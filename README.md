@@ -1,35 +1,20 @@
-# Getting started
+# GIM hub
 
-Follow these steps to deploy the application in your hosted environment.
+<img alt="GIM hub header" src="public/images/logo.png" width="400"/>
 
-## 1. Use Docker Compose
+GIM hub is a hosted dashboard for Old School RuneScape Group Ironman teams. It connects to a RuneLite plugin to stream live data from your teammates and turns it into a rich, shared view of your group's progress.
 
-A [`docker-compose.yml`](./docker-compose.yml) file is provided at the root of this repository. Use this file to run the container.
+What it offers
+- Live group overview: online status, world, current interaction, and health bars
+- Inventories, equipment, and rune pouch details with HA and GE value estimates
+- Skills overview with total level, total XP, and levels
+- Quest progress
+- Achievement Diary tracker
+- Collection log browser
+- Live world map with player markers
+- XP drops feed for recent gains
 
-## 2. Prepare your `.env` and data files
-
-The application requires a `.env` file for configuration, and also requires an empty database file present before startup.
-
-**You must manually create these files before starting the container:**
-
-- Create an empty `.env` file in your data directory.  
-  If you want to start with the example configuration, copy it from the .env.example file in the repository.
-  If the file is empty, the application will create a default configuration from the example file.
-
-- Create an empty database.sqlite file in your data directory.
-
-## 3. Deploy the application
-
-Start the application using Docker Compose:
-
-```
-docker compose up -d
-```
-
-The application will be available on port **80**, or on the port you have configured in your `docker-compose.yml`.
-
-> If you configured a different port, use that port to access the application.
-
----
-
-Your application should now be running in your environment.
+How it works
+- Each member installs the “GIM hub” RuneLite plugin from the Plugin Hub
+- In the plugin's config, set your Group Name and Group Token from this app
+- The plugin sends updates to the GIM hub server; the UI renders it in real time

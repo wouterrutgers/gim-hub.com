@@ -6,6 +6,8 @@
   **A real-time dashboard for Old School RuneScape Group Ironman teams**
   
   Track your team's progress and view member locations with live data streaming from RuneLite.
+  
+  **🌐 [Visit GIM Hub](https://gim-hub.com)**
 </div>
 
 ## ✨ Features

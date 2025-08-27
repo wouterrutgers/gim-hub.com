@@ -37,7 +37,8 @@ export type Diaries = Record<DiaryRegion, Record<DiaryTier, boolean[]>>;
 export type Collection = Map<ItemID, number>;
 
 /**
- * An instance of a member gaining experience.
+ * An instance of a member gaining experience, across multiple skills at the
+ * same time.
  */
 export interface ExperienceDrop {
   /**
@@ -47,25 +48,14 @@ export interface ExperienceDrop {
   id: number;
 
   /**
-   * The skill to display the icon for.
+   * All the skills that the player gained experience in.
    */
-  skill: Skill;
-
-  /**
-   * The amount of xp in the drop.
-   */
-  amount: Experience;
+  amounts: { skill: Skill; amount: Experience }[];
 
   /**
    * Age of the drop, for deleting when it gets old
    */
   creationTimeMS: number;
-
-  /**
-   * A random seed between 0 and 1, that can be used for randomly distributed
-   * yet deterministic variations between xp drops.
-   */
-  seed: number;
 }
 
 export interface NPCInteraction {

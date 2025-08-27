@@ -40828,7 +40828,7 @@
     "mapping": null
   },
   "11793": {
-    "name": "Agility jump",
+    "name": "Agility strength",
     "highalch": 0,
     "mapping": null
   },
@@ -84362,12 +84362,12 @@
   },
   "30616": {
     "name": "Bounty supply crate (manta ray)",
-    "highalch": 6000,
+    "highalch": 0,
     "mapping": null
   },
   "30619": {
     "name": "Bounty supply crate (anglerfish)",
-    "highalch": 6000,
+    "highalch": 0,
     "mapping": null
   },
   "30622": {
@@ -85804,6 +85804,86 @@
   "31130": {
     "name": "Dom",
     "highalch": 0,
+    "mapping": null
+  },
+  "31132": {
+    "name": "Dinh's blazing bulwark",
+    "highalch": 750000,
+    "mapping": null
+  },
+  "31133": {
+    "name": "Venator bow",
+    "highalch": 450000,
+    "mapping": null
+  },
+  "31134": {
+    "name": "Agility swing",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31135": {
+    "name": "Agility swing",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31136": {
+    "name": "Blood moon armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31139": {
+    "name": "Blue moon armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31142": {
+    "name": "Eclipse moon armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31145": {
+    "name": "Torva armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31148": {
+    "name": "Virtus armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31151": {
+    "name": "Rock-shell armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31154": {
+    "name": "Skeletal armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31157": {
+    "name": "Spined armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31160": {
+    "name": "Swampbark armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31163": {
+    "name": "Bloodbark armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31166": {
+    "name": "Mixed hide armour set",
+    "highalch": 87000,
+    "mapping": null
+  },
+  "31169": {
+    "name": "Hueycoatl hide armour set",
+    "highalch": 87000,
     "mapping": null
   }
 }

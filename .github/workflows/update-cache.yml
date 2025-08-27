@@ -33,7 +33,7 @@ jobs:
           path: cache/runelite
 
       - run: |
-          cache=$(curl -s https://archive.openrs2.org/caches.json | jq -r --arg cutoff "$(date -u -v-2H '+%Y-%m-%dT%H:%M:%SZ')" '
+          cache=$(curl -s https://archive.openrs2.org/caches.json | jq -r --arg cutoff "$(date -u -v-4H '+%Y-%m-%dT%H:%M:%SZ')" '
             [ .[] | select(.game == "oldschool" and .environment == "live" and .language == "en" and (.sources | contains(["Jagex"])) and .size != null) ] |
             map(select(.timestamp <= $cutoff)) |
             sort_by(.id) | last

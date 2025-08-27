@@ -1,5 +1,5 @@
 import { Fragment, type ReactElement } from "react";
-import { MenLink } from "../men-link/men-link";
+import { AppLink } from "../app-link/app-link";
 import { useLocation } from "react-router-dom";
 import { CachedImage } from "../cached-image/cached-image";
 
@@ -25,14 +25,14 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
     links.map(({ label, href, mobileIconSource }) => (
       <Fragment key={label}>
         <span className="desktop">
-          <MenLink href={href} selected={location.pathname === href}>
+          <AppLink href={href} selected={location.pathname === href}>
             {label}
-          </MenLink>
+          </AppLink>
         </span>
         <span className="mobile">
-          <MenLink href={href} selected={location.pathname === href}>
+          <AppLink href={href} selected={location.pathname === href}>
             <CachedImage alt={label} src={mobileIconSource} />
-          </MenLink>
+          </AppLink>
         </span>
       </Fragment>
     ));

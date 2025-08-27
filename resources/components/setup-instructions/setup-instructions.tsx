@@ -1,5 +1,5 @@
 import { useContext, useState, type ReactElement } from "react";
-import { MenLink } from "../men-link/men-link";
+import { AppLink } from "../app-link/app-link";
 import { Context as APIContext } from "../../context/api-context.tsx";
 import { CachedImage } from "../cached-image/cached-image";
 
@@ -60,7 +60,7 @@ export const SetupInstructions = (): ReactElement => {
         </div>
 
         <div id="setup-go-to-group">
-          <MenLink href="/group">Go to group</MenLink>
+          <AppLink href="/group">Go to group</AppLink>
         </div>
       </div>
     </div>

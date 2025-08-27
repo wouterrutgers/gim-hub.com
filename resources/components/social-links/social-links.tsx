@@ -11,7 +11,7 @@ export const SocialLinks = (): ReactElement => {
             <div>
               <CachedImage alt="github logo" loading="lazy" src="/images/github-light.webp" height="20" />
             </div>
-            GIM hub GitHub
+            GitHub
           </a>
         </li>
       </ul>

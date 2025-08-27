@@ -4,35 +4,29 @@ import "./social-links.css";
 
 export const SocialLinks = (): ReactElement => {
   return (
-    <ul id="social-links">
-      <li>
-        <a href="https://ko-fi.com/gimplugin" title="Support the original creator on Ko-fi" target="_blank">
-          <div>
-            <CachedImage alt="kofi logo" loading="lazy" src="/images/kofi_p_logo_nolabel.webp" height="20" />
-          </div>
-          Support the original creator on Ko-fi
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/christoabrown/group-ironmen-tracker"
-          title="Original Creator's Github"
-          target="_blank"
-        >
-          <div>
-            <CachedImage alt="github logo" loading="lazy" src="/images/github-light.webp" height="20" />
-          </div>
-          Original creator's GitHub
-        </a>
-      </li>
-      <li>
-        <a href="https://github.com/wouterrutgers/group-ironmen" title="Github" target="_blank">
-          <div>
-            <CachedImage alt="github logo" loading="lazy" src="/images/github-light.webp" height="20" />
-          </div>
-          This site's GitHub
-        </a>
-      </li>
-    </ul>
+    <>
+      <ul id="social-links">
+        <li>
+          <a href="https://github.com/wouterrutgers/gim-hub.com" title="Github" target="_blank">
+            <div>
+              <CachedImage alt="github logo" loading="lazy" src="/images/github-light.webp" height="20" />
+            </div>
+            GIM hub GitHub
+          </a>
+        </li>
+      </ul>
+
+      <a
+        id="original-creator-link"
+        href="https://github.com/christoabrown/group-ironmen-tracker"
+        title="Original creator's GitHub"
+        target="_blank"
+      >
+        <div>
+          <CachedImage alt="github logo" loading="lazy" src="/images/github-light.webp" height="16" />
+        </div>
+        Original creator's GitHub
+      </a>
+    </>
   );
 };

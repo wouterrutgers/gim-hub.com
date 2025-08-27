@@ -1,5 +1,6 @@
 import { MenLink } from "../men-link/men-link.tsx";
 import { SocialLinks } from "../social-links/social-links.tsx";
+import { CachedImage } from "../cached-image/cached-image";
 import { useContext, type ReactElement } from "react";
 import { Context as APIContext } from "../../context/api-context.tsx";
 
@@ -15,7 +16,7 @@ export const MenHomepage = (): ReactElement => {
   return (
     <div id="men-homepage">
       <SocialLinks />
-      <h1>GroupIron.men</h1>
+      <CachedImage className="logo" alt="GIM hub" src="/images/logo.png" />
       <div id="men-homepage-links">
         <MenLink href="/create-group">Get started</MenLink>
         {hasLogin ? groupLink : loginLink}

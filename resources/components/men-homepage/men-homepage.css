@@ -9,14 +9,14 @@
   flex-direction: column;
 }
 
-#men-homepage h1 {
-  text-shadow: 3px 3px var(--black);
-  font-size: min(128px, 16vw);
-  margin: 0;
-}
-
 #men-homepage-links {
   margin-top: 1.5em;
   display: flex;
   gap: 2em;
+}
+
+#men-homepage .logo {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
 }

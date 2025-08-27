@@ -17,22 +17,43 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
   ];
 
   const rightAlignedLinks = [
+    {
+      label: "GitHub",
+      href: "https://github.com/wouterrutgers/gim-hub.com",
+      mobileIconSource: "/images/GitHub-Mark-Light-64px.png",
+      isExternal: true,
+    },
     { label: "Setup", href: "/setup-instructions", mobileIconSource: "/ui/1094-0.png" },
     { label: "Logout", href: "/logout", mobileIconSource: "/ui/225-0.png" },
   ];
 
-  const renderLinks = (links: typeof mainLinks): ReactElement[] =>
-    links.map(({ label, href, mobileIconSource }) => (
+  const renderLinks = (
+    links: { label: string; href: string; mobileIconSource: string; isExternal?: boolean }[],
+  ): ReactElement[] =>
+    links.map(({ label, href, mobileIconSource, isExternal }) => (
       <Fragment key={label}>
         <span className="desktop">
-          <AppLink href={href} selected={location.pathname === href}>
-            {label}
-          </AppLink>
+          {isExternal ? (
+            <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
+              <CachedImage alt={label} src={mobileIconSource} height="16" style={{ marginRight: "8px" }} />
+              {label}
+            </a>
+          ) : (
+            <AppLink href={href} selected={location.pathname === href}>
+              {label}
+            </AppLink>
+          )}
         </span>
         <span className="mobile">
-          <AppLink href={href} selected={location.pathname === href}>
-            <CachedImage alt={label} src={mobileIconSource} />
-          </AppLink>
+          {isExternal ? (
+            <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
+              <CachedImage alt={label} src={mobileIconSource} />
+            </a>
+          ) : (
+            <AppLink href={href} selected={location.pathname === href}>
+              <CachedImage alt={label} src={mobileIconSource} />
+            </AppLink>
+          )}
         </span>
       </Fragment>
     ));

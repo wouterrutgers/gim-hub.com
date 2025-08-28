@@ -1,8 +1,8 @@
-import { Fragment, useContext, useEffect, useState, type ReactElement } from "react";
+import { Fragment, useContext, useEffect, useState, type ReactElement, type ReactNode } from "react";
 import { GameDataContext } from "../../context/game-data-context";
 import * as CollectionLog from "../../game/collection-log";
 import type * as Member from "../../game/member";
-import { useGroupMemberContext } from "../../context/group-context";
+import { GroupCollectionsContext } from "../../context/group-context";
 import { useCollectionLogItemTooltip } from "./collection-log-tooltip";
 import { PlayerIcon } from "../player-icon/player-icon";
 import type { ItemID } from "../../game/items";
@@ -271,18 +271,7 @@ export const CollectionLogWindow = ({
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [hiscores, setHiscores] = useState<Map<string, number>>();
 
-  const playerCollection = useGroupMemberContext(
-    (group) => group?.get(player)?.collection ?? new Map<ItemID, number>(),
-  );
-  const otherMemberCollections = useGroupMemberContext((group) => {
-    const map = new Map<Member.Name, Member.Collection>();
-    if (!group) return map;
-    for (const [name, state] of group) {
-      if (name === player) continue;
-      if (state.collection) map.set(name, state.collection);
-    }
-    return map;
-  });
+  const groupCollections = useContext(GroupCollectionsContext);
 
   useEffect(() => {
     if (!credentials) return;
@@ -298,7 +287,7 @@ export const CollectionLogWindow = ({
       .catch((err) => console.error("Failed to get hiscores for collection log", err));
   }, [credentials, player]);
 
-  const collection = playerCollection;
+  const collection = groupCollections.get(player);
   const tabButtons = CollectionLog.TabName.map((tab) => (
     <button
       key={tab}
@@ -313,7 +302,7 @@ export const CollectionLogWindow = ({
     </button>
   ));
 
-  const totalCollected = collection.size;
+  const totalCollected = collection?.size ?? 0;
 
   const pageDirectory: ReactElement[] = (collectionLogInfo?.tabs.get(currentTabName) ?? []).map(
     ({ name: pageName, items: pageItems }, index): ReactElement => {
@@ -345,9 +334,10 @@ export const CollectionLogWindow = ({
     },
   );
 
-  let pageElement: ReactElement | undefined = undefined;
-  const page = collectionLogInfo?.tabs.get(currentTabName)?.at(pageIndex);
-  if (page) {
+  const pageElement = ((): ReactNode => {
+    const page = collectionLogInfo?.tabs.get(currentTabName)?.at(pageIndex);
+    if (!page) return undefined;
+
     const headerProps: CollectionLogPageHeaderProps = {
       name: page.name,
       wikiLink: ResolvePageWikiLink({ page: page.name, tab: currentTabName }),
@@ -368,38 +358,39 @@ export const CollectionLogWindow = ({
     }
 
     page.items.forEach((itemID) => {
-      const quantity: number = collection.get(itemID) ?? 0;
+      const quantity: number = collection?.get(itemID) ?? 0;
 
       if (quantity > 0) {
         headerProps.obtained += 1;
       }
 
+      const otherMembers = [];
+      for (const [otherMember, otherCollection] of groupCollections) {
+        if (otherMember === player) continue;
+
+        const quantity = otherCollection.get(itemID) ?? 0;
+        if (quantity <= 0) continue;
+
+        otherMembers.push({
+          name: otherMember,
+          quantity: quantity,
+        });
+      }
+
       itemsProps.items.push({
         item: itemID,
         quantity: quantity,
-        otherMembers: [
-          ...Array.from(otherMemberCollections.entries())
-            .map(
-              ([name, memberCollection]): {
-                name: Member.Name;
-                quantity: number;
-              } => ({
-                name,
-                quantity: memberCollection.get(itemID) ?? 0,
-              }),
-            )
-            .filter(({ quantity }) => quantity > 0),
-        ],
+        otherMembers,
       });
     });
 
-    pageElement = (
+    return (
       <>
         <CollectionLogPageHeader {...headerProps} />
         <CollectionLogPageItems {...itemsProps} />
       </>
     );
-  }
+  })();
 
   return (
     <div className="collection-log-container dialog-container metal-border rsbackground">

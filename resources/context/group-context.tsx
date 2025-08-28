@@ -13,6 +13,7 @@ interface GroupState {
   memberStates: Map<Member.Name, Member.State>;
   memberNames: Set<Member.Name>;
   memberColors: Map<Member.Name, MemberColor>;
+  collections: Map<Member.Name, Member.Collection>;
   xpDropCounter: number;
   xpDrops: Map<Member.Name, Member.ExperienceDrop[]>;
 }
@@ -45,6 +46,11 @@ export const GroupXPDropsContext = createContext<GroupState["xpDrops"]>(new Map(
  * Contains the colors of the group. These colors are not stable if the group changes.
  */
 export const GroupMemberColorsContext = createContext<GroupState["memberColors"]>(new Map());
+
+/**
+ * Contains the collection logs of the group.
+ */
+export const GroupCollectionsContext = createContext<GroupState["collections"]>(new Map());
 
 // TODO: many of these are candidates to be split off like the items, to reduce
 // excessive updates.
@@ -84,8 +90,6 @@ export const useMemberQuestsContext = (member: Member.Name): Member.Quests | und
   useGroupMemberContext((state) => state?.get(member)?.quests);
 export const useMemberDiariesContext = (member: Member.Name): Member.Diaries | undefined =>
   useGroupMemberContext((state) => state?.get(member)?.diaries);
-export const useMemberCollectionContext = (member: Member.Name): Member.Collection | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.collection);
 
 /* eslint-enable react-refresh/only-export-components */
 
@@ -145,6 +149,39 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
       newMemberStates.set(member, { ...memberState, ...memberStateUpdate });
       newState.memberStates = newMemberStates;
       updated = true;
+    }
+  }
+
+  const collectionsHaveMaybeChanged = !!newState.memberStates && newState.memberStates !== oldState.memberStates;
+  if (collectionsHaveMaybeChanged) {
+    let groupChanged = false;
+    const newCollections = new Map<Member.Name, Member.Collection>();
+    for (const [name, { collection: newCollection }] of newState.memberStates!) {
+      let memberChanged = false;
+      const oldCollection = oldState.memberStates.get(name)?.collection;
+      if (oldCollection) {
+        for (const [itemID, oldQuantity] of oldCollection) {
+          const newQuantity = newCollection?.get(itemID);
+          if (oldQuantity !== newQuantity) {
+            memberChanged = true;
+            break;
+          }
+        }
+      } else if (newCollection) {
+        memberChanged = true;
+      }
+
+      if (memberChanged) {
+        groupChanged = true;
+        if (newCollection) {
+          newCollections.set(name, newCollection);
+        }
+      }
+    }
+
+    if (groupChanged) {
+      updated = true;
+      newState.collections = newCollections;
     }
   }
 
@@ -286,6 +323,7 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
     memberStates: new Map(),
     memberNames: new Set<Member.Name>(),
     memberColors: new Map(),
+    collections: new Map(),
     xpDropCounter: 0,
     xpDrops: new Map(),
   });
@@ -297,16 +335,18 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
     setUpdateCallbacks({ onGroupUpdate: updateContexts });
   }, [setUpdateCallbacks]);
 
-  const { items, memberStates, memberNames, xpDrops, memberColors } = contexts;
+  const { items, memberStates, memberNames, xpDrops, memberColors, collections } = contexts;
 
   return (
     <GroupMemberNamesContext value={memberNames}>
       <GroupMemberColorsContext value={memberColors}>
-        <GroupItemsContext value={items}>
-          <GroupMemberStatesContext value={memberStates}>
-            <GroupXPDropsContext value={xpDrops}>{children}</GroupXPDropsContext>
-          </GroupMemberStatesContext>
-        </GroupItemsContext>
+        <GroupCollectionsContext value={collections}>
+          <GroupItemsContext value={items}>
+            <GroupMemberStatesContext value={memberStates}>
+              <GroupXPDropsContext value={xpDrops}>{children}</GroupXPDropsContext>
+            </GroupMemberStatesContext>
+          </GroupItemsContext>
+        </GroupCollectionsContext>
       </GroupMemberColorsContext>
     </GroupMemberNamesContext>
   );

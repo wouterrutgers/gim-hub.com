@@ -155,8 +155,17 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
   const collectionsHaveMaybeChanged = !!newState.memberStates && newState.memberStates !== oldState.memberStates;
   if (collectionsHaveMaybeChanged) {
     let groupChanged = false;
+
+    if (newState.memberStates!.size !== oldState.memberStates.size) {
+      groupChanged = true;
+    }
+
     const newCollections = new Map<Member.Name, Member.Collection>();
     for (const [name, { collection: newCollection }] of newState.memberStates!) {
+      if (newCollection) {
+        newCollections.set(name, newCollection);
+      }
+
       let memberChanged = false;
       const oldCollection = oldState.memberStates.get(name)?.collection;
       if (oldCollection) {
@@ -173,9 +182,6 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
 
       if (memberChanged) {
         groupChanged = true;
-        if (newCollection) {
-          newCollections.set(name, newCollection);
-        }
       }
     }
 

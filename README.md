@@ -1,35 +1,68 @@
-# Getting started
+# 🏆 GIM Hub
 
-Follow these steps to deploy the application in your hosted environment.
+<div align="center">
+  <img alt="GIM Hub Logo" src="public/images/logo.png" width="400"/>
+  
+  **A real-time dashboard for Old School RuneScape Group Ironman teams**
+  
+  Track your team's progress and view member locations with live data streaming from RuneLite.
+  
+  **🌐 [Visit GIM Hub](https://gim-hub.com)**
+</div>
 
-## 1. Use Docker Compose
+## ✨ Features
 
-A [`docker-compose.yml`](./docker-compose.yml) file is provided at the root of this repository. Use this file to run the container.
+### 📊 **Live team overview**
 
-## 2. Prepare your `.env` and data files
+- Real-time online status and world tracking
+- Current player interactions and activities
+- Live health, prayer, and run energy bars
+- Team member locations on interactive world map
 
-The application requires a `.env` file for configuration, and also requires an empty database file present before startup.
+### 🎒 **Inventory & equipment tracking**
 
-**You must manually create these files before starting the container:**
+- Complete inventory and equipment views
+- Rune pouch contents with quantities
+- High alchemy and Grand Exchange values
 
-- Create an empty `.env` file in your data directory.  
-  If you want to start with the example configuration, copy it from the .env.example file in the repository.
-  If the file is empty, the application will create a default configuration from the example file.
+### 📈 **Skills & progress**
 
-- Create an empty database.sqlite file in your data directory.
+- Individual skill levels and experience tracking
+- Total level and experience summaries
+- Live XP drops feed for current gains
+- Progress comparison between team members
 
-## 3. Deploy the application
+### 🗺️ **Quest & achievement progress**
 
-Start the application using Docker Compose:
+- Quest completion tracking
+- Achievement diary progress monitoring
+- Collection log browser with item counts
 
-```
-docker compose up -d
-```
+## 🚀 Getting started
 
-The application will be available on port **80**, or on the port you have configured in your `docker-compose.yml`.
+### Prerequisites
 
-> If you configured a different port, use that port to access the application.
+- Old School RuneScape GIM account
+- RuneLite client installed
+- Group Ironman team setup
 
----
+### Setup instructions
 
-Your application should now be running in your environment.
+1. **Install the RuneLite plugin**
+   - Open RuneLite
+   - Go to the plugin hub
+   - Search for "GIM Hub" and install
+
+2. **Configure your team**
+   - Create your group on the GIM Hub website
+   - Copy your unique group token
+   - In RuneLite, open the GIM Hub plugin settings
+   - Enter your group name and group token
+
+3. **Start tracking**
+   - The plugin automatically streams your data
+   - View your team's progress on the GIM hub dashboard
+   - Invite teammates using your group token
+
+<img alt="RuneLite Plugin Configuration" src="public/images/plugin-screenshot.png" width="300"/>
+<em>Plugin configuration in RuneLite</em>

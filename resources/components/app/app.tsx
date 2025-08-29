@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { type ReactElement } from "react";
 import { UnauthedLayout, AuthedLayout } from "../layout/layout";
-import { MenHomepage } from "../men-homepage/men-homepage";
+import { Homepage } from "../homepage/homepage";
 import { SetupInstructions } from "../setup-instructions/setup-instructions";
 import { LoginPage } from "../login-page/login-page";
 import { LogoutPage } from "../logout-page/logout-page";
@@ -26,7 +26,7 @@ export const App = (): ReactElement => {
           index
           element={
             <UnauthedLayout>
-              <MenHomepage />
+              <Homepage />
             </UnauthedLayout>
           }
         />

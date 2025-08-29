@@ -11,7 +11,7 @@ import "./xp-dropper.css";
 export const XpDropper = ({ xpDrops }: { xpDrops: Member.ExperienceDrop[] | undefined }): ReactElement => {
   return (
     <div className="xp-dropper">
-      {xpDrops?.map(({ id, amounts }) => {
+      {xpDrops?.map(({ id, amounts, creationTimeMS }) => {
         const elements = [];
         for (const { skill, amount } of amounts) {
           elements.push(
@@ -22,7 +22,7 @@ export const XpDropper = ({ xpDrops }: { xpDrops: Member.ExperienceDrop[] | unde
           );
         }
         return (
-          <div className="xp-dropper-drop-cluster" key={id}>
+          <div className="xp-dropper-drop-cluster" key={`${id}-${creationTimeMS}`}>
             {elements}
           </div>
         );

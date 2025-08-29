@@ -30,3 +30,16 @@
 #social-links a:hover {
   color: hsl(0deg 0% 100%);
 }
+
+#original-creator-link {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0.6em 0.8em;
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  font-size: 0.9em;
+  text-decoration: none;
+  opacity: 0.5;
+}

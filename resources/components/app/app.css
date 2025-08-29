@@ -1,5 +1,4 @@
 :root {
-  --primary-text: white;
   --elevated: rgb(255 255 255 / 8%);
   --light-border: rgb(255 255 255 / 12%);
   --darken: rgb(0 0 0 / 20%);
@@ -13,6 +12,7 @@
   --red: #f00;
   --green: hsl(120deg 87% 40%);
   --green-light: hsl(120deg 87% 90%);
+  --white: #fff;
   --rsbackground: url("/ui/297-0.png");
   --rsbackground-dark: url("/ui/297-0-dark.png");
 }
@@ -56,7 +56,7 @@ body {
   margin: 0;
   gap: 8px;
   background: var(--background);
-  color: var(--primary-text);
+  color: var(--white);
   overflow: hidden;
   position: relative;
   font-size: 18px;

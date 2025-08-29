@@ -57,7 +57,7 @@
 }
 
 #app-navigation-group-name {
-  color: white;
+  color: var(--white);
   white-space: nowrap;
   margin-right: 8px;
   font-size: 1.5em;

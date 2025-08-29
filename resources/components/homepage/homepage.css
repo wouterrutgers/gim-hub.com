@@ -1,22 +1,22 @@
-#men-homepage {
+#homepage {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   width: 100%;
   position: relative;
-  color: white;
+  color: var(--white);
   flex-direction: column;
 }
 
-#men-homepage h1 {
-  text-shadow: 3px 3px var(--black);
-  font-size: min(128px, 16vw);
-  margin: 0;
-}
-
-#men-homepage-links {
+#homepage-links {
   margin-top: 1.5em;
   display: flex;
-  gap: 2em;
+  gap: 16px;
+}
+
+#homepage .logo {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
 }

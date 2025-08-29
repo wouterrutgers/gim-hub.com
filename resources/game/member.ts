@@ -4,7 +4,6 @@ import type { EquipmentSlot } from "./equipment";
 import type { ItemID, ItemStack } from "./items";
 import type { QuestID, QuestStatus } from "./quests";
 import type { Experience, Skill } from "./skill";
-import * as CollectionLog from "./collection-log";
 import type { WikiPosition2D } from "../components/canvas-map/coordinates";
 
 export type Name = Distinct<string, "Member.Name">;
@@ -36,10 +35,7 @@ export type Inventory = (ItemStack | undefined)[];
 export type Skills = Record<Skill, Experience>;
 export type Quests = Map<QuestID, QuestStatus>;
 export type Diaries = Record<DiaryRegion, Record<DiaryTier, boolean[]>>;
-export interface Collection {
-  obtainedItems: Map<CollectionLog.ItemIDDeduped, number>;
-  pageStats: Map<CollectionLog.PageName, { completions: number[] }>;
-}
+export type Collection = Map<ItemID, number>;
 
 /**
  * An instance of a member gaining experience, across multiple skills at the

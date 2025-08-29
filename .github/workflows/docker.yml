@@ -30,7 +30,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: wouterrutgers/group-ironmen:latest
+          tags: wouterrutgers/gim-hub.com:latest
           platforms: linux/amd64
           target: final
           cache-from: type=gha

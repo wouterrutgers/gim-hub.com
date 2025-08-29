@@ -97,6 +97,19 @@ export const useMemberDiariesContext = (member: Member.Name): Member.Diaries | u
 // perceptively just rotating the colors doesn't look very good.
 const memberColorHues: number[] = [330, 100, 230, 170, 40];
 
+interface GroupStateAction {
+  /*
+   * A partial update has only some of the members e.g. collection-log only
+   * returns members who have recorded their logs. If the update is partial, we
+   * persist old member states.
+   *
+   * A non-partial / full update has all of the members e.g. get-group-data always returns all
+   * members. If the update is not partial, we wipe old state.
+   */
+  partial: boolean;
+  update: GroupStateUpdate;
+}
+
 /**
  * Taking in the new group state, perform some diff checking and update
  * sparingly. This method also aggregates the items for the group.
@@ -104,64 +117,78 @@ const memberColorHues: number[] = [330, 100, 230, 170, 40];
  * A lot of these checks should probably be done by the backend and diffs
  * performed in the API class, but for now we can just do the checks here.
  */
-const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupState => {
+const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => {
   const newState: Partial<GroupState> = {};
 
   let updated = false;
 
-  if (stateUpdate.size > 0) {
-    const mergedMemberNames = new Set<Member.Name>(oldState.memberNames);
-    for (const name of stateUpdate.keys()) mergedMemberNames.add(name);
-
-    if (mergedMemberNames.size !== oldState.memberNames.size) {
-      newState.memberNames = mergedMemberNames;
-
-      const newMemberColors = new Map<Member.Name, MemberColor>(oldState.memberColors);
-      const SHARED_NAME = "@SHARED" as Member.Name;
-      let colorIndex = Array.from(newMemberColors.keys()).filter((n) => n !== SHARED_NAME).length;
-      for (const name of mergedMemberNames) {
-        if (newMemberColors.has(name)) continue;
-        if (name === SHARED_NAME) {
-          newMemberColors.set(SHARED_NAME, { hueDegrees: 0 });
-          continue;
-        }
-        const hueDegrees = memberColorHues.at(colorIndex) ?? 0;
-        newMemberColors.set(name, { hueDegrees });
-        colorIndex += 1;
-      }
-      newState.memberColors = newMemberColors;
-      updated = true;
+  const memberNames = ((): Set<Member.Name> => {
+    if (action.partial) {
+      return new Set([...oldState.memberNames, ...action.update.keys()].sort((a, b) => a.localeCompare(b)));
     }
+    return new Set([...action.update.keys()].sort((a, b) => a.localeCompare(b)));
+  })();
+  const namesHaveChanged = oldState.memberNames.symmetricDifference(memberNames).size > 0;
+
+  if (namesHaveChanged) {
+    newState.memberNames = new Set(memberNames);
+    updated = true;
+  }
+
+  if (namesHaveChanged) {
+    const newMemberColors = new Map<Member.Name, MemberColor>();
+    const SHARED_NAME = "@SHARED" as Member.Name;
+    let colorIndex = Array.from(newMemberColors.keys()).filter((n) => n !== SHARED_NAME).length;
+    for (const name of memberNames) {
+      if (newMemberColors.has(name)) continue;
+      if (name === SHARED_NAME) {
+        newMemberColors.set(SHARED_NAME, { hueDegrees: 0 });
+        continue;
+      }
+      const hueDegrees = memberColorHues.at(colorIndex) ?? 0;
+      newMemberColors.set(name, { hueDegrees });
+      colorIndex += 1;
+    }
+    newState.memberColors = newMemberColors;
+    updated = true;
   }
 
   {
-    const newMemberStates = new Map(oldState.memberStates);
-    for (const [member, memberStateUpdate] of stateUpdate) {
-      const memberState: Member.State = oldState.memberStates.get(member) ?? {
-        bank: new Map(),
-        equipment: new Map(),
-        inventory: [] satisfies Member.Inventory,
-        lastUpdated: new Date(0),
-        runePouch: new Map(),
-        seedVault: new Map(),
-      };
+    const newMemberStates = new Map();
+    let memberStatesUpdated = namesHaveChanged;
 
-      newMemberStates.set(member, { ...memberState, ...memberStateUpdate });
-      newState.memberStates = newMemberStates;
+    for (const member of memberNames) {
+      const stateUpdate = action.update.get(member);
+      const oldMemberState = oldState.memberStates.get(member);
+
+      if (stateUpdate || !oldMemberState) {
+        newMemberStates.set(member, {
+          bank: new Map(),
+          equipment: new Map(),
+          inventory: [] satisfies Member.Inventory,
+          lastUpdated: new Date(0),
+          runePouch: new Map(),
+          seedVault: new Map(),
+          ...oldMemberState,
+          ...stateUpdate,
+        });
+        memberStatesUpdated = true;
+      } else {
+        newMemberStates.set(member, oldMemberState);
+      }
+    }
+
+    if (memberStatesUpdated) {
       updated = true;
+      newState.memberStates = newMemberStates;
     }
   }
 
-  const collectionsHaveMaybeChanged = !!newState.memberStates && newState.memberStates !== oldState.memberStates;
-  if (collectionsHaveMaybeChanged) {
-    let groupChanged = false;
-
-    if (newState.memberStates!.size !== oldState.memberStates.size) {
-      groupChanged = true;
-    }
+  if (newState.memberStates) {
+    let groupCollectionsUpdated = namesHaveChanged;
 
     const newCollections = new Map<Member.Name, Member.Collection>();
-    for (const [name, { collection: newCollection }] of newState.memberStates!) {
+    for (const [name, { collection: newCollection }] of newState.memberStates) {
       if (newCollection) {
         newCollections.set(name, newCollection);
       }
@@ -181,17 +208,17 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
       }
 
       if (memberChanged) {
-        groupChanged = true;
+        groupCollectionsUpdated = true;
       }
     }
 
-    if (groupChanged) {
+    if (groupCollectionsUpdated) {
       updated = true;
       newState.collections = newCollections;
     }
   }
 
-  {
+  if (newState.memberStates) {
     const newItems = new Map<ItemID, Map<Member.Name, number>>();
     const incrementItemCount = (memberName: Member.Name, { itemID, quantity }: ItemStack): void => {
       if (!newItems.has(itemID)) newItems.set(itemID, new Map<Member.Name, number>());
@@ -201,7 +228,7 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
       itemView.set(memberName, oldQuantity + quantity);
     };
 
-    newState.memberStates?.forEach(({ bank, equipment, inventory, runePouch, seedVault }, memberName) => {
+    newState.memberStates.forEach(({ bank, equipment, inventory, runePouch, seedVault }, memberName) => {
       // Each item storage is slightly different, so we need to iterate them different.
       [bank, runePouch, seedVault].forEach((storageArea) =>
         storageArea.forEach((quantity, itemID) => {
@@ -256,9 +283,9 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
     }
   }
 
-  {
+  if (newState.memberStates) {
     const xpDropsByMember = new Map<Member.Name, Member.ExperienceDrop[]>(oldState.xpDrops);
-    for (const [member, { skills: newSkills }] of stateUpdate) {
+    for (const [member, { skills: newSkills }] of newState.memberStates) {
       const oldSkills = oldState.memberStates.get(member)?.skills;
       if (!oldSkills || !newSkills) {
         continue;
@@ -338,7 +365,11 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
   useEffect(() => {
     if (!setUpdateCallbacks) return;
 
-    setUpdateCallbacks({ onGroupUpdate: updateContexts });
+    setUpdateCallbacks({
+      onGroupUpdate: (update, partial) => {
+        updateContexts({ partial, update });
+      },
+    });
   }, [setUpdateCallbacks]);
 
   const { items, memberStates, memberNames, xpDrops, memberColors, collections } = contexts;

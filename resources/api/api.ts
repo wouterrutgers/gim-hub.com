@@ -26,7 +26,7 @@ export interface GameData {
 }
 
 interface UpdateCallbacks {
-  onGroupUpdate: (group: GroupStateUpdate) => void;
+  onGroupUpdate: (group: GroupStateUpdate, partial: boolean) => void;
   onGameDataUpdate: (data: GameData) => void;
 }
 export default class Api {
@@ -72,7 +72,7 @@ export default class Api {
       updates.set(name, update);
     }
 
-    this.callbacks?.onGroupUpdate?.(updates);
+    this.callbacks?.onGroupUpdate?.(updates, false);
   }
 
   private callbacks: Partial<UpdateCallbacks> = {};
@@ -237,6 +237,6 @@ export default class Api {
     for (const [name, collection] of Object.entries(collections)) {
       updates.set(name as Member.Name, { collection });
     }
-    this.callbacks?.onGroupUpdate?.(updates);
+    this.callbacks?.onGroupUpdate?.(updates, true);
   }
 }

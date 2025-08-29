@@ -108,6 +108,9 @@ export const LoginPage = (): ReactElement => {
         })
         .catch((reason) => {
           console.error("LoginPage: Error during form submission:", reason);
+        })
+        .finally(() => {
+          setPendingSubmission(false);
         });
     },
     [navigate, logInLive],

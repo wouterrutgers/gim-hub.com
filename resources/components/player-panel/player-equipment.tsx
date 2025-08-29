@@ -15,18 +15,14 @@ import type { ItemID } from "../../game/items";
 import { composeItemIconHref, formatShortQuantity, mappedGEPrice } from "../../game/items";
 
 const DIZANAS_IDS = new Set<ItemID>([
-  28826 as ItemID,
-  28828 as ItemID,
-  28830 as ItemID,
-  28902 as ItemID,
-  28904 as ItemID,
-  28906 as ItemID,
-  28947 as ItemID,
-  28949 as ItemID,
-  28951 as ItemID,
-  28953 as ItemID,
-  28955 as ItemID,
-  28957 as ItemID,
+  28902 as ItemID, // Dizana's max cape
+  28906 as ItemID, // Dizana's max cape (l)
+  28947 as ItemID, // Dizana's quiver (uncharged)
+  28949 as ItemID, // Dizana's quiver (uncharged) (l)
+  28951 as ItemID, // Dizana's quiver
+  28953 as ItemID, // Dizana's quiver (l)
+  28955 as ItemID, // Blessed dizana's quiver
+  28957 as ItemID, // Blessed dizana's quiver (l)
 ]);
 
 const VisibleEquipmentSlots: EquipmentSlot[] = [

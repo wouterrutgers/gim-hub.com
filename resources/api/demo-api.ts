@@ -178,4 +178,7 @@ export default class DemoApi {
   async deleteGroupMember(): Promise<RequestDeleteGroupMember.Response> {
     return Promise.reject(new Error("Not implemented."));
   }
+  async fetchGroupCollectionLogs(): Promise<void> {
+    return Promise.reject(new Error("Not implemented."));
+  }
 }

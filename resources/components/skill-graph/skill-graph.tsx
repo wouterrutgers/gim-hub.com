@@ -579,7 +579,7 @@ export const SkillGraph = (): ReactElement => {
   const style = getComputedStyle(document.body);
   ChartJS.defaults.font.family = "rssmall";
   ChartJS.defaults.font.size = 16;
-  ChartJS.defaults.color = style.getPropertyValue("--primary-text");
+  ChartJS.defaults.color = style.getPropertyValue("--white");
   ChartJS.defaults.scale.grid.color = style.getPropertyValue("--graph-grid-border");
 
   const loadingOverlay = loading ? (

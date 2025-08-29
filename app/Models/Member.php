@@ -29,6 +29,8 @@ class Member extends Model
         'bank_last_update' => 'datetime',
         'seed_vault' => 'array',
         'seed_vault_last_update' => 'datetime',
+        'quiver' => 'array',
+        'quiver_last_update' => 'datetime',
         'interacting' => 'array',
         'interacting_last_update' => 'datetime',
         'diary_vars' => 'array',
@@ -45,11 +47,6 @@ class Member extends Model
     public function collectionLogs(): HasMany
     {
         return $this->hasMany(CollectionLog::class);
-    }
-
-    public function newCollectionLogs(): HasMany
-    {
-        return $this->hasMany(NewCollectionLog::class);
     }
 
     public function skillStats(): HasMany

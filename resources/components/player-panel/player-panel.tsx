@@ -8,7 +8,6 @@ import { PlayerDiaries } from "./player-diaries";
 import * as Member from "../../game/member";
 import { useModal } from "../modal/modal";
 import { CollectionLogWindow } from "../collection-log/collection-log";
-import { useGroupMemberContext } from "../../context/group-context";
 import { useCachedImages } from "../../hooks/use-cached-images";
 import { CachedImage } from "../cached-image/cached-image";
 
@@ -29,23 +28,8 @@ interface PlayerPanelButtonProps {
   onClick: () => void;
 }
 
-const collectionsSelector = (
-  group: Map<Member.Name, Member.State> | undefined,
-): Map<Member.Name, Member.Collection> => {
-  const collections = new Map<Member.Name, Member.Collection>();
-
-  if (!group) return collections;
-
-  for (const [name, { collection }] of group) {
-    if (!collection) continue;
-    collections.set(name, collection);
-  }
-  return collections;
-};
-
 export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement => {
   const [subcategory, setSubcategory] = useState<PlayerPanelSubcategory>();
-  const collections = useGroupMemberContext(collectionsSelector);
   const { open: openCollectionLogModal, modal: collectionLogModal } = useModal(CollectionLogWindow);
   const { getUIImageUrl, getIconUrl } = useCachedImages();
 
@@ -124,7 +108,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         height: 32,
         class: "player-panel-collection-log",
         onClick: (): void => {
-          openCollectionLogModal({ collections, player: member });
+          openCollectionLogModal({ player: member });
         },
       },
     ] satisfies PlayerPanelButtonProps[]

@@ -1,11 +1,16 @@
-/* Makes the xp drop rise upward from bottom to top of its parent */
+/*
+ * Makes the xp drop rise upward just off the bottom of the parent, before
+ * sliding far offscreen. The hardcode pixel value accommodates an xp drop with
+ * every single skill. Doing it this way instead of with transforms/translations
+ * helps keep text sharp.
+ */
 @keyframes rising {
   0% {
-    bottom: -20px;
+    top: 100%;
   }
 
   100% {
-    bottom: calc(100% + 80px);
+    top: calc(-16 * 24px);
     display: none;
   }
 }
@@ -18,16 +23,25 @@
 }
 
 .xp-dropper-drop {
-  position: absolute;
-  right: 0;
-  animation-name: rising;
-  animation-duration: 8s;
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 
 .xp-dropper-drop > img {
   width: 16px;
   height: 16px;
+  image-rendering: auto;
   object-fit: contain;
+  margin-right: 4px;
+}
+
+.xp-dropper-drop-cluster {
+  position: absolute;
+  right: 4px;
+  height: 80px;
+  animation-name: rising;
+  animation-duration: 9.6s;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
 }

@@ -4,7 +4,6 @@ import type { EquipmentSlot } from "./equipment";
 import type { ItemID, ItemStack } from "./items";
 import type { QuestID, QuestStatus } from "./quests";
 import type { Experience, Skill } from "./skill";
-import * as CollectionLog from "./collection-log";
 import type { WikiPosition2D } from "../components/canvas-map/coordinates";
 
 export type Name = Distinct<string, "Member.Name">;
@@ -14,6 +13,7 @@ export interface State {
   bank: ItemCollection;
   runePouch: ItemCollection;
   seedVault: ItemCollection;
+  quiver: ItemCollection;
   equipment: Equipment;
   inventory: Inventory;
   coordinates?: { coords: WikiPosition2D; plane: number };
@@ -35,13 +35,11 @@ export type Inventory = (ItemStack | undefined)[];
 export type Skills = Record<Skill, Experience>;
 export type Quests = Map<QuestID, QuestStatus>;
 export type Diaries = Record<DiaryRegion, Record<DiaryTier, boolean[]>>;
-export interface Collection {
-  obtainedItems: Map<CollectionLog.ItemIDDeduped, number>;
-  pageStats: Map<CollectionLog.PageName, { completions: number[] }>;
-}
+export type Collection = Map<ItemID, number>;
 
 /**
- * An instance of a member gaining experience.
+ * An instance of a member gaining experience, across multiple skills at the
+ * same time.
  */
 export interface ExperienceDrop {
   /**
@@ -51,25 +49,14 @@ export interface ExperienceDrop {
   id: number;
 
   /**
-   * The skill to display the icon for.
+   * All the skills that the player gained experience in.
    */
-  skill: Skill;
-
-  /**
-   * The amount of xp in the drop.
-   */
-  amount: Experience;
+  amounts: { skill: Skill; amount: Experience }[];
 
   /**
    * Age of the drop, for deleting when it gets old
    */
   creationTimeMS: number;
-
-  /**
-   * A random seed between 0 and 1, that can be used for randomly distributed
-   * yet deterministic variations between xp drops.
-   */
-  seed: number;
 }
 
 export interface NPCInteraction {

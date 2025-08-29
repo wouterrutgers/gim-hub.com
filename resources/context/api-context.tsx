@@ -22,6 +22,8 @@ interface APIMethods {
   addMember: Api["addGroupMember"];
   deleteMember: Api["deleteGroupMember"];
 
+  fetchGroupCollectionLogs?: Api["fetchGroupCollectionLogs"];
+
   getCredentials: Api["getCredentials"];
 }
 
@@ -157,26 +159,31 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     [storageCredentials],
   );
 
-  const apiContext: APIContext = {
-    loaded: true,
-    logOut,
-    logInLive,
-    logInDemo,
-    checkCredentials,
-  };
+  const apiContext: APIContext = useMemo(() => {
+    const base: APIContext = {
+      loaded: true,
+      logOut,
+      logInLive,
+      logInDemo,
+      checkCredentials,
+    };
 
-  if (!api) {
-    return <Context value={apiContext}>{children}</Context>;
-  }
+    if (!api) return base;
 
-  apiContext.api = {
-    fetchSkillData: api.fetchSkillData.bind(api),
-    setUpdateCallbacks: api.overwriteSomeUpdateCallbacks.bind(api),
-    addMember: api.addGroupMember.bind(api),
-    deleteMember: api.deleteGroupMember.bind(api),
-    renameMember: api.renameGroupMember.bind(api),
-    getCredentials: api.getCredentials.bind(api),
-  } satisfies APIMethods;
+    /* eslint-disable @typescript-eslint/explicit-function-return-type */
+    base.api = {
+      fetchSkillData: api.fetchSkillData.bind(api),
+      setUpdateCallbacks: api.overwriteSomeUpdateCallbacks.bind(api),
+      addMember: api.addGroupMember.bind(api),
+      deleteMember: api.deleteGroupMember.bind(api),
+      renameMember: api.renameGroupMember.bind(api),
+      getCredentials: api.getCredentials.bind(api),
+      fetchGroupCollectionLogs: () => api.fetchGroupCollectionLogs(),
+    };
+    /* eslint-enable @typescript-eslint/explicit-function-return-type */
+
+    return base;
+  }, [api, checkCredentials, logInDemo, logInLive, logOut]);
 
   return <Context value={apiContext}>{children}</Context>;
 };

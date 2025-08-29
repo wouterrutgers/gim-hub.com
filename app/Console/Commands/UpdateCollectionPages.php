@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Domain\CollectionLogInfo;
+use App\Models\CollectionPage;
 use App\Models\CollectionTab;
 use Illuminate\Console\Command;
 
@@ -14,39 +14,48 @@ class UpdateCollectionPages extends Command
 
     public function handle(): int
     {
-        CollectionTab::updateOrCreate([
+        $tabs = [];
+        $pages = [];
+
+        $tabs[] = CollectionTab::updateOrCreate([
             'tab_id' => 0,
             'name' => 'Bosses',
-        ]);
+        ])->id;
 
-        CollectionTab::updateOrCreate([
+        $tabs[] = CollectionTab::updateOrCreate([
             'tab_id' => 1,
             'name' => 'Raids',
-        ]);
+        ])->id;
 
-        CollectionTab::updateOrCreate([
+        $tabs[] = CollectionTab::updateOrCreate([
             'tab_id' => 2,
             'name' => 'Clues',
-        ]);
+        ])->id;
 
-        CollectionTab::updateOrCreate([
+        $tabs[] = CollectionTab::updateOrCreate([
             'tab_id' => 3,
             'name' => 'Minigames',
-        ]);
+        ])->id;
 
-        CollectionTab::updateOrCreate([
+        $tabs[] = CollectionTab::updateOrCreate([
             'tab_id' => 4,
             'name' => 'Other',
-        ]);
+        ])->id;
 
-        foreach (CollectionLogInfo::getCollectionLogInfo() as $tab) {
+        foreach (json_decode(file_get_contents(storage_path('cache/collection_log_info.json')), true) as $tab) {
             foreach ($tab['pages'] as $page) {
-                CollectionTab::where('tab_id', '=', $tab['tabId'])->firstOrFail()
+                $pages[] = CollectionTab::where('tab_id', '=', $tab['tabId'])->firstOrFail()
                     ->pages()->updateOrCreate([], [
                         'name' => $page['name'],
-                    ]);
+                    ])->id;
             }
         }
+
+        CollectionTab::whereNotIn('id', $tabs)
+            ->delete();
+
+        CollectionPage::whereNotIn('id', $pages)
+            ->delete();
 
         return static::SUCCESS;
     }

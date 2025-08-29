@@ -57,6 +57,15 @@
   top: 39px;
 }
 
+.equipment-quiver {
+  left: 111px;
+  top: 0;
+}
+
+.equipment-slot-grayed {
+  filter: grayscale(0.9) brightness(0.8);
+}
+
 .equipment-weapon {
   left: 14px;
   top: 78px;

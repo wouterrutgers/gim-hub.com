@@ -3,7 +3,7 @@
   width: 300px;
   position: relative;
   transform: translate3d(0, 0, 1px);
-  color: white;
+  color: var(--white);
   box-sizing: border-box;
 }
 

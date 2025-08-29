@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\CollectionLogInfo;
 use App\Domain\Validators;
 use App\Enums\AggregatePeriod;
 use App\Models\CollectionLog;
 use App\Models\Member;
-use App\Models\NewCollectionLog;
 use App\Models\SkillStat;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class GroupMemberController extends Controller
 {
@@ -80,7 +79,6 @@ class GroupMemberController extends Controller
 
             SkillStat::where('member_id', '=', $memberId)->delete();
             CollectionLog::where('member_id', '=', $memberId)->delete();
-            NewCollectionLog::where('member_id', '=', $memberId)->delete();
 
             $member->delete();
         });
@@ -136,10 +134,10 @@ class GroupMemberController extends Controller
             'shared_bank' => 'nullable|array',
             'rune_pouch' => 'nullable|array',
             'seed_vault' => 'nullable|array',
+            'quiver' => 'nullable|array',
             'deposited' => 'nullable|array',
             'diary_vars' => 'nullable|array',
             'collection_log' => 'nullable|array',
-            'collection_log_new' => 'nullable|array',
             'interacting' => 'nullable',
         ]);
 
@@ -166,45 +164,13 @@ class GroupMemberController extends Controller
         Validators::validateMemberPropLength('shared_bank', $validated['shared_bank'] ?? null, 0, 1000);
         Validators::validateMemberPropLength('rune_pouch', $validated['rune_pouch'] ?? null, 6, 8);
         Validators::validateMemberPropLength('seed_vault', $validated['seed_vault'] ?? null, 0, 500);
+        Validators::validateMemberPropLength('quiver', $validated['quiver'] ?? null, 2, 2);
         Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);
         Validators::validateMemberPropLength('diary_vars', $validated['diary_vars'] ?? null, 0, 62);
 
-        $collectionLogInfo = CollectionLogInfo::make();
         $collectionLogData = $validated['collection_log'] ?? null;
 
-        try {
-            if (! is_null($collectionLogData)) {
-                foreach ($collectionLogData as $key => $log) {
-                    $pageId = $collectionLogInfo->pageNameToId($log['page_name'] ?? '');
-                    if (is_null($pageId)) {
-                        throw new Exception("Invalid collection log page: {$log['page_name']}");
-                    }
-
-                    if (isset($log['items'])) {
-                        $numberOfItems = count($log['items']) / 2;
-                        $maxItems = $collectionLogInfo->numberOfItemsInPage($pageId);
-                        if ($numberOfItems > $maxItems) {
-                            throw new Exception("{$numberOfItems} is too many items for collection log {$log['page_name']}");
-                        }
-
-                        for ($i = 0; $i < count($log['items']); $i += 2) {
-                            $itemId = $collectionLogInfo->remapItemId($log['items'][$i]);
-                            $collectionLogData[$key]['items'][$i] = $itemId;
-
-                            if (! $collectionLogInfo->hasItem($pageId, $itemId)) {
-                                throw new Exception("Collection log {$log['page_name']} does not have item id {$itemId}");
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
-        }
-
-        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogInfo, $collectionLogData): void {
+        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
             $now = now();
 
             if (! is_null($validated['stats'] ?? null)) {
@@ -243,6 +209,10 @@ class GroupMemberController extends Controller
                 $member->seed_vault = $validated['seed_vault'];
                 $member->seed_vault_last_update = $now;
             }
+            if (! is_null($validated['quiver'] ?? null)) {
+                $member->quiver = $validated['quiver'];
+                $member->quiver_last_update = $now;
+            }
             if (! is_null($validated['diary_vars'] ?? null)) {
                 $member->diary_vars = $validated['diary_vars'];
                 $member->diary_vars_last_update = $now;
@@ -268,101 +238,22 @@ class GroupMemberController extends Controller
             }
 
             if (! is_null($collectionLogData)) {
-                $this->updateCollectionLog($groupId, $member, $collectionLogData, $collectionLogInfo);
-            }
-
-            if (! empty($validated['collection_log_new'] ?? [])) {
-                $this->updateCollectionLogNew($groupId, $member, $validated['collection_log_new'], $collectionLogInfo);
+                $this->updateCollectionLog($member, $collectionLogData);
             }
         });
 
         return response()->json(null, 200);
     }
 
-    protected function updateCollectionLog(int $groupId, Member $member, array $collectionLogs, CollectionLogInfo $collectionLogInfo): void
+    protected function updateCollectionLog(Member $member, array $collectionLogData): void
     {
-        $now = now();
-
-        foreach ($collectionLogs as $log) {
-            $pageId = $collectionLogInfo->pageNameToId($log['page_name']);
-
-            if (is_null($pageId)) {
-                continue;
-            }
-
-            CollectionLog::updateOrCreate(
-                [
-                    'member_id' => $member->id,
-                    'collection_page_id' => $pageId,
-                ],
-                [
-                    'items' => $log['items'],
-                    'counts' => $log['completion_counts'],
-                    'updated_at' => $now,
-                ]
-            );
-
-            NewCollectionLog::updateOrCreate(
-                [
-                    'member_id' => $member->id,
-                    'collection_page_id' => $pageId,
-                ],
-                [
-                    'items' => [],
-                    'updated_at' => $now,
-                ]
-            );
+        foreach ($collectionLogData as $itemId => $count) {
+            $member->collectionLogs()->updateOrCreate([
+                'item_id' => $itemId,
+            ], [
+                'item_count' => $count,
+            ]);
         }
-    }
-
-    protected function updateCollectionLogNew(int $groupId, Member $member, array $collectionLogNew, CollectionLogInfo $collectionLogInfo): void
-    {
-        $now = now();
-
-        $itemIds = [];
-        foreach ($collectionLogNew as $itemName) {
-            $itemId = $collectionLogInfo->itemNameToId($itemName);
-            if (is_null($itemId)) {
-                throw new Exception("{$itemName} is not a known collection log item");
-            }
-            $itemIds[] = $itemId;
-        }
-
-        $pageIdsToItemIds = [];
-        foreach ($itemIds as $itemId) {
-            $pageIds = $collectionLogInfo->pageIdsForItem($itemId);
-            foreach ($pageIds as $pageId) {
-                if (! isset($pageIdsToItemIds[$pageId])) {
-                    $pageIdsToItemIds[$pageId] = [];
-                }
-                $pageIdsToItemIds[$pageId][$itemId] = true;
-            }
-        }
-
-        foreach ($pageIdsToItemIds as $pageId => $pageItemIds) {
-            $existingItems = $this->getCollectionNewForPage($member->id, $pageId);
-            $combinedItems = array_values(array_unique(array_merge($existingItems, array_keys($pageItemIds))));
-
-            NewCollectionLog::updateOrCreate(
-                [
-                    'member_id' => $member->id,
-                    'collection_page_id' => $pageId,
-                ],
-                [
-                    'items' => $combinedItems,
-                    'updated_at' => $now,
-                ]
-            );
-        }
-    }
-
-    protected function getCollectionNewForPage(int $memberId, int $pageId): array
-    {
-        $result = NewCollectionLog::where('member_id', '=', $memberId)
-            ->where('collection_page_id', '=', $pageId)
-            ->value('items');
-
-        return $result ?? [];
     }
 
     protected function depositItems(int $groupId, string $memberName, array $deposited): void
@@ -432,6 +323,7 @@ class GroupMemberController extends Controller
                     $member->rune_pouch_last_update,
                     $member->interacting_last_update,
                     $member->seed_vault_last_update,
+                    $member->quiver_last_update,
                     $member->diary_vars_last_update,
                 ];
                 $lastUpdated = collect($dates)
@@ -453,11 +345,11 @@ class GroupMemberController extends Controller
                         ? $this->withInteractingTimestamp($member->interacting, $member->interacting_last_update)
                         : null,
                     'seed_vault' => (! is_null($member->seed_vault_last_update) && $member->seed_vault_last_update >= $fromTime) ? $member->seed_vault : null,
+                    'quiver' => (! is_null($member->quiver_last_update) && $member->quiver_last_update >= $fromTime) ? $member->quiver : null,
                     'diary_vars' => (! is_null($member->diary_vars_last_update) && $member->diary_vars_last_update >= $fromTime) ? $member->diary_vars : null,
                     'shared_bank' => null,
                     'deposited' => null,
                     'collection_log' => null,
-                    'collection_log_new' => null,
                 ];
             });
 
@@ -521,51 +413,31 @@ class GroupMemberController extends Controller
         })));
     }
 
-    public function getCollectionLog(Request $request): JsonResponse
+    public function getCollectionLog(Request $request): Collection
     {
         $groupId = app('group')->id;
 
-        $logs = CollectionLog::with(['member', 'page'])
+        return CollectionLog::with('member')
             ->whereHas('member.group', function ($query) use ($groupId) {
                 $query->where('group_id', '=', $groupId);
             })
-            ->get();
+            ->get()->groupBy('member.name')->map->pluck('item_count', 'item_id');
+    }
 
-        $newLogs = NewCollectionLog::with('member')
-            ->whereHas('member.group', function ($query) use ($groupId) {
-                $query->where('group_id', '=', $groupId);
-            })
-            ->get();
+    public function getHiscores(Request $request): Collection
+    {
+        $groupId = app('group')->id;
 
-        $newItemsLookup = [];
-        foreach ($newLogs as $newLog) {
-            $key = "{$newLog->member_id}_{$newLog->collection_page_id}";
-            $newItemsLookup[$key] = $newLog->items ?? [];
-        }
+        $validated = $request->validate([
+            'name' => 'required|string',
+        ]);
 
-        $result = [];
-        foreach ($logs as $log) {
-            $memberName = $log->member->name;
-            $pageId = $log->collection_page_id;
-            $memberId = $log->member_id;
-            $key = "{$memberId}_{$pageId}";
-            $newItems = $newItemsLookup[$key] ?? [];
+        $member = Member::where('group_id', '=', $groupId)
+            ->where('name', '=', $validated['name'])
+            ->first();
 
-            $collectionLog = [
-                'page_name' => $log->page->name,
-                'completion_counts' => $log->counts,
-                'items' => $log->items,
-                'new_items' => $newItems,
-            ];
-
-            if (! isset($result[$memberName])) {
-                $result[$memberName] = [];
-            }
-
-            $result[$memberName][] = $collectionLog;
-        }
-
-        return response()->json($result);
+        return Http::get('https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name))
+            ->throw()->collect('activities')->pluck('score', 'name');
     }
 
     public function amILoggedIn(Request $request): JsonResponse
@@ -592,6 +464,6 @@ class GroupMemberController extends Controller
             ], 401);
         }
 
-        return response()->json(null, 200);
+        return response()->json(null);
     }
 }

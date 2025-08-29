@@ -9,9 +9,9 @@ export const SocialLinks = (): ReactElement => {
         <li>
           <a href="https://github.com/wouterrutgers/gim-hub.com" title="Github" target="_blank">
             <div>
-              <CachedImage alt="github logo" loading="lazy" src="/images/github-light.webp" height="20" />
+              <CachedImage alt="github logo" loading="lazy" src="/images/GitHub-Mark-Light-64px.png" height="20" />
             </div>
-            GIM hub GitHub
+            GitHub
           </a>
         </li>
       </ul>
@@ -23,7 +23,7 @@ export const SocialLinks = (): ReactElement => {
         target="_blank"
       >
         <div>
-          <CachedImage alt="github logo" loading="lazy" src="/images/github-light.webp" height="16" />
+          <CachedImage alt="github logo" loading="lazy" src="/images/GitHub-Mark-Light-64px.png" height="16" />
         </div>
         Original creator's GitHub
       </a>

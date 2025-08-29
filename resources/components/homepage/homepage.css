@@ -1,4 +1,4 @@
-#men-homepage {
+#homepage {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,13 +9,13 @@
   flex-direction: column;
 }
 
-#men-homepage-links {
+#homepage-links {
   margin-top: 1.5em;
   display: flex;
-  gap: 2em;
+  gap: 16px;
 }
 
-#men-homepage .logo {
+#homepage .logo {
   width: 100%;
   max-width: 400px;
   height: auto;

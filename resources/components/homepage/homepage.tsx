@@ -13,22 +13,14 @@ export const Homepage = (): ReactElement => {
   useEffect(() => {
     if (!logInLive) return;
 
-    logInLive()
-      .then(() => {
-        setHasLogin(true);
-      })
-      .catch(() => {
-        setHasLogin(false);
-      });
+    logInLive().then(
+      () => setHasLogin(true),
+      () => setHasLogin(false),
+    );
   }, [logInLive]);
 
   const groupLink = <AppLink href="/group">Go to group</AppLink>;
   const loginLink = <AppLink href="/login">Login</AppLink>;
-
-  if (hasLogin === undefined) {
-    return <></>;
-  }
-
   return (
     <div id="homepage">
       <SocialLinks />

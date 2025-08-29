@@ -95,7 +95,7 @@ const EquipmentSlotInBackendOrder: EquipmentSlot[] = [
 ] as const;
 const EquipmentSchema = z
   .array(z.uint32())
-  .length(2 * EquipmentSlot.length)
+  .length(2 * (EquipmentSlot.length - 1)) // Quiver is an equipment slot but comes as a separate `quiver` key
   .transform((equipmentFlat) => {
     return equipmentFlat.reduce<Map<EquipmentSlot, ItemStack>>((equipment, _, index, equipmentFlat) => {
       if (index % 2 !== 0 || index + 1 >= equipmentFlat.length) return equipment;
@@ -109,6 +109,23 @@ const EquipmentSchema = z
       equipment.set(slot, { itemID, quantity });
       return equipment;
     }, new Map());
+  });
+
+const QuiverSchema = z
+  .array(z.uint32())
+  .refine((arr) => arr.length === 0 || arr.length === 2)
+  .transform((flat) => {
+    const result = new Map<ItemID, number>();
+    if (flat.length === 2) {
+      const itemID = flat[0] as ItemID;
+      const quantity = flat[1];
+
+      if (quantity > 0) {
+        result.set(itemID, quantity);
+      }
+    }
+
+    return result;
   });
 
 const ItemCollectionSchema = z
@@ -900,6 +917,11 @@ const GetGroupDataResponseSchema = z
      */
     equipment: z.nullish(EquipmentSchema).transform((value) => value ?? undefined),
     /**
+     * The items in the player's quiver.
+     * When defined, it always contains all of the items (which is always 1 item in case of the quiver).
+     */
+    quiver: z.nullish(QuiverSchema).transform((value) => value ?? undefined),
+    /**
      * The items in the player's inventory.
      * When defined, it always contains all of the items.
      */
@@ -935,10 +957,11 @@ const GetGroupDataResponseSchema = z
      */
     diary_vars: DiariesSchema.nullish().transform((value) => value ?? undefined),
   })
-  .transform(({ last_updated, rune_pouch, seed_vault, diary_vars, ...rest }) => ({
+  .transform(({ last_updated, rune_pouch, seed_vault, diary_vars, quiver, ...rest }) => ({
     lastUpdated: last_updated,
     runePouch: rune_pouch,
     seedVault: seed_vault,
+    quiver,
     diaries: diary_vars,
     ...rest,
   }))

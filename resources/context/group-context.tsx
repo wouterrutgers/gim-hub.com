@@ -74,6 +74,8 @@ export const useMemberRunePouchContext = (member: Member.Name): Member.ItemColle
   useGroupMemberContext((state) => state?.get(member)?.runePouch);
 export const useMemberSeedVaultContext = (member: Member.Name): Member.ItemCollection | undefined =>
   useGroupMemberContext((state) => state?.get(member)?.seedVault);
+export const useMemberQuiverContext = (member: Member.Name): Member.ItemCollection | undefined =>
+  useGroupMemberContext((state) => state?.get(member)?.quiver);
 export const useMemberEquipmentContext = (member: Member.Name): Member.Equipment | undefined =>
   useGroupMemberContext((state) => state?.get(member)?.equipment);
 export const useMemberInventoryContext = (member: Member.Name): Member.Inventory | undefined =>
@@ -169,6 +171,7 @@ const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => 
           lastUpdated: new Date(0),
           runePouch: new Map(),
           seedVault: new Map(),
+          quiver: new Map(),
           ...oldMemberState,
           ...stateUpdate,
         });
@@ -228,9 +231,9 @@ const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => 
       itemView.set(memberName, oldQuantity + quantity);
     };
 
-    newState.memberStates.forEach(({ bank, equipment, inventory, runePouch, seedVault }, memberName) => {
+    newState.memberStates.forEach(({ bank, equipment, inventory, runePouch, seedVault, quiver }, memberName) => {
       // Each item storage is slightly different, so we need to iterate them different.
-      [bank, runePouch, seedVault].forEach((storageArea) =>
+      [bank, runePouch, seedVault, quiver].forEach((storageArea) =>
         storageArea.forEach((quantity, itemID) => {
           incrementItemCount(memberName, { quantity, itemID });
         }),

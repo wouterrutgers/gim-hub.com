@@ -13,6 +13,7 @@ export interface State {
   bank: ItemCollection;
   runePouch: ItemCollection;
   seedVault: ItemCollection;
+  quiver: ItemCollection;
   equipment: Equipment;
   inventory: Inventory;
   coordinates?: { coords: WikiPosition2D; plane: number };

@@ -13,5 +13,6 @@ export const EquipmentSlot = [
   "Jaw",
   "Ring",
   "Ammo",
+  "Quiver",
 ] as const;
 export type EquipmentSlot = (typeof EquipmentSlot)[number];

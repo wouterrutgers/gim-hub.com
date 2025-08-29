@@ -127,19 +127,21 @@ export default class DemoApi {
   private queueFetchGroupData(): void {
     const FETCH_INTERVAL_MS = 1000;
 
-    this.getGroupDataPromise ??= mockGroupDataResponse()
-      .then((response) => {
-        this.updateGroupData(response);
-      })
-      .catch((reason) => console.error("Failed to get group data for API", reason))
-      .finally(() => {
-        if (this.closed) return;
+    this.getGroupDataPromise ??= new Promise((resolve) => setTimeout(resolve, 100)).then(() =>
+      mockGroupDataResponse()
+        .then((response) => {
+          this.updateGroupData(response);
+        })
+        .catch((reason) => console.error("Failed to get group data for API", reason))
+        .finally(() => {
+          if (this.closed) return;
 
-        window.setTimeout(() => {
-          this.getGroupDataPromise = undefined;
-          this.queueFetchGroupData();
-        }, FETCH_INTERVAL_MS);
-      });
+          window.setTimeout(() => {
+            this.getGroupDataPromise = undefined;
+            this.queueFetchGroupData();
+          }, FETCH_INTERVAL_MS);
+        }),
+    );
   }
 
   close(): void {

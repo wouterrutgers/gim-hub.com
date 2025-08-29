@@ -1,6 +1,7 @@
 import z from "zod/v4";
 import type { ItemID } from "../../game/items";
 import * as CollectionLog from "../../game/collection-log";
+import { canonicalizeCollectionLogItemId } from "../../game/collection-log";
 
 export type Response = z.infer<typeof CollectionLogInfoSchema>;
 export const fetchCollectionLogInfo = ({ baseURL }: { baseURL: string }): Promise<Response> =>
@@ -31,7 +32,8 @@ const PageSchema = z
       .object({ id: z.uint32().transform((id) => id as ItemID), name: z.string() })
       /* Throw away name since we can look that up in the game data */
       .transform((item) => item.id)
-      .array(),
+      .array()
+      .transform((ids) => ids.map((id) => canonicalizeCollectionLogItemId(id))),
   })
   .transform(({ name, completion_labels, items }) => ({ name, completionLabels: completion_labels, items }));
 
@@ -45,10 +47,10 @@ const CollectionLogInfoSchema = z
   })
   .array()
   .transform((tabsFlat) => {
-    const seenItemIDs = new Set<CollectionLog.ItemIDDeduped>();
+    const seenItemIDs = new Set<ItemID>();
     const tabs = tabsFlat.reduce<Map<CollectionLog.TabName, Page[]>>((tabsMap, { tabId, pages }) => {
       tabsMap.set(TabByID[tabId], pages);
-      pages.flatMap((page) => page.items).forEach((itemID) => seenItemIDs.add(CollectionLog.deduplicateItemID(itemID)));
+      pages.flatMap((page) => page.items).forEach((itemID) => seenItemIDs.add(canonicalizeCollectionLogItemId(itemID)));
       return tabsMap;
     }, new Map());
 

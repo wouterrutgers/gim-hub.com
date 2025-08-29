@@ -29,18 +29,11 @@ export interface CollectionLogInfo {
   tabs: Map<TabName, Page[]>;
 }
 
-/**
- * The collection log has duplicate versions of items on different pages with
- * different items ids. Where it matters, collection log storage structures will
- * use the deduped ID instead, which must be obtained by calling `deduplicateItemID`.
- */
-export type ItemIDDeduped = Distinct<number, "ItemIDDeduped">;
-const duplicateItemIDLookup = new Map<ItemID, ItemIDDeduped>([
-  // Duplicate mining outfit from volcanic mine and motherlode mine pages
-  [29472, 12013], // Prospector helmet
-  [29474, 12014], // Prospector jacket
-  [29476, 12015], // Prospector legs
-  [29478, 12016], // Prospector boots
-] as [ItemID, ItemIDDeduped][]);
-export const deduplicateItemID = (id: ItemID): ItemIDDeduped =>
-  duplicateItemIDLookup.get(id) ?? (id as number as ItemIDDeduped);
+const COLLECTION_LOG_ITEM_ALIASES: ReadonlyMap<ItemID, ItemID> = new Map<ItemID, ItemID>([
+  [29472 as ItemID, 12013 as ItemID],
+  [29474 as ItemID, 12014 as ItemID],
+  [29476 as ItemID, 12015 as ItemID],
+  [29478 as ItemID, 12016 as ItemID],
+]);
+
+export const canonicalizeCollectionLogItemId = (id: ItemID): ItemID => COLLECTION_LOG_ITEM_ALIASES.get(id) ?? id;

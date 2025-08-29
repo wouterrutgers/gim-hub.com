@@ -1,9 +1,9 @@
-import { createContext, useContext, useEffect, useReducer, type ReactNode } from "react";
+import { createContext, type ReactNode, useContext, useEffect, useReducer } from "react";
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
 import type { ItemID, ItemStack } from "../game/items";
 import type { GroupStateUpdate } from "../api/api";
-import { Skill, type Experience } from "../game/skill";
+import { type Experience, Skill } from "../game/skill";
 
 interface MemberColor {
   hueDegrees: number;
@@ -13,6 +13,7 @@ interface GroupState {
   memberStates: Map<Member.Name, Member.State>;
   memberNames: Set<Member.Name>;
   memberColors: Map<Member.Name, MemberColor>;
+  collections: Map<Member.Name, Member.Collection>;
   xpDropCounter: number;
   xpDrops: Map<Member.Name, Member.ExperienceDrop[]>;
 }
@@ -45,6 +46,11 @@ export const GroupXPDropsContext = createContext<GroupState["xpDrops"]>(new Map(
  * Contains the colors of the group. These colors are not stable if the group changes.
  */
 export const GroupMemberColorsContext = createContext<GroupState["memberColors"]>(new Map());
+
+/**
+ * Contains the collection logs of the group.
+ */
+export const GroupCollectionsContext = createContext<GroupState["collections"]>(new Map());
 
 // TODO: many of these are candidates to be split off like the items, to reduce
 // excessive updates.
@@ -84,14 +90,25 @@ export const useMemberQuestsContext = (member: Member.Name): Member.Quests | und
   useGroupMemberContext((state) => state?.get(member)?.quests);
 export const useMemberDiariesContext = (member: Member.Name): Member.Diaries | undefined =>
   useGroupMemberContext((state) => state?.get(member)?.diaries);
-export const useMemberCollectionContext = (member: Member.Name): Member.Collection | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.collection);
 
 /* eslint-enable react-refresh/only-export-components */
 
 // TODO: Use full HSL colors with varying saturation/lightness, since
 // perceptively just rotating the colors doesn't look very good.
 const memberColorHues: number[] = [330, 100, 230, 170, 40];
+
+interface GroupStateAction {
+  /*
+   * A partial update has only some of the members e.g. collection-log only
+   * returns members who have recorded their logs. If the update is partial, we
+   * persist old member states.
+   *
+   * A non-partial / full update has all of the members e.g. get-group-data always returns all
+   * members. If the update is not partial, we wipe old state.
+   */
+  partial: boolean;
+  update: GroupStateUpdate;
+}
 
 /**
  * Taking in the new group state, perform some diff checking and update
@@ -100,55 +117,108 @@ const memberColorHues: number[] = [330, 100, 230, 170, 40];
  * A lot of these checks should probably be done by the backend and diffs
  * performed in the API class, but for now we can just do the checks here.
  */
-const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupState => {
+const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => {
   const newState: Partial<GroupState> = {};
 
   let updated = false;
 
+  const memberNames = ((): Set<Member.Name> => {
+    if (action.partial) {
+      return new Set([...oldState.memberNames, ...action.update.keys()].sort((a, b) => a.localeCompare(b)));
+    }
+    return new Set([...action.update.keys()].sort((a, b) => a.localeCompare(b)));
+  })();
+  const namesHaveChanged = oldState.memberNames.symmetricDifference(memberNames).size > 0;
+
+  if (namesHaveChanged) {
+    newState.memberNames = new Set(memberNames);
+    updated = true;
+  }
+
+  if (namesHaveChanged) {
+    const newMemberColors = new Map<Member.Name, MemberColor>();
+    const SHARED_NAME = "@SHARED" as Member.Name;
+    let colorIndex = Array.from(newMemberColors.keys()).filter((n) => n !== SHARED_NAME).length;
+    for (const name of memberNames) {
+      if (newMemberColors.has(name)) continue;
+      if (name === SHARED_NAME) {
+        newMemberColors.set(SHARED_NAME, { hueDegrees: 0 });
+        continue;
+      }
+      const hueDegrees = memberColorHues.at(colorIndex) ?? 0;
+      newMemberColors.set(name, { hueDegrees });
+      colorIndex += 1;
+    }
+    newState.memberColors = newMemberColors;
+    updated = true;
+  }
+
   {
-    const newMemberNames = new Set<Member.Name>(stateUpdate.keys());
-    if (newMemberNames.size !== oldState.memberNames.size || newMemberNames.difference(oldState.memberNames).size > 0) {
-      newState.memberNames = newMemberNames;
+    const newMemberStates = new Map();
+    let memberStatesUpdated = namesHaveChanged;
 
-      newState.memberColors = new Map();
-      let colorIndex = 0;
-      for (const name of newMemberNames) {
-        const SHARED_NAME = "@SHARED" as Member.Name;
-        if (name === SHARED_NAME) {
-          newState.memberColors.set(SHARED_NAME, { hueDegrees: 0 });
-          continue;
-        }
+    for (const member of memberNames) {
+      const stateUpdate = action.update.get(member);
+      const oldMemberState = oldState.memberStates.get(member);
 
-        // Groups should only have at most 5 members, but we fill in a placeholder so
-        // things look OK just in case.
-        const hueDegrees = memberColorHues.at(colorIndex) ?? 0;
-        newState.memberColors.set(name, { hueDegrees });
-        colorIndex += 1;
+      if (stateUpdate || !oldMemberState) {
+        newMemberStates.set(member, {
+          bank: new Map(),
+          equipment: new Map(),
+          inventory: [] satisfies Member.Inventory,
+          lastUpdated: new Date(0),
+          runePouch: new Map(),
+          seedVault: new Map(),
+          ...oldMemberState,
+          ...stateUpdate,
+        });
+        memberStatesUpdated = true;
+      } else {
+        newMemberStates.set(member, oldMemberState);
+      }
+    }
+
+    if (memberStatesUpdated) {
+      updated = true;
+      newState.memberStates = newMemberStates;
+    }
+  }
+
+  if (newState.memberStates) {
+    let groupCollectionsUpdated = namesHaveChanged;
+
+    const newCollections = new Map<Member.Name, Member.Collection>();
+    for (const [name, { collection: newCollection }] of newState.memberStates) {
+      if (newCollection) {
+        newCollections.set(name, newCollection);
       }
 
+      let memberChanged = false;
+      const oldCollection = oldState.memberStates.get(name)?.collection;
+      if (oldCollection) {
+        for (const [itemID, oldQuantity] of oldCollection) {
+          const newQuantity = newCollection?.get(itemID);
+          if (oldQuantity !== newQuantity) {
+            memberChanged = true;
+            break;
+          }
+        }
+      } else if (newCollection) {
+        memberChanged = true;
+      }
+
+      if (memberChanged) {
+        groupCollectionsUpdated = true;
+      }
+    }
+
+    if (groupCollectionsUpdated) {
       updated = true;
+      newState.collections = newCollections;
     }
   }
 
-  {
-    const newMemberStates = new Map(oldState.memberStates);
-    for (const [member, memberStateUpdate] of stateUpdate) {
-      const memberState: Member.State = oldState.memberStates.get(member) ?? {
-        bank: new Map(),
-        equipment: new Map(),
-        inventory: [] satisfies Member.Inventory,
-        lastUpdated: new Date(0),
-        runePouch: new Map(),
-        seedVault: new Map(),
-      };
-
-      newMemberStates.set(member, { ...memberState, ...memberStateUpdate });
-      newState.memberStates = newMemberStates;
-      updated = true;
-    }
-  }
-
-  {
+  if (newState.memberStates) {
     const newItems = new Map<ItemID, Map<Member.Name, number>>();
     const incrementItemCount = (memberName: Member.Name, { itemID, quantity }: ItemStack): void => {
       if (!newItems.has(itemID)) newItems.set(itemID, new Map<Member.Name, number>());
@@ -158,7 +228,7 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
       itemView.set(memberName, oldQuantity + quantity);
     };
 
-    newState.memberStates?.forEach(({ bank, equipment, inventory, runePouch, seedVault }, memberName) => {
+    newState.memberStates.forEach(({ bank, equipment, inventory, runePouch, seedVault }, memberName) => {
       // Each item storage is slightly different, so we need to iterate them different.
       [bank, runePouch, seedVault].forEach((storageArea) =>
         storageArea.forEach((quantity, itemID) => {
@@ -213,9 +283,9 @@ const reducer = (oldState: GroupState, stateUpdate: GroupStateUpdate): GroupStat
     }
   }
 
-  {
+  if (newState.memberStates) {
     const xpDropsByMember = new Map<Member.Name, Member.ExperienceDrop[]>(oldState.xpDrops);
-    for (const [member, { skills: newSkills }] of stateUpdate) {
+    for (const [member, { skills: newSkills }] of newState.memberStates) {
       const oldSkills = oldState.memberStates.get(member)?.skills;
       if (!oldSkills || !newSkills) {
         continue;
@@ -286,6 +356,7 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
     memberStates: new Map(),
     memberNames: new Set<Member.Name>(),
     memberColors: new Map(),
+    collections: new Map(),
     xpDropCounter: 0,
     xpDrops: new Map(),
   });
@@ -294,19 +365,25 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
   useEffect(() => {
     if (!setUpdateCallbacks) return;
 
-    setUpdateCallbacks({ onGroupUpdate: updateContexts });
+    setUpdateCallbacks({
+      onGroupUpdate: (update, partial) => {
+        updateContexts({ partial, update });
+      },
+    });
   }, [setUpdateCallbacks]);
 
-  const { items, memberStates, memberNames, xpDrops, memberColors } = contexts;
+  const { items, memberStates, memberNames, xpDrops, memberColors, collections } = contexts;
 
   return (
     <GroupMemberNamesContext value={memberNames}>
       <GroupMemberColorsContext value={memberColors}>
-        <GroupItemsContext value={items}>
-          <GroupMemberStatesContext value={memberStates}>
-            <GroupXPDropsContext value={xpDrops}>{children}</GroupXPDropsContext>
-          </GroupMemberStatesContext>
-        </GroupItemsContext>
+        <GroupCollectionsContext value={collections}>
+          <GroupItemsContext value={items}>
+            <GroupMemberStatesContext value={memberStates}>
+              <GroupXPDropsContext value={xpDrops}>{children}</GroupXPDropsContext>
+            </GroupMemberStatesContext>
+          </GroupItemsContext>
+        </GroupCollectionsContext>
       </GroupMemberColorsContext>
     </GroupMemberNamesContext>
   );

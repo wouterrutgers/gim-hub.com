@@ -26,6 +26,7 @@ interface APIContext {
   renameMember?: Api["renameGroupMember"];
   addMember?: Api["addGroupMember"];
   deleteMember?: Api["deleteGroupMember"];
+  fetchGroupCollectionLogs?: Api["fetchGroupCollectionLogs"];
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -69,33 +70,34 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     };
   }, [credentials]);
 
-  const apiContext: APIContext = {
-    logOut: (): void => {
-      setGroupName(undefined);
-      setGroupToken(undefined);
-    },
-    logIn: ({ name, token }: GroupCredentials): void => {
-      setGroupName(name);
-      setGroupToken(token);
-    },
-    credentials,
-  };
-
-  if (api?.isOpen()) {
-    apiContext.fetchSkillData = (period: RequestSkillData.AggregatePeriod): ReturnType<Api["fetchSkillData"]> => {
-      return api.fetchSkillData(period);
-    };
-    apiContext.setUpdateCallbacks = (callbacks: Parameters<Api["overwriteSomeUpdateCallbacks"]>[0]): void => {
-      api.overwriteSomeUpdateCallbacks(callbacks);
+  const apiContext: APIContext = useMemo(() => {
+    const base: APIContext = {
+      logOut: (): void => {
+        setGroupName(undefined);
+        setGroupToken(undefined);
+      },
+      logIn: ({ name, token }: GroupCredentials): void => {
+        setGroupName(name);
+        setGroupToken(token);
+      },
+      credentials,
     };
 
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    apiContext.addMember = (member) => api.addGroupMember(member);
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    apiContext.deleteMember = (member) => api.deleteGroupMember(member);
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    apiContext.renameMember = (member) => api.renameGroupMember(member);
-  }
+    if (api?.isOpen()) {
+      return {
+        ...base,
+        fetchSkillData: (period: RequestSkillData.AggregatePeriod) => api.fetchSkillData(period),
+        setUpdateCallbacks: (callbacks: Parameters<Api["overwriteSomeUpdateCallbacks"]>[0]) =>
+          api.overwriteSomeUpdateCallbacks(callbacks),
+        addMember: (member) => api.addGroupMember(member),
+        deleteMember: (member) => api.deleteGroupMember(member),
+        renameMember: (member) => api.renameGroupMember(member),
+        fetchGroupCollectionLogs: () => api.fetchGroupCollectionLogs(),
+      };
+    }
+
+    return base;
+  }, [api, credentials, setGroupName, setGroupToken]);
 
   return <Context value={apiContext}>{children}</Context>;
 };

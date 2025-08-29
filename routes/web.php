@@ -22,6 +22,7 @@ Route::middleware(AuthenticateGroup::class)->prefix('api/group/{group}')->group(
     Route::get('/collection-log', [GroupMemberController::class, 'getCollectionLog']);
     Route::get('/am-i-logged-in', [GroupMemberController::class, 'amILoggedIn']);
     Route::get('/am-i-in-group', [GroupMemberController::class, 'amIInGroup']);
+    Route::get('/hiscores', [GroupMemberController::class, 'getHiscores']);
 });
 
 Route::fallback(function () {

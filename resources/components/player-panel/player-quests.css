@@ -9,7 +9,7 @@
 }
 
 .player-quests-list {
-  color: white;
+  color: var(--white);
   max-height: 300px;
   overflow-y: scroll;
 }

@@ -2,7 +2,6 @@
   display: flex;
   align-items: flex-end;
   gap: 6px 8px;
-  margin-inline: 16px;
 }
 
 @media only screen and (width <= 800px) {
@@ -17,7 +16,6 @@
 }
 
 #items-page-utility {
-  margin-inline: 16px;
   gap: 4px;
   display: flex;
   flex-wrap: wrap;
@@ -102,5 +100,5 @@
 }
 
 #items-page-no-items {
-  padding: 16px;
+  padding: 16px 16px 0;
 }

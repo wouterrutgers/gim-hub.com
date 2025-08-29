@@ -174,7 +174,7 @@ const ItemPanelsScrollArea = ({
   }, []);
 
   return (
-    <div ref={parentRef} style={{ overflowY: "auto", padding: 16 }}>
+    <div ref={parentRef} style={{ overflowY: "auto" }}>
       <div
         ref={childRef}
         style={{ height: `${itemsVirtualizer.getTotalSize()}px`, width: "100%", position: "relative" }}

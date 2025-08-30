@@ -156,8 +156,8 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
     <PlayerStatsImpl
       name={member}
       health={stats?.health ?? { current: 10, max: 10 }}
-      prayer={stats?.health ?? { current: 1, max: 1 }}
-      run={stats?.health ?? { current: 1, max: 1 }}
+      prayer={stats?.prayer ?? { current: 1, max: 1 }}
+      run={stats?.run ?? { current: 1, max: 1 }}
       status={
         online
           ? { online: true, interacting: isInteractingRecent ? interacting : undefined, world: stats?.world }

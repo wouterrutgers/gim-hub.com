@@ -4,7 +4,6 @@ import { SearchElement } from "../search-element/search-element";
 import { GameDataContext } from "../../context/game-data-context";
 import type * as Member from "../../game/member";
 import { useMemberQuestsContext } from "../../context/group-context";
-import { useCachedImages } from "../../hooks/use-cached-images";
 import { CachedImage } from "../cached-image/cached-image";
 
 import "./player-quests.css";
@@ -28,23 +27,22 @@ const getClassForQuestStatus = (status: QuestStatus): string => {
 export const PlayerQuests = ({ member }: { member: Member.Name }): ReactElement => {
   const [nameFilter, setNameFilter] = useState<string>("");
   const { quests: questData } = useContext(GameDataContext);
-  const { getIconUrl } = useCachedImages();
   const quests = useMemberQuestsContext(member);
 
   const getDifficultyIconURL = (difficulty: QuestDifficulty): string => {
     switch (difficulty) {
       case "Novice":
-        return getIconUrl("3399-0.png");
+        return "/icons/3399-0.png";
       case "Intermediate":
-        return getIconUrl("3400-0.png");
+        return "/icons/3400-0.png";
       case "Experienced":
-        return getIconUrl("3402-0.png");
+        return "/icons/3402-0.png";
       case "Master":
-        return getIconUrl("3403-0.png");
+        return "/icons/3403-0.png";
       case "Grandmaster":
-        return getIconUrl("3404-0.png");
+        return "/icons/3404-0.png";
       case "Special":
-        return getIconUrl("3404-0.png");
+        return "/icons/3404-0.png";
     }
   };
 

@@ -1,7 +1,7 @@
 import z from "zod/v4";
 import type { QuestStatus } from "../../game/quests";
 import { Skill, type Experience } from "../../game/skill";
-import { DiaryTier, type DiaryRegion } from "../../game/diaries";
+import type { DiaryTier, DiaryRegion } from "../../game/diaries";
 import { EquipmentSlot } from "../../game/equipment";
 import type { ItemID, ItemStack } from "../../game/items";
 import type { GroupCredentials } from "../credentials";

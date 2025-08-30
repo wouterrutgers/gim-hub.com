@@ -9,7 +9,6 @@ import * as Member from "../../game/member";
 import { useModal } from "../modal/modal";
 import { CollectionLogWindow } from "../collection-log/collection-log";
 import { useGroupMemberContext } from "../../context/group-context";
-import { useCachedImages } from "../../hooks/use-cached-images";
 import { CachedImage } from "../cached-image/cached-image";
 
 import "./player-panel.css";
@@ -47,7 +46,6 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
   const [subcategory, setSubcategory] = useState<PlayerPanelSubcategory>();
   const collections = useGroupMemberContext(collectionsSelector);
   const { open: openCollectionLogModal, modal: collectionLogModal } = useModal(CollectionLogWindow);
-  const { getUIImageUrl, getIconUrl } = useCachedImages();
 
   const toggleCategory = useCallback(
     (newSubcategory: PlayerPanelSubcategory) => {
@@ -64,7 +62,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         category: "Inventory",
         ariaLabel: "inventory",
         alt: "osrs inventory",
-        src: getUIImageUrl("777-0.png"),
+        src: "/ui/777-0.png",
         width: 26,
         height: 28,
         onClick: (): void => {
@@ -75,7 +73,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         category: "Equipment",
         ariaLabel: "equipment",
         alt: "osrs t-posing knight",
-        src: getUIImageUrl("778-0.png"),
+        src: "/ui/778-0.png",
         width: 27,
         height: 32,
         onClick: (): void => {
@@ -86,7 +84,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         category: "Skills",
         ariaLabel: "skills",
         alt: "osrs skills",
-        src: getUIImageUrl("3579-0.png"),
+        src: "/ui/3579-0.png",
         width: 23,
         height: 22,
         onClick: (): void => {
@@ -97,7 +95,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         category: "Quests",
         ariaLabel: "quests",
         alt: "osrs quest",
-        src: getUIImageUrl("776-0.png"),
+        src: "/ui/776-0.png",
         width: 22,
         height: 22,
         onClick: (): void => {
@@ -108,7 +106,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         category: "Diaries",
         ariaLabel: "diaries",
         alt: "osrs diary",
-        src: getUIImageUrl("1298-0.png"),
+        src: "/ui/1298-0.png",
         width: 22,
         height: 22,
         onClick: (): void => {
@@ -119,7 +117,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         category: "Collection Log",
         ariaLabel: "collection-log",
         alt: "osrs collection log",
-        src: getIconUrl("items/22711.webp"),
+        src: "/icons/items/22711.webp",
         width: 32,
         height: 32,
         class: "player-panel-collection-log",

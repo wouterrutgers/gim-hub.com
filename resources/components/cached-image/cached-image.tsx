@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useState, useEffect, type ReactElement } from "react";
 import { useImageContext } from "../../context/image-context";
 
 interface CachedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -7,7 +7,16 @@ interface CachedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export const CachedImage = ({ src, alt, ...props }: CachedImageProps): ReactElement => {
-  const { getImageUrl } = useImageContext();
+  const { getImageUrlAsync } = useImageContext();
+  const [hashedSrc, setHashedSrc] = useState<string | null>(null);
 
-  return <img {...props} src={getImageUrl(src)} alt={alt} />;
+  useEffect(() => {
+    void getImageUrlAsync(src).then(setHashedSrc);
+  }, [src, getImageUrlAsync]);
+
+  if (!hashedSrc) {
+    return <span />;
+  }
+
+  return <img {...props} src={hashedSrc} alt={alt} />;
 };

@@ -28,7 +28,7 @@
 }
 
 .diary-dialog-title-border {
-  background: url("/ui/173-0.png") repeat;
+  background: url("../../assets/ui/173-0.png") repeat;
   width: 100%;
   height: 6px;
   flex-shrink: 0;

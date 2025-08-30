@@ -6,7 +6,6 @@ const nAsync = require("async");
 const path = require("path");
 const axios = require("axios");
 const sharp = require("sharp");
-const crypto = require("crypto");
 
 // NOTE: sharp will keep some files open and prevent them from being deleted
 sharp.cache(false);
@@ -28,7 +27,6 @@ const siteMapImagesPath = "../public/map";
 const siteMapLabelsPath = "../public/map/labels";
 const siteMapIconPath = "../public/map/icons/map_icons.webp";
 const siteQuestMapping = path.resolve("../resources/js/quests/mapping.json");
-const siteImagesManifestResourcesPath = "../resources/data/images.json";
 const tileSize = 256;
 
 function exec(command, options) {
@@ -506,42 +504,6 @@ async function dumpQuestMapping() {
   execRuneliteApi("net.runelite.api.QuestDumper", siteQuestMapping);
 }
 
-function hashFile(filePath) {
-  const data = fs.readFileSync(filePath);
-  const sha = crypto.createHash("sha256").update(data).digest("hex");
-
-  return sha.substring(0, 7);
-}
-
-async function generateImageManifest() {
-  console.log("\nStep: Generate image manifest");
-
-  const patterns = [
-    "../public/**/*.png",
-    "../public/**/*.webp",
-    "../public/**/*.jpg",
-    "../public/**/*.jpeg",
-    "../public/**/*.gif",
-    "../public/**/*.svg",
-  ];
-
-  const files = patterns.flatMap((pattern) => glob.sync(pattern, { nodir: true }));
-
-  const manifest = {};
-  for (const file of files) {
-    if (file.endsWith("/images.json")) {
-      continue;
-    }
-
-    const relative = `/${path.relative("../public", file).replace(/\\/g, "/")}`;
-
-    manifest[relative] = hashFile(file);
-  }
-
-  fs.mkdirSync(path.dirname(siteImagesManifestResourcesPath), { recursive: true });
-  fs.writeFileSync(siteImagesManifestResourcesPath, JSON.stringify(manifest, null, 2));
-}
-
 (async () => {
   await dumpItemData();
   const allIncludedItemIds = await buildItemDataJson();
@@ -554,5 +516,4 @@ async function generateImageManifest() {
   await moveResults();
 
   await dumpQuestMapping();
-  await generateImageManifest();
 })();

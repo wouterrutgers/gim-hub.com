@@ -12,12 +12,12 @@
 }
 
 .skill-box-left {
-  background-image: url("/ui/174-0.png");
+  background-image: url("../../assets/ui/174-0.png");
 }
 
 .skill-box-right {
   position: relative;
-  background-image: url("/ui/175-0.png");
+  background-image: url("../../assets/ui/175-0.png");
 }
 
 .skill-box-left,
@@ -38,11 +38,11 @@
 }
 
 .dark-mode .skill-box-left {
-  background-image: url("/ui/174-0-dark.png");
+  background-image: url("../../assets/ui/174-0-dark.png");
 }
 
 .dark-mode .skill-box-right {
-  background-image: url("/ui/175-0-dark.png");
+  background-image: url("../../assets/ui/175-0-dark.png");
 }
 
 .skill-box-current-level,

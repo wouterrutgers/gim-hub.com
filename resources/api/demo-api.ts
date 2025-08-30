@@ -26,8 +26,6 @@ export interface GameData {
   collectionLogInfo?: CollectionLogInfo;
 }
 
-let startMS: number | undefined = undefined;
-
 const EXPERIENCE_99 = 13034431 as Experience;
 const EXPERIENCE_90 = 5346332 as Experience;
 const EXPERIENCE_70 = 737627 as Experience;
@@ -78,26 +76,8 @@ const MAX_DIARY = {
   Varrock: MAX_DIARY_TIER,
   Wilderness: MAX_DIARY_TIER,
 } satisfies Member.Diaries;
-const thurgo = {
-  lastTick: 0,
-  piesCookedInInventory: 0,
-  piesUncookedInInventory: 28,
-  piesCookedInBank: 0,
-  piesUncookedInBank: 423425,
-  bankingCooldown: 0,
-};
-const cowKiller = {
-  MAX_HIT: 28,
-  COW_MAX_HP: 8,
-  cowHP: 8,
-  kills: 0,
-  damageDone: 0,
-  lastTick: 0,
-  deathCooldown: 0,
-  attackCooldown: 3,
-};
 
-const mockGroupDataResponse = (): Promise<GetGroupDataResponse> => {
+const mockGroupDataResponse = ({ thurgo, cowKiller }: DemoGroup, startMS: number): Promise<GetGroupDataResponse> => {
   const results: GetGroupDataResponse = [];
 
   startMS ??= performance.now();
@@ -361,6 +341,47 @@ interface UpdateCallbacks {
   onGroupUpdate: (group: GroupStateUpdate) => void;
   onGameDataUpdate: (data: GameData) => void;
 }
+interface DemoGroup {
+  thurgo: {
+    lastTick: number;
+    piesCookedInInventory: number;
+    piesUncookedInInventory: number;
+    piesCookedInBank: number;
+    piesUncookedInBank: number;
+    bankingCooldown: number;
+  };
+  cowKiller: {
+    MAX_HIT: number;
+    COW_MAX_HP: number;
+    cowHP: number;
+    kills: number;
+    damageDone: number;
+    lastTick: number;
+    deathCooldown: number;
+    attackCooldown: number;
+  };
+}
+
+const INITIAL_STATE = {
+  thurgo: {
+    lastTick: 0,
+    piesCookedInInventory: 0,
+    piesUncookedInInventory: 28,
+    piesCookedInBank: 0,
+    piesUncookedInBank: 423425,
+    bankingCooldown: 0,
+  },
+  cowKiller: {
+    MAX_HIT: 28,
+    COW_MAX_HP: 8,
+    cowHP: 8,
+    kills: 0,
+    damageDone: 0,
+    lastTick: 0,
+    deathCooldown: 0,
+    attackCooldown: 3,
+  },
+};
 export default class DemoApi {
   private closed: boolean;
 
@@ -368,6 +389,8 @@ export default class DemoApi {
   private callbacks: Partial<UpdateCallbacks> = {};
 
   private gameData: GameData = {};
+  private startMS: number;
+  private state: DemoGroup = structuredClone(INITIAL_STATE);
 
   public isOpen(): boolean {
     return !this.closed;
@@ -455,7 +478,7 @@ export default class DemoApi {
   private queueFetchGroupData(): void {
     const FETCH_INTERVAL_MS = 1000;
 
-    this.getGroupDataPromise ??= mockGroupDataResponse()
+    this.getGroupDataPromise ??= mockGroupDataResponse(this.state, this.startMS)
       .then((response) => {
         this.updateGroupData(response);
       })
@@ -481,6 +504,7 @@ export default class DemoApi {
 
   constructor() {
     this.closed = false;
+    this.startMS = performance.now();
 
     setTimeout(() => this.queueGetGameData(), 100);
     this.queueFetchGroupData();

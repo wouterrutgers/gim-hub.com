@@ -11,10 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticateGroup
 {
-    public function __construct(
-        protected RateLimiter $rateLimiter
-    ) {}
-
     public function handle(Request $request, Closure $next): mixed
     {
         $routeGroup = $request->route('group');
@@ -64,8 +60,8 @@ class AuthenticateGroup
     {
         $key = "auth_attempts:{$request->ip()}:{$routeGroup}";
 
-        if ($this->rateLimiter->tooManyAttempts($key, 5)) {
-            $seconds = $this->rateLimiter->availableIn($key);
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
 
             return response()->json([
                 'message' => 'Too many authentication attempts',
@@ -73,7 +69,7 @@ class AuthenticateGroup
             ], Response::HTTP_TOO_MANY_REQUESTS);
         }
 
-        $this->rateLimiter->hit($key, 300);
+        RateLimiter::hit($key, 300);
 
         return $this->unauthorized();
     }

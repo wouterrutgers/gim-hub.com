@@ -94,7 +94,6 @@ const imageChunksPlugin = (): PluginOption => ({
     const allImages = scanDirectory("public");
 
     const chunks: Record<string, Record<string, string>> = {
-      "icons-misc": {},
       ui: {},
       misc: {},
       "map-misc": {},
@@ -102,7 +101,9 @@ const imageChunksPlugin = (): PluginOption => ({
 
     const mapRegions: Record<string, Record<string, string>> = {};
 
-    const iconChunks: Record<string, Record<string, string>> = {};
+    const iconChunks: Record<string, Record<string, string>> = {
+      "icons-misc": {},
+    };
 
     for (const [imagePath, hash] of Object.entries(allImages)) {
       if (imagePath.startsWith("/icons/")) {

@@ -201,7 +201,7 @@
 }
 
 .collection-log-page-completion-quantity {
-  color: white;
+  color: var(--yellow);
 }
 
 .collection-log-page-obtained-all {
@@ -217,7 +217,7 @@
 }
 
 .collection-log-count {
-  color: white;
+  color: var(--yellow);
 }
 
 .collection-log-page-item {
@@ -241,18 +241,15 @@
   max-height: 64px;
 }
 
-.collection-log-page-item:hover {
-  background: rgb(255 255 255 / 10%);
-}
-
 .collection-log-page-item-missing {
   filter: opacity(0.3);
 }
 
 .collection-log-page-item-quantity {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -4px;
+  left: 3px;
+  font-size: 0.85em;
 }
 
 .collection-log-page-name-link {

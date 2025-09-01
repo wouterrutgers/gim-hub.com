@@ -24,6 +24,8 @@ interface APIMethods {
 
   fetchGroupCollectionLogs?: Api["fetchGroupCollectionLogs"];
 
+  fetchMemberHiscores: Api["fetchMemberHiscores"];
+
   getCredentials: Api["getCredentials"];
 }
 
@@ -178,6 +180,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
       deleteMember: api.deleteGroupMember.bind(api),
       renameMember: api.renameGroupMember.bind(api),
       getCredentials: api.getCredentials.bind(api),
+      fetchMemberHiscores: api.fetchMemberHiscores.bind(api),
       fetchGroupCollectionLogs: () => api.fetchGroupCollectionLogs(),
     };
     /* eslint-enable @typescript-eslint/explicit-function-return-type */

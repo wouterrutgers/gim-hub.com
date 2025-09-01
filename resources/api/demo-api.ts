@@ -3,18 +3,19 @@ import { fetchQuestDataJSON, type QuestDatabase, type QuestID, type QuestStatus 
 import { fetchDiaryDataJSON, type DiaryDatabase } from "../game/diaries";
 import type * as Member from "../game/member";
 import { Vec2D, type WikiPosition2D } from "../components/canvas-map/coordinates";
-import type { CollectionLogInfo } from "../game/collection-log";
-import { type GEPrices } from "./requests/ge-prices";
+import { type CollectionLogInfo } from "../game/collection-log";
+import { fetchGEPrices, type GEPrices } from "./requests/ge-prices";
 import { Schema as GetGroupDataResponseSchema, type Response as GetGroupDataResponse } from "./requests/group-data";
 import * as RequestSkillData from "./requests/skill-data";
 import * as RequestCreateGroup from "./requests/create-group";
 import * as RequestAddGroupMember from "./requests/add-group-member";
 import * as RequestDeleteGroupMember from "./requests/delete-group-member";
 import * as RequestRenameGroupMember from "./requests/rename-group-member";
-import MockData from "./demo-api-data.json" with { type: "json" };
+import * as RequestHiscores from "./requests/hiscores";
 import type { GroupCredentials } from "./credentials";
 import { Skill, type Experience } from "../game/skill";
 import { EquipmentSlot } from "../game/equipment";
+import { fetchCollectionLogInfo } from "./requests/collection-log-info";
 
 export type GroupStateUpdate = Map<Member.Name, Partial<Member.State>>;
 
@@ -77,7 +78,11 @@ const MAX_DIARY = {
   Wilderness: MAX_DIARY_TIER,
 } satisfies Member.Diaries;
 
-const mockGroupDataResponse = ({ thurgo, cowKiller }: DemoGroup, startMS: number): Promise<GetGroupDataResponse> => {
+const mockGroupDataResponse = (
+  { thurgo, cowKiller }: DemoGroup,
+  startMS: number,
+  demoData: typeof import("./demo-api-data.json"),
+): Promise<GetGroupDataResponse> => {
   const results: GetGroupDataResponse = [];
 
   startMS ??= performance.now();
@@ -229,7 +234,7 @@ const mockGroupDataResponse = ({ thurgo, cowKiller }: DemoGroup, startMS: number
       },
     } satisfies GetGroupDataResponse[number];
 
-    const timeline: number[][] = MockData.gary_timeline;
+    const timeline: number[][] = demoData.gary_timeline;
     const index = Math.max(Math.floor(elapsedMS / 600), 0) % timeline.length;
     const WIZARD_ENCOUNTER_TICK = timeline.length - 28;
     const WIZARD_DAMAGE_TICK = timeline.length - 26;
@@ -360,6 +365,7 @@ interface DemoGroup {
     deathCooldown: number;
     attackCooldown: number;
   };
+  hiscores: Map<Member.Name, RequestHiscores.Response>;
 }
 
 const INITIAL_STATE = {
@@ -381,8 +387,10 @@ const INITIAL_STATE = {
     deathCooldown: 0,
     attackCooldown: 3,
   },
+  hiscores: new Map(),
 };
 export default class DemoApi {
+  private readonly baseURL: string = __API_URL__;
   private closed: boolean;
 
   private getGroupDataPromise: Promise<void> | undefined;
@@ -391,6 +399,8 @@ export default class DemoApi {
   private gameData: GameData = {};
   private startMS: number;
   private state: DemoGroup = structuredClone(INITIAL_STATE);
+  private demoData: typeof import("./demo-api-data.json") | undefined;
+  private demoDataPromise: Promise<void> | undefined;
 
   public isOpen(): boolean {
     return !this.closed;
@@ -442,43 +452,45 @@ export default class DemoApi {
     }
   }
 
-  private queueGetGameData(): void {
-    if (!this.gameData.quests) {
-      fetchQuestDataJSON()
-        .then((data) => {
-          this.gameData.quests = data;
-          this.callbacks?.onGameDataUpdate?.(this.gameData);
-        })
-        .catch((reason) => console.error("Failed to get quest data for API", reason));
-    }
-    if (!this.gameData.items) {
-      fetchItemDataJSON()
-        .then((data) => {
-          this.gameData.items = data;
-          this.callbacks?.onGameDataUpdate?.(this.gameData);
-        })
-        .catch((reason) => console.error("Failed to get item data for API", reason));
-    }
-    if (!this.gameData.diaries) {
-      fetchDiaryDataJSON()
-        .then((data) => {
-          this.gameData.diaries = data;
-          this.callbacks?.onGameDataUpdate?.(this.gameData);
-        })
-        .catch((reason) => console.error("Failed to get diary data for API", reason));
-    }
-    if (!this.gameData.gePrices) {
-      // TODO: maybe implement this
-    }
-    if (!this.gameData.collectionLogInfo) {
-      // TODO: maybe implement this
-    }
+  private queueGetGameData(): Promise<GameData> {
+    const gameData: GameData = {};
+    const promises = [
+      fetchQuestDataJSON().then((data) => {
+        gameData.quests = data;
+        this.callbacks?.onGameDataUpdate?.(gameData);
+      }),
+      fetchItemDataJSON().then((data) => {
+        gameData.items = data;
+        this.callbacks?.onGameDataUpdate?.(gameData);
+      }),
+      fetchDiaryDataJSON().then((data) => {
+        gameData.diaries = data;
+        this.callbacks?.onGameDataUpdate?.(gameData);
+      }),
+      fetchGEPrices({ baseURL: this.baseURL }).then((data) => {
+        gameData.gePrices = data;
+        this.callbacks?.onGameDataUpdate?.(gameData);
+      }),
+      fetchCollectionLogInfo({ baseURL: this.baseURL }).then((response) => {
+        gameData.collectionLogInfo = response;
+        this.callbacks?.onGameDataUpdate?.(gameData);
+      }),
+    ];
+
+    return Promise.allSettled(promises).then((results) => {
+      const failures = results.filter((value) => value.status === "rejected");
+      if (failures.length > 0) {
+        console.error("Failed one or more gameData fetches:", ...failures);
+      }
+
+      return gameData;
+    });
   }
 
   private queueFetchGroupData(): void {
     const FETCH_INTERVAL_MS = 1000;
 
-    this.getGroupDataPromise ??= mockGroupDataResponse(this.state, this.startMS)
+    this.getGroupDataPromise ??= mockGroupDataResponse(this.state, this.startMS, this.demoData!)
       .then((response) => {
         this.updateGroupData(response);
       })
@@ -506,8 +518,38 @@ export default class DemoApi {
     this.closed = false;
     this.startMS = performance.now();
 
-    setTimeout(() => this.queueGetGameData(), 100);
-    this.queueFetchGroupData();
+    this.demoDataPromise = Promise.all([
+      import("./demo-api-data.json"),
+      this.queueGetGameData(),
+      new Promise<void>((resolve) => {
+        // Hacky delay to avoid race with redirecting to demo page causing the first group update to be missed
+        setTimeout(() => resolve(), 100);
+      }),
+    ])
+      .then(([demoData, gameData]) => {
+        this.demoData = demoData;
+        this.gameData = gameData;
+
+        // Load from a manually updated list of categories, since we don't
+        // enumerate all categories anywhere and otherwise we'd need to fetch
+        // and parse live hiscores data.
+        const hiscoreCategories = demoData.hiscore_categories;
+        for (const member of ["Cow31337Killer", "Duradel", "Gary", "Thurgo", "xXgamerXx"] as Member.Name[]) {
+          this.state.hiscores.set(
+            member,
+            new Map(hiscoreCategories.map((category) => [category, Math.floor(Math.random() * 100)])),
+          );
+        }
+
+        this.queueFetchGroupData();
+      })
+      .catch((reason) => {
+        console.error("Failed to initiate Demo API:", reason);
+        this.closed = true;
+      })
+      .finally(() => {
+        this.demoDataPromise = undefined;
+      });
   }
 
   static async fetchAmILoggedIn(): Promise<Response> {
@@ -531,6 +573,10 @@ export default class DemoApi {
     return Promise.reject(new Error("Not implemented."));
   }
   async fetchGroupCollectionLogs(): Promise<void> {
-    return Promise.reject(new Error("Not implemented."));
+    return Promise.resolve();
+  }
+  async fetchMemberHiscores(memberName: Member.Name): Promise<RequestHiscores.Response> {
+    await this.demoDataPromise;
+    return Promise.resolve(this.state.hiscores.get(memberName) ?? new Map<string, number>());
   }
 }

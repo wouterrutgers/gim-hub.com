@@ -79,7 +79,7 @@ const MAX_DIARY = {
 } satisfies Member.Diaries;
 
 const mockGroupDataResponse = (
-  { thurgo, cowKiller }: DemoGroup,
+  { thurgo, cowKiller, banks, sharedBank }: DemoGroup,
   startMS: number,
   demoData: typeof import("./demo-api-data.json"),
 ): Promise<GetGroupDataResponse> => {
@@ -93,6 +93,7 @@ const mockGroupDataResponse = (
     const member = {
       ...DEFAULT_MEMBER,
       name: "Thurgo" as Member.Name,
+      bank: banks.get("Thurgo" as Member.Name),
       stats: {
         health: { current: 99, max: 99 },
         prayer: { current: 1, max: 1 },
@@ -157,6 +158,7 @@ const mockGroupDataResponse = (
     const member = {
       ...DEFAULT_MEMBER,
       name: "Cow31337Killer" as Member.Name,
+      bank: banks.get("Cow31337Killer" as Member.Name),
       skills: { ...DEFAULT_SKILLS },
       stats: {
         health: { current: 90, max: 90 },
@@ -215,6 +217,7 @@ const mockGroupDataResponse = (
     const member = {
       ...DEFAULT_MEMBER,
       name: "Gary" as Member.Name,
+      bank: banks.get("Gary" as Member.Name),
       stats: {
         health: { current: 10, max: 10 },
         prayer: { current: 1, max: 1 },
@@ -255,6 +258,7 @@ const mockGroupDataResponse = (
     const member = {
       ...DEFAULT_MEMBER,
       name: "Duradel" as Member.Name,
+      bank: banks.get("Duradel" as Member.Name),
       stats: {
         health: { current: 99, max: 99 },
         prayer: { current: 99, max: 99 },
@@ -276,6 +280,7 @@ const mockGroupDataResponse = (
     const member = {
       ...DEFAULT_MEMBER,
       name: "xXgamerXx" as Member.Name,
+      bank: banks.get("xXgamerXx" as Member.Name),
       lastUpdated: new Date(Date.now()),
       skills: { ...DEFAULT_SKILLS },
       stats: {
@@ -339,11 +344,13 @@ const mockGroupDataResponse = (
     results.push(member);
   }
 
+  results.push({ ...DEFAULT_MEMBER, name: "@SHARED" as Member.Name, bank: sharedBank });
+
   return Promise.resolve(results);
 };
 
 interface UpdateCallbacks {
-  onGroupUpdate: (group: GroupStateUpdate) => void;
+  onGroupUpdate: (group: GroupStateUpdate, partial: boolean) => void;
   onGameDataUpdate: (data: GameData) => void;
 }
 interface DemoGroup {
@@ -366,6 +373,9 @@ interface DemoGroup {
     attackCooldown: number;
   };
   hiscores: Map<Member.Name, RequestHiscores.Response>;
+  collections: Map<Member.Name, Member.Collection>;
+  banks: Map<Member.Name, Member.ItemCollection>;
+  sharedBank: Member.ItemCollection;
 }
 
 const INITIAL_STATE = {
@@ -388,6 +398,9 @@ const INITIAL_STATE = {
     attackCooldown: 3,
   },
   hiscores: new Map(),
+  collections: new Map(),
+  banks: new Map(),
+  sharedBank: new Map(),
 };
 export default class DemoApi {
   private readonly baseURL: string = __API_URL__;
@@ -410,7 +423,12 @@ export default class DemoApi {
     const updates: GroupStateUpdate = new Map();
 
     for (const { name, coordinates, quests, ...rest } of response) {
-      const update: Partial<Member.State> = { ...rest };
+      for (const [key, value] of Object.entries(rest)) {
+        if (value === undefined) {
+          delete rest[key as keyof typeof rest];
+        }
+      }
+      const update = rest as Partial<Member.State>;
 
       if (coordinates) {
         update.coordinates = {
@@ -434,7 +452,7 @@ export default class DemoApi {
       updates.set(name, update);
     }
 
-    this.callbacks?.onGroupUpdate?.(updates);
+    this.callbacks?.onGroupUpdate?.(updates, false);
   }
 
   public getCredentials(): GroupCredentials {
@@ -530,16 +548,53 @@ export default class DemoApi {
         this.demoData = demoData;
         this.gameData = gameData;
 
+        const TALENTED_PLAYERS = ["Cow31337Killer", "Duradel", "xXgamerXx"] as Member.Name[];
+
         // Load from a manually updated list of categories, since we don't
         // enumerate all categories anywhere and otherwise we'd need to fetch
         // and parse live hiscores data.
         const hiscoreCategories = demoData.hiscore_categories;
-        for (const member of ["Cow31337Killer", "Duradel", "Gary", "Thurgo", "xXgamerXx"] as Member.Name[]) {
+        for (const member of TALENTED_PLAYERS) {
           this.state.hiscores.set(
             member,
             new Map(hiscoreCategories.map((category) => [category, Math.floor(Math.random() * 100)])),
           );
         }
+
+        const sharedBank: Member.ItemCollection = new Map();
+        for (const name of TALENTED_PLAYERS) {
+          const bank: Member.ItemCollection = new Map();
+          const collection: Member.Collection = new Map();
+          for (const [_, pages] of this.gameData.collectionLogInfo?.tabs ?? []) {
+            for (const { items } of pages) {
+              for (const item of items) {
+                // When items are duplicated across pages, this overwrites them, but that's okay.
+                const totalCount = Math.floor(Math.max(0, (Math.random() - 0.5) * 8));
+                collection.set(item, totalCount);
+                bank.set(item, totalCount);
+              }
+            }
+          }
+
+          for (const [itemID, totalCount] of bank) {
+            const depositedCount = Math.floor(Math.random() * totalCount);
+            const keptCount = totalCount - depositedCount;
+
+            if (depositedCount > 0) {
+              sharedBank.set(itemID, (sharedBank.get(itemID) ?? 0) + depositedCount);
+            }
+            if (keptCount > 0) {
+              bank.set(itemID, keptCount);
+            } else {
+              bank.delete(itemID);
+            }
+          }
+
+          this.state.collections.set(name, collection);
+          this.state.banks.set(name, bank);
+        }
+
+        this.state.sharedBank = sharedBank;
 
         this.queueFetchGroupData();
       })
@@ -573,7 +628,14 @@ export default class DemoApi {
     return Promise.reject(new Error("Not implemented."));
   }
   async fetchGroupCollectionLogs(): Promise<void> {
-    return Promise.resolve();
+    await this.demoDataPromise;
+
+    const updates = new Map<Member.Name, Partial<Member.State>>();
+    for (const [name, clog] of this.state.collections.entries()) {
+      updates.set(name, { collection: clog });
+    }
+
+    this.callbacks?.onGroupUpdate?.(updates, true);
   }
   async fetchMemberHiscores(memberName: Member.Name): Promise<RequestHiscores.Response> {
     await this.demoDataPromise;

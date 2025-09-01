@@ -159,7 +159,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
   }
 
   {
-    const newMemberStates = new Map();
+    const newMemberStates = new Map<Member.Name, Member.State>();
     let memberStatesUpdated = namesHaveChanged;
 
     for (const member of memberNames) {

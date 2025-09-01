@@ -49,7 +49,12 @@ export default class Api {
     const updates: GroupStateUpdate = new Map();
 
     for (const { name, coordinates, quests, ...rest } of response) {
-      const update: Partial<Member.State> = { ...rest };
+      for (const [key, value] of Object.entries(rest)) {
+        if (value === undefined) {
+          delete rest[key as keyof typeof rest];
+        }
+      }
+      const update = rest as Partial<Member.State>;
 
       if (coordinates) {
         update.coordinates = {

@@ -57,7 +57,7 @@ const ItemPanel = memo(
         return (
           <Fragment key={name}>
             <span>{name}</span>
-            <span>{quantity}</span>
+            <span>{quantity.toLocaleString()}</span>
             <span
               className="items-page-panel-quantity-contribution"
               style={{ transform: `scaleX(${quantityPercent}%)`, background: `hsl(${quantityPercent}, 100%, 40%)` }}
@@ -81,7 +81,7 @@ const ItemPanel = memo(
             <div className="items-page-panel-item-details">
               <span>Quantity</span>
               <span>{totalQuantity.toLocaleString()}</span>
-              <span>High Alch</span>
+              <span>High alch</span>
               <span
                 onPointerEnter={() =>
                   showTooltip({
@@ -94,7 +94,7 @@ const ItemPanel = memo(
               >
                 {highAlch.toLocaleString()}gp
               </span>
-              <span>GE Price</span>
+              <span>GE price</span>
               <span
                 onPointerEnter={() =>
                   showTooltip({

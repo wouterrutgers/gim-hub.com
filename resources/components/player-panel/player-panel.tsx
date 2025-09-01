@@ -15,7 +15,7 @@ import { CachedImage } from "../cached-image/cached-image";
 import "./player-panel.css";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PlayerPanelSubcategories = ["Inventory", "Equipment", "Skills", "Quests", "Diaries", "Collection Log"] as const;
+const PlayerPanelSubcategories = ["Inventory", "Equipment", "Skills", "Quests", "Diaries", "Collection log"] as const;
 type PlayerPanelSubcategory = (typeof PlayerPanelSubcategories)[number];
 
 interface PlayerPanelButtonProps {
@@ -116,7 +116,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         },
       },
       {
-        category: "Collection Log",
+        category: "Collection log",
         ariaLabel: "collection-log",
         alt: "osrs collection log",
         src: getIconUrl("items/22711.webp"),

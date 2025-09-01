@@ -110,7 +110,7 @@ const createGroupFormAction = async (formData: FormData): Promise<FormSubmission
       return { type: "Success", credentials } satisfies FormSubmissionResult;
     })
     .catch((reason) => {
-      const error = reason instanceof Error ? reason.message : "Unknown Error";
+      const error = reason instanceof Error ? reason.message : "Unknown error";
       return { type: "Pending", serverErrors: [error] };
     });
 };
@@ -177,13 +177,13 @@ export const CreateGroupPage = (): ReactElement => {
 
     return (
       <>
-        <label htmlFor="create-group-group-name">Group Name</label>
+        <label htmlFor="create-group-group-name">Group name</label>
         <br />
         <input
           id="create-group-group-name"
           name="group-name"
           className={invalid ? "invalid" : "valid"}
-          placeholder="Group Name"
+          placeholder="Group name"
           maxLength={16}
         />
         <div className="validation-error">
@@ -204,7 +204,7 @@ export const CreateGroupPage = (): ReactElement => {
 
     return (
       <>
-        <label htmlFor="group-member-count">Group Size</label>
+        <label htmlFor="group-member-count">Group size</label>
         <br />
         <div className={`select-container rsborder-tiny rsbackground ${invalid ? "invalid" : "valid"}`}>
           <select
@@ -254,7 +254,7 @@ export const CreateGroupPage = (): ReactElement => {
           aria-required
           id={`create-group-member-name-${index}`}
           className={invalid ? "invalid" : "valid"}
-          placeholder="Member Name"
+          placeholder="Member name"
           name="member-name"
           maxLength={16}
         />

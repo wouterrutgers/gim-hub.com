@@ -16,12 +16,12 @@ export const SetupInstructions = (): ReactElement => {
           <h3>The group's login</h3>
           <p>Only share these with your group. You can't recover it so keep it safe!</p>
           <div className="setup-block">
-            <h4>Group Name</h4>
+            <h4>Group name</h4>
             <div className="setup-credential rsborder-tiny rsbackground">{credentials?.name ?? "NULL"}</div>
           </div>
 
           <div className="setup-block">
-            <h4>Group Token</h4>
+            <h4>Group token</h4>
             <div className="setup-credential rsborder-tiny rsbackground">
               {tokenVisible ? (
                 (credentials?.token ?? "00000000-0000-0000-0000-000000000000")

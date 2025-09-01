@@ -46,7 +46,7 @@ export const DiaryRegionWindow = ({ region, player, progress, onCloseModal }: Di
         <h1>
           {`${player}'s `}
           <a className="diary-dialog-title" href={regionHref} target="_blank" rel="noopener noreferrer">
-            {region} Achievement Diary
+            {region} achievement diary
           </a>
         </h1>
         <button className="diary-dialog-close" onClick={onCloseModal}>

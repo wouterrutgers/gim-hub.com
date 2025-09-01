@@ -345,7 +345,7 @@ export const SettingsPage = (): ReactElement => {
           setSidebarPosition?.(position);
         }}
       >
-        <legend>Player Panels</legend>
+        <legend>Player panels</legend>
         {SiteSettings.SidebarPosition.map((position) => {
           return (
             <Fragment key={position}>

@@ -31,6 +31,7 @@ interface APIMethods {
 
 interface APIContext {
   loaded: true;
+  isDemo: boolean;
 
   /**
    * Delete the credentials from persistent storage, and close any active API
@@ -108,6 +109,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
   }, [groupName, groupToken]);
 
   const [api, setApi] = useState<Api | DemoApi>();
+  const [isDemo, setIsDemo] = useState<boolean>(false);
 
   useEffect(() => {
     if (!api) return;
@@ -118,6 +120,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     setGroupName(undefined);
     setGroupToken(undefined);
     setApi(undefined);
+    setIsDemo(false);
   }, [setGroupName, setGroupToken]);
   const logInLive = useCallback(
     (credentials?: GroupCredentials): Promise<void> => {
@@ -131,6 +134,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
           setGroupName(newCredentials.name);
           setGroupToken(newCredentials.token);
           setApi(new Api(newCredentials));
+          setIsDemo(false);
           return Promise.resolve();
         }
 
@@ -145,6 +149,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
   );
   const logInDemo = useCallback((): Promise<boolean> => {
     setApi(new DemoApi());
+    setIsDemo(true);
     return Promise.resolve(true);
   }, []);
   const checkCredentials = useCallback(
@@ -164,6 +169,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
   const apiContext: APIContext = useMemo(() => {
     const base: APIContext = {
       loaded: true,
+      isDemo,
       logOut,
       logInLive,
       logInDemo,

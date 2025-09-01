@@ -59,7 +59,7 @@ body {
   color: var(--primary-text);
   overflow: hidden;
   position: relative;
-  font-size: 18px;
+  font-size: 16px;
   font-family: rssmall, ui-sans-serif, Arial, sans-serif;
   text-shadow: 1.3px 1.3px var(--black);
   display: flex;
@@ -191,7 +191,7 @@ input {
 input,
 select {
   font-family: rssmall, ui-sans-serif, Arial, sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   text-shadow: 1px 1px var(--black);
 }
 

@@ -17,7 +17,6 @@
 .player-quests-quest {
   display: flex;
   align-items: center;
-  font-size: 18px;
   text-decoration: none;
 }
 
@@ -52,10 +51,6 @@
   flex-grow: 1;
   box-sizing: border-box;
   min-width: 0;
-}
-
-.player-quests-filter input {
-  font-size: 18px;
 }
 
 .player-quests-hidden {

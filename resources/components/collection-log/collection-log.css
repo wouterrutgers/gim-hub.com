@@ -68,7 +68,6 @@
   font-family: rssmall, ui-sans-serif, Arial, sans-serif;
   text-shadow: 1.3px 1.3px var(--black);
   color: var(--orange);
-  font-size: 18px;
   background: #28251e;
   border: 1px solid hsl(40deg 15.79% 29.8%);
   border-bottom: none;
@@ -145,7 +144,6 @@
 }
 
 .collection-log-page-directory-page {
-  font-size: 18px;
   color: var(--orange);
   font-family: rssmall, ui-sans-serif, Arial, sans-serif;
   text-shadow: 1.3px 1.3px var(--black);
@@ -180,7 +178,6 @@
 
 .collection-log-page-top {
   color: var(--orange);
-  font-size: 18px;
   padding: 4px 8px;
   border-bottom: 1px solid hsl(40deg 15.79% 29.8%);
 }
@@ -249,7 +246,6 @@
   position: absolute;
   top: -4px;
   left: 3px;
-  font-size: 0.85em;
 }
 
 .collection-log-page-name-link {

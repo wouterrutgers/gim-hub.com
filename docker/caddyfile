@@ -8,6 +8,9 @@
 
     php_fastcgi 127.0.0.1:9000 {
         root /var/www/public
+        env REMOTE_ADDR {http.request.header.Cf-Connecting-Ip}
+        env HTTP_HOST {http.request.header.X-Forwarded-Host}
+        env SERVER_NAME {http.request.header.X-Forwarded-Host}
     }
 
     @dotfiles {

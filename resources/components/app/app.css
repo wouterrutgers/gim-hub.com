@@ -134,6 +134,10 @@ h3 {
   padding: 0.2em 0.4em;
 }
 
+.men-button.men-button-small {
+  font-size: inherit;
+}
+
 input[type="checkbox"],
 input[type="radio"] {
   display: none;

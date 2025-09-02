@@ -183,7 +183,7 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
     teleportButtons.push(
       <button
         key={player}
-        className={`${player === followedPlayer ? "canvas-map-selected-teleport-button" : ""} men-button canvas-map-teleport-button`}
+        className={`${player === followedPlayer ? "canvas-map-selected-teleport-button" : ""} men-button men-button-small canvas-map-teleport-button`}
         onClick={() => {
           if (!renderer) return;
           renderer.startFollowingPlayer({

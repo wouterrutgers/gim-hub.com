@@ -192,7 +192,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     /* eslint-enable @typescript-eslint/explicit-function-return-type */
 
     return base;
-  }, [api, checkCredentials, logInDemo, logInLive, logOut]);
+  }, [api, checkCredentials, isDemo, logInDemo, logInLive, logOut]);
 
   return <Context value={apiContext}>{children}</Context>;
 };

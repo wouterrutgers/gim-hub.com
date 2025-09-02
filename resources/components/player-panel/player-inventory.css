@@ -32,12 +32,34 @@
   min-width: 0;
 }
 
+.player-inventory-pouch-vertical {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.player-inventory-pouch-vertical .player-inventory-pouch-item-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.player-inventory-pouch-vertical .player-inventory-pouch-item-box img {
+  height: 12px;
+  width: 12px;
+  flex-shrink: 0;
+}
+
 .player-inventory-item-quantity {
   position: absolute;
   left: 3px;
   top: -4px;
   min-height: 0;
   color: var(--yellow);
+}
+
+.player-inventory-pouch-vertical .player-inventory-item-quantity {
+  position: static;
+  margin-top: 2px;
 }
 
 .player-inventory-background {

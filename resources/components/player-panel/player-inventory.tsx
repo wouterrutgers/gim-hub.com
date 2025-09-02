@@ -115,7 +115,11 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
         runes,
       };
       if (overlayItemIcons.length > 0) {
-        pouchOverlay = <div className="player-inventory-pouch-container ">{overlayItemIcons}</div>;
+        const containerClass =
+          overlayItemIcons.length <= 3
+            ? "player-inventory-pouch-container player-inventory-pouch-vertical"
+            : "player-inventory-pouch-container";
+        pouchOverlay = <div className={containerClass}>{overlayItemIcons}</div>;
       }
     }
 

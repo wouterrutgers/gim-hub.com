@@ -27,7 +27,7 @@ export const App = (): ReactElement => {
 
   return (
     <>
-      <Suspense fallback={<LoadingScreen />}>
+      <Suspense fallback={<></>}>
         <CanvasMap interactive={location.pathname === "/group/map"} />
       </Suspense>
       <Suspense fallback={<LoadingScreen />}>

@@ -53,7 +53,7 @@ WORKDIR /var/www
 
 COPY docker/php/php.ini $PHP_INI_DIR/conf.d/custom.ini
 COPY docker/php/opcache.ini $PHP_INI_DIR/conf.d/opcache.ini
-COPY docker/caddyfile /etc/caddy/Caddyfile
+COPY docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

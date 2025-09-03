@@ -122,6 +122,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
         const response = result.value;
         if (response.status === "error") {
           setErrors([response.text]);
+          setPendingRename(undefined);
           return;
         }
 
@@ -156,6 +157,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
         const response = result.value;
         if (response.status === "error") {
           setErrors([response.text]);
+          setPendingDelete(false);
           return;
         }
 

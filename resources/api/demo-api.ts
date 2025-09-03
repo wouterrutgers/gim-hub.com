@@ -79,7 +79,7 @@ const MAX_DIARY = {
 } satisfies Member.Diaries;
 
 const mockGroupDataResponse = (
-  { thurgo, cowKiller, banks, sharedBank }: DemoGroup,
+  { roster, thurgo, cowKiller, banks, sharedBank }: DemoGroup,
   startMS: number,
   demoData: typeof import("./demo-api-data.json"),
 ): Promise<GetGroupDataResponse> => {
@@ -88,11 +88,11 @@ const mockGroupDataResponse = (
   startMS ??= performance.now();
   const elapsedMS = performance.now() - startMS;
 
-  {
+  if (roster.at(0)?.deleted === false) {
     // Thurgo cooks pies in the myth's guild
     const member = {
       ...DEFAULT_MEMBER,
-      name: "Thurgo" as Member.Name,
+      name: roster.at(0)!.displayName,
       bank: banks.get("Thurgo" as Member.Name),
       stats: {
         health: { current: 99, max: 99 },
@@ -153,11 +153,12 @@ const mockGroupDataResponse = (
 
     results.push(member);
   }
-  {
+
+  if (roster.at(1)?.deleted === false) {
     // Cow31337Killer kills undead cows
     const member = {
       ...DEFAULT_MEMBER,
-      name: "Cow31337Killer" as Member.Name,
+      name: roster.at(1)!.displayName,
       bank: banks.get("Cow31337Killer" as Member.Name),
       quests: [...cowKiller.quests],
       diaries: { ...cowKiller.diaries },
@@ -219,11 +220,12 @@ const mockGroupDataResponse = (
     };
     results.push(member);
   }
-  {
+
+  if (roster.at(2)?.deleted === false) {
     // Gary walks Lumbridge to Varrock, but dies to a Dark wizard at the end
     const member = {
       ...DEFAULT_MEMBER,
-      name: "Gary" as Member.Name,
+      name: roster.at(2)!.displayName,
       bank: banks.get("Gary" as Member.Name),
       stats: {
         health: { current: 10, max: 10 },
@@ -260,11 +262,12 @@ const mockGroupDataResponse = (
 
     results.push(member);
   }
-  {
+
+  if (roster.at(3)?.deleted === false) {
     // xXgamerXx bankstands ToA lobby in BiS
     const member = {
       ...DEFAULT_MEMBER,
-      name: "xXgamerXx" as Member.Name,
+      name: roster.at(3)!.displayName,
       bank: banks.get("xXgamerXx" as Member.Name),
       lastUpdated: new Date(Date.now()),
       skills: { ...DEFAULT_SKILLS },
@@ -329,6 +332,10 @@ const mockGroupDataResponse = (
     results.push(member);
   }
 
+  for (const { displayName } of roster.slice(4)) {
+    results.push({ ...DEFAULT_MEMBER, name: displayName });
+  }
+
   results.push({ ...DEFAULT_MEMBER, name: "@SHARED" as Member.Name, bank: sharedBank });
 
   return Promise.resolve(results);
@@ -360,6 +367,7 @@ interface DemoGroup {
     quests: typeof MAX_QUEST;
     diaries: typeof MAX_DIARY;
   };
+  roster: { displayName: Member.Name; deleted: boolean }[];
   hiscores: Map<Member.Name, RequestHiscores.Response>;
   collections: Map<Member.Name, Member.Collection>;
   banks: Map<Member.Name, Member.ItemCollection>;
@@ -388,6 +396,12 @@ const INITIAL_STATE = {
     quests: MAX_QUEST,
     diaries: structuredClone(MAX_DIARY),
   },
+  roster: [
+    { displayName: "Thurgo" as Member.Name, deleted: false },
+    { displayName: "Cow31337Killer" as Member.Name, deleted: false },
+    { displayName: "Gary" as Member.Name, deleted: false },
+    { displayName: "xXgamerXx" as Member.Name, deleted: false },
+  ],
   hiscores: new Map(),
   collections: new Map(),
   banks: new Map(),
@@ -623,14 +637,57 @@ export default class DemoApi {
     return Promise.reject(new Error("Not implemented."));
   }
 
-  async addGroupMember(): Promise<RequestAddGroupMember.Response> {
-    return Promise.reject(new Error("Not implemented."));
+  async addGroupMember(member: Member.Name): Promise<RequestAddGroupMember.Response> {
+    if (this.state.roster.length >= 5) {
+      return Promise.resolve({ status: "error", text: "Group is full (5 members)." });
+    }
+
+    const memberInRoster = this.state.roster.find(({ displayName }) => displayName === member);
+    if (memberInRoster) {
+      return Promise.resolve({ status: "error", text: "A member of that name already exists." });
+    }
+
+    this.state.roster.push({ displayName: member, deleted: false });
+
+    return Promise.resolve({ status: "ok" });
   }
-  async renameGroupMember(): Promise<RequestRenameGroupMember.Response> {
-    return Promise.reject(new Error("Not implemented."));
+  async renameGroupMember({
+    oldName,
+    newName,
+  }: {
+    oldName: Member.Name;
+    newName: Member.Name;
+  }): Promise<RequestRenameGroupMember.Response> {
+    const oldMember = this.state.roster.find(({ displayName }) => displayName === oldName);
+    if (!oldMember) {
+      return Promise.resolve({ status: "error", text: "No member has that name." });
+    }
+    const newMember = this.state.roster.find(({ displayName }) => displayName === newName);
+    if (newMember) {
+      return Promise.resolve({ status: "error", text: "A member of that name already exists." });
+    }
+
+    oldMember.displayName = newName;
+
+    return Promise.resolve({ status: "ok" });
   }
-  async deleteGroupMember(): Promise<RequestDeleteGroupMember.Response> {
-    return Promise.reject(new Error("Not implemented."));
+  async deleteGroupMember(member: Member.Name): Promise<RequestDeleteGroupMember.Response> {
+    const memberInRoster = this.state.roster.findIndex(({ displayName }) => displayName === member);
+    if (memberInRoster === -1) return Promise.resolve({ status: "error", text: "No member has that name." });
+
+    // Don't delete the original members so we can use a static index to access
+    // them while mocking the get-group-data response
+    const isOriginalMember = memberInRoster <= 3;
+    if (isOriginalMember) {
+      this.state.roster[memberInRoster].deleted = true;
+    } else {
+      this.state.roster = [
+        ...this.state.roster.slice(0, memberInRoster),
+        ...this.state.roster.slice(memberInRoster + 1),
+      ];
+    }
+
+    return Promise.resolve({ status: "ok" });
   }
   async fetchGroupCollectionLogs(): Promise<void> {
     await this.demoDataPromise;

@@ -96,13 +96,13 @@ export const PlayerQuests = ({ member }: { member: Member.Name }): ReactElement 
   return (
     <div className="player-quests">
       <div className="player-quests-top">
-        <SearchElement className="player-quests-filter" onChange={setNameFilter} placeholder="Filter Quests" />
+        <SearchElement className="player-quests-filter" onChange={setNameFilter} placeholder="Filter quests" />
         <div className="player-quests-points">
           <span className="player-quests-current-points">{currentPoints}</span> / {possiblePoints}
         </div>
       </div>
       <div className="player-quests-list">
-        <h4 className="player-quests-section-header">Free Quests</h4>
+        <h4 className="player-quests-section-header">Free quests</h4>
         {freeQuests}
         <h4 className="player-quests-section-header">Members' Quests</h4>
         {membersQuests}

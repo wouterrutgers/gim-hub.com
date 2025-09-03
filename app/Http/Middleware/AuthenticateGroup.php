@@ -6,6 +6,7 @@ use App\Models\Group;
 use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticateGroup
@@ -33,7 +34,7 @@ class AuthenticateGroup
             ->first();
 
         if (! $group) {
-            return $this->unauthorized();
+            return $this->handleFailedAuth($request, $routeGroup, $token);
         }
 
         app()->instance('group', $group);
@@ -53,5 +54,23 @@ class AuthenticateGroup
         return response()->json([
             'message' => 'Unauthorized',
         ], Response::HTTP_UNAUTHORIZED);
+    }
+
+    protected function handleFailedAuth(Request $request, string $routeGroup, string $token): JsonResponse
+    {
+        $key = "auth_attempts:{$request->ip()}:{$routeGroup}";
+
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+
+            return response()->json([
+                'message' => 'Too many authentication attempts',
+                'retry_after' => $seconds,
+            ], Response::HTTP_TOO_MANY_REQUESTS);
+        }
+
+        RateLimiter::hit($key, 300);
+
+        return $this->unauthorized();
     }
 }

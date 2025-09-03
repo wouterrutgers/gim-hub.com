@@ -8,9 +8,10 @@
 #tooltip {
   transform: translate(5px, calc(-100% - 5px));
   min-width: 160px;
-  background-color: rgb(0 0 0);
-  border: solid 1px rgb(255 255 255);
+  background-color: rgb(26 26 26 / 61%);
+  border: solid 1px rgb(26 26 26 / 80%);
   padding: 5px;
+  text-shadow: 1.3px 1.3px var(--black);
 }
 
 #tooltip hr {

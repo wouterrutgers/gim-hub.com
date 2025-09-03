@@ -1,0 +1,32 @@
+name: Monitor open GIM hub plugin
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  check-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Check if PR is merged
+        id: pr_check
+        run: |
+          PR_STATE=$(curl -s -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/runelite/plugin-hub/pulls/8954" | jq -r '.state + "|" + (.merged // false | tostring)')
+
+          echo "PR state: $PR_STATE"
+
+          if [[ "$PR_STATE" == "closed|true" ]]; then
+            echo "pr_merged=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Merge pre-release into master
+        if: steps.pr_check.outputs.pr_merged == 'true'
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: pre-release
+          target_branch: master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "Automated merge of pre-release into master after RuneLite plugin hub PR merge"

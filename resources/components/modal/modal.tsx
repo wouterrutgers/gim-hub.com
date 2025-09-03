@@ -89,7 +89,7 @@ export const useModal = <TProps extends { onCloseModal: () => void }>(
 
     modal = (
       <>
-        <button id="modal-clickbox" onClick={close} aria-label="Exit Modal" />
+        <button id="modal-clickbox" onClick={close} aria-label="Exit modal" />
         <div id="modal">
           <Child {...unifiedProps} />
         </div>

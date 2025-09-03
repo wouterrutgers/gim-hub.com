@@ -47,6 +47,16 @@ class GroupMemberController extends Controller
             ], 400);
         }
 
+        $sameNameCount = Member::where('group_id', '=', $groupId)
+            ->where('name', '=', $name)
+            ->count();
+
+        if ($sameNameCount > 0) {
+            return response()->json([
+                'error' => "Member name {$name} is taken in this group",
+            ], 400);
+        }
+
         Member::create([
             'group_id' => $groupId,
             'name' => $name,
@@ -106,6 +116,16 @@ class GroupMemberController extends Controller
         if (! Validators::validName($newName)) {
             return response()->json([
                 'error' => "Member name {$newName} is not valid",
+            ], 400);
+        }
+
+        $sameNameCount = Member::where('group_id', '=', $groupId)
+            ->where('name', '=', $newName)
+            ->count();
+
+        if ($sameNameCount > 0) {
+            return response()->json([
+                'error' => "Member name {$newName} is taken in this group",
             ], 400);
         }
 

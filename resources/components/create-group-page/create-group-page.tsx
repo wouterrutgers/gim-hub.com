@@ -45,10 +45,10 @@ export const MemberNameSchema = z
   .refine((name) => !/[ \-_]{2,}/g.test(name), {
     error: "Member name cannot contain more than 2 special characters '-', '_', or ' ' in a row.",
   })
-  .refine((name) => name.length >= 1 && name.length <= 16, {
+  .refine((name) => name.length >= 1 && name.length <= 12, {
     error: ({ input }) => {
       if ((input as string).length === 0) return "Member name is required.";
-      return "Member name must be between 1 and 16 characters.";
+      return "Member name must be between 1 and 12 characters.";
     },
   })
   .transform((name) => name.trim() as Member.Name);

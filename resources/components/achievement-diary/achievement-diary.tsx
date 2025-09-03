@@ -69,7 +69,7 @@ const TierTasksDisplay = ({ tasks }: { tasks: DiaryTaskProgress[] }): ReactEleme
           className={`diary-dialog-skill-icon ${complete ? "diary-dialog-skill-complete" : ""}`}
         >
           {` ${current} / ${required} `}
-          <CachedImage alt={skill} src={SkillIconsBySkill.get(skill)?.href ?? ""} />
+          <CachedImage alt={skill} src={SkillIconsBySkill[skill]} />
         </span>
       );
     });

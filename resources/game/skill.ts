@@ -29,35 +29,32 @@ export type Skill = (typeof Skill)[number];
 export type Experience = Distinct<number, "Experience">;
 export type Level = Distinct<number, "Level">;
 
-const SkillIcons: { skill: Skill | "Overall"; iconURL: string }[] = [
-  { skill: "Overall", iconURL: "/ui/3579-0.png" },
-  { skill: "Attack", iconURL: "/ui/197-0.png" },
-  { skill: "Hitpoints", iconURL: "/ui/203-0.png" },
-  { skill: "Mining", iconURL: "/ui/209-0.png" },
-  { skill: "Strength", iconURL: "/ui/198-0.png" },
-  { skill: "Agility", iconURL: "/ui/204-0.png" },
-  { skill: "Smithing", iconURL: "/ui/210-0.png" },
-  { skill: "Defence", iconURL: "/ui/199-0.png" },
-  { skill: "Herblore", iconURL: "/ui/205-0.png" },
-  { skill: "Fishing", iconURL: "/ui/211-0.png" },
-  { skill: "Ranged", iconURL: "/ui/200-0.png" },
-  { skill: "Thieving", iconURL: "/ui/206-0.png" },
-  { skill: "Cooking", iconURL: "/ui/212-0.png" },
-  { skill: "Prayer", iconURL: "/ui/201-0.png" },
-  { skill: "Crafting", iconURL: "/ui/207-0.png" },
-  { skill: "Firemaking", iconURL: "/ui/213-0.png" },
-  { skill: "Magic", iconURL: "/ui/202-0.png" },
-  { skill: "Fletching", iconURL: "/ui/208-0.png" },
-  { skill: "Woodcutting", iconURL: "/ui/214-0.png" },
-  { skill: "Runecraft", iconURL: "/ui/215-0.png" },
-  { skill: "Slayer", iconURL: "/ui/216-0.png" },
-  { skill: "Farming", iconURL: "/ui/217-0.png" },
-  { skill: "Construction", iconURL: "/ui/221-0.png" },
-  { skill: "Hunter", iconURL: "/ui/220-0.png" },
-];
-export const SkillIconsBySkill = new Map<Skill | "Overall", URL>(
-  SkillIcons.map(({ skill, iconURL }) => [skill, new URL(iconURL, window.location.href)] as [Skill, URL]),
-);
+export const SkillIconsBySkill: Record<Skill | "Overall", string> = {
+  Overall: "/ui/3579-0.png",
+  Attack: "/ui/197-0.png",
+  Hitpoints: "/ui/203-0.png",
+  Mining: "/ui/209-0.png",
+  Strength: "/ui/198-0.png",
+  Agility: "/ui/204-0.png",
+  Smithing: "/ui/210-0.png",
+  Defence: "/ui/199-0.png",
+  Herblore: "/ui/205-0.png",
+  Fishing: "/ui/211-0.png",
+  Ranged: "/ui/200-0.png",
+  Thieving: "/ui/206-0.png",
+  Cooking: "/ui/212-0.png",
+  Prayer: "/ui/201-0.png",
+  Crafting: "/ui/207-0.png",
+  Firemaking: "/ui/213-0.png",
+  Magic: "/ui/202-0.png",
+  Fletching: "/ui/208-0.png",
+  Woodcutting: "/ui/214-0.png",
+  Runecraft: "/ui/215-0.png",
+  Slayer: "/ui/216-0.png",
+  Farming: "/ui/217-0.png",
+  Construction: "/ui/221-0.png",
+  Hunter: "/ui/220-0.png",
+};
 
 const levelLookup = new Map<number, number>();
 {

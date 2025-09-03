@@ -52,7 +52,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
         levelTotal += levelReal;
 
         const wikiURLRaw = `https://oldschool.runescape.wiki/w/${skill}`;
-        const iconURLRaw = SkillIconsBySkill.get(skill)?.href;
+        const iconURLRaw = SkillIconsBySkill[skill];
 
         return (
           <a

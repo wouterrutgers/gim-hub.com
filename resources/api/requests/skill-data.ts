@@ -1,4 +1,4 @@
-import z from "zod/v4";
+import * as z from "zod/v4";
 import * as Member from "../../game/member";
 import { DateSchema } from "./shared";
 import type { Experience } from "../../game/skill";

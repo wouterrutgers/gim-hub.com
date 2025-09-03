@@ -1,7 +1,8 @@
 import { createContext, useContext } from "react";
 
 export interface ImageContextValue {
-  getImageUrl: (path: string) => string;
+  getImageUrlAsync: (path: string) => Promise<string>;
+  preloadMapRegion?: (z: number, x: number, y: number) => void;
 }
 
 export const ImageContext = createContext<ImageContextValue | null>(null);

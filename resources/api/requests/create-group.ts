@@ -1,4 +1,4 @@
-import z from "zod/v4";
+import * as z from "zod/v4";
 import * as Member from "../../game/member";
 import type { GroupCredentials } from "../credentials";
 

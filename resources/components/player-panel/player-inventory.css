@@ -65,7 +65,7 @@
 .player-inventory-background {
   width: 190px;
   box-sizing: border-box;
-  background-image: url("/ui/inventory_background.png");
+  background-image: url("../../assets/ui/inventory_background.png");
   background-repeat: no-repeat;
   background-size: contain;
   padding: 8px;
@@ -76,5 +76,5 @@
 }
 
 .dark-mode .player-inventory-background {
-  background-image: url("/ui/inventory_background-dark.png");
+  background-image: url("../../assets/ui/inventory_background-dark.png");
 }

@@ -128,7 +128,7 @@ export class CanvasMapRenderer {
   private iconsByRegion?: MapIconGrid;
   private labelsByRegion?: MapLabelGrid;
   private playerPositions = new Map<string, { coords: WorldPosition2D; plane: number }>();
-  private getImageUrl: (path: string) => string;
+  private getImageUrl: (path: string) => Promise<string>;
 
   private interactive = false;
   public setInteractive(interactive: boolean): void {
@@ -212,7 +212,7 @@ export class CanvasMapRenderer {
     }
   }
 
-  private constructor(getImageUrl: (path: string) => string) {
+  private constructor(getImageUrl: (path: string) => Promise<string>) {
     const INITIAL_X = 3232;
     const INITIAL_Y = -3232;
     const INITIAL_ZOOM = 1 / 4;
@@ -241,14 +241,16 @@ export class CanvasMapRenderer {
     this.plane = INITIAL_PLANE;
   }
 
-  public static async load(getImageUrl: (path: string) => string): Promise<CanvasMapRenderer> {
+  public static async load(getImageUrl: (path: string) => Promise<string>): Promise<CanvasMapRenderer> {
     const renderer = new CanvasMapRenderer(getImageUrl);
 
     // Promisify the image loading
     const iconAtlasPromise = new Promise<ImageBitmap>((resolve) => {
       const ICONS_IN_ATLAS = 123;
       const iconAtlas = new Image(ICONS_IN_ATLAS * ICON_IMAGE_PIXEL_EXTENT.x, ICON_IMAGE_PIXEL_EXTENT.y);
-      iconAtlas.src = getImageUrl("/map/icons/map_icons.webp");
+      void getImageUrl("/map/icons/map_icons.webp").then((url) => {
+        iconAtlas.src = url;
+      });
       iconAtlas.onload = (): void => {
         resolve(createImageBitmap(iconAtlas));
       };
@@ -562,7 +564,9 @@ export class CanvasMapRenderer {
                 console.error("Failed to load image bitmap for:", image.src, reason);
               });
           };
-          image.src = this.getImageUrl(`/map/${regionFileBaseName}.webp`);
+          void this.getImageUrl(`/map/${regionFileBaseName}.webp`).then((url) => {
+            image.src = url;
+          });
 
           this.regions.set(hash3D, region);
         }
@@ -576,7 +580,9 @@ export class CanvasMapRenderer {
 
           if (label.image === undefined) {
             const image = new Image();
-            image.src = this.getImageUrl(`/map/labels/${labelID}.webp`);
+            void this.getImageUrl(`/map/labels/${labelID}.webp`).then((url) => {
+              image.src = url;
+            });
             image.onload = (): void => {
               createImageBitmap(image)
                 .then((bitmap) => (label.image = bitmap))

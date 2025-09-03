@@ -1,18 +1,23 @@
 import { useMemo, useCallback, type ReactElement, type ReactNode } from "react";
 import { ImageContext, type ImageContextValue } from "./image-context";
-import imageManifest from "../data/images.json";
+import { useImageChunks } from "../hooks/use-image-chunks";
 
 export const ImageProvider = ({ children }: { children: ReactNode }): ReactElement => {
-  const getImageUrl = useCallback((path: string): string => {
-    const hash = (imageManifest as Record<string, string>)[path];
-    return hash ? `${path}?v=${hash}` : path;
-  }, []);
+  const { getImageUrl: getChunkedImageUrl, preloadMapRegion } = useImageChunks();
+
+  const getImageUrlAsync = useCallback(
+    async (path: string): Promise<string> => {
+      return await getChunkedImageUrl(path);
+    },
+    [getChunkedImageUrl],
+  );
 
   const contextValue: ImageContextValue = useMemo(
     () => ({
-      getImageUrl,
+      getImageUrlAsync,
+      preloadMapRegion,
     }),
-    [getImageUrl],
+    [getImageUrlAsync, preloadMapRegion],
   );
 
   return <ImageContext.Provider value={contextValue}>{children}</ImageContext.Provider>;

@@ -16,7 +16,7 @@ export const XpDropper = ({ xpDrops }: { xpDrops: Member.ExperienceDrop[] | unde
         for (const { skill, amount } of amounts) {
           elements.push(
             <div className="xp-dropper-drop" key={`${skill}-${amount}`}>
-              <CachedImage alt={skill} src={SkillIconsBySkill.get(skill)?.href ?? ""} />
+              <CachedImage alt={skill} src={SkillIconsBySkill[skill]} />
               {amount}
             </div>,
           );

@@ -66,3 +66,7 @@
 
 <img alt="RuneLite Plugin Configuration" src="public/images/plugin-screenshot.png" width="300"/>
 <em>Plugin configuration in RuneLite</em>
+
+## 🏠 Self-hosting
+
+Prefer to run your own instance? See the self-hosting guide: [self-host.md](self-host.md).

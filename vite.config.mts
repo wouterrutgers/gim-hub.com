@@ -151,7 +151,7 @@ const imageChunksPlugin = (): PluginOption => ({
     for (const [chunkName, chunkData] of Object.entries(chunks)) {
       if (Object.keys(chunkData).length > 0) {
         const chunkPath = path.join(publicDir, `${chunkName}.json`);
-        fs.writeFileSync(chunkPath, JSON.stringify(chunkData));
+        fs.writeFileSync(chunkPath, JSON.stringify(chunkData, Object.keys(chunkData).sort()));
         totalFiles++;
       }
     }

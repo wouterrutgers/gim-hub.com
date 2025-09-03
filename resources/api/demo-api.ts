@@ -29,7 +29,7 @@ export interface GameData {
 
 const EXPERIENCE_99 = 13034431 as Experience;
 const EXPERIENCE_90 = 5346332 as Experience;
-const EXPERIENCE_70 = 737627 as Experience;
+const EXPERIENCE_80 = 1986068 as Experience;
 const DEFAULT_MEMBER = GetGroupDataResponseSchema.parse([{ name: "" }])[0];
 const DEFAULT_SKILLS = {
   Agility: 0 as Experience,
@@ -56,12 +56,12 @@ const DEFAULT_SKILLS = {
   Thieving: 0 as Experience,
   Woodcutting: 0 as Experience,
 };
-const MAX_QUEST = GetGroupDataResponseSchema.parse([{ name: "", quests: new Array(400).fill(2) }])[0].quests;
+const MAX_QUEST = GetGroupDataResponseSchema.parse([{ name: "", quests: new Array(400).fill(2) }])[0].quests!;
 const MAX_DIARY_TIER = {
-  Easy: new Array(20).fill(true),
-  Medium: new Array(20).fill(true),
-  Hard: new Array(20).fill(true),
-  Elite: new Array(20).fill(true),
+  Easy: new Array<boolean>(20).fill(true),
+  Medium: new Array<boolean>(20).fill(true),
+  Hard: new Array<boolean>(20).fill(true),
+  Elite: new Array<boolean>(20).fill(true),
 };
 const MAX_DIARY = {
   "Kourend & Kebos": MAX_DIARY_TIER,
@@ -159,13 +159,24 @@ const mockGroupDataResponse = (
       ...DEFAULT_MEMBER,
       name: "Cow31337Killer" as Member.Name,
       bank: banks.get("Cow31337Killer" as Member.Name),
-      skills: { ...DEFAULT_SKILLS },
+      quests: [...cowKiller.quests],
+      diaries: { ...cowKiller.diaries },
+      skills: { ...cowKiller.skills },
       stats: {
         health: { current: 90, max: 90 },
         prayer: { current: 80, max: 80 },
         run: { current: 100, max: 100 },
         world: 201,
       },
+      equipment: new Map([
+        ["Weapon", { itemID: 25516 as ItemID, quantity: 1 }], // dharok greataxe
+        ["Head", { itemID: 4716 as ItemID, quantity: 1 }], // dharok helm
+        ["Cape", { itemID: 21295 as ItemID, quantity: 1 }], // infernal cape
+        ["Body", { itemID: 20421 as ItemID, quantity: 1 }], // rune platebody
+        ["Legs", { itemID: 1093 as ItemID, quantity: 1 }], // rune plateskirt
+        ["Boots", { itemID: 4131 as ItemID, quantity: 1 }], // rune boots
+        ["Gloves", { itemID: 1495 as ItemID, quantity: 1 }], // klank's gauntlets
+      ]),
       coordinates: { x: 3616, y: 3525, plane: 0 },
       lastUpdated: new Date(Date.now()),
     } satisfies GetGroupDataResponse[number];
@@ -191,15 +202,11 @@ const mockGroupDataResponse = (
       cowKiller.lastTick += 1;
     }
 
-    for (const skill of Skill) {
-      member.skills[skill] = EXPERIENCE_70;
-    }
     member.skills = {
       ...member.skills,
       Attack: EXPERIENCE_99,
       Defence: EXPERIENCE_99,
-      Magic: 0 as Experience,
-      Ranged: 0 as Experience,
+      Prayer: EXPERIENCE_80,
       Strength: (EXPERIENCE_99 + 4 * cowKiller.damageDone) as Experience,
       Hitpoints: Math.floor(EXPERIENCE_90 + (4 / 3) * cowKiller.damageDone) as Experience,
     };
@@ -250,28 +257,6 @@ const mockGroupDataResponse = (
 
     const [x, y] = timeline.at(index) ?? [0, 0];
     member.coordinates = { x, y, plane: 0 };
-
-    results.push(member);
-  }
-  {
-    // Duradel stands in Shilo Village
-    const member = {
-      ...DEFAULT_MEMBER,
-      name: "Duradel" as Member.Name,
-      bank: banks.get("Duradel" as Member.Name),
-      stats: {
-        health: { current: 99, max: 99 },
-        prayer: { current: 99, max: 99 },
-        run: { current: 100, max: 100 },
-        world: 201,
-      },
-      coordinates: { x: 2868, y: 2982, plane: 1 },
-      lastUpdated: new Date(Date.now()),
-      equipment: new Map([
-        ["Weapon", { itemID: 3101 as ItemID, quantity: 1 }], // Rune claws
-        ["Cape", { itemID: 9786 as ItemID, quantity: 1 }], // Slayer cape
-      ]),
-    } satisfies GetGroupDataResponse[number];
 
     results.push(member);
   }
@@ -371,6 +356,9 @@ interface DemoGroup {
     lastTick: number;
     deathCooldown: number;
     attackCooldown: number;
+    skills: typeof DEFAULT_SKILLS;
+    quests: typeof MAX_QUEST;
+    diaries: typeof MAX_DIARY;
   };
   hiscores: Map<Member.Name, RequestHiscores.Response>;
   collections: Map<Member.Name, Member.Collection>;
@@ -396,6 +384,9 @@ const INITIAL_STATE = {
     lastTick: 0,
     deathCooldown: 0,
     attackCooldown: 3,
+    skills: DEFAULT_SKILLS,
+    quests: MAX_QUEST,
+    diaries: structuredClone(MAX_DIARY),
   },
   hiscores: new Map(),
   collections: new Map(),
@@ -548,7 +539,7 @@ export default class DemoApi {
         this.demoData = demoData;
         this.gameData = gameData;
 
-        const TALENTED_PLAYERS = ["Cow31337Killer", "Duradel", "xXgamerXx"] as Member.Name[];
+        const TALENTED_PLAYERS = ["Cow31337Killer", "xXgamerXx"] as Member.Name[];
 
         // Load from a manually updated list of categories, since we don't
         // enumerate all categories anywhere and otherwise we'd need to fetch
@@ -592,6 +583,20 @@ export default class DemoApi {
 
           this.state.collections.set(name, collection);
           this.state.banks.set(name, bank);
+        }
+
+        for (const skill of Skill) {
+          this.state.cowKiller.skills[skill] = Math.ceil(EXPERIENCE_99 * Math.random()) as Experience;
+        }
+        const QUEST_STATUSES = ["IN_PROGRESS", "NOT_STARTED", "FINISHED"] as const;
+        for (let i = 0; i < this.state.cowKiller.quests.length; i++) {
+          this.state.cowKiller.quests[i] = QUEST_STATUSES[Math.floor(Math.random() * QUEST_STATUSES.length)];
+        }
+        for (const diaryRegion of Object.values(this.state.cowKiller.diaries)) {
+          diaryRegion.Easy = diaryRegion.Easy.map(() => Math.random() < 0.9);
+          diaryRegion.Medium = diaryRegion.Medium.map(() => Math.random() < 0.7);
+          diaryRegion.Hard = diaryRegion.Hard.map(() => Math.random() < 0.5);
+          diaryRegion.Elite = diaryRegion.Elite.map(() => Math.random() < 0.3);
         }
 
         this.state.sharedBank = sharedBank;

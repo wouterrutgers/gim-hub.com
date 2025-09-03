@@ -1,4 +1,4 @@
-import z from "zod/v4";
+import * as z from "zod/v4";
 import type { QuestStatus } from "../../game/quests";
 import { Skill, type Experience } from "../../game/skill";
 import type { DiaryTier, DiaryRegion } from "../../game/diaries";

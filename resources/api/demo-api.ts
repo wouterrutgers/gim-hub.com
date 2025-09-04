@@ -16,6 +16,8 @@ import type { GroupCredentials } from "./credentials";
 import { Skill, type Experience } from "../game/skill";
 import { EquipmentSlot } from "../game/equipment";
 import { fetchCollectionLogInfo } from "./requests/collection-log-info";
+import * as DateFNS from "date-fns";
+import { utc } from "@date-fns/utc";
 
 export type GroupStateUpdate = Map<Member.Name, Partial<Member.State>>;
 
@@ -633,8 +635,50 @@ export default class DemoApi {
     return Promise.reject(new Error("Not implemented."));
   }
 
-  async fetchSkillData(): Promise<RequestSkillData.Response> {
-    return Promise.reject(new Error("Not implemented."));
+  async fetchSkillData(period: RequestSkillData.AggregatePeriod): Promise<RequestSkillData.Response> {
+    const now = new Date(Date.now());
+    const dates: Date[] = [];
+
+    switch (period) {
+      case "Day": {
+        const start = DateFNS.startOfHour(DateFNS.sub(now, { days: 1 }), { in: utc });
+        dates.push(...DateFNS.eachHourOfInterval({ start, end: now }));
+        break;
+      }
+      case "Week": {
+        const start = DateFNS.startOfDay(DateFNS.sub(now, { weeks: 1 }), { in: utc });
+        dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
+        break;
+      }
+      case "Month": {
+        const start = DateFNS.startOfDay(DateFNS.sub(now, { months: 1 }), { in: utc });
+        dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
+        break;
+      }
+      case "Year": {
+        const start = DateFNS.startOfMonth(DateFNS.sub(now, { years: 1 }), { in: utc });
+        dates.push(...DateFNS.eachMonthOfInterval({ start, end: now }));
+      }
+    }
+
+    const result: RequestSkillData.Response = new Map();
+    for (const { displayName } of this.state.roster) {
+      const currentXP = new Array<Experience>(Skill.length).fill(0 as Experience);
+      const samples = [];
+      let lastTime = dates[0];
+      for (const time of dates) {
+        const hoursSince = Math.abs(DateFNS.differenceInHours(time, lastTime));
+        samples.push({ time, data: [...currentXP] });
+        for (let i = 0; i < currentXP.length; i++) {
+          currentXP[i] = (currentXP[i] +
+            Math.floor(hoursSince * Math.max(0, Math.random() - 0.7) * 100_000)) as Experience;
+        }
+        lastTime = time;
+      }
+      result.set(displayName, samples);
+    }
+
+    return new Promise((resolve) => setTimeout(() => resolve(result), 700));
   }
 
   async addGroupMember(member: Member.Name): Promise<RequestAddGroupMember.Response> {

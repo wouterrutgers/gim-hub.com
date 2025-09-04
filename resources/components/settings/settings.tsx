@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useContext, useEffect, useRef, useState, type ReactElement } from "react";
+import { Fragment, useCallback, useContext, useRef, useState, type ReactElement } from "react";
 import * as SiteSettings from "../../context/settings-context";
 import { Context as APIContext } from "../../context/api-context";
 import * as Member from "../../game/member";
@@ -71,8 +71,10 @@ const RemoveConfirmationWindow = ({
 const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const id = `edit-member-${member}`;
-  const [pendingRename, setPendingRename] = useState<string | undefined>();
+
+  const [pendingRename, setPendingRename] = useState(false);
   const [pendingDelete, setPendingDelete] = useState(false);
+
   const [errors, setErrors] = useState<string[]>();
   const { deleteMember, renameMember } = useContext(APIContext)?.api ?? {};
   const { open, modal: removeConfirmationModal } = useModal(RemoveConfirmationWindow);
@@ -84,11 +86,6 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
       <LoadingScreen />
     </div>
   ) : undefined;
-  useEffect(() => {
-    if (member !== pendingRename) return;
-
-    setPendingRename(undefined);
-  }, [pendingRename, member]);
 
   const onRename = useCallback(() => {
     if (pendingRename || !renameMember || !nameInputRef.current) return;
@@ -105,7 +102,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
       return;
     }
 
-    setPendingRename(newName);
+    setPendingRename(true);
     Promise.allSettled([
       renameMember({ oldName: member, newName: newName }),
       new Promise<void>((resolve) =>
@@ -122,19 +119,19 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
         const response = result.value;
         if (response.status === "error") {
           setErrors([response.text]);
-          setPendingRename(undefined);
+          setPendingRename(false);
           return;
         }
 
+        // Don't stop pending on success, since this element should be disappear
+        // once the member is renamed. This avoids the pending overlay flashing off early.
         setErrors(undefined);
       })
       .catch((reason) => {
         console.error("Rename Member Failed:", reason);
         setErrors(["Failed to rename. Is the name already in use?"]);
-        setPendingRename(undefined);
+        setPendingRename(false);
       });
-
-    // Don't ever stop pending, since this element should be disappear once the member is renamed.
   }, [pendingRename, member, renameMember]);
 
   const onRemove = useCallback(() => {
@@ -161,6 +158,8 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
           return;
         }
 
+        // Don't stop pending on success, since this element should be disappear
+        // once the member is deleted. This avoids the pending overlay flashing off early.
         setErrors(undefined);
       })
       .catch((reason) => {
@@ -168,8 +167,6 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
         setErrors(["Unknown error."]);
         setPendingDelete(false);
       });
-
-    // Don't ever stop pending, since this element should be disappear once the member is deleted.
   }, [pendingDelete, deleteMember, member]);
 
   const errorID = `edit-member-errors-${member}`;
@@ -191,7 +188,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
           id={id}
           className={invalid ? "invalid" : "valid"}
           defaultValue={member}
-          maxLength={16}
+          maxLength={12}
           onBlur={(e) => {
             e.target.value = e.target.value.trim();
           }}
@@ -303,7 +300,7 @@ export const SettingsPage = (): ReactElement => {
           disabled={pendingAddMember}
           className={invalid ? "invalid" : "valid"}
           id="add-member-input"
-          maxLength={16}
+          maxLength={12}
           onBlur={(e) => {
             e.target.value = e.target.value.trim();
           }}
@@ -347,7 +344,7 @@ export const SettingsPage = (): ReactElement => {
           setSidebarPosition?.(position);
         }}
       >
-        <legend>Player Panels</legend>
+        <legend>Player panels</legend>
         {SiteSettings.SidebarPosition.map((position) => {
           return (
             <Fragment key={position}>

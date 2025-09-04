@@ -144,14 +144,14 @@ export const LoginPage = (): ReactElement => {
     <div id="login-page-container">
       <form ref={formRef} id="login-page-window" className="rsborder rsbackground" action={tryLogin}>
         <div className="login-page-step">
-          <label htmlFor="login-group-name">Group Name</label>
+          <label htmlFor="login-group-name">Group name</label>
           <br />
           <input
             aria-required
             id="login-group-name"
             className={nameError ? "invalid" : "valid"}
             name="login-group-name"
-            placeholder="Group Name"
+            placeholder="Group name"
             maxLength={16}
           />
           <div className="validation-error">
@@ -164,14 +164,14 @@ export const LoginPage = (): ReactElement => {
           </div>
         </div>
         <div className="login-page-step">
-          <label htmlFor="login-group-token">Group Token</label>
+          <label htmlFor="login-group-token">Group token</label>
           <br />
           <input
             aria-required
             id="login-group-token"
             className={tokenError ? "invalid" : "valid"}
             name="login-group-token"
-            placeholder="Group Token"
+            placeholder="Group token"
             maxLength={60}
             type="password"
           />

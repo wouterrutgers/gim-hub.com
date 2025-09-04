@@ -17,10 +17,6 @@
   height: 100%;
 }
 
-.player-inventory-item-box:hover {
-  background: rgb(255 255 255 / 10%);
-}
-
 .player-inventory-pouch-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -38,9 +34,10 @@
 
 .player-inventory-item-quantity {
   position: absolute;
-  left: 0;
-  top: -0.125em;
+  left: 3px;
+  top: -4px;
   min-height: 0;
+  color: var(--yellow);
 }
 
 .player-inventory-background {

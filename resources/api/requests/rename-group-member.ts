@@ -21,14 +21,23 @@ export const renameGroupMember = ({
       Authorization: credentials.token,
     },
     method: "PUT",
-  }).then((response) => {
+  }).then((response): Promise<Response> => {
     if (response.status === 400) {
-      return response.text().then((text) => ({ status: "error", text }));
+      return response
+        .json()
+        .then(
+          (json) => (json as { error?: string }).error ?? "Unknown server error.",
+          (reason) => {
+            console.error("renameGroupMember failed to parse response JSON:", reason);
+            return "Unknown server error.";
+          },
+        )
+        .then((text) => ({ status: "error", text }));
     }
 
     if (!response.ok && response.status !== 400) {
       throw new Error("renameGroupMember HTTP response was not OK");
     }
 
-    return { status: "ok" };
+    return Promise.resolve({ status: "ok" });
   });

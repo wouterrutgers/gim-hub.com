@@ -68,7 +68,6 @@
   font-family: rssmall, ui-sans-serif, Arial, sans-serif;
   text-shadow: 1.3px 1.3px var(--black);
   color: var(--orange);
-  font-size: 18px;
   background: #28251e;
   border: 1px solid hsl(40deg 15.79% 29.8%);
   border-bottom: none;
@@ -155,7 +154,6 @@
 }
 
 .collection-log-page-directory-page {
-  font-size: 18px;
   color: var(--orange);
   font-family: rssmall, ui-sans-serif, Arial, sans-serif;
   text-shadow: 1.3px 1.3px var(--black);
@@ -192,7 +190,6 @@
 
 .collection-log-page-top {
   color: var(--orange);
-  font-size: 18px;
   padding: 4px 8px;
   border-bottom: 1px solid hsl(40deg 15.79% 29.8%);
 }
@@ -213,7 +210,7 @@
 }
 
 .collection-log-page-completion-quantity {
-  color: var(--white);
+  color: var(--yellow);
 }
 
 .collection-log-page-completion-quantity-loading {
@@ -234,7 +231,7 @@
 }
 
 .collection-log-count {
-  color: var(--white);
+  color: var(--yellow);
 }
 
 .collection-log-page-item {
@@ -258,18 +255,14 @@
   max-height: 64px;
 }
 
-.collection-log-page-item:hover {
-  background: rgb(255 255 255 / 10%);
-}
-
 .collection-log-page-item-missing {
   filter: opacity(0.3);
 }
 
 .collection-log-page-item-quantity {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -4px;
+  left: 3px;
   color: var(--yellow);
 }
 

@@ -714,11 +714,16 @@ export class CanvasMapRenderer {
             y: labelScale * image.height,
           });
 
+          const centeredPosition = Vec2D.create<WorldPosition2D>({
+            x: worldPosition.x - extent.x / 2,
+            y: worldPosition.y,
+          });
+
           context.drawImage({
             image,
             imageOffsetInPixels: Vec2D.create({ x: 0, y: 0 }),
             imageExtentInPixels: Vec2D.create({ x: image.width, y: image.height }),
-            rect: Rect2D.create({ position: worldPosition, extent }),
+            rect: Rect2D.create({ position: centeredPosition, extent }),
             alpha: 1,
           });
         });

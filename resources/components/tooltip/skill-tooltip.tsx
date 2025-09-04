@@ -48,13 +48,13 @@ export const useSkillTooltip = (): {
         <br />
         Total XP: {skillProps.xp.toLocaleString()}
         <br />
-        Until Level: {skillProps.untilNext.toLocaleString()}
+        Until level: {skillProps.untilNext.toLocaleString()}
         <StatBar
           color={`hsl(${107 * skillProps.untilNextRatio}, 100%, 41%)`}
           bgColor="#222222"
           ratio={skillProps.untilNextRatio}
         />
-        Until Max: {skillProps.untilMax.toLocaleString()}
+        Until max: {skillProps.untilMax.toLocaleString()}
         <StatBar
           color={`hsl(${107 * skillProps.untilMaxRatio}, 100%, 41%)`}
           bgColor="#222222"

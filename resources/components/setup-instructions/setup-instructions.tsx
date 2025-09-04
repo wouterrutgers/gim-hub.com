@@ -23,7 +23,7 @@ export const SetupInstructions = (): ReactElement => {
           </div>
 
           <div className="setup-block">
-            <h4>Group Token</h4>
+            <h4>Group token</h4>
             <div className="setup-credential rsborder-tiny rsbackground">
               {tokenVisible ? (
                 (credentials?.token ?? "00000000-0000-0000-0000-000000000000")

@@ -31,11 +31,11 @@ const TokenSchema = z
   });
 
 export const LoginPage = (): ReactElement => {
-  const { logIn, credentials } = useContext(APIContext);
+  const { logInLive } = useContext(APIContext) ?? {};
   const [nameError, setNameError] = useState<string[]>();
   const [tokenError, setTokenError] = useState<string[]>();
   const [serverError, setServerError] = useState<string[]>();
-  const [pending, setPending] = useState<boolean>(false);
+  const [pendingSubmission, setPendingSubmission] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -54,14 +54,19 @@ export const LoginPage = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    if (credentials === undefined) return;
+    if (!logInLive) return;
 
-    console.info("Found valid credentials, redirecting...");
-    void navigate("/group");
-  }, [credentials, navigate]);
+    logInLive()
+      .then(() => {
+        return navigate("/group/items", { replace: true });
+      })
+      .catch((reason) => {
+        console.error("LoginPage: Error while redirecting:", reason);
+      });
+  }, [logInLive, navigate]);
 
   const tryLogin = useCallback(
-    async (formData: FormData): Promise<void> => {
+    (formData: FormData): void => {
       const groupNameParsed = NameSchema.safeParse(formData.get("login-group-name")?.valueOf());
       const groupTokenParsed = TokenSchema.safeParse(formData.get("login-group-token")?.valueOf());
 
@@ -79,15 +84,19 @@ export const LoginPage = (): ReactElement => {
 
       const credentials = { name: groupNameParsed.data, token: groupTokenParsed.data };
 
+      if (!logInLive) {
+        console.error("LoginPage: LogInLive was undefined, but form was still submitted.");
+        return;
+      }
+
+      setPendingSubmission(true);
       setNameError(undefined);
       setTokenError(undefined);
-      return Api.fetchAmILoggedIn(credentials)
+      Api.fetchAmILoggedIn(credentials)
         .then((response) => new Promise<typeof response>((resolve) => setTimeout(() => resolve(response), 500)))
         .then((response) => {
           if (response.ok) {
-            logIn?.(credentials);
-            void navigate("/group");
-            return;
+            return logInLive(credentials).then(() => navigate("/group"));
           }
 
           if (response.status === 401) {
@@ -96,9 +105,15 @@ export const LoginPage = (): ReactElement => {
           }
 
           throw new Error(`Unexpected status code: ${response.status}`);
+        })
+        .catch((reason) => {
+          console.error("LoginPage: Error during form submission:", reason);
+        })
+        .finally(() => {
+          setPendingSubmission(false);
         });
     },
-    [navigate, logIn],
+    [navigate, logInLive],
   );
 
   const serverErrorsElement = ((): ReactNode => {
@@ -118,30 +133,16 @@ export const LoginPage = (): ReactElement => {
     );
   })();
 
-  const pendingOverlay = pending ? (
+  const pendingOverlay = pendingSubmission ? (
     <div id="login-page-loading-overlay">
       <LoadingScreen />
     </div>
   ) : undefined;
 
+  const pending = pendingSubmission || !logInLive;
   return (
     <div id="login-page-container">
-      <form
-        ref={formRef}
-        id="login-page-window"
-        className="rsborder rsbackground"
-        action={(formData) => {
-          setPending(true);
-          void tryLogin(formData)
-            .catch((reason) => {
-              setServerError(["Unknown error."]);
-              console.error("login-page login failed:", reason);
-            })
-            .finally(() => {
-              setPending(false);
-            });
-        }}
-      >
+      <form ref={formRef} id="login-page-window" className="rsborder rsbackground" action={tryLogin}>
         <div className="login-page-step">
           <label htmlFor="login-group-name">Group name</label>
           <br />

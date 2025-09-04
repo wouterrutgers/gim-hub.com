@@ -14,6 +14,7 @@ import * as RequestCreateGroup from "./requests/create-group";
 import * as RequestAddGroupMember from "./requests/add-group-member";
 import * as RequestDeleteGroupMember from "./requests/delete-group-member";
 import * as RequestRenameGroupMember from "./requests/rename-group-member";
+import * as RequestHiscores from "./requests/hiscores";
 
 export type GroupStateUpdate = Map<Member.Name, Partial<Member.State>>;
 
@@ -48,7 +49,12 @@ export default class Api {
     const updates: GroupStateUpdate = new Map();
 
     for (const { name, coordinates, quests, ...rest } of response) {
-      const update: Partial<Member.State> = { ...rest };
+      for (const [key, value] of Object.entries(rest)) {
+        if (value === undefined) {
+          delete rest[key as keyof typeof rest];
+        }
+      }
+      const update = rest as Partial<Member.State>;
 
       if (coordinates) {
         update.coordinates = {
@@ -76,6 +82,10 @@ export default class Api {
   }
 
   private callbacks: Partial<UpdateCallbacks> = {};
+
+  public getCredentials(): GroupCredentials {
+    return this.credentials;
+  }
 
   public overwriteSomeUpdateCallbacks(callbacks: Partial<UpdateCallbacks>): void {
     Object.assign(this.callbacks, callbacks);
@@ -238,5 +248,14 @@ export default class Api {
       updates.set(name as Member.Name, { collection });
     }
     this.callbacks?.onGroupUpdate?.(updates, true);
+  }
+
+  async fetchMemberHiscores(memberName: string): Promise<RequestHiscores.Response> {
+    if (this.credentials === undefined) return Promise.reject(new Error("No active API connection."));
+    return RequestHiscores.fetchMemberHiscores({
+      baseURL: this.baseURL,
+      credentials: this.credentials,
+      memberName,
+    });
   }
 }

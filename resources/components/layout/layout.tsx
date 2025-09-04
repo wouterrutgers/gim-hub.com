@@ -1,10 +1,11 @@
-import { useContext, type ReactElement, type ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { useContext, useEffect, type ReactElement, type ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppNavigation } from "../app-navigation/app-navigation.tsx";
 import { PlayerPanel } from "../player-panel/player-panel.tsx";
 import { Context as APIContext } from "../../context/api-context.tsx";
 import { SettingsContext as SettingsContext } from "../../context/settings-context.tsx";
 import { GroupMemberNamesContext } from "../../context/group-context.tsx";
+import { LoadingScreen } from "../loading-screen/loading-screen.tsx";
 
 import "./layout.css";
 
@@ -19,7 +20,24 @@ export const UnauthedLayout = ({ children }: { children?: ReactNode }): ReactEle
 const SidePanels = (): ReactNode => {
   const groupMembers = useContext(GroupMemberNamesContext);
 
-  if (groupMembers.size <= 0) return undefined;
+  if (groupMembers.size <= 0) {
+    return (
+      <div id="side-panels-container">
+        <div style={{ position: "relative" }}>
+          <PlayerPanel />
+          <div style={{ position: "absolute", background: "rgba(0 0 0 / 60%)", inset: 0 }}>
+            <LoadingScreen />
+          </div>
+        </div>
+        <div style={{ position: "relative" }}>
+          <PlayerPanel />
+          <div style={{ position: "absolute", background: "rgba(0 0 0 / 60%)", inset: 0 }}>
+            <LoadingScreen />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div id="side-panels-container">
@@ -35,9 +53,18 @@ const SidePanels = (): ReactNode => {
   );
 };
 
-export const AuthedLayout = ({ children, showPanels }: { children?: ReactNode; showPanels: boolean }): ReactElement => {
-  const { credentials } = useContext(APIContext);
+export const AuthedLayout = ({
+  children,
+  showPanels,
+  hideHeader,
+}: {
+  children?: ReactNode;
+  showPanels?: boolean;
+  hideHeader?: boolean;
+}): ReactElement => {
+  const { logInLive, api } = useContext(APIContext) ?? {};
   const { sidebarPosition, siteTheme } = useContext(SettingsContext);
+  const navigate = useNavigate();
 
   if (siteTheme === "dark") {
     document.documentElement.classList.add("dark-mode");
@@ -45,11 +72,17 @@ export const AuthedLayout = ({ children, showPanels }: { children?: ReactNode; s
     document.documentElement.classList.remove("dark-mode");
   }
 
-  if (credentials === undefined) return <Navigate to="/" />;
+  useEffect(() => {
+    if (api) return;
+
+    logInLive!().catch(() => {
+      return navigate("/", { replace: true });
+    });
+  }, [logInLive, api, navigate]);
 
   const mainContent = (
     <div id="main-content" className="pointer-passthrough">
-      <AppNavigation groupName={credentials?.name} />
+      {hideHeader ? undefined : <AppNavigation groupName={api?.getCredentials().name ?? "Group Name"} />}
       {children}
     </div>
   );

@@ -18,7 +18,7 @@ export const GameDataContext = createContext<GameData>({});
  */
 export const GameDataProvider = ({ children }: { children: ReactNode }): ReactElement => {
   const [gameData, setGameData] = useState<GameData>({});
-  const { setUpdateCallbacks } = useContext(APIContext);
+  const { setUpdateCallbacks } = useContext(APIContext)?.api ?? {};
 
   useEffect(() => {
     if (!setUpdateCallbacks) return;

@@ -1,12 +1,14 @@
-import { Fragment, type ReactElement } from "react";
+import { Fragment, useContext, type ReactElement } from "react";
 import { AppLink } from "../app-link/app-link";
 import { useLocation } from "react-router-dom";
 import { CachedImage } from "../cached-image/cached-image";
+import { Context as APIContext } from "../../context/api-context";
 
 import "./app-navigation.css";
 
 export const AppNavigation = ({ groupName }: { groupName: string }): ReactElement => {
   const location = useLocation();
+  const { isDemo } = useContext(APIContext) ?? {};
 
   const mainLinks = [
     { label: "Items", href: "/group/items", mobileIconSource: "/ui/777-0.png" },
@@ -23,8 +25,8 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
       mobileIconSource: "/images/GitHub-Mark-Light-64px.png",
       isExternal: true,
     },
-    { label: "Setup", href: "/setup-instructions", mobileIconSource: "/ui/1094-0.png" },
-    { label: "Logout", href: "/logout", mobileIconSource: "/ui/225-0.png" },
+    { label: "Setup", href: "/group/setup-instructions", mobileIconSource: "/ui/1094-0.png" },
+    { label: "Logout", href: isDemo ? "/" : "/logout", mobileIconSource: "/ui/225-0.png" },
   ];
 
   const renderLinks = (

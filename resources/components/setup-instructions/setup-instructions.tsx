@@ -7,7 +7,9 @@ import "./setup-instructions.css";
 
 export const SetupInstructions = (): ReactElement => {
   const [tokenVisible, setTokenVisible] = useState(false);
-  const { credentials } = useContext(APIContext);
+  const { api } = useContext(APIContext) ?? {};
+
+  const credentials = api?.getCredentials();
 
   return (
     <div id="setup-instructions-container">
@@ -17,7 +19,7 @@ export const SetupInstructions = (): ReactElement => {
           <p>Only share these with your group. You can't recover it so keep it safe!</p>
           <div className="setup-block">
             <h4>Group name</h4>
-            <div className="setup-credential rsborder-tiny rsbackground">{credentials?.name ?? "NULL"}</div>
+            <div className="setup-credential rsborder-tiny rsbackground">{credentials?.name ?? "Group name"}</div>
           </div>
 
           <div className="setup-block">

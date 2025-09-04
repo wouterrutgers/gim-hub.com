@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState, type ReactElement } from "react";
+import { useCallback, useContext, useEffect, useRef, useState, type ReactElement } from "react";
 import { Context2DScaledWrapper } from "./canvas-wrapper";
 import { CanvasMapRenderer, type LabelledCoordinates } from "./canvas-map-renderer";
-import { useGroupMemberContext } from "../../context/group-context";
+import { GroupMemberNamesContext, useGroupMemberContext } from "../../context/group-context";
 import { Vec2D, type WikiPosition2D } from "./coordinates";
 import { createPortal } from "react-dom";
 import * as Member from "../../game/member";
@@ -29,10 +29,11 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
   const [visiblePlane, setVisiblePlane] = useState<number>(0);
   const animationFrameHandleRef = useRef<number>(undefined);
   const memberCoordinates = useGroupMemberContext(memberCoordinatesSelector);
+  const members = useContext(GroupMemberNamesContext);
   const { getImageUrl } = useCachedImages();
 
   if (memberCoordinates) {
-    renderer?.tryUpdatePlayerPositions(memberCoordinates);
+    renderer?.tryUpdatePlayerPositions(memberCoordinates, members);
   }
 
   if (renderer) {

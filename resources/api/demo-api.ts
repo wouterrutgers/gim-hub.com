@@ -287,6 +287,12 @@ const mockGroupDataResponse = (
       diaries: MAX_DIARY,
       coordinates: { x: 3354, y: 9120, plane: 0 },
       quiver: new Map([[11212 as ItemID, 24381]]), // dragon arrow
+      runePouch: new Map([
+        [565 as ItemID, 13929392], // blood rune
+        [560 as ItemID, 22381328], // death rune
+        [554 as ItemID, 34842382], // fire rune
+        [30843 as ItemID, 22313418], // aether rune
+      ]),
       equipment: new Map<EquipmentSlot, ItemStack>([
         ["Cape", { itemID: 28955 as ItemID, quantity: 1 }], // quiver
         ["Head", { itemID: 27235 as ItemID, quantity: 1 }], // masori

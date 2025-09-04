@@ -18,8 +18,8 @@ export const SetupInstructions = (): ReactElement => {
           <h3>The group's login</h3>
           <p>Only share these with your group. You can't recover it so keep it safe!</p>
           <div className="setup-block">
-            <h4>Group Name</h4>
-            <div className="setup-credential rsborder-tiny rsbackground">{credentials?.name ?? "Group Name"}</div>
+            <h4>Group name</h4>
+            <div className="setup-credential rsborder-tiny rsbackground">{credentials?.name ?? "Group name"}</div>
           </div>
 
           <div className="setup-block">

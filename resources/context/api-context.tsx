@@ -178,7 +178,6 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
 
     if (!api) return base;
 
-    /* eslint-disable @typescript-eslint/explicit-function-return-type */
     base.api = {
       fetchSkillData: api.fetchSkillData.bind(api),
       setUpdateCallbacks: api.overwriteSomeUpdateCallbacks.bind(api),
@@ -187,9 +186,8 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
       renameMember: api.renameGroupMember.bind(api),
       getCredentials: api.getCredentials.bind(api),
       fetchMemberHiscores: api.fetchMemberHiscores.bind(api),
-      fetchGroupCollectionLogs: () => api.fetchGroupCollectionLogs(),
+      fetchGroupCollectionLogs: api.fetchGroupCollectionLogs.bind(api),
     };
-    /* eslint-enable @typescript-eslint/explicit-function-return-type */
 
     return base;
   }, [api, checkCredentials, isDemo, logInDemo, logInLive, logOut]);

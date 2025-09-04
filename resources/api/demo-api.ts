@@ -90,11 +90,12 @@ const mockGroupDataResponse = (
   startMS ??= performance.now();
   const elapsedMS = performance.now() - startMS;
 
-  if (roster.at(0)?.deleted === false) {
+  const thurgoRoster = roster.find(({ originalName }) => originalName === "Thurgo");
+  if (thurgoRoster) {
     // Thurgo cooks pies in the myth's guild
     const member = {
       ...DEFAULT_MEMBER,
-      name: roster.at(0)!.displayName,
+      name: thurgoRoster.displayName,
       bank: banks.get("Thurgo" as Member.Name),
       stats: {
         health: { current: 99, max: 99 },
@@ -156,11 +157,12 @@ const mockGroupDataResponse = (
     results.push(member);
   }
 
-  if (roster.at(1)?.deleted === false) {
+  const cow31337KillerRoster = roster.find(({ originalName }) => originalName === "Cow31337Killer");
+  if (cow31337KillerRoster) {
     // Cow31337Killer kills undead cows
     const member = {
       ...DEFAULT_MEMBER,
-      name: roster.at(1)!.displayName,
+      name: cow31337KillerRoster.displayName,
       bank: banks.get("Cow31337Killer" as Member.Name),
       quests: [...cowKiller.quests],
       diaries: { ...cowKiller.diaries },
@@ -223,11 +225,12 @@ const mockGroupDataResponse = (
     results.push(member);
   }
 
-  if (roster.at(2)?.deleted === false) {
+  const garyRoster = roster.find(({ originalName }) => originalName === "Gary");
+  if (garyRoster) {
     // Gary walks Lumbridge to Varrock, but dies to a Dark wizard at the end
     const member = {
       ...DEFAULT_MEMBER,
-      name: roster.at(2)!.displayName,
+      name: garyRoster.displayName,
       bank: banks.get("Gary" as Member.Name),
       stats: {
         health: { current: 10, max: 10 },
@@ -265,11 +268,12 @@ const mockGroupDataResponse = (
     results.push(member);
   }
 
-  if (roster.at(3)?.deleted === false) {
+  const xXgamerXxRoster = roster.find(({ originalName }) => originalName === "xXgamerXx");
+  if (xXgamerXxRoster) {
     // xXgamerXx bankstands ToA lobby in BiS
     const member = {
       ...DEFAULT_MEMBER,
-      name: roster.at(3)!.displayName,
+      name: xXgamerXxRoster.displayName,
       bank: banks.get("xXgamerXx" as Member.Name),
       lastUpdated: new Date(Date.now()),
       skills: { ...DEFAULT_SKILLS },
@@ -334,7 +338,7 @@ const mockGroupDataResponse = (
     results.push(member);
   }
 
-  for (const { displayName } of roster.slice(4)) {
+  for (const { displayName } of roster.filter(({ originalName }) => originalName === undefined)) {
     results.push({ ...DEFAULT_MEMBER, name: displayName });
   }
 
@@ -369,7 +373,7 @@ interface DemoGroup {
     quests: typeof MAX_QUEST;
     diaries: typeof MAX_DIARY;
   };
-  roster: { displayName: Member.Name; deleted: boolean }[];
+  roster: { displayName: Member.Name; originalName?: "Thurgo" | "Cow31337Killer" | "Gary" | "xXgamerXx" }[];
   hiscores: Map<Member.Name, RequestHiscores.Response>;
   collections: Map<Member.Name, Member.Collection>;
   banks: Map<Member.Name, Member.ItemCollection>;
@@ -399,10 +403,10 @@ const INITIAL_STATE = {
     diaries: structuredClone(MAX_DIARY),
   },
   roster: [
-    { displayName: "Thurgo" as Member.Name, deleted: false },
-    { displayName: "Cow31337Killer" as Member.Name, deleted: false },
-    { displayName: "Gary" as Member.Name, deleted: false },
-    { displayName: "xXgamerXx" as Member.Name, deleted: false },
+    { displayName: "Thurgo" as Member.Name, originalName: "Thurgo" as const },
+    { displayName: "Cow31337Killer" as Member.Name, originalName: "Cow31337Killer" as const },
+    { displayName: "Gary" as Member.Name, originalName: "Gary" as const },
+    { displayName: "xXgamerXx" as Member.Name, originalName: "xXgamerXx" as const },
   ],
   hiscores: new Map(),
   collections: new Map(),
@@ -691,7 +695,7 @@ export default class DemoApi {
       return Promise.resolve({ status: "error", text: "A member of that name already exists." });
     }
 
-    this.state.roster.push({ displayName: member, deleted: false });
+    this.state.roster.push({ displayName: member });
 
     return Promise.resolve({ status: "ok" });
   }
@@ -719,17 +723,7 @@ export default class DemoApi {
     const memberInRoster = this.state.roster.findIndex(({ displayName }) => displayName === member);
     if (memberInRoster === -1) return Promise.resolve({ status: "error", text: "No member has that name." });
 
-    // Don't delete the original members so we can use a static index to access
-    // them while mocking the get-group-data response
-    const isOriginalMember = memberInRoster <= 3;
-    if (isOriginalMember) {
-      this.state.roster[memberInRoster].deleted = true;
-    } else {
-      this.state.roster = [
-        ...this.state.roster.slice(0, memberInRoster),
-        ...this.state.roster.slice(memberInRoster + 1),
-      ];
-    }
+    this.state.roster = [...this.state.roster.slice(0, memberInRoster), ...this.state.roster.slice(memberInRoster + 1)];
 
     return Promise.resolve({ status: "ok" });
   }

@@ -41,6 +41,11 @@ interface CanvasMapCamera {
   zoom: number;
   minZoom: number;
   maxZoom: number;
+
+  // Time spent moving slow enough to allow loading.
+  accumulatedSlowMS: number;
+  // Samples of camera displacement across a frame, over some time.
+  displacementSamples: { displacement: WorldDisplacement2D; timeMS: number }[];
 }
 interface CanvasMapCursor {
   /**
@@ -105,7 +110,8 @@ interface MapLabel {
   labelID: number;
   worldPosition: WorldPosition2D;
   plane: number;
-  image?: ImageBitmap;
+  // Defined when the image fetch is outbound, eventually populated with the result of that fetch.
+  imageFetch?: { loaded: true; asset: ImageBitmap } | { loaded: false; asset: undefined };
 }
 
 type MapLabelGrid = Map<MapRegionCoordinate2DHash, MapLabel[]>;
@@ -119,11 +125,175 @@ const REGION_X_MAX = 68;
 const REGION_Y_MIN = 19;
 const REGION_Y_MAX = 160;
 
+/**
+ * Various parameters that control how eagerly images are loaded. The only
+ * images affected by this are regions and labels.
+ */
+const RATE_LIMIT_CONFIG = Object.freeze({
+  /**
+   * A ratio of the number of outbound fetches allowed, to the number of regions
+   * visible that frame. This helps keep the network queue clear so when the
+   * camera slows down after panning quickly, useful images are loaded sooner.
+   *
+   * For example, if the camera is zoomed and the window is sized such that 40
+   * regions are visible, a ratio of 2.0 means that at most 80 images can be
+   * loading at a time.
+   */
+  visibleRegionOutboundFetchCapRatio: 1.5,
+
+  /**
+   * Instantaneous speed above which we stop loading images.
+   */
+  cameraSpeedThresholdWorldUnitsPerSecond: 800,
+
+  /**
+   * Milliseconds needed to be spent below
+   * cameraSpeedThresholdWorldUnitsPerSecond before images can start being
+   * loaded.
+   */
+  cameraAccumulatedSlowThresholdMS: 200,
+
+  /**
+   * Average displacement over the time period set by
+   * cameraAverageDisplacementLookbackTimeMS below which we load images.
+   */
+  cameraAverageDisplacementThresholdWorldUnits: 5,
+
+  /**
+   * The number of seconds we average camera displacement over.
+   */
+  cameraAverageDisplacementLookbackTimeMS: 500,
+});
+
+/**
+ * Iterate a 2d interval of integers inside-out.
+ *
+ * E.g. if input is minInclusive=0 and maxInclusive=3, yields are:
+ *    1) lower: 1, higher: 2
+ *    2) lower: 0, higher: 3
+ *
+ *  * E.g. if input is minInclusive=0 and maxInclusive=2, yields are:
+ *    1) lower: 1, higher: 1
+ *    2) lower: 0, higher: 2
+ */
+function* makeInsideOutIterator1D(
+  minInclusive: number,
+  maxInclusive: number,
+): Generator<{ lower: number; higher: number }, undefined> {
+  if (
+    !Number.isInteger(minInclusive) ||
+    !Number.isInteger(maxInclusive) ||
+    minInclusive < 0 ||
+    maxInclusive < 0 ||
+    minInclusive >= maxInclusive
+  ) {
+    throw new Error("min and max must be a well defined interval of positive integers.");
+  }
+
+  const extent = maxInclusive - minInclusive;
+  const n = Math.abs(extent) + 1;
+  const isEven = n % 2 === 0;
+  if (isEven) {
+    const higher = n / 2 + minInclusive;
+    const lower = higher - 1;
+    for (let i = 0; i < n / 2; i++) {
+      yield { lower: lower - i, higher: higher + i };
+    }
+  } else {
+    const higher = Math.floor(n / 2) + minInclusive;
+    const lower = higher;
+    for (let i = 0; i < n / 2; i++) {
+      yield { lower: lower - i, higher: higher + i };
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Iterate a rectangle of regions in a sort of inside-out spiral. Used to
+ * prioritize loading the important regions center of the camera.
+ */
+function* makeInsideOutRegionIterator(min: RegionPosition2D, max: RegionPosition2D): Generator<RegionPosition2D> {
+  const extent = Vec2D.sub(max, min);
+
+  const xGenerator = makeInsideOutIterator1D(min.x, max.x);
+  const xSteps = Math.ceil((extent.x + 1) / 2);
+  const yGenerator = makeInsideOutIterator1D(min.y, max.y);
+  const ySteps = Math.ceil((extent.y + 1) / 2);
+
+  let xCurrentPair = xGenerator.next();
+  let yCurrentPair = yGenerator.next();
+
+  // If the rectangle is long in one dimension, we need to iterate the extent of
+  // the long innermost layer first.
+  if (ySteps > xSteps) {
+    const { lower: lowerX, higher: higherX } = xCurrentPair.value!;
+    for (let i = 0; i < ySteps - xSteps; i++) {
+      const { lower: lowerY, higher: higherY } = yCurrentPair.value!;
+      yield Vec2D.create({ x: lowerX, y: lowerY });
+      if (higherX) {
+        yield Vec2D.create({ x: higherX, y: lowerY });
+      }
+      if (higherY) {
+        yield Vec2D.create({ x: lowerX, y: higherY });
+      }
+      if (higherX && higherY) {
+        yield Vec2D.create({ x: higherX, y: higherY });
+      }
+      yCurrentPair = yGenerator.next();
+    }
+  } else if (xSteps > ySteps) {
+    const { lower: lowerY, higher: higherY } = yCurrentPair.value!;
+    for (let i = 0; i < xSteps - ySteps; i++) {
+      const { lower: lowerX, higher: higherX } = xCurrentPair.value!;
+      yield Vec2D.create({ x: lowerX, y: lowerY });
+      if (higherX) {
+        yield Vec2D.create({ x: higherX, y: lowerY });
+      }
+      if (higherY) {
+        yield Vec2D.create({ x: lowerX, y: higherY });
+      }
+      if (higherX && higherY) {
+        yield Vec2D.create({ x: higherX, y: higherY });
+      }
+      xCurrentPair = xGenerator.next();
+    }
+  }
+
+  while (!xCurrentPair.done && !yCurrentPair.done) {
+    const { lower: lowerX, higher: higherX } = xCurrentPair.value;
+    const { lower: lowerY, higher: higherY } = yCurrentPair.value;
+
+    // spiral pattern of a hollow rectangle
+    for (let x = lowerX; x <= higherX; x++) {
+      yield Vec2D.create({ x, y: higherY });
+    }
+    for (let y = higherY - 1; y > lowerY; y--) {
+      yield Vec2D.create({ x: higherX, y });
+    }
+    if (lowerY !== higherY) {
+      for (let x = higherX; x >= lowerX; x--) {
+        yield Vec2D.create({ x, y: lowerY });
+      }
+    }
+    if (lowerX !== higherX) {
+      for (let y = lowerY + 1; y < higherY; y++) {
+        yield Vec2D.create({ x: lowerX, y });
+      }
+    }
+
+    yCurrentPair = yGenerator.next();
+    xCurrentPair = xGenerator.next();
+  }
+}
+
 export class CanvasMapRenderer {
   private regions: RegionGrid;
   private camera: CanvasMapCamera;
   private cursor: CanvasMapCursor;
   private lastUpdateTime: DOMHighResTimeStamp;
+  private outboundImageFetchesCount: number;
   private iconsAtlas?: ImageBitmap;
   private iconsByRegion?: MapIconGrid;
   private labelsByRegion?: MapLabelGrid;
@@ -219,6 +389,7 @@ export class CanvasMapRenderer {
     const INITIAL_PLANE = 0;
 
     this.getImageUrl = getImageUrl;
+    this.outboundImageFetchesCount = 0;
     this.regions = new Map();
     this.camera = {
       position: Vec2D.create({ x: INITIAL_X, y: INITIAL_Y }),
@@ -227,6 +398,8 @@ export class CanvasMapRenderer {
       minZoom: 1 / 32,
       maxZoom: 1 / 4,
       followPlayer: undefined,
+      accumulatedSlowMS: 0,
+      displacementSamples: [],
     };
     this.cursor = {
       position: Vec2D.create({ x: 0, y: 0 }),
@@ -370,6 +543,8 @@ export class CanvasMapRenderer {
   }
 
   private updateCamera({ context, elapsed }: { context: Context2DScaledWrapper; elapsed: number }): void {
+    const cameraInitialPosition = { ...this.camera.position };
+
     const previousZoom = this.camera.zoom;
     const ZOOM_SENSITIVITY = 1 / 3000;
     if (this.cursor.accumulatedScroll !== 0) {
@@ -423,7 +598,12 @@ export class CanvasMapRenderer {
       this.camera.position = Vec2D.lerp({ t, from, to });
     } else {
       // The camera continues to move with linear deceleration due to friction
+
+      // The speed at which we consider static friction dominating, causing
+      // velocity to drop to zero.
       const SPEED_THRESHOLD = 0.05;
+
+      // The rate of decrease of velocity due to kinetic friction
       const FRICTION_PER_MS = 0.004;
 
       const velocityAverage = Vec2D.average(this.cursor.rateSamples);
@@ -439,6 +619,25 @@ export class CanvasMapRenderer {
         this.camera.position = Vec2D.add(this.camera.position, Vec2D.mul(-1.0, displacement));
       }
     }
+
+    const cameraDisplacement = Vec2D.sub(this.camera.position, cameraInitialPosition);
+    const cameraSpeed = Math.sqrt(Vec2D.lengthSquared(Vec2D.mul(1000 / elapsed, cameraDisplacement)));
+    if (cameraSpeed >= RATE_LIMIT_CONFIG.cameraSpeedThresholdWorldUnitsPerSecond) {
+      this.camera.accumulatedSlowMS = 0;
+    } else {
+      this.camera.accumulatedSlowMS += elapsed;
+    }
+
+    const nowMS = performance.now();
+    const firstValidSampleIndex = this.camera.displacementSamples.findIndex(
+      ({ timeMS }) => timeMS >= nowMS - RATE_LIMIT_CONFIG.cameraAverageDisplacementLookbackTimeMS,
+    );
+    if (firstValidSampleIndex < 0) {
+      this.camera.displacementSamples = [];
+    } else {
+      this.camera.displacementSamples = this.camera.displacementSamples.slice(firstValidSampleIndex);
+    }
+    this.camera.displacementSamples.push({ displacement: cameraDisplacement, timeMS: nowMS });
   }
 
   /**
@@ -511,7 +710,16 @@ export class CanvasMapRenderer {
       currentTransform.translation.y !== previousTransform.translation.y;
     const anyVisibleRegionUpdatedAlpha = this.updateRegionsAlpha(context, elapsed);
 
-    this.loadVisibleAll(context);
+    const cameraAverageDisplacementLength = Math.sqrt(
+      Vec2D.lengthSquared(Vec2D.average(this.camera.displacementSamples.map(({ displacement }) => displacement))),
+    );
+    const cameraIsPanningTooFast =
+      cameraAverageDisplacementLength > RATE_LIMIT_CONFIG.cameraAverageDisplacementThresholdWorldUnits &&
+      this.camera.accumulatedSlowMS < RATE_LIMIT_CONFIG.cameraAccumulatedSlowThresholdMS;
+    if (!cameraIsPanningTooFast) {
+      this.loadVisibleAll(context);
+    }
+
     if (anyVisibleRegionUpdatedAlpha || transformHasChanged || this.forceRenderNextFrame) {
       this.forceRenderNextFrame = false;
       this.drawAll(context);
@@ -532,65 +740,88 @@ export class CanvasMapRenderer {
     this.lastUpdateTime = currentUpdateTime;
   }
 
+  /**
+   * Load regions and labels, which use individual images. Icons are in an atlas
+   * and are already loaded.
+   */
   private loadVisibleAll(context: Context2DScaledWrapper): void {
-    // Load regions and labels, which use individual images.
-    // Icons are in an atlas and are already loaded.
-    const visibleRect = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));
+    const visibleRegionRect = Rect2D.worldToRegion(context.getVisibleWorldBox());
+    const visibleRegionExtent = Vec2D.sub(visibleRegionRect.max, visibleRegionRect.min);
+    const visibleRegionCountEstimate = visibleRegionExtent.x * visibleRegionExtent.y;
 
-    for (let regionX = visibleRect.min.x - 1; regionX <= visibleRect.max.x; regionX++) {
-      for (let regionY = visibleRect.min.y - 1; regionY <= visibleRect.max.y; regionY++) {
-        if (regionX < REGION_X_MIN || regionX > REGION_X_MAX || regionY < REGION_Y_MIN || regionY > REGION_Y_MAX) {
-          continue;
-        }
+    const outboundImageFetchesLimit = visibleRegionCountEstimate * RATE_LIMIT_CONFIG.visibleRegionOutboundFetchCapRatio;
+    const rateLimited = this.outboundImageFetchesCount > outboundImageFetchesLimit;
 
-        const regionPosition = Vec2D.create<RegionPosition2D>({ x: regionX, y: regionY });
-        const hash3D = hashMapRegionCoordinate3Ds(regionPosition, this.plane);
-        const hash2D = hashMapRegionCoordinate2Ds(regionPosition);
+    const probablyVisibleRegions = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));
+    for (const region of makeInsideOutRegionIterator(probablyVisibleRegions.min, probablyVisibleRegions.max)) {
+      const regionX = region.x;
+      const regionY = region.y;
+      if (regionX < REGION_X_MIN || regionX > REGION_X_MAX || regionY < REGION_Y_MIN || regionY > REGION_Y_MAX) {
+        continue;
+      }
 
-        if (!this.regions.has(hash3D)) {
-          const image = new Image(REGION_IMAGE_PIXEL_EXTENT.x, REGION_IMAGE_PIXEL_EXTENT.y);
-          const regionFileBaseName = `${this.plane}_${regionX}_${regionY}`;
+      const regionPosition = Vec2D.create<RegionPosition2D>({ x: regionX, y: regionY });
+      const hash3D = hashMapRegionCoordinate3Ds(regionPosition, this.plane);
+      const hash2D = hashMapRegionCoordinate2Ds(regionPosition);
 
-          const region: MapRegion = {
-            alpha: 0,
-            position: Vec2D.create(regionPosition),
-          };
-          image.onload = (): void => {
-            createImageBitmap(image)
-              .then((bitmap) => {
-                region.image = bitmap;
-              })
-              .catch((reason) => {
-                console.error("Failed to load image bitmap for:", image.src, reason);
-              });
-          };
-          void this.getImageUrl(`/map/${regionFileBaseName}.webp`).then((url) => {
+      if (!this.regions.has(hash3D) && !rateLimited) {
+        const image = new Image(REGION_IMAGE_PIXEL_EXTENT.x, REGION_IMAGE_PIXEL_EXTENT.y);
+        const regionFileBaseName = `${this.plane}_${regionX}_${regionY}`;
+
+        this.outboundImageFetchesCount += 1;
+        const region: MapRegion = {
+          alpha: 0,
+          position: Vec2D.create(regionPosition),
+        };
+        image.onload = (): void => {
+          this.outboundImageFetchesCount -= 1;
+          createImageBitmap(image)
+            .then((bitmap) => {
+              region.image = bitmap;
+            })
+            .catch((reason) => {
+              console.error("Failed to load image bitmap for:", image.src, reason);
+            });
+        };
+        image.onerror = (): void => {
+          this.outboundImageFetchesCount -= 1;
+        };
+        void this.getImageUrl(`/map/${regionFileBaseName}.webp`).then((url) => {
+          image.src = url;
+        });
+
+        this.regions.set(hash3D, region);
+      }
+
+      const labels = this.labelsByRegion?.get(hash2D);
+      if (labels === undefined) continue;
+
+      labels.forEach((label) => {
+        const { labelID, plane } = label;
+        if (plane !== this.plane) return;
+
+        if (!label.imageFetch && !rateLimited) {
+          label.imageFetch = { loaded: false, asset: undefined };
+
+          const image = new Image();
+          this.outboundImageFetchesCount += 1;
+          void this.getImageUrl(`/map/labels/${labelID}.webp`).then((url) => {
             image.src = url;
           });
-
-          this.regions.set(hash3D, region);
+          image.onload = (): void => {
+            this.outboundImageFetchesCount -= 1;
+            createImageBitmap(image)
+              .then((bitmap) => {
+                label.imageFetch!.asset = bitmap;
+                label.imageFetch!.loaded = true;
+              })
+              .catch((reason) => console.error("Failed to load image bitmap for", image.src, reason));
+          };
+          image.onerror = (): void => {
+            this.outboundImageFetchesCount -= 1;
+          };
         }
-
-        const labels = this.labelsByRegion?.get(hash2D);
-        if (labels === undefined) continue;
-
-        labels.forEach((label) => {
-          const { labelID, plane } = label;
-          if (plane !== this.plane) return;
-
-          if (label.image === undefined) {
-            const image = new Image();
-            void this.getImageUrl(`/map/labels/${labelID}.webp`).then((url) => {
-              image.src = url;
-            });
-            image.onload = (): void => {
-              createImageBitmap(image)
-                .then((bitmap) => (label.image = bitmap))
-                .catch((reason) => console.error("Failed to load image bitmap for", image.src, reason));
-            };
-          }
-        });
-      }
+      });
     }
   }
 
@@ -693,13 +924,13 @@ export class CanvasMapRenderer {
     for (let regionX = visibleRect.min.x - 1; regionX <= visibleRect.max.x; regionX++) {
       for (let regionY = visibleRect.min.y - 1; regionY <= visibleRect.max.y; regionY++) {
         const labels = this.labelsByRegion?.get(hashMapRegionCoordinate2Ds(Vec2D.create({ x: regionX, y: regionY })));
-        if (labels === undefined) continue;
+        if (!labels) continue;
 
         labels.forEach((label) => {
           const { worldPosition, plane } = label;
 
-          const image = label.image;
-          if (plane !== this.plane || image === undefined) return;
+          const image = label.imageFetch?.asset;
+          if (plane !== this.plane || !image) return;
 
           const extent = Vec2D.create<WorldDisplacement2D>({
             x: labelScale * image.width,

@@ -138,20 +138,19 @@ const OUTBOUND_IMAGE_FETCHES_CAP = 6;
  */
 function* makeInsideOutIterator1D(
   minInclusive: number,
-  maxInclusive: number,
+  maxExclusive: number,
 ): Generator<{ lower: number; higher: number }, undefined> {
   if (
     !Number.isInteger(minInclusive) ||
-    !Number.isInteger(maxInclusive) ||
+    !Number.isInteger(maxExclusive) ||
     minInclusive < 0 ||
-    maxInclusive < 0 ||
-    minInclusive >= maxInclusive
+    maxExclusive < 0 ||
+    minInclusive > maxExclusive
   ) {
     throw new Error("min and max must be a well defined interval of positive integers.");
   }
 
-  const extent = maxInclusive - minInclusive;
-  const n = Math.abs(extent) + 1;
+  const n = Math.abs(maxExclusive - minInclusive);
   const isEven = n % 2 === 0;
   if (isEven) {
     const higher = n / 2 + minInclusive;
@@ -174,13 +173,16 @@ function* makeInsideOutIterator1D(
  * Iterate a rectangle of regions in a sort of inside-out spiral. Used to
  * prioritize loading the important regions center of the camera.
  */
-function* makeInsideOutRegionIterator(min: RegionPosition2D, max: RegionPosition2D): Generator<RegionPosition2D> {
-  const extent = Vec2D.sub(max, min);
+function* makeInsideOutRegionIterator(
+  minInclusive: RegionPosition2D,
+  maxExclusive: RegionPosition2D,
+): Generator<RegionPosition2D> {
+  const extent = Vec2D.sub(maxExclusive, minInclusive);
 
-  const xGenerator = makeInsideOutIterator1D(min.x, max.x);
-  const xSteps = Math.ceil((extent.x + 1) / 2);
-  const yGenerator = makeInsideOutIterator1D(min.y, max.y);
-  const ySteps = Math.ceil((extent.y + 1) / 2);
+  const xGenerator = makeInsideOutIterator1D(minInclusive.x, maxExclusive.x);
+  const xSteps = Math.ceil(extent.x / 2);
+  const yGenerator = makeInsideOutIterator1D(minInclusive.y, maxExclusive.y);
+  const ySteps = Math.ceil(extent.y / 2);
 
   let xCurrentPair = xGenerator.next();
   let yCurrentPair = yGenerator.next();

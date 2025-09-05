@@ -194,13 +194,13 @@ function* makeInsideOutRegionIterator(
     for (let i = 0; i < ySteps - xSteps; i++) {
       const { lower: lowerY, higher: higherY } = yCurrentPair.value!;
       yield Vec2D.create({ x: lowerX, y: lowerY });
-      if (higherX) {
+      if (lowerX !== higherX) {
         yield Vec2D.create({ x: higherX, y: lowerY });
       }
-      if (higherY) {
+      if (lowerY !== higherY) {
         yield Vec2D.create({ x: lowerX, y: higherY });
       }
-      if (higherX && higherY) {
+      if (lowerX !== higherX && lowerY !== higherY) {
         yield Vec2D.create({ x: higherX, y: higherY });
       }
       yCurrentPair = yGenerator.next();
@@ -210,13 +210,13 @@ function* makeInsideOutRegionIterator(
     for (let i = 0; i < xSteps - ySteps; i++) {
       const { lower: lowerX, higher: higherX } = xCurrentPair.value!;
       yield Vec2D.create({ x: lowerX, y: lowerY });
-      if (higherX) {
+      if (lowerX !== higherX) {
         yield Vec2D.create({ x: higherX, y: lowerY });
       }
-      if (higherY) {
+      if (lowerY !== higherY) {
         yield Vec2D.create({ x: lowerX, y: higherY });
       }
-      if (higherX && higherY) {
+      if (lowerX !== higherX && lowerY !== higherY) {
         yield Vec2D.create({ x: higherX, y: higherY });
       }
       xCurrentPair = xGenerator.next();

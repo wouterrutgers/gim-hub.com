@@ -131,15 +131,9 @@ const REGION_Y_MAX = 160;
  */
 const RATE_LIMIT_CONFIG = Object.freeze({
   /**
-   * A ratio of the number of outbound fetches allowed, to the number of regions
-   * visible that frame. This helps keep the network queue clear so when the
-   * camera slows down after panning quickly, useful images are loaded sooner.
-   *
-   * For example, if the camera is zoomed and the window is sized such that 40
-   * regions are visible, a ratio of 2.0 means that at most 80 images can be
-   * loading at a time.
+   * A cap on the number of outbound fetches allowed.
    */
-  visibleRegionOutboundFetchCapRatio: 1.5,
+  visibleRegionOutboundFetchCap: 40,
 
   /**
    * Instantaneous speed above which we stop loading images.
@@ -745,13 +739,6 @@ export class CanvasMapRenderer {
    * and are already loaded.
    */
   private loadVisibleAll(context: Context2DScaledWrapper): void {
-    const visibleRegionRect = Rect2D.worldToRegion(context.getVisibleWorldBox());
-    const visibleRegionExtent = Vec2D.sub(visibleRegionRect.max, visibleRegionRect.min);
-    const visibleRegionCountEstimate = visibleRegionExtent.x * visibleRegionExtent.y;
-
-    const outboundImageFetchesLimit = visibleRegionCountEstimate * RATE_LIMIT_CONFIG.visibleRegionOutboundFetchCapRatio;
-    const rateLimited = this.outboundImageFetchesCount > outboundImageFetchesLimit;
-
     const probablyVisibleRegions = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));
     for (const region of makeInsideOutRegionIterator(probablyVisibleRegions.min, probablyVisibleRegions.max)) {
       const regionX = region.x;
@@ -764,6 +751,7 @@ export class CanvasMapRenderer {
       const hash3D = hashMapRegionCoordinate3Ds(regionPosition, this.plane);
       const hash2D = hashMapRegionCoordinate2Ds(regionPosition);
 
+      const rateLimited = this.outboundImageFetchesCount > RATE_LIMIT_CONFIG.visibleRegionOutboundFetchCap;
       if (!this.regions.has(hash3D) && !rateLimited) {
         const image = new Image(REGION_IMAGE_PIXEL_EXTENT.x, REGION_IMAGE_PIXEL_EXTENT.y);
         const regionFileBaseName = `${this.plane}_${regionX}_${regionY}`;

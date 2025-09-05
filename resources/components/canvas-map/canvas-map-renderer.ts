@@ -41,11 +41,6 @@ interface CanvasMapCamera {
   zoom: number;
   minZoom: number;
   maxZoom: number;
-
-  // Time spent moving slow enough to allow loading.
-  accumulatedSlowMS: number;
-  // Samples of camera displacement across a frame, over some time.
-  displacementSamples: { displacement: WorldDisplacement2D; timeMS: number }[];
 }
 interface CanvasMapCursor {
   /**
@@ -126,38 +121,9 @@ const REGION_Y_MIN = 19;
 const REGION_Y_MAX = 160;
 
 /**
- * Various parameters that control how eagerly images are loaded. The only
- * images affected by this are regions and labels.
+ * A cap on the number of outbound fetches allowed.
  */
-const RATE_LIMIT_CONFIG = Object.freeze({
-  /**
-   * A cap on the number of outbound fetches allowed.
-   */
-  visibleRegionOutboundFetchCap: 40,
-
-  /**
-   * Instantaneous speed above which we stop loading images.
-   */
-  cameraSpeedThresholdWorldUnitsPerSecond: 800,
-
-  /**
-   * Milliseconds needed to be spent below
-   * cameraSpeedThresholdWorldUnitsPerSecond before images can start being
-   * loaded.
-   */
-  cameraAccumulatedSlowThresholdMS: 200,
-
-  /**
-   * Average displacement over the time period set by
-   * cameraAverageDisplacementLookbackTimeMS below which we load images.
-   */
-  cameraAverageDisplacementThresholdWorldUnits: 5,
-
-  /**
-   * The number of seconds we average camera displacement over.
-   */
-  cameraAverageDisplacementLookbackTimeMS: 500,
-});
+const OUTBOUND_IMAGE_FETCHES_CAP = 6;
 
 /**
  * Iterate a 2d interval of integers inside-out.
@@ -392,8 +358,6 @@ export class CanvasMapRenderer {
       minZoom: 1 / 32,
       maxZoom: 1 / 4,
       followPlayer: undefined,
-      accumulatedSlowMS: 0,
-      displacementSamples: [],
     };
     this.cursor = {
       position: Vec2D.create({ x: 0, y: 0 }),
@@ -537,8 +501,6 @@ export class CanvasMapRenderer {
   }
 
   private updateCamera({ context, elapsed }: { context: Context2DScaledWrapper; elapsed: number }): void {
-    const cameraInitialPosition = { ...this.camera.position };
-
     const previousZoom = this.camera.zoom;
     const ZOOM_SENSITIVITY = 1 / 3000;
     if (this.cursor.accumulatedScroll !== 0) {
@@ -613,25 +575,6 @@ export class CanvasMapRenderer {
         this.camera.position = Vec2D.add(this.camera.position, Vec2D.mul(-1.0, displacement));
       }
     }
-
-    const cameraDisplacement = Vec2D.sub(this.camera.position, cameraInitialPosition);
-    const cameraSpeed = Math.sqrt(Vec2D.lengthSquared(Vec2D.mul(1000 / elapsed, cameraDisplacement)));
-    if (cameraSpeed >= RATE_LIMIT_CONFIG.cameraSpeedThresholdWorldUnitsPerSecond) {
-      this.camera.accumulatedSlowMS = 0;
-    } else {
-      this.camera.accumulatedSlowMS += elapsed;
-    }
-
-    const nowMS = performance.now();
-    const firstValidSampleIndex = this.camera.displacementSamples.findIndex(
-      ({ timeMS }) => timeMS >= nowMS - RATE_LIMIT_CONFIG.cameraAverageDisplacementLookbackTimeMS,
-    );
-    if (firstValidSampleIndex < 0) {
-      this.camera.displacementSamples = [];
-    } else {
-      this.camera.displacementSamples = this.camera.displacementSamples.slice(firstValidSampleIndex);
-    }
-    this.camera.displacementSamples.push({ displacement: cameraDisplacement, timeMS: nowMS });
   }
 
   /**
@@ -704,15 +647,7 @@ export class CanvasMapRenderer {
       currentTransform.translation.y !== previousTransform.translation.y;
     const anyVisibleRegionUpdatedAlpha = this.updateRegionsAlpha(context, elapsed);
 
-    const cameraAverageDisplacementLength = Math.sqrt(
-      Vec2D.lengthSquared(Vec2D.average(this.camera.displacementSamples.map(({ displacement }) => displacement))),
-    );
-    const cameraIsPanningTooFast =
-      cameraAverageDisplacementLength > RATE_LIMIT_CONFIG.cameraAverageDisplacementThresholdWorldUnits &&
-      this.camera.accumulatedSlowMS < RATE_LIMIT_CONFIG.cameraAccumulatedSlowThresholdMS;
-    if (!cameraIsPanningTooFast) {
-      this.loadVisibleAll(context);
-    }
+    this.loadVisibleAll(context);
 
     if (anyVisibleRegionUpdatedAlpha || transformHasChanged || this.forceRenderNextFrame) {
       this.forceRenderNextFrame = false;
@@ -751,7 +686,7 @@ export class CanvasMapRenderer {
       const hash3D = hashMapRegionCoordinate3Ds(regionPosition, this.plane);
       const hash2D = hashMapRegionCoordinate2Ds(regionPosition);
 
-      const rateLimited = this.outboundImageFetchesCount > RATE_LIMIT_CONFIG.visibleRegionOutboundFetchCap;
+      const rateLimited = this.outboundImageFetchesCount > OUTBOUND_IMAGE_FETCHES_CAP;
       if (!this.regions.has(hash3D) && !rateLimited) {
         const image = new Image(REGION_IMAGE_PIXEL_EXTENT.x, REGION_IMAGE_PIXEL_EXTENT.y);
         const regionFileBaseName = `${this.plane}_${regionX}_${regionY}`;

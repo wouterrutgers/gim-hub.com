@@ -7,6 +7,7 @@
   position: relative;
   color: var(--white);
   flex-direction: column;
+  background: rgb(0 0 0 / 20%);
 }
 
 #homepage-links {
@@ -17,6 +18,17 @@
 
 #homepage .logo {
   width: 100%;
+  margin-block: 16px;
   max-width: 400px;
-  height: auto;
+  aspect-ratio: 1.37;
+  filter: drop-shadow(rgb(0 0 0 / 60%) 8px 8px);
+}
+
+#homepage .logo img {
+  width: 100%;
+  object-fit: contain;
+}
+
+#homepage .men-button {
+  filter: drop-shadow(rgb(0 0 0 / 60%) 2px 2px);
 }

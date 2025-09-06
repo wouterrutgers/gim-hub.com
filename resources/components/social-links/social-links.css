@@ -1,45 +1,46 @@
-#social-links > li {
-  display: flex;
-}
-
-#social-links > li > a > div {
-  display: flex;
-  width: 35px;
-  place-content: center center;
-}
-
-#social-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
+#top-left-links {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 1em;
-  list-style: none;
-  font-size: 1.2em;
+  font-size: 32px;
 }
 
-#social-links a {
-  display: flex;
-  color: hsl(0deg 0% 80%);
-  text-decoration: none;
-  align-items: center;
-}
-
-#social-links a:hover {
-  color: hsl(0deg 0% 100%);
-}
-
-#original-creator-link {
+#bottom-right-links {
   position: absolute;
   right: 0;
   bottom: 0;
-  padding: 0.6em 0.8em;
+  font-size: 16px;
+}
+
+.social-links {
   display: flex;
-  align-items: center;
-  gap: 0.25em;
-  font-size: 0.9em;
+  flex-direction: column;
+  margin: 16px;
+  gap: 8px;
+  padding: 4px;
+  filter: drop-shadow(rgb(0 0 0 / 60%) 2px 2px);
+}
+
+.homepage-link {
   text-decoration: none;
-  opacity: 0.5;
+  color: hsl(0deg 0% 80%);
+  filter: drop-shadow(black 1px 1px);
+  text-shadow: none;
+  display: flex;
+  padding-left: calc(1em + 4px);
+}
+
+.homepage-link img {
+  position: absolute;
+  filter: brightness(80%);
+  padding-right: 0.25em;
+  left: 0;
+}
+
+.homepage-link:hover {
+  color: var(--white);
+}
+
+.homepage-link:hover img {
+  filter: brightness(100%);
 }

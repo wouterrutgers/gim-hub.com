@@ -1,7 +1,7 @@
 # 🏆 GIM Hub
 
 <div align="center">
-  <img alt="GIM Hub Logo" src="public/images/logo.png" width="400"/>
+  <img alt="GIM Hub Logo" src="public/images/logo-full.webp" width="400"/>
   
   **A real-time dashboard for Old School RuneScape Group Ironman teams**
   

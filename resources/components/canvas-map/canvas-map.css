@@ -55,7 +55,7 @@
 }
 
 .dark-mode #canvas-map:not(.interactive) {
-  filter: opacity(0.15) saturate(0.8);
+  filter: opacity(0.6) saturate(0.8);
 }
 
 #canvas-map-coordinates {

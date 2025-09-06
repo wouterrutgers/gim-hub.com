@@ -10,7 +10,7 @@
 
     <script>
       window.getTheme = () => {
-        let theme = localStorage.getItem("theme");
+        let theme = localStorage.getItem("settings-site-theme");
 
         if (!theme && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
           theme = "dark";

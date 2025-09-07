@@ -486,7 +486,7 @@ export const SkillGraph = (): ReactElement => {
 
   const memberColors = useContext(GroupMemberColorsContext);
 
-  const { fetchSkillData } = useContext(APIContext);
+  const { fetchSkillData } = useContext(APIContext)?.api ?? {};
 
   useEffect(() => {
     if (!fetchSkillData) return;

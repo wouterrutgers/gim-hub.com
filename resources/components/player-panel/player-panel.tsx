@@ -2,7 +2,7 @@ import { useCallback, useState, type ReactElement } from "react";
 import { PlayerSkills } from "./player-skills";
 import { PlayerInventory } from "./player-inventory";
 import { PlayerEquipment } from "./player-equipment";
-import { PlayerStats } from "./player-stats";
+import { PlayerStats, PlayerStatsPlaceholder } from "./player-stats";
 import { PlayerQuests } from "./player-quests";
 import { PlayerDiaries } from "./player-diaries";
 import * as Member from "../../game/member";
@@ -28,7 +28,7 @@ interface PlayerPanelButtonProps {
   onClick: () => void;
 }
 
-export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement => {
+export const PlayerPanel = ({ member }: { member?: Member.Name }): ReactElement => {
   const [subcategory, setSubcategory] = useState<PlayerPanelSubcategory>();
   const { open: openCollectionLogModal, modal: collectionLogModal } = useModal(CollectionLogWindow);
   const { getUIImageUrl, getIconUrl } = useCachedImages();
@@ -108,6 +108,7 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
         height: 32,
         class: "player-panel-collection-log",
         onClick: (): void => {
+          if (!member) return;
           openCollectionLogModal({ player: member });
         },
       },
@@ -118,29 +119,41 @@ export const PlayerPanel = ({ member }: { member: Member.Name }): ReactElement =
       className={`${props.category === subcategory ? "player-panel-tab-active" : ""} ${props.class}`}
       aria-label={props.ariaLabel}
       type="button"
-      onClick={props.onClick}
+      onClick={member && props.onClick}
     >
       <CachedImage alt={props.alt} src={props.src} width={props.width} height={props.height} />
     </button>
   ));
 
+  if (!member) {
+    return (
+      <div className={`player-panel rsborder rsbackground`}>
+        <PlayerStatsPlaceholder />
+        <div className="player-panel-minibar">{buttons}</div>
+        <div className="player-panel-content"></div>
+      </div>
+    );
+  }
+
   let content = undefined;
-  switch (subcategory) {
-    case "Inventory":
-      content = <PlayerInventory member={member} />;
-      break;
-    case "Equipment":
-      content = <PlayerEquipment member={member} />;
-      break;
-    case "Skills":
-      content = <PlayerSkills member={member} />;
-      break;
-    case "Quests":
-      content = <PlayerQuests member={member} />;
-      break;
-    case "Diaries":
-      content = <PlayerDiaries member={member} />;
-      break;
+  if (member) {
+    switch (subcategory) {
+      case "Inventory":
+        content = <PlayerInventory member={member} />;
+        break;
+      case "Equipment":
+        content = <PlayerEquipment member={member} />;
+        break;
+      case "Skills":
+        content = <PlayerSkills member={member} />;
+        break;
+      case "Quests":
+        content = <PlayerQuests member={member} />;
+        break;
+      case "Diaries":
+        content = <PlayerDiaries member={member} />;
+        break;
+    }
   }
 
   return (

@@ -99,18 +99,21 @@ export const useMemberDiariesContext = (member: Member.Name): Member.Diaries | u
 // perceptively just rotating the colors doesn't look very good.
 const memberColorHues: number[] = [330, 100, 230, 170, 40];
 
-interface GroupStateAction {
-  /*
-   * A partial update has only some of the members e.g. collection-log only
-   * returns members who have recorded their logs. If the update is partial, we
-   * persist old member states.
-   *
-   * A non-partial / full update has all of the members e.g. get-group-data always returns all
-   * members. If the update is not partial, we wipe old state.
-   */
-  partial: boolean;
-  update: GroupStateUpdate;
-}
+type GroupStateAction =
+  | { type: "Wipe" }
+  | {
+      type: "Update";
+      /*
+       * A partial update has only some of the members e.g. collection-log only
+       * returns members who have recorded their logs. If the update is partial, we
+       * persist old member states.
+       *
+       * A non-partial / full update has all of the members e.g. get-group-data always returns all
+       * members. If the update is not partial, we wipe old state.
+       */
+      partial: boolean;
+      update: GroupStateUpdate;
+    };
 
 /**
  * Taking in the new group state, perform some diff checking and update
@@ -119,7 +122,7 @@ interface GroupStateAction {
  * A lot of these checks should probably be done by the backend and diffs
  * performed in the API class, but for now we can just do the checks here.
  */
-const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => {
+const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: GroupStateUpdate }): GroupState => {
   const newState: Partial<GroupState> = {};
 
   let updated = false;
@@ -156,7 +159,7 @@ const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => 
   }
 
   {
-    const newMemberStates = new Map();
+    const newMemberStates = new Map<Member.Name, Member.State>();
     let memberStatesUpdated = namesHaveChanged;
 
     for (const member of memberNames) {
@@ -349,6 +352,25 @@ const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => 
   return { ...oldState, ...newState };
 };
 
+const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => {
+  switch (action.type) {
+    case "Wipe": {
+      return {
+        items: new Map(),
+        memberStates: new Map(),
+        memberNames: new Set<Member.Name>(),
+        memberColors: new Map(),
+        collections: new Map(),
+        xpDropCounter: 0,
+        xpDrops: new Map(),
+      };
+    }
+    case "Update": {
+      return actionUpdate(oldState, action);
+    }
+  }
+};
+
 /**
  * The provider for {@link GroupItemsContext}, {@link GroupMemberStatesContext},
  * {@link GroupMemberStatesContext}, and {@link GroupXPDropsContext}.
@@ -363,14 +385,15 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
     xpDropCounter: 0,
     xpDrops: new Map(),
   });
-  const { setUpdateCallbacks } = useContext(APIContext);
+  const { setUpdateCallbacks } = useContext(APIContext)?.api ?? {};
 
   useEffect(() => {
+    updateContexts({ type: "Wipe" });
     if (!setUpdateCallbacks) return;
 
     setUpdateCallbacks({
       onGroupUpdate: (update, partial) => {
-        updateContexts({ partial, update });
+        updateContexts({ type: "Update", partial, update });
       },
     });
   }, [setUpdateCallbacks]);

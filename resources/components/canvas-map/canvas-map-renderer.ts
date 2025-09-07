@@ -327,7 +327,14 @@ export class CanvasMapRenderer {
     this.onFollowPlayerUpdate?.(this.camera.followPlayer);
   }
 
-  public tryUpdatePlayerPositions(positions: LabelledCoordinates[]): void {
+  /**
+   * Update a bunch of labelled positions. Any labelled positions NOT in roster
+   * are deleted. If a label is in roster but not in positions, it is kept and
+   * its position untouched.
+   *
+   * A rerender occurs next frame if anything is changed.
+   */
+  public tryUpdatePlayerPositions(positions: LabelledCoordinates[], roster: Set<string>): void {
     for (const { label, coords: coordsWiki, plane } of positions) {
       const current = this.playerPositions.get(label);
       const coords = Pos2D.wikiToWorld(coordsWiki);
@@ -346,6 +353,13 @@ export class CanvasMapRenderer {
       };
 
       this.setPlane(plane);
+    }
+
+    for (const [label] of this.playerPositions) {
+      if (roster.has(label)) continue;
+
+      const deleted = this.playerPositions.delete(label);
+      this.forceRenderNextFrame = deleted;
     }
   }
 

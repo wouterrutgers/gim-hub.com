@@ -18,14 +18,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("/ui/170-0.png");
+  background-image: url("../../assets/ui/170-0.png");
   width: 36px;
   height: 36px;
 }
 
 .dark-mode .equipment-slot-empty,
 .dark-mode .equipment-slot-filled {
-  background-image: url("/ui/170-0-dark.png");
+  background-image: url("../../assets/ui/170-0-dark.png");
 }
 
 .equipment-slot-filled:hover {

@@ -397,7 +397,7 @@ const buildTableRowsFromMemberSkillData = (
         name,
         colorCSS: `hsl(69deg, 60%, 60%)`,
         fillFraction: total / groupGainTotal,
-        iconSource: SkillIconsBySkill.get(skill)!.href,
+        iconSource: SkillIconsBySkill[skill],
         quantity: total,
       });
       continue;
@@ -408,7 +408,7 @@ const buildTableRowsFromMemberSkillData = (
       name,
       colorCSS,
       fillFraction: overallFraction,
-      iconSource: SkillIconsBySkill.get("Overall")?.href ?? "",
+      iconSource: SkillIconsBySkill.Overall,
       quantity: total,
     };
     const skillRows: SkillGraphTableRow[] = [];
@@ -427,7 +427,7 @@ const buildTableRowsFromMemberSkillData = (
         name: skill,
         colorCSS,
         fillFraction: fraction * overallFraction,
-        iconSource: SkillIconsBySkill.get(skill)!.href,
+        iconSource: SkillIconsBySkill[skill],
         quantity: xpGain,
       });
     }
@@ -658,7 +658,7 @@ export const SkillGraph = (): ReactElement => {
             alt={skillFilter}
             id="skill-graph-skill-image"
             loading="lazy"
-            src={SkillIconsBySkill.get(skillFilter)?.href ?? ""}
+            src={SkillIconsBySkill[skillFilter]}
           />
           <div id="skill-graph-line-chart-container">
             <Line options={chart.options} data={chart.data} />

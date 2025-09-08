@@ -24,6 +24,10 @@ Route::middleware(AuthenticateGroup::class)->prefix('api/group/{group}')->group(
     Route::get('/am-i-in-group', [GroupMemberController::class, 'amIInGroup']);
 });
 
-Route::fallback(function () {
+Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/{path}', function () {
+    return view('index');
+})->where('path', '[^.]*');

@@ -88,7 +88,9 @@ CACHE_STORE=file
         root /var/www/public
     }
 
-    @dotfiles { path */.* }
+    @dotfiles {
+        path */.*
+    }
     respond @dotfiles 404
 
     header {
@@ -100,7 +102,9 @@ CACHE_STORE=file
         -Server
     }
 
-    @static { path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2 }
+    @static {
+        path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2
+    }
     header @static Cache-Control "public, max-age=31536000, immutable"
 
     file_server
@@ -126,7 +130,9 @@ domain.example {
         root /var/www/public
     }
 
-    @dotfiles { path */.* }
+    @dotfiles {
+        path */.*
+    }
     respond @dotfiles 404
 
     header {
@@ -138,7 +144,9 @@ domain.example {
         -Server
     }
 
-    @static { path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2 }
+    @static {
+        path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2
+    }
     header @static Cache-Control "public, max-age=31536000, immutable"
 
     file_server

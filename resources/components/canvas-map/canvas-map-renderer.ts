@@ -143,11 +143,9 @@ function* makeInsideOutIterator1D(
   if (
     !Number.isInteger(minInclusive) ||
     !Number.isInteger(maxExclusive) ||
-    minInclusive < 0 ||
-    maxExclusive < 0 ||
     minInclusive > maxExclusive
   ) {
-    throw new Error("min and max must be a well defined interval of positive integers.");
+    throw new Error("min and max must be a well defined interval of integers.");
   }
 
   const n = Math.abs(maxExclusive - minInclusive);

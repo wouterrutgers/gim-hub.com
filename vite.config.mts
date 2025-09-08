@@ -45,10 +45,6 @@ const mapJsonPlugin = (): PluginOption => ({
 const imageChunksPlugin = (): PluginOption => ({
   name: "imageChunks",
   buildStart(): void {
-    if (process.env.npm_lifecycle_event !== "bundle") {
-      return;
-    }
-
     console.info("Scanning public directory and creating image chunks...");
 
     const publicDir = path.join("public", "image-chunks");

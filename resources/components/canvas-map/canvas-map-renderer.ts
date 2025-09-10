@@ -140,11 +140,7 @@ function* makeInsideOutIterator1D(
   minInclusive: number,
   maxExclusive: number,
 ): Generator<{ lower: number; higher: number }, undefined> {
-  if (
-    !Number.isInteger(minInclusive) ||
-    !Number.isInteger(maxExclusive) ||
-    minInclusive > maxExclusive
-  ) {
+  if (!Number.isInteger(minInclusive) || !Number.isInteger(maxExclusive) || minInclusive > maxExclusive) {
     throw new Error("min and max must be a well defined interval of integers.");
   }
 

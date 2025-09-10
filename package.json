@@ -6,7 +6,7 @@
     "@date-fns/utc": "^2.1.0",
     "@tanstack/react-virtual": "^3.13.12",
     "@types/chart.js": "^2.9.41",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.3.1",
     "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
     "@types/react-router-dom": "^5.3.3",

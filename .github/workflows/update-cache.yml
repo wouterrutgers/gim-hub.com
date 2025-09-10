@@ -71,7 +71,7 @@ jobs:
 
       - run: npm run bundle
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v6
         if: ${{ ! env.ACT }}
         with:
           commit_message: dump latest game data

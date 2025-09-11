@@ -46,15 +46,19 @@ export const SetupInstructions = (): ReactElement => {
           <h3>Setup</h3>
           <p>
             This app requires each group member to install a runelite plugin from the Plugin Hub in order to track
-            player information. Find it by searching "<span className="emphasize">GIM Hub</span>" in the Runelite
-            client.
+            player information. Find it by searching "<span className="emphasize">Group Ironmen Tracker</span>" in the
+            Runelite client.
           </p>
         </div>
 
         <div id="setup-config">
           <p>
-            Use the provided credentials to fill in the <span className="emphasize">Group config</span> section in the
+            Use the provided credentials to fill in the <span className="emphasize">Group Config</span> section in the
             plugin's configuration.
+          </p>
+          <p>
+            Then open the "<span className="emphasize">Self Hosted Config</span>" section in the plugin settings and add
+            the URL: <span className="emphasize">https://gim-hub.com</span> (no trailing slash!).
           </p>
           <CachedImage alt="GIM Hub Runelite plugin screenshot" src="/images/plugin-screenshot.png" />
         </div>

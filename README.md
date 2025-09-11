@@ -51,13 +51,15 @@
 1. **Install the RuneLite plugin**
    - Open RuneLite
    - Go to the plugin hub
-   - Search for "GIM Hub" and install
+   - Search for "Group Ironmen Tracker" and install
 
 2. **Configure your team**
    - Create your group on the GIM Hub website
    - Copy your unique group token
-   - In RuneLite, open the GIM Hub plugin settings
+   - In RuneLite, open the "Group Ironmen Tracker" plugin settings
    - Enter your group name and group token
+   - Open the "Self Hosted Config" section
+   - Add the URL: `https://gim-hub.com` (no trailing slash!)
 
 3. **Start tracking**
    - The plugin automatically streams your data

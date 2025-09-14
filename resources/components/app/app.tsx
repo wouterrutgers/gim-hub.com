@@ -3,7 +3,6 @@ import { type ReactElement, Suspense, lazy } from "react";
 import { UnauthedLayout, AuthedLayout } from "../layout/layout";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { Tooltip } from "../tooltip/tooltip";
-import { DemoPage } from "../demo-page/demo-page";
 
 // Lazy load components that are not immediately needed
 const Homepage = lazy(() => import("../homepage/homepage").then((m) => ({ default: m.Homepage })));
@@ -20,6 +19,7 @@ const CreateGroupPage = lazy(() =>
   import("../create-group-page/create-group-page").then((m) => ({ default: m.CreateGroupPage })),
 );
 const SettingsPage = lazy(() => import("../settings/settings").then((m) => ({ default: m.SettingsPage })));
+const DemoPage = lazy(() => import("../demo-page/demo-page").then((m) => ({ default: m.DemoPage })));
 
 import "./app.css";
 

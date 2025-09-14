@@ -1,4 +1,4 @@
-import z from "zod/v4";
+import * as z from "zod/v4";
 import type { ItemID } from "../../game/items";
 
 export type Response = z.infer<typeof GEPricesSchema>;

@@ -32,6 +32,23 @@
   min-width: 0;
 }
 
+.player-inventory-pouch-vertical {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.player-inventory-pouch-vertical .player-inventory-pouch-item-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.player-inventory-pouch-vertical .player-inventory-pouch-item-box img {
+  height: 12px;
+  width: 12px;
+  flex-shrink: 0;
+}
+
 .player-inventory-item-quantity {
   position: absolute;
   left: 3px;
@@ -40,10 +57,15 @@
   color: var(--yellow);
 }
 
+.player-inventory-pouch-vertical .player-inventory-item-quantity {
+  position: static;
+  margin-top: 2px;
+}
+
 .player-inventory-background {
   width: 190px;
   box-sizing: border-box;
-  background-image: url("/ui/inventory_background.png");
+  background-image: url("../../assets/ui/inventory_background.png");
   background-repeat: no-repeat;
   background-size: contain;
   padding: 8px;
@@ -54,5 +76,5 @@
 }
 
 .dark-mode .player-inventory-background {
-  background-image: url("/ui/inventory_background-dark.png");
+  background-image: url("../../assets/ui/inventory_background-dark.png");
 }

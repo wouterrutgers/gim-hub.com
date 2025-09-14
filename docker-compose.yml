@@ -1,8 +1,0 @@
-services:
-  app:
-    image: wouterrutgers/group-ironmen
-    ports:
-      - "80:80"
-    volumes:
-      - /path/to/gim/data/.env:/var/www/.env
-      - /path/to/gim/data/database.sqlite:/var/www/database/database.sqlite

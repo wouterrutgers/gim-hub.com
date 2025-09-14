@@ -14,7 +14,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  min-height: 42px;
 }
 
 @media only screen and (width <= 800px) {
@@ -55,7 +54,7 @@
 }
 
 .dark-mode #canvas-map:not(.interactive) {
-  filter: opacity(0.15) saturate(0.8);
+  filter: opacity(0.6) saturate(0.8);
 }
 
 #canvas-map-coordinates {
@@ -70,7 +69,6 @@
 
 .canvas-map-plane-select {
   padding: 0.4em;
-  font-size: 20px;
 }
 
 #canvas-map-controls {

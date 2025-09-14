@@ -11,7 +11,6 @@ trap shutdown SIGTERM SIGINT
 echo "Starting application entrypoint..."
 
 if [ ! -s ".env" ]; then
-    echo "Creating .env file..."
     cat .env.example > .env
     php artisan key:generate --force
 fi
@@ -31,5 +30,4 @@ php-fpm -D
 
 php artisan schedule:work &
 
-echo "Starting Caddy server..."
 exec caddy run --config /etc/caddy/Caddyfile

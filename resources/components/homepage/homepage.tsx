@@ -1,5 +1,5 @@
 import { AppLink } from "../app-link/app-link";
-import { SocialLinks } from "../social-links/social-links.tsx";
+import { SocialLinks } from "../social-links/social-links";
 import { CachedImage } from "../cached-image/cached-image";
 import { useContext, useEffect, useState, type ReactElement } from "react";
 import { Context as APIContext } from "../../context/api-context.tsx";
@@ -24,7 +24,9 @@ export const Homepage = (): ReactElement => {
   return (
     <div id="homepage">
       <SocialLinks />
-      <CachedImage className="logo" alt="GIM hub" src="/images/logo.png" />
+      <div className="logo">
+        <CachedImage alt="GIM hub" src="/images/logo-quarter.webp" />
+      </div>
       <div id="homepage-links">
         <AppLink href="/create-group">Get started</AppLink>
         <AppLink href="/demo">Demo</AppLink>

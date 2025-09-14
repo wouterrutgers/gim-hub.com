@@ -157,7 +157,7 @@ class GroupMemberController extends Controller
             'quiver' => 'nullable|array',
             'deposited' => 'nullable|array',
             'diary_vars' => 'nullable|array',
-            'collection_log' => 'nullable|array',
+            'collection_log_v2' => 'nullable|array',
             'interacting' => 'nullable',
         ]);
 
@@ -188,7 +188,7 @@ class GroupMemberController extends Controller
         Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);
         Validators::validateMemberPropLength('diary_vars', $validated['diary_vars'] ?? null, 0, 62);
 
-        $collectionLogData = $validated['collection_log'] ?? null;
+        $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
             $now = now();
@@ -468,10 +468,10 @@ class GroupMemberController extends Controller
     public function amIInGroup(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string',
+            'member_name' => 'required|string',
         ]);
 
-        $memberName = $validated['name'];
+        $memberName = $validated['member_name'];
         $groupId = app('group')->id;
 
         $memberExists = Member::where('group_id', '=', $groupId)

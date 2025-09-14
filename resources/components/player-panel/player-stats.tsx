@@ -56,41 +56,46 @@ const PlayerInteracting = ({ npcName, healthRatio }: { npcName: string; healthRa
   );
 };
 
-export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement => {
-  const interacting = useMemberInteractingContext(member);
-  const stats = useMemberStatsContext(member);
-  const lastUpdated = useMemberLastUpdatedContext(member);
-  const xpDrops = useContext(GroupXPDropsContext);
-
-  const now = new Date();
-  const online = now.getTime() - (lastUpdated ?? new Date(0)).getTime() < INACTIVE_TIMER_MS;
-
+const PlayerStatsImpl = ({
+  name,
+  health,
+  prayer,
+  run,
+  status,
+  children,
+}: {
+  name: Member.Name;
+  health: { current: number; max: number };
+  prayer: { current: number; max: number };
+  run: { current: number; max: number };
+  status: { online: true; world?: number; interacting?: Member.NPCInteraction } | { online: false; lastUpdated?: Date };
+  children?: ReactNode;
+}): ReactElement => {
   let interactionBar: ReactNode = undefined;
-  if (online && interacting !== undefined) {
-    if (now.getTime() - interacting.lastUpdated.getTime() < INTERACTION_TIMER_MS) {
-      const { healthRatio, name } = interacting;
+  let statusOverlay: ReactNode = undefined;
+  if (status.online) {
+    if (status.interacting) {
+      const { healthRatio, name } = status.interacting;
       interactionBar = <PlayerInteracting healthRatio={healthRatio} npcName={name} />;
     }
+    if (status.world !== undefined) {
+      statusOverlay = (
+        <>
+          - <span className="player-stats-world">{`W${status.world}`}</span>
+        </>
+      );
+    }
+  } else if (status.lastUpdated && status.lastUpdated?.getTime() > 0) {
+    statusOverlay = <> - {status.lastUpdated?.toLocaleString()}</>;
   }
 
-  let status: ReactNode = undefined;
-  if (online && stats?.world !== undefined) {
-    status = (
-      <>
-        - <span className="player-stats-world">{`W${stats.world}`}</span>
-      </>
-    );
-  } else if (!online && lastUpdated && lastUpdated?.getTime() > 0) {
-    status = <> - {lastUpdated.toLocaleString()}</>;
-  }
-
-  const healthRatio = (stats?.health?.current ?? 0) / (stats?.health?.max ?? 1);
-  const prayerRatio = (stats?.prayer?.current ?? 0) / (stats?.prayer?.max ?? 1);
-  const runRatio = (stats?.run?.current ?? 0) / (stats?.run?.max ?? 1);
+  const healthRatio = health.current / health.max;
+  const prayerRatio = prayer.current / prayer.max;
+  const runRatio = run.current / run.max;
 
   return (
-    <div className={`player-stats ${online ? "" : "player-stats-inactive"}`}>
-      <XpDropper xpDrops={xpDrops.get(member)} />
+    <div className={`player-stats ${status.online ? "" : "player-stats-inactive"}`}>
+      {children}
       <div className="player-stats-hitpoints">
         <StatBar
           className="player-stats-hitpoints-bar"
@@ -100,11 +105,9 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
         />
         {interactionBar}
         <div className="player-stats-name">
-          <PlayerIcon name={member} /> {member} {status}
+          <PlayerIcon name={name} /> {name} {statusOverlay}
         </div>
-        <div className="player-stats-hitpoints-numbers">
-          {stats ? `${stats.health.current} / ${stats.health.max}` : "10 / 10"}
-        </div>
+        <div className="player-stats-hitpoints-numbers">{`${health.current} / ${health.max}`}</div>
       </div>
       <div className="player-stats-prayer">
         <StatBar
@@ -113,9 +116,7 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
           bgColor={COLORS.player.prayerBG}
           ratio={prayerRatio}
         />
-        <div className="player-stats-prayer-numbers">
-          {stats ? `${stats.prayer.current} / ${stats?.prayer.max}` : "1 / 1"}
-        </div>
+        <div className="player-stats-prayer-numbers">{`${prayer.current} / ${prayer.max}`}</div>
       </div>
       <div className="player-stats-energy">
         <StatBar
@@ -126,5 +127,43 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
         />
       </div>
     </div>
+  );
+};
+
+export const PlayerStatsPlaceholder = (): ReactElement => {
+  return (
+    <PlayerStatsImpl
+      name={"" as Member.Name}
+      health={{ current: 10, max: 10 }}
+      prayer={{ current: 1, max: 1 }}
+      run={{ current: 1, max: 1 }}
+      status={{ online: false }}
+    />
+  );
+};
+
+export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement => {
+  const interacting = useMemberInteractingContext(member);
+  const stats = useMemberStatsContext(member);
+  const lastUpdated = useMemberLastUpdatedContext(member);
+  const xpDrops = useContext(GroupXPDropsContext);
+
+  const now = new Date();
+  const online = now.getTime() - (lastUpdated ?? new Date(0)).getTime() < INACTIVE_TIMER_MS;
+  const isInteractingRecent = interacting && now.getTime() - interacting?.lastUpdated.getTime() < INTERACTION_TIMER_MS;
+
+  return (
+    <PlayerStatsImpl
+      name={member}
+      health={stats?.health ?? { current: 10, max: 10 }}
+      prayer={stats?.prayer ?? { current: 1, max: 1 }}
+      run={stats?.run ?? { current: 1, max: 1 }}
+      status={
+        online
+          ? { online: true, interacting: isInteractingRecent ? interacting : undefined, world: stats?.world }
+          : { online: false, lastUpdated }
+      }
+      children={<XpDropper xpDrops={xpDrops.get(member)} />}
+    />
   );
 };

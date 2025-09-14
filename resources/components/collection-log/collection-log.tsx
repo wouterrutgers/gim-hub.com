@@ -8,7 +8,6 @@ import { PlayerIcon } from "../player-icon/player-icon";
 import type { ItemID } from "../../game/items";
 import { CachedImage } from "../cached-image/cached-image";
 import { Context as APIContext } from "../../context/api-context";
-import { fetchMemberHiscores } from "../../api/requests/hiscores";
 
 import "./collection-log.css";
 
@@ -266,7 +265,7 @@ export const CollectionLogWindow = ({
   onCloseModal: () => void;
 }): ReactElement => {
   const { collectionLogInfo } = useContext(GameDataContext);
-  const { credentials, fetchGroupCollectionLogs } = useContext(APIContext);
+  const { fetchGroupCollectionLogs, fetchMemberHiscores } = useContext(APIContext)?.api ?? {};
   const [currentTabName, setCurrentTabName] = useState<CollectionLog.TabName>("Bosses");
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [hiscores, setHiscores] = useState<Map<string, number>>();
@@ -274,18 +273,17 @@ export const CollectionLogWindow = ({
   const groupCollections = useContext(GroupCollectionsContext);
 
   useEffect(() => {
-    if (!credentials) return;
     fetchGroupCollectionLogs?.().catch((err) => console.error("Failed to fetch collection logs", err));
-  }, [credentials, fetchGroupCollectionLogs]);
+  }, [fetchGroupCollectionLogs]);
 
   useEffect(() => {
-    if (!credentials) return;
-    fetchMemberHiscores({ baseURL: __API_URL__, credentials, memberName: player })
+    if (!fetchMemberHiscores) return;
+    fetchMemberHiscores(player)
       .then((map) => {
         setHiscores(map);
       })
       .catch((err) => console.error("Failed to get hiscores for collection log", err));
-  }, [credentials, player]);
+  }, [fetchMemberHiscores, player]);
 
   const collection = groupCollections.get(player);
   const tabButtons = CollectionLog.TabName.map((tab) => (

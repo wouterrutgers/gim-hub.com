@@ -76,7 +76,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
   const [pendingDelete, setPendingDelete] = useState(false);
 
   const [errors, setErrors] = useState<string[]>();
-  const { deleteMember, renameMember } = useContext(APIContext);
+  const { deleteMember, renameMember } = useContext(APIContext)?.api ?? {};
   const { open, modal: removeConfirmationModal } = useModal(RemoveConfirmationWindow);
 
   const pending = pendingDelete || !!pendingRename;
@@ -232,7 +232,7 @@ export const SettingsPage = (): ReactElement => {
   const members = useContext(GroupMemberNamesContext);
   const [addMemberErrors, setAddMemberErrors] = useState<string[]>();
   const addMemberInputRef = useRef<HTMLInputElement>(null);
-  const { addMember } = useContext(APIContext);
+  const { addMember } = useContext(APIContext)?.api ?? {};
   const [pendingAddMember, setPendingAddMember] = useState(false);
 
   const pendingOverlay = pendingAddMember ? (

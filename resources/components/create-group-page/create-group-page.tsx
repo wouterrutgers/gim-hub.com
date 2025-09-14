@@ -117,7 +117,7 @@ const createGroupFormAction = async (formData: FormData): Promise<FormSubmission
 
 export const CreateGroupPage = (): ReactElement => {
   const navigate = useNavigate();
-  const { logIn } = useContext(APIContext);
+  const { logInLive } = useContext(APIContext) ?? {};
   const [memberCount, setMemberCount] = useState<number | undefined>(undefined);
   const [pending, setPending] = useState(false);
   const [formState, setFormState] = useState<FormSubmissionResult>({ type: "Pending" });
@@ -167,9 +167,12 @@ export const CreateGroupPage = (): ReactElement => {
 
     const credentials = formState.credentials;
 
-    logIn?.(credentials);
-    void navigate("/setup-instructions");
-  }, [formState, navigate, logIn]);
+    logInLive?.(credentials)
+      .then(() => navigate("/group/setup-instructions"))
+      .catch((reason) => {
+        console.error("CreateGroupPage: Failed to log in:", reason);
+      });
+  }, [formState, navigate, logInLive]);
 
   const groupNameInput = ((): ReactElement => {
     const groupNameErrors = formState?.type === "Pending" ? formState.groupNameErrors : undefined;

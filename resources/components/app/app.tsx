@@ -19,6 +19,7 @@ const CreateGroupPage = lazy(() =>
   import("../create-group-page/create-group-page").then((m) => ({ default: m.CreateGroupPage })),
 );
 const SettingsPage = lazy(() => import("../settings/settings").then((m) => ({ default: m.SettingsPage })));
+const DemoPage = lazy(() => import("../demo-page/demo-page").then((m) => ({ default: m.DemoPage })));
 
 import "./app.css";
 
@@ -40,6 +41,7 @@ export const App = (): ReactElement => {
               </UnauthedLayout>
             }
           />
+          <Route path="/demo" element={<DemoPage />} />
           <Route
             path="/create-group"
             element={
@@ -67,6 +69,14 @@ export const App = (): ReactElement => {
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/group">
             <Route index element={<Navigate to="items" replace />} />
+            <Route
+              path="setup-instructions"
+              element={
+                <AuthedLayout showPanels={false} hideHeader>
+                  <SetupInstructions />
+                </AuthedLayout>
+              }
+            />
             <Route
               path="items"
               element={

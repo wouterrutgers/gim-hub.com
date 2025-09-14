@@ -3,7 +3,7 @@ import * as SiteSettings from "../../context/settings-context";
 import { Context as APIContext } from "../../context/api-context";
 import * as Member from "../../game/member";
 import { MemberNameSchema } from "../create-group-page/create-group-page";
-import z from "zod/v4";
+import * as z from "zod/v4";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { PlayerIcon } from "../player-icon/player-icon";
 import { useModal } from "../modal/modal";

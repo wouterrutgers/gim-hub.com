@@ -11,7 +11,7 @@ import {
 import Api from "../../api/api";
 import { Context as APIContext } from "../../context/api-context";
 import { useNavigate } from "react-router-dom";
-import z from "zod/v4";
+import * as z from "zod/v4";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 
 import "./login-page.css";

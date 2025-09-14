@@ -25,6 +25,10 @@ Route::middleware(AuthenticateGroup::class)->prefix('api/group/{group}')->group(
     Route::get('/hiscores', [GroupMemberController::class, 'getHiscores']);
 });
 
-Route::fallback(function () {
+Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/{path}', function () {
+    return view('index');
+})->where('path', '[^.]*');

@@ -13,7 +13,7 @@ import { Context as APIContext } from "../../context/api-context";
 import { useNavigate } from "react-router-dom";
 import * as Member from "../../game/member";
 import type { GroupCredentials } from "../../api/credentials";
-import z from "zod/v4";
+import * as z from "zod/v4";
 
 import "./create-group-page.css";
 import { LoadingScreen } from "../loading-screen/loading-screen";

@@ -5,7 +5,7 @@ import { useGroupMemberContext } from "../../context/group-context";
 import { Vec2D, type WikiPosition2D } from "./coordinates";
 import { createPortal } from "react-dom";
 import * as Member from "../../game/member";
-import { useCachedImages } from "../../hooks/use-cached-images";
+import { useImageContext } from "../../context/image-context";
 
 import "./canvas-map.css";
 
@@ -29,7 +29,7 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
   const [visiblePlane, setVisiblePlane] = useState<number>(0);
   const animationFrameHandleRef = useRef<number>(undefined);
   const memberCoordinates = useGroupMemberContext(memberCoordinatesSelector);
-  const { getImageUrl } = useCachedImages();
+  const { getImageUrlAsync } = useImageContext();
 
   if (memberCoordinates) {
     renderer?.tryUpdatePlayerPositions(memberCoordinates);
@@ -88,14 +88,14 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
   useEffect(() => {
     console.info("Rebuilding renderer.");
 
-    CanvasMapRenderer.load(getImageUrl)
+    CanvasMapRenderer.load(getImageUrlAsync)
       .then((renderer) => {
         setRenderer(renderer);
       })
       .catch((reason) => {
         console.error("Failed to build renderer:", reason);
       });
-  }, [getImageUrl]);
+  }, [getImageUrlAsync]);
 
   useEffect(() => {
     if (renderer === undefined) return;
@@ -183,7 +183,7 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
     teleportButtons.push(
       <button
         key={player}
-        className={`${player === followedPlayer ? "canvas-map-selected-teleport-button" : ""} men-button canvas-map-teleport-button`}
+        className={`${player === followedPlayer ? "canvas-map-selected-teleport-button" : ""} men-button men-button-small canvas-map-teleport-button`}
         onClick={() => {
           if (!renderer) return;
           renderer.startFollowingPlayer({

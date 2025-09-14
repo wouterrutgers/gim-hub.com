@@ -13,8 +13,8 @@
   --green: hsl(120deg 87% 40%);
   --green-light: hsl(120deg 87% 90%);
   --white: #fff;
-  --rsbackground: url("/ui/297-0.png");
-  --rsbackground-dark: url("/ui/297-0-dark.png");
+  --rsbackground: url("../../assets/ui/297-0.png");
+  --rsbackground-dark: url("../../assets/ui/297-0-dark.png");
 }
 
 /*
@@ -74,19 +74,19 @@ h3 {
 @font-face {
   font-family: rssmall;
   font-display: block;
-  src: url("/fonts/RuneScape-Chat-07.ttf");
+  src: url("../../assets/fonts/RuneScape-Chat-07.ttf");
 }
 
 @font-face {
   font-family: rsbold;
   font-display: block;
-  src: url("/fonts/RuneScape-Chat-Bold-07.ttf");
+  src: url("../../assets/fonts/RuneScape-Chat-Bold-07.ttf");
 }
 
 @font-face {
   font-family: rstiny;
   font-display: block;
-  src: url("/fonts/runescape-tiny.ttf");
+  src: url("../../assets/fonts/runescape-tiny.ttf");
 }
 
 .men-button {
@@ -105,7 +105,7 @@ h3 {
   justify-content: center;
   align-items: center;
   white-space: nowrap;
-  border-image: url("/ui/border-button.png") 9 9 / 9px stretch;
+  border-image: url("../../assets/ui/border-button.png") 9 9 / 9px stretch;
   border-style: solid;
   border-radius: 4px;
   background: #4d4336;
@@ -113,7 +113,7 @@ h3 {
 }
 
 .dark-mode .men-button {
-  border-image: url("/ui/border-button-dark.png") 9 9 / 9px stretch;
+  border-image: url("../../assets/ui/border-button-dark.png") 9 9 / 9px stretch;
   background: #282828;
 }
 
@@ -132,6 +132,10 @@ h3 {
 
 .men-button.small {
   padding: 0.2em 0.4em;
+}
+
+.men-button.men-button-small {
+  font-size: inherit;
 }
 
 input[type="checkbox"],
@@ -159,19 +163,19 @@ input[type="radio"] + label::before {
 }
 
 input[type="checkbox"] + label::before {
-  background: url("/ui/checkbox.png") no-repeat;
+  background: url("../../assets/ui/checkbox.png") no-repeat;
 }
 
 input[type="radio"] + label::before {
-  background: url("/ui/radio.png") no-repeat;
+  background: url("../../assets/ui/radio.png") no-repeat;
 }
 
 input[type="checkbox"]:checked + label::before {
-  background: url("/ui/checkbox-checked.png") no-repeat;
+  background: url("../../assets/ui/checkbox-checked.png") no-repeat;
 }
 
 input[type="radio"]:checked + label::before {
-  background: url("/ui/radio-checked.png") no-repeat;
+  background: url("../../assets/ui/radio-checked.png") no-repeat;
 }
 
 input.input-small {
@@ -298,29 +302,29 @@ ul {
 }
 
 .rsborder {
-  border-image: url("/ui/border.png") 32 32 / 32px / 3px 4px 4px 3px round;
+  border-image: url("../../assets/ui/border.png") 32 32 / 32px / 3px 4px 4px 3px round;
   border-style: solid;
   border-radius: 4px;
 }
 
 .metal-border {
-  border-image: url("/ui/metal-border.png") 18 18 / 18px / 2px round;
+  border-image: url("../../assets/ui/metal-border.png") 18 18 / 18px / 2px round;
   border-style: solid;
   border-radius: 4px;
 }
 
 .dark-mode .rsborder {
-  border-image: url("/ui/border-dark.png") 32 32 / 32px / 4px round;
+  border-image: url("../../assets/ui/border-dark.png") 32 32 / 32px / 4px round;
 }
 
 .rsborder-tiny {
-  border-image: url("/ui/border-tiny.png") 4 4 / 4px round;
+  border-image: url("../../assets/ui/border-tiny.png") 4 4 / 4px round;
   border-style: solid;
   border-radius: 4px;
 }
 
 .dark-mode .rsborder-tiny {
-  border-image: url("/ui/border-tiny-dark.png") 4 4 / 4px round;
+  border-image: url("../../assets/ui/border-tiny-dark.png") 4 4 / 4px round;
 }
 
 .rsbackground {

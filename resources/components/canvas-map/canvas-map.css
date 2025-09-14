@@ -14,7 +14,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  min-height: 42px;
 }
 
 @media only screen and (width <= 800px) {
@@ -70,7 +69,6 @@
 
 .canvas-map-plane-select {
   padding: 0.4em;
-  font-size: 20px;
 }
 
 #canvas-map-controls {

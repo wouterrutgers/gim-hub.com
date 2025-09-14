@@ -2,12 +2,11 @@ import { type ReactElement, Fragment, memo, useContext, useEffect, useRef, useSt
 import { SearchElement } from "../search-element/search-element";
 import type * as Member from "../../game/member";
 import { GameDataContext } from "../../context/game-data-context";
-import { type ItemID, mappedGEPrice } from "../../game/items";
+import { type ItemID, mappedGEPrice, composeItemIconHref } from "../../game/items";
 import { GroupItemsContext, GroupMemberNamesContext } from "../../context/group-context";
 import { Link } from "react-router-dom";
 import { useItemsPriceTooltip } from "./items-page-tooltip";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useCachedImages } from "../../hooks/use-cached-images";
 import { CachedImage } from "../cached-image/cached-image";
 
 import "./items-page.css";
@@ -194,7 +193,7 @@ const ItemPanelsScrollArea = ({
                 right: 0,
                 transform: `translateY(${rowOfItems.start - itemsVirtualizer.options.scrollMargin}px)`,
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
                 gap: "16px",
               }}
             >
@@ -224,7 +223,6 @@ export const ItemsPage = (): ReactElement => {
   const [searchString, setSearchString] = useState<string>("");
   const [sortCategory, setSortCategory] = useState<ItemSortCategory>("GE unit price");
   const { gePrices: geData, items: itemData } = useContext(GameDataContext);
-  const { getItemIconUrl } = useCachedImages();
 
   const members = useContext(GroupMemberNamesContext);
   const items = useContext(GroupItemsContext);
@@ -260,7 +258,7 @@ export const ItemsPage = (): ReactElement => {
         totalQuantity: filteredTotalQuantity,
         gePrice,
         highAlch,
-        imageURL: getItemIconUrl({ itemID, quantity: filteredTotalQuantity }, itemDatum),
+        imageURL: composeItemIconHref({ itemID, quantity: filteredTotalQuantity }, itemDatum),
       });
 
       return previousValue;

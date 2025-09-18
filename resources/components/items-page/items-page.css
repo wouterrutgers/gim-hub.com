@@ -48,7 +48,7 @@
 .items-page-panel-item-details {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  grid-gap: 0 0.5em;
+  gap: 0 0.5em;
   word-break: keep-all;
   white-space: nowrap;
 }
@@ -66,7 +66,7 @@
   grid-template-columns: 1fr 1fr 2fr;
   align-items: center;
   white-space: nowrap;
-  grid-gap: 0 8px;
+  gap: 0 8px;
   padding: 8px;
 }
 

@@ -8,6 +8,8 @@ import { SettingsProvider } from "../context/settings-context";
 import { GroupProvider } from "../context/group-context";
 import { ImageProvider } from "../context/image-provider";
 
+import "../api/fetch-with-csrf";
+
 const root = document.getElementById("root")!;
 
 createRoot(root).render(

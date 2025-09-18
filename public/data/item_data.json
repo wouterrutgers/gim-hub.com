@@ -40045,6 +40045,11 @@
     "highalch": 0,
     "mapping": null
   },
+  "11527": {
+    "name": "Mausoleum bridge repair",
+    "highalch": 0,
+    "mapping": null
+  },
   "11578": {
     "name": "Mounted harpoonfish",
     "highalch": 0,
@@ -80209,7 +80214,7 @@
   },
   "29325": {
     "name": "House keys",
-    "highalch": 300,
+    "highalch": 0,
     "mapping": null,
     "stacks": [
       [

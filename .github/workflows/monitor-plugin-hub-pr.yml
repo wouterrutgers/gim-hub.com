@@ -1,7 +1,7 @@
 name: Monitor open GIM hub plugin
 on:
-  schedule:
-    - cron: "*/5 * * * *"
+  #   schedule:
+  #     - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:

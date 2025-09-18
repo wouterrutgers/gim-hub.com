@@ -175,6 +175,7 @@ Then open http://localhost (or your domain) in a browser. If you mapped the app 
 - Container won't start: `docker compose logs app` (or `mysql`)
 - Database connection issues: ensure `.env` uses `DB_HOST=mysql` and MySQL is healthy: `docker compose ps mysql`
 - Permission issues: ensure `.env` and `caddyfile` exist and are readable: `chmod 644 .env caddyfile`
+- CSS/JS assets not loading: if the page loads but styling/scripts are broken, add `ASSET_URL` to your `.env` file with the same value as `APP_URL`.
 
 ## Security
 

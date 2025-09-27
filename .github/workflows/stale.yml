@@ -26,7 +26,7 @@ jobs:
             This issue was closed because it has been stalled for 7 days with no activity.
           close-pr-message: |
             This pull request was closed because it has been stalled for 7 days with no activity.
-          days-before-stale: 7
+          days-before-stale: 14
           days-before-close: 3
           stale-issue-label: "stale"
           stale-pr-label: "stale"

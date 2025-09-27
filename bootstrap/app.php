@@ -16,7 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->validateCsrfTokens(except: [
-            '*',
+            'api/group/*/update-group-member',
+            'api/group/*/am-i-in-group',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

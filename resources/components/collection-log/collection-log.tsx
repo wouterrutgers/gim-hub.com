@@ -402,7 +402,8 @@ export const CollectionLogWindow = ({
       </div>
       <div className="collection-log-title-border" />
       <div className="collection-log-warning">
-        Collection log is temporarily unavailable. This will become functional again once the RuneLite plugin update is approved.
+        Collection log is temporarily unavailable. This will become functional again once the RuneLite plugin update is
+        approved.
       </div>
       <div className="collection-log-main">
         <div className="collection-log-tab-buttons">{tabButtons}</div>

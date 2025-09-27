@@ -46,6 +46,18 @@
   flex-shrink: 0;
 }
 
+.collection-log-warning {
+  margin: 8px;
+  padding: 8px;
+  border: 1px solid hsl(40deg 15.79% 29.8%);
+  background: rgb(0 0 0 / 40%);
+  color: var(--yellow);
+  font-family: rssmall, ui-sans-serif, Arial, sans-serif;
+  text-align: center;
+  text-shadow: 1.3px 1.3px var(--black);
+  border-radius: 4px;
+}
+
 .collection-log-main {
   padding: 4px;
   display: flex;

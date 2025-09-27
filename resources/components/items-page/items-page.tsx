@@ -132,8 +132,8 @@ interface FilteredItem {
   highAlch: number;
 }
 
-// css width + gap
-const PANEL_WIDTH_PIXELS = 280 + 16;
+// Defines the minimal width of each column, which the panels flex to fill
+const PANEL_WIDTH_PIXELS = 280;
 
 const ItemPanelsScrollArea = ({
   sortedItems,
@@ -150,7 +150,6 @@ const ItemPanelsScrollArea = ({
     getScrollElement: () => parentRef.current,
     overscan: 3,
     estimateSize: () => 220,
-    gap: 16,
   });
 
   useEffect(() => {
@@ -173,7 +172,7 @@ const ItemPanelsScrollArea = ({
   }, []);
 
   return (
-    <div ref={parentRef} style={{ overflowY: "auto" }}>
+    <div ref={parentRef} style={{ overflowY: "auto", paddingRight: "12px" }}>
       <div
         ref={childRef}
         style={{ height: `${itemsVirtualizer.getTotalSize()}px`, width: "100%", position: "relative" }}
@@ -193,8 +192,7 @@ const ItemPanelsScrollArea = ({
                 right: 0,
                 transform: `translateY(${rowOfItems.start - itemsVirtualizer.options.scrollMargin}px)`,
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                gap: "16px",
+                gridTemplateColumns: `repeat(${columns}, 1fr)`,
               }}
             >
               {items.map((item) => (

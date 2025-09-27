@@ -11,6 +11,8 @@ return new class extends Migration
     {
         Schema::drop('new_collection_logs');
 
+        CollectionLog::query()->truncate();
+
         Schema::table('collection_logs', function (Blueprint $table) {
             $table->dropConstrainedForeignId('collection_page_id');
             $table->dropColumn('items');
@@ -21,7 +23,5 @@ return new class extends Migration
             $table->unsignedBigInteger('item_id')->after('member_id');
             $table->unsignedInteger('item_count')->after('item_id');
         });
-
-        CollectionLog::query()->truncate();
     }
 };

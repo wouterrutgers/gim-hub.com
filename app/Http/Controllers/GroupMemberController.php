@@ -439,7 +439,7 @@ class GroupMemberController extends Controller
 
         return CollectionLog::with('member')
             ->whereHas('member.group', function ($query) use ($groupId) {
-                $query->where('group_id', '=', $groupId);
+                $query->where('groups.id', '=', $groupId);
             })
             ->get()->groupBy('member.name')->map->pluck('item_count', 'item_id');
     }

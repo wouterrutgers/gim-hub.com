@@ -12,7 +12,6 @@ Route::get('/collection-log-info', [UnauthedController::class, 'collectionLogInf
 Route::post('/create-group', [GroupController::class, 'createGroup']);
 
 Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(function () {
-    Route::post('/get-group-data', [GroupController::class, 'getGroup']);
     Route::post('/add-group-member', [GroupMemberController::class, 'addGroupMember']);
     Route::delete('/delete-group-member', [GroupMemberController::class, 'deleteGroupMember']);
     Route::put('/rename-group-member', [GroupMemberController::class, 'renameGroupMember']);

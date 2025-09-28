@@ -48,6 +48,7 @@ interface SkillGraphTableRow {
   quantity: number;
   colorCSS: string;
   fillFraction: number;
+  isMemberHeader: boolean;
 }
 
 interface SkillChart {
@@ -433,6 +434,7 @@ const buildTableRowsFromMemberSkillData = (
         fillFraction: total / safeDenominator,
         iconSource: SkillIconsBySkill[skill],
         quantity: total,
+        isMemberHeader: true,
       });
       continue;
     }
@@ -444,6 +446,7 @@ const buildTableRowsFromMemberSkillData = (
       fillFraction: overallFraction,
       iconSource: SkillIconsBySkill.Overall,
       quantity: total,
+      isMemberHeader: true,
     };
 
     const skillRows: SkillGraphTableRow[] = [];
@@ -460,6 +463,7 @@ const buildTableRowsFromMemberSkillData = (
         fillFraction: fraction * overallFraction,
         iconSource: SkillIconsBySkill[skill],
         quantity: metricValue,
+        isMemberHeader: false,
       });
     }
 
@@ -640,11 +644,12 @@ export const SkillGraph = (): ReactElement => {
 
   if (chart.data.datasets.length > 0) {
     const tableRowElements = [];
-    for (const { colorCSS, fillFraction, iconSource, name, quantity } of tableRowData) {
+    for (const { colorCSS, fillFraction, iconSource, name, quantity, isMemberHeader } of tableRowData) {
       const fillPercent = Math.max(0.1, Math.min(100, 100 * fillFraction));
       tableRowElements.push(
         <tr
           key={`${iconSource} ${name} ${quantity} ${fillFraction} ${colorCSS}`}
+          className={isMemberHeader ? "skill-graph-member-header" : undefined}
           style={{
             background: `linear-gradient(90deg, ${colorCSS} ${fillPercent}%, transparent ${fillPercent}%)`,
           }}

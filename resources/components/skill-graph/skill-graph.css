@@ -73,6 +73,39 @@
   padding: 4px 0;
 }
 
+.skill-graph-member-header {
+  position: relative;
+}
+
+.skill-graph-member-header td {
+  padding: 12px 0 8px;
+}
+
+.skill-graph-member-header::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--light-border);
+  pointer-events: none;
+}
+
+#skill-graph-xp-change-table tr.skill-graph-member-header:first-child::before {
+  display: none;
+}
+
+#skill-graph-xp-change-table tr.skill-graph-member-header .skill-graph-xp-change-table-label {
+  font-family: rsbold, ui-sans-serif, Arial, sans-serif;
+  font-weight: bold;
+}
+
+#skill-graph-xp-change-table tr.skill-graph-member-header .skill-graph-xp-change-data {
+  font-family: rsbold, ui-sans-serif, Arial, sans-serif;
+  font-weight: bold;
+}
+
 #skill-graph-no-data {
   padding: 8px;
 }

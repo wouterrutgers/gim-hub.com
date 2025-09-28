@@ -219,7 +219,7 @@ const ItemPanelsScrollArea = ({
 export const ItemsPage = (): ReactElement => {
   const [filter, setFilter] = useState<ItemFilter>("All");
   const [searchString, setSearchString] = useState<string>("");
-  const [sortCategory, setSortCategory] = useState<ItemSortCategory>("GE unit price");
+  const [sortCategory, setSortCategory] = useState<ItemSortCategory>("GE total price");
   const { gePrices: geData, items: itemData } = useContext(GameDataContext);
 
   const members = useContext(GroupMemberNamesContext);

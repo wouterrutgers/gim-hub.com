@@ -163,9 +163,9 @@ const buildLineChartOptions = ({ period, yAxisUnit }: SkillGraphOptions): ChartO
 };
 
 /**
- * Returns the array of experience linearly interpolated between two samples
- * based on time. If one of the endpoints is undefined, the other is returned.
- * At least one of sampleA and sampleB needs to be defined.
+ * Returns experience values for a date bin. We keep the latest known value
+ * (step function) instead of linearly interpolating between samples so the
+ * chart does not show fabricated gains during periods with no tracking data.
  */
 const interpolateSkillSamples = (
   sampleA: { time: Date; data: Experience[] } | undefined,
@@ -186,19 +186,9 @@ const interpolateSkillSamples = (
   if (sampleA!.data.length !== sampleB!.data.length)
     throw new Error("Interpolated xp samples don't have same exp length");
 
-  // The intermediate results are signed, so we preserve the ordering and the signs cancel out
-  const overallHours = DateFNS.differenceInSeconds(sampleB!.time, sampleA!.time);
-  const fractionOfInterval = DateFNS.differenceInSeconds(interpolationTime, sampleA!.time) / overallHours;
+  const useSecondSample = DateFNS.compareAsc(interpolationTime, sampleB!.time) >= 0;
 
-  const result: Experience[] = [];
-  for (let i = 0; i < sampleA!.data.length; i++) {
-    const interpolatedExperience = Math.floor(
-      sampleA!.data[i] * (1 - fractionOfInterval) + sampleB!.data[i] * fractionOfInterval,
-    ) as Experience;
-    result.push(interpolatedExperience);
-  }
-
-  return result;
+  return [...(useSecondSample ? sampleB! : sampleA!).data];
 };
 
 /**
@@ -228,12 +218,10 @@ const buildDatasetsFromMemberSkillData = (
     }, 0) as Experience;
 
   /**
-   * We interpret the skillData samples as a polynomial, and sample the points
-   * along of the polynomial for our bins. Our best guess is linear
-   * interpolation, which will lead to aliasing but we can't do much better
-   * without building up the backend a bit more. Since we clamped our date bins
-   * to UTC midnight, which the server also does, we aren't interpolating a lot,
-   * just where there are gaps.
+   * Treat the samples as a step function: we reuse the most recent sample until
+   * tracking reports a new value. This avoids implying that experience was
+   * gained between updates while still giving every member the same number of
+   * data points.
    */
   const datasets = [];
   for (const { member, skillSamples, style } of members) {
@@ -263,10 +251,10 @@ const buildDatasetsFromMemberSkillData = (
 
       /*
        * If we are about to sample before the interval, we need to come up with
-       * some data to put in. This only occurs if the polynomial does not cover
-       * all datebins, like if the server is missing data from the past or a
-       * member was recently added. This should be a fairly rare occurrence, so
-       * we push whatever makes the data look nicest.
+       * some data to put in. This only occurs if the tracked history does not
+       * reach all date bins (for example, a recently added member). This should
+       * be a fairly rare occurrence, so we push whatever makes the data look
+       * nicest.
        *
        * TODO: have backend send dates indicating the start of history for each
        * member? To differentiate between missing data vs date bin mismatch
@@ -329,81 +317,127 @@ const buildDatasetsFromMemberSkillData = (
   return datasets.sort(({ label: labelA }, { label: labelB }) => labelA.localeCompare(labelB));
 };
 
+const padExperienceArray = (experience: Experience[] | undefined): Experience[] => {
+  return SkillsInBackendOrder.map((_, index) => (experience?.[index] ?? 0) as Experience);
+};
+
+const getExperienceSnapshot = (
+  skillSamples: { time: Date; data: Experience[] }[],
+  target: Date,
+  yAxisUnit: LineChartYAxisOption,
+): Experience[] => {
+  if (skillSamples.length === 0) return padExperienceArray(undefined);
+
+  const firstSample = skillSamples[0];
+  if (DateFNS.compareAsc(firstSample.time, target) > 0) {
+    if (yAxisUnit === "Experience per hour") {
+      return padExperienceArray(firstSample.data);
+    }
+
+    return padExperienceArray(undefined);
+  }
+
+  for (let index = skillSamples.length - 1; index >= 0; index--) {
+    const sample = skillSamples[index];
+    if (DateFNS.compareAsc(sample.time, target) <= 0) {
+      return padExperienceArray(sample.data);
+    }
+  }
+
+  return padExperienceArray(skillSamples.at(-1)?.data);
+};
+
 const buildTableRowsFromMemberSkillData = (
   members: SkillGraphMember[],
+  dateBins: Date[],
   options: {
     yAxisUnit: LineChartYAxisOption;
     skillFilter: SkillFilteringOption;
   },
 ): SkillGraphTableRow[] => {
-  // Aggregates we so we can compute what fraction of total gains over a period each member did
-  let groupGainTotal = 0 as Experience;
+  const startTime = dateBins.at(1) ?? dateBins.at(0);
+  const endTime = dateBins.at(-1);
+  const previousTime = dateBins.at(-2) ?? startTime;
 
-  // Individual gains to display for the individual rows
-  const groupGains: { name: Member.Name; total: Experience; perSkill: Experience[]; colorCSS: string }[] = [];
+  if (!startTime || !endTime) return [];
+
+  const elapsedMilliseconds = previousTime ? DateFNS.differenceInMilliseconds(endTime, previousTime) : 0;
+  const elapsedHours = elapsedMilliseconds > 0 ? elapsedMilliseconds / (1000 * 60 * 60) : 0;
+
+  let groupMetricTotal = 0;
+  const groupMetrics: { name: Member.Name; total: number; perSkill: number[]; colorCSS: string }[] = [];
 
   for (const { member, skillSamples, style } of members) {
-    const memberGain = {
+    const startSkills = getExperienceSnapshot(skillSamples, startTime, options.yAxisUnit);
+    const endSkills = getExperienceSnapshot(skillSamples, endTime, options.yAxisUnit);
+    const previousSkills = previousTime
+      ? getExperienceSnapshot(skillSamples, previousTime, options.yAxisUnit)
+      : startSkills;
+
+    const memberMetrics = {
       name: member,
-      total: 0 as Experience,
-      perSkill: [] as Experience[],
+      total: 0,
+      perSkill: [] as number[],
       colorCSS: style.barBackground,
     };
 
-    const samplesSortedOldestFirst = skillSamples.sort(({ time: timeA }, { time: timeB }) =>
-      DateFNS.compareAsc(timeA, timeB),
-    );
+    for (let skillIndex = 0; skillIndex < SkillsInBackendOrder.length; skillIndex++) {
+      const skill = SkillsInBackendOrder[skillIndex];
+      if (!skill) continue;
+      if (options.skillFilter !== "Overall" && skill !== options.skillFilter) continue;
 
-    /*
-     * TODO: New members AND members that haven't logged in a lot both have 1
-     * sample, and we cannot differentiate them even though we'd like to display
-     * new member's gains over a month/year. This is fairly minor, since this
-     * only happens if the new member hasn't played enough to be logged multiple
-     * times.
-     */
-    if (samplesSortedOldestFirst.length >= 2) {
-      const startingSkills = samplesSortedOldestFirst.at(0)!.data;
-      const endingSkills = samplesSortedOldestFirst.at(-1)!.data;
+      const start = startSkills[skillIndex] ?? (0 as Experience);
+      const end = endSkills[skillIndex] ?? (0 as Experience);
+      const previous = previousSkills[skillIndex] ?? (0 as Experience);
 
-      const skillIndexMax = Math.max(startingSkills.length, endingSkills.length);
-      for (let skillIndex = 0; skillIndex < skillIndexMax; skillIndex++) {
-        const skill = SkillsInBackendOrder[skillIndex];
-        if (options.skillFilter !== "Overall" && skill !== options.skillFilter) {
-          continue;
+      let metricValue = 0;
+      switch (options.yAxisUnit) {
+        case "Total experience":
+          metricValue = Math.max(0, end);
+          break;
+        case "Experience per hour": {
+          if (elapsedHours > 0) {
+            metricValue = Math.max(0, (end - previous) / elapsedHours);
+          }
+          break;
         }
-
-        const start = startingSkills.at(skillIndex) ?? 0;
-        const end = endingSkills.at(skillIndex) ?? 0;
-        const xpGain = Math.max(0, end - start) as Experience;
-
-        memberGain.perSkill[skillIndex] = xpGain;
-        memberGain.total = (memberGain.total + xpGain) as Experience;
-        groupGainTotal = (groupGainTotal + xpGain) as Experience;
+        case "Cumulative experience gained":
+        default: {
+          metricValue = Math.max(0, end - start);
+          break;
+        }
       }
+
+      if (options.skillFilter === "Overall") {
+        memberMetrics.perSkill[skillIndex] = metricValue;
+      }
+
+      memberMetrics.total += metricValue;
     }
 
-    groupGains.push(memberGain);
+    groupMetricTotal += memberMetrics.total;
+    groupMetrics.push(memberMetrics);
   }
 
   const rows: SkillGraphTableRow[] = [];
+  groupMetrics.sort(({ total: a }, { total: b }) => b - a);
 
-  groupGains.sort(({ total: a }, { total: b }) => b - a);
+  const safeDenominator = groupMetricTotal === 0 ? 1 : groupMetricTotal;
 
-  for (const { name, total, perSkill, colorCSS } of groupGains) {
+  for (const { name, total, perSkill, colorCSS } of groupMetrics) {
     if (options.skillFilter !== "Overall") {
       const skill: Skill = options.skillFilter;
-
       rows.push({
         name,
         colorCSS: `hsl(69deg, 60%, 60%)`,
-        fillFraction: total / groupGainTotal,
+        fillFraction: total / safeDenominator,
         iconSource: SkillIconsBySkill[skill],
         quantity: total,
       });
       continue;
     }
 
-    const overallFraction = total / groupGainTotal;
+    const overallFraction = total / safeDenominator;
     const header: SkillGraphTableRow = {
       name,
       colorCSS,
@@ -411,30 +445,28 @@ const buildTableRowsFromMemberSkillData = (
       iconSource: SkillIconsBySkill.Overall,
       quantity: total,
     };
-    const skillRows: SkillGraphTableRow[] = [];
 
+    const skillRows: SkillGraphTableRow[] = [];
     for (let skillIndex = 0; skillIndex < perSkill.length; skillIndex++) {
-      const xpGain = perSkill.at(skillIndex);
+      const metricValue = perSkill.at(skillIndex);
       const skill = SkillsInBackendOrder[skillIndex];
 
-      if (!xpGain || xpGain <= 0 || !skill) {
-        continue;
-      }
+      if (!metricValue || metricValue <= 0 || !skill) continue;
 
-      const fraction = xpGain / total;
-
+      const fraction = total > 0 ? metricValue / total : 0;
       skillRows.push({
         name: skill,
         colorCSS,
         fillFraction: fraction * overallFraction,
         iconSource: SkillIconsBySkill[skill],
-        quantity: xpGain,
+        quantity: metricValue,
       });
     }
 
     rows.push(header);
     rows.push(...skillRows.sort(({ quantity: a }, { quantity: b }) => b - a));
   }
+
   return rows;
 };
 
@@ -559,7 +591,7 @@ export const SkillGraph = (): ReactElement => {
         });
 
         setTableRowData(
-          buildTableRowsFromMemberSkillData(memberChartData, {
+          buildTableRowsFromMemberSkillData(memberChartData, dates, {
             yAxisUnit: yAxisUnit,
             skillFilter: skillFilter,
           }),

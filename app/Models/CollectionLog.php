@@ -18,9 +18,4 @@ class CollectionLog extends Model
     {
         return $this->belongsTo(Member::class);
     }
-
-    public function page(): BelongsTo
-    {
-        return $this->belongsTo(CollectionPage::class, 'collection_page_id');
-    }
 }

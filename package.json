@@ -35,7 +35,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.44.1",
     "vite": "^7.1.5",
-    "zod": "^3.25.58"
+    "zod": "^4.1.11"
   },
   "scripts": {
     "dev": "vite",

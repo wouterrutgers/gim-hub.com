@@ -368,12 +368,14 @@ const buildTableRowsFromMemberSkillData = (
 ): SkillGraphTableRow[] => {
   const startTime = dateBins.at(0);
   const endTime = dateBins.at(-1);
-  const previousTime = dateBins.at(-2) ?? startTime;
 
   if (!startTime || !endTime) return [];
 
-  const elapsedMilliseconds = previousTime ? DateFNS.differenceInMilliseconds(endTime, previousTime) : 0;
-  const elapsedHours = elapsedMilliseconds > 0 ? elapsedMilliseconds / (1000 * 60 * 60) : 0;
+  const elapsedHours = differenceInHoursPrecise({ laterDate: endTime, earlierDate: startTime });
+  if (elapsedHours <= 0) {
+    console.error("Skill table end time is before or equal to start time.");
+    return [];
+  }
 
   let groupMetricTotal = 0;
   const groupMetrics: { name: Member.Name; total: number; perSkill: number[]; colorCSS: string }[] = [];
@@ -381,9 +383,6 @@ const buildTableRowsFromMemberSkillData = (
   for (const { member, skillSamples, style } of members) {
     const startSkills = getExperienceSnapshot(skillSamples, startTime, options.yAxisUnit);
     const endSkills = getExperienceSnapshot(skillSamples, endTime, options.yAxisUnit);
-    const previousSkills = previousTime
-      ? getExperienceSnapshot(skillSamples, previousTime, options.yAxisUnit)
-      : startSkills;
 
     const memberMetrics = {
       name: member,
@@ -399,7 +398,6 @@ const buildTableRowsFromMemberSkillData = (
 
       const start = startSkills[skillIndex] ?? (0 as Experience);
       const end = endSkills[skillIndex] ?? (0 as Experience);
-      const previous = previousSkills[skillIndex] ?? (0 as Experience);
 
       let metricValue = 0;
       switch (options.yAxisUnit) {
@@ -408,7 +406,7 @@ const buildTableRowsFromMemberSkillData = (
           break;
         case "Experience per hour": {
           if (elapsedHours > 0) {
-            metricValue = Math.max(0, (end - previous) / elapsedHours);
+            metricValue = Math.max(0, Math.round((end - start) / elapsedHours));
           }
           break;
         }

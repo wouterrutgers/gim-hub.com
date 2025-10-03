@@ -71,6 +71,15 @@ interface SkillGraphMember {
 }
 
 /**
+ * Returns the difference in hours between two dates more precisely, since the
+ * native Date-FNS function rounded to the nearest hour.
+ */
+const differenceInHoursPrecise = ({ earlierDate, laterDate }: { earlierDate: Date; laterDate: Date }): number => {
+  const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
+  return DateFNS.differenceInMilliseconds(laterDate, earlierDate) / MILLISECONDS_PER_HOUR;
+};
+
+/**
  * Returns the finitely enumerated x-axis positions for a given aggregate
  * period. Each position should be assigned a y-value then displayed on the
  * chart.
@@ -104,7 +113,7 @@ const enumerateDateBinsForPeriod = (period: AggregatePeriod): Date[] => {
 
   dates.push(now);
 
-  return dates;
+  return dates.slice(1);
 };
 
 const buildLineChartOptions = ({ period, yAxisUnit }: SkillGraphOptions): ChartOptions<"line"> => {
@@ -286,15 +295,16 @@ const buildDatasetsFromMemberSkillData = (
     const chartPoints: [Date, number][] = [];
     switch (options.yAxisUnit) {
       case "Cumulative experience gained": {
-        const start = interpolatedSamples[1] ?? 0;
+        const start = interpolatedSamples[0] ?? 0;
         for (let i = 0; i < interpolatedSamples.length; i++) {
           chartPoints[i] = [dateBins[i], interpolatedSamples[i] - start];
         }
         break;
       }
       case "Experience per hour": {
-        for (let i = 0; i < interpolatedSamples.length; i++) {
-          const hoursPerSample = DateFNS.differenceInHours(dateBins[i], dateBins[i - 1]);
+        chartPoints[0] = [dateBins[0], 0];
+        for (let i = 1; i < interpolatedSamples.length; i++) {
+          const hoursPerSample = differenceInHoursPrecise({ laterDate: dateBins[i], earlierDate: dateBins[i - 1] });
           const experienceGained = interpolatedSamples[i] - interpolatedSamples[i - 1];
           chartPoints[i] = [dateBins[i], experienceGained / hoursPerSample];
         }
@@ -356,7 +366,7 @@ const buildTableRowsFromMemberSkillData = (
     skillFilter: SkillFilteringOption;
   },
 ): SkillGraphTableRow[] => {
-  const startTime = dateBins.at(1) ?? dateBins.at(0);
+  const startTime = dateBins.at(0);
   const endTime = dateBins.at(-1);
   const previousTime = dateBins.at(-2) ?? startTime;
 
@@ -514,7 +524,7 @@ export const SkillGraph = (): ReactElement => {
   const [tableRowData, setTableRowData] = useState<SkillGraphTableRow[]>([]);
   const [chart, setChart] = useState<SkillChart>({
     data: { datasets: [] },
-    options: buildLineChartOptions({ period: "Day", yAxisUnit: "Total experience", skillFilter: "Overall" }),
+    options: buildLineChartOptions(options),
   });
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -542,7 +552,8 @@ export const SkillGraph = (): ReactElement => {
         const skillData = result.value;
 
         const memberChartData: SkillGraphMember[] = [];
-        // Filter and sort the data, so that calculations like xp/hr down the road are well formed.
+
+        // From here on out, the skill samples are sorted. This is important for sampling them.
         for (const [member, skillSamples] of skillData) {
           const hueDegrees = memberColors.get(member)?.hueDegrees;
           if (!hueDegrees || skillSamples.length === 0) continue;
@@ -560,17 +571,6 @@ export const SkillGraph = (): ReactElement => {
           });
         }
 
-        /*
-         * Slice the data, since our calculations up until now included an extra
-         * interval.
-         *
-         * For example, if today is JUNE 8 and the period is a week, we get
-         * samples and process JUNE 1.
-         *
-         * This also makes "per hour" options well defined, since our
-         * calculations look backwards to determine rates, and the first sample
-         * can't look backwards.
-         */
         const data = {
           datasets: buildDatasetsFromMemberSkillData(memberChartData, dates, {
             yAxisUnit,
@@ -580,7 +580,7 @@ export const SkillGraph = (): ReactElement => {
               label,
               borderColor,
               backgroundColor,
-              data: data.slice(1),
+              data,
               pointBorderWidth: 0,
               pointHoverBorderWidth: 0,
               pointHoverRadius: 3,

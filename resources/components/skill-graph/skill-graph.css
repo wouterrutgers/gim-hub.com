@@ -61,10 +61,22 @@
   border-collapse: collapse;
 }
 
-#skill-graph-xp-change-table img {
+.skill-graph-xp-change-table-image-container {
   width: 1em;
+  height: 1em;
   margin-inline: 0.5em;
+}
+
+.skill-graph-xp-change-table-image-container img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+}
+
+#skill-graph-xp-change-table th {
+  font-family: rsbold, ui-sans-serif, Arial, sans-serif;
+  font-weight: bold;
+  text-align: center;
 }
 
 .skill-graph-xp-change-table-label {
@@ -90,10 +102,6 @@
   height: 2px;
   background: var(--light-border);
   pointer-events: none;
-}
-
-#skill-graph-xp-change-table tr.skill-graph-member-header:first-child::before {
-  display: none;
 }
 
 #skill-graph-xp-change-table tr.skill-graph-member-header .skill-graph-xp-change-table-label {

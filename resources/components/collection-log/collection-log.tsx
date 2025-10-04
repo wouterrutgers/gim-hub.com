@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useState, type ReactElement, type ReactNode } from "react";
+import { Fragment, type ReactElement, type ReactNode, useContext, useEffect, useState } from "react";
 import { GameDataContext } from "../../context/game-data-context";
 import * as CollectionLog from "../../game/collection-log";
 import type * as Member from "../../game/member";
@@ -8,6 +8,7 @@ import { PlayerIcon } from "../player-icon/player-icon";
 import type { ItemID } from "../../game/items";
 import { CachedImage } from "../cached-image/cached-image";
 import { Context as APIContext } from "../../context/api-context";
+import { formatTitle } from "../../ts/format-title";
 
 import "./collection-log.css";
 
@@ -394,7 +395,7 @@ export const CollectionLogWindow = ({
     <div className="collection-log-container dialog-container metal-border rsbackground">
       <div className="collection-log-header">
         <h1 className="collection-log-title">
-          {player}'s collection log - {totalCollected} / {collectionLogInfo?.uniqueSlots ?? 0}
+          {formatTitle(`${player}'s collection log`)} - {totalCollected} / {collectionLogInfo?.uniqueSlots ?? 0}
         </h1>
         <button className="collection-log-close dialog__close" onClick={onCloseModal}>
           <CachedImage src="/ui/1731-0.png" alt="Close dialog" title="Close dialog" />

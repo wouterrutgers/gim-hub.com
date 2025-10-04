@@ -5,6 +5,7 @@ import { GameDataContext } from "../../context/game-data-context";
 import type * as Member from "../../game/member";
 import { useMemberQuestsContext } from "../../context/group-context";
 import { CachedImage } from "../cached-image/cached-image";
+import { formatTitle } from "../../ts/format-title";
 
 import "./player-quests.css";
 
@@ -100,11 +101,11 @@ export const PlayerQuests = ({ member }: { member: Member.Name }): ReactElement 
         </div>
       </div>
       <div className="player-quests-list">
-        <h4 className="player-quests-section-header">Free quests</h4>
+        <h4 className="player-quests-section-header">{formatTitle("Free quests")}</h4>
         {freeQuests}
-        <h4 className="player-quests-section-header">Members' Quests</h4>
+        <h4 className="player-quests-section-header">{formatTitle("Members' quests")}</h4>
         {membersQuests}
-        <h4 className="player-quests-section-header">Miniquests</h4>
+        <h4 className="player-quests-section-header">{formatTitle("Miniquests")}</h4>
         {miniquestQuests}
       </div>
     </div>

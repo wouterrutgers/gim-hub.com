@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useItemsPriceTooltip } from "./items-page-tooltip";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { CachedImage } from "../cached-image/cached-image";
+import { formatTitle } from "../../ts/format-title";
 
 import "./items-page.css";
 
@@ -284,7 +285,7 @@ export const ItemsPage = (): ReactElement => {
   if ((items?.size ?? 0) <= 0) {
     return (
       <div id="items-page-no-items" className="rsborder rsbackground">
-        <h3>Your group has no recorded items!</h3>
+        <h3>{formatTitle("Your group has no recorded items!")}</h3>
         <p>
           Either no members have logged in with the plugin, or there is an issue. Please double check that the names in
           the{" "}
@@ -317,7 +318,7 @@ export const ItemsPage = (): ReactElement => {
           >
             {ItemSortCategory.map((category) => (
               <option key={category} value={category}>
-                Sort: {category}
+                {`Sort: ${formatTitle(category)}`}
               </option>
             ))}
           </select>

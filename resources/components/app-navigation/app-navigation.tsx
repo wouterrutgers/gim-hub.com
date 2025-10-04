@@ -3,6 +3,7 @@ import { AppLink } from "../app-link/app-link";
 import { useLocation } from "react-router-dom";
 import { CachedImage } from "../cached-image/cached-image";
 import { Context as APIContext } from "../../context/api-context";
+import { formatTitle } from "../../ts/format-title";
 
 import "./app-navigation.css";
 
@@ -32,33 +33,37 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
   const renderLinks = (
     links: { label: string; href: string; mobileIconSource: string; isExternal?: boolean }[],
   ): ReactElement[] =>
-    links.map(({ label, href, mobileIconSource, isExternal }) => (
-      <Fragment key={label}>
-        <span className="desktop">
-          {isExternal ? (
-            <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
-              <CachedImage alt={label} src={mobileIconSource} height="16" style={{ marginRight: "8px" }} />
-              {label}
-            </a>
-          ) : (
-            <AppLink href={href} selected={location.pathname === href}>
-              {label}
-            </AppLink>
-          )}
-        </span>
-        <span className="mobile">
-          {isExternal ? (
-            <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
-              <CachedImage alt={label} src={mobileIconSource} />
-            </a>
-          ) : (
-            <AppLink href={href} selected={location.pathname === href}>
-              <CachedImage alt={label} src={mobileIconSource} />
-            </AppLink>
-          )}
-        </span>
-      </Fragment>
-    ));
+    links.map(({ label, href, mobileIconSource, isExternal }) => {
+      const formattedLabel = formatTitle(label);
+
+      return (
+        <Fragment key={label}>
+          <span className="desktop">
+            {isExternal ? (
+              <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
+                <CachedImage alt={formattedLabel} src={mobileIconSource} height="16" style={{ marginRight: "8px" }} />
+                {formattedLabel}
+              </a>
+            ) : (
+              <AppLink href={href} selected={location.pathname === href}>
+                {formattedLabel}
+              </AppLink>
+            )}
+          </span>
+          <span className="mobile">
+            {isExternal ? (
+              <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
+                <CachedImage alt={formattedLabel} src={mobileIconSource} />
+              </a>
+            ) : (
+              <AppLink href={href} selected={location.pathname === href}>
+                <CachedImage alt={formattedLabel} src={mobileIconSource} />
+              </AppLink>
+            )}
+          </span>
+        </Fragment>
+      );
+    });
 
   const elements = [
     ...renderLinks(mainLinks),

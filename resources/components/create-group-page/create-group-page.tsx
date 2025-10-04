@@ -17,6 +17,7 @@ import * as z from "zod/v4";
 
 import "./create-group-page.css";
 import { LoadingScreen } from "../loading-screen/loading-screen";
+import { formatTitle } from "../../ts/format-title";
 
 /**
  * This page is where users can submit initial name and members for a group.
@@ -299,20 +300,20 @@ export const CreateGroupPage = (): ReactElement => {
     <div id="create-group-container">
       <form ref={formRef} id="create-group-window" className="rsborder rsbackground" action={action}>
         <div>
-          <h3>Pick a name for your group</h3>
+          <h3>{formatTitle("Pick a name for your group")}</h3>
           <p>
             This does <span className="emphasize">not</span> need to be the in-game name.
           </p>
           {groupNameInput}
         </div>
         <div>
-          <h3>What size is the group?</h3>
+          <h3>{formatTitle("What size is the group?")}</h3>
           <p>This can be changed later.</p>
           {memberCountDropdown}
         </div>
         {memberNameInputs.length > 0 ? (
           <div>
-            <h3>Enter each members' name</h3>
+            <h3>{formatTitle("Enter each members' name")}</h3>
             <p>
               This <span className="emphasize">does</span> need to match the in-game name. (Can be changed later)
             </p>

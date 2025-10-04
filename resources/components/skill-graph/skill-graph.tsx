@@ -1,22 +1,22 @@
-import { useContext, useEffect, useRef, useState, type ReactElement } from "react";
+import { type ReactElement, useContext, useEffect, useRef, useState } from "react";
 import {
-  Chart as ChartJS,
   CategoryScale,
-  TimeScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
+  Chart as ChartJS,
   type ChartData,
   type ChartOptions,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  TimeScale,
+  Title,
+  Tooltip,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { AggregatePeriod } from "../../api/requests/skill-data";
 import * as DateFNS from "date-fns";
 import { Context as APIContext } from "../../context/api-context";
-import { Skill, SkillIconsBySkill, type Experience } from "../../game/skill";
+import { type Experience, Skill, SkillIconsBySkill } from "../../game/skill";
 import * as Member from "../../game/member";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { SkillsInBackendOrder } from "../../api/requests/group-data";
@@ -24,16 +24,18 @@ import { utc } from "@date-fns/utc";
 import { Link } from "react-router-dom";
 import { CachedImage } from "../cached-image/cached-image";
 import { GroupMemberColorsContext } from "../../context/group-context";
+import { formatTitle } from "../../ts/format-title";
 
 import "./skill-graph.css";
 
 import "chartjs-adapter-date-fns";
+
 ChartJS.register(CategoryScale, TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const SkillFilteringOption = ["Overall", ...Skill] as const;
 type SkillFilteringOption = (typeof SkillFilteringOption)[number];
 
-const LineChartYAxisOption = ["Cumulative Experience Gained", "Total Experience", "Experience per Hour"] as const;
+const LineChartYAxisOption = ["Cumulative experience gained", "Total experience", "Experience per hour"] as const;
 type LineChartYAxisOption = (typeof LineChartYAxisOption)[number];
 
 interface SkillGraphOptions {
@@ -142,7 +144,7 @@ const buildLineChartOptions = ({ period, yAxisUnit }: SkillGraphOptions): ChartO
       },
       title: {
         display: true,
-        text: `Group ${yAxisUnit} over the Preceding ${period}`,
+        text: formatTitle(`Group ${yAxisUnit} over the preceding ${period.toLowerCase()}`),
       },
     },
     interaction: {
@@ -164,7 +166,7 @@ const buildLineChartOptions = ({ period, yAxisUnit }: SkillGraphOptions): ChartO
         },
       },
       y: {
-        title: { display: true, text: yAxisUnit },
+        title: { display: true, text: formatTitle(yAxisUnit) },
         type: "linear",
         min: 0,
       },
@@ -271,12 +273,12 @@ const buildDatasetsFromMemberSkillData = (
        */
       if (DateFNS.compareAsc(firstSample.time, dateBin) > 0) {
         switch (options.yAxisUnit) {
-          case "Total Experience":
-          case "Cumulative Experience Gained":
+          case "Total experience":
+          case "Cumulative experience gained":
           default:
             interpolatedSamples.push(0 as Experience);
             break;
-          case "Experience per Hour":
+          case "Experience per hour":
             interpolatedSamples.push(sumFilteredExperience(firstSample.data));
             break;
         }
@@ -294,14 +296,14 @@ const buildDatasetsFromMemberSkillData = (
 
     const chartPoints: [Date, number][] = [];
     switch (options.yAxisUnit) {
-      case "Cumulative Experience Gained": {
+      case "Cumulative experience gained": {
         const start = interpolatedSamples[0] ?? 0;
         for (let i = 0; i < interpolatedSamples.length; i++) {
           chartPoints[i] = [dateBins[i], interpolatedSamples[i] - start];
         }
         break;
       }
-      case "Experience per Hour": {
+      case "Experience per hour": {
         chartPoints[0] = [dateBins[0], 0];
         for (let i = 1; i < interpolatedSamples.length; i++) {
           const hoursPerSample = differenceInHoursPrecise({ laterDate: dateBins[i], earlierDate: dateBins[i - 1] });
@@ -310,7 +312,7 @@ const buildDatasetsFromMemberSkillData = (
         }
         break;
       }
-      case "Total Experience":
+      case "Total experience":
         for (let i = 0; i < interpolatedSamples.length; i++) {
           chartPoints[i] = [dateBins[i], interpolatedSamples[i]];
         }
@@ -341,7 +343,7 @@ const getExperienceSnapshot = (
 
   const firstSample = skillSamples[0];
   if (DateFNS.compareAsc(firstSample.time, target) > 0) {
-    if (yAxisUnit === "Experience per Hour") {
+    if (yAxisUnit === "Experience per hour") {
       return padExperienceArray(firstSample.data);
     }
 
@@ -401,16 +403,16 @@ const buildTableRowsFromMemberSkillData = (
 
       let metricValue = 0;
       switch (options.yAxisUnit) {
-        case "Total Experience":
+        case "Total experience":
           metricValue = Math.max(0, end);
           break;
-        case "Experience per Hour": {
+        case "Experience per hour": {
           if (elapsedHours > 0) {
             metricValue = Math.max(0, Math.round((end - start) / elapsedHours));
           }
           break;
         }
-        case "Cumulative Experience Gained":
+        case "Cumulative experience gained":
         default: {
           metricValue = Math.max(0, end - start);
           break;
@@ -504,7 +506,7 @@ const SkillGraphDropdown = <TOption extends string>({
       >
         {options.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {formatTitle(option)}
           </option>
         ))}
       </select>
@@ -515,7 +517,7 @@ const SkillGraphDropdown = <TOption extends string>({
 export const SkillGraph = (): ReactElement => {
   const [options, setOptions] = useState<SkillGraphOptions>({
     period: "Day",
-    yAxisUnit: "Cumulative Experience Gained",
+    yAxisUnit: "Cumulative experience gained",
     skillFilter: "Overall",
   });
 
@@ -603,18 +605,18 @@ export const SkillGraph = (): ReactElement => {
           }),
         };
         switch (options.yAxisUnit) {
-          case "Cumulative Experience Gained": {
-            tableData.title = "Experience Gained over the Preceding " + period;
+          case "Cumulative experience gained": {
+            tableData.title = `Experience gained over the preceding ${period.toLowerCase()}`;
             tableData.numberPrefix = "+";
             break;
           }
-          case "Total Experience": {
-            tableData.title = "Current Total Experience";
+          case "Total experience": {
+            tableData.title = "Current total experience";
             tableData.numberPrefix = "";
             break;
           }
-          case "Experience per Hour": {
-            tableData.title = "Experience per Hour Averaged over the Preceding " + period;
+          case "Experience per hour": {
+            tableData.title = `Experience per hour averaged over the preceding ${period.toLowerCase()}`;
             tableData.numberPrefix = "+";
             break;
           }
@@ -649,7 +651,7 @@ export const SkillGraph = (): ReactElement => {
   if (!loading && chart.data.datasets.length === 0) {
     xpGainsTable = (
       <div id="skill-graph-no-data">
-        <h3>Your group has no recorded skill data!</h3>
+        <h3>{formatTitle("Your group has no recorded skill data!")}</h3>
         <p>
           Either no members have logged in more than a couple hours with the plugin, or there is an issue. Please double
           check that the names in the{" "}
@@ -693,7 +695,7 @@ export const SkillGraph = (): ReactElement => {
       <table id="skill-graph-xp-change-table">
         <thead>
           <tr>
-            <th colSpan={2}>{tableData.title}</th>
+            <th colSpan={2}>{formatTitle(tableData.title)}</th>
           </tr>
         </thead>
         <tbody>{tableRowElements}</tbody>

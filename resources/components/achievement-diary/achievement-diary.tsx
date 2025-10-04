@@ -3,6 +3,7 @@ import { DiaryRegion, DiaryTier } from "../../game/diaries";
 import { SkillIconsBySkill, type Level, type Skill } from "../../game/skill";
 import type * as Member from "../../game/member";
 import { CachedImage } from "../cached-image/cached-image";
+import { formatTitle } from "../../ts/format-title";
 
 import "./achievement-log.css";
 
@@ -46,11 +47,11 @@ export const DiaryRegionWindow = ({ region, player, progress, onCloseModal }: Di
         <h1>
           {`${player}'s `}
           <a className="diary-dialog-title" href={regionHref} target="_blank" rel="noopener noreferrer">
-            {region} achievement diary
+            {formatTitle(`${region} achievement diary`)}
           </a>
         </h1>
         <button className="diary-dialog-close" onClick={onCloseModal}>
-          <CachedImage src="/ui/1731-0.png" alt="Close dialog" title="Close dialog" />
+          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} title={formatTitle("Close dialog")} />
         </button>
       </div>
       <div className="diary-dialog-title-border" />

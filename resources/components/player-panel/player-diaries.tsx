@@ -7,6 +7,7 @@ import { GameDataContext } from "../../context/game-data-context";
 import type * as Member from "../../game/member";
 import { useMemberDiariesContext, useMemberQuestsContext, useMemberSkillsContext } from "../../context/group-context";
 import { DiaryRegionWindow, type DiaryTaskProgress } from "../achievement-diary/achievement-diary";
+import { formatTitle } from "../../ts/format-title";
 
 import "./player-diaries.css";
 
@@ -122,7 +123,7 @@ export const PlayerDiaries = ({ member }: { member: Member.Name }): ReactElement
 
   return (
     <div className="player-diaries">
-      <h2 className="player-diaries-title">Achievement diaries</h2>
+      <h2 className="player-diaries-title">{formatTitle("Achievement diaries")}</h2>
       <div className="player-diaries-completions">{summaryElements}</div>
       {modal}
     </div>

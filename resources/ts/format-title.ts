@@ -18,5 +18,5 @@ export function formatTitle(sentence: string): string {
 
       return word;
     })
-    .join("");
+    .join(" ");
 }

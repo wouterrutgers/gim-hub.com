@@ -1,7 +1,6 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import prettier from "eslint-plugin-prettier/recommended";
 import jsxA11y from "eslint-plugin-jsx-a11y";
@@ -28,7 +27,6 @@ export default tseslint.config(
       js.configs.recommended,
       ...tseslint.configs.recommendedTypeChecked,
       ...tseslint.configs.stylisticTypeChecked,
-      reactHooks.configs["recommended-latest"],
       reactRefresh.configs.recommended,
     ],
     files: TS_GLOB,

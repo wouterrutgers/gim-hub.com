@@ -380,6 +380,7 @@ interface DemoGroup {
     diaries: typeof MAX_DIARY;
   };
   roster: { displayName: Member.Name; originalName?: "Thurgo" | "Cow31337Killer" | "Gary" | "xXgamerXx" }[];
+  skillData: Record<RequestSkillData.AggregatePeriod, RequestSkillData.Response>;
   hiscores: Map<Member.Name, RequestHiscores.Response>;
   collections: Map<Member.Name, Member.Collection>;
   banks: Map<Member.Name, Member.ItemCollection>;
@@ -414,6 +415,7 @@ const INITIAL_STATE = {
     { displayName: "Gary" as Member.Name, originalName: "Gary" as const },
     { displayName: "xXgamerXx" as Member.Name, originalName: "xXgamerXx" as const },
   ],
+  skillData: { Day: new Map(), Week: new Map(), Month: new Map(), Year: new Map() },
   hiscores: new Map(),
   collections: new Map(),
   banks: new Map(),
@@ -553,6 +555,8 @@ export default class DemoApi {
     this.closed = false;
     this.startMS = performance.now();
 
+    this.populateSkillDataFromRoster();
+
     this.demoDataPromise = Promise.all([
       import("./demo-api-data.json"),
       this.queueGetGameData(),
@@ -645,50 +649,69 @@ export default class DemoApi {
     return Promise.reject(new Error("Not implemented."));
   }
 
-  async fetchSkillData(period: RequestSkillData.AggregatePeriod): Promise<RequestSkillData.Response> {
-    const now = new Date(Date.now());
-    const dates: Date[] = [];
+  private populateSkillDataFromRoster(): void {
+    for (const period of RequestSkillData.AggregatePeriod) {
+      const now = new Date(Date.now());
+      let dates: Date[] = [];
 
-    switch (period) {
-      case "Day": {
-        const start = DateFNS.startOfHour(DateFNS.sub(now, { days: 1 }), { in: utc });
-        dates.push(...DateFNS.eachHourOfInterval({ start, end: now }));
-        break;
-      }
-      case "Week": {
-        const start = DateFNS.startOfDay(DateFNS.sub(now, { weeks: 1 }), { in: utc });
-        dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
-        break;
-      }
-      case "Month": {
-        const start = DateFNS.startOfDay(DateFNS.sub(now, { months: 1 }), { in: utc });
-        dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
-        break;
-      }
-      case "Year": {
-        const start = DateFNS.startOfMonth(DateFNS.sub(now, { years: 1 }), { in: utc });
-        dates.push(...DateFNS.eachMonthOfInterval({ start, end: now }));
-      }
-    }
-
-    const result: RequestSkillData.Response = new Map();
-    for (const { displayName } of this.state.roster) {
-      const currentXP = new Array<Experience>(Skill.length).fill(0 as Experience);
-      const samples = [];
-      let lastTime = dates[0];
-      for (const time of dates) {
-        const hoursSince = Math.abs(DateFNS.differenceInHours(time, lastTime));
-        samples.push({ time, data: [...currentXP] });
-        for (let i = 0; i < currentXP.length; i++) {
-          currentXP[i] = (currentXP[i] +
-            Math.floor(hoursSince * Math.max(0, Math.random() - 0.7) * 100_000)) as Experience;
+      switch (period) {
+        case "Day": {
+          const start = DateFNS.startOfHour(DateFNS.sub(now, { days: 1 }), { in: utc });
+          dates.push(...DateFNS.eachHourOfInterval({ start, end: now }));
+          break;
         }
-        lastTime = time;
+        case "Week": {
+          const start = DateFNS.startOfDay(DateFNS.sub(now, { weeks: 1 }), { in: utc });
+          dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
+          break;
+        }
+        case "Month": {
+          const start = DateFNS.startOfDay(DateFNS.sub(now, { months: 1 }), { in: utc });
+          dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
+          break;
+        }
+        case "Year": {
+          const start = DateFNS.startOfMonth(DateFNS.sub(now, { years: 1 }), { in: utc });
+          dates.push(...DateFNS.eachMonthOfInterval({ start, end: now }));
+        }
       }
-      result.set(displayName, samples);
-    }
 
-    return new Promise((resolve) => setTimeout(() => resolve(result), 700));
+      dates.push(now);
+      dates = dates.slice(1);
+
+      const result: RequestSkillData.Response = new Map();
+      for (const { displayName } of this.state.roster) {
+        const samples = [];
+        const currentXP = new Array<Experience>(Skill.length).fill(Math.round(Math.random() * 100_000) as Experience);
+
+        for (let i = 0; i < dates.length; i++) {
+          const time = dates[i];
+
+          const playerIsOffline = (period === "Day" && i >= 8 && i <= 16) || (period === "Year" && i <= 2);
+
+          if (!playerIsOffline) {
+            if (i >= 1) {
+              const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
+              const hoursSince = Math.abs(DateFNS.differenceInMilliseconds(time, dates[i - 1])) / MILLISECONDS_PER_HOUR;
+
+              for (let i = 0; i < currentXP.length; i++) {
+                const xpPerHour = Math.max(0, Math.random() - 0.7) * 100_000;
+                currentXP[i] = (currentXP[i] + Math.floor(hoursSince * xpPerHour)) as Experience;
+              }
+            }
+
+            samples.push({ time, data: [...currentXP] });
+          }
+        }
+        result.set(displayName, samples);
+      }
+
+      this.state.skillData[period] = result;
+    }
+  }
+
+  async fetchSkillData(period: RequestSkillData.AggregatePeriod): Promise<RequestSkillData.Response> {
+    return new Promise((resolve) => setTimeout(() => resolve(structuredClone(this.state.skillData[period])), 700));
   }
 
   async addGroupMember(member: Member.Name): Promise<RequestAddGroupMember.Response> {
@@ -702,6 +725,8 @@ export default class DemoApi {
     }
 
     this.state.roster.push({ displayName: member });
+
+    this.populateSkillDataFromRoster();
 
     return Promise.resolve({ status: "ok" });
   }
@@ -723,6 +748,8 @@ export default class DemoApi {
 
     oldMember.displayName = newName;
 
+    this.populateSkillDataFromRoster();
+
     return Promise.resolve({ status: "ok" });
   }
   async deleteGroupMember(member: Member.Name): Promise<RequestDeleteGroupMember.Response> {
@@ -730,6 +757,8 @@ export default class DemoApi {
     if (memberInRoster === -1) return Promise.resolve({ status: "error", text: "No member has that name." });
 
     this.state.roster = [...this.state.roster.slice(0, memberInRoster), ...this.state.roster.slice(memberInRoster + 1)];
+
+    this.populateSkillDataFromRoster();
 
     return Promise.resolve({ status: "ok" });
   }

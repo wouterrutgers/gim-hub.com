@@ -8,6 +8,7 @@ import { LoadingScreen } from "../loading-screen/loading-screen";
 import { PlayerIcon } from "../player-icon/player-icon";
 import { useModal } from "../modal/modal";
 import { GroupMemberNamesContext } from "../../context/group-context";
+import { formatTitle } from "../../ts/format-title";
 
 import "./settings.css";
 
@@ -329,12 +330,12 @@ export const SettingsPage = (): ReactElement => {
 
   return (
     <div id="group-settings-container" className="rsborder rsbackground">
-      <h2>Member settings</h2>
+      <h2>{formatTitle("Member settings")}</h2>
       <p>
         These <span className="emphasize">do</span> need to match the in-game names.
       </p>
       {memberElements}
-      <h3>Appearance settings</h3>
+      <h3>{formatTitle("Appearance settings")}</h3>
       <fieldset
         onChange={(e) => {
           const selected = (e.target as Partial<HTMLInputElement>).value;
@@ -344,7 +345,7 @@ export const SettingsPage = (): ReactElement => {
           setSidebarPosition?.(position);
         }}
       >
-        <legend>Player panels</legend>
+        <legend>{formatTitle("Player panels")}</legend>
         {SiteSettings.SidebarPosition.map((position) => {
           return (
             <Fragment key={position}>
@@ -371,7 +372,7 @@ export const SettingsPage = (): ReactElement => {
           setSiteTheme?.(theme);
         }}
       >
-        <legend>Style</legend>
+        <legend>{formatTitle("Style")}</legend>
         {SiteSettings.SiteTheme.map((theme) => {
           const id = `style-${theme}`;
           return (

@@ -6,7 +6,7 @@ permissions:
 on:
   workflow_dispatch:
   push:
-    branches: [master]
+    branches: [master, octane]
 
 jobs:
   docker:
@@ -25,14 +25,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Determine Docker tags
+        id: tags
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/octane" ]; then
+            echo "tags=wouterrutgers/gim-hub.com:octane" >> $GITHUB_OUTPUT
+          else
+            echo "tags=wouterrutgers/gim-hub.com:latest" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: wouterrutgers/gim-hub.com:latest
+          tags: ${{ steps.tags.outputs.tags }}
           platforms: linux/amd64
-          target: final
+          target: production
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false

@@ -24,3 +24,5 @@ yarn-error.log
 /.zed
 .DS_Store
 dump.sh
+frankenphp
+frankenphp-worker.php

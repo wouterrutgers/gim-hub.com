@@ -23,7 +23,7 @@ class GroupMemberController extends Controller
         ]);
 
         $name = $validated['name'];
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         if ($name === Member::SHARED_MEMBER) {
             return response()->json([
@@ -72,7 +72,7 @@ class GroupMemberController extends Controller
         ]);
 
         $name = $validated['name'];
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         if ($name === Member::SHARED_MEMBER) {
             return response()->json([
@@ -105,7 +105,7 @@ class GroupMemberController extends Controller
 
         $originalName = $validated['original_name'];
         $newName = $validated['new_name'];
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         if ($originalName === Member::SHARED_MEMBER || $newName === Member::SHARED_MEMBER) {
             return response()->json([
@@ -162,7 +162,7 @@ class GroupMemberController extends Controller
         ]);
 
         $name = $validated['name'];
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         $member = Member::where('group_id', '=', $groupId)
             ->where('name', '=', $name)
@@ -327,7 +327,7 @@ class GroupMemberController extends Controller
         ]);
 
         $fromTime = Carbon::parse($validated['from_time']);
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         $members = Member::where('group_id', '=', $groupId)
             ->get()
@@ -395,7 +395,7 @@ class GroupMemberController extends Controller
             'period' => 'required|in:Day,Week,Month,Year',
         ]);
 
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
         $period = $validated['period'];
 
         $aggregatePeriod = match ($period) {
@@ -435,7 +435,7 @@ class GroupMemberController extends Controller
 
     public function getCollectionLog(Request $request): Collection
     {
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         return CollectionLog::with('member')
             ->whereHas('member.group', function ($query) use ($groupId) {
@@ -446,7 +446,7 @@ class GroupMemberController extends Controller
 
     public function getHiscores(Request $request): Collection
     {
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         $validated = $request->validate([
             'name' => 'required|string',
@@ -472,7 +472,7 @@ class GroupMemberController extends Controller
         ]);
 
         $memberName = $validated['member_name'];
-        $groupId = app('group')->id;
+        $groupId = $request->attributes->get('group')->id;
 
         $memberExists = Member::where('group_id', '=', $groupId)
             ->where('name', '=', $memberName)

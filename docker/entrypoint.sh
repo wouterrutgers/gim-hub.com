@@ -4,7 +4,6 @@ set -e
 function shutdown {
     echo "Shutting down services..."
     kill -TERM $(jobs -p) 2>/dev/null || true
-    kill -QUIT $(cat /var/run/php-fpm.pid) 2>/dev/null || true
 }
 trap shutdown SIGTERM SIGINT
 
@@ -25,8 +24,12 @@ php artisan route:cache
 php artisan view:cache
 php artisan migrate --force
 
-php-fpm -D
-
 php artisan schedule:work &
 
-exec caddy run --config /etc/caddy/Caddyfile
+if [ -f "/Caddyfile" ]; then
+    echo "Using custom Caddyfile"
+    exec php artisan octane:frankenphp --host=0.0.0.0 --port=8000 --caddyfile=/Caddyfile "$@"
+else
+    echo "Using Octane default configuration"
+    exec php artisan octane:frankenphp --host=0.0.0.0 --port=8000 "$@"
+fi

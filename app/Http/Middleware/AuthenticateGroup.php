@@ -37,7 +37,7 @@ class AuthenticateGroup
             return $this->handleFailedAuth($request, $routeGroup, $token);
         }
 
-        app()->instance('group', $group);
+        $request->attributes->set('group', $group);
 
         return $next($request);
     }

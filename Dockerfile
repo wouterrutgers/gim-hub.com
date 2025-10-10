@@ -1,23 +1,7 @@
-FROM php:8.4-fpm-alpine AS base
+FROM dunglas/frankenphp:php8.4 AS base
 
-WORKDIR /var/www
-
-RUN apk add --no-cache \
-    curl \
-    bash \
-    libzip-dev \
-    oniguruma-dev \
-    zip \
-    unzip \
-    sqlite-dev \
-    sqlite \
-    nodejs \
-    npm \
-    && curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/cfg/gpg/gpg.155B6D79CA56EA34.key' > /etc/apk/keys/caddy.key \
-    && echo "https://dl.cloudsmith.io/public/caddy/stable/alpine/any-version/main" >> /etc/apk/repositories \
-    && apk add --no-cache caddy
-
-RUN docker-php-ext-install -j$(nproc) \
+RUN install-php-extensions \
+    pcntl \
     pdo_mysql \
     pdo_sqlite \
     bcmath \
@@ -26,8 +10,9 @@ RUN docker-php-ext-install -j$(nproc) \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-FROM base AS deps
-WORKDIR /var/www
+WORKDIR /app
+
+FROM base AS dependencies
 
 COPY composer.json composer.lock ./
 
@@ -35,7 +20,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
     composer install --no-dev --prefer-dist --no-interaction --classmap-authoritative --no-scripts
 
 FROM node:24-alpine AS assets
-WORKDIR /app
+WORKDIR /build
 
 COPY package.json ./
 
@@ -48,23 +33,19 @@ COPY public ./public
 
 RUN npm run bundle
 
-FROM base AS prod
-WORKDIR /var/www
+FROM base AS production
 
-COPY docker/php/php.ini $PHP_INI_DIR/conf.d/custom.ini
-COPY docker/php/opcache.ini $PHP_INI_DIR/conf.d/opcache.ini
-COPY docker/php/www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-COPY --chown=www-data:www-data . .
+COPY . /app
 
-COPY --from=deps /var/www/vendor ./vendor
+COPY --from=dependencies /app/vendor ./vendor
 
-COPY --from=assets /app/public/build /var/www/public/build
-COPY --from=assets /app/public/data /var/www/public/data
-COPY --from=assets /app/public/image-chunks /var/www/public/image-chunks
-COPY --from=assets /app/resources/views/index.blade.php /var/www/resources/views/index.blade.php
+COPY --from=assets /build/public/build /app/public/build
+COPY --from=assets /build/public/data /app/public/data
+COPY --from=assets /build/public/image-chunks /app/public/image-chunks
+COPY --from=assets /build/resources/views/index.blade.php /app/resources/views/index.blade.php
 
 RUN composer dump-autoload --optimize --classmap-authoritative --no-dev --no-interaction
 
@@ -73,11 +54,9 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 
 RUN rm -rf .git*
 
-EXPOSE 80
+EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost/ || exit 1
+    CMD curl -f http://localhost:8000/up || exit 1
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-FROM prod AS final

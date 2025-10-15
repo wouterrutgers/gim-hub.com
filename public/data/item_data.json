@@ -85890,5 +85890,135 @@
     "name": "Hueycoatl hide armour set",
     "highalch": 87000,
     "mapping": null
+  },
+  "31172": {
+    "name": "Battlehat",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31174": {
+    "name": "Corrupted shark",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31181": {
+    "name": "Grid master tabard",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31184": {
+    "name": "Grid master tabard (b)",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31187": {
+    "name": "Grid master tabard (p)",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31190": {
+    "name": "Grid master tabard (g)",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31193": {
+    "name": "Swords and emblem",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31196": {
+    "name": "Swords and emblem (b)",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31199": {
+    "name": "Swords and emblem (p)",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31202": {
+    "name": "Swords and emblem (g)",
+    "highalch": 60000,
+    "mapping": null
+  },
+  "31205": {
+    "name": "Grid master altar icon scroll",
+    "highalch": 1500000,
+    "mapping": null
+  },
+  "31208": {
+    "name": "Grid master torch scroll",
+    "highalch": 1500000,
+    "mapping": null
+  },
+  "31211": {
+    "name": "Event lamp",
+    "highalch": 120,
+    "mapping": null
+  },
+  "31212": {
+    "name": "Combatant scroll",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31214": {
+    "name": "Craftsman scroll",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31216": {
+    "name": "Gatherer scroll",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31218": {
+    "name": "Cabbage",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31220": {
+    "name": "Cabbage",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31222": {
+    "name": "Spooky picture",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31223": {
+    "name": "Spooky wall lamp",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31224": {
+    "name": "Spooky scarecrow",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31225": {
+    "name": "Spooky chair",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31227": {
+    "name": "Spooky pumpkin lantern",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31229": {
+    "name": "Grim reaper top",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31231": {
+    "name": "Grim reaper bottoms",
+    "highalch": 0,
+    "mapping": null
+  },
+  "31233": {
+    "name": "Grim reaper gloves",
+    "highalch": 0,
+    "mapping": null
   }
 }

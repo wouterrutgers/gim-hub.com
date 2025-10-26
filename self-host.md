@@ -375,4 +375,4 @@ Don't forget to:
 
 ## Next steps
 
-- Install the RuneLite “GIM Hub” plugin and configure it to use your self‑hosted URL.
+- Install the RuneLite “Group Ironmen Tracker” plugin and configure it to use your self‑hosted URL.

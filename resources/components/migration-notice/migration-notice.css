@@ -1,0 +1,66 @@
+.migration-notice {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1a1a1a;
+  border-top: 2px solid #2a2a2a;
+  padding: 8px 16px;
+  z-index: 9999;
+  box-shadow: 0 -2px 8px rgb(0 0 0 / 50%);
+}
+
+.dark-mode .migration-notice {
+  background: #141414;
+  border-top: 2px solid #252525;
+}
+
+.migration-notice-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.migration-notice-icon {
+  font-size: 20px;
+  filter: drop-shadow(1px 1px 2px rgb(0 0 0 / 80%));
+  flex-shrink: 0;
+}
+
+.migration-notice-text {
+  color: var(--orange);
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.migration-notice-link {
+  color: var(--orange-light);
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.migration-notice-link:hover {
+  color: var(--yellow);
+}
+
+@media only screen and (width <= 800px) {
+  .migration-notice {
+    padding: 6px 12px;
+  }
+
+  .migration-notice-content {
+    gap: 8px;
+  }
+
+  .migration-notice-icon {
+    font-size: 18px;
+  }
+
+  .migration-notice-text {
+    font-size: 12px;
+  }
+}

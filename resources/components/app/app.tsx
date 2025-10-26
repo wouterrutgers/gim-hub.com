@@ -3,6 +3,7 @@ import { type ReactElement, Suspense, lazy } from "react";
 import { UnauthedLayout, AuthedLayout } from "../layout/layout";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { Tooltip } from "../tooltip/tooltip";
+import { MigrationNotice } from "../migration-notice/migration-notice";
 
 // Lazy load components that are not immediately needed
 const Homepage = lazy(() => import("../homepage/homepage").then((m) => ({ default: m.Homepage })));
@@ -115,6 +116,7 @@ export const App = (): ReactElement => {
         </Routes>
       </Suspense>
       <Tooltip />
+      <MigrationNotice />
     </>
   );
 };

@@ -95,17 +95,58 @@ Then open http://localhost (or your domain) in a browser. If you mapped the app 
 
 ## Advanced configuration
 
-### Custom Caddyfile
+### HTTPS setup
 
-If you need custom Caddy configuration, create a `Caddyfile` and mount it in `docker-compose.yml`:
+There are two approaches to enable HTTPS, depending on your needs:
+
+#### Option 1: Built-in HTTPS with automatic certificates
+
+FrankenPHP automatically generates and renews certificates when you use the `--https` flag. This is the simplest approach for production.
+
+**docker-compose.yml:**
 
 ```yaml
+services:
+  app:
+    image: wouterrutgers/gim-hub.com:octane
+    command: ["--https", "--domain=yourdomain.com"]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp" # For HTTP/3 support
+    volumes:
+      - ./.env:/app/.env
+      - caddy_data:/data/caddy
+      - caddy_config:/config/caddy
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    # ... same as before
+
 volumes:
-  - ./.env:/app/.env
-  - ./Caddyfile:/Caddyfile:ro
+  mysql_data:
+  caddy_data:  # Persists Let's Encrypt certificates
+  caddy_config:  # Persists Caddy configuration
 ```
 
-**Important:** your Caddyfile must include the `frankenphp` directive in the global block:
+**Update your `.env`:**
+
+```env
+APP_URL=https://yourdomain.com
+OCTANE_HTTPS=true
+```
+
+> **Important:** The volumes `caddy_data` and `caddy_config` are essential for persisting Let's Encrypt certificates across container restarts. Without them, your app will request new certificates on every restart.
+
+#### Option 2: Custom Caddyfile (for advanced configuration)
+
+If you need custom headers, rate limiting, or other advanced Caddy features, create a custom `Caddyfile`.
+
+**Important:** your Caddyfile must include the `frankenphp` directive in the global block.
+
+**For HTTP only (e.g., behind a reverse proxy):**
 
 ```caddy
 {
@@ -123,9 +164,15 @@ volumes:
 }
 ```
 
-For HTTPS with automatic certificates, you need to update both the Caddyfile and docker-compose.yml:
+Mount it in `docker-compose.yml`:
 
-**Caddyfile:**
+```yaml
+volumes:
+  - ./.env:/app/.env
+  - ./Caddyfile:/Caddyfile:ro
+```
+
+**For HTTPS with automatic certificates:**
 
 ```caddy
 {
@@ -139,6 +186,9 @@ yourdomain.com {
     # Your custom configuration here
     encode gzip zstd
 
+    # Optional: custom headers, rate limiting, etc.
+    header X-Custom-Header "value"
+    
     # Proxy to the Octane server
     reverse_proxy localhost:8000
 }
@@ -157,67 +207,82 @@ services:
     volumes:
       - ./.env:/app/.env
       - ./Caddyfile:/Caddyfile:ro
+      - caddy_data:/data/caddy
+      - caddy_config:/config/caddy
+
+volumes:
+  mysql_data:
+  caddy_data:  # Persists certificates
+  caddy_config:
 ```
 
-This setup allows Caddy to handle HTTPS on ports 80/443 and proxy to the Octane server running on port 8000.
+**Update your `.env`:**
 
-**Alternative: Use Octane's built-in HTTPS support (no custom Caddyfile needed)**
-
-Octane with FrankenPHP has native HTTPS support. To use it, pass the `--https` flag to the container:
-
-```yaml
-services:
-  app:
-    image: wouterrutgers/gim-hub.com:octane
-    command: ["--https"]
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp" # For HTTP/3 support
-    volumes:
-      - ./.env:/app/.env
-    depends_on:
-      mysql:
-        condition: service_healthy
-
-  mysql:
-    # ... same as before
+```env
+APP_URL=https://yourdomain.com
+OCTANE_HTTPS=true
 ```
 
-Then set `OCTANE_HTTPS=true` in your `.env` to ensure Laravel generates HTTPS links. Access your application via `https://localhost` (note: you may need to accept a self-signed certificate in development).
-
-> **Note:** When using `--https` with FrankenPHP, the server automatically listens on ports 80 (HTTP), 443 (HTTPS/HTTP/2), and 443/udp (HTTP/3), regardless of the `--port` flag value.
+> **Note:** With a custom Caddyfile for HTTPS, Caddy handles certificate generation and proxies internally to the Octane server on port 8000. The `OCTANE_HTTPS=true` setting ensures Laravel generates HTTPS links correctly.
 
 ## Migrating from PHP-FPM to Octane
 
 If you're upgrading from `wouterrutgers/gim-hub.com:latest` (PHP-FPM) to `:octane`:
 
 1. **Update image tag** in `docker-compose.yml` from `:latest` to `:octane`
-2. **Update port mapping** in `docker-compose.yml`: Change from `"80:80"` to `"80:8000"` (the internal port changed from 80 to 8000)
+2. **Update port mapping** in `docker-compose.yml`:
+   - For HTTP only: Change from `"80:80"` to `"80:8000"`
+   - For HTTPS: Keep `"80:80"` and `"443:443"` (see HTTPS section above)
 3. **Update .env volume mount path**: Change from `/var/www/.env` to `/app/.env` (the working directory changed)
-4. **Update or remove Caddyfile mount** in `docker-compose.yml`:
-   - **Option A (Recommended):** Remove the Caddyfile mount entirely - Octane provides sensible defaults
+4. **Update APP_URL** in `.env`:
+   - If you had HTTPS: ensure `APP_URL=https://yourdomain.com`
+   - Add `OCTANE_HTTPS=true` to generate HTTPS links
+5. **Add certificate persistence** (if using HTTPS):
+   - Add volumes for `caddy_data` and `caddy_config` (see HTTPS section above)
+6. **Choose HTTPS approach** (if you had HTTPS configured):
+   - **Option A:** Use built-in `--https` flag (remove custom Caddyfile)
    - **Option B:** Update your Caddyfile to work with Octane (see example below)
-5. **Update Caddyfile mount path** (if keeping custom Caddyfile): Change from `/etc/caddy/Caddyfile` to `/Caddyfile`
-6. **Update Caddyfile port** (if using custom Caddyfile): Change from `:80` to `:8000` in your Caddyfile
+7. **Update Caddyfile mount path** (if keeping custom Caddyfile): Change from `/etc/caddy/Caddyfile` to `/Caddyfile`
 
-### Option A: remove Caddyfile (recommended)
+### Option A: Use built-in HTTPS
 
-Simply remove or comment out the Caddyfile volume mount in `docker-compose.yml`:
+If you had HTTPS configured with the old image, the simplest migration is to use FrankenPHP's built-in HTTPS:
 
 ```yaml
+services:
+  app:
+    image: wouterrutgers/gim-hub.com:octane
+    command: ["--https", "--domain=yourdomain.com"]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./.env:/app/.env
+      - caddy_data:/data/caddy
+      - caddy_config:/config/caddy
+    # ... rest of config
+
 volumes:
-  - ./.env:/app/.env
-  # - ./Caddyfile:/Caddyfile:ro  # Remove this line
+  mysql_data:
+  caddy_data:
+  caddy_config:
 ```
 
-Octane will use sensible defaults with HTTP/2, HTTP/3, gzip compression, and security headers.
+Update `.env`:
 
-### Option B: update Caddyfile
+```env
+APP_URL=https://yourdomain.com
+OCTANE_HTTPS=true
+```
 
-If you need custom configuration, update your Caddyfile:
+This approach automatically generates and renews Let's Encrypt certificates.
 
-Example migration of a custom Caddyfile:
+### Option B: Update your Caddyfile
+
+If you need custom configuration, update your Caddyfile. Here are examples for both HTTP and HTTPS scenarios:
+
+**Migrating HTTP-only Caddyfile (behind reverse proxy):**
 
 **Before (PHP-FPM):**
 
@@ -236,7 +301,7 @@ Example migration of a custom Caddyfile:
 }
 ```
 
-**After (Octane):**
+**After (Octane - HTTP only):**
 
 ```caddy
 {
@@ -252,6 +317,46 @@ Example migration of a custom Caddyfile:
     # Just add your custom directives
 }
 ```
+
+**Migrating HTTPS Caddyfile:**
+
+**Before (PHP-FPM with HTTPS):**
+
+```caddy
+{
+    admin off
+    email you@example.com
+}
+
+yourdomain.com {
+    root * /var/www/public
+    php_fastcgi localhost:9000 {
+        root /var/www/public
+    }
+    file_server
+}
+```
+
+**After (Octane with HTTPS):**
+
+```caddy
+{
+    admin off
+    email you@example.com
+
+    frankenphp  # Add this!
+}
+
+yourdomain.com {
+    # Remove root, php_fastcgi, and file_server
+    # FrankenPHP handles everything automatically
+    # Just add your custom directives
+}
+```
+
+Don't forget to:
+- Add `caddy_data` and `caddy_config` volumes to persist certificates
+- Update `.env` with `APP_URL=https://yourdomain.com` and `OCTANE_HTTPS=true`
 
 ## Troubleshooting
 

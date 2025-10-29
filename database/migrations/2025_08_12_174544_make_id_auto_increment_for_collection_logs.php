@@ -21,10 +21,6 @@ return new class extends Migration
         });
 
         Schema::table('collection_pages', function (Blueprint $table) {
-            $table->id()->change();
-        });
-
-        Schema::table('collection_pages', function (Blueprint $table) {
             $table->foreign('collection_tab_id')->references('id')->on('collection_tabs');
         });
 

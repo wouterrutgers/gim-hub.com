@@ -127,8 +127,8 @@ services:
 
 volumes:
   mysql_data:
-  caddy_data:  # Persists Let's Encrypt certificates
-  caddy_config:  # Persists Caddy configuration
+  caddy_data: # Persists Let's Encrypt certificates
+  caddy_config: # Persists Caddy configuration
 ```
 
 **Update your `.env`:**
@@ -188,7 +188,7 @@ yourdomain.com {
 
     # Optional: custom headers, rate limiting, etc.
     header X-Custom-Header "value"
-    
+
     # Proxy to the Octane server
     reverse_proxy localhost:8000
 }
@@ -212,7 +212,7 @@ services:
 
 volumes:
   mysql_data:
-  caddy_data:  # Persists certificates
+  caddy_data: # Persists certificates
   caddy_config:
 ```
 
@@ -355,6 +355,7 @@ yourdomain.com {
 ```
 
 Don't forget to:
+
 - Add `caddy_data` and `caddy_config` volumes to persist certificates
 - Update `.env` with `APP_URL=https://yourdomain.com` and `OCTANE_HTTPS=true`
 

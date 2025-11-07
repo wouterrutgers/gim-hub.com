@@ -102,7 +102,7 @@ export type ImageDisplacement2D = Vec2D<"Displacement", "Image">;
  * rendering perspective.
  */
 const WORLD_TO_REGION_CONVERSION = {
-  x: -128,
+  x: -192,
   y: 0,
 };
 

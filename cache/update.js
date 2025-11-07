@@ -421,7 +421,7 @@ async function moveResults() {
   await retry(() => fs.rmSync(siteItemImagesPath, { recursive: true, force: true }), true);
   await retry(() => fs.rmSync(siteMapImagesPath, { recursive: true, force: true }), true);
   await retry(() => fs.rmSync(siteMapLabelsPath, { recursive: true, force: true }), true);
-  
+
   // Recreate destination folders
   fs.mkdirSync(siteItemImagesPath, { recursive: true });
   fs.mkdirSync(siteMapImagesPath, { recursive: true });

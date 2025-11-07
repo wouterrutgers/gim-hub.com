@@ -52,6 +52,7 @@ const DEFAULT_SKILLS = {
   Prayer: 0 as Experience,
   Ranged: 0 as Experience,
   Runecraft: 0 as Experience,
+  Sailing: 0 as Experience,
   Slayer: 0 as Experience,
   Smithing: 0 as Experience,
   Strength: 0 as Experience,

@@ -202,6 +202,9 @@ const SkillsSchema = ExperienceSchema.array()
     SkillsInBackendOrder.forEach((skill, index) => {
       skills[skill] = xpFlat.at(index);
     });
+    for (const skill of Skill) {
+      skills[skill] ??= 0 as Experience;
+    }
     return skills as Record<Skill, Experience>;
   });
 

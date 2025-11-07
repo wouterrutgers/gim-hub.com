@@ -31,6 +31,7 @@ const SkillsInOSRSDisplayOrder: Skill[] = [
   "Farming",
   "Construction",
   "Hunter",
+  "Sailing",
 ];
 
 export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement => {
@@ -88,13 +89,11 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
       })}
       <div
         className="total-level-box"
+        style={{ gridColumn: "1 / span 3" }}
         onPointerEnter={() => showTooltip({ style: "Total", xp: xpTotal as Experience })}
       >
-        <CachedImage alt="osrs total level" className="total-level-box-image" src="/ui/183-0.png" />
-        <CachedImage alt="osrs total level" className="total-level-box-image" src="/ui/184-0.png" />
         <div className="total-level-box-content">
-          <span>Total level:</span>
-          <span className="total-level-box__level">{levelTotal}</span>
+          <span>Total level: {levelTotal}</span>
         </div>
       </div>
     </div>

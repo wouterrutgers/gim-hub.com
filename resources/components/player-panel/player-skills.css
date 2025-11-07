@@ -1,7 +1,7 @@
 .player-skills {
   display: grid;
   margin-bottom: 4px;
-  height: 256px;
+  height: 275px;
   grid-template-columns: 62px 62px 62px;
   justify-content: center;
 }
@@ -84,6 +84,8 @@
   position: relative;
   justify-content: center;
   align-items: center;
+  background-image: url("../../assets/ui/total-level-background.png");
+  height: 19px;
 }
 
 .total-level-box-content,

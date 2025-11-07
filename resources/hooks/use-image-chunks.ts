@@ -86,6 +86,10 @@ export const useImageChunks = (): {
       const chunk = await loadChunk(chunkKey);
       const hash = chunk[path];
 
+      if (!hash) {
+        return "";
+      }
+
       return `${path}?v=${hash}`;
     },
     [getChunkKey, loadChunk],

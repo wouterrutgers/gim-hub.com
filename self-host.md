@@ -1,6 +1,6 @@
 # GIM Hub self‑hosting guide
 
-This guide shows how to run GIM Hub with Laravel Octane and FrankenPHP for improved performance.
+This guide shows how to run GIM Hub with Laravel Octane and FrankenPHP.
 
 ## Prerequisites
 
@@ -24,10 +24,15 @@ services:
     image: wouterrutgers/gim-hub.com:octane
     ports:
       - "80:8000"
+      # Optional: enable HTTPS (requires custom Caddyfile)
+      # - "443:443"
+      # - "443:443/udp" # For HTTP/3 support
     volumes:
       - ./.env:/app/.env
       # Optional: mount custom Caddyfile for advanced configuration
       # - ./Caddyfile:/Caddyfile:ro
+      - caddy_data:/data/caddy
+      - caddy_config:/config/caddy
     depends_on:
       mysql:
         condition: service_healthy
@@ -50,6 +55,8 @@ services:
 
 volumes:
   mysql_data:
+  caddy_data:
+  caddy_config:
 ```
 
 3. Create `.env` (app key will be generated automatically)
@@ -97,38 +104,78 @@ Then open http://localhost (or your domain) in a browser. If you mapped the app 
 
 ### HTTPS setup
 
-There are two approaches to enable HTTPS, depending on your needs:
+To enable HTTPS with automatic certificates, you need to create a custom Caddyfile. FrankenPHP (built on Caddy) automatically generates and renews Let's Encrypt certificates when you specify a domain.
 
-#### Option 1: Built-in HTTPS with automatic certificates
+**For HTTP only (e.g., behind a reverse proxy or local development):**
 
-FrankenPHP automatically generates and renews certificates when you use the `--https` flag. This is the simplest approach for production.
+```caddy
+{
+    auto_https off
+    admin off
 
-**docker-compose.yml:**
+    frankenphp {
+        worker {
+            file /app/public/frankenphp-worker.php
+            num 2
+        }
+    }
+}
 
-```yaml
-services:
-  app:
-    image: wouterrutgers/gim-hub.com:octane
-    command: ["--https", "--domain=yourdomain.com"]
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp" # For HTTP/3 support
-    volumes:
-      - ./.env:/app/.env
-      - caddy_data:/data/caddy
-      - caddy_config:/config/caddy
-    depends_on:
-      mysql:
-        condition: service_healthy
+:8000 {
+    log {
+        level ERROR
+    }
 
-  mysql:
-    # ... same as before
+    route {
+        root * /app/public
+        encode zstd br gzip
 
-volumes:
-  mysql_data:
-  caddy_data: # Persists Let's Encrypt certificates
-  caddy_config: # Persists Caddy configuration
+        # Optional: custom headers
+        header X-Custom-Header "value"
+
+        php_server {
+            index frankenphp-worker.php
+            try_files {path} frankenphp-worker.php
+            resolve_root_symlink
+        }
+    }
+}
+```
+
+**For HTTPS with automatic certificates:**
+
+```caddy
+{
+    admin off
+    email you@example.com
+
+    frankenphp {
+        worker {
+            file /app/public/frankenphp-worker.php
+            num 2
+        }
+    }
+}
+
+yourdomain.com {
+    log {
+        level ERROR
+    }
+
+    route {
+        root * /app/public
+        encode zstd br gzip
+
+        # Optional: custom headers
+        header X-Custom-Header "value"
+
+        php_server {
+            index frankenphp-worker.php
+            try_files {path} frankenphp-worker.php
+            resolve_root_symlink
+        }
+    }
+}
 ```
 
 **Update your `.env`:**
@@ -140,90 +187,7 @@ OCTANE_HTTPS=true
 
 > **Important:** The volumes `caddy_data` and `caddy_config` are essential for persisting Let's Encrypt certificates across container restarts. Without them, your app will request new certificates on every restart.
 
-#### Option 2: Custom Caddyfile (for advanced configuration)
-
-If you need custom headers, rate limiting, or other advanced Caddy features, create a custom `Caddyfile`.
-
-**Important:** your Caddyfile must include the `frankenphp` directive in the global block.
-
-**For HTTP only (e.g., behind a reverse proxy):**
-
-```caddy
-{
-    auto_https off
-    admin off
-
-    frankenphp  # Required for Octane!
-}
-
-:8000 {
-    # Your custom configuration here
-    header X-Custom-Header "value"
-
-    encode gzip zstd
-}
-```
-
-Mount it in `docker-compose.yml`:
-
-```yaml
-volumes:
-  - ./.env:/app/.env
-  - ./Caddyfile:/Caddyfile:ro
-```
-
-**For HTTPS with automatic certificates:**
-
-```caddy
-{
-    admin off
-    email you@example.com
-
-    frankenphp  # Required for Octane!
-}
-
-yourdomain.com {
-    # Your custom configuration here
-    encode gzip zstd
-
-    # Optional: custom headers, rate limiting, etc.
-    header X-Custom-Header "value"
-
-    # Proxy to the Octane server
-    reverse_proxy localhost:8000
-}
-```
-
-**docker-compose.yml:**
-
-```yaml
-services:
-  app:
-    image: wouterrutgers/gim-hub.com:octane
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp" # For HTTP/3 support
-    volumes:
-      - ./.env:/app/.env
-      - ./Caddyfile:/Caddyfile:ro
-      - caddy_data:/data/caddy
-      - caddy_config:/config/caddy
-
-volumes:
-  mysql_data:
-  caddy_data: # Persists certificates
-  caddy_config:
-```
-
-**Update your `.env`:**
-
-```env
-APP_URL=https://yourdomain.com
-OCTANE_HTTPS=true
-```
-
-> **Note:** With a custom Caddyfile for HTTPS, Caddy handles certificate generation and proxies internally to the Octane server on port 8000. The `OCTANE_HTTPS=true` setting ensures Laravel generates HTTPS links correctly.
+> **Note:** Caddy automatically handles certificate generation and renewal when you specify a domain (e.g., `yourdomain.com`) in your Caddyfile. It then proxies internally to the Octane server on port 8000. The `OCTANE_HTTPS=true` setting ensures Laravel generates HTTPS links correctly.
 
 ## Troubleshooting
 
@@ -231,14 +195,13 @@ OCTANE_HTTPS=true
 - Database connection issues: ensure `.env` uses `DB_HOST=mysql` and MySQL is healthy: `docker compose ps mysql`
 - Permission issues: ensure `.env` is readable: `chmod 644 .env`
 - CSS/JS assets not loading: add `ASSET_URL` to `.env` with the same value as `APP_URL`
-- Custom Caddyfile not working: ensure you included the `frankenphp` directive in the global block
 
 ## Security
 
 - Change all default database passwords for production
 - For HTTPS, use a custom Caddyfile with your domain (automatic certificates) or place behind a reverse proxy
 - Consider Docker secrets for sensitive environment variables
-- The application is production-ready with Octane providing high performance
+- The application is production ready with Octane providing high performance
 
 ## Next steps
 

@@ -19,7 +19,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to DockerHub
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/octane'
+        if: github.ref == 'refs/heads/master'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -28,17 +28,13 @@ jobs:
       - name: Determine Docker tags
         id: tags
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/octane" ]; then
-            echo "tags=wouterrutgers/gim-hub.com:octane" >> $GITHUB_OUTPUT
-          else
-            echo "tags=wouterrutgers/gim-hub.com:latest" >> $GITHUB_OUTPUT
-          fi
+          echo "tags=wouterrutgers/gim-hub.com:octane" >> $GITHUB_OUTPUT
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/octane' }}
+          push: ${{ github.ref == 'refs/heads/master' }}
           tags: ${{ steps.tags.outputs.tags }}
           platforms: linux/amd64
           target: production

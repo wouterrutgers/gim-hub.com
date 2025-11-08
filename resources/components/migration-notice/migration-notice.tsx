@@ -7,7 +7,7 @@ export const MigrationNotice = (): ReactElement => {
       <div className="migration-notice-content">
         <span className="migration-notice-icon">⚠️</span>
         <span className="migration-notice-text">
-          We're migrating to Laravel Octane for better performance. Please migrate before November 16, 2025.{" "}
+          We're migrating to Laravel Octane for better performance. Please migrate before November 23, 2025.{" "}
           <a
             href="https://github.com/wouterrutgers/gim-hub.com/blob/octane/self-host.md#migrating-from-php-fpm-to-octane"
             target="_blank"

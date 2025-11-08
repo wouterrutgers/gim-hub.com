@@ -195,6 +195,11 @@ OCTANE_HTTPS=true
 - Database connection issues: ensure `.env` uses `DB_HOST=mysql` and MySQL is healthy: `docker compose ps mysql`
 - Permission issues: ensure `.env` is readable: `chmod 644 .env`
 - CSS/JS assets not loading: add `ASSET_URL` to `.env` with the same value as `APP_URL`
+- Caddy formatting warning when self hosting: if you see a warning about Caddyfile formatting, you can run:
+  ```bash
+  docker run --rm -v ./Caddyfile:/tmp/Caddyfile caddy:latest caddy fmt --overwrite /tmp/Caddyfile
+  ```
+  Then restart the container: `docker compose restart app`
 
 ## Security
 

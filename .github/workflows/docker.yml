@@ -41,7 +41,7 @@ jobs:
           push: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/octane' }}
           tags: ${{ steps.tags.outputs.tags }}
           platforms: linux/amd64
-          target: final
+          target: production
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false

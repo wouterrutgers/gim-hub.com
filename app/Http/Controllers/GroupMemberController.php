@@ -267,6 +267,8 @@ class GroupMemberController extends Controller
 
     protected function updateCollectionLog(Member $member, array $collectionLogData): void
     {
+        return;
+
         foreach ($collectionLogData as $itemId => $count) {
             $member->collectionLogs()->updateOrCreate([
                 'item_id' => $itemId,

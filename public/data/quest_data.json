@@ -1222,5 +1222,23 @@
     "difficulty": "Intermediate",
     "points": "1",
     "member": true
+  },
+  "7105": {
+    "name": "Current Affairs",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true
+  },
+  "7106": {
+    "name": "Troubled Tortugans",
+    "difficulty": "Experienced",
+    "points": "1",
+    "member": true
+  },
+  "7107": {
+    "name": "The Red Reef",
+    "difficulty": "Experienced",
+    "points": "2",
+    "member": true
   }
 }

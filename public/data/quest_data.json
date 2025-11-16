@@ -1223,6 +1223,12 @@
     "points": "1",
     "member": true
   },
+  "7103": {
+    "name": "Pandemonium",
+    "difficulty": "Novice",
+    "points": "1",
+    "member": true
+  },
   "7104": {
     "name": "Prying Times",
     "difficulty": "Intermediate",

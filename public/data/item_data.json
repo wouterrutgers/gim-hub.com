@@ -91659,7 +91659,7 @@
   },
   "32866": {
     "name": "Broken compass",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32867": {
@@ -91669,7 +91669,7 @@
   },
   "32868": {
     "name": "Broken sextant",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32869": {

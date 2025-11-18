@@ -89364,12 +89364,12 @@
   },
   "32398": {
     "name": "Sailors' amulet (inert)",
-    "highalch": 210,
+    "highalch": 0,
     "mapping": null
   },
   "32399": {
     "name": "Sailors' amulet",
-    "highalch": 210,
+    "highalch": 0,
     "mapping": null
   },
   "32401": {
@@ -91644,7 +91644,7 @@
   },
   "32863": {
     "name": "Rusty locket",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32864": {
@@ -91664,7 +91664,7 @@
   },
   "32867": {
     "name": "Rusty coin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32868": {

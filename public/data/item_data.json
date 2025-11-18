@@ -91649,7 +91649,7 @@
   },
   "32864": {
     "name": "Mouldy block",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32865": {
@@ -91674,7 +91674,7 @@
   },
   "32869": {
     "name": "Mouldy doll",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32870": {

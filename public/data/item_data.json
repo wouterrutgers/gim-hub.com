@@ -86286,7 +86286,7 @@
   },
   "31297": {
     "name": "Pirate medallion",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31298": {
@@ -86301,27 +86301,27 @@
   },
   "31327": {
     "name": "Form cr-4p",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31328": {
     "name": "Form 7r4-5h",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31329": {
     "name": "Form 7r4-5h",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31330": {
     "name": "Mayoral fishbowl",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31331": {
     "name": "Mayor of catherby",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "31333": {
@@ -86585,12 +86585,12 @@
     "mapping": null
   },
   "31441": {
-    "name": "Teleport boat to me",
+    "name": "Summon boat",
     "highalch": 0,
     "mapping": null
   },
   "31443": {
-    "name": "Teleport me to boat",
+    "name": "Teleport to boat",
     "highalch": 0,
     "mapping": null
   },
@@ -87249,7 +87249,7 @@
   },
   "31742": {
     "name": "Storm cruiser's shoes",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31744": {
@@ -87284,7 +87284,7 @@
   },
   "31754": {
     "name": "Nifty shoes",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31756": {
@@ -87319,7 +87319,7 @@
   },
   "31766": {
     "name": "Sleek shoes",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31768": {
@@ -87444,12 +87444,12 @@
   },
   "31833": {
     "name": "Bottle of fish bladder stout",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31834": {
     "name": "Bottle of potterington's marrow wine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31835": {
@@ -87604,17 +87604,17 @@
   },
   "31865": {
     "name": "Daddy's special water's special water",
-    "highalch": 1,
+    "highalch": 0,
     "mapping": null
   },
   "31867": {
     "name": "The melted rocks",
-    "highalch": 1,
+    "highalch": 0,
     "mapping": null
   },
   "31869": {
     "name": "Chuck up's 'stew'",
-    "highalch": 12,
+    "highalch": 0,
     "mapping": null
   },
   "31871": {
@@ -87774,7 +87774,7 @@
   },
   "31903": {
     "name": "Mystery fruit",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31905": {
@@ -89529,17 +89529,17 @@
   },
   "32432": {
     "name": "Charred key",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "32433": {
     "name": "Void orb",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "32434": {
     "name": "Holy sheet",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "32435": {
@@ -91414,42 +91414,42 @@
   },
   "32809": {
     "name": "Bull shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32810": {
     "name": "Hammerhead shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32811": {
     "name": "Tiger shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32812": {
     "name": "Great white shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32813": {
     "name": "Narwhal blubber",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32814": {
     "name": "Orca blubber",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32815": {
     "name": "Pygmy kraken tentacle",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32816": {
     "name": "Spined kraken tentacle",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32817": {
@@ -91459,42 +91459,42 @@
   },
   "32818": {
     "name": "Vampyre kraken tentacle",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32819": {
     "name": "Eagle ray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32820": {
     "name": "Butterfly ray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32821": {
     "name": "Stingray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32822": {
     "name": "Manta ray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32823": {
     "name": "Tern feather",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32824": {
     "name": "Osprey feather",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32825": {
     "name": "Frigatebird feather",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32826": {
@@ -91504,47 +91504,47 @@
   },
   "32827": {
     "name": "Mogre mace",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32828": {
     "name": "Bull shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32829": {
     "name": "Hammerhead shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32830": {
     "name": "Tiger shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32831": {
     "name": "Great white shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32832": {
     "name": "Narwhal tusk",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32833": {
     "name": "Orca teeth",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32834": {
     "name": "Pygmy kraken ink sac",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32835": {
     "name": "Spined kraken ink sac",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32836": {
@@ -91554,42 +91554,42 @@
   },
   "32837": {
     "name": "Vampyre kraken ink sac",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32838": {
     "name": "Eagle ray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32839": {
     "name": "Butterfly ray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32840": {
     "name": "Stingray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32841": {
     "name": "Manta ray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32842": {
     "name": "Tern beak",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32843": {
     "name": "Osprey beak",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32844": {
     "name": "Frigatebird beak",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32845": {
@@ -91599,7 +91599,7 @@
   },
   "32846": {
     "name": "Mogre head",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32847": {
@@ -91770,6 +91770,11 @@
   "32910": {
     "name": "Rosewood logs",
     "highalch": 288,
+    "mapping": null
+  },
+  "32921": {
+    "name": "Jar of feathers",
+    "highalch": 120000,
     "mapping": null
   }
 }

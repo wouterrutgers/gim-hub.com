@@ -1223,6 +1223,35 @@
     "points": "1",
     "member": true
   },
+  "5192": {
+    "name": "An Existential Crisis",
+    "difficulty": "Novice",
+    "points": "0",
+    "member": true,
+    "miniquest": true
+  },
+  "5193": {
+    "name": "Impending Chaos",
+    "difficulty": "Novice",
+    "points": "0",
+    "member": true,
+    "miniquest": true
+  },
+  "5194": {
+    "name": "Vale Totems",
+    "difficulty": "Novice",
+    "points": "0",
+    "member": true,
+    "miniquest": true
+  },
+  "7033": {
+    "name": "Tutorial Island",
+    "difficulty": "Novice",
+    "points": "0",
+    "member": true,
+    "miniquest": true,
+    "hidden": true
+  },
   "7103": {
     "name": "Pandemonium",
     "difficulty": "Novice",
@@ -1246,5 +1275,19 @@
     "difficulty": "Experienced",
     "points": "1",
     "member": true
+  },
+  "7107": {
+    "name": "The Red Reef",
+    "difficulty": "Novice",
+    "points": "0",
+    "member": true,
+    "miniquest": true
+  },
+  "7108": {
+    "name": "Burial at Sea",
+    "difficulty": "Novice",
+    "points": "0",
+    "member": true,
+    "miniquest": true
   }
 }

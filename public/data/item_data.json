@@ -86466,7 +86466,7 @@
   },
   "31392": {
     "name": "Makeshift bandages",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31393": {
@@ -86481,7 +86481,7 @@
   },
   "31397": {
     "name": "List of repairs",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31398": {

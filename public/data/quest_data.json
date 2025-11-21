@@ -1228,28 +1228,27 @@
     "difficulty": "Novice",
     "points": "0",
     "member": true,
-    "miniquest": true
+    "hidden": true
   },
   "5193": {
     "name": "Impending Chaos",
     "difficulty": "Novice",
     "points": "0",
     "member": true,
-    "miniquest": true
+    "hidden": true
   },
   "5194": {
     "name": "Vale Totems",
     "difficulty": "Novice",
     "points": "0",
     "member": true,
-    "miniquest": true
+    "hidden": true
   },
   "7033": {
     "name": "Tutorial Island",
     "difficulty": "Novice",
     "points": "0",
     "member": true,
-    "miniquest": true,
     "hidden": true
   },
   "7103": {
@@ -1281,13 +1280,13 @@
     "difficulty": "Novice",
     "points": "0",
     "member": true,
-    "miniquest": true
+    "hidden": true
   },
   "7108": {
     "name": "Burial at Sea",
     "difficulty": "Novice",
     "points": "0",
     "member": true,
-    "miniquest": true
+    "hidden": true
   }
 }

@@ -2,7 +2,11 @@
   position: absolute;
   top: 0;
   left: 0;
-  font-size: 32px;
+  font-size: 24px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  margin: 8px;
 }
 
 #bottom-right-links {
@@ -10,12 +14,16 @@
   right: 0;
   bottom: 0;
   font-size: 16px;
+  margin: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
 }
 
 .social-links {
   display: flex;
   flex-direction: column;
-  margin: 16px;
+  margin: 0;
   gap: 8px;
   padding: 4px;
   filter: drop-shadow(rgb(0 0 0 / 60%) 2px 2px);

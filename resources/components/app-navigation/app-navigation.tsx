@@ -26,6 +26,12 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
       mobileIconSource: "/images/GitHub-Mark-Light-64px.png",
       isExternal: true,
     },
+    {
+      label: "Discord",
+      href: "https://discord.gg/ZwzW6yYD8V",
+      mobileIconSource: "/images/discord-light.png",
+      isExternal: true,
+    },
     { label: "Setup", href: "/group/setup-instructions", mobileIconSource: "/ui/1094-0.png" },
     { label: "Logout", href: isDemo ? "/" : "/logout", mobileIconSource: "/ui/225-0.png" },
   ];

@@ -75,6 +75,19 @@ async function run() {
     result[questNameToIdMap.get(quest.name)] = quest;
   }
 
+  // Add missing quests from mapping (hidden/unreleased quests) with placeholder data
+  for (const [questId, questName] of Object.entries(questsMapping)) {
+    if (!result[questId]) {
+      result[questId] = {
+        name: questName,
+        difficulty: "Novice",
+        points: "0",
+        member: true,
+        hidden: true,
+      };
+    }
+  }
+
   fs.writeFileSync("./public/data/quest_data.json", JSON.stringify(result, null, 2));
 }
 

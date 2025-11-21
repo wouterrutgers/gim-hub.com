@@ -58,7 +58,7 @@ export const PlayerQuests = ({ member }: { member: Member.Name }): ReactElement 
   const questList = [
     ...(questData
       ?.entries()
-      .filter(([, { name }]) => name.toLowerCase().includes(nameFilter?.toLowerCase()))
+      .filter(([, { name, hidden }]) => !hidden && name.toLowerCase().includes(nameFilter?.toLowerCase()))
       .map(([id, { name, difficulty, member, miniquest }]) => {
         const status = quests?.get(id) ?? "NOT_STARTED";
         return {

@@ -87434,12 +87434,12 @@
   },
   "31831": {
     "name": "Bottle of almost smuggled rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31832": {
     "name": "Bottle of sorodamin's bru",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31833": {
@@ -87454,137 +87454,137 @@
   },
   "31835": {
     "name": "Bottle of slug's mind balm",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31836": {
     "name": "Bottle of spinner's last gasp",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31837": {
     "name": "Bottle of barracuda brew",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31838": {
     "name": "Bottle of banana daiquiri",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31839": {
     "name": "Bottle of kharazi cooler",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31840": {
     "name": "Bottle of dognose draught",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31841": {
     "name": "Bottle of the way home",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31842": {
     "name": "Bottle of platinum rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31843": {
     "name": "Bottle of light in the dark",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31844": {
     "name": "Bottle of ogre prayer potion",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31845": {
     "name": "Bottle of get to the point punch",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31846": {
     "name": "Bottle of oo'glug",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31847": {
     "name": "Bottle of myths mighty mixer",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31848": {
     "name": "Bottle of goldless asgoldian ale",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31849": {
     "name": "Bottle of destructor's cocktail",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31850": {
     "name": "Bottle of zogre's sloppy kisses",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31851": {
     "name": "Bottle of creator's cocktail",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31852": {
     "name": "Bottle of soul",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31853": {
     "name": "Bottle of zul-rye beer",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31854": {
     "name": "Bottle of captain clop's mango gin",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31855": {
     "name": "Bottle of slippery snake skins in possibly gravy",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31856": {
     "name": "Bottle of crystal clear water",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31857": {
     "name": "Bottle of underground passteurised milk",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31858": {
     "name": "Bottle of delicate elven wine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31859": {
     "name": "Bottle of sea spray",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31860": {
     "name": "Bottle of banker's draught",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31861": {
     "name": "Bottle of headless unicornman's heady beer",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31862": {
@@ -87594,12 +87594,12 @@
   },
   "31863": {
     "name": "Bottle of crocodile tears",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31864": {
     "name": "Bottle of fishier bladderier stout",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31865": {
@@ -87619,42 +87619,42 @@
   },
   "31871": {
     "name": "Bottle of tangled toad's legs cider",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31872": {
     "name": "Bottle of waterbirth blue lagoon",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31873": {
     "name": "Bottle of fishtongue tonic",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31874": {
     "name": "Bottle of the endless night",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31875": {
     "name": "Bottle of exile's welcome",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31876": {
     "name": "Bottle of suqah-free cola",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31877": {
     "name": "Bottle of winter sun",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31878": {
     "name": "Bottle of black lobster ale",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31879": {
@@ -87664,57 +87664,57 @@
   },
   "31881": {
     "name": "Bottle of dwarvern wizard's stout bomb",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31882": {
     "name": "Bottle of kgp standard issue martini",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31883": {
     "name": "Bottle of graveyard corpse reviver",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31884": {
     "name": "Bottle of weiss meltwater",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31885": {
     "name": "Bottle of ol' random's reddest rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31886": {
     "name": "Bottle of elidinis's life water",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31887": {
     "name": "Bottle of possible albumen",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31888": {
     "name": "Bottle of alone at sea",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31889": {
     "name": "Bottle of alco-sol",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31890": {
     "name": "Bottle of portal nexus perry",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31891": {
     "name": "Bottle of self-congratulation wine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31892": {
@@ -87724,52 +87724,52 @@
   },
   "31893": {
     "name": "Bottle of crystal clear vodka",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31894": {
     "name": "Bottle of spinning comp-kvass",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31895": {
     "name": "Bottle of puzzlers poteen",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31896": {
     "name": "Bottle of wild wood whisky",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31897": {
     "name": "Bottle of robert's port",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31898": {
     "name": "Bottle of sea shandy 2",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31899": {
     "name": "Bottle of monkfish bladder stout",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31900": {
     "name": "Bottle of lunarshine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31901": {
     "name": "Bottle of impling surprise",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31902": {
     "name": "Bottle of mystery fruit cider",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31903": {
@@ -87779,7 +87779,7 @@
   },
   "31905": {
     "name": "Bottle of captain cat's black rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31906": {

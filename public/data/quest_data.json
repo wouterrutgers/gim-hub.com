@@ -1240,9 +1240,9 @@
   "5194": {
     "name": "Vale Totems",
     "difficulty": "Novice",
-    "points": "0",
+    "points": 0,
     "member": true,
-    "hidden": true
+    "miniquest": true
   },
   "7033": {
     "name": "Tutorial Island",

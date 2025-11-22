@@ -62,6 +62,9 @@ async function run() {
       continue;
     }
 
+    // Quests like Vale Totems explicitly calls out its a miniquest to differentiate with the minigame of the same name
+    quest.name = quest.name.replace(" (miniquest)", "");
+
     if (!questNameToIdMap.has(quest.name)) {
       console.error(`quest mapping is missing quest ${quest.name} from the wiki`);
       continue;

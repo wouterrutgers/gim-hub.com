@@ -1248,7 +1248,8 @@
     "name": "Tutorial Island",
     "difficulty": "Novice",
     "points": 1,
-    "member": false
+    "member": false,
+    "tutorial": true
   },
   "7103": {
     "name": "Pandemonium",

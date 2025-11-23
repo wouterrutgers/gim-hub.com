@@ -36,6 +36,7 @@ const QuestSchema = z.object({
     .refine((id) => id >= 0),
   member: z.boolean(),
   miniquest: z.boolean().optional(),
+  tutorial: z.boolean().optional(),
   hidden: z.boolean().optional(),
 });
 

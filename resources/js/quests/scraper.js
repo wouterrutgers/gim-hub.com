@@ -55,9 +55,10 @@ async function run() {
     quest.member = true;
     quest.miniquest = true;
   });
+  const tutorialQuests = [{ name: "Tutorial Island", difficulty: "Novice", points: 1, member: false, tutorial: true }];
 
   const result = {};
-  for (const quest of [...freeToPlayQuests, ...memberQuests, ...miniQuests]) {
+  for (const quest of [...freeToPlayQuests, ...memberQuests, ...miniQuests, ...tutorialQuests]) {
     if (quest.name.includes("Quick guide")) {
       continue;
     }
@@ -77,17 +78,6 @@ async function run() {
 
   // Add missing quests from mapping (hidden/unreleased quests) with placeholder data
   for (const [questId, questName] of Object.entries(questsMapping)) {
-    if (questName === "Tutorial Island") {
-      result[questId] = {
-        name: questName,
-        difficulty: "Novice",
-        points: 1,
-        member: false,
-      };
-
-      continue;
-    }
-
     if (!result[questId]) {
       result[questId] = {
         name: questName,

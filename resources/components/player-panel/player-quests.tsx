@@ -59,11 +59,12 @@ export const PlayerQuests = ({ member }: { member: Member.Name }): ReactElement 
     ...(questData
       ?.entries()
       .filter(([, { name, hidden }]) => !hidden && name.toLowerCase().includes(nameFilter?.toLowerCase()))
-      .map(([id, { name, difficulty, member, miniquest }]) => {
+      .map(([id, { name, difficulty, member, miniquest, tutorial }]) => {
         const status = quests?.get(id) ?? "NOT_STARTED";
         return {
           member,
           miniquest,
+          tutorial,
           element: (
             <a
               key={id}
@@ -84,10 +85,11 @@ export const PlayerQuests = ({ member }: { member: Member.Name }): ReactElement 
       }) ?? []),
   ];
 
-  const freeQuests = questList?.filter(({ member }) => !member).map(({ element }) => element);
+  const tutorialQuests = questList?.filter(({ tutorial }) => !!tutorial).map(({ element }) => element);
+  const freeQuests = questList?.filter(({ member, tutorial }) => !member && !tutorial).map(({ element }) => element);
   const membersQuests = questList
-    ?.filter(({ member, miniquest }) => {
-      return member && !miniquest;
+    ?.filter(({ member, miniquest, tutorial }) => {
+      return member && !miniquest && !tutorial;
     })
     .map(({ element }) => element);
   const miniquestQuests = questList?.filter(({ miniquest }) => !!miniquest).map(({ element }) => element);
@@ -107,6 +109,8 @@ export const PlayerQuests = ({ member }: { member: Member.Name }): ReactElement 
         {membersQuests}
         <h4 className="player-quests-section-header">{formatTitle("Miniquests")}</h4>
         {miniquestQuests}
+        <h4 className="player-quests-section-header">{formatTitle("Tutorial")}</h4>
+        {tutorialQuests}
       </div>
     </div>
   );

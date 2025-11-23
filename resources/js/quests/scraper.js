@@ -77,11 +77,22 @@ async function run() {
 
   // Add missing quests from mapping (hidden/unreleased quests) with placeholder data
   for (const [questId, questName] of Object.entries(questsMapping)) {
+    if (questName === "Tutorial Island") {
+      result[questId] = {
+        name: questName,
+        difficulty: "Novice",
+        points: 1,
+        member: false,
+      };
+
+      continue;
+    }
+
     if (!result[questId]) {
       result[questId] = {
         name: questName,
         difficulty: "Novice",
-        points: "0",
+        points: 0,
         member: true,
         hidden: true,
       };

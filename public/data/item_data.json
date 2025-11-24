@@ -87224,7 +87224,7 @@
   },
   "31733": {
     "name": "Barrel stand",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31734": {
@@ -87384,7 +87384,7 @@
   },
   "31803": {
     "name": "Spyglass",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31805": {
@@ -87394,7 +87394,7 @@
   },
   "31807": {
     "name": "Crowbar",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31809": {
@@ -87954,12 +87954,12 @@
   },
   "31985": {
     "name": "Captain's log",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31986": {
     "name": "Captain's log",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31989": {

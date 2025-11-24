@@ -157,7 +157,7 @@ class GroupMemberController extends Controller
             'quiver' => 'nullable|array',
             'deposited' => 'nullable|array',
             'diary_vars' => 'nullable|array',
-            'collection_log' => 'nullable|array',
+            'collection_log_v2' => 'nullable|array',
             'interacting' => 'nullable',
         ]);
 
@@ -188,7 +188,7 @@ class GroupMemberController extends Controller
         Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);
         Validators::validateMemberPropLength('diary_vars', $validated['diary_vars'] ?? null, 0, 62);
 
-        $collectionLogData = $validated['collection_log'] ?? null;
+        $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
             $now = now();
@@ -267,9 +267,9 @@ class GroupMemberController extends Controller
 
     protected function updateCollectionLog(Member $member, array $collectionLogData): void
     {
-        return;
-
-        foreach ($collectionLogData as $itemId => $count) {
+        foreach (array_chunk($collectionLogData, 2) as $entry) {
+            $itemId = $entry[0];
+            $count = $entry[1];
             $member->collectionLogs()->updateOrCreate([
                 'item_id' => $itemId,
             ], [

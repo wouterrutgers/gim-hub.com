@@ -352,7 +352,7 @@ export class CanvasMapRenderer {
       followingAnimation: undefined,
       zoom: INITIAL_ZOOM,
       minZoom: 1 / 32,
-      maxZoom: 1 / 4,
+      maxZoom: 1.5,
       followPlayer: undefined,
     };
     this.cursor = {
@@ -769,6 +769,9 @@ export class CanvasMapRenderer {
    * quest star and green agility shortcut arrow.
    */
   private drawVisibleIcons(context: Context2DScaledWrapper): void {
+    const ICON_HIDE_THRESHOLD = 0.55;
+    if (context.getCamera().scale > ICON_HIDE_THRESHOLD) return;
+
     // When zooming out, we want icons to get bigger since they would become unreadable otherwise.
     const iconScale = 16 * Math.max(context.getCamera().scale, 1 / 8);
 
@@ -856,6 +859,9 @@ export class CanvasMapRenderer {
    * "Mudskipper Point".
    */
   private drawVisibleAreaLabels(context: Context2DScaledWrapper): void {
+    const LABEL_HIDE_THRESHOLD = 0.55;
+    if (context.getCamera().scale > LABEL_HIDE_THRESHOLD) return;
+
     const labelScale = Math.max(context.getCamera().scale, 1 / 12);
 
     const visibleRect = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));

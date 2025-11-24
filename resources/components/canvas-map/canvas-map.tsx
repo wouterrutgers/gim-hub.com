@@ -67,6 +67,21 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
     };
   }, [resizeCanvas]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleWheel = (e: WheelEvent): void => {
+      e.preventDefault();
+      renderer?.handleScroll(e.deltaY);
+    };
+
+    canvas.addEventListener("wheel", handleWheel, { passive: false });
+    return (): void => {
+      canvas.removeEventListener("wheel", handleWheel);
+    };
+  }, [renderer]);
+
   const render = useCallback((): void => {
     if (canvasRef.current === null) {
       console.error("No canvas.");
@@ -139,12 +154,6 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
   const handlePointerLeave = useCallback(() => {
     renderer?.handlePointerLeave();
   }, [renderer]);
-  const handleScroll = useCallback(
-    ({ deltaY }: { deltaY: number }) => {
-      renderer?.handleScroll(deltaY);
-    },
-    [renderer],
-  );
   const handleSelectPlane = useCallback(
     (plane: number) => {
       renderer?.setPlane(plane);
@@ -233,7 +242,6 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
         onPointerLeave={handlePointerLeave}
-        onWheel={handleScroll}
         id="canvas-map"
         className={`${draggingClass} ${interactiveClass}`}
         ref={canvasRef}

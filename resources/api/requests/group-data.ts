@@ -193,6 +193,7 @@ export const SkillsInBackendOrder: Skill[] = [
   "Strength",
   "Thieving",
   "Woodcutting",
+  "Sailing",
 ] as const;
 const ExperienceSchema = z.uint32().transform((xp) => xp as Experience);
 const SkillsSchema = ExperienceSchema.array()
@@ -892,7 +893,7 @@ const DiariesSchema = z
 const CoordinatesSchema = z
   .uint32()
   .array()
-  .length(3)
+  .length(4)
   .transform(([x, y, plane]) => ({ x, y, plane }));
 
 const GetGroupDataResponseSchema = z

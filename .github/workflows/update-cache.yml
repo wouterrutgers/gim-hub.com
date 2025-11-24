@@ -8,14 +8,11 @@ permissions:
 on:
   workflow_dispatch:
   schedule:
-    - cron: "47 * * * *"
+    - cron: "47 7 * * *"
 
 jobs:
   cache:
     runs-on: macos-latest
-    strategy:
-      matrix:
-        branch: [master, octane]
 
     steps:
       - uses: actions/setup-node@v6
@@ -29,7 +26,6 @@ jobs:
       - uses: actions/checkout@v5
         with:
           token: ${{ secrets.PAT }}
-          ref: ${{ matrix.branch }}
 
       - uses: actions/checkout@v5
         with:

@@ -1222,5 +1222,71 @@
     "difficulty": "Intermediate",
     "points": "1",
     "member": true
+  },
+  "5192": {
+    "name": "An Existential Crisis",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true,
+    "hidden": true
+  },
+  "5193": {
+    "name": "Impending Chaos",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true,
+    "hidden": true
+  },
+  "5194": {
+    "name": "Vale Totems",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true,
+    "miniquest": true
+  },
+  "7033": {
+    "name": "Tutorial Island",
+    "difficulty": "Novice",
+    "points": 1,
+    "member": false,
+    "tutorial": true
+  },
+  "7103": {
+    "name": "Pandemonium",
+    "difficulty": "Novice",
+    "points": "1",
+    "member": true
+  },
+  "7104": {
+    "name": "Prying Times",
+    "difficulty": "Intermediate",
+    "points": "1",
+    "member": true
+  },
+  "7105": {
+    "name": "Current Affairs",
+    "difficulty": "Novice",
+    "points": "1",
+    "member": true
+  },
+  "7106": {
+    "name": "Troubled Tortugans",
+    "difficulty": "Experienced",
+    "points": "1",
+    "member": true
+  },
+  "7107": {
+    "name": "The Red Reef",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true,
+    "hidden": true
+  },
+  "7108": {
+    "name": "Burial at Sea",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true,
+    "hidden": true
   }
 }

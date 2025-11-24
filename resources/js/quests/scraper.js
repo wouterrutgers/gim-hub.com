@@ -55,9 +55,10 @@ async function run() {
     quest.member = true;
     quest.miniquest = true;
   });
+  const tutorialQuests = [{ name: "Tutorial Island", difficulty: "Novice", points: 1, member: false, tutorial: true }];
 
   const result = {};
-  for (const quest of [...freeToPlayQuests, ...memberQuests, ...miniQuests]) {
+  for (const quest of [...freeToPlayQuests, ...memberQuests, ...miniQuests, ...tutorialQuests]) {
     if (quest.name.includes("Quick guide")) {
       continue;
     }
@@ -73,6 +74,19 @@ async function run() {
     }
 
     result[questNameToIdMap.get(quest.name)] = quest;
+  }
+
+  // Add missing quests from mapping (hidden/unreleased quests) with placeholder data
+  for (const [questId, questName] of Object.entries(questsMapping)) {
+    if (!result[questId]) {
+      result[questId] = {
+        name: questName,
+        difficulty: "Novice",
+        points: 0,
+        member: true,
+        hidden: true,
+      };
+    }
   }
 
   fs.writeFileSync("./public/data/quest_data.json", JSON.stringify(result, null, 2));

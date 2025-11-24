@@ -94,12 +94,11 @@ export type ImageDisplacement2D = Vec2D<"Displacement", "Image">;
  * For whatever reason, regions are identified by a position far offset from
  * their actual coordinate position.
  *
- * E.g., the Lumbridge tile is named "0_52_50.webp". It runs from (3200,3200) to
+ * E.g., the Lumbridge tile is named "0_53_50.webp". It runs from (3200,3200) to
  * (3264,3264) in in-game coordinates.
  *
- * However, (52,50) * 64 = (3328,3200) = (3200,3200) + (128,0), so we offset by
- * that amount. Using the minimum corner (3200,3200) makes the most sense from a
- * rendering perspective.
+ * However, (53,50) * 64 = (3392,3200) = (3200,3200) + (192,0), so we offset by
+ * -192 in the x direction to align region coordinates with world coordinates.
  */
 const WORLD_TO_REGION_CONVERSION = {
   x: -192,

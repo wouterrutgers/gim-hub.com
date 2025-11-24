@@ -1,12 +1,14 @@
 # GIM Hub self‑hosting guide
 
-This guide shows how to run GIM Hub locally. You will create three small files next to each other and start the stack.
+This guide shows how to run GIM Hub with Laravel Octane and FrankenPHP.
 
 ## Prerequisites
 
 - Docker Compose installed
 
 ## Quick start
+
+This setup works out-of-the-box with sensible defaults. You only need to create two files: `docker-compose.yml` and `.env`.
 
 1. Create a working directory and enter it
 
@@ -19,13 +21,18 @@ mkdir gim-hub && cd gim-hub
 ```yaml
 services:
   app:
-    image: wouterrutgers/gim-hub.com:latest
+    image: wouterrutgers/gim-hub.com:octane
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:8000"
+      # Optional: enable HTTPS (requires custom Caddyfile)
+      # - "443:443"
+      # - "443:443/udp" # For HTTP/3 support
     volumes:
-      - ./.env:/var/www/.env
-      - ./caddyfile:/etc/caddy/Caddyfile:ro
+      - ./.env:/app/.env
+      # Optional: mount custom Caddyfile for advanced configuration
+      # - ./Caddyfile:/Caddyfile:ro
+      - caddy_data:/data/caddy
+      - caddy_config:/config/caddy
     depends_on:
       mysql:
         condition: service_healthy
@@ -48,6 +55,8 @@ services:
 
 volumes:
   mysql_data:
+  caddy_data:
+  caddy_config:
 ```
 
 3. Create `.env` (app key will be generated automatically)
@@ -71,91 +80,7 @@ QUEUE_CONNECTION=database
 CACHE_STORE=file
 ```
 
-4. Create `caddyfile`
-
-- Without HTTPS (in case of a reverse proxy handling HTTPS):
-
-```caddy
-{
-    auto_https off
-    admin off
-}
-
-:80 {
-    root * /var/www/public
-
-    php_fastcgi localhost:9000 {
-        root /var/www/public
-    }
-
-    @dotfiles {
-        path */.*
-    }
-    respond @dotfiles 404
-
-    header {
-        X-XSS-Protection "1; mode=block"
-        X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
-        Referrer-Policy "strict-origin-when-cross-origin"
-        Permissions-Policy "geolocation=(), microphone=(), camera=()"
-        -Server
-    }
-
-    @static {
-        path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2
-    }
-    header @static Cache-Control "public, max-age=31536000, immutable"
-
-    file_server
-    try_files {path} {path}/ /index.php?{query}
-    encode gzip zstd
-}
-```
-
-- For with HTTPS (automatic certificates):
-  - Change `APP_URL` in `.env` to your `https://domain.example`.
-  - Replace the `caddyfile` with:
-
-```caddy
-{
-    admin off
-    # optional: email you@example.com
-}
-
-domain.example {
-    root * /var/www/public
-
-    php_fastcgi localhost:9000 {
-        root /var/www/public
-    }
-
-    @dotfiles {
-        path */.*
-    }
-    respond @dotfiles 404
-
-    header {
-        X-XSS-Protection "1; mode=block"
-        X-Content-Type-Options "nosniff"
-        X-Frame-Options "SAMEORIGIN"
-        Referrer-Policy "strict-origin-when-cross-origin"
-        Permissions-Policy "geolocation=(), microphone=(), camera=()"
-        -Server
-    }
-
-    @static {
-        path *.ico *.css *.js *.gif *.webp *.avif *.jpg *.jpeg *.png *.svg *.woff *.woff2
-    }
-    header @static Cache-Control "public, max-age=31536000, immutable"
-
-    file_server
-    try_files {path} {path}/ /index.php?{query}
-    encode gzip zstd
-}
-```
-
-5. Start the stack
+4. Start the stack
 
 ```bash
 docker compose up -d
@@ -168,20 +93,120 @@ Then open http://localhost (or your domain) in a browser. If you mapped the app 
 - Database defaults (change for production):
   - DB name: `gim`, user: `gim`, password: `secret`, root password: `secret`
 - Ports:
-  - If 80/443 are in use, change the app ports to e.g. `"8080:80"` and/or `"8443:443"` in `docker-compose.yml`, and update how you access the site.
+  - The app runs on port 8000 inside the container
+  - If port 80 is in use on the host, change to e.g. `"8080:8000"` in `docker-compose.yml`
+- Laravel Octane with FrankenPHP:
+  - High-performance application server with built-in HTTP/2 and HTTP/3 support
+  - Uses sensible defaults; no Caddyfile needed for basic usage
+  - For custom headers, rate limiting, or HTTPS, mount a custom Caddyfile (see [Advanced Configuration](#advanced-configuration))
+
+## Advanced configuration
+
+### HTTPS setup
+
+To enable HTTPS with automatic certificates, you need to create a custom Caddyfile. FrankenPHP (built on Caddy) automatically generates and renews Let's Encrypt certificates when you specify a domain.
+
+**For HTTP only (e.g., behind a reverse proxy or local development):**
+
+```caddy
+{
+    auto_https off
+    admin off
+
+    frankenphp {
+        worker {
+            file /app/public/frankenphp-worker.php
+            num 2
+        }
+    }
+}
+
+:8000 {
+    log {
+        level ERROR
+    }
+
+    route {
+        root * /app/public
+        encode zstd br gzip
+
+        # Optional: custom headers
+        header X-Custom-Header "value"
+
+        php_server {
+            index frankenphp-worker.php
+            try_files {path} frankenphp-worker.php
+            resolve_root_symlink
+        }
+    }
+}
+```
+
+**For HTTPS with automatic certificates:**
+
+```caddy
+{
+    admin off
+    email you@example.com
+
+    frankenphp {
+        worker {
+            file /app/public/frankenphp-worker.php
+            num 2
+        }
+    }
+}
+
+yourdomain.com {
+    log {
+        level ERROR
+    }
+
+    route {
+        root * /app/public
+        encode zstd br gzip
+
+        # Optional: custom headers
+        header X-Custom-Header "value"
+
+        php_server {
+            index frankenphp-worker.php
+            try_files {path} frankenphp-worker.php
+            resolve_root_symlink
+        }
+    }
+}
+```
+
+**Update your `.env`:**
+
+```env
+APP_URL=https://yourdomain.com
+OCTANE_HTTPS=true
+```
+
+> **Important:** The volumes `caddy_data` and `caddy_config` are essential for persisting Let's Encrypt certificates across container restarts. Without them, your app will request new certificates on every restart.
+
+> **Note:** Caddy automatically handles certificate generation and renewal when you specify a domain (e.g., `yourdomain.com`) in your Caddyfile. It then proxies internally to the Octane server on port 8000. The `OCTANE_HTTPS=true` setting ensures Laravel generates HTTPS links correctly.
 
 ## Troubleshooting
 
 - Container won't start: `docker compose logs app` (or `mysql`)
 - Database connection issues: ensure `.env` uses `DB_HOST=mysql` and MySQL is healthy: `docker compose ps mysql`
-- Permission issues: ensure `.env` and `caddyfile` exist and are readable: `chmod 644 .env caddyfile`
-- CSS/JS assets not loading: if the page loads but styling/scripts are broken, add `ASSET_URL` to your `.env` file with the same value as `APP_URL`.
+- Permission issues: ensure `.env` is readable: `chmod 644 .env`
+- CSS/JS assets not loading: add `ASSET_URL` to `.env` with the same value as `APP_URL`
+- Caddy formatting warning when self hosting: if you see a warning about Caddyfile formatting, you can run:
+  ```bash
+  docker run --rm -v ./Caddyfile:/tmp/Caddyfile caddy:latest caddy fmt --overwrite /tmp/Caddyfile
+  ```
+  Then restart the container: `docker compose restart app`
 
 ## Security
 
-- Change all default database passwords for production.
-- If exposing 443, use the HTTPS Caddyfile and point DNS to your server.
-- Consider Docker secrets or `.env` per environment.
+- Change all default database passwords for production
+- For HTTPS, use a custom Caddyfile with your domain (automatic certificates) or place behind a reverse proxy
+- Consider Docker secrets for sensitive environment variables
+- The application is production ready with Octane providing high performance
 
 ## Next steps
 

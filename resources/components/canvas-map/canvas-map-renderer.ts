@@ -720,7 +720,13 @@ export class CanvasMapRenderer {
           this.outboundImageFetchesCount -= 1;
         };
         void this.getImageUrl(`/map/${regionFileBaseName}.webp`).then((url) => {
-          image.src = url;
+          if (url) {
+            image.src = url;
+
+            return;
+          }
+
+          this.outboundImageFetchesCount -= 1;
         });
 
         this.regions.set(hash3D, region);

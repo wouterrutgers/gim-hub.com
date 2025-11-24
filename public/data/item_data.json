@@ -58623,7 +58623,7 @@
   },
   "22414": {
     "name": "Chain",
-    "highalch": 0,
+    "highalch": 60,
     "mapping": null
   },
   "22415": {
@@ -86286,7 +86286,7 @@
   },
   "31297": {
     "name": "Pirate medallion",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31298": {
@@ -86301,27 +86301,27 @@
   },
   "31327": {
     "name": "Form cr-4p",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31328": {
     "name": "Form 7r4-5h",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31329": {
     "name": "Form 7r4-5h",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31330": {
     "name": "Mayoral fishbowl",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31331": {
     "name": "Mayor of catherby",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "31333": {
@@ -86466,7 +86466,7 @@
   },
   "31392": {
     "name": "Makeshift bandages",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31393": {
@@ -86481,7 +86481,7 @@
   },
   "31397": {
     "name": "List of repairs",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31398": {
@@ -86585,12 +86585,12 @@
     "mapping": null
   },
   "31441": {
-    "name": "Teleport boat to me",
+    "name": "Summon boat",
     "highalch": 0,
     "mapping": null
   },
   "31443": {
-    "name": "Teleport me to boat",
+    "name": "Teleport to boat",
     "highalch": 0,
     "mapping": null
   },
@@ -87224,7 +87224,7 @@
   },
   "31733": {
     "name": "Barrel stand",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31734": {
@@ -87249,7 +87249,7 @@
   },
   "31742": {
     "name": "Storm cruiser's shoes",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31744": {
@@ -87284,7 +87284,7 @@
   },
   "31754": {
     "name": "Nifty shoes",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31756": {
@@ -87319,7 +87319,7 @@
   },
   "31766": {
     "name": "Sleek shoes",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31768": {
@@ -87384,7 +87384,7 @@
   },
   "31803": {
     "name": "Spyglass",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31805": {
@@ -87394,7 +87394,7 @@
   },
   "31807": {
     "name": "Crowbar",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31809": {
@@ -87434,157 +87434,157 @@
   },
   "31831": {
     "name": "Bottle of almost smuggled rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31832": {
     "name": "Bottle of sorodamin's bru",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31833": {
     "name": "Bottle of fish bladder stout",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31834": {
     "name": "Bottle of potterington's marrow wine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31835": {
     "name": "Bottle of slug's mind balm",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31836": {
     "name": "Bottle of spinner's last gasp",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31837": {
     "name": "Bottle of barracuda brew",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31838": {
     "name": "Bottle of banana daiquiri",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31839": {
     "name": "Bottle of kharazi cooler",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31840": {
     "name": "Bottle of dognose draught",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31841": {
     "name": "Bottle of the way home",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31842": {
     "name": "Bottle of platinum rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31843": {
     "name": "Bottle of light in the dark",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31844": {
     "name": "Bottle of ogre prayer potion",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31845": {
     "name": "Bottle of get to the point punch",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31846": {
     "name": "Bottle of oo'glug",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31847": {
     "name": "Bottle of myths mighty mixer",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31848": {
     "name": "Bottle of goldless asgoldian ale",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31849": {
     "name": "Bottle of destructor's cocktail",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31850": {
     "name": "Bottle of zogre's sloppy kisses",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31851": {
     "name": "Bottle of creator's cocktail",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31852": {
     "name": "Bottle of soul",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31853": {
     "name": "Bottle of zul-rye beer",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31854": {
     "name": "Bottle of captain clop's mango gin",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31855": {
     "name": "Bottle of slippery snake skins in possibly gravy",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31856": {
     "name": "Bottle of crystal clear water",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31857": {
     "name": "Bottle of underground passteurised milk",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31858": {
     "name": "Bottle of delicate elven wine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31859": {
     "name": "Bottle of sea spray",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31860": {
     "name": "Bottle of banker's draught",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31861": {
     "name": "Bottle of headless unicornman's heady beer",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31862": {
@@ -87594,67 +87594,67 @@
   },
   "31863": {
     "name": "Bottle of crocodile tears",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31864": {
     "name": "Bottle of fishier bladderier stout",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31865": {
     "name": "Daddy's special water's special water",
-    "highalch": 1,
+    "highalch": 0,
     "mapping": null
   },
   "31867": {
     "name": "The melted rocks",
-    "highalch": 1,
+    "highalch": 0,
     "mapping": null
   },
   "31869": {
     "name": "Chuck up's 'stew'",
-    "highalch": 12,
+    "highalch": 0,
     "mapping": null
   },
   "31871": {
     "name": "Bottle of tangled toad's legs cider",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31872": {
     "name": "Bottle of waterbirth blue lagoon",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31873": {
     "name": "Bottle of fishtongue tonic",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31874": {
     "name": "Bottle of the endless night",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31875": {
     "name": "Bottle of exile's welcome",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31876": {
     "name": "Bottle of suqah-free cola",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31877": {
     "name": "Bottle of winter sun",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31878": {
     "name": "Bottle of black lobster ale",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31879": {
@@ -87664,57 +87664,57 @@
   },
   "31881": {
     "name": "Bottle of dwarvern wizard's stout bomb",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31882": {
     "name": "Bottle of kgp standard issue martini",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31883": {
     "name": "Bottle of graveyard corpse reviver",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31884": {
     "name": "Bottle of weiss meltwater",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31885": {
     "name": "Bottle of ol' random's reddest rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31886": {
     "name": "Bottle of elidinis's life water",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31887": {
     "name": "Bottle of possible albumen",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31888": {
     "name": "Bottle of alone at sea",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31889": {
     "name": "Bottle of alco-sol",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31890": {
     "name": "Bottle of portal nexus perry",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31891": {
     "name": "Bottle of self-congratulation wine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31892": {
@@ -87724,62 +87724,62 @@
   },
   "31893": {
     "name": "Bottle of crystal clear vodka",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31894": {
     "name": "Bottle of spinning comp-kvass",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31895": {
     "name": "Bottle of puzzlers poteen",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31896": {
     "name": "Bottle of wild wood whisky",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31897": {
     "name": "Bottle of robert's port",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31898": {
     "name": "Bottle of sea shandy 2",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31899": {
     "name": "Bottle of monkfish bladder stout",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31900": {
     "name": "Bottle of lunarshine",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31901": {
     "name": "Bottle of impling surprise",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31902": {
     "name": "Bottle of mystery fruit cider",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31903": {
     "name": "Mystery fruit",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31905": {
     "name": "Bottle of captain cat's black rum",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31906": {
@@ -87954,12 +87954,12 @@
   },
   "31985": {
     "name": "Captain's log",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31986": {
     "name": "Captain's log",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31989": {
@@ -89364,12 +89364,12 @@
   },
   "32398": {
     "name": "Sailors' amulet (inert)",
-    "highalch": 210,
+    "highalch": 0,
     "mapping": null
   },
   "32399": {
     "name": "Sailors' amulet",
-    "highalch": 210,
+    "highalch": 0,
     "mapping": null
   },
   "32401": {
@@ -89529,17 +89529,17 @@
   },
   "32432": {
     "name": "Charred key",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "32433": {
     "name": "Void orb",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "32434": {
     "name": "Holy sheet",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "32435": {
@@ -91414,42 +91414,42 @@
   },
   "32809": {
     "name": "Bull shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32810": {
     "name": "Hammerhead shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32811": {
     "name": "Tiger shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32812": {
     "name": "Great white shark jaw",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32813": {
     "name": "Narwhal blubber",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32814": {
     "name": "Orca blubber",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32815": {
     "name": "Pygmy kraken tentacle",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32816": {
     "name": "Spined kraken tentacle",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32817": {
@@ -91459,42 +91459,42 @@
   },
   "32818": {
     "name": "Vampyre kraken tentacle",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32819": {
     "name": "Eagle ray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32820": {
     "name": "Butterfly ray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32821": {
     "name": "Stingray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32822": {
     "name": "Manta ray fin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32823": {
     "name": "Tern feather",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32824": {
     "name": "Osprey feather",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32825": {
     "name": "Frigatebird feather",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32826": {
@@ -91504,47 +91504,47 @@
   },
   "32827": {
     "name": "Mogre mace",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32828": {
     "name": "Bull shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32829": {
     "name": "Hammerhead shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32830": {
     "name": "Tiger shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32831": {
     "name": "Great white shark liver",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32832": {
     "name": "Narwhal tusk",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32833": {
     "name": "Orca teeth",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32834": {
     "name": "Pygmy kraken ink sac",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32835": {
     "name": "Spined kraken ink sac",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32836": {
@@ -91554,42 +91554,42 @@
   },
   "32837": {
     "name": "Vampyre kraken ink sac",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32838": {
     "name": "Eagle ray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32839": {
     "name": "Butterfly ray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32840": {
     "name": "Stingray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32841": {
     "name": "Manta ray skin",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32842": {
     "name": "Tern beak",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32843": {
     "name": "Osprey beak",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32844": {
     "name": "Frigatebird beak",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32845": {
@@ -91599,7 +91599,7 @@
   },
   "32846": {
     "name": "Mogre head",
-    "highalch": 120,
+    "highalch": 0,
     "mapping": null
   },
   "32847": {
@@ -91644,42 +91644,42 @@
   },
   "32863": {
     "name": "Rusty locket",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32864": {
     "name": "Mouldy block",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32865": {
     "name": "Dull knife",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32866": {
     "name": "Broken compass",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32867": {
     "name": "Rusty coin",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32868": {
     "name": "Broken sextant",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32869": {
     "name": "Mouldy doll",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32870": {
     "name": "Smashed mirror",
-    "highalch": 60,
+    "highalch": 0,
     "mapping": null
   },
   "32871": {
@@ -91724,7 +91724,7 @@
   },
   "32886": {
     "name": "Chain",
-    "highalch": 0,
+    "highalch": 90,
     "mapping": null
   },
   "32889": {
@@ -91770,6 +91770,11 @@
   "32910": {
     "name": "Rosewood logs",
     "highalch": 288,
+    "mapping": null
+  },
+  "32921": {
+    "name": "Jar of feathers",
+    "highalch": 120000,
     "mapping": null
   }
 }

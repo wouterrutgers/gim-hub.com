@@ -8,6 +8,8 @@
   Track your team's progress and view member locations with live data streaming from RuneLite.
   
   **🌐 [Visit GIM Hub](https://gim-hub.com)**
+  
+  **💬 [Join our Discord](https://discord.gg/ZwzW6yYD8V)**
 </div>
 
 ## ✨ Features

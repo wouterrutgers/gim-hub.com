@@ -267,9 +267,7 @@ class GroupMemberController extends Controller
 
     protected function updateCollectionLog(Member $member, array $collectionLogData): void
     {
-        foreach (array_chunk($collectionLogData, 2) as $entry) {
-            $itemId = $entry[0];
-            $count = $entry[1];
+        foreach (array_chunk($collectionLogData, 2) as [$itemId, $count]) {
             $member->collectionLogs()->updateOrCreate([
                 'item_id' => $itemId,
             ], [

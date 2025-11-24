@@ -23,11 +23,11 @@ jobs:
         with:
           java-version: 11
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT }}
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           repository: runelite/runelite
           path: cache/runelite

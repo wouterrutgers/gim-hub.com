@@ -175,7 +175,7 @@ class GroupMemberController extends Controller
         }
 
         Validators::validateMemberPropLength('stats', $validated['stats'] ?? null, 7, 7);
-        Validators::validateMemberPropLength('coordinates', $validated['coordinates'] ?? null, 3, 3);
+        Validators::validateMemberPropLength('coordinates', $validated['coordinates'] ?? null, 4, 4);
         Validators::validateMemberPropLength('skills', $validated['skills'] ?? null, 23, 24);
         Validators::validateMemberPropLength('quests', $validated['quests'] ?? null, 0, 250);
         Validators::validateMemberPropLength('inventory', $validated['inventory'] ?? null, 56, 56);

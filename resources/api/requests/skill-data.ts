@@ -46,7 +46,7 @@ const MemberSkillDataSchema = z.object({
     .uint32()
     .transform((xp) => xp as Experience)
     .array()
-    .length(23),
+    .length(24),
 });
 type MemberSkillData = z.infer<typeof MemberSkillDataSchema>;
 

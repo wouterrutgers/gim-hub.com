@@ -87219,7 +87219,7 @@
   },
   "31732": {
     "name": "Stormy key",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31733": {
@@ -87229,7 +87229,7 @@
   },
   "31734": {
     "name": "Ralph's fabric roll",
-    "highalch": 300,
+    "highalch": 0,
     "mapping": null
   },
   "31736": {
@@ -87254,17 +87254,17 @@
   },
   "31744": {
     "name": "Fetid key",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31745": {
     "name": "Captured wind mote",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31746": {
     "name": "Gurtob's fabric roll",
-    "highalch": 300,
+    "highalch": 0,
     "mapping": null
   },
   "31748": {
@@ -87289,17 +87289,17 @@
   },
   "31756": {
     "name": "Serrated key",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31757": {
     "name": "Heart of ithell",
-    "highalch": 18,
+    "highalch": 0,
     "mapping": null
   },
   "31758": {
     "name": "Gwyna's fabric roll",
-    "highalch": 300,
+    "highalch": 0,
     "mapping": null
   },
   "31760": {
@@ -87399,12 +87399,12 @@
   },
   "31809": {
     "name": "Portable weather station",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31810": {
     "name": "Data filled portable weather station",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31811": {

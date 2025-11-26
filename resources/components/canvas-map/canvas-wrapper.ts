@@ -247,4 +247,54 @@ export class Context2DScaledWrapper {
     this.context.fillStyle = "yellow";
     this.context.fillText(label, positionView.x, positionView.y);
   }
+
+  drawBoatIcon({ position, rotation }: { position: WorldPosition2D; rotation: number }): void {
+    const positionView = Pos2D.worldToView({ world: position, camera: this.camera });
+    const scale = 0.42;
+
+    this.context.save();
+    this.context.translate(positionView.x, positionView.y);
+    this.context.rotate(rotation);
+    this.context.scale(scale, scale);
+    this.context.translate(-28, -45);
+
+    this.context.fillStyle = "#11131b";
+    this.context.fillRect(25, 0, 6, 40);
+
+    this.context.fillStyle = "#613f24";
+    this.context.strokeStyle = "#2a1a12";
+    this.context.lineWidth = 2;
+    this.context.lineJoin = "round";
+
+    this.context.beginPath();
+    this.context.moveTo(28, 12);
+    this.context.bezierCurveTo(20, 20, 15, 38, 15, 60);
+    this.context.lineTo(15, 90);
+    this.context.lineTo(41, 90);
+    this.context.lineTo(41, 60);
+    this.context.bezierCurveTo(41, 38, 36, 20, 28, 12);
+    this.context.closePath();
+    this.context.fill();
+    this.context.stroke();
+
+    this.context.strokeStyle = "#7e5231";
+    this.context.lineWidth = 1;
+
+    this.context.beginPath();
+    this.context.moveTo(22, 24);
+    this.context.bezierCurveTo(19, 40, 19, 60, 21, 80);
+    this.context.stroke();
+
+    this.context.beginPath();
+    this.context.moveTo(28, 20);
+    this.context.bezierCurveTo(27, 40, 27, 60, 28, 84);
+    this.context.stroke();
+
+    this.context.beginPath();
+    this.context.moveTo(34, 24);
+    this.context.bezierCurveTo(36, 40, 36, 60, 34, 80);
+    this.context.stroke();
+
+    this.context.restore();
+  }
 }

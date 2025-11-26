@@ -15,7 +15,12 @@ const memberCoordinatesSelector = (state: Map<Member.Name, Member.State> | undef
     ...state
       .entries()
       .filter(([_, state]) => state.coordinates)
-      .map(([name, state]) => ({ label: name, coords: state.coordinates!.coords, plane: state.coordinates!.plane })),
+      .map(([name, state]) => ({
+        label: name,
+        coords: state.coordinates!.coords,
+        plane: state.coordinates!.plane,
+        isOnBoat: state.coordinates!.isOnBoat,
+      })),
   ];
 };
 

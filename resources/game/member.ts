@@ -16,7 +16,7 @@ export interface State {
   quiver: ItemCollection;
   equipment: Equipment;
   inventory: Inventory;
-  coordinates?: { coords: WikiPosition2D; plane: number };
+  coordinates?: { coords: WikiPosition2D; plane: number; isOnBoat: boolean };
   interacting?: NPCInteraction;
   stats?: Stats;
   skills?: Skills;
@@ -28,6 +28,7 @@ export interface State {
 export interface Position {
   coords: WikiPosition2D;
   plane: number;
+  isOnBoat: boolean;
 }
 export type ItemCollection = Map<ItemID, number>;
 export type Equipment = Map<EquipmentSlot, ItemStack>;

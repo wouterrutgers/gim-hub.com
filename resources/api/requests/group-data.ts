@@ -894,7 +894,7 @@ const CoordinatesSchema = z
   .uint32()
   .array()
   .length(4)
-  .transform(([x, y, plane]) => ({ x, y, plane }));
+  .transform(([x, y, plane, isOnBoat]) => ({ x, y, plane, isOnBoat: isOnBoat === 1 }));
 
 const GetGroupDataResponseSchema = z
   .object({

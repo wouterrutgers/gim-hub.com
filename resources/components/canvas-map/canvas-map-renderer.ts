@@ -21,6 +21,7 @@ export interface LabelledCoordinates {
   label: string;
   coords: WikiPosition2D;
   plane: number;
+  isOnBoat: boolean;
 }
 
 interface CoordinateLerp {
@@ -253,7 +254,10 @@ export class CanvasMapRenderer {
   private iconsAtlas?: ImageBitmap;
   private iconsByRegion?: MapIconGrid;
   private labelsByRegion?: MapLabelGrid;
-  private playerPositions = new Map<string, { coords: WorldPosition2D; plane: number }>();
+  private playerPositions = new Map<
+    string,
+    { coords: WorldPosition2D; plane: number; isOnBoat: boolean; previousCoords?: WorldPosition2D }
+  >();
   private getImageUrl: (path: string) => Promise<string>;
 
   private interactive = false;
@@ -464,13 +468,15 @@ export class CanvasMapRenderer {
    * A rerender occurs next frame if anything is changed.
    */
   public tryUpdatePlayerPositions(positions: LabelledCoordinates[], roster: Set<string>): void {
-    for (const { label, coords: coordsWiki, plane } of positions) {
+    for (const { label, coords: coordsWiki, plane, isOnBoat } of positions) {
       const current = this.playerPositions.get(label);
       const coords = Pos2D.wikiToWorld(coordsWiki);
 
-      if (current && Vec2D.equals(coords, current.coords) && plane === current.plane) continue;
+      if (current && Vec2D.equals(coords, current.coords) && plane === current.plane && isOnBoat === current.isOnBoat)
+        continue;
 
-      this.playerPositions.set(label, { coords, plane });
+      const previousCoords = current?.coords;
+      this.playerPositions.set(label, { coords, plane, isOnBoat, previousCoords });
       this.forceRenderNextFrame = true;
 
       if (this.camera.followPlayer !== label) continue;
@@ -904,21 +910,44 @@ export class CanvasMapRenderer {
    * label of their name.
    */
   private drawPlayerPositionMarkers(context: Context2DScaledWrapper): void {
-    for (const [player, { coords }] of this.playerPositions) {
+    const zoom = context.getCamera().scale;
+    const labelOffsetBoat = -1 - 8.5 * zoom;
+
+    for (const [player, { coords, isOnBoat, previousCoords }] of this.playerPositions) {
       const rect = Rect2D.create({
         position: coords,
         extent: Vec2D.create<WorldDisplacement2D>({ x: 1, y: -1 }),
       });
 
-      context.drawRect({
-        fillStyle: "rgb(0 200 255 / 50%)",
-        insetBorder: { style: "rgb(0 200 255 / 50%)", widthPixels: 5 },
-        rect,
-      });
-      context.drawRSText({
-        label: player,
-        position: Vec2D.add(coords, Vec2D.create<WorldDisplacement2D>({ x: 0.5, y: -1 })),
-      });
+      if (isOnBoat) {
+        let rotation = Math.PI / 2;
+        if (previousCoords && !Vec2D.equals(coords, previousCoords)) {
+          const dx = coords.x - previousCoords.x;
+          const dy = coords.y - previousCoords.y;
+          rotation = Math.atan2(dy, dx) + Math.PI / 2;
+        }
+
+        context.drawBoatIcon({
+          position: Vec2D.add(coords, Vec2D.create<WorldDisplacement2D>({ x: 0.5, y: -0.5 })),
+          rotation,
+        });
+
+        context.drawRSText({
+          label: player,
+          position: Vec2D.add(coords, Vec2D.create<WorldDisplacement2D>({ x: 0.5, y: labelOffsetBoat })),
+        });
+      } else {
+        context.drawRect({
+          fillStyle: "rgb(0 200 255 / 50%)",
+          insetBorder: { style: "rgb(0 200 255 / 50%)", widthPixels: 5 },
+          rect,
+        });
+
+        context.drawRSText({
+          label: player,
+          position: Vec2D.add(coords, Vec2D.create<WorldDisplacement2D>({ x: 0.5, y: -1 })),
+        });
+      }
     }
   }
 

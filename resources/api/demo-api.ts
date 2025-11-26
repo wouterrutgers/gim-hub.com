@@ -104,7 +104,7 @@ const mockGroupDataResponse = (
         run: { current: 100, max: 100 },
         world: 201,
       },
-      coordinates: { x: 2465, y: 2848, plane: 1 },
+      coordinates: { x: 2465, y: 2848, plane: 1, isOnBoat: false },
     } satisfies GetGroupDataResponse[number];
     member.lastUpdated = new Date(Date.now());
 
@@ -183,7 +183,7 @@ const mockGroupDataResponse = (
         ["Boots", { itemID: 4131 as ItemID, quantity: 1 }], // rune boots
         ["Gloves", { itemID: 1495 as ItemID, quantity: 1 }], // klank's gauntlets
       ]),
-      coordinates: { x: 3616, y: 3525, plane: 0 },
+      coordinates: { x: 3616, y: 3525, plane: 0, isOnBoat: false },
       lastUpdated: new Date(Date.now()),
     } satisfies GetGroupDataResponse[number];
 
@@ -264,7 +264,7 @@ const mockGroupDataResponse = (
     }
 
     const [x, y] = timeline.at(index) ?? [0, 0];
-    member.coordinates = { x, y, plane: 0 };
+    member.coordinates = { x, y, plane: 0, isOnBoat: false };
 
     results.push(member);
   }
@@ -286,7 +286,7 @@ const mockGroupDataResponse = (
       },
       quests: MAX_QUEST,
       diaries: MAX_DIARY,
-      coordinates: { x: 3354, y: 9120, plane: 0 },
+      coordinates: { x: 3354, y: 9120, plane: 0, isOnBoat: false },
       quiver: new Map([[11212 as ItemID, 24381]]), // dragon arrow
       runePouch: new Map([
         [565 as ItemID, 13929392], // blood rune
@@ -457,6 +457,7 @@ export default class DemoApi {
             y: coordinates.y,
           }),
           plane: coordinates.plane,
+          isOnBoat: coordinates.isOnBoat,
         };
       }
 

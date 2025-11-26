@@ -63,6 +63,7 @@ export default class Api {
             y: coordinates.y,
           }),
           plane: coordinates.plane,
+          isOnBoat: coordinates.isOnBoat,
         };
       }
 

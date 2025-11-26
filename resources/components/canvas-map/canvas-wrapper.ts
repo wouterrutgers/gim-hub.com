@@ -206,11 +206,16 @@ export class Context2DScaledWrapper {
     alpha: number;
   }): void {
     const { min, max } = Rect2D.worldToView({ min: rect.min, max: rect.max, camera: this.camera });
-    const position = min;
-    const extent = Vec2D.sub(max, min);
 
     const previousAlpha = this.context.globalAlpha;
     this.context.globalAlpha = alpha;
+    this.context.setTransform(1, 0, 0, 1, 0, 0);
+
+    const centerOffset = this.context.canvas.width / 2;
+    const dx = Math.floor(this.pixelRatio * min.x + centerOffset);
+    const dy = Math.floor(this.pixelRatio * min.y + this.context.canvas.height / 2);
+    const dw = Math.ceil(this.pixelRatio * (max.x - min.x));
+    const dh = Math.ceil(this.pixelRatio * (max.y - min.y));
 
     this.context.drawImage(
       image,
@@ -218,11 +223,12 @@ export class Context2DScaledWrapper {
       imageOffsetInPixels.y,
       imageExtentInPixels.x,
       imageExtentInPixels.y,
-      position.x,
-      position.y,
-      extent.x,
-      extent.y,
+      dx,
+      dy,
+      dw,
+      dh,
     );
+    this.context.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, centerOffset, this.context.canvas.height / 2);
     this.context.globalAlpha = previousAlpha;
   }
 

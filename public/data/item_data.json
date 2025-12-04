@@ -88448,12 +88448,12 @@
     "mapping": null
   },
   "32170": {
-    "name": "Mahogany mast and linen sails",
+    "name": "Mahogany mast and canvas sails",
     "highalch": 0,
     "mapping": null
   },
   "32171": {
-    "name": "Mahogany mast and linen sails",
+    "name": "Mahogany mast and canvas sails",
     "highalch": 0,
     "mapping": null
   },
@@ -91775,6 +91775,21 @@
   "32921": {
     "name": "Jar of feathers",
     "highalch": 120000,
+    "mapping": null
+  },
+  "32923": {
+    "name": "Steel nails",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32924": {
+    "name": "Crate of arrowtips",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32925": {
+    "name": "Crate of clothes",
+    "highalch": 0,
     "mapping": null
   }
 }

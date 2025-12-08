@@ -234,16 +234,17 @@ export const ItemsPage = (): ReactElement => {
   const { totalHighAlch, totalGEPrice, filteredItems } = [...(items ?? [])].reduce<ItemAggregates>(
     (previousValue, [itemID, quantityByMemberName]) => {
       const itemDatum = itemData?.get(itemID);
+      if (!itemDatum) return previousValue;
 
-      if (itemDatum && searchString.includes("|")) {
-        let success = false;
-        for (const splitSearch of searchString.split("|")) {
-          if (splitSearch.trim().length == 0) continue;
-          success = itemDatum.name.toLocaleLowerCase().includes(splitSearch.trim());
-          if (success) break;
-        }
-        if (!success) return previousValue;
-      } else if (!itemDatum?.name.toLocaleLowerCase().includes(searchString)) return previousValue;
+      if (searchString.length > 0) {
+        const name = itemDatum.name.toLocaleLowerCase();
+        const parts = searchString
+          .split("|")
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0);
+        const matches = parts.length > 0 && parts.some((part) => name.includes(part));
+        if (!matches) return previousValue;
+      }
 
       let filteredTotalQuantity = 0;
       quantityByMemberName.forEach((quantity, name) => {

@@ -234,7 +234,16 @@ export const ItemsPage = (): ReactElement => {
   const { totalHighAlch, totalGEPrice, filteredItems } = [...(items ?? [])].reduce<ItemAggregates>(
     (previousValue, [itemID, quantityByMemberName]) => {
       const itemDatum = itemData?.get(itemID);
-      if (!itemDatum?.name.toLocaleLowerCase().includes(searchString)) return previousValue;
+
+      if (itemDatum && searchString.includes("|")) {
+        let success = false;
+        for (const splitSearch of searchString.split("|")) {
+          if (splitSearch.trim().length == 0) continue;
+          success = itemDatum.name.toLocaleLowerCase().includes(splitSearch.trim());
+          if (success) break;
+        }
+        if (!success) return previousValue;
+      } else if (!itemDatum?.name.toLocaleLowerCase().includes(searchString)) return previousValue;
 
       let filteredTotalQuantity = 0;
       quantityByMemberName.forEach((quantity, name) => {
@@ -302,7 +311,7 @@ export const ItemsPage = (): ReactElement => {
     <>
       <div id="items-page-head">
         <SearchElement
-          onChange={(string) => setSearchString(string.toLocaleLowerCase())}
+          onChange={(string) => setSearchString(string.toLocaleLowerCase().trim())}
           id="items-page-search"
           placeholder="Search"
           auto-focus

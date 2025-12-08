@@ -154,6 +154,7 @@ class GroupMemberController extends Controller
             'shared_bank' => 'nullable|array',
             'rune_pouch' => 'nullable|array',
             'seed_vault' => 'nullable|array',
+            'poh_wardrobe' => 'nullable|array',
             'quiver' => 'nullable|array',
             'deposited' => 'nullable|array',
             'diary_vars' => 'nullable|array',
@@ -184,6 +185,7 @@ class GroupMemberController extends Controller
         Validators::validateMemberPropLength('shared_bank', $validated['shared_bank'] ?? null, 0, 1000);
         Validators::validateMemberPropLength('rune_pouch', $validated['rune_pouch'] ?? null, 6, 8);
         Validators::validateMemberPropLength('seed_vault', $validated['seed_vault'] ?? null, 0, 500);
+        Validators::validateMemberPropLength('poh_wardrobe', $validated['poh_wardrobe'] ?? null, 0, 1000);
         Validators::validateMemberPropLength('quiver', $validated['quiver'] ?? null, 2, 2);
         Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);
         Validators::validateMemberPropLength('diary_vars', $validated['diary_vars'] ?? null, 0, 62);
@@ -228,6 +230,10 @@ class GroupMemberController extends Controller
             if (! is_null($validated['seed_vault'] ?? null)) {
                 $member->seed_vault = $validated['seed_vault'];
                 $member->seed_vault_last_update = $now;
+            }
+            if (! is_null($validated['poh_wardrobe'] ?? null)) {
+                $member->poh_wardrobe = $validated['poh_wardrobe'];
+                $member->poh_wardrobe_last_update = $now;
             }
             if (! is_null($validated['quiver'] ?? null)) {
                 $member->quiver = $validated['quiver'];
@@ -343,6 +349,7 @@ class GroupMemberController extends Controller
                     $member->rune_pouch_last_update,
                     $member->interacting_last_update,
                     $member->seed_vault_last_update,
+                    $member->poh_wardrobe_last_update,
                     $member->quiver_last_update,
                     $member->diary_vars_last_update,
                 ];
@@ -365,6 +372,7 @@ class GroupMemberController extends Controller
                         ? $this->withInteractingTimestamp($member->interacting, $member->interacting_last_update)
                         : null,
                     'seed_vault' => (! is_null($member->seed_vault_last_update) && $member->seed_vault_last_update >= $fromTime) ? $member->seed_vault : null,
+                    'poh_wardrobe' => (! is_null($member->poh_wardrobe_last_update) && $member->poh_wardrobe_last_update >= $fromTime) ? $member->poh_wardrobe : null,
                     'quiver' => (! is_null($member->quiver_last_update) && $member->quiver_last_update >= $fromTime) ? $member->quiver : null,
                     'diary_vars' => (! is_null($member->diary_vars_last_update) && $member->diary_vars_last_update >= $fromTime) ? $member->diary_vars : null,
                     'shared_bank' => null,

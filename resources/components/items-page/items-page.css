@@ -83,6 +83,12 @@
   image-rendering: pixelated;
 }
 
+.items-page-panel-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .items-page-panel-name {
   font-size: 20px;
   color: var(--yellow);
@@ -91,6 +97,31 @@
 
 .items-page-panel-name:hover {
   color: var(--yellow-light);
+}
+
+.items-page-panel-pin-button {
+  background: transparent;
+  border: none;
+  color: rgb(150 150 150);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+.items-page-panel-pin-button:hover {
+  color: rgb(255 215 0);
+}
+
+.items-page-panel-pin-button.pinned {
+  color: rgb(255 215 0);
+}
+
+.items-page-panel-pinned {
+  border-color: rgb(255 215 0 / 40%);
+  box-shadow: 0 0 8px rgb(255 215 0 / 20%);
 }
 
 #items-page-search {

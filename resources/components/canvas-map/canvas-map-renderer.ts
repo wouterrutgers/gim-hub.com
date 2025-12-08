@@ -124,7 +124,7 @@ const REGION_Y_MAX = 160;
 /**
  * A cap on the number of outbound fetches allowed.
  */
-const OUTBOUND_IMAGE_FETCHES_CAP = 6;
+const OUTBOUND_IMAGE_FETCHES_CAP = 24;
 
 /**
  * Iterate a 2d interval of integers inside-out.

@@ -80,7 +80,7 @@ class ActiveGroups extends Command
             'rune_pouch_last_update',
             'interacting_last_update',
             'seed_vault_last_update',
-            'poh_wardrobe_last_update',
+            'poh_costume_room_last_update',
             'quiver_last_update',
             'diary_vars_last_update',
         ];

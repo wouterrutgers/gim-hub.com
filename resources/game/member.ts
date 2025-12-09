@@ -13,7 +13,7 @@ export interface State {
   bank: ItemCollection;
   runePouch: ItemCollection;
   seedVault: ItemCollection;
-  pohWardrobe: ItemCollection;
+  pohCostumeRoom: ItemCollection;
   quiver: ItemCollection;
   equipment: Equipment;
   inventory: Inventory;

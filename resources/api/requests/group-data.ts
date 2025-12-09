@@ -947,7 +947,7 @@ const GetGroupDataResponseSchema = z
      *
      * Different furniture is required to store specific items, but they use the same inventory under the hood.
      * */
-    poh_wardrobe: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
+    poh_costume_room: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
     /**
      * Information on NPC the player last interacted with.
      */
@@ -969,11 +969,11 @@ const GetGroupDataResponseSchema = z
      */
     diary_vars: DiariesSchema.nullish().transform((value) => value ?? undefined),
   })
-  .transform(({ last_updated, rune_pouch, seed_vault, poh_wardrobe, diary_vars, quiver, ...rest }) => ({
+  .transform(({ last_updated, rune_pouch, seed_vault, poh_costume_room, diary_vars, quiver, ...rest }) => ({
     lastUpdated: last_updated,
     runePouch: rune_pouch,
     seedVault: seed_vault,
-    pohWardrobe: poh_wardrobe,
+    pohCostumeRoom: poh_costume_room,
     quiver,
     diaries: diary_vars,
     ...rest,

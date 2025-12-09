@@ -74,6 +74,8 @@ export const useMemberRunePouchContext = (member: Member.Name): Member.ItemColle
   useGroupMemberContext((state) => state?.get(member)?.runePouch);
 export const useMemberSeedVaultContext = (member: Member.Name): Member.ItemCollection | undefined =>
   useGroupMemberContext((state) => state?.get(member)?.seedVault);
+export const useMemberPohCostumeRoomContext = (member: Member.Name): Member.ItemCollection | undefined =>
+  useGroupMemberContext((state) => state?.get(member)?.pohCostumeRoom);
 export const useMemberQuiverContext = (member: Member.Name): Member.ItemCollection | undefined =>
   useGroupMemberContext((state) => state?.get(member)?.quiver);
 export const useMemberEquipmentContext = (member: Member.Name): Member.Equipment | undefined =>
@@ -102,18 +104,18 @@ const memberColorHues: number[] = [330, 100, 230, 170, 40];
 type GroupStateAction =
   | { type: "Wipe" }
   | {
-      type: "Update";
-      /*
-       * A partial update has only some of the members e.g. collection-log only
-       * returns members who have recorded their logs. If the update is partial, we
-       * persist old member states.
-       *
-       * A non-partial / full update has all of the members e.g. get-group-data always returns all
-       * members. If the update is not partial, we wipe old state.
-       */
-      partial: boolean;
-      update: GroupStateUpdate;
-    };
+    type: "Update";
+    /*
+     * A partial update has only some of the members e.g. collection-log only
+     * returns members who have recorded their logs. If the update is partial, we
+     * persist old member states.
+     *
+     * A non-partial / full update has all of the members e.g. get-group-data always returns all
+     * members. If the update is not partial, we wipe old state.
+     */
+    partial: boolean;
+    update: GroupStateUpdate;
+  };
 
 /**
  * Taking in the new group state, perform some diff checking and update
@@ -174,6 +176,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
           lastUpdated: new Date(0),
           runePouch: new Map(),
           seedVault: new Map(),
+          pohCostumeRoom: new Map(),
           quiver: new Map(),
           ...oldMemberState,
           ...stateUpdate,
@@ -234,9 +237,9 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       itemView.set(memberName, oldQuantity + quantity);
     };
 
-    newState.memberStates.forEach(({ bank, equipment, inventory, runePouch, seedVault, quiver }, memberName) => {
+    newState.memberStates.forEach(({ bank, equipment, inventory, runePouch, seedVault, pohCostumeRoom, quiver }, memberName) => {
       // Each item storage is slightly different, so we need to iterate them different.
-      [bank, runePouch, seedVault, quiver].forEach((storageArea) =>
+      [bank, runePouch, seedVault, pohCostumeRoom, quiver].forEach((storageArea) =>
         storageArea.forEach((quantity, itemID) => {
           incrementItemCount(memberName, { quantity, itemID });
         }),

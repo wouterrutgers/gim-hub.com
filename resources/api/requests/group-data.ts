@@ -940,6 +940,14 @@ const GetGroupDataResponseSchema = z
      * When defined, it always contains all of the items.
      */
     seed_vault: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
+
+    /**
+     * The items in the player's PoH wardrobe.
+     * When defined, it always contains all of the items.
+     *
+     * Different furniture is required to store specific items, but they use the same inventory under the hood.
+     * */
+    poh_costume_room: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
     /**
      * Information on NPC the player last interacted with.
      */
@@ -961,10 +969,11 @@ const GetGroupDataResponseSchema = z
      */
     diary_vars: DiariesSchema.nullish().transform((value) => value ?? undefined),
   })
-  .transform(({ last_updated, rune_pouch, seed_vault, diary_vars, quiver, ...rest }) => ({
+  .transform(({ last_updated, rune_pouch, seed_vault, poh_costume_room, diary_vars, quiver, ...rest }) => ({
     lastUpdated: last_updated,
     runePouch: rune_pouch,
     seedVault: seed_vault,
+    pohCostumeRoom: poh_costume_room,
     quiver,
     diaries: diary_vars,
     ...rest,

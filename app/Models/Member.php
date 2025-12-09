@@ -29,6 +29,8 @@ class Member extends Model
         'bank_last_update' => 'datetime',
         'seed_vault' => 'array',
         'seed_vault_last_update' => 'datetime',
+        'poh_costume_room' => 'array',
+        'poh_costume_room_last_update' => 'datetime',
         'quiver' => 'array',
         'quiver_last_update' => 'datetime',
         'interacting' => 'array',

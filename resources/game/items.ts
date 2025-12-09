@@ -10,6 +10,17 @@ export interface ItemStack {
 export type Item = z.infer<typeof ItemsDataEntrySchema>;
 export type ItemsDatabase = z.infer<typeof ItemsDataSchema>;
 
+export const ItemContainer = [
+  "Bank",
+  "Rune Pouch",
+  "Seed Vault",
+  "Costume Room",
+  "Quiver",
+  "Equipment",
+  "Inventory",
+] as const;
+export type ItemContainer = (typeof ItemContainer)[number];
+
 export const composeItemIconHref = ({ itemID, quantity }: ItemStack, itemDatum?: Item): string => {
   let id = itemID;
   if (itemDatum?.stacks) {

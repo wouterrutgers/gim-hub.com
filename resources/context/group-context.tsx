@@ -1,15 +1,21 @@
 import { createContext, type ReactNode, useContext, useEffect, useReducer } from "react";
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
-import type { ItemID, ItemStack } from "../game/items";
+import { ItemContainer, type ItemID, type ItemStack } from "../game/items";
 import type { GroupStateUpdate } from "../api/api";
 import { type Experience, Skill } from "../game/skill";
 
 interface MemberColor {
   hueDegrees: number;
 }
+
+interface ItemBreakdown {
+  total: number;
+  byContainer: Partial<Record<ItemContainer, number>>;
+}
+
 interface GroupState {
-  items: Map<ItemID, Map<Member.Name, number>>;
+  items: Map<ItemID, Map<Member.Name, ItemBreakdown>>;
   memberStates: Map<Member.Name, Member.State>;
   memberNames: Set<Member.Name>;
   memberColors: Map<Member.Name, MemberColor>;
@@ -228,33 +234,58 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
   }
 
   if (newState.memberStates) {
-    const newItems = new Map<ItemID, Map<Member.Name, number>>();
-    const incrementItemCount = (memberName: Member.Name, { itemID, quantity }: ItemStack): void => {
-      if (!newItems.has(itemID)) newItems.set(itemID, new Map<Member.Name, number>());
+    const newItems: GroupState["items"] = new Map();
+    const setContainerQuantity = (
+      containerName: ItemContainer,
+      memberName: Member.Name,
+      { itemID, quantity }: ItemStack,
+    ): void => {
+      if (!newItems.has(itemID)) newItems.set(itemID, new Map());
       const itemView = newItems.get(itemID)!;
+      if (!itemView.has(memberName)) itemView.set(memberName, { total: 0, byContainer: {} });
+      const memberBreakdown = itemView.get(memberName)!;
 
-      const oldQuantity = itemView.get(memberName) ?? 0;
-      itemView.set(memberName, oldQuantity + quantity);
+      memberBreakdown.byContainer[containerName] = quantity;
     };
 
     newState.memberStates.forEach(
       ({ bank, equipment, inventory, runePouch, seedVault, pohCostumeRoom, quiver }, memberName) => {
         // Each item storage is slightly different, so we need to iterate them different.
-        [bank, runePouch, seedVault, pohCostumeRoom, quiver].forEach((storageArea) =>
-          storageArea.forEach((quantity, itemID) => {
-            incrementItemCount(memberName, { quantity, itemID });
-          }),
-        );
+        bank.forEach((quantity, itemID) => {
+          setContainerQuantity("Bank", memberName, { quantity, itemID });
+        });
+        runePouch.forEach((quantity, itemID) => {
+          setContainerQuantity("Rune Pouch", memberName, { quantity, itemID });
+        });
+        seedVault.forEach((quantity, itemID) => {
+          setContainerQuantity("Seed Vault", memberName, { quantity, itemID });
+        });
+        pohCostumeRoom.forEach((quantity, itemID) => {
+          setContainerQuantity("Costume Room", memberName, { quantity, itemID });
+        });
+        quiver.forEach((quantity, itemID) => {
+          setContainerQuantity("Quiver", memberName, { quantity, itemID });
+        });
+
         inventory
           .filter((item) => item !== undefined)
           .forEach((item) => {
-            incrementItemCount(memberName, item);
+            setContainerQuantity("Inventory", memberName, item);
           });
         equipment.forEach((item) => {
-          incrementItemCount(memberName, item);
+          setContainerQuantity("Equipment", memberName, item);
         });
       },
     );
+
+    for (const [_, quantityPerMember] of newItems) {
+      for (const [_, itemBreakdown] of quantityPerMember) {
+        itemBreakdown.total = 0;
+        for (const containerName of ItemContainer) {
+          itemBreakdown.total += itemBreakdown.byContainer[containerName] ?? 0;
+        }
+      }
+    }
 
     let newAndOldItemsEqual = true;
 
@@ -277,10 +308,24 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       let quantitiesAllEqual = true;
       for (const [member, oldQuantity] of oldQuantityPerMember) {
         const newQuantity = newQuantityPerMember.get(member);
-        if (newQuantity !== oldQuantity) {
+        if (!newQuantity) {
           newAndOldItemsEqual = false;
           quantitiesAllEqual = false;
           break;
+        }
+
+        if (newQuantity.total !== oldQuantity.total) {
+          newAndOldItemsEqual = false;
+          quantitiesAllEqual = false;
+          break;
+        }
+
+        for (const containerName of ItemContainer) {
+          if (newQuantity.byContainer[containerName] !== oldQuantity.byContainer[containerName]) {
+            newAndOldItemsEqual = false;
+            quantitiesAllEqual = false;
+            break;
+          }
         }
       }
       if (!quantitiesAllEqual) continue;

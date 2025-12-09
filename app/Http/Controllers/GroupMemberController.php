@@ -185,7 +185,7 @@ class GroupMemberController extends Controller
         Validators::validateMemberPropLength('shared_bank', $validated['shared_bank'] ?? null, 0, 1000);
         Validators::validateMemberPropLength('rune_pouch', $validated['rune_pouch'] ?? null, 6, 8);
         Validators::validateMemberPropLength('seed_vault', $validated['seed_vault'] ?? null, 0, 500);
-        Validators::validateMemberPropLength('poh_costume_room', $validated['poh_costume_room'] ?? null, 0, 1000);
+        Validators::validateMemberPropLength('poh_costume_room', $validated['poh_costume_room'] ?? null, 0, 2000);
         Validators::validateMemberPropLength('quiver', $validated['quiver'] ?? null, 2, 2);
         Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);
         Validators::validateMemberPropLength('diary_vars', $validated['diary_vars'] ?? null, 0, 62);

@@ -29,8 +29,7 @@
   width: 30px;
   height: 30px;
   object-fit: contain;
-  image-rendering: crisp-edges;
-  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
 }
 
 .group-settings-member-buttons {
@@ -58,8 +57,7 @@
   width: 30px;
   height: 30px;
   object-fit: contain;
-  image-rendering: crisp-edges;
-  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
 }
 
 #group-settings-remove-confirmation button {

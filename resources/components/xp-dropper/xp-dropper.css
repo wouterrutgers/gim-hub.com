@@ -30,7 +30,7 @@
 .xp-dropper-drop > img {
   width: 16px;
   height: 16px;
-  image-rendering: auto;
+  image-rendering: pixelated;
   object-fit: contain;
   margin-right: 4px;
 }

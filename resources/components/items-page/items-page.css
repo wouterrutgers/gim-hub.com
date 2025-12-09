@@ -59,7 +59,7 @@
   min-height: 56px;
   min-width: 63px;
   border: none;
-  image-rendering: optimizequality;
+  image-rendering: pixelated;
 }
 
 .items-page-panel-quantity-breakdown {

@@ -1,4 +1,4 @@
-import { type ReactElement, Fragment, memo, useContext, useEffect, useRef, useState, useCallback } from "react";
+import { type ReactElement, Fragment, memo, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { SearchElement } from "../search-element/search-element";
 import type * as Member from "../../game/member";
 import { GameDataContext } from "../../context/game-data-context";
@@ -253,11 +253,14 @@ export const ItemsPage = (): ReactElement => {
     validator: (value) => value ?? "",
   });
 
-  const pinnedItems = new Set<ItemID>(
-    pinnedItemsString
-      .split(",")
-      .filter((id) => id.length > 0)
-      .map((id) => parseInt(id, 10) as ItemID),
+  const pinnedItems = useMemo(
+    () => new Set<ItemID>(
+      pinnedItemsString
+        .split(",")
+        .filter((id) => id.length > 0)
+        .map((id) => parseInt(id, 10) as ItemID),
+    ),
+    [pinnedItemsString]
   );
 
   const togglePin = useCallback(

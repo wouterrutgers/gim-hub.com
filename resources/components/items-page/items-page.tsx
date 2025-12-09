@@ -1,4 +1,14 @@
-import { type ReactElement, Fragment, memo, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
+import {
+  type ReactElement,
+  Fragment,
+  memo,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import { SearchElement } from "../search-element/search-element";
 import type * as Member from "../../game/member";
 import { GameDataContext } from "../../context/game-data-context";
@@ -266,13 +276,14 @@ export const ItemsPage = (): ReactElement => {
   });
 
   const pinnedItems = useMemo(
-    () => new Set<ItemID>(
-      pinnedItemsString
-        .split(",")
-        .filter((id) => id.length > 0)
-        .map((id) => parseInt(id, 10) as ItemID),
-    ),
-    [pinnedItemsString]
+    () =>
+      new Set<ItemID>(
+        pinnedItemsString
+          .split(",")
+          .filter((id) => id.length > 0)
+          .map((id) => parseInt(id, 10) as ItemID),
+      ),
+    [pinnedItemsString],
   );
 
   const togglePin = useCallback(
@@ -434,7 +445,12 @@ export const ItemsPage = (): ReactElement => {
           <span>gp</span>
         </span>
       </div>
-      <ItemPanelsScrollArea sortedItems={sortedItems} memberFilter={filter} pinnedItems={pinnedItems} onTogglePin={togglePin} />
+      <ItemPanelsScrollArea
+        sortedItems={sortedItems}
+        memberFilter={filter}
+        pinnedItems={pinnedItems}
+        onTogglePin={togglePin}
+      />
     </>
   );
 };

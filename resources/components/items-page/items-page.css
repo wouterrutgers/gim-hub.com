@@ -101,7 +101,9 @@
   font-size: 16px;
   padding: 4px;
   line-height: 1;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
   user-select: none;
   position: absolute;
   top: 4px;
@@ -111,6 +113,10 @@
   pointer-events: none;
 }
 
+.items-page-panel-pin-button:hover {
+  color: rgb(255 215 0);
+}
+
 .items-page-panel:hover .items-page-panel-pin-button,
 .items-page-panel-pin-button.pinned {
   opacity: 1;
@@ -118,10 +124,6 @@
 }
 
 .items-page-panel-pin-button.pinned {
-  color: rgb(255 215 0);
-}
-
-.items-page-panel-pin-button:hover {
   color: rgb(255 215 0);
 }
 

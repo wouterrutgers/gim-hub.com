@@ -30,7 +30,6 @@
 
 .player-panel-minibar img {
   pointer-events: none;
-  image-rendering: crisp-edges;
   image-rendering: pixelated;
   transform: translateZ(0);
   padding: 4px 0;
@@ -51,8 +50,4 @@ button.player-panel-tab-active {
 
 .player-panel-content > * {
   margin: 8px 0;
-}
-
-.player-panel-collection-log img {
-  image-rendering: initial;
 }

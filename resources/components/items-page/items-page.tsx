@@ -236,10 +236,24 @@ const ItemPanelsScrollArea = ({
   );
 };
 
+const STORAGE_KEY_SORT_CATEGORY = "items-page-sort-category";
+
+const loadSortCategoryFromStorage = (): ItemSortCategory => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY_SORT_CATEGORY);
+    if (stored && ItemSortCategory.includes(stored as ItemSortCategory)) {
+      return stored as ItemSortCategory;
+    }
+  } catch (error) {
+    console.warn("Failed to load sort category from localStorage:", error);
+  }
+  return "GE total price";
+};
+
 export const ItemsPage = (): ReactElement => {
   const [filter, setFilter] = useState<ItemFilter>("All");
   const [searchString, setSearchString] = useState<string>("");
-  const [sortCategory, setSortCategory] = useState<ItemSortCategory>("GE total price");
+  const [sortCategory, setSortCategory] = useState<ItemSortCategory>(loadSortCategoryFromStorage);
   const { gePrices: geData, items: itemData } = useContext(GameDataContext);
 
   const members = useContext(GroupMemberNamesContext);
@@ -377,7 +391,13 @@ export const ItemsPage = (): ReactElement => {
           <select
             value={sortCategory}
             onChange={(e) => {
-              setSortCategory(e.target.value as ItemSortCategory);
+              const newCategory = e.target.value as ItemSortCategory;
+              setSortCategory(newCategory);
+              try {
+                localStorage.setItem(STORAGE_KEY_SORT_CATEGORY, newCategory);
+              } catch (error) {
+                console.warn("Failed to save sort category to localStorage:", error);
+              }
             }}
           >
             {ItemSortCategory.map((category) => (

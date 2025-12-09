@@ -104,18 +104,18 @@ const memberColorHues: number[] = [330, 100, 230, 170, 40];
 type GroupStateAction =
   | { type: "Wipe" }
   | {
-    type: "Update";
-    /*
-     * A partial update has only some of the members e.g. collection-log only
-     * returns members who have recorded their logs. If the update is partial, we
-     * persist old member states.
-     *
-     * A non-partial / full update has all of the members e.g. get-group-data always returns all
-     * members. If the update is not partial, we wipe old state.
-     */
-    partial: boolean;
-    update: GroupStateUpdate;
-  };
+      type: "Update";
+      /*
+       * A partial update has only some of the members e.g. collection-log only
+       * returns members who have recorded their logs. If the update is partial, we
+       * persist old member states.
+       *
+       * A non-partial / full update has all of the members e.g. get-group-data always returns all
+       * members. If the update is not partial, we wipe old state.
+       */
+      partial: boolean;
+      update: GroupStateUpdate;
+    };
 
 /**
  * Taking in the new group state, perform some diff checking and update
@@ -237,22 +237,24 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       itemView.set(memberName, oldQuantity + quantity);
     };
 
-    newState.memberStates.forEach(({ bank, equipment, inventory, runePouch, seedVault, pohCostumeRoom, quiver }, memberName) => {
-      // Each item storage is slightly different, so we need to iterate them different.
-      [bank, runePouch, seedVault, pohCostumeRoom, quiver].forEach((storageArea) =>
-        storageArea.forEach((quantity, itemID) => {
-          incrementItemCount(memberName, { quantity, itemID });
-        }),
-      );
-      inventory
-        .filter((item) => item !== undefined)
-        .forEach((item) => {
+    newState.memberStates.forEach(
+      ({ bank, equipment, inventory, runePouch, seedVault, pohCostumeRoom, quiver }, memberName) => {
+        // Each item storage is slightly different, so we need to iterate them different.
+        [bank, runePouch, seedVault, pohCostumeRoom, quiver].forEach((storageArea) =>
+          storageArea.forEach((quantity, itemID) => {
+            incrementItemCount(memberName, { quantity, itemID });
+          }),
+        );
+        inventory
+          .filter((item) => item !== undefined)
+          .forEach((item) => {
+            incrementItemCount(memberName, item);
+          });
+        equipment.forEach((item) => {
           incrementItemCount(memberName, item);
         });
-      equipment.forEach((item) => {
-        incrementItemCount(memberName, item);
-      });
-    });
+      },
+    );
 
     let newAndOldItemsEqual = true;
 

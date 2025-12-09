@@ -78,21 +78,19 @@ const ItemPanel = memo(
 
     return (
       <div className={`items-page-panel rsborder rsbackground ${isPinned ? "items-page-panel-pinned" : ""}`}>
+        <button
+          className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
+          onClick={() => onTogglePin(itemID)}
+          title={isPinned ? "Unpin item" : "Pin item to top"}
+          aria-label={isPinned ? "Unpin item" : "Pin item to top"}
+        >
+          {isPinned ? "★" : "☆"}
+        </button>
         <div className="items-page-panel-top rsborder-tiny">
           <div>
-            <div className="items-page-panel-name-row">
-              <Link className="items-page-panel-name rstext" to={wikiLink} target="_blank" rel="noopener noreferrer">
-                {itemName}
-              </Link>
-              <button
-                className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
-                onClick={() => onTogglePin(itemID)}
-                title={isPinned ? "Unpin item" : "Pin item to top"}
-                aria-label={isPinned ? "Unpin item" : "Pin item to top"}
-              >
-                {isPinned ? "★" : "☆"}
-              </button>
-            </div>
+            <Link className="items-page-panel-name rstext" to={wikiLink} target="_blank" rel="noopener noreferrer">
+              {itemName}
+            </Link>
             <div className="items-page-panel-item-details">
               <span>Quantity</span>
               <span>{totalQuantity.toLocaleString()}</span>

@@ -1,4 +1,4 @@
-import { type ReactElement, Fragment, memo, useContext, useEffect, useRef, useState } from "react";
+import { type ReactElement, Fragment, memo, useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { SearchElement } from "../search-element/search-element";
 import type * as Member from "../../game/member";
 import { GameDataContext } from "../../context/game-data-context";
@@ -9,6 +9,7 @@ import { useItemsPriceTooltip } from "./items-page-tooltip";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { CachedImage } from "../cached-image/cached-image";
 import { formatTitle } from "../../ts/format-title";
+import { useLocalStorage } from "../../hooks/local-storage";
 
 import "./items-page.css";
 
@@ -32,6 +33,8 @@ interface ItemPanelProps {
   totalQuantity: number;
   memberFilter: ItemFilter;
   quantities: Map<Member.Name, number>;
+  isPinned: boolean;
+  onTogglePin: (itemID: ItemID) => void;
 }
 
 // Memo works well here since all the props are primitives, except for
@@ -47,6 +50,8 @@ const ItemPanel = memo(
     totalQuantity,
     memberFilter,
     quantities,
+    isPinned,
+    onTogglePin,
   }: ItemPanelProps): ReactElement => {
     const { tooltipElement, hideTooltip, showTooltip } = useItemsPriceTooltip();
 
@@ -72,12 +77,22 @@ const ItemPanel = memo(
     const wikiLink = `https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=${itemID}`;
 
     return (
-      <div className="items-page-panel rsborder rsbackground">
+      <div className={`items-page-panel rsborder rsbackground ${isPinned ? "items-page-panel-pinned" : ""}`}>
         <div className="items-page-panel-top rsborder-tiny">
           <div>
-            <Link className="items-page-panel-name rstext" to={wikiLink} target="_blank" rel="noopener noreferrer">
-              {itemName}
-            </Link>
+            <div className="items-page-panel-name-row">
+              <Link className="items-page-panel-name rstext" to={wikiLink} target="_blank" rel="noopener noreferrer">
+                {itemName}
+              </Link>
+              <button
+                className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
+                onClick={() => onTogglePin(itemID)}
+                title={isPinned ? "Unpin item" : "Pin item to top"}
+                aria-label={isPinned ? "Unpin item" : "Pin item to top"}
+              >
+                {isPinned ? "★" : "☆"}
+              </button>
+            </div>
             <div className="items-page-panel-item-details">
               <span>Quantity</span>
               <span>{totalQuantity.toLocaleString()}</span>
@@ -139,9 +154,13 @@ const PANEL_WIDTH_PIXELS = 280;
 const ItemPanelsScrollArea = ({
   sortedItems,
   memberFilter,
+  pinnedItems,
+  onTogglePin,
 }: {
   sortedItems: FilteredItem[];
   memberFilter: ItemFilter;
+  pinnedItems: Set<ItemID>;
+  onTogglePin: (itemID: ItemID) => void;
 }): ReactElement => {
   const parentRef = useRef<HTMLDivElement>(null);
   const childRef = useRef<HTMLDivElement>(null);
@@ -207,6 +226,8 @@ const ItemPanelsScrollArea = ({
                   itemName={item.itemName}
                   memberFilter={memberFilter}
                   quantities={item.quantityByMemberName}
+                  isPinned={pinnedItems.has(item.itemID)}
+                  onTogglePin={onTogglePin}
                 />
               ))}
             </div>
@@ -225,6 +246,35 @@ export const ItemsPage = (): ReactElement => {
 
   const members = useContext(GroupMemberNamesContext);
   const items = useContext(GroupItemsContext);
+
+  const [pinnedItemsString, setPinnedItemsString] = useLocalStorage({
+    key: "pinned-items",
+    defaultValue: "",
+    validator: (value) => value ?? "",
+  });
+
+  const pinnedItems = useMemo(
+    () => new Set<ItemID>(
+      pinnedItemsString
+        .split(",")
+        .filter((id) => id.length > 0)
+        .map((id) => parseInt(id, 10) as ItemID),
+    ),
+    [pinnedItemsString]
+  );
+
+  const togglePin = useCallback(
+    (itemID: ItemID) => {
+      const newPinnedItems = new Set(pinnedItems);
+      if (newPinnedItems.has(itemID)) {
+        newPinnedItems.delete(itemID);
+      } else {
+        newPinnedItems.add(itemID);
+      }
+      setPinnedItemsString(Array.from(newPinnedItems).join(","));
+    },
+    [pinnedItems, setPinnedItemsString],
+  );
 
   interface ItemAggregates {
     totalHighAlch: number;
@@ -276,6 +326,12 @@ export const ItemsPage = (): ReactElement => {
   );
 
   const sortedItems = [...filteredItems].sort((lhs, rhs) => {
+    const lhsIsPinned = pinnedItems.has(lhs.itemID);
+    const rhsIsPinned = pinnedItems.has(rhs.itemID);
+
+    if (lhsIsPinned && !rhsIsPinned) return -1;
+    if (!lhsIsPinned && rhsIsPinned) return 1;
+
     switch (sortCategory) {
       case "Total quantity":
         return rhs.totalQuantity - lhs.totalQuantity;
@@ -360,7 +416,7 @@ export const ItemsPage = (): ReactElement => {
           <span>gp</span>
         </span>
       </div>
-      <ItemPanelsScrollArea sortedItems={sortedItems} memberFilter={filter} />
+      <ItemPanelsScrollArea sortedItems={sortedItems} memberFilter={filter} pinnedItems={pinnedItems} onTogglePin={togglePin} />
     </>
   );
 };

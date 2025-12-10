@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ActiveGroups extends Command
 {
-    protected $signature = 'groups:active';
+    protected $signature = 'groups:active {--sort-by-created-at : Sort by group creation date}';
 
     protected $description = 'Find active groups';
 
@@ -26,12 +26,17 @@ class ActiveGroups extends Command
         })->get();
 
         $groups = $groups->sortByDesc(function (Group $group) {
+            if ($this->option('sort-by-created-at')) {
+                return $group->created_at;
+            }
+
             return $group->members->flatMap(function (Member $member) {
                 return collect($this->dates())->map(fn (string $date) => $member->{$date})->filter();
             })->max();
         });
 
-        $this->info('Active groups (sorted by last activity)');
+        $sortMethod = $this->option('sort-by-created-at') ? 'creation date' : 'last activity';
+        $this->info("Active groups (sorted by {$sortMethod})");
         $this->newLine();
 
         foreach ($groups->values() as $index => $group) {
@@ -42,7 +47,12 @@ class ActiveGroups extends Command
             $lastActive = $latestDate ? $latestDate->diffForHumans() : 'never';
             $isLast = $index === $groups->count() - 1;
 
-            $this->info("{$group->name} <comment>({$lastActive})</comment>");
+            $info = $lastActive;
+            if ($this->option('sort-by-created-at')) {
+                $info = $group->created_at->format('Y-m-d H:i');
+            }
+
+            $this->info("{$group->name} <comment>({$info})</comment>");
 
             $sortedMembers = $group->members->sortByDesc(function (Member $member) {
                 return collect($this->dates())->map(fn (string $date) => $member->{$date})->filter()->max();

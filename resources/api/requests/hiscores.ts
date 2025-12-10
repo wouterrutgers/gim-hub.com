@@ -1,4 +1,4 @@
-import z from "zod/v4";
+import * as z from "zod/v4";
 import type { GroupCredentials } from "../credentials";
 
 export type Response = z.infer<typeof HiscoresSchema>;

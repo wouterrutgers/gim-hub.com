@@ -210,4 +210,4 @@ OCTANE_HTTPS=true
 
 ## Next steps
 
-- Install the RuneLite “Group Ironmen Tracker” plugin and configure it to use your self‑hosted URL.
+- Install the RuneLite "GIM hub" plugin and configure it to use your self‑hosted URL.

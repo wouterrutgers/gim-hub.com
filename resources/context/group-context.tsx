@@ -1,7 +1,7 @@
 import { createContext, type ReactNode, useContext, useEffect, useReducer } from "react";
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
-import { ItemContainer, type ItemID, type ItemStack } from "../game/items";
+import { ItemContainer, type ItemID, type ItemLocationBreakdown, type ItemStack } from "../game/items";
 import type { GroupStateUpdate } from "../api/api";
 import { type Experience, Skill } from "../game/skill";
 
@@ -9,13 +9,8 @@ interface MemberColor {
   hueDegrees: number;
 }
 
-interface ItemBreakdown {
-  total: number;
-  byContainer: Partial<Record<ItemContainer, number>>;
-}
-
 interface GroupState {
-  items: Map<ItemID, Map<Member.Name, ItemBreakdown>>;
+  items: Map<ItemID, Map<Member.Name, ItemLocationBreakdown>>;
   memberStates: Map<Member.Name, Member.State>;
   memberNames: Set<Member.Name>;
   memberColors: Map<Member.Name, MemberColor>;
@@ -242,10 +237,10 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
     ): void => {
       if (!newItems.has(itemID)) newItems.set(itemID, new Map());
       const itemView = newItems.get(itemID)!;
-      if (!itemView.has(memberName)) itemView.set(memberName, { total: 0, byContainer: {} });
+      if (!itemView.has(memberName)) itemView.set(memberName, {});
       const memberBreakdown = itemView.get(memberName)!;
 
-      memberBreakdown.byContainer[containerName] = quantity;
+      memberBreakdown[containerName] = quantity;
     };
 
     newState.memberStates.forEach(
@@ -278,15 +273,6 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       },
     );
 
-    for (const [_, quantityPerMember] of newItems) {
-      for (const [_, itemBreakdown] of quantityPerMember) {
-        itemBreakdown.total = 0;
-        for (const containerName of ItemContainer) {
-          itemBreakdown.total += itemBreakdown.byContainer[containerName] ?? 0;
-        }
-      }
-    }
-
     let newAndOldItemsEqual = true;
 
     if (newItems.size !== oldState.items.size) {
@@ -294,34 +280,28 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
     }
 
     for (const [itemID, oldQuantityPerMember] of oldState.items) {
-      const newQuantityPerMember = newItems.get(itemID);
-      if (!newQuantityPerMember) {
+      const newBreakdownPerMember = newItems.get(itemID);
+      if (!newBreakdownPerMember) {
         newAndOldItemsEqual = false;
         continue;
       }
 
-      if (oldQuantityPerMember.size !== newQuantityPerMember.size) {
+      if (oldQuantityPerMember.size !== newBreakdownPerMember.size) {
         newAndOldItemsEqual = false;
         continue;
       }
 
       let quantitiesAllEqual = true;
       for (const [member, oldQuantity] of oldQuantityPerMember) {
-        const newQuantity = newQuantityPerMember.get(member);
-        if (!newQuantity) {
-          newAndOldItemsEqual = false;
-          quantitiesAllEqual = false;
-          break;
-        }
-
-        if (newQuantity.total !== oldQuantity.total) {
+        const newBreakdown = newBreakdownPerMember.get(member);
+        if (!newBreakdown) {
           newAndOldItemsEqual = false;
           quantitiesAllEqual = false;
           break;
         }
 
         for (const containerName of ItemContainer) {
-          if (newQuantity.byContainer[containerName] !== oldQuantity.byContainer[containerName]) {
+          if (newBreakdown[containerName] !== oldQuantity[containerName]) {
             newAndOldItemsEqual = false;
             quantitiesAllEqual = false;
             break;

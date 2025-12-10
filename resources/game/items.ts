@@ -9,6 +9,7 @@ export interface ItemStack {
 }
 export type Item = z.infer<typeof ItemsDataEntrySchema>;
 export type ItemsDatabase = z.infer<typeof ItemsDataSchema>;
+export type ItemLocationBreakdown = Partial<Record<ItemContainer, number>>;
 
 export const ItemContainer = [
   "Bank",

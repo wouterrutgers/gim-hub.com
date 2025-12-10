@@ -13,7 +13,6 @@ return new class extends Migration
             $table->foreignId('member_id')->constrained()->cascadeOnDelete();
             $table->string('key')->index();
             $table->json('value')->nullable();
-            $table->dateTime('last_update')->nullable();
             $table->timestamps();
             $table->unique(['member_id', 'key']);
         });

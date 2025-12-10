@@ -11,7 +11,6 @@ class MemberProperty extends Model
 
     protected $casts = [
         'value' => 'array',
-        'last_update' => 'datetime',
     ];
 
     public function member(): BelongsTo

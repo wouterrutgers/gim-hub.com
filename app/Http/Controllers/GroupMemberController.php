@@ -193,13 +193,11 @@ class GroupMemberController extends Controller
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
-            $now = now();
-
             foreach (Member::PROPERTY_KEYS as $property) {
                 if (array_key_exists($property, $validated) && ! is_null($validated[$property])) {
                     $member->properties()->updateOrCreate(
                         ['key' => $property],
-                        ['value' => $validated[$property], 'last_update' => $now]
+                        ['value' => $validated[$property]]
                     );
                 }
             }
@@ -207,7 +205,7 @@ class GroupMemberController extends Controller
             if (isset($validated['interacting'])) {
                 $member->properties()->updateOrCreate(
                     ['key' => 'interacting'],
-                    ['value' => $validated['interacting'], 'last_update' => $now]
+                    ['value' => $validated['interacting']]
                 );
             }
 
@@ -222,7 +220,7 @@ class GroupMemberController extends Controller
 
                 $sharedMember?->properties()->updateOrCreate(
                     ['key' => 'bank'],
-                    ['value' => $validated['shared_bank'], 'last_update' => $now]
+                    ['value' => $validated['shared_bank']]
                 );
             }
 
@@ -288,7 +286,7 @@ class GroupMemberController extends Controller
 
         $member->properties()->updateOrCreate(
             ['key' => 'bank'],
-            ['value' => $bankItems, 'last_update' => now()]
+            ['value' => $bankItems]
         );
     }
 
@@ -306,7 +304,7 @@ class GroupMemberController extends Controller
             ->get()
             ->map(function ($member) use ($fromTime) {
                 $properties = $member->properties->keyBy('key');
-                $lastUpdated = $properties->max('last_update');
+                $lastUpdated = $properties->max('updated_at');
 
                 $data = [
                     'name' => $member->name,
@@ -318,10 +316,10 @@ class GroupMemberController extends Controller
 
                 foreach (Member::PROPERTY_KEYS as $key) {
                     $property = $properties->get($key);
-                    if ($property && $property->last_update >= $fromTime) {
+                    if ($property && $property->updated_at >= $fromTime) {
                         $value = $property->value;
                         if ($key === 'interacting') {
-                            $value = $this->withInteractingTimestamp($value, $property->last_update);
+                            $value = $this->withInteractingTimestamp($value, $property->updated_at);
                         }
                         $data[$key] = $value;
                     } else {

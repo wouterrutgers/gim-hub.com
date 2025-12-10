@@ -18,8 +18,8 @@ return new class extends Migration
 
                 $member->properties()->create([
                     'key' => $property,
-                    'value' => $value,
-                    'last_update' => $lastUpdate,
+                    'value' => json_decode($value),
+                    'updated_at' => $lastUpdate,
                 ]);
             }
         });

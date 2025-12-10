@@ -19,7 +19,7 @@ class ActiveGroups extends Command
             $query->where('name', '!=', '@SHARED')->with('properties');
         }])->whereHas('members', function (Builder $query) {
             $query->where('name', '!=', '@SHARED')->whereHas('properties', function (Builder $query) {
-                $query->where('last_update', '>=', now()->subDays(30));
+                $query->where('updated_at', '>=', now()->subDays(30));
             });
         })->get();
 
@@ -29,7 +29,7 @@ class ActiveGroups extends Command
             }
 
             return $group->members->flatMap(function (Member $member) {
-                return $member->properties->pluck('last_update');
+                return $member->properties->pluck('updated_at');
             })->max();
         });
 
@@ -39,7 +39,7 @@ class ActiveGroups extends Command
 
         foreach ($groups->values() as $index => $group) {
             $latestDate = $group->members->flatMap(function (Member $member) {
-                return $member->properties->pluck('last_update');
+                return $member->properties->pluck('updated_at');
             })->max();
 
             $lastActive = $latestDate ? $latestDate->diffForHumans() : 'never';
@@ -53,11 +53,11 @@ class ActiveGroups extends Command
             $this->info("{$group->name} <comment>({$info})</comment>");
 
             $sortedMembers = $group->members->sortByDesc(function (Member $member) {
-                return $member->properties->max('last_update');
+                return $member->properties->max('updated_at');
             })->values();
 
             foreach ($sortedMembers as $memberIndex => $member) {
-                $memberLatestDate = $member->properties->max('last_update');
+                $memberLatestDate = $member->properties->max('updated_at');
 
                 $lastUpdate = $memberLatestDate ? $memberLatestDate->diffForHumans() : 'never';
                 $isLastMember = $memberIndex === $sortedMembers->count() - 1;

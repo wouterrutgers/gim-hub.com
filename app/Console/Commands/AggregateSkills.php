@@ -49,13 +49,13 @@ class AggregateSkills extends Command
     protected function aggregateSkillsForPeriod(AggregatePeriod $period, Carbon $lastAggregation): void
     {
         $properties = MemberProperty::where('key', '=', 'skills')
-            ->where('last_update', '>=', $lastAggregation)
+            ->where('updated_at', '>=', $lastAggregation)
             ->with('member')
             ->get();
 
         foreach ($properties as $property) {
             $member = $property->member;
-            $timeValue = $this->getAggregateTimeValue($period, $property->last_update);
+            $timeValue = $this->getAggregateTimeValue($period, $property->updated_at);
 
             SkillStat::updateOrCreate(
                 [

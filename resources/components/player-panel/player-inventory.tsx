@@ -65,7 +65,7 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
 
   const itemElements = [];
   for (let index = 0; index < 28; index++) {
-    const item = items?.at(index);
+    const item = items?.get(index);
     if (!item || !itemData?.has(item.itemID)) {
       itemElements.push(<span onPointerEnter={hideTooltip} key={`empty ${index}`} />);
       continue;
@@ -92,7 +92,7 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
       let totalHighAlch = 0;
       let totalGePrice = 0;
       const runes: { name: string; quantity: number }[] = [];
-      for (const [runeID, runeQuantity] of runePouch) {
+      for (const [runeID, { quantity: runeQuantity }] of runePouch) {
         const runeDatum = itemData?.get(runeID);
         if (!runeDatum) continue;
 

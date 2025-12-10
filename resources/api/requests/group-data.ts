@@ -115,13 +115,13 @@ const QuiverSchema = z
   .array(z.uint32())
   .refine((arr) => arr.length === 0 || arr.length === 2)
   .transform((flat) => {
-    const result = new Map<ItemID, number>();
+    const result = new Map<ItemID, ItemStack>();
     if (flat.length === 2) {
       const itemID = flat[0] as ItemID;
       const quantity = flat[1];
 
       if (quantity > 0) {
-        result.set(itemID, quantity);
+        result.set(itemID, { itemID, quantity });
       }
     }
 
@@ -132,7 +132,7 @@ const ItemCollectionSchema = z
   .array(z.uint32().or(z.literal(-1)))
   .refine((arg) => arg.length % 2 === 0)
   .transform((arg: number[]) =>
-    arg.reduce<Map<ItemID, number>>((items, _, index, flatItems) => {
+    arg.reduce<Map<ItemID, ItemStack>>((items, _, index, flatItems) => {
       if (index % 2 !== 0 || index + 1 >= flatItems.length) return items;
 
       const itemID = flatItems[index] as ItemID;
@@ -141,11 +141,13 @@ const ItemCollectionSchema = z
       if (itemID < 0) return items;
 
       const itemQuantity = flatItems[index + 1];
+      const existing = items.get(itemID);
+      const quantity = itemQuantity + (existing?.quantity ?? 0);
 
-      items.set(itemID, itemQuantity + (items.get(itemID) ?? 0));
+      items.set(itemID, { itemID, quantity });
 
       return items;
-    }, new Map<ItemID, number>()),
+    }, new Map<ItemID, ItemStack>()),
   );
 
 const INVENTORY_SIZE = 28;
@@ -154,16 +156,17 @@ const InventoryFromBackend = z
   .array(z.uint32())
   .length(2 * INVENTORY_SIZE)
   .transform((flat) =>
-    flat.reduce<(ItemStack | undefined)[]>((inventory, _, index, flat) => {
+    flat.reduce<Map<number, ItemStack>>((inventory, _, index, flat) => {
       if (index % 2 !== 0) return inventory;
 
       const itemID = flat[index] as ItemID;
       const quantity = flat[index + 1];
 
-      if (quantity === 0) inventory.push(undefined);
-      else inventory.push({ itemID, quantity });
+      if (quantity > 0) {
+        inventory.set(index / 2, { itemID, quantity });
+      }
       return inventory;
-    }, []),
+    }, new Map()),
   );
 
 /**
@@ -896,6 +899,8 @@ const CoordinatesSchema = z
   .length(4)
   .transform(([x, y, plane, isOnBoat]) => ({ x, y, plane, isOnBoat: isOnBoat === 1 }));
 
+const NullableItemCollection = z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined);
+
 const GetGroupDataResponseSchema = z
   .object({
     /**
@@ -914,7 +919,7 @@ const GetGroupDataResponseSchema = z
      * The items in the player's bank.
      * When defined, it always contains all of the items.
      */
-    bank: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
+    bank: NullableItemCollection,
     /**
      * The items in the player's equipment.
      * When defined, it always contains all of the items.
@@ -934,12 +939,12 @@ const GetGroupDataResponseSchema = z
      * The items in the player's rune pouch.
      * When defined, it always contains all of the items.
      */
-    rune_pouch: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
+    rune_pouch: NullableItemCollection,
     /**
      * The items in the player's farming guild seed vault.
      * When defined, it always contains all of the items.
      */
-    seed_vault: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
+    seed_vault: NullableItemCollection,
 
     /**
      * The items in the player's PoH wardrobe.
@@ -947,7 +952,7 @@ const GetGroupDataResponseSchema = z
      *
      * Different furniture is required to store specific items, but they use the same inventory under the hood.
      * */
-    poh_costume_room: z.nullish(ItemCollectionSchema).transform((value) => value ?? undefined),
+    poh_costume_room: NullableItemCollection,
     /**
      * Information on NPC the player last interacted with.
      */

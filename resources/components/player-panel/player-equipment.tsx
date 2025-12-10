@@ -64,7 +64,9 @@ export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactEleme
   const slotElements = [];
 
   const hasEquippedQuiver = Array.from(equipment?.values() ?? []).some((item) => DIZANAS_IDS.has(item.itemID));
-  const hasInventoryQuiver = (inventory ?? []).some((item) => item !== undefined && DIZANAS_IDS.has(item.itemID));
+  const hasInventoryQuiver = Array.from(inventory?.values() ?? []).some(
+    (item) => item !== undefined && DIZANAS_IDS.has(item.itemID),
+  );
 
   for (const slot of VisibleEquipmentSlots) {
     let item = equipment?.get(slot);
@@ -75,10 +77,9 @@ export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactEleme
       present = hasEquippedQuiver || hasInventoryQuiver;
       isGrayed = !hasEquippedQuiver;
 
-      const firstEntry = quiver?.entries().next().value;
+      const firstEntry = quiver?.values().next().value;
       if (firstEntry) {
-        const [itemID, quantity] = firstEntry;
-        item = { itemID, quantity };
+        item = firstEntry;
       }
     }
 

@@ -1,7 +1,7 @@
 import { createContext, type ReactNode, useContext, useEffect, useReducer } from "react";
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
-import { ItemContainer, type ItemID, type ItemLocationBreakdown, type ItemStack } from "../game/items";
+import { type ItemID, type ItemStack } from "../game/items";
 import type { GroupStateUpdate } from "../api/api";
 import { type Experience, Skill } from "../game/skill";
 
@@ -10,7 +10,7 @@ interface MemberColor {
 }
 
 interface GroupState {
-  items: Map<ItemID, Map<Member.Name, ItemLocationBreakdown>>;
+  items: Map<ItemID, Map<Member.Name, Member.ItemLocationBreakdown>>;
   memberStates: Map<Member.Name, Member.State>;
   memberNames: Set<Member.Name>;
   memberColors: Map<Member.Name, MemberColor>;
@@ -218,7 +218,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
   if (newState.memberStates) {
     const newItems: GroupState["items"] = new Map();
     const setContainerQuantity = (
-      containerName: ItemContainer,
+      containerName: Member.ItemContainer,
       memberName: Member.Name,
       { itemID, quantity }: ItemStack,
     ): void => {
@@ -268,7 +268,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
           break;
         }
 
-        for (const containerName of ItemContainer) {
+        for (const containerName of Member.ItemContainer) {
           if (newBreakdown[containerName] !== oldBreakdown[containerName]) {
             newAndOldItemsEqual = false;
             quantitiesAllEqual = false;

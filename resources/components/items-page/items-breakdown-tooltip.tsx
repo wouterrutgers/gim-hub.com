@@ -1,12 +1,11 @@
 import { Fragment, useRef, useState, type ReactElement } from "react";
 import { createPortal } from "react-dom";
-import { ItemContainer } from "../../game/items";
 import * as Member from "../../game/member";
 
 interface ItemsBreakdownTooltipProps {
   name: Member.Name;
-  filter: ItemContainer | "All";
-  breakdown: Partial<Record<ItemContainer, number>>;
+  filter: Member.ItemContainer | "All";
+  breakdown: Partial<Record<Member.ItemContainer, number>>;
 }
 
 /**
@@ -33,7 +32,7 @@ export const useItemsBreakdownTooltip = (): {
   if (tooltipData) {
     const lines = [];
 
-    for (const itemContainer of ItemContainer) {
+    for (const itemContainer of Member.ItemContainer) {
       if (tooltipData.filter !== "All" && tooltipData.filter !== itemContainer) {
         continue;
       }

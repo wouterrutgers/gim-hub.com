@@ -10,15 +10,9 @@ import {
   useMemo,
 } from "react";
 import { SearchElement } from "../search-element/search-element";
-import type * as Member from "../../game/member";
+import * as Member from "../../game/member";
 import { GameDataContext } from "../../context/game-data-context";
-import {
-  type ItemID,
-  mappedGEPrice,
-  composeItemIconHref,
-  ItemContainer,
-  type ItemLocationBreakdown,
-} from "../../game/items";
+import { type ItemID, mappedGEPrice, composeItemIconHref } from "../../game/items";
 import { GroupItemsContext, GroupMemberNamesContext } from "../../context/group-context";
 import { Link } from "react-router-dom";
 import { useItemsPriceTooltip } from "./items-page-tooltip";
@@ -49,8 +43,8 @@ interface ItemPanelProps {
   imageURL: string;
   totalQuantity: number;
   memberFilter: ItemFilter;
-  containerFilter: ItemContainer | "All";
-  quantities: Map<Member.Name, ItemLocationBreakdown>;
+  containerFilter: Member.ItemContainer | "All";
+  quantities: Map<Member.Name, Member.ItemLocationBreakdown>;
   isPinned: boolean;
   onTogglePin: (itemID: ItemID) => void;
 }
@@ -84,7 +78,7 @@ const ItemPanel = memo(
       .map(([name, breakdown]) => {
         let quantity = 0;
 
-        for (const itemContainer of ItemContainer) {
+        for (const itemContainer of Member.ItemContainer) {
           if (containerFilter !== "All" && containerFilter !== itemContainer) continue;
 
           quantity += breakdown[itemContainer] ?? 0;
@@ -190,7 +184,7 @@ interface FilteredItem {
   itemID: ItemID;
   itemName: string;
   imageURL: string;
-  quantityByMemberName: Map<Member.Name, ItemLocationBreakdown>;
+  breakdownByMember: Map<Member.Name, Member.ItemLocationBreakdown>;
   totalQuantity: number;
   gePrice: number;
   highAlch: number;
@@ -208,7 +202,7 @@ const ItemPanelsScrollArea = ({
 }: {
   sortedItems: FilteredItem[];
   memberFilter: ItemFilter;
-  containerFilter: ItemContainer | "All";
+  containerFilter: Member.ItemContainer | "All";
   pinnedItems: Set<ItemID>;
   onTogglePin: (itemID: ItemID) => void;
 }): ReactElement => {
@@ -276,7 +270,7 @@ const ItemPanelsScrollArea = ({
                   itemName={item.itemName}
                   memberFilter={memberFilter}
                   containerFilter={containerFilter}
-                  quantities={item.quantityByMemberName}
+                  quantities={item.breakdownByMember}
                   isPinned={pinnedItems.has(item.itemID)}
                   onTogglePin={onTogglePin}
                 />
@@ -304,11 +298,11 @@ const loadSortCategoryFromStorage = (): ItemSortCategory => {
 };
 
 const validatePinnedItems = (value: string | undefined): string | undefined => value;
-const validateContainerFilter = (value: string | undefined): ItemContainer | "All" | undefined => {
+const validateContainerFilter = (value: string | undefined): Member.ItemContainer | "All" | undefined => {
   if (typeof value !== "string") return undefined;
-  if (value !== "All" && !ItemContainer.includes(value as ItemContainer)) return undefined;
+  if (value !== "All" && !Member.ItemContainer.includes(value as Member.ItemContainer)) return undefined;
 
-  return value as ItemContainer | "All";
+  return value as Member.ItemContainer | "All";
 };
 
 export const ItemsPage = (): ReactElement => {
@@ -325,7 +319,7 @@ export const ItemsPage = (): ReactElement => {
     defaultValue: "",
     validator: validatePinnedItems,
   });
-  const [containerFilter, setContainerFilter] = useLocalStorage<ItemContainer | "All">({
+  const [containerFilter, setContainerFilter] = useLocalStorage<Member.ItemContainer | "All">({
     key: "item-page-container-filter",
     defaultValue: "All",
     validator: validateContainerFilter,
@@ -361,7 +355,7 @@ export const ItemsPage = (): ReactElement => {
     filteredItems: FilteredItem[];
   }
   const { totalHighAlch, totalGEPrice, filteredItems } = [...(items ?? [])].reduce<ItemAggregates>(
-    (previousValue, [itemID, breakdownByMemberName]) => {
+    (previousValue, [itemID, breakdownByMember]) => {
       const itemDatum = itemData?.get(itemID);
       if (!itemDatum) return previousValue;
 
@@ -376,10 +370,10 @@ export const ItemsPage = (): ReactElement => {
       }
 
       let filteredTotalQuantity = 0;
-      for (const [name, breakdown] of breakdownByMemberName) {
+      for (const [name, breakdown] of breakdownByMember) {
         if (memberFilter !== "All" && memberFilter !== name) continue;
 
-        for (const itemContainer of ItemContainer) {
+        for (const itemContainer of Member.ItemContainer) {
           if (containerFilter !== "All" && containerFilter !== itemContainer) continue;
 
           filteredTotalQuantity += breakdown[itemContainer] ?? 0;
@@ -396,7 +390,7 @@ export const ItemsPage = (): ReactElement => {
       previousValue.filteredItems.push({
         itemID,
         itemName: itemDatum?.name ?? "@UNKNOWN",
-        quantityByMemberName: breakdownByMemberName,
+        breakdownByMember,
         totalQuantity: filteredTotalQuantity,
         gePrice,
         highAlch,
@@ -499,7 +493,7 @@ export const ItemsPage = (): ReactElement => {
               setContainerFilter(validateContainerFilter(e.target.value) ?? "All");
             }}
           >
-            {["All", ...ItemContainer].map((name) => (
+            {["All", ...Member.ItemContainer].map((name) => (
               <option key={name} value={name}>
                 {name}
               </option>

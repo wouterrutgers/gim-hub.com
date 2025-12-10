@@ -29,15 +29,10 @@ export const useItemsBreakdownTooltip = (): {
     setTooltipData(props);
   };
 
-  const lines = [];
-
+  let content: ReactElement = <></>;
   if (tooltipData) {
-    lines.push(
-      <Fragment key={"header"}>
-        {tooltipData.name}
-        <hr />
-      </Fragment>,
-    );
+    const lines = [];
+
     for (const itemContainer of ItemContainer) {
       if (tooltipData.filter !== "All" && tooltipData.filter !== itemContainer) {
         continue;
@@ -51,13 +46,20 @@ export const useItemsBreakdownTooltip = (): {
 
       lines.push(
         <Fragment key={itemContainer}>
-          {itemContainer}: {quantity.toLocaleString()}
+          <span>{itemContainer}</span> <span>{quantity.toLocaleString()}</span>
         </Fragment>,
       );
     }
-  }
 
-  const content: ReactElement = <>{lines}</>;
+    content = (
+      <>
+        {tooltipData.name}
+        <br />
+        <hr />
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>{lines}</div>
+      </>
+    );
+  }
 
   const tooltipElement = createPortal(content, tooltipRef.current);
 

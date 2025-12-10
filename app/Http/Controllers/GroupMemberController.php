@@ -195,72 +195,35 @@ class GroupMemberController extends Controller
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
             $now = now();
 
-            if (! is_null($validated['stats'] ?? null)) {
-                $member->stats = $validated['stats'];
-                $member->stats_last_update = $now;
-            }
-            if (! is_null($validated['coordinates'] ?? null)) {
-                $member->coordinates = $validated['coordinates'];
-                $member->coordinates_last_update = $now;
-            }
-            if (! is_null($validated['skills'] ?? null)) {
-                $member->skills = $validated['skills'];
-                $member->skills_last_update = $now;
-            }
-            if (! is_null($validated['quests'] ?? null)) {
-                $member->quests = $validated['quests'];
-                $member->quests_last_update = $now;
-            }
-            if (! is_null($validated['inventory'] ?? null)) {
-                $member->inventory = $validated['inventory'];
-                $member->inventory_last_update = $now;
-            }
-            if (! is_null($validated['equipment'] ?? null)) {
-                $member->equipment = $validated['equipment'];
-                $member->equipment_last_update = $now;
-            }
-            if (! is_null($validated['bank'] ?? null)) {
-                $member->bank = $validated['bank'];
-                $member->bank_last_update = $now;
-            }
-            if (! is_null($validated['rune_pouch'] ?? null)) {
-                $member->rune_pouch = $validated['rune_pouch'];
-                $member->rune_pouch_last_update = $now;
-            }
-            if (! is_null($validated['seed_vault'] ?? null)) {
-                $member->seed_vault = $validated['seed_vault'];
-                $member->seed_vault_last_update = $now;
-            }
-            if (! is_null($validated['poh_costume_room'] ?? null)) {
-                $member->poh_costume_room = $validated['poh_costume_room'];
-                $member->poh_costume_room_last_update = $now;
-            }
-            if (! is_null($validated['quiver'] ?? null)) {
-                $member->quiver = $validated['quiver'];
-                $member->quiver_last_update = $now;
-            }
-            if (! is_null($validated['diary_vars'] ?? null)) {
-                $member->diary_vars = $validated['diary_vars'];
-                $member->diary_vars_last_update = $now;
-            }
-            if (isset($validated['interacting'])) {
-                $member->interacting = $validated['interacting'];
-                $member->interacting_last_update = $now;
+            foreach (Member::PROPERTY_KEYS as $property) {
+                if (array_key_exists($property, $validated) && ! is_null($validated[$property])) {
+                    $member->properties()->updateOrCreate(
+                        ['key' => $property],
+                        ['value' => $validated[$property], 'last_update' => $now]
+                    );
+                }
             }
 
-            $member->save();
+            if (isset($validated['interacting'])) {
+                $member->properties()->updateOrCreate(
+                    ['key' => 'interacting'],
+                    ['value' => $validated['interacting'], 'last_update' => $now]
+                );
+            }
 
             if (! empty($validated['deposited'] ?? [])) {
                 $this->depositItems($groupId, $member->name, $validated['deposited']);
             }
 
             if (! empty($validated['shared_bank'] ?? [])) {
-                Member::where('group_id', '=', $groupId)
+                $sharedMember = Member::where('group_id', '=', $groupId)
                     ->where('name', '=', Member::SHARED_MEMBER)
-                    ->update([
-                        'bank' => $validated['shared_bank'],
-                        'bank_last_update' => $now,
-                    ]);
+                    ->first();
+
+                $sharedMember?->properties()->updateOrCreate(
+                    ['key' => 'bank'],
+                    ['value' => $validated['shared_bank'], 'last_update' => $now]
+                );
             }
 
             if (! is_null($collectionLogData)) {
@@ -268,7 +231,7 @@ class GroupMemberController extends Controller
             }
         });
 
-        return response()->json(null, 200);
+        return response()->json(null);
     }
 
     protected function updateCollectionLog(Member $member, array $collectionLogData): void
@@ -296,7 +259,9 @@ class GroupMemberController extends Controller
             return;
         }
 
-        $bankItems = $member->bank ?? [];
+        $member->loadMissing('properties');
+        $bankProperty = $member->getProperty('bank');
+        $bankItems = $bankProperty?->value ?? [];
 
         $depositedMap = [];
         for ($i = 0; $i < count($deposited); $i += 2) {
@@ -321,9 +286,10 @@ class GroupMemberController extends Controller
             $bankItems[] = $quantity;
         }
 
-        $member->bank = $bankItems;
-        $member->bank_last_update = now();
-        $member->save();
+        $member->properties()->updateOrCreate(
+            ['key' => 'bank'],
+            ['value' => $bankItems, 'last_update' => now()]
+        );
     }
 
     public function getGroupData(Request $request): JsonResponse
@@ -336,49 +302,34 @@ class GroupMemberController extends Controller
         $groupId = $request->attributes->get('group')->id;
 
         $members = Member::where('group_id', '=', $groupId)
+            ->with('properties')
             ->get()
             ->map(function ($member) use ($fromTime) {
-                $dates = [
-                    $member->stats_last_update,
-                    $member->coordinates_last_update,
-                    $member->skills_last_update,
-                    $member->quests_last_update,
-                    $member->inventory_last_update,
-                    $member->equipment_last_update,
-                    $member->bank_last_update,
-                    $member->rune_pouch_last_update,
-                    $member->interacting_last_update,
-                    $member->seed_vault_last_update,
-                    $member->poh_costume_room_last_update,
-                    $member->quiver_last_update,
-                    $member->diary_vars_last_update,
-                ];
-                $lastUpdated = collect($dates)
-                    ->filter(fn ($d) => ! is_null($d))
-                    ->max();
+                $properties = $member->properties->keyBy('key');
+                $lastUpdated = $properties->max('last_update');
 
-                return [
+                $data = [
                     'name' => $member->name,
                     'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
-                    'stats' => (! is_null($member->stats_last_update) && $member->stats_last_update >= $fromTime) ? $member->stats : null,
-                    'coordinates' => (! is_null($member->coordinates_last_update) && $member->coordinates_last_update >= $fromTime) ? $member->coordinates : null,
-                    'skills' => (! is_null($member->skills_last_update) && $member->skills_last_update >= $fromTime) ? $member->skills : null,
-                    'quests' => (! is_null($member->quests_last_update) && $member->quests_last_update >= $fromTime) ? $member->quests : null,
-                    'inventory' => (! is_null($member->inventory_last_update) && $member->inventory_last_update >= $fromTime) ? $member->inventory : null,
-                    'equipment' => (! is_null($member->equipment_last_update) && $member->equipment_last_update >= $fromTime) ? $member->equipment : null,
-                    'bank' => (! is_null($member->bank_last_update) && $member->bank_last_update >= $fromTime) ? $member->bank : null,
-                    'rune_pouch' => (! is_null($member->rune_pouch_last_update) && $member->rune_pouch_last_update >= $fromTime) ? $member->rune_pouch : null,
-                    'interacting' => (! is_null($member->interacting_last_update) && $member->interacting_last_update >= $fromTime)
-                        ? $this->withInteractingTimestamp($member->interacting, $member->interacting_last_update)
-                        : null,
-                    'seed_vault' => (! is_null($member->seed_vault_last_update) && $member->seed_vault_last_update >= $fromTime) ? $member->seed_vault : null,
-                    'poh_costume_room' => (! is_null($member->poh_costume_room_last_update) && $member->poh_costume_room_last_update >= $fromTime) ? $member->poh_costume_room : null,
-                    'quiver' => (! is_null($member->quiver_last_update) && $member->quiver_last_update >= $fromTime) ? $member->quiver : null,
-                    'diary_vars' => (! is_null($member->diary_vars_last_update) && $member->diary_vars_last_update >= $fromTime) ? $member->diary_vars : null,
                     'shared_bank' => null,
                     'deposited' => null,
                     'collection_log' => null,
                 ];
+
+                foreach (Member::PROPERTY_KEYS as $key) {
+                    $property = $properties->get($key);
+                    if ($property && $property->last_update >= $fromTime) {
+                        $value = $property->value;
+                        if ($key === 'interacting') {
+                            $value = $this->withInteractingTimestamp($value, $property->last_update);
+                        }
+                        $data[$key] = $value;
+                    } else {
+                        $data[$key] = null;
+                    }
+                }
+
+                return $data;
             });
 
         return response()->json($members);

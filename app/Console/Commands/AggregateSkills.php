@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Enums\AggregatePeriod;
 use App\Models\AggregationInfo;
-use App\Models\Member;
+use App\Models\MemberProperty;
 use App\Models\SkillStat;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -48,13 +48,14 @@ class AggregateSkills extends Command
 
     protected function aggregateSkillsForPeriod(AggregatePeriod $period, Carbon $lastAggregation): void
     {
-        $members = Member::whereNotNull('skills_last_update')
-            ->whereNotNull('skills')
-            ->where('skills_last_update', '>=', $lastAggregation)
+        $properties = MemberProperty::where('key', '=', 'skills')
+            ->where('last_update', '>=', $lastAggregation)
+            ->with('member')
             ->get();
 
-        foreach ($members as $member) {
-            $timeValue = $this->getAggregateTimeValue($period, $member->skills_last_update);
+        foreach ($properties as $property) {
+            $member = $property->member;
+            $timeValue = $this->getAggregateTimeValue($period, $property->last_update);
 
             SkillStat::updateOrCreate(
                 [
@@ -63,7 +64,7 @@ class AggregateSkills extends Command
                     'created_at' => $timeValue,
                 ],
                 [
-                    'skills' => $member->skills,
+                    'skills' => $property->value,
                     'updated_at' => now(),
                 ]
             );

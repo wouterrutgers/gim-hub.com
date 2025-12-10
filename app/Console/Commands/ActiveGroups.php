@@ -16,12 +16,10 @@ class ActiveGroups extends Command
     public function handle(): void
     {
         $groups = Group::with(['members' => function ($query) {
-            $query->where('name', '!=', '@SHARED');
+            $query->where('name', '!=', '@SHARED')->with('properties');
         }])->whereHas('members', function (Builder $query) {
-            $query->where('name', '!=', '@SHARED')->where(function (Builder $query) {
-                foreach ($this->dates() as $date) {
-                    $query->orWhere($date, '>=', now()->subDays(30));
-                }
+            $query->where('name', '!=', '@SHARED')->whereHas('properties', function (Builder $query) {
+                $query->where('last_update', '>=', now()->subDays(30));
             });
         })->get();
 
@@ -31,7 +29,7 @@ class ActiveGroups extends Command
             }
 
             return $group->members->flatMap(function (Member $member) {
-                return collect($this->dates())->map(fn (string $date) => $member->{$date})->filter();
+                return $member->properties->pluck('last_update');
             })->max();
         });
 
@@ -41,7 +39,7 @@ class ActiveGroups extends Command
 
         foreach ($groups->values() as $index => $group) {
             $latestDate = $group->members->flatMap(function (Member $member) {
-                return collect($this->dates())->map(fn (string $date) => $member->{$date})->filter();
+                return $member->properties->pluck('last_update');
             })->max();
 
             $lastActive = $latestDate ? $latestDate->diffForHumans() : 'never';
@@ -55,11 +53,11 @@ class ActiveGroups extends Command
             $this->info("{$group->name} <comment>({$info})</comment>");
 
             $sortedMembers = $group->members->sortByDesc(function (Member $member) {
-                return collect($this->dates())->map(fn (string $date) => $member->{$date})->filter()->max();
+                return $member->properties->max('last_update');
             })->values();
 
             foreach ($sortedMembers as $memberIndex => $member) {
-                $memberLatestDate = collect($this->dates())->map(fn (string $date) => $member->{$date})->filter()->max();
+                $memberLatestDate = $member->properties->max('last_update');
 
                 $lastUpdate = $memberLatestDate ? $memberLatestDate->diffForHumans() : 'never';
                 $isLastMember = $memberIndex === $sortedMembers->count() - 1;
@@ -75,24 +73,5 @@ class ActiveGroups extends Command
 
         $this->newLine();
         $this->info("Total: {$groups->count()} groups");
-    }
-
-    protected function dates(): array
-    {
-        return [
-            'stats_last_update',
-            'coordinates_last_update',
-            'skills_last_update',
-            'quests_last_update',
-            'inventory_last_update',
-            'equipment_last_update',
-            'bank_last_update',
-            'rune_pouch_last_update',
-            'interacting_last_update',
-            'seed_vault_last_update',
-            'poh_costume_room_last_update',
-            'quiver_last_update',
-            'diary_vars_last_update',
-        ];
     }
 }

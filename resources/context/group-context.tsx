@@ -279,20 +279,20 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       newAndOldItemsEqual = false;
     }
 
-    for (const [itemID, oldQuantityPerMember] of oldState.items) {
+    for (const [itemID, oldBreakdownPerMember] of oldState.items) {
       const newBreakdownPerMember = newItems.get(itemID);
       if (!newBreakdownPerMember) {
         newAndOldItemsEqual = false;
         continue;
       }
 
-      if (oldQuantityPerMember.size !== newBreakdownPerMember.size) {
+      if (oldBreakdownPerMember.size !== newBreakdownPerMember.size) {
         newAndOldItemsEqual = false;
         continue;
       }
 
       let quantitiesAllEqual = true;
-      for (const [member, oldQuantity] of oldQuantityPerMember) {
+      for (const [member, oldBreakdown] of oldBreakdownPerMember) {
         const newBreakdown = newBreakdownPerMember.get(member);
         if (!newBreakdown) {
           newAndOldItemsEqual = false;
@@ -301,7 +301,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
         }
 
         for (const containerName of ItemContainer) {
-          if (newBreakdown[containerName] !== oldQuantity[containerName]) {
+          if (newBreakdown[containerName] !== oldBreakdown[containerName]) {
             newAndOldItemsEqual = false;
             quantitiesAllEqual = false;
             break;
@@ -310,7 +310,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       }
       if (!quantitiesAllEqual) continue;
 
-      newItems.set(itemID, oldQuantityPerMember);
+      newItems.set(itemID, oldBreakdownPerMember);
     }
 
     if (!newAndOldItemsEqual) {

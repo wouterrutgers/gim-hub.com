@@ -91791,5 +91791,30 @@
     "name": "Crate of clothes",
     "highalch": 0,
     "mapping": null
+  },
+  "32926": {
+    "name": "Serving platter",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32928": {
+    "name": "Lovley jubbly bib",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32930": {
+    "name": "Beer belly sweater",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32932": {
+    "name": "Jad jumper",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32934": {
+    "name": "Christmas dinner",
+    "highalch": 0,
+    "mapping": null
   }
 }

@@ -10,40 +10,27 @@ class Member extends Model
 {
     protected $guarded = [];
 
-    protected $casts = [
-        'stats' => 'array',
-        'stats_last_update' => 'datetime',
-        'coordinates' => 'array',
-        'coordinates_last_update' => 'datetime',
-        'skills' => 'array',
-        'skills_last_update' => 'datetime',
-        'quests' => 'array',
-        'quests_last_update' => 'datetime',
-        'inventory' => 'array',
-        'inventory_last_update' => 'datetime',
-        'equipment' => 'array',
-        'equipment_last_update' => 'datetime',
-        'rune_pouch' => 'array',
-        'rune_pouch_last_update' => 'datetime',
-        'bank' => 'array',
-        'bank_last_update' => 'datetime',
-        'seed_vault' => 'array',
-        'seed_vault_last_update' => 'datetime',
-        'poh_costume_room' => 'array',
-        'poh_costume_room_last_update' => 'datetime',
-        'quiver' => 'array',
-        'quiver_last_update' => 'datetime',
-        'interacting' => 'array',
-        'interacting_last_update' => 'datetime',
-        'diary_vars' => 'array',
-        'diary_vars_last_update' => 'datetime',
+    public const SHARED_MEMBER = '@SHARED';
+
+    public const PROPERTY_KEYS = [
+        'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
+        'bank', 'rune_pouch', 'seed_vault', 'poh_costume_room', 'quiver',
+        'diary_vars', 'interacting',
     ];
 
-    public const SHARED_MEMBER = '@SHARED';
+    public function getProperty(string $key): ?MemberProperty
+    {
+        return $this->properties->firstWhere('key', '=', $key);
+    }
 
     public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class);
+    }
+
+    public function properties(): HasMany
+    {
+        return $this->hasMany(MemberProperty::class);
     }
 
     public function collectionLogs(): HasMany

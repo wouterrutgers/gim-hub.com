@@ -140,19 +140,20 @@ const mockGroupDataResponse = (
     const REDBERRY_PIE_UNCOOKED = 2321 as ItemID;
 
     member.bank = new Map([
-      [REDBERRY_PIE_UNCOOKED, thurgo.piesUncookedInBank],
-      [REDBERRY_PIE_COOKED, thurgo.piesCookedInBank],
+      [REDBERRY_PIE_UNCOOKED, { itemID: REDBERRY_PIE_UNCOOKED, quantity: thurgo.piesUncookedInBank }],
+      [REDBERRY_PIE_COOKED, { itemID: REDBERRY_PIE_COOKED, quantity: thurgo.piesCookedInBank }],
     ]);
     member.skills = {
       ...DEFAULT_SKILLS,
       Cooking: (61512 + (thurgo.piesCookedInBank + thurgo.piesCookedInInventory) * 78) as Experience,
     };
-    member.inventory = [];
+    member.inventory = new Map();
+    let slot = 0;
     for (let i = 0; i < thurgo.piesCookedInInventory; i++) {
-      member.inventory.push({ itemID: REDBERRY_PIE_COOKED, quantity: 1 });
+      member.inventory.set(slot++, { itemID: REDBERRY_PIE_COOKED, quantity: 1 });
     }
     for (let i = 0; i < thurgo.piesUncookedInInventory; i++) {
-      member.inventory.push({ itemID: REDBERRY_PIE_UNCOOKED, quantity: 1 });
+      member.inventory.set(slot++, { itemID: REDBERRY_PIE_UNCOOKED, quantity: 1 });
     }
 
     results.push(member);
@@ -287,12 +288,12 @@ const mockGroupDataResponse = (
       quests: MAX_QUEST,
       diaries: MAX_DIARY,
       coordinates: { x: 3354, y: 9120, plane: 0, isOnBoat: false },
-      quiver: new Map([[11212 as ItemID, 24381]]), // dragon arrow
+      quiver: new Map([[11212 as ItemID, { itemID: 11212 as ItemID, quantity: 24381 }]]), // dragon arrow
       runePouch: new Map([
-        [565 as ItemID, 13929392], // blood rune
-        [560 as ItemID, 22381328], // death rune
-        [554 as ItemID, 34842382], // fire rune
-        [30843 as ItemID, 22313418], // aether rune
+        [565 as ItemID, { itemID: 565 as ItemID, quantity: 13929392 }], // blood rune
+        [560 as ItemID, { itemID: 560 as ItemID, quantity: 22381328 }], // death rune
+        [554 as ItemID, { itemID: 554 as ItemID, quantity: 34842382 }], // fire rune
+        [30843 as ItemID, { itemID: 30843 as ItemID, quantity: 22313418 }], // aether rune
       ]),
       equipment: new Map<EquipmentSlot, ItemStack>([
         ["Cape", { itemID: 28955 as ItemID, quantity: 1 }], // quiver
@@ -306,36 +307,38 @@ const mockGroupDataResponse = (
         ["Gloves", { itemID: 26235 as ItemID, quantity: 1 }], // zaryte
         ["Ring", { itemID: 28310 as ItemID, quantity: 1 }], // venator ring
       ]),
-      inventory: [
-        { itemID: 27275 as ItemID, quantity: 1 }, // shadow
-        { itemID: 24664 as ItemID, quantity: 1 }, // ancestral hat
-        { itemID: 27246 as ItemID, quantity: 1 }, // fang
-        { itemID: 28254 as ItemID, quantity: 1 }, // torva helm
-        { itemID: 12002 as ItemID, quantity: 1 }, // occult
-        { itemID: 24666 as ItemID, quantity: 1 }, // ancestral robe
-        { itemID: 29804 as ItemID, quantity: 1 }, // rancour
-        { itemID: 28256 as ItemID, quantity: 1 }, // torva body
-        { itemID: 31106 as ItemID, quantity: 1 }, // confliction
-        { itemID: 24668 as ItemID, quantity: 1 }, // ancestral robe bottom
-        { itemID: 22981 as ItemID, quantity: 1 }, // ferocious
-        { itemID: 28258 as ItemID, quantity: 1 }, // torva legs
-        { itemID: 28313 as ItemID, quantity: 1 }, // magus
-        { itemID: 21795 as ItemID, quantity: 1 }, // zamorak cape
-        { itemID: 28307 as ItemID, quantity: 1 }, // ultor
-        { itemID: 21297 as ItemID, quantity: 1 }, // infernal cape
-        { itemID: 27291 as ItemID, quantity: 1 }, // sun partisan
-        { itemID: 28688 as ItemID, quantity: 1 }, // bp
-        { itemID: 27610 as ItemID, quantity: 1 }, // venator bow
-        { itemID: 22322 as ItemID, quantity: 1 }, // avernic defender
-        { itemID: 8872 as ItemID, quantity: 1 }, // bone dagger
-        { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
-        { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
-        { itemID: 27281 as ItemID, quantity: 1 }, // rune pouch
-        { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
-        { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
-        { itemID: 23685 as ItemID, quantity: 1 }, // supercombat
-        { itemID: 25818 as ItemID, quantity: 1 }, // book of the dead
-      ],
+      inventory: new Map(
+        [
+          { itemID: 27275 as ItemID, quantity: 1 }, // shadow
+          { itemID: 24664 as ItemID, quantity: 1 }, // ancestral hat
+          { itemID: 27246 as ItemID, quantity: 1 }, // fang
+          { itemID: 28254 as ItemID, quantity: 1 }, // torva helm
+          { itemID: 12002 as ItemID, quantity: 1 }, // occult
+          { itemID: 24666 as ItemID, quantity: 1 }, // ancestral robe
+          { itemID: 29804 as ItemID, quantity: 1 }, // rancour
+          { itemID: 28256 as ItemID, quantity: 1 }, // torva body
+          { itemID: 31106 as ItemID, quantity: 1 }, // confliction
+          { itemID: 24668 as ItemID, quantity: 1 }, // ancestral robe bottom
+          { itemID: 22981 as ItemID, quantity: 1 }, // ferocious
+          { itemID: 28258 as ItemID, quantity: 1 }, // torva legs
+          { itemID: 28313 as ItemID, quantity: 1 }, // magus
+          { itemID: 21795 as ItemID, quantity: 1 }, // zamorak cape
+          { itemID: 28307 as ItemID, quantity: 1 }, // ultor
+          { itemID: 21297 as ItemID, quantity: 1 }, // infernal cape
+          { itemID: 27291 as ItemID, quantity: 1 }, // sun partisan
+          { itemID: 28688 as ItemID, quantity: 1 }, // bp
+          { itemID: 27610 as ItemID, quantity: 1 }, // venator bow
+          { itemID: 22322 as ItemID, quantity: 1 }, // avernic defender
+          { itemID: 8872 as ItemID, quantity: 1 }, // bone dagger
+          { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
+          { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
+          { itemID: 27281 as ItemID, quantity: 1 }, // rune pouch
+          { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
+          { itemID: 10925 as ItemID, quantity: 1 }, // sanfew
+          { itemID: 23685 as ItemID, quantity: 1 }, // supercombat
+          { itemID: 25818 as ItemID, quantity: 1 }, // book of the dead
+        ].map((item, index) => [index, item]),
+      ),
     } satisfies GetGroupDataResponse[number];
 
     for (const skill of Skill) {
@@ -594,20 +597,24 @@ export default class DemoApi {
                 // When items are duplicated across pages, this overwrites them, but that's okay.
                 const totalCount = Math.floor(Math.max(0, (Math.random() - 0.5) * 8));
                 collection.set(item, totalCount);
-                bank.set(item, totalCount);
+                bank.set(item, { itemID: item, quantity: totalCount });
               }
             }
           }
 
-          for (const [itemID, totalCount] of bank) {
+          for (const [itemID, { quantity: totalCount }] of bank) {
             const depositedCount = Math.floor(Math.random() * totalCount);
             const keptCount = totalCount - depositedCount;
 
             if (depositedCount > 0) {
-              sharedBank.set(itemID, (sharedBank.get(itemID) ?? 0) + depositedCount);
+              const existing = sharedBank.get(itemID);
+              sharedBank.set(itemID, {
+                itemID,
+                quantity: (existing?.quantity ?? 0) + depositedCount,
+              });
             }
             if (keptCount > 0) {
-              bank.set(itemID, keptCount);
+              bank.set(itemID, { itemID, quantity: keptCount });
             } else {
               bank.delete(itemID);
             }

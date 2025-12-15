@@ -9,6 +9,7 @@ import type { ItemID } from "../../game/items";
 import { CachedImage } from "../cached-image/cached-image";
 import { Context as APIContext } from "../../context/api-context";
 import { formatTitle } from "../../ts/format-title";
+import mappings from "./mappings.json";
 
 import "./collection-log.css";
 
@@ -160,99 +161,18 @@ const buildCompletionLines = (pageName: string): { label: string; lookupKey: str
     lookupKey: key ?? boss,
   });
 
-  const map: Record<string, { label: string; lookupKey: string }[]> = {
-    "Callisto and Artio": [kills("Callisto"), kills("Artio")],
-    "Dagannoth Kings": [kills("Dagannoth Rex"), kills("Dagannoth Prime"), kills("Dagannoth Supreme")],
-    "Doom of Mokhaiotl": [{ label: "Deep delves", lookupKey: "Doom of Mokhaiotl" }],
-    "The Gauntlet": [
-      { label: "Gauntlet completion count", lookupKey: "The Gauntlet" },
-      { label: "Corrupted Gauntlet completion count", lookupKey: "The Corrupted Gauntlet" },
-    ],
-    "The Inferno": [kills("TzKal-Zuk")],
-    "The Nightmare": [kills("Phosani's Nightmare"), kills("Nightmare")],
-    "Venenatis and Spindel": [kills("Venenatis"), kills("Spindel")],
-    "Vet'ion and Calvar'ion": [kills("Vet'ion"), kills("Calvar'ion")],
-    "Moons of Peril": [{ label: "Lunar Chests opened", lookupKey: "Lunar Chests" }],
-    "The Fight Caves": [kills("TzTok-Jad")],
-    "Fortis Colosseum": [kills("Sol Heredit")],
-    "Royal Titans": [kills("Royal Titans", "The Royal Titans")],
+  const map: Record<string, string | { label: string; lookupKey: string }[]> = mappings;
 
-    "Chambers of Xeric": [
-      { label: "Chambers of Xeric completions", lookupKey: "Chambers of Xeric" },
-      { label: "Chambers of Xeric (CM) completions", lookupKey: "Chambers of Xeric: Challenge Mode" },
-    ],
-    "Theatre of Blood": [
-      { label: "Theatre of Blood completions", lookupKey: "Theatre of Blood" },
-      { label: "Theatre of Blood (Hard) completions", lookupKey: "Theatre of Blood: Hard Mode" },
-    ],
-    "Tombs of Amascut": [
-      { label: "Tombs of Amascut completions", lookupKey: "Tombs of Amascut" },
-      { label: "Tombs of Amascut (Expert) completions", lookupKey: "Tombs of Amascut: Expert Mode" },
-    ],
+  const entry = map[pageName];
+  if (entry === "kills") {
+    return [kills(pageName)];
+  }
 
-    "Beginner Treasure Trails": [{ label: "Beginner clues completed", lookupKey: "Clue Scrolls (beginner)" }],
-    "Easy Treasure Trails": [{ label: "Easy clues completed", lookupKey: "Clue Scrolls (easy)" }],
-    "Medium Treasure Trails": [{ label: "Medium clues completed", lookupKey: "Clue Scrolls (medium)" }],
-    "Hard Treasure Trails": [{ label: "Hard clues completed", lookupKey: "Clue Scrolls (hard)" }],
-    "Elite Treasure Trails": [{ label: "Elite clues completed", lookupKey: "Clue Scrolls (elite)" }],
-    "Master Treasure Trails": [{ label: "Master clues completed", lookupKey: "Clue Scrolls (master)" }],
-    "Hard Treasure Trails (Rare)": [{ label: "Hard clues completed", lookupKey: "Clue Scrolls (hard)" }],
-    "Elite Treasure Trails (Rare)": [{ label: "Elite clues completed", lookupKey: "Clue Scrolls (elite)" }],
-    "Master Treasure Trails (Rare)": [{ label: "Master clues completed", lookupKey: "Clue Scrolls (master)" }],
-    "Shared Treasure Trail Rewards": [{ label: "Total clues completed", lookupKey: "Clue Scrolls (all)" }],
-    "Scroll Cases": [],
+  if (typeof entry === "string") {
+    return [];
+  }
 
-    "Barbarian Assault": [],
-    "Brimhaven Agility Arena": [],
-    "Castle Wars": [],
-    "Fishing Trawler": [],
-    "Giants' Foundry": [],
-    "Gnome Restaurant": [],
-    "Guardians of the Rift": [],
-    "Hallowed Sepulchre": [],
-    "Last Man Standing": [],
-    "Magic Training Arena": [],
-    "Mahogany Homes": [],
-    "Mastering Mixology": [],
-    "Pest Control": [],
-    "Rogues' Den": [],
-    "Shades of Mort'ton": [],
-    "Soul Wars": [],
-    "Temple Trekking": [],
-    "Tithe Farm": [],
-    "Trouble Brewing": [],
-    "Vale Totems": [],
-    "Volcanic Mine": [],
-
-    "Aerial Fishing": [],
-    "All Pets": [],
-    Camdozaal: [],
-    "Champion's Challenge": [],
-    "Chompy Bird Hunting": [],
-    "Colossal Wyrm Agility": [],
-    "Creature Creation": [],
-    Cyclopes: [],
-    "Elder Chaos Druids": [],
-    Forestry: [],
-    "Fossil Island Notes": [],
-    "Glough's Experiments": [],
-    "Hunter Guild": [],
-    "Monkey Backpacks": [],
-    "Motherlode Mine": [],
-    "My Notes": [],
-    "Random Events": [],
-    Revenants: [],
-    "Rooftop Agility": [],
-    "Shayzien Armour": [],
-    "Shooting Stars": [],
-    "Skilling Pets": [],
-    Slayer: [],
-    "Tormented Demons": [],
-    TzHaar: [],
-    Miscellaneous: [],
-  };
-
-  return map[pageName] ?? [kills(pageName)];
+  return entry;
 };
 
 /**
@@ -285,6 +205,18 @@ export const CollectionLogWindow = ({
       })
       .catch((err) => console.error("Failed to get hiscores for collection log", err));
   }, [fetchMemberHiscores, player]);
+
+  useEffect(() => {
+    if (!import.meta.env.DEV || !collectionLogInfo) return;
+
+    console.groupCollapsed("Collection log mappings");
+    collectionLogInfo.tabs.forEach((pages) => {
+      pages.forEach((page) => {
+        buildCompletionLines(page.name);
+      });
+    });
+    console.groupEnd();
+  }, [collectionLogInfo]);
 
   const collection = groupCollections.get(player);
   const tabButtons = CollectionLog.TabName.map((tab) => (

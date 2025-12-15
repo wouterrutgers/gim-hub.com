@@ -240,7 +240,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       if (!itemView.has(memberName)) itemView.set(memberName, {});
       const memberBreakdown = itemView.get(memberName)!;
 
-      memberBreakdown[containerName] = quantity;
+      memberBreakdown[containerName] = (memberBreakdown[containerName] ?? 0) + quantity;
     };
 
     newState.memberStates.forEach(

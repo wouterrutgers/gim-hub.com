@@ -1,7 +1,7 @@
 import { createContext, type ReactNode, useContext, useEffect, useReducer } from "react";
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
-import { ItemContainer, type ItemID, type ItemLocationBreakdown, type ItemStack } from "../game/items";
+import { type ItemID, type ItemStack } from "../game/items";
 import type { GroupStateUpdate } from "../api/api";
 import { type Experience, Skill } from "../game/skill";
 
@@ -10,7 +10,7 @@ interface MemberColor {
 }
 
 interface GroupState {
-  items: Map<ItemID, Map<Member.Name, ItemLocationBreakdown>>;
+  items: Map<ItemID, Map<Member.Name, Member.ItemLocationBreakdown>>;
   memberStates: Map<Member.Name, Member.State>;
   memberNames: Set<Member.Name>;
   memberColors: Map<Member.Name, MemberColor>;
@@ -67,34 +67,25 @@ export const useGroupMemberContext = <T,>(selector: GroupMemberStateSelector<T>)
 };
 
 // Selectors for per member state
-export const useMemberLastUpdatedContext = (member: Member.Name): Date | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.lastUpdated);
-export const useMemberBankContext = (member: Member.Name): Member.ItemCollection | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.bank);
-export const useMemberRunePouchContext = (member: Member.Name): Member.ItemCollection | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.runePouch);
-export const useMemberSeedVaultContext = (member: Member.Name): Member.ItemCollection | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.seedVault);
-export const useMemberPohCostumeRoomContext = (member: Member.Name): Member.ItemCollection | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.pohCostumeRoom);
-export const useMemberQuiverContext = (member: Member.Name): Member.ItemCollection | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.quiver);
-export const useMemberEquipmentContext = (member: Member.Name): Member.Equipment | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.equipment);
-export const useMemberInventoryContext = (member: Member.Name): Member.Inventory | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.inventory);
-export const useMemberCoordinatesContext = (member: Member.Name): Member.Position | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.coordinates);
-export const useMemberInteractingContext = (member: Member.Name): Member.NPCInteraction | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.interacting);
-export const useMemberStatsContext = (member: Member.Name): Member.Stats | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.stats);
-export const useMemberSkillsContext = (member: Member.Name): Member.Skills | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.skills);
-export const useMemberQuestsContext = (member: Member.Name): Member.Quests | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.quests);
-export const useMemberDiariesContext = (member: Member.Name): Member.Diaries | undefined =>
-  useGroupMemberContext((state) => state?.get(member)?.diaries);
+const createMemberSelector =
+  <K extends keyof Member.State>(key: K) =>
+  (member: Member.Name): Member.State[K] | undefined =>
+    useGroupMemberContext((state) => state?.get(member)?.[key]);
+
+export const useMemberLastUpdatedContext = createMemberSelector("lastUpdated");
+export const useMemberBankContext = createMemberSelector("bank");
+export const useMemberRunePouchContext = createMemberSelector("runePouch");
+export const useMemberSeedVaultContext = createMemberSelector("seedVault");
+export const useMemberPohCostumeRoomContext = createMemberSelector("pohCostumeRoom");
+export const useMemberQuiverContext = createMemberSelector("quiver");
+export const useMemberEquipmentContext = createMemberSelector("equipment");
+export const useMemberInventoryContext = createMemberSelector("inventory");
+export const useMemberCoordinatesContext = createMemberSelector("coordinates");
+export const useMemberInteractingContext = createMemberSelector("interacting");
+export const useMemberStatsContext = createMemberSelector("stats");
+export const useMemberSkillsContext = createMemberSelector("skills");
+export const useMemberQuestsContext = createMemberSelector("quests");
+export const useMemberDiariesContext = createMemberSelector("diaries");
 
 /* eslint-enable react-refresh/only-export-components */
 
@@ -170,18 +161,14 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       const oldMemberState = oldState.memberStates.get(member);
 
       if (stateUpdate || !oldMemberState) {
+        const containerDefaults = Object.fromEntries(Member.AllItemContainers.map(({ key }) => [key, new Map()]));
+
         newMemberStates.set(member, {
-          bank: new Map(),
-          equipment: new Map(),
-          inventory: [] satisfies Member.Inventory,
           lastUpdated: new Date(0),
-          runePouch: new Map(),
-          seedVault: new Map(),
-          pohCostumeRoom: new Map(),
-          quiver: new Map(),
+          ...containerDefaults,
           ...oldMemberState,
           ...stateUpdate,
-        });
+        } as Member.State);
         memberStatesUpdated = true;
       } else {
         newMemberStates.set(member, oldMemberState);
@@ -231,7 +218,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
   if (newState.memberStates) {
     const newItems: GroupState["items"] = new Map();
     const setContainerQuantity = (
-      containerName: ItemContainer,
+      containerName: Member.ItemContainer,
       memberName: Member.Name,
       { itemID, quantity }: ItemStack,
     ): void => {
@@ -243,35 +230,16 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
       memberBreakdown[containerName] = (memberBreakdown[containerName] ?? 0) + quantity;
     };
 
-    newState.memberStates.forEach(
-      ({ bank, equipment, inventory, runePouch, seedVault, pohCostumeRoom, quiver }, memberName) => {
-        // Each item storage is slightly different, so we need to iterate them different.
-        bank.forEach((quantity, itemID) => {
-          setContainerQuantity("Bank", memberName, { quantity, itemID });
-        });
-        runePouch.forEach((quantity, itemID) => {
-          setContainerQuantity("Rune Pouch", memberName, { quantity, itemID });
-        });
-        seedVault.forEach((quantity, itemID) => {
-          setContainerQuantity("Seed Vault", memberName, { quantity, itemID });
-        });
-        pohCostumeRoom.forEach((quantity, itemID) => {
-          setContainerQuantity("Costume Room", memberName, { quantity, itemID });
-        });
-        quiver.forEach((quantity, itemID) => {
-          setContainerQuantity("Quiver", memberName, { quantity, itemID });
-        });
+    newState.memberStates.forEach((memberState, memberName) => {
+      for (const { name, key, getItems } of Member.AllItemContainers) {
+        const data = memberState[key];
+        if (!data) continue;
 
-        inventory
-          .filter((item) => item !== undefined)
-          .forEach((item) => {
-            setContainerQuantity("Inventory", memberName, item);
-          });
-        equipment.forEach((item) => {
-          setContainerQuantity("Equipment", memberName, item);
-        });
-      },
-    );
+        for (const item of getItems(data)) {
+          setContainerQuantity(name, memberName, item);
+        }
+      }
+    });
 
     let newAndOldItemsEqual = true;
 
@@ -300,7 +268,7 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
           break;
         }
 
-        for (const containerName of ItemContainer) {
+        for (const containerName of Member.ItemContainer) {
           if (newBreakdown[containerName] !== oldBreakdown[containerName]) {
             newAndOldItemsEqual = false;
             quantitiesAllEqual = false;

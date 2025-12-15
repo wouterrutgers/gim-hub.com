@@ -1,12 +1,32 @@
 import type { Distinct } from "../ts/util";
 import type { DiaryRegion, DiaryTier } from "./diaries";
 import type { EquipmentSlot } from "./equipment";
-import type { ItemID, ItemStack } from "./items";
+import { type ItemID, type ItemStack } from "./items";
 import type { QuestID, QuestStatus } from "./quests";
 import type { Experience, Skill } from "./skill";
 import type { WikiPosition2D } from "../components/canvas-map/coordinates";
 
 export type Name = Distinct<string, "Member.Name">;
+
+const mapToItems = (data: Map<unknown, ItemStack>): Iterable<ItemStack> => data.values();
+
+export const AllItemContainers = [
+  { name: "Bank", key: "bank", getItems: mapToItems },
+  { name: "Rune Pouch", key: "runePouch", getItems: mapToItems },
+  { name: "Seed Vault", key: "seedVault", getItems: mapToItems },
+  { name: "Costume Room", key: "pohCostumeRoom", getItems: mapToItems },
+  { name: "Quiver", key: "quiver", getItems: mapToItems },
+  { name: "Equipment", key: "equipment", getItems: mapToItems },
+  { name: "Inventory", key: "inventory", getItems: mapToItems },
+] as const;
+
+export type ItemContainerKey = (typeof AllItemContainers)[number]["key"];
+export const ItemContainerKey: readonly ItemContainerKey[] = AllItemContainers.map(({ key }) => key);
+
+export type ItemContainer = (typeof AllItemContainers)[number]["name"];
+export const ItemContainer: readonly ItemContainer[] = AllItemContainers.map(({ name }) => name);
+
+export type ItemLocationBreakdown = Partial<Record<ItemContainer, number>>;
 
 export interface State {
   lastUpdated: Date;
@@ -31,9 +51,9 @@ export interface Position {
   plane: number;
   isOnBoat: boolean;
 }
-export type ItemCollection = Map<ItemID, number>;
+export type ItemCollection = Map<ItemID, ItemStack>;
 export type Equipment = Map<EquipmentSlot, ItemStack>;
-export type Inventory = (ItemStack | undefined)[];
+export type Inventory = Map<number, ItemStack>;
 export type Skills = Record<Skill, Experience>;
 export type Quests = Map<QuestID, QuestStatus>;
 export type Diaries = Record<DiaryRegion, Record<DiaryTier, boolean[]>>;

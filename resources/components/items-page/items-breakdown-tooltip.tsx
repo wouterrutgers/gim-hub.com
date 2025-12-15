@@ -55,7 +55,7 @@ export const useItemsBreakdownTooltip = (): {
         {tooltipData.name}
         <br />
         <hr />
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>{lines}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: "1rem" }}>{lines}</div>
       </>
     );
   }

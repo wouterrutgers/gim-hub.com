@@ -87964,12 +87964,12 @@
   },
   "31989": {
     "name": "Boat bottle (empty)",
-    "highalch": 300,
+    "highalch": 0,
     "mapping": null
   },
   "31992": {
     "name": "Boat bottle (full)",
-    "highalch": 300,
+    "highalch": 0,
     "mapping": null
   },
   "31996": {

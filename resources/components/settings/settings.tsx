@@ -1,8 +1,9 @@
 import { Fragment, useCallback, useContext, useRef, useState, type ReactElement } from "react";
-import * as SiteSettings from "../../context/settings-context";
+import { SettingsContext } from "../../context/settings-context";
+import { SidebarPosition, SiteTheme } from "../../context/settings-types";
 import { Context as APIContext } from "../../context/api-context";
 import * as Member from "../../game/member";
-import { MemberNameSchema } from "../create-group-page/create-group-page";
+import { MemberNameSchema } from "../create-group-page/schemas";
 import * as z from "zod/v4";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { PlayerIcon } from "../player-icon/player-icon";
@@ -12,7 +13,7 @@ import { formatTitle } from "../../ts/format-title";
 
 import "./settings.css";
 
-const labels: Record<SiteSettings.SiteTheme | SiteSettings.SidebarPosition, string> = {
+const labels: Record<SiteTheme | SidebarPosition, string> = {
   light: "Light",
   dark: "Dark",
   left: "Dock panels to the left",
@@ -229,7 +230,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
  * A component that contains fields for tweaking site settings such as sidebar position, and group settings like member names.
  */
 export const SettingsPage = (): ReactElement => {
-  const { siteTheme, setSiteTheme, sidebarPosition, setSidebarPosition } = useContext(SiteSettings.SettingsContext);
+  const { siteTheme, setSiteTheme, sidebarPosition, setSidebarPosition } = useContext(SettingsContext);
   const members = useContext(GroupMemberNamesContext);
   const [addMemberErrors, setAddMemberErrors] = useState<string[]>();
   const addMemberInputRef = useRef<HTMLInputElement>(null);
@@ -339,14 +340,14 @@ export const SettingsPage = (): ReactElement => {
       <fieldset
         onChange={(e) => {
           const selected = (e.target as Partial<HTMLInputElement>).value;
-          const position = SiteSettings.SidebarPosition.find((position) => position === selected);
+          const position = SidebarPosition.find((position) => position === selected);
           if (!position) return;
 
           setSidebarPosition?.(position);
         }}
       >
         <legend>{formatTitle("Player panels")}</legend>
-        {SiteSettings.SidebarPosition.map((position) => {
+        {SidebarPosition.map((position) => {
           return (
             <Fragment key={position}>
               <input
@@ -366,14 +367,14 @@ export const SettingsPage = (): ReactElement => {
       <fieldset
         onChange={(e) => {
           const selected = (e.target as Partial<HTMLInputElement>).value;
-          const theme = SiteSettings.SiteTheme.find((theme) => theme === selected);
+          const theme = SiteTheme.find((theme) => theme === selected);
           if (!theme) return;
 
           setSiteTheme?.(theme);
         }}
       >
         <legend>{formatTitle("Style")}</legend>
-        {SiteSettings.SiteTheme.map((theme) => {
+        {SiteTheme.map((theme) => {
           const id = `style-${theme}`;
           return (
             <Fragment key={theme}>

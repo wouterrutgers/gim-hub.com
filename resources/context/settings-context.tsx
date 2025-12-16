@@ -1,11 +1,6 @@
 import { createContext, type ReactElement, type ReactNode } from "react";
 import { useLocalStorage } from "../hooks/local-storage";
-
-export const SidebarPosition = ["left", "right"] as const;
-export type SidebarPosition = (typeof SidebarPosition)[number];
-
-export const SiteTheme = ["light", "dark"] as const;
-export type SiteTheme = (typeof SiteTheme)[number];
+import { SidebarPosition, SiteTheme } from "./settings-types";
 
 interface Settings {
   siteTheme: SiteTheme;

@@ -11,13 +11,13 @@ import {
 import Api from "../../api/api";
 import { Context as APIContext } from "../../context/api-context";
 import { useNavigate } from "react-router-dom";
-import * as Member from "../../game/member";
 import type { GroupCredentials } from "../../api/credentials";
 import * as z from "zod/v4";
 
 import "./create-group-page.css";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { formatTitle } from "../../ts/format-title";
+import { MemberNameSchema } from "./schemas";
 
 /**
  * This page is where users can submit initial name and members for a group.
@@ -36,23 +36,6 @@ const GroupNameSchema = z
     },
   })
   .transform((name) => name.trim());
-
-export const MemberNameSchema = z
-  .string("Member name is required.")
-  .refine((name) => name === name.trim(), { error: "Member name cannot begin or end with spaces." })
-  .refine((name) => !/[^A-Za-z 0-9-_]/g.test(name), {
-    error: "Member name must use only characters 'A-Z', 'a-z', '0-9', and '-', '_', or ' '.",
-  })
-  .refine((name) => !/[ \-_]{2,}/g.test(name), {
-    error: "Member name cannot contain more than 2 special characters '-', '_', or ' ' in a row.",
-  })
-  .refine((name) => name.length >= 1 && name.length <= 12, {
-    error: ({ input }) => {
-      if ((input as string).length === 0) return "Member name is required.";
-      return "Member name must be between 1 and 12 characters.";
-    },
-  })
-  .transform((name) => name.trim() as Member.Name);
 
 const MemberNamesSchema = MemberNameSchema.array().nonempty();
 const MemberCountSchema = z

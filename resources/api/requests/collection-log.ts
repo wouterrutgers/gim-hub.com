@@ -17,9 +17,17 @@ const MemberCollectionLogSchema = z.record(z.string(), z.uint32()).transform((it
   return obtained;
 });
 
-const GroupCollectionLogsSchema = z.record(
-  z.string().transform((name) => name as Member.Name),
-  MemberCollectionLogSchema,
+const GroupCollectionLogsSchema = z.preprocess(
+  (val) => {
+    if (Array.isArray(val) && val.length == 0) {
+      return {};
+    }
+    return val;
+  },
+  z.record(
+    z.string().transform((name) => name as Member.Name),
+    MemberCollectionLogSchema,
+  ),
 );
 export type GroupResponse = z.infer<typeof GroupCollectionLogsSchema>;
 

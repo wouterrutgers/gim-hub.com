@@ -203,7 +203,12 @@ export const CollectionLogWindow = ({
       .then((map) => {
         setHiscores(map);
       })
-      .catch((err) => console.error("Failed to get hiscores for collection log", err));
+      .catch((err) => {
+        console.warn(
+          `Failed to get hiscores for '${player}': `,
+          (err as { message?: string }).message ?? "unknown error",
+        );
+      });
   }, [fetchMemberHiscores, player]);
 
   useEffect(() => {

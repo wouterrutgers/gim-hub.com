@@ -31166,22 +31166,22 @@
     "mapping": null
   },
   "8924": {
-    "name": "Bandana eyepatch",
+    "name": "Bandana eyepatch (white)",
     "highalch": 60,
     "mapping": null
   },
   "8925": {
-    "name": "Bandana eyepatch",
+    "name": "Bandana eyepatch (red)",
     "highalch": 60,
     "mapping": null
   },
   "8926": {
-    "name": "Bandana eyepatch",
+    "name": "Bandana eyepatch (blue)",
     "highalch": 60,
     "mapping": null
   },
   "8927": {
-    "name": "Bandana eyepatch",
+    "name": "Bandana eyepatch (brown)",
     "highalch": 60,
     "mapping": null
   },
@@ -89438,7 +89438,7 @@
     "mapping": null
   },
   "32414": {
-    "name": "Small key (ynsdail)",
+    "name": "Small key (ynysdail)",
     "highalch": 0,
     "mapping": null
   },
@@ -91814,6 +91814,336 @@
   },
   "32934": {
     "name": "Christmas dinner",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32936": {
+    "name": "Crate of furs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32937": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32938": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32939": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32940": {
+    "name": "Crate of sand",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32941": {
+    "name": "Crate of red coral",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32942": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32943": {
+    "name": "Crate of spices",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32944": {
+    "name": "Crate of jewellery",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32945": {
+    "name": "Crate of bait",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32946": {
+    "name": "Crate of coconuts",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32947": {
+    "name": "Crate of arrowtips",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32948": {
+    "name": "Crate of pineapples",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32949": {
+    "name": "Crate of logs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32950": {
+    "name": "Crate of planks",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32951": {
+    "name": "Crate of logs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32952": {
+    "name": "Crate of alpaca wool",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32953": {
+    "name": "Crate of planks",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32954": {
+    "name": "Crate of fabrics",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32955": {
+    "name": "Crate of planks",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32956": {
+    "name": "Crate of logs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32957": {
+    "name": "Crate of planks",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32958": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32959": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32960": {
+    "name": "Crate of gems",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32961": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32962": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32963": {
+    "name": "Crate of potions",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32964": {
+    "name": "Crate of furs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32965": {
+    "name": "Crate of swamp paste",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32966": {
+    "name": "Crate of planks",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32967": {
+    "name": "Crate of books",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32968": {
+    "name": "Crate of books",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32969": {
+    "name": "Crate of jewellery",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32970": {
+    "name": "Crate of jewellery",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32971": {
+    "name": "Crate of planks",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32972": {
+    "name": "Crate of furs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32973": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32974": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32975": {
+    "name": "Crate of silk",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32976": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32977": {
+    "name": "Crate of logs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32978": {
+    "name": "Crate of swords",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32979": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32980": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32981": {
+    "name": "Crate of seeds",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32982": {
+    "name": "Crate of swords",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32983": {
+    "name": "Crate of platebodies",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32984": {
+    "name": "Crate of swords",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32985": {
+    "name": "Crate of ores",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32986": {
+    "name": "Crate of logs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32987": {
+    "name": "Crate of potions",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32988": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32989": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32990": {
+    "name": "Crate of runes",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32991": {
+    "name": "Crate of fish",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32992": {
+    "name": "Crate of planks",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32993": {
+    "name": "Crate of teak logs",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32994": {
+    "name": "Crate of runes",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32995": {
+    "name": "Crate of cocktails",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32996": {
+    "name": "Crate of ship parts",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32997": {
+    "name": "Crate of rum",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32998": {
+    "name": "Crate of javelins",
+    "highalch": 0,
+    "mapping": null
+  },
+  "32999": {
+    "name": "Crate of potions",
+    "highalch": 0,
+    "mapping": null
+  },
+  "33000": {
+    "name": "Crate of ores",
+    "highalch": 0,
+    "mapping": null
+  },
+  "33001": {
+    "name": "Crate of potions",
     "highalch": 0,
     "mapping": null
   }

@@ -49,7 +49,7 @@
       {
         "name": "Alchemical Hydra",
         "completion_labels": [
-          "Alchemical Hydra kills"
+          "Easy clues completed"
         ],
         "items": [
           {
@@ -100,9 +100,7 @@
       },
       {
         "name": "Amoxliatl",
-        "completion_labels": [
-          "Amoxliatl kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 30154,
@@ -125,7 +123,9 @@
       {
         "name": "Araxxor",
         "completion_labels": [
-          "Araxxor kills"
+          "Personal Best Corrupted",
+          "Gauntlet completion count",
+          "Corrupted Gauntlet completion count"
         ],
         "items": [
           {
@@ -280,9 +280,7 @@
       },
       {
         "name": "Bryophyta",
-        "completion_labels": [
-          "Bryophyta kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 22372,
@@ -293,8 +291,7 @@
       {
         "name": "Callisto and Artio",
         "completion_labels": [
-          "Callisto kills",
-          "Artio kills"
+          "Bryophyta kills"
         ],
         "items": [
           {
@@ -326,7 +323,8 @@
       {
         "name": "Cerberus",
         "completion_labels": [
-          "Cerberus kills"
+          "Callisto kills",
+          "Artio kills"
         ],
         "items": [
           {
@@ -362,7 +360,7 @@
       {
         "name": "Chaos Elemental",
         "completion_labels": [
-          "Chaos Elemental kills"
+          "Cerberus kills"
         ],
         "items": [
           {
@@ -381,9 +379,7 @@
       },
       {
         "name": "Chaos Fanatic",
-        "completion_labels": [
-          "Chaos Fanatic kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 11995,
@@ -402,7 +398,7 @@
       {
         "name": "Commander Zilyana",
         "completion_labels": [
-          "Commander Zilyana kills"
+          "Chaos Elemental kills"
         ],
         "items": [
           {
@@ -442,7 +438,7 @@
       {
         "name": "Corporeal Beast",
         "completion_labels": [
-          "Corporeal Beast kills"
+          "Chaos Fanatic kills"
         ],
         "items": [
           {
@@ -478,7 +474,7 @@
       {
         "name": "Crazy Archaeologist",
         "completion_labels": [
-          "Crazy Archaeologist kills"
+          "Commander Zilyana kills"
         ],
         "items": [
           {
@@ -497,11 +493,7 @@
       },
       {
         "name": "Dagannoth Kings",
-        "completion_labels": [
-          "Dagannoth Rex kills",
-          "Dagannoth Prime kills",
-          "Dagannoth Supreme kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 12644,
@@ -548,7 +540,7 @@
       {
         "name": "Deranged Archaeologist",
         "completion_labels": [
-          "Deranged Archaeologist kills"
+          "Tempoross kills"
         ],
         "items": [
           {
@@ -560,9 +552,8 @@
       {
         "name": "Doom of Mokhaiotl",
         "completion_labels": [
-          "Deepest delve",
-          "Deep delves",
-          "Total delves"
+          "Personal Best",
+          "Reward permits claimed"
         ],
         "items": [
           {
@@ -593,9 +584,7 @@
       },
       {
         "name": "Duke Sucellus",
-        "completion_labels": [
-          "Duke Sucellus kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 28250,
@@ -641,9 +630,7 @@
       },
       {
         "name": "The Fight Caves",
-        "completion_labels": [
-          "TzTok-Jad kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 13225,
@@ -658,7 +645,7 @@
       {
         "name": "Fortis Colosseum",
         "completion_labels": [
-          "Sol Heredit kills"
+          "High-level Gambles"
         ],
         "items": [
           {
@@ -702,8 +689,7 @@
       {
         "name": "The Gauntlet",
         "completion_labels": [
-          "Gauntlet completion count",
-          "Corrupted Gauntlet completion count"
+          "Elite clues completed"
         ],
         "items": [
           {
@@ -731,7 +717,7 @@
       {
         "name": "General Graardor",
         "completion_labels": [
-          "General Graardor kills"
+          "Corporeal Beast kills"
         ],
         "items": [
           {
@@ -771,7 +757,7 @@
       {
         "name": "Giant Mole",
         "completion_labels": [
-          "Giant Mole kills"
+          "Crazy Archaeologist kills"
         ],
         "items": [
           {
@@ -791,7 +777,7 @@
       {
         "name": "Grotesque Guardians",
         "completion_labels": [
-          "Grotesque Guardian kills"
+          "Dagannoth Supreme kills"
         ],
         "items": [
           {
@@ -827,7 +813,7 @@
       {
         "name": "Hespori",
         "completion_labels": [
-          "Hespori kills"
+          "Medium clues completed"
         ],
         "items": [
           {
@@ -851,7 +837,9 @@
       {
         "name": "The Hueycoatl",
         "completion_labels": [
-          "Hueycoatl kills"
+          "Phosani\u0027s Nightmare kills",
+          "Nightmare kills",
+          "Personal Best"
         ],
         "items": [
           {
@@ -883,7 +871,7 @@
       {
         "name": "The Inferno",
         "completion_labels": [
-          "TzKal-Zuk kills"
+          "Obor kills"
         ],
         "items": [
           {
@@ -899,7 +887,8 @@
       {
         "name": "Kalphite Queen",
         "completion_labels": [
-          "Kalphite Queen kills"
+          "Dagannoth Rex kills",
+          "Dagannoth Prime kills"
         ],
         "items": [
           {
@@ -931,7 +920,7 @@
       {
         "name": "King Black Dragon",
         "completion_labels": [
-          "King Black Dragon kills"
+          "General Graardor kills"
         ],
         "items": [
           {
@@ -955,7 +944,7 @@
       {
         "name": "Kraken",
         "completion_labels": [
-          "Kraken kills"
+          "Giant Mole kills"
         ],
         "items": [
           {
@@ -979,7 +968,7 @@
       {
         "name": "Kree\u0027arra",
         "completion_labels": [
-          "Kree\u0027arra kills"
+          "Grotesque Guardian kills"
         ],
         "items": [
           {
@@ -1019,7 +1008,7 @@
       {
         "name": "K\u0027ril Tsutsaroth",
         "completion_labels": [
-          "K\u0027ril Tsutsaroth kills"
+          "Personal Best"
         ],
         "items": [
           {
@@ -1059,7 +1048,7 @@
       {
         "name": "The Leviathan",
         "completion_labels": [
-          "Leviathan kills"
+          "Alchemical Hydra kills"
         ],
         "items": [
           {
@@ -1107,7 +1096,8 @@
       {
         "name": "Moons of Peril",
         "completion_labels": [
-          "Lunar Chests opened"
+          "Personal Best",
+          "Hespori kills"
         ],
         "items": [
           {
@@ -1167,7 +1157,7 @@
       {
         "name": "Nex",
         "completion_labels": [
-          "Nex kills"
+          "Total clues completed"
         ],
         "items": [
           {
@@ -1206,10 +1196,7 @@
       },
       {
         "name": "The Nightmare",
-        "completion_labels": [
-          "Phosani\u0027s Nightmare kills",
-          "Nightmare kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 24491,
@@ -1264,7 +1251,7 @@
       {
         "name": "Obor",
         "completion_labels": [
-          "Obor kills"
+          "Kalphite Queen kills"
         ],
         "items": [
           {
@@ -1276,7 +1263,7 @@
       {
         "name": "Phantom Muspah",
         "completion_labels": [
-          "Phantom Muspah kills"
+          "Revenant kills"
         ],
         "items": [
           {
@@ -1308,7 +1295,9 @@
       {
         "name": "Royal Titans",
         "completion_labels": [
-          "Royal Titan kills"
+          "Last Man Standing Kills",
+          "Last Man Standing Wins",
+          "Last Man Standing games played"
         ],
         "items": [
           {
@@ -1343,9 +1332,7 @@
       },
       {
         "name": "Sarachnis",
-        "completion_labels": [
-          "Sarachnis kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 23495,
@@ -1368,7 +1355,7 @@
       {
         "name": "Scorpia",
         "completion_labels": [
-          "Scorpia kills"
+          "Kraken kills"
         ],
         "items": [
           {
@@ -1392,7 +1379,7 @@
       {
         "name": "Scurrius",
         "completion_labels": [
-          "Scurrius kills"
+          "King Black Dragon kills"
         ],
         "items": [
           {
@@ -1407,17 +1394,15 @@
       },
       {
         "name": "Shellbane Gryphon",
-        "completion_labels": [
-          "Shellbane Gryphon kills"
-        ],
+        "completion_labels": [],
         "items": [
-          {
-            "id": 32921,
-            "name": "Jar of feathers"
-          },
           {
             "id": 31285,
             "name": "Gull"
+          },
+          {
+            "id": 32921,
+            "name": "Jar of feathers"
           },
           {
             "id": 31245,
@@ -1432,7 +1417,7 @@
       {
         "name": "Skotizo",
         "completion_labels": [
-          "Skotizo kills"
+          "Kree\u0027arra kills"
         ],
         "items": [
           {
@@ -1463,10 +1448,7 @@
       },
       {
         "name": "Tempoross",
-        "completion_labels": [
-          "Reward permits claimed",
-          "Tempoross kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 25602,
@@ -1521,7 +1503,7 @@
       {
         "name": "Thermonuclear Smoke Devil",
         "completion_labels": [
-          "Thermonuclear Smoke Devil kills"
+          "K\u0027ril Tsutsaroth kills"
         ],
         "items": [
           {
@@ -1549,7 +1531,8 @@
       {
         "name": "Vardorvis",
         "completion_labels": [
-          "Vardorvis kills"
+          "Demonic Gorilla kills",
+          "Tortured Gorilla kills"
         ],
         "items": [
           {
@@ -1597,8 +1580,7 @@
       {
         "name": "Venenatis and Spindel",
         "completion_labels": [
-          "Venenatis kills",
-          "Spindel kills"
+          "Scurrius kills"
         ],
         "items": [
           {
@@ -1630,8 +1612,7 @@
       {
         "name": "Vet\u0027ion and Calvar\u0027ion",
         "completion_labels": [
-          "Vet\u0027ion kills",
-          "Calvar\u0027ion kills"
+          "Scorpia kills"
         ],
         "items": [
           {
@@ -1663,7 +1644,7 @@
       {
         "name": "Vorkath",
         "completion_labels": [
-          "Vorkath kills"
+          "Shellbane Gryphon kills"
         ],
         "items": [
           {
@@ -1695,7 +1676,7 @@
       {
         "name": "The Whisperer",
         "completion_labels": [
-          "Whisperer kills"
+          "Tormented Demon kills"
         ],
         "items": [
           {
@@ -1742,10 +1723,7 @@
       },
       {
         "name": "Wintertodt",
-        "completion_labels": [
-          "Rewards claimed",
-          "Wintertodt kills"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 20693,
@@ -1792,7 +1770,8 @@
       {
         "name": "Yama",
         "completion_labels": [
-          "Yama kills"
+          "Gnome restaurant easy deliveries",
+          "Gnome restaurant hard deliveries"
         ],
         "items": [
           {
@@ -1844,7 +1823,7 @@
       {
         "name": "Zalcano",
         "completion_labels": [
-          "Zalcano kills"
+          "Skotizo kills"
         ],
         "items": [
           {
@@ -1868,7 +1847,7 @@
       {
         "name": "Zulrah",
         "completion_labels": [
-          "Zulrah kills"
+          "Thermonuclear Smoke Devil kills"
         ],
         "items": [
           {
@@ -1921,8 +1900,7 @@
       {
         "name": "Chambers of Xeric",
         "completion_labels": [
-          "Chambers of Xeric completions",
-          "Chambers of Xeric (CM) completions"
+          "TzKal-Zuk kills"
         ],
         "items": [
           {
@@ -2021,11 +1999,7 @@
       },
       {
         "name": "Theatre of Blood",
-        "completion_labels": [
-          "Theatre of Blood completions",
-          "Theatre of Blood (Entry) completions",
-          "Theatre of Blood (Hard) completions"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 22473,
@@ -2100,9 +2074,7 @@
       {
         "name": "Tombs of Amascut",
         "completion_labels": [
-          "Tombs of Amascut completions",
-          "Tombs of Amascut (Entry) completions",
-          "Tombs of Amascut (Expert) completions"
+          "TzTok-Jad kills"
         ],
         "items": [
           {
@@ -2223,7 +2195,8 @@
       {
         "name": "Beginner Treasure Trails",
         "completion_labels": [
-          "Beginner clues completed"
+          "Venenatis kills",
+          "Spindel kills"
         ],
         "items": [
           {
@@ -2295,7 +2268,7 @@
       {
         "name": "Easy Treasure Trails",
         "completion_labels": [
-          "Easy clues completed"
+          "Calvar\u0027ion kills"
         ],
         "items": [
           {
@@ -2827,7 +2800,7 @@
       {
         "name": "Medium Treasure Trails",
         "completion_labels": [
-          "Medium clues completed"
+          "Vet\u0027ion kills"
         ],
         "items": [
           {
@@ -3295,7 +3268,8 @@
       {
         "name": "Hard Treasure Trails",
         "completion_labels": [
-          "Hard clues completed"
+          "Personal Best",
+          "Vorkath kills"
         ],
         "items": [
           {
@@ -3839,7 +3813,8 @@
       {
         "name": "Elite Treasure Trails",
         "completion_labels": [
-          "Elite clues completed"
+          "Rewards claimed",
+          "Wintertodt kills"
         ],
         "items": [
           {
@@ -4083,7 +4058,7 @@
       {
         "name": "Master Treasure Trails",
         "completion_labels": [
-          "Master clues completed"
+          "Zalcano kills"
         ],
         "items": [
           {
@@ -4286,9 +4261,7 @@
       },
       {
         "name": "Hard Treasure Trails (Rare)",
-        "completion_labels": [
-          "Hard clues completed"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 10334,
@@ -4391,7 +4364,8 @@
       {
         "name": "Elite Treasure Trails (Rare)",
         "completion_labels": [
-          "Elite clues completed"
+          "Personal Best",
+          "Zulrah kills"
         ],
         "items": [
           {
@@ -4555,7 +4529,8 @@
       {
         "name": "Master Treasure Trails (Rare)",
         "completion_labels": [
-          "Master clues completed"
+          "Chambers of Xeric completions",
+          "Chambers of Xeric (CM) completions"
         ],
         "items": [
           {
@@ -4743,7 +4718,7 @@
       {
         "name": "Shared Treasure Trail Rewards",
         "completion_labels": [
-          "Total clues completed"
+          "Theatre of Blood (Hard) completions"
         ],
         "items": [
           {
@@ -5010,7 +4985,7 @@
       {
         "name": "Barbarian Assault",
         "completion_labels": [
-          "High-level Gambles"
+          "Hard clues completed"
         ],
         "items": [
           {
@@ -5330,7 +5305,7 @@
       {
         "name": "Giants\u0027 Foundry",
         "completion_labels": [
-          "Swords created"
+          "Sarachnis kills"
         ],
         "items": [
           {
@@ -5374,8 +5349,7 @@
       {
         "name": "Gnome Restaurant",
         "completion_labels": [
-          "Gnome restaurant easy deliveries",
-          "Gnome restaurant hard deliveries"
+          "Elite clues completed"
         ],
         "items": [
           {
@@ -5399,8 +5373,7 @@
       {
         "name": "Guardians of the Rift",
         "completion_labels": [
-          "Rifts searches",
-          "Rifts closed"
+          "Personal Best"
         ],
         "items": [
           {
@@ -5476,7 +5449,7 @@
       {
         "name": "Hallowed Sepulchre",
         "completion_labels": [
-          "Grand Hallowed Coffins opened"
+          "Master clues completed"
         ],
         "items": [
           {
@@ -5548,9 +5521,7 @@
       {
         "name": "Last Man Standing",
         "completion_labels": [
-          "Last Man Standing Kills",
-          "Last Man Standing Wins",
-          "Last Man Standing games played"
+          "Hard clues completed"
         ],
         "items": [
           {
@@ -5774,7 +5745,8 @@
       {
         "name": "Mastering Mixology",
         "completion_labels": [
-          "Orders fulfilled"
+          "Grand Hallowed Coffins opened",
+          "Personal Best"
         ],
         "items": [
           {
@@ -5944,7 +5916,7 @@
       {
         "name": "Soul Wars",
         "completion_labels": [
-          "Spoils of war opened"
+          "Master clues completed"
         ],
         "items": [
           {
@@ -7027,8 +6999,9 @@
       {
         "name": "Glough\u0027s Experiments",
         "completion_labels": [
-          "Demonic Gorilla kills",
-          "Tortured Gorilla kills"
+          "Tombs of Amascut completions",
+          "Tombs of Amascut (Entry) completions",
+          "Tombs of Amascut (Expert) completions"
         ],
         "items": [
           {
@@ -7059,9 +7032,7 @@
       },
       {
         "name": "Hunter Guild",
-        "completion_labels": [
-          "Rumours Completed"
-        ],
+        "completion_labels": [],
         "items": [
           {
             "id": 28962,
@@ -7456,7 +7427,8 @@
       {
         "name": "Revenants",
         "completion_labels": [
-          "Revenant kills"
+          "Theatre of Blood completions",
+          "Theatre of Blood (Entry) completions"
         ],
         "items": [
           {
@@ -8198,7 +8170,7 @@
       {
         "name": "Tormented Demons",
         "completion_labels": [
-          "Tormented Demon kills"
+          "Beginner clues completed"
         ],
         "items": [
           {

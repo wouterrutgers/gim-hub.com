@@ -24,7 +24,7 @@ import { useLocalStorage } from "../../hooks/local-storage";
 
 import "./items-page.css";
 
-type ItemFilter = "All" | Member.Name;
+type MemberFilter = "All" | Member.Name;
 const ItemSortCategory = [
   "Total quantity",
   "HA total value",
@@ -42,7 +42,7 @@ interface ItemPanelProps {
   gePricePer: number;
   imageURL: string;
   totalQuantity: number;
-  memberFilter: ItemFilter;
+  memberFilter: MemberFilter;
   containerFilter: Member.ItemContainer | "All";
   quantities: Map<Member.Name, Member.ItemLocationBreakdown>;
   isPinned: boolean;
@@ -201,7 +201,7 @@ const ItemPanelsScrollArea = ({
   onTogglePin,
 }: {
   sortedItems: FilteredItem[];
-  memberFilter: ItemFilter;
+  memberFilter: MemberFilter;
   containerFilter: Member.ItemContainer | "All";
   pinnedItems: Set<ItemID>;
   onTogglePin: (itemID: ItemID) => void;
@@ -305,12 +305,66 @@ const validateContainerFilter = (value: string | undefined): Member.ItemContaine
   return value as Member.ItemContainer | "All";
 };
 
-export const ItemsPage = (): ReactElement => {
-  const [memberFilter, setMemberFilter] = useState<ItemFilter>("All");
-  const [searchString, setSearchString] = useState<string>("");
-  const [sortCategory, setSortCategory] = useState<ItemSortCategory>(loadSortCategoryFromStorage);
-  const { gePrices: geData, items: itemData } = useContext(GameDataContext);
+interface SearchFilter {
+  parts: {
+    lowercase: string;
+    exact: boolean;
+  }[];
+}
+const useSearchFilter = (): [ReactElement, SearchFilter] => {
+  const [filter, setFilter] = useState<SearchFilter>({ parts: [] });
 
+  const inputElement = useMemo(() => {
+    const updateFilter = (raw: string): void => {
+      if (raw.length == 0) {
+        setFilter({ parts: [] });
+      }
+
+      const parts = raw
+        .split("|")
+        .map((s: string) => {
+          return s.trim().toLocaleLowerCase();
+        })
+        .map((s: string) => {
+          const exact = s.startsWith('"') && s.endsWith('"');
+          if (exact) {
+            return {
+              exact: true,
+              lowercase: s.slice(1, -1),
+            };
+          }
+          return {
+            exact: false,
+            lowercase: s,
+          };
+        })
+        .filter(({ lowercase }) => lowercase.length > 0)
+        .sort(({ lowercase: a }, { lowercase: b }) => a.localeCompare(b));
+
+      if (parts.length > 0 && parts.length == filter.parts.length) {
+        const filterIsDifferent = parts.some(({ exact, lowercase }, index) => {
+          const other = filter.parts.at(index);
+          return other?.exact != exact || other?.lowercase != lowercase;
+        });
+        if (!filterIsDifferent) {
+          return;
+        }
+      }
+
+      setFilter({ parts });
+    };
+    return <SearchElement onChange={updateFilter} id="items-page-search" placeholder="Search" auto-focus />;
+  }, []);
+
+  return [inputElement, filter];
+};
+
+export const ItemsPage = (): ReactElement => {
+  const [memberFilter, setMemberFilter] = useState<MemberFilter>("All");
+  const [searchInputElement, searchFilter] = useSearchFilter();
+  const [sortCategory, setSortCategory] = useState<ItemSortCategory>(loadSortCategoryFromStorage);
+
+  const { gePrices: geData, items: itemData } = useContext(GameDataContext);
   const members = useContext(GroupMemberNamesContext);
   const items = useContext(GroupItemsContext);
 
@@ -359,14 +413,18 @@ export const ItemsPage = (): ReactElement => {
       const itemDatum = itemData?.get(itemID);
       if (!itemDatum) return previousValue;
 
-      if (searchString.length > 0) {
-        const name = itemDatum.name.toLocaleLowerCase();
-        const parts = searchString
-          .split("|")
-          .map((s) => s.trim())
-          .filter((s) => s.length > 0);
-        const matches = parts.length > 0 && parts.some((part) => name.includes(part));
-        if (!matches) return previousValue;
+      if (searchFilter.parts.length > 0) {
+        const itemLowercase = itemDatum.name.toLocaleLowerCase();
+        const matches = searchFilter.parts.some(({ exact, lowercase: filterLowercase }) => {
+          if (exact) {
+            return filterLowercase == itemLowercase;
+          } else {
+            return itemLowercase.includes(filterLowercase);
+          }
+        });
+        if (!matches) {
+          return previousValue;
+        }
       }
 
       let filteredTotalQuantity = 0;
@@ -443,14 +501,7 @@ export const ItemsPage = (): ReactElement => {
 
   return (
     <>
-      <div id="items-page-head">
-        <SearchElement
-          onChange={(string) => setSearchString(string.toLocaleLowerCase().trim())}
-          id="items-page-search"
-          placeholder="Search"
-          auto-focus
-        />
-      </div>
+      <div id="items-page-head">{searchInputElement}</div>
       <div id="items-page-utility">
         <div className="rsborder-tiny rsbackground rsbackground-hover">
           <select
@@ -476,7 +527,7 @@ export const ItemsPage = (): ReactElement => {
           <select
             value={memberFilter}
             onChange={(e) => {
-              setMemberFilter(e.target.value as ItemFilter);
+              setMemberFilter(e.target.value as MemberFilter);
             }}
           >
             {["All", ...members].map((name) => (

@@ -9,6 +9,8 @@ import laravel from "laravel-vite-plugin";
 const mapJsonPlugin = (): PluginOption => ({
   name: "mapTilesJson",
   buildStart(): void {
+    console.info("Building map json...");
+
     const mapImageFiles = fs
       .readdirSync("public/map")
       .filter((file) => file.endsWith(".webp"))
@@ -39,6 +41,7 @@ const mapJsonPlugin = (): PluginOption => ({
     };
 
     fs.writeFileSync("public/data/map.json", JSON.stringify(result, null, 2));
+    console.info("Built map json.");
   },
 });
 
@@ -48,14 +51,26 @@ const mapJsonPlugin = (): PluginOption => ({
 const wikiTagsPlugin = (): PluginOption => ({
   name: "wikiTags",
   async buildStart(): Promise<void> {
-    const categoriesCaseSensitive = ["Herbs", "Logs", "Ores", "Potions", "Runes", "Bars", "Food", "Seeds"];
+    console.info("Fetching categories from wiki to build item tags...");
+
+    const ourAliasByWikiCaseSensitiveName: Record<string, string> = {
+      Herbs: "herbs",
+      Logs: "logs",
+      Ores: "ores",
+      Potions: "potions",
+      Runes: "runes",
+      "Metal bars": "metal bars",
+      Food: "foods",
+      Seeds: "seeds",
+      "Hands slot items": "gloves",
+    };
     const itemNamesByTag: Record<string, string[]> = {};
 
-    for (const category of categoriesCaseSensitive) {
+    for (const [wikiName, ourName] of Object.entries(ourAliasByWikiCaseSensitiveName)) {
       let names: string[] = [];
       let cmcontinue = "";
       do {
-        const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${category}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
+        const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${wikiName}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
         const response = await fetch(url);
         const data = (await response.json()) as {
           continue?: { cmcontinue?: string };
@@ -72,7 +87,9 @@ const wikiTagsPlugin = (): PluginOption => ({
       } while (cmcontinue);
 
       if (names.length > 0) {
-        itemNamesByTag[category.toLowerCase()] = names;
+        itemNamesByTag[ourName.toLowerCase()] = names;
+      } else {
+        console.error(`[wikiTags] Empty tag '${wikiName}' - Does it exist on the wiki?`);
       }
     }
 

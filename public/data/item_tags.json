@@ -5,8 +5,10 @@
     "ores",
     "potions",
     "runes",
-    "food",
-    "seeds"
+    "metal bars",
+    "foods",
+    "seeds",
+    "gloves"
   ],
   "items": {
     "91": [
@@ -79,7 +81,7 @@
       "herbs"
     ],
     "247": [
-      "food"
+      "foods"
     ],
     "249": [
       "herbs"
@@ -118,55 +120,55 @@
       "seeds"
     ],
     "315": [
-      "food"
+      "foods"
     ],
     "319": [
-      "food"
+      "foods"
     ],
     "325": [
-      "food"
+      "foods"
     ],
     "329": [
-      "food"
+      "foods"
     ],
     "333": [
-      "food"
+      "foods"
     ],
     "339": [
-      "food"
+      "foods"
     ],
     "351": [
-      "food"
+      "foods"
     ],
     "355": [
-      "food"
+      "foods"
     ],
     "361": [
-      "food"
+      "foods"
     ],
     "365": [
-      "food"
+      "foods"
     ],
     "371": [
-      "food"
+      "foods"
     ],
     "373": [
-      "food"
+      "foods"
     ],
     "377": [
-      "food"
+      "foods"
     ],
     "379": [
-      "food"
+      "foods"
     ],
     "383": [
-      "food"
+      "foods"
     ],
     "385": [
-      "food"
+      "foods"
     ],
     "391": [
-      "food"
+      "foods"
     ],
     "436": [
       "ores"
@@ -196,7 +198,7 @@
       "ores"
     ],
     "464": [
-      "food"
+      "foods"
     ],
     "554": [
       "runes"
@@ -255,8 +257,32 @@
     "756": [
       "potions"
     ],
+    "775": [
+      "gloves"
+    ],
+    "776": [
+      "gloves"
+    ],
+    "777": [
+      "gloves"
+    ],
+    "778": [
+      "gloves"
+    ],
+    "1059": [
+      "gloves"
+    ],
+    "1063": [
+      "gloves"
+    ],
+    "1065": [
+      "gloves"
+    ],
     "1465": [
       "potions"
+    ],
+    "1495": [
+      "gloves"
     ],
     "1511": [
       "logs"
@@ -307,193 +333,223 @@
       "herbs"
     ],
     "1550": [
-      "food"
+      "foods"
     ],
     "1573": [
       "herbs"
+    ],
+    "1580": [
+      "gloves"
     ],
     "1582": [
       "potions"
     ],
     "1859": [
-      "food"
+      "foods"
     ],
     "1861": [
-      "food"
+      "foods"
     ],
     "1883": [
-      "food"
+      "foods"
     ],
     "1885": [
-      "food"
+      "foods"
     ],
     "1891": [
-      "food"
+      "foods"
     ],
     "1897": [
-      "food"
+      "foods"
     ],
     "1942": [
-      "food"
+      "foods"
     ],
     "1951": [
-      "food"
+      "foods"
     ],
     "1953": [
-      "food"
+      "foods"
     ],
     "1955": [
-      "food"
+      "foods"
     ],
     "1957": [
-      "food"
+      "foods"
     ],
     "1963": [
-      "food"
+      "foods"
     ],
     "1965": [
-      "food"
+      "foods"
     ],
     "1967": [
-      "food"
+      "foods"
     ],
     "1969": [
-      "food"
+      "foods"
     ],
     "1971": [
-      "food"
+      "foods"
     ],
     "1973": [
-      "food"
+      "foods"
     ],
     "1977": [
-      "food"
+      "foods"
     ],
     "1982": [
-      "food"
+      "foods"
     ],
     "2003": [
-      "food"
+      "foods"
     ],
     "2011": [
-      "food"
+      "foods"
     ],
     "2102": [
-      "food"
+      "foods"
     ],
     "2108": [
-      "food"
+      "foods"
     ],
     "2114": [
-      "food"
+      "foods"
     ],
     "2120": [
-      "food"
+      "foods"
     ],
     "2132": [
-      "food"
+      "foods"
     ],
     "2134": [
-      "food"
+      "foods"
     ],
     "2136": [
-      "food"
+      "foods"
     ],
     "2138": [
-      "food"
+      "foods"
     ],
     "2140": [
-      "food"
+      "foods"
     ],
     "2142": [
-      "food"
+      "foods"
     ],
     "2154": [
-      "food"
+      "foods"
     ],
     "2156": [
-      "food"
+      "foods"
     ],
     "2158": [
-      "food"
+      "foods"
     ],
     "2160": [
-      "food"
+      "foods"
     ],
     "2162": [
-      "food"
+      "foods"
     ],
     "2173": [
-      "food"
+      "foods"
     ],
     "2185": [
-      "food"
+      "foods"
     ],
     "2187": [
-      "food"
+      "foods"
     ],
     "2191": [
-      "food"
+      "foods"
     ],
     "2195": [
-      "food"
+      "foods"
     ],
     "2197": [
-      "food"
+      "foods"
     ],
     "2245": [
-      "food"
+      "foods"
     ],
     "2259": [
-      "food"
+      "foods"
     ],
     "2289": [
-      "food"
+      "foods"
     ],
     "2293": [
-      "food"
+      "foods"
     ],
     "2297": [
-      "food"
+      "foods"
     ],
     "2301": [
-      "food"
+      "foods"
     ],
     "2309": [
-      "food"
+      "foods"
     ],
     "2313": [
-      "food"
+      "foods"
     ],
     "2315": [
-      "food"
+      "foods"
     ],
     "2317": [
-      "food"
+      "foods"
     ],
     "2319": [
-      "food"
+      "foods"
     ],
     "2321": [
-      "food"
+      "foods"
     ],
     "2323": [
-      "food"
+      "foods"
     ],
     "2325": [
-      "food"
+      "foods"
     ],
     "2327": [
-      "food"
+      "foods"
     ],
     "2337": [
-      "food"
+      "foods"
     ],
     "2341": [
-      "food"
+      "foods"
     ],
     "2343": [
-      "food"
+      "foods"
+    ],
+    "2349": [
+      "metal bars"
+    ],
+    "2351": [
+      "metal bars"
+    ],
+    "2353": [
+      "metal bars"
+    ],
+    "2355": [
+      "metal bars"
+    ],
+    "2357": [
+      "metal bars"
+    ],
+    "2359": [
+      "metal bars"
+    ],
+    "2361": [
+      "metal bars"
+    ],
+    "2363": [
+      "metal bars"
+    ],
+    "2365": [
+      "metal bars"
     ],
     "2395": [
       "potions"
@@ -507,6 +563,15 @@
     "2485": [
       "herbs"
     ],
+    "2487": [
+      "gloves"
+    ],
+    "2489": [
+      "gloves"
+    ],
+    "2491": [
+      "gloves"
+    ],
     "2511": [
       "logs"
     ],
@@ -514,10 +579,31 @@
       "logs"
     ],
     "2876": [
-      "food"
+      "foods"
     ],
     "2878": [
-      "food"
+      "foods"
+    ],
+    "2893": [
+      "metal bars"
+    ],
+    "2902": [
+      "gloves"
+    ],
+    "2912": [
+      "gloves"
+    ],
+    "2922": [
+      "gloves"
+    ],
+    "2932": [
+      "gloves"
+    ],
+    "2942": [
+      "gloves"
+    ],
+    "2997": [
+      "gloves"
     ],
     "2998": [
       "herbs"
@@ -537,17 +623,20 @@
     "3051": [
       "herbs"
     ],
+    "3060": [
+      "gloves"
+    ],
     "3144": [
-      "food"
+      "foods"
     ],
     "3147": [
-      "food"
+      "foods"
     ],
     "3226": [
-      "food"
+      "foods"
     ],
     "3228": [
-      "food"
+      "foods"
     ],
     "3239": [
       "logs"
@@ -559,22 +648,25 @@
       "potions"
     ],
     "3363": [
-      "food"
+      "foods"
     ],
     "3365": [
-      "food"
+      "foods"
     ],
     "3367": [
-      "food"
+      "foods"
     ],
     "3369": [
-      "food"
+      "foods"
     ],
     "3371": [
-      "food"
+      "foods"
     ],
     "3373": [
-      "food"
+      "foods"
+    ],
+    "3391": [
+      "gloves"
     ],
     "3406": [
       "potions"
@@ -597,26 +689,44 @@
     "3448": [
       "logs"
     ],
+    "3799": [
+      "gloves"
+    ],
     "4001": [
       "seeds"
     ],
+    "4007": [
+      "metal bars"
+    ],
     "4045": [
       "potions"
+    ],
+    "4095": [
+      "gloves"
+    ],
+    "4105": [
+      "gloves"
+    ],
+    "4115": [
+      "gloves"
     ],
     "4182": [
       "herbs"
     ],
     "4287": [
-      "food"
+      "foods"
     ],
     "4289": [
-      "food"
+      "foods"
     ],
     "4291": [
-      "food"
+      "foods"
     ],
     "4293": [
-      "food"
+      "foods"
+    ],
+    "4308": [
+      "gloves"
     ],
     "4445": [
       "logs"
@@ -625,10 +735,10 @@
       "seeds"
     ],
     "4517": [
-      "food"
+      "foods"
     ],
     "4608": [
-      "food"
+      "foods"
     ],
     "4694": [
       "runes"
@@ -655,7 +765,7 @@
       "potions"
     ],
     "5003": [
-      "food"
+      "foods"
     ],
     "5096": [
       "seeds"
@@ -832,7 +942,10 @@
       "seeds"
     ],
     "5504": [
-      "food"
+      "foods"
+    ],
+    "5556": [
+      "gloves"
     ],
     "5935": [
       "potions"
@@ -856,16 +969,31 @@
       "potions"
     ],
     "5982": [
-      "food"
+      "foods"
     ],
     "5988": [
-      "food"
+      "foods"
     ],
     "6032": [
-      "food"
+      "foods"
+    ],
+    "6068": [
+      "gloves"
+    ],
+    "6110": [
+      "gloves"
     ],
     "6112": [
       "seeds"
+    ],
+    "6149": [
+      "gloves"
+    ],
+    "6151": [
+      "gloves"
+    ],
+    "6153": [
+      "gloves"
     ],
     "6211": [
       "logs"
@@ -874,23 +1002,26 @@
       "logs"
     ],
     "6293": [
-      "food"
+      "foods"
     ],
     "6295": [
-      "food"
+      "foods"
     ],
     "6297": [
-      "food"
+      "foods"
     ],
     "6299": [
-      "food"
+      "foods"
     ],
     "6303": [
-      "food"
+      "foods"
     ],
     "6311": [
       "herbs",
       "seeds"
+    ],
+    "6330": [
+      "gloves"
     ],
     "6332": [
       "logs"
@@ -944,106 +1075,118 @@
       "seeds"
     ],
     "6469": [
-      "food"
+      "foods"
+    ],
+    "6629": [
+      "gloves"
     ],
     "6701": [
-      "food"
+      "foods"
     ],
     "6703": [
-      "food"
+      "foods"
     ],
     "6705": [
-      "food"
+      "foods"
+    ],
+    "6708": [
+      "gloves"
     ],
     "6710": [
       "seeds"
+    ],
+    "6720": [
+      "gloves"
     ],
     "6766": [
       "potions"
     ],
     "6794": [
-      "food"
+      "foods"
     ],
     "6883": [
-      "food"
+      "foods"
+    ],
+    "6922": [
+      "gloves"
     ],
     "6961": [
-      "food"
+      "foods"
     ],
     "6962": [
-      "food"
+      "foods"
     ],
     "6963": [
-      "food"
+      "foods"
     ],
     "6965": [
-      "food"
+      "foods"
     ],
     "6969": [
-      "food"
+      "foods"
     ],
     "7054": [
-      "food"
+      "foods"
     ],
     "7056": [
-      "food"
+      "foods"
     ],
     "7058": [
-      "food"
+      "foods"
     ],
     "7060": [
-      "food"
+      "foods"
     ],
     "7066": [
-      "food"
+      "foods"
     ],
     "7068": [
-      "food"
+      "foods"
     ],
     "7162": [
-      "food"
+      "foods"
     ],
     "7168": [
-      "food"
+      "foods"
     ],
     "7170": [
-      "food"
+      "foods"
     ],
     "7176": [
-      "food"
+      "foods"
     ],
     "7178": [
-      "food"
+      "foods"
     ],
     "7186": [
-      "food"
+      "foods"
     ],
     "7188": [
-      "food"
+      "foods"
     ],
     "7196": [
-      "food"
+      "foods"
     ],
     "7198": [
-      "food"
+      "foods"
     ],
     "7206": [
-      "food"
+      "foods"
     ],
     "7208": [
-      "food"
+      "foods"
     ],
     "7216": [
-      "food"
+      "foods"
     ],
     "7218": [
-      "food"
+      "foods"
     ],
     "7223": [
-      "food"
+      "foods"
     ],
     "7228": [
-      "food"
+      "foods"
     ],
     "7404": [
       "logs"
@@ -1054,29 +1197,62 @@
     "7406": [
       "logs"
     ],
+    "7453": [
+      "gloves"
+    ],
+    "7454": [
+      "gloves"
+    ],
+    "7455": [
+      "gloves"
+    ],
+    "7456": [
+      "gloves"
+    ],
+    "7457": [
+      "gloves"
+    ],
+    "7458": [
+      "gloves"
+    ],
+    "7459": [
+      "gloves"
+    ],
+    "7460": [
+      "gloves"
+    ],
+    "7461": [
+      "gloves"
+    ],
+    "7462": [
+      "gloves"
+    ],
     "7479": [
-      "food"
+      "foods"
     ],
     "7518": [
-      "food"
+      "foods"
     ],
     "7519": [
-      "food"
+      "foods"
     ],
     "7521": [
-      "food"
+      "foods"
     ],
     "7523": [
-      "food"
+      "foods"
     ],
     "7524": [
-      "food"
+      "foods"
     ],
     "7525": [
-      "food"
+      "foods"
     ],
     "7526": [
-      "food"
+      "foods"
+    ],
+    "7537": [
+      "gloves"
     ],
     "7548": [
       "seeds"
@@ -1100,10 +1276,13 @@
       "seeds"
     ],
     "7566": [
-      "food"
+      "foods"
     ],
     "7568": [
-      "food"
+      "foods"
+    ],
+    "7595": [
+      "gloves"
     ],
     "7652": [
       "potions"
@@ -1118,7 +1297,13 @@
       "potions"
     ],
     "7946": [
-      "food"
+      "foods"
+    ],
+    "8842": [
+      "gloves"
+    ],
+    "8929": [
+      "gloves"
     ],
     "8934": [
       "logs"
@@ -1127,25 +1312,37 @@
       "potions"
     ],
     "9052": [
-      "food"
+      "foods"
     ],
     "9067": [
       "logs"
     ],
+    "9072": [
+      "gloves"
+    ],
     "9075": [
       "runes"
     ],
+    "9077": [
+      "metal bars"
+    ],
+    "9099": [
+      "gloves"
+    ],
+    "9467": [
+      "metal bars"
+    ],
     "9535": [
-      "food"
+      "foods"
     ],
     "9547": [
-      "food"
+      "foods"
     ],
     "9549": [
-      "food"
+      "foods"
     ],
     "9553": [
-      "food"
+      "foods"
     ],
     "9632": [
       "ores"
@@ -1165,29 +1362,74 @@
     "9699": [
       "runes"
     ],
+    "9727": [
+      "metal bars"
+    ],
+    "9728": [
+      "metal bars"
+    ],
+    "9922": [
+      "gloves"
+    ],
     "9978": [
-      "food"
+      "foods"
     ],
     "9980": [
-      "food"
+      "foods"
     ],
     "9986": [
-      "food"
+      "foods"
     ],
     "9988": [
-      "food"
+      "foods"
     ],
     "9992": [
-      "food"
+      "foods"
+    ],
+    "10075": [
+      "gloves"
+    ],
+    "10077": [
+      "gloves"
+    ],
+    "10079": [
+      "gloves"
+    ],
+    "10081": [
+      "gloves"
+    ],
+    "10083": [
+      "gloves"
+    ],
+    "10085": [
+      "gloves"
     ],
     "10136": [
-      "food"
+      "foods"
     ],
     "10328": [
       "logs"
     ],
     "10329": [
       "logs"
+    ],
+    "10336": [
+      "gloves"
+    ],
+    "10368": [
+      "gloves"
+    ],
+    "10376": [
+      "gloves"
+    ],
+    "10384": [
+      "gloves"
+    ],
+    "10553": [
+      "gloves"
+    ],
+    "10554": [
+      "gloves"
     ],
     "10808": [
       "logs"
@@ -1199,13 +1441,73 @@
       "logs"
     ],
     "10816": [
-      "food"
+      "foods"
     ],
     "10964": [
-      "food"
+      "foods"
     ],
     "11035": [
       "logs"
+    ],
+    "11068": [
+      "gloves"
+    ],
+    "11069": [
+      "gloves"
+    ],
+    "11071": [
+      "gloves"
+    ],
+    "11072": [
+      "gloves"
+    ],
+    "11074": [
+      "gloves"
+    ],
+    "11076": [
+      "gloves"
+    ],
+    "11078": [
+      "gloves"
+    ],
+    "11085": [
+      "gloves"
+    ],
+    "11087": [
+      "gloves"
+    ],
+    "11088": [
+      "gloves"
+    ],
+    "11092": [
+      "gloves"
+    ],
+    "11094": [
+      "gloves"
+    ],
+    "11115": [
+      "gloves"
+    ],
+    "11126": [
+      "gloves"
+    ],
+    "11130": [
+      "gloves"
+    ],
+    "11132": [
+      "gloves"
+    ],
+    "11133": [
+      "gloves"
+    ],
+    "11136": [
+      "gloves"
+    ],
+    "11138": [
+      "gloves"
+    ],
+    "11140": [
+      "gloves"
     ],
     "11204": [
       "potions"
@@ -1252,11 +1554,44 @@
     "11699": [
       "runes"
     ],
+    "11858": [
+      "gloves"
+    ],
+    "11859": [
+      "gloves"
+    ],
     "11936": [
-      "food"
+      "foods"
+    ],
+    "12490": [
+      "gloves"
+    ],
+    "12498": [
+      "gloves"
+    ],
+    "12506": [
+      "gloves"
     ],
     "12844": [
       "potions"
+    ],
+    "12890": [
+      "gloves"
+    ],
+    "12895": [
+      "gloves"
+    ],
+    "12958": [
+      "gloves"
+    ],
+    "13103": [
+      "gloves"
+    ],
+    "13287": [
+      "gloves"
+    ],
+    "13354": [
+      "metal bars"
     ],
     "13355": [
       "logs"
@@ -1264,11 +1599,26 @@
     "13356": [
       "ores"
     ],
+    "13357": [
+      "gloves"
+    ],
+    "13362": [
+      "gloves"
+    ],
+    "13367": [
+      "gloves"
+    ],
+    "13372": [
+      "gloves"
+    ],
+    "13377": [
+      "gloves"
+    ],
     "13399": [
-      "food"
+      "foods"
     ],
     "13413": [
-      "food"
+      "foods"
     ],
     "13423": [
       "seeds"
@@ -1280,25 +1630,73 @@
       "seeds"
     ],
     "13441": [
-      "food"
+      "foods"
     ],
     "13575": [
       "ores"
     ],
+    "13587": [
+      "gloves"
+    ],
+    "13588": [
+      "gloves"
+    ],
+    "13599": [
+      "gloves"
+    ],
+    "13600": [
+      "gloves"
+    ],
+    "13611": [
+      "gloves"
+    ],
+    "13612": [
+      "gloves"
+    ],
+    "13623": [
+      "gloves"
+    ],
+    "13624": [
+      "gloves"
+    ],
+    "13635": [
+      "gloves"
+    ],
+    "13636": [
+      "gloves"
+    ],
     "13657": [
       "seeds"
+    ],
+    "13665": [
+      "gloves"
+    ],
+    "13675": [
+      "gloves"
+    ],
+    "13676": [
+      "gloves"
     ],
     "13680": [
       "runes"
     ],
+    "19492": [
+      "gloves"
+    ],
+    "19532": [
+      "gloves"
+    ],
+    "19544": [
+      "gloves"
+    ],
     "19653": [
-      "food"
+      "foods"
     ],
     "19656": [
-      "food"
+      "foods"
     ],
     "19662": [
-      "food"
+      "foods"
     ],
     "19669": [
       "logs"
@@ -1306,11 +1704,47 @@
     "19672": [
       "logs"
     ],
+    "19691": [
+      "gloves"
+    ],
+    "19961": [
+      "gloves"
+    ],
+    "19976": [
+      "gloves"
+    ],
+    "19994": [
+      "gloves"
+    ],
+    "19997": [
+      "gloves"
+    ],
+    "20041": [
+      "gloves"
+    ],
+    "20086": [
+      "gloves"
+    ],
+    "20101": [
+      "gloves"
+    ],
+    "20134": [
+      "gloves"
+    ],
     "20390": [
-      "food"
+      "foods"
     ],
     "20547": [
-      "food"
+      "foods"
+    ],
+    "20581": [
+      "gloves"
+    ],
+    "20582": [
+      "gloves"
+    ],
+    "20583": [
+      "gloves"
     ],
     "20695": [
       "logs"
@@ -1321,8 +1755,11 @@
     "20698": [
       "herbs"
     ],
+    "20712": [
+      "gloves"
+    ],
     "20862": [
-      "food"
+      "foods"
     ],
     "20901": [
       "herbs"
@@ -1348,6 +1785,39 @@
     "20909": [
       "seeds"
     ],
+    "21073": [
+      "gloves"
+    ],
+    "21075": [
+      "gloves"
+    ],
+    "21117": [
+      "gloves"
+    ],
+    "21120": [
+      "gloves"
+    ],
+    "21123": [
+      "gloves"
+    ],
+    "21177": [
+      "gloves"
+    ],
+    "21180": [
+      "gloves"
+    ],
+    "21183": [
+      "gloves"
+    ],
+    "21343": [
+      "gloves"
+    ],
+    "21345": [
+      "gloves"
+    ],
+    "21392": [
+      "gloves"
+    ],
     "21486": [
       "seeds"
     ],
@@ -1361,13 +1831,13 @@
       "potions"
     ],
     "21626": [
-      "food"
+      "foods"
     ],
     "21684": [
-      "food"
+      "foods"
     ],
     "21690": [
-      "food"
+      "foods"
     ],
     "21711": [
       "potions"
@@ -1375,11 +1845,23 @@
     "21712": [
       "potions"
     ],
+    "21736": [
+      "gloves"
+    ],
+    "21816": [
+      "gloves"
+    ],
+    "21845": [
+      "gloves"
+    ],
+    "21855": [
+      "gloves"
+    ],
     "21869": [
       "logs"
     ],
     "21875": [
-      "food"
+      "foods"
     ],
     "21880": [
       "runes"
@@ -1406,16 +1888,16 @@
       "potions"
     ],
     "22519": [
-      "food"
+      "foods"
     ],
     "22520": [
-      "food"
+      "foods"
     ],
     "22789": [
-      "food"
+      "foods"
     ],
     "22795": [
-      "food"
+      "foods"
     ],
     "22869": [
       "seeds"
@@ -1448,13 +1930,31 @@
       "seeds"
     ],
     "22929": [
-      "food"
+      "foods"
+    ],
+    "22981": [
+      "gloves"
     ],
     "23002": [
       "potions"
     ],
+    "23056": [
+      "gloves"
+    ],
+    "23091": [
+      "gloves"
+    ],
+    "23261": [
+      "gloves"
+    ],
+    "23444": [
+      "gloves"
+    ],
     "23533": [
-      "food"
+      "foods"
+    ],
+    "23593": [
+      "gloves"
     ],
     "23661": [
       "seeds"
@@ -1474,26 +1974,41 @@
     "23881": [
       "potions"
     ],
+    "24006": [
+      "gloves"
+    ],
+    "24046": [
+      "gloves"
+    ],
+    "24303": [
+      "gloves"
+    ],
+    "24311": [
+      "gloves"
+    ],
+    "24321": [
+      "gloves"
+    ],
     "24367": [
-      "food"
+      "foods"
     ],
     "24426": [
-      "food"
+      "foods"
     ],
     "24534": [
       "seeds"
     ],
     "24549": [
-      "food"
+      "foods"
     ],
     "24589": [
-      "food"
+      "foods"
     ],
     "24592": [
-      "food"
+      "foods"
     ],
     "24595": [
-      "food"
+      "foods"
     ],
     "24650": [
       "logs"
@@ -1501,29 +2016,56 @@
     "24691": [
       "logs"
     ],
+    "24755": [
+      "gloves"
+    ],
+    "24757": [
+      "gloves"
+    ],
     "24782": [
-      "food"
+      "foods"
     ],
     "24785": [
-      "food"
+      "foods"
     ],
     "24938": [
       "logs"
     ],
     "24971": [
-      "food"
+      "foods"
     ],
     "24973": [
-      "food"
+      "foods"
     ],
     "24994": [
-      "food"
+      "foods"
     ],
     "24996": [
-      "food"
+      "foods"
+    ],
+    "25081": [
+      "gloves"
+    ],
+    "25083": [
+      "gloves"
+    ],
+    "25135": [
+      "gloves"
     ],
     "25211": [
       "potions"
+    ],
+    "25330": [
+      "gloves"
+    ],
+    "25392": [
+      "gloves"
+    ],
+    "25407": [
+      "gloves"
+    ],
+    "25494": [
+      "gloves"
     ],
     "25812": [
       "potions"
@@ -1532,37 +2074,94 @@
       "potions"
     ],
     "25833": [
-      "food"
+      "foods"
     ],
     "26149": [
-      "food"
+      "foods"
+    ],
+    "26168": [
+      "gloves"
+    ],
+    "26182": [
+      "gloves"
+    ],
+    "26227": [
+      "gloves"
+    ],
+    "26235": [
+      "gloves"
     ],
     "26247": [
-      "food"
+      "foods"
     ],
     "26417": [
-      "food"
+      "foods"
     ],
     "26419": [
-      "food"
+      "foods"
+    ],
+    "26467": [
+      "gloves"
+    ],
+    "26537": [
+      "gloves"
+    ],
+    "26723": [
+      "gloves"
+    ],
+    "26727": [
+      "gloves"
     ],
     "26971": [
-      "food"
+      "foods"
     ],
     "26973": [
-      "food"
+      "foods"
     ],
     "26975": [
-      "food"
+      "foods"
     ],
     "26977": [
-      "food"
+      "foods"
     ],
     "26979": [
-      "food"
+      "foods"
+    ],
+    "27029": [
+      "gloves"
+    ],
+    "27031": [
+      "gloves"
+    ],
+    "27046": [
+      "gloves"
+    ],
+    "27110": [
+      "gloves"
+    ],
+    "27111": [
+      "gloves"
+    ],
+    "27112": [
+      "gloves"
+    ],
+    "27171": [
+      "gloves"
+    ],
+    "27412": [
+      "gloves"
+    ],
+    "27434": [
+      "gloves"
+    ],
+    "27456": [
+      "gloves"
+    ],
+    "27458": [
+      "gloves"
     ],
     "27781": [
-      "food"
+      "foods"
     ],
     "28383": [
       "potions"
@@ -1573,74 +2172,77 @@
     "28388": [
       "potions"
     ],
+    "28630": [
+      "gloves"
+    ],
     "28678": [
-      "food"
+      "foods"
     ],
     "28680": [
-      "food"
+      "foods"
     ],
     "28929": [
       "runes"
     ],
     "29076": [
-      "food"
+      "foods"
     ],
     "29077": [
-      "food"
+      "foods"
     ],
     "29101": [
-      "food"
+      "foods"
     ],
     "29104": [
-      "food"
+      "foods"
     ],
     "29107": [
-      "food"
+      "foods"
     ],
     "29110": [
-      "food"
+      "foods"
     ],
     "29113": [
-      "food"
+      "foods"
     ],
     "29116": [
-      "food"
+      "foods"
     ],
     "29119": [
-      "food"
+      "foods"
     ],
     "29122": [
-      "food"
+      "foods"
     ],
     "29125": [
-      "food"
+      "foods"
     ],
     "29128": [
-      "food"
+      "foods"
     ],
     "29131": [
-      "food"
+      "foods"
     ],
     "29134": [
-      "food"
+      "foods"
     ],
     "29137": [
-      "food"
+      "foods"
     ],
     "29140": [
-      "food"
+      "foods"
     ],
     "29143": [
-      "food"
+      "foods"
     ],
     "29146": [
-      "food"
+      "foods"
     ],
     "29149": [
-      "food"
+      "foods"
     ],
     "29152": [
-      "food"
+      "foods"
     ],
     "29458": [
       "seeds"
@@ -1652,7 +2254,52 @@
       "seeds"
     ],
     "29646": [
-      "food"
+      "foods"
+    ],
+    "29716": [
+      "gloves"
+    ],
+    "29718": [
+      "gloves"
+    ],
+    "29720": [
+      "gloves"
+    ],
+    "29722": [
+      "gloves"
+    ],
+    "29724": [
+      "gloves"
+    ],
+    "29726": [
+      "gloves"
+    ],
+    "29728": [
+      "gloves"
+    ],
+    "29730": [
+      "gloves"
+    ],
+    "29732": [
+      "gloves"
+    ],
+    "29734": [
+      "gloves"
+    ],
+    "29736": [
+      "gloves"
+    ],
+    "29986": [
+      "gloves"
+    ],
+    "30057": [
+      "gloves"
+    ],
+    "30059": [
+      "gloves"
+    ],
+    "30082": [
+      "gloves"
     ],
     "30088": [
       "seeds"
@@ -1667,22 +2314,37 @@
       "potions"
     ],
     "30353": [
-      "food"
+      "foods"
     ],
     "30355": [
-      "food"
+      "foods"
+    ],
+    "30380": [
+      "gloves"
+    ],
+    "30386": [
+      "gloves"
+    ],
+    "30726": [
+      "gloves"
     ],
     "30843": [
       "runes"
     ],
+    "31106": [
+      "gloves"
+    ],
     "31117": [
-      "food"
+      "foods"
     ],
     "31218": [
-      "food"
+      "foods"
     ],
     "31220": [
-      "food"
+      "foods"
+    ],
+    "31233": [
+      "gloves"
     ],
     "31383": [
       "logs"
@@ -1742,25 +2404,31 @@
       "potions"
     ],
     "31903": [
-      "food"
+      "foods"
     ],
     "32312": [
-      "food"
+      "foods"
     ],
     "32320": [
-      "food"
+      "foods"
     ],
     "32328": [
-      "food"
+      "foods"
     ],
     "32336": [
-      "food"
+      "foods"
     ],
     "32344": [
-      "food"
+      "foods"
     ],
     "32352": [
-      "food"
+      "foods"
+    ],
+    "32889": [
+      "metal bars"
+    ],
+    "32892": [
+      "metal bars"
     ],
     "32902": [
       "logs"

@@ -361,7 +361,7 @@ export const ItemsPage = (): ReactElement => {
 
       if (searchString.length > 0) {
         const name = itemDatum.name.toLocaleLowerCase();
-        const validTags = itemTags?.items?.[itemID];
+        const itemBitMask = itemTags?.items?.[itemID];
 
         const parts = searchString
           .split("|")
@@ -375,7 +375,7 @@ export const ItemsPage = (): ReactElement => {
               return true;
             }
 
-            if (!validTags) {
+            if (!itemBitMask || itemBitMask === 0) {
               return false;
             }
 
@@ -389,7 +389,16 @@ export const ItemsPage = (): ReactElement => {
               return false;
             }
 
-            return validTags.some((tag) => tag.includes(suffix.toLocaleLowerCase()));
+            let bitMask = 0;
+            for (const [tag, bitIndex] of itemTags.tags) {
+              if (!tag.includes(suffix.toLocaleLowerCase())) {
+                continue;
+              }
+
+              bitMask += 1 << bitIndex;
+            }
+
+            return (bitMask & itemBitMask) != 0;
           });
         if (!matches) return previousValue;
       }
@@ -475,7 +484,7 @@ export const ItemsPage = (): ReactElement => {
           placeholder="Search"
           auto-focus
         />
-        <span>Tags: {itemTags?.tags.join(",")}</span>
+        <span>Tags: {itemTags?.tags.map(([tag]) => tag).join(",")}</span>
       </div>
       <div id="items-page-utility">
         <div className="rsborder-tiny rsbackground rsbackground-hover">

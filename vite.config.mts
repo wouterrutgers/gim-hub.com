@@ -53,71 +53,105 @@ const wikiTagsPlugin = (): PluginOption => ({
   async buildStart(): Promise<void> {
     console.info("Fetching categories from wiki to build item tags...");
 
-    const ourAliasByWikiCaseSensitiveName: Record<string, string> = {
-      Herbs: "herbs",
-      Logs: "logs",
-      Ores: "ores",
-      Potions: "potions",
-      Runes: "runes",
-      "Metal bars": "metal bars",
-      Food: "foods",
-      Seeds: "seeds",
-      "Hands slot items": "gloves",
+    const wikiCaseSensitiveNamesByOurName: Record<string, string[]> = {
+      herbs: ["Herbs"],
+      logs: ["Logs"],
+      ores: ["Ores"],
+      potions: ["Potions"],
+      runes: ["Runes"],
+      foods: ["Food"],
+      seeds: ["Seeds", "Seedlings", "Saplings"],
+      gloves: ["Hands slot items"],
+      "metal bars": ["Metal bars"],
+      ammo: ["Ammunition"],
+      ammunition: ["Ammunition"],
+      weapons: ["Weapon slot items", "Weapons"],
+      "2h": ["Two-handed slot items"],
+      "two handed": ["Two-handed slot items"],
+      "two-handed": ["Two-handed slot items"],
+      body: ["Body slot items"],
+      capes: ["Cape slot items"],
+      feet: ["Feet slot items"],
+      hands: ["Hands slot items"],
+      head: ["Head slot items"],
+      legs: ["Legs slot items"],
+      neck: ["Neck slot items"],
+      rings: ["Ring slot items"],
+      shields: ["Shield slot items"],
     };
     const itemNamesByTag: Record<string, string[]> = {};
 
-    for (const [wikiName, ourName] of Object.entries(ourAliasByWikiCaseSensitiveName)) {
-      let names: string[] = [];
-      let cmcontinue = "";
-      do {
-        const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${wikiName}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
-        const response = await fetch(url);
-        const data = (await response.json()) as {
-          continue?: { cmcontinue?: string };
-          query: { categorymembers: { title: string }[] };
-        };
-        const itemNames = data.query.categorymembers
-          .filter(({ title }) => title !== undefined)
-          .map(({ title }) => title.toLowerCase());
-        names = [...names, ...itemNames];
-        cmcontinue = data.continue?.cmcontinue ?? "";
+    for (const [ourName, wikiNames] of Object.entries(wikiCaseSensitiveNamesByOurName)) {
+      let names = new Set<string>();
+      for (const wikiName of wikiNames) {
+        let cmcontinue = "";
+        do {
+          const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${wikiName}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
+          const response = await fetch(url);
+          const data = (await response.json()) as {
+            continue?: { cmcontinue?: string };
+            query: { categorymembers: { title: string }[] };
+          };
+          const itemNames = data.query.categorymembers
+            .filter(({ title }) => title !== undefined)
+            .map(({ title }) => title.toLowerCase());
 
-        // Be kind to the wiki
-        await new Promise((resolve) => setTimeout(resolve, 200));
-      } while (cmcontinue);
+          if (itemNames.length <= 0) {
+            console.error(`[wikiTags] Empty tag '${wikiName}' - Does it exist on the wiki?`);
+          }
 
-      if (names.length > 0) {
-        itemNamesByTag[ourName.toLowerCase()] = names;
-      } else {
-        console.error(`[wikiTags] Empty tag '${wikiName}' - Does it exist on the wiki?`);
+          names = new Set([...names, ...itemNames]);
+          cmcontinue = data.continue?.cmcontinue ?? "";
+
+          // Be kind to the wiki
+          await new Promise((resolve) => setTimeout(resolve, 200));
+        } while (cmcontinue);
+      }
+
+      if (names.size > 0) {
+        itemNamesByTag[ourName.toLowerCase()] = Array.from(names);
       }
     }
 
-    const tags = Array.from(Object.keys(itemNamesByTag));
+    let tags = Array.from(Object.keys(itemNamesByTag));
+    if (tags.length > 64) {
+      console.error("[wikiTags] More than 64 tags - have to truncate.");
+      tags = tags.slice(0, 64);
+    }
+    tags.sort((a, b) => itemNamesByTag[b].length - itemNamesByTag[a].length);
 
-    const tagsByItemID: Record<number, string[]> = {};
+    const bitIndexByTag: Record<string, number> = {};
+    {
+      let bitIndexCount = 0;
+      for (const tag of tags) {
+        bitIndexByTag[tag] = bitIndexCount;
+        bitIndexCount += 1;
+      }
+    }
+
+    const tagBitMaskByItemID: Record<number, number> = {};
 
     const itemDataJSON = JSON.parse(fs.readFileSync("public/data/item_data.json", "utf8")) as Record<
       string,
       { name: string; highalch: number }
     >;
     for (const [itemID, item] of Object.entries(itemDataJSON)) {
-      let itemTags: string[] = [];
+      let itemBitMask = 0;
       for (const tag of tags) {
         const included = itemNamesByTag[tag].some((other) => other === item.name.toLowerCase());
         if (included) {
-          itemTags = [...itemTags, tag];
+          itemBitMask += 1 << bitIndexByTag[tag];
         }
       }
 
-      if (itemTags.length > 0) {
-        tagsByItemID[Number.parseInt(itemID)] = itemTags;
+      if (itemBitMask !== 0) {
+        tagBitMaskByItemID[Number.parseInt(itemID)] = itemBitMask;
       }
     }
 
-    const serialized = JSON.stringify({ tags, items: tagsByItemID }, null, 2);
+    const serialized = JSON.stringify({ tags, items: tagBitMaskByItemID }, null, 2);
 
-    fs.writeFileSync("public/data/item_tags.json", serialized);
+    fs.writeFileSync(`public/data/item_tags.json`, serialized);
   },
 });
 

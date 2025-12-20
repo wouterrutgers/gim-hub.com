@@ -108,14 +108,14 @@ const ItemsDataSchema = z
   });
 
 const ItemsTagsSchema = z.object({
-  tags: z.array(z.string().nonempty()),
+  tags: z.array(z.string().nonempty()).transform((tags) => tags.map((tag, index) => [tag, index] as [string, number])),
   items: z.record(
     z
       .string()
       .transform((id) => Number.parseInt(id) as ItemID)
       .refine(Number.isInteger)
       .refine((id) => id >= 0),
-    z.array(z.string().nonempty()),
+    z.number(),
   ),
 });
 

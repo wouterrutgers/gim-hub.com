@@ -9,6 +9,7 @@ export interface ItemStack {
 }
 export type Item = z.infer<typeof ItemsDataEntrySchema>;
 export type ItemsDatabase = z.infer<typeof ItemsDataSchema>;
+export type ItemTags = z.infer<typeof ItemsTagsSchema>;
 
 export const composeItemIconHref = ({ itemID, quantity }: ItemStack, itemDatum?: Item): string => {
   let id = itemID;
@@ -35,6 +36,18 @@ export const fetchItemDataJSON = (): Promise<ItemsDatabase> =>
     })
     .then((parseResult) => {
       if (!parseResult.success) throw new Error("Failed to parse item_data.json", { cause: parseResult.error });
+
+      return parseResult.data;
+    });
+
+export const fetchItemTagsJSON = (): Promise<ItemTags> =>
+  fetch("/data/item_tags.json")
+    .then((response) => response.json())
+    .then((data) => {
+      return ItemsTagsSchema.safeParseAsync(data);
+    })
+    .then((parseResult) => {
+      if (!parseResult.success) throw new Error("Failed to parse item_tags.json", { cause: parseResult.error });
 
       return parseResult.data;
     });
@@ -93,6 +106,18 @@ const ItemsDataSchema = z
     }
     return result;
   });
+
+const ItemsTagsSchema = z.object({
+  tags: z.array(z.string().nonempty()),
+  items: z.record(
+    z
+      .string()
+      .transform((id) => Number.parseInt(id) as ItemID)
+      .refine(Number.isInteger)
+      .refine((id) => id >= 0),
+    z.array(z.string().nonempty()),
+  ),
+});
 
 export const mappedGEPrice = (
   itemID: ItemID,

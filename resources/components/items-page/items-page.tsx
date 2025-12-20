@@ -309,7 +309,7 @@ export const ItemsPage = (): ReactElement => {
   const [memberFilter, setMemberFilter] = useState<ItemFilter>("All");
   const [searchString, setSearchString] = useState<string>("");
   const [sortCategory, setSortCategory] = useState<ItemSortCategory>(loadSortCategoryFromStorage);
-  const { gePrices: geData, items: itemData } = useContext(GameDataContext);
+  const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
 
   const members = useContext(GroupMemberNamesContext);
   const items = useContext(GroupItemsContext);
@@ -361,11 +361,36 @@ export const ItemsPage = (): ReactElement => {
 
       if (searchString.length > 0) {
         const name = itemDatum.name.toLocaleLowerCase();
+        const validTags = itemTags?.items?.[itemID];
+
         const parts = searchString
           .split("|")
           .map((s) => s.trim())
           .filter((s) => s.length > 0);
-        const matches = parts.length > 0 && parts.some((part) => name.includes(part));
+        const matches =
+          parts.length > 0 &&
+          parts.some((part) => {
+            const directMatch = name.includes(part);
+            if (directMatch) {
+              return true;
+            }
+
+            if (!validTags) {
+              return false;
+            }
+
+            const splits = part.split(":");
+            if (splits.length !== 2) {
+              return false;
+            }
+
+            const [prefix, suffix] = splits;
+            if (prefix !== "tag") {
+              return false;
+            }
+
+            return validTags.some((tag) => tag.includes(suffix.toLocaleLowerCase()));
+          });
         if (!matches) return previousValue;
       }
 
@@ -450,6 +475,7 @@ export const ItemsPage = (): ReactElement => {
           placeholder="Search"
           auto-focus
         />
+        <span>Tags: {itemTags?.tags.join(",")}</span>
       </div>
       <div id="items-page-utility">
         <div className="rsborder-tiny rsbackground rsbackground-hover">

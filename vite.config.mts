@@ -42,6 +42,68 @@ const mapJsonPlugin = (): PluginOption => ({
   },
 });
 
+/**
+ * Fetches categories from the wiki, then indexes these tags by item ID to enable tagged searching.
+ */
+const wikiTagsPlugin = (): PluginOption => ({
+  name: "wikiTags",
+  async buildStart(): Promise<void> {
+    const categoriesCaseSensitive = ["Herbs", "Logs", "Ores", "Potions", "Runes", "Bars", "Food", "Seeds"];
+    const itemNamesByTag: Record<string, string[]> = {};
+
+    for (const category of categoriesCaseSensitive) {
+      let names: string[] = [];
+      let cmcontinue = "";
+      do {
+        const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${category}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
+        const response = await fetch(url);
+        const data = (await response.json()) as {
+          continue?: { cmcontinue?: string };
+          query: { categorymembers: { title: string }[] };
+        };
+        const itemNames = data.query.categorymembers
+          .filter(({ title }) => title !== undefined)
+          .map(({ title }) => title.toLowerCase());
+        names = [...names, ...itemNames];
+        cmcontinue = data.continue?.cmcontinue ?? "";
+
+        // Be kind to the wiki
+        await new Promise((resolve) => setTimeout(resolve, 200));
+      } while (cmcontinue);
+
+      if (names.length > 0) {
+        itemNamesByTag[category.toLowerCase()] = names;
+      }
+    }
+
+    const tags = Array.from(Object.keys(itemNamesByTag));
+
+    const tagsByItemID: Record<number, string[]> = {};
+
+    const itemDataJSON = JSON.parse(fs.readFileSync("public/data/item_data.json", "utf8")) as Record<
+      string,
+      { name: string; highalch: number }
+    >;
+    for (const [itemID, item] of Object.entries(itemDataJSON)) {
+      let itemTags: string[] = [];
+      for (const tag of tags) {
+        const included = itemNamesByTag[tag].some((other) => other === item.name.toLowerCase());
+        if (included) {
+          itemTags = [...itemTags, tag];
+        }
+      }
+
+      if (itemTags.length > 0) {
+        tagsByItemID[Number.parseInt(itemID)] = itemTags;
+      }
+    }
+
+    const serialized = JSON.stringify({ tags, items: tagsByItemID }, null, 2);
+
+    fs.writeFileSync("public/data/item_tags.json", serialized);
+  },
+});
+
 const imageChunksPlugin = (): PluginOption => ({
   name: "imageChunks",
   buildStart(): void {
@@ -162,6 +224,7 @@ const imageChunksPlugin = (): PluginOption => ({
 export default defineConfig({
   plugins: [
     mapJsonPlugin(),
+    wikiTagsPlugin(),
     imageChunksPlugin(),
     react(),
     laravel({

@@ -5,6 +5,7 @@ import crypto from "crypto";
 import react from "@vitejs/plugin-react";
 import { MapMetadataSchema } from "./resources/game/map-data";
 import laravel from "laravel-vite-plugin";
+import wikiTagCategories from "./resources/assets/wiki_tag_categories.json";
 
 const mapJsonPlugin = (): PluginOption => ({
   name: "mapTilesJson",
@@ -53,35 +54,9 @@ const wikiTagsPlugin = (): PluginOption => ({
   async buildStart(): Promise<void> {
     console.info("Fetching categories from wiki to build item tags...");
 
-    const wikiCaseSensitiveNamesByOurName: Record<string, string[]> = {
-      herbs: ["Herbs"],
-      logs: ["Logs"],
-      ores: ["Ores"],
-      potions: ["Potions"],
-      runes: ["Runes"],
-      foods: ["Food"],
-      seeds: ["Seeds", "Seedlings", "Saplings"],
-      gloves: ["Hands slot items"],
-      "metal bars": ["Metal bars"],
-      ammo: ["Ammunition"],
-      ammunition: ["Ammunition"],
-      weapons: ["Weapon slot items", "Weapons"],
-      "2h": ["Two-handed slot items"],
-      "two handed": ["Two-handed slot items"],
-      "two-handed": ["Two-handed slot items"],
-      body: ["Body slot items"],
-      capes: ["Cape slot items"],
-      feet: ["Feet slot items"],
-      hands: ["Hands slot items"],
-      head: ["Head slot items"],
-      legs: ["Legs slot items"],
-      neck: ["Neck slot items"],
-      rings: ["Ring slot items"],
-      shields: ["Shield slot items"],
-    };
     const itemNamesByTag: Record<string, string[]> = {};
 
-    for (const [ourName, wikiNames] of Object.entries(wikiCaseSensitiveNamesByOurName)) {
+    for (const [ourNames, wikiNames] of wikiTagCategories) {
       let names = new Set<string>();
       for (const wikiName of wikiNames) {
         let cmcontinue = "";
@@ -108,8 +83,10 @@ const wikiTagsPlugin = (): PluginOption => ({
         } while (cmcontinue);
       }
 
-      if (names.size > 0) {
-        itemNamesByTag[ourName.toLowerCase()] = Array.from(names);
+      for (const ourName of ourNames) {
+        if (names.size > 0) {
+          itemNamesByTag[ourName.toLowerCase()] = Array.from(names);
+        }
       }
     }
 

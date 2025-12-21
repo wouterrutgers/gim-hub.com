@@ -11,6 +11,7 @@ import net.runelite.cache.definitions.StructDefinition;
 import net.runelite.cache.definitions.loaders.EnumLoader;
 import net.runelite.cache.fs.Archive;
 import net.runelite.cache.fs.ArchiveFiles;
+import net.runelite.cache.fs.FSFile;
 import net.runelite.cache.fs.Index;
 import net.runelite.cache.fs.Storage;
 import net.runelite.cache.fs.Store;

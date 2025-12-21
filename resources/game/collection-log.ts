@@ -6,7 +6,6 @@ export type TabName = (typeof TabName)[number];
 export type PageName = Distinct<string, "CollectionLog.PageName">;
 export interface Page {
   name: PageName;
-  completionLabels: string[];
   items: ItemID[];
 }
 export interface CollectionLogInfo {

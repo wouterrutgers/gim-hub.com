@@ -7,13 +7,10 @@ import com.google.gson.GsonBuilder;
 import lombok.Data;
 import net.runelite.cache.definitions.EnumDefinition;
 import net.runelite.cache.definitions.ItemDefinition;
-import net.runelite.cache.definitions.ScriptDefinition;
 import net.runelite.cache.definitions.StructDefinition;
 import net.runelite.cache.definitions.loaders.EnumLoader;
-import net.runelite.cache.definitions.loaders.ScriptLoader;
 import net.runelite.cache.fs.Archive;
 import net.runelite.cache.fs.ArchiveFiles;
-import net.runelite.cache.fs.FSFile;
 import net.runelite.cache.fs.Index;
 import net.runelite.cache.fs.Storage;
 import net.runelite.cache.fs.Store;
@@ -28,10 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CollectionLogDumper
 {
@@ -46,7 +40,6 @@ public class CollectionLogDumper
 	private static final int COLLECTION_LOG_TAB_ENUM_PARAM_ID = 683;
 	private static final int COLLECTION_LOG_PAGE_NAME_PARAM_ID = 689;
 	private static final int COLLECTION_LOG_PAGE_ITEMS_ENUM_PARAM_ID = 690;
-	private static final int COLLECTION_CATEGORY_COUNT_SCRIPT = 2735;
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	@Data
@@ -60,7 +53,6 @@ public class CollectionLogDumper
 	static class CollectionLogPage
 	{
 		public String name;
-		public List<String> completion_labels = new ArrayList<>();
 		public List<CollectionLogItem> items = new ArrayList<>();
 	}
 
@@ -112,47 +104,6 @@ public class CollectionLogDumper
 			StructManager structManager = new StructManager(store);
 			structManager.load();
 
-			Index scriptIndex = store.getIndex(IndexType.CLIENTSCRIPT);
-			Archive collectionCategoryCountScript = scriptIndex.getArchive(COLLECTION_CATEGORY_COUNT_SCRIPT);
-			byte[] collectionCategoryCountScriptData = storage.loadArchive(collectionCategoryCountScript);
-			FSFile collectionCategoryCountScriptFile = collectionCategoryCountScript.getFiles(collectionCategoryCountScriptData).findFile(0);
-			ScriptLoader scriptLoader = new ScriptLoader();
-			ScriptDefinition collectionCategoryCountScriptDefinition = scriptLoader.load(COLLECTION_CATEGORY_COUNT_SCRIPT, collectionCategoryCountScriptFile.getContents());
-
-			Map<Integer, List<String>> completionLabels = new HashMap<>();
-			String[] labelStrings = collectionCategoryCountScriptDefinition.getStringOperands();
-			int offset = 1;
-			for (Integer pageId : collectionCategoryCountScriptDefinition.getSwitches()[0].keySet())
-			{
-				List<String> labels = new ArrayList<>();
-				int count = 0;
-
-				// Every completion count return has 3 strings
-				for (int i = offset; count < 3; ++i, ++offset)
-				{
-					String label = labelStrings[i];
-					String previousLabel = labelStrings[i - 1];
-					// If the previous value is another valid label then it is part of some argument to a proc
-					// and we only want the first one. Example is the "High-level Gambles" which can change to not
-					// include the word "Gamble" on mobile.
-					if (label != null && !label.trim().startsWith("<") && (previousLabel == null || !previousLabel.trim().endsWith(":")))
-					{
-						++count;
-
-						// non-empty labels should always have a <col></col> tag that we can advance to avoid
-						// any other empty string up until then.
-						if (label.trim().endsWith(":"))
-						{
-							for (; labelStrings[i] == null || !labelStrings[i].trim().equals("</col>"); ++i, ++offset);
-							labels.add(label.trim().substring(0, label.trim().length() - 1));
-						}
-					}
-				}
-
-				Collections.reverse(labels);
-				completionLabels.put(pageId, labels);
-			}
-
 			ItemManager itemManager = new ItemManager(store);
 			itemManager.load();
 
@@ -178,7 +129,6 @@ public class CollectionLogDumper
 
 					CollectionLogPage collectionLogPage = new CollectionLogPage();
 					collectionLogPage.name = pageName;
-					collectionLogPage.completion_labels = completionLabels.getOrDefault(pageStructId, new ArrayList<>());
 					collectionLogTab.pages.add(collectionLogPage);
 
 					for (Integer pageItemId : pageItemsEnum.getIntVals())

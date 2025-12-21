@@ -27,7 +27,6 @@ export const fetchCollectionLogInfo = ({ baseURL }: { baseURL: string }): Promis
 const PageSchema = z
   .object({
     name: z.string().transform((pageName) => pageName as CollectionLog.PageName),
-    completion_labels: z.string().array(),
     items: z
       .object({ id: z.uint32().transform((id) => id as ItemID), name: z.string() })
       /* Throw away name since we can look that up in the game data */
@@ -35,7 +34,7 @@ const PageSchema = z
       .array()
       .transform((ids) => ids.map((id) => canonicalizeCollectionLogItemId(id))),
   })
-  .transform(({ name, completion_labels, items }) => ({ name, completionLabels: completion_labels, items }));
+  .transform(({ name, items }) => ({ name, items }));
 
 type Page = z.infer<typeof PageSchema>;
 

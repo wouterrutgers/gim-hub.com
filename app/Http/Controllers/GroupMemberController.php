@@ -154,6 +154,7 @@ class GroupMemberController extends Controller
             'shared_bank' => 'nullable|array',
             'rune_pouch' => 'nullable|array',
             'seed_vault' => 'nullable|array',
+            'potion_storage' => 'nullable|array',
             'poh_costume_room' => 'nullable|array',
             'quiver' => 'nullable|array',
             'deposited' => 'nullable|array',
@@ -185,6 +186,7 @@ class GroupMemberController extends Controller
         Validators::validateMemberPropLength('shared_bank', $validated['shared_bank'] ?? null, 0, 1000);
         Validators::validateMemberPropLength('rune_pouch', $validated['rune_pouch'] ?? null, 6, 8);
         Validators::validateMemberPropLength('seed_vault', $validated['seed_vault'] ?? null, 0, 500);
+        Validators::validateMemberPropLength('potion_storage', $validated['potion_storage'] ?? null, 0, 2000);
         Validators::validateMemberPropLength('poh_costume_room', $validated['poh_costume_room'] ?? null, 0, 2000);
         Validators::validateMemberPropLength('quiver', $validated['quiver'] ?? null, 2, 2);
         Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);

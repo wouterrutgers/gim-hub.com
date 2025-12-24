@@ -519,7 +519,7 @@ export default class DemoApi {
       }),
       fetchItemTagsJSON().then((data) => {
         gameData.itemTags = data;
-        this.callbacks?.onGameDataUpdate?.(this.gameData);
+        this.callbacks?.onGameDataUpdate?.(gameData);
       }),
       fetchGEPrices({ baseURL: this.baseURL }).then((data) => {
         gameData.gePrices = data;

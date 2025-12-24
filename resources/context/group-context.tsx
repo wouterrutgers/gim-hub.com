@@ -76,6 +76,7 @@ export const useMemberLastUpdatedContext = createMemberSelector("lastUpdated");
 export const useMemberBankContext = createMemberSelector("bank");
 export const useMemberRunePouchContext = createMemberSelector("runePouch");
 export const useMemberSeedVaultContext = createMemberSelector("seedVault");
+export const useMemberPotionStorageContext = createMemberSelector("potionStorage");
 export const useMemberPohCostumeRoomContext = createMemberSelector("pohCostumeRoom");
 export const useMemberQuiverContext = createMemberSelector("quiver");
 export const useMemberEquipmentContext = createMemberSelector("equipment");

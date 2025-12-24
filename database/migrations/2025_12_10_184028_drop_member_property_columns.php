@@ -11,8 +11,10 @@ return new class extends Migration
     {
         Schema::table('members', function (Blueprint $table) {
             foreach (Member::PROPERTY_KEYS as $property) {
-                $table->dropColumn($property);
-                $table->dropColumn("{$property}_last_update");
+                if (Schema::hasColumn('members', $property)) {
+                    $table->dropColumn($property);
+                    $table->dropColumn("{$property}_last_update");
+                }
             }
         });
     }

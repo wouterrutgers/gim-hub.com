@@ -14,6 +14,7 @@ export const AllItemContainers = [
   { name: "Bank", key: "bank", getItems: mapToItems },
   { name: "Rune Pouch", key: "runePouch", getItems: mapToItems },
   { name: "Seed Vault", key: "seedVault", getItems: mapToItems },
+  { name: "Potion Storage", key: "potionStorage", getItems: mapToItems },
   { name: "Costume Room", key: "pohCostumeRoom", getItems: mapToItems },
   { name: "Quiver", key: "quiver", getItems: mapToItems },
   { name: "Equipment", key: "equipment", getItems: mapToItems },
@@ -33,6 +34,7 @@ export interface State {
   bank: ItemCollection;
   runePouch: ItemCollection;
   seedVault: ItemCollection;
+  potionStorage: ItemCollection;
   pohCostumeRoom: ItemCollection;
   quiver: ItemCollection;
   equipment: Equipment;

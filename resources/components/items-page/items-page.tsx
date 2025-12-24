@@ -1,14 +1,4 @@
-import {
-  type ReactElement,
-  Fragment,
-  memo,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import { type ReactElement, Fragment, memo, useContext, useEffect, useRef, useState, useCallback } from "react";
 import { SearchElement } from "../search-element/search-element";
 import * as Member from "../../game/member";
 import { GameDataContext } from "../../context/game-data-context";
@@ -24,7 +14,7 @@ import { useLocalStorage } from "../../hooks/local-storage";
 
 import "./items-page.css";
 
-type ItemFilter = "All" | Member.Name;
+type MemberFilter = "All" | Member.Name;
 const ItemSortCategory = [
   "Total quantity",
   "HA total value",
@@ -42,7 +32,7 @@ interface ItemPanelProps {
   gePricePer: number;
   imageURL: string;
   totalQuantity: number;
-  memberFilter: ItemFilter;
+  memberFilter: MemberFilter;
   containerFilter: Member.ItemContainer | "All";
   quantities: Map<Member.Name, Member.ItemLocationBreakdown>;
   isPinned: boolean;
@@ -201,7 +191,7 @@ const ItemPanelsScrollArea = ({
   onTogglePin,
 }: {
   sortedItems: FilteredItem[];
-  memberFilter: ItemFilter;
+  memberFilter: MemberFilter;
   containerFilter: Member.ItemContainer | "All";
   pinnedItems: Set<ItemID>;
   onTogglePin: (itemID: ItemID) => void;
@@ -283,57 +273,27 @@ const ItemPanelsScrollArea = ({
   );
 };
 
-const STORAGE_KEY_SORT_CATEGORY = "items-page-sort-category";
-
-const loadSortCategoryFromStorage = (): ItemSortCategory => {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY_SORT_CATEGORY);
-    if (stored && ItemSortCategory.includes(stored as ItemSortCategory)) {
-      return stored as ItemSortCategory;
-    }
-  } catch (error) {
-    console.warn("Failed to load sort category from localStorage:", error);
-  }
-  return "GE total price";
-};
-
-const validatePinnedItems = (value: string | undefined): string | undefined => value;
-const validateContainerFilter = (value: string | undefined): Member.ItemContainer | "All" | undefined => {
+const validateItemSortCategory = (value: string | undefined): ItemSortCategory | undefined => {
   if (typeof value !== "string") return undefined;
-  if (value !== "All" && !Member.ItemContainer.includes(value as Member.ItemContainer)) return undefined;
+  if (!ItemSortCategory.includes(value as ItemSortCategory)) return undefined;
 
-  return value as Member.ItemContainer | "All";
+  return value as ItemSortCategory;
 };
 
-export const ItemsPage = (): ReactElement => {
-  const [memberFilter, setMemberFilter] = useState<ItemFilter>("All");
-  const [searchString, setSearchString] = useState<string>("");
-  const [sortCategory, setSortCategory] = useState<ItemSortCategory>(loadSortCategoryFromStorage);
-  const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
-
-  const members = useContext(GroupMemberNamesContext);
-  const items = useContext(GroupItemsContext);
-
-  const [pinnedItemsString, setPinnedItemsString] = useLocalStorage({
+type PinnedItems = Set<ItemID>;
+const validatePinnedItems = (value: string | undefined): string | undefined => value;
+const usePinnedItems = (): [PinnedItems, (toggleID: ItemID) => void] => {
+  const [pinnedItemsUserString, setPinnedItemsUserString] = useLocalStorage({
     key: "pinned-items",
     defaultValue: "",
     validator: validatePinnedItems,
   });
-  const [containerFilter, setContainerFilter] = useLocalStorage<Member.ItemContainer | "All">({
-    key: "item-page-container-filter",
-    defaultValue: "All",
-    validator: validateContainerFilter,
-  });
 
-  const pinnedItems = useMemo(
-    () =>
-      new Set<ItemID>(
-        pinnedItemsString
-          .split(",")
-          .filter((id) => id.length > 0)
-          .map((id) => parseInt(id, 10) as ItemID),
-      ),
-    [pinnedItemsString],
+  const pinnedItems = new Set<ItemID>(
+    pinnedItemsUserString
+      .split(",")
+      .filter((id) => id.length > 0)
+      .map((id) => parseInt(id, 10) as ItemID),
   );
 
   const togglePin = useCallback(
@@ -344,63 +304,169 @@ export const ItemsPage = (): ReactElement => {
       } else {
         newPinnedItems.add(itemID);
       }
-      setPinnedItemsString(Array.from(newPinnedItems).join(","));
+      setPinnedItemsUserString(Array.from(newPinnedItems).join(","));
     },
-    [pinnedItems, setPinnedItemsString],
+    [pinnedItems, setPinnedItemsUserString],
   );
+
+  return [pinnedItems, togglePin];
+};
+
+type ContainerFilter = "All" | Member.ItemContainer;
+const validateContainerFilter = (value: string | undefined): ContainerFilter | undefined => {
+  if (typeof value !== "string") return undefined;
+  if (value !== "All" && !Member.ItemContainer.includes(value as Member.ItemContainer)) return undefined;
+
+  return value as ContainerFilter;
+};
+
+interface SearchFilter {
+  parts: (
+    | {
+        type: "Name";
+        lowercase: string;
+        exact: boolean;
+      }
+    | { type: "Tag"; bitmask: bigint }
+  )[];
+}
+const validateSearchFilter = (value: string | undefined): string | undefined => value;
+const useSearchFilter = (): [ReactElement, SearchFilter] => {
+  const [filterUserString, setFilterUserString] = useLocalStorage({
+    key: "search-filter",
+    defaultValue: undefined,
+    validator: validateSearchFilter,
+  });
+  const { itemTags } = useContext(GameDataContext);
+
+  const parts = (filterUserString ?? "")
+    .split("|")
+    .map((s: string) => {
+      return s.trim().toLocaleLowerCase();
+    })
+    .map<SearchFilter["parts"][number]>((s: string) => {
+      if (s.length === 0) {
+        return {
+          type: "Name",
+          lowercase: "",
+          exact: false,
+        };
+      }
+
+      const exact = s.startsWith('"') && s.endsWith('"');
+      if (exact) {
+        return {
+          type: "Name",
+          lowercase: s.slice(1, -1),
+          exact: true,
+        };
+      }
+
+      const splitForTag = s.split(":");
+      const prefix = splitForTag[0];
+      if (splitForTag.length === 1 || prefix !== "tag") {
+        return {
+          type: "Name",
+          lowercase: s,
+          exact: false,
+        };
+      }
+
+      if (itemTags?.tags === undefined) {
+        return {
+          type: "Tag",
+          bitmask: 0n,
+        };
+      }
+
+      const suffix = splitForTag.slice(1).join(":");
+
+      let bitmask = 0n;
+      for (const [tag, bitIndex] of itemTags?.tags ?? []) {
+        const tagMatches = tag.includes(suffix.toLocaleLowerCase());
+        if (tagMatches) {
+          bitmask += 1n << BigInt(bitIndex);
+        }
+      }
+
+      return {
+        type: "Tag" as const,
+        bitmask,
+      };
+    })
+    .filter((part) => {
+      if (part.type !== "Name") {
+        return true;
+      }
+      return part.lowercase.length > 0;
+    });
+
+  return [
+    <SearchElement
+      onChange={setFilterUserString}
+      id="items-page-search"
+      placeholder="Search"
+      auto-focus
+      defaultValue={filterUserString}
+    />,
+    { parts },
+  ];
+};
+
+export const ItemsPage = (): ReactElement => {
+  const [memberFilter, setMemberFilter] = useState<MemberFilter>("All");
+  const [searchInputElement, searchFilter] = useSearchFilter();
+
+  const [pinnedItems, togglePin] = usePinnedItems();
+
+  const [sortCategory, setSortCategory] = useLocalStorage<ItemSortCategory>({
+    key: "items-page-sort-category",
+    defaultValue: "GE total price",
+    validator: validateItemSortCategory,
+  });
+
+  const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
+  const members = useContext(GroupMemberNamesContext);
+  const items = useContext(GroupItemsContext);
+
+  const [containerFilter, setContainerFilter] = useLocalStorage<ContainerFilter>({
+    key: "item-page-container-filter",
+    defaultValue: "All",
+    validator: validateContainerFilter,
+  });
 
   interface ItemAggregates {
     totalHighAlch: number;
     totalGEPrice: number;
     filteredItems: FilteredItem[];
   }
+
   const { totalHighAlch, totalGEPrice, filteredItems } = [...(items ?? [])].reduce<ItemAggregates>(
     (previousValue, [itemID, breakdownByMember]) => {
       const itemDatum = itemData?.get(itemID);
+
       if (!itemDatum) return previousValue;
 
-      if (searchString.length > 0) {
-        const name = itemDatum.name.toLocaleLowerCase();
-        const itemBitMask = itemTags?.items?.[itemID];
-
-        const parts = searchString
-          .split("|")
-          .map((s) => s.trim())
-          .filter((s) => s.length > 0);
-        const matches =
-          parts.length > 0 &&
-          parts.some((part) => {
-            const directMatch = name.includes(part);
-            if (directMatch) {
-              return true;
-            }
-
-            if (!itemBitMask || itemBitMask === 0n) {
-              return false;
-            }
-
-            const splits = part.split(":");
-            if (splits.length !== 2) {
-              return false;
-            }
-
-            const [prefix, suffix] = splits;
-            if (prefix !== "tag") {
-              return false;
-            }
-
-            let bitMask = 0n;
-            for (const [tag, bitIndex] of itemTags.tags) {
-              if (!tag.includes(suffix.toLocaleLowerCase())) {
-                continue;
+      if (searchFilter.parts.length > 0) {
+        const itemLowercase = itemDatum.name.toLocaleLowerCase();
+        const matches = searchFilter.parts.some((part) => {
+          switch (part.type) {
+            case "Name": {
+              if (part.exact) {
+                return part.lowercase === itemLowercase;
+              } else {
+                return itemLowercase.includes(part.lowercase);
               }
-
-              bitMask += 1n << BigInt(bitIndex);
             }
+            case "Tag": {
+              return (part.bitmask & (itemTags?.items[itemID] ?? 0n)) !== 0n;
+            }
+          }
+        });
 
-            return (bitMask & itemBitMask) !== 0n;
-          });
-        if (!matches) return previousValue;
+        if (!matches) {
+          return previousValue;
+        }
       }
 
       let filteredTotalQuantity = 0;
@@ -478,12 +544,7 @@ export const ItemsPage = (): ReactElement => {
   return (
     <>
       <div id="items-page-head">
-        <SearchElement
-          onChange={(string) => setSearchString(string.toLocaleLowerCase().trim())}
-          id="items-page-search"
-          placeholder="Search"
-          auto-focus
-        />
+        {searchInputElement}
         <span>Tags: {itemTags?.tags.map(([tag]) => tag).join(",")}</span>
       </div>
       <div id="items-page-utility">
@@ -493,11 +554,6 @@ export const ItemsPage = (): ReactElement => {
             onChange={(e) => {
               const newCategory = e.target.value as ItemSortCategory;
               setSortCategory(newCategory);
-              try {
-                localStorage.setItem(STORAGE_KEY_SORT_CATEGORY, newCategory);
-              } catch (error) {
-                console.warn("Failed to save sort category to localStorage:", error);
-              }
             }}
           >
             {ItemSortCategory.map((category) => (
@@ -511,7 +567,7 @@ export const ItemsPage = (): ReactElement => {
           <select
             value={memberFilter}
             onChange={(e) => {
-              setMemberFilter(e.target.value as ItemFilter);
+              setMemberFilter(e.target.value as MemberFilter);
             }}
           >
             {["All", ...members].map((name) => (
@@ -525,7 +581,7 @@ export const ItemsPage = (): ReactElement => {
           <select
             value={containerFilter}
             onChange={(e) => {
-              setContainerFilter(validateContainerFilter(e.target.value) ?? "All");
+              setContainerFilter(validateContainerFilter(e.target.value));
             }}
           >
             {["All", ...Member.ItemContainer].map((name) => (

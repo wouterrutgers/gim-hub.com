@@ -4,9 +4,6 @@
     "pages": [
       {
         "name": "Abyssal Sire",
-        "completion_labels": [
-          "Abyssal Sire kills"
-        ],
         "items": [
           {
             "id": 13262,
@@ -48,9 +45,6 @@
       },
       {
         "name": "Alchemical Hydra",
-        "completion_labels": [
-          "Alchemical Hydra kills"
-        ],
         "items": [
           {
             "id": 22746,
@@ -100,9 +94,6 @@
       },
       {
         "name": "Amoxliatl",
-        "completion_labels": [
-          "Amoxliatl kills"
-        ],
         "items": [
           {
             "id": 30154,
@@ -124,9 +115,6 @@
       },
       {
         "name": "Araxxor",
-        "completion_labels": [
-          "Araxxor kills"
-        ],
         "items": [
           {
             "id": 29836,
@@ -172,9 +160,6 @@
       },
       {
         "name": "Barrows Chests",
-        "completion_labels": [
-          "Barrows Chests opened"
-        ],
         "items": [
           {
             "id": 4732,
@@ -280,9 +265,6 @@
       },
       {
         "name": "Bryophyta",
-        "completion_labels": [
-          "Bryophyta kills"
-        ],
         "items": [
           {
             "id": 22372,
@@ -292,10 +274,6 @@
       },
       {
         "name": "Callisto and Artio",
-        "completion_labels": [
-          "Callisto kills",
-          "Artio kills"
-        ],
         "items": [
           {
             "id": 13178,
@@ -325,9 +303,6 @@
       },
       {
         "name": "Cerberus",
-        "completion_labels": [
-          "Cerberus kills"
-        ],
         "items": [
           {
             "id": 13247,
@@ -361,9 +336,6 @@
       },
       {
         "name": "Chaos Elemental",
-        "completion_labels": [
-          "Chaos Elemental kills"
-        ],
         "items": [
           {
             "id": 11995,
@@ -381,9 +353,6 @@
       },
       {
         "name": "Chaos Fanatic",
-        "completion_labels": [
-          "Chaos Fanatic kills"
-        ],
         "items": [
           {
             "id": 11995,
@@ -401,9 +370,6 @@
       },
       {
         "name": "Commander Zilyana",
-        "completion_labels": [
-          "Commander Zilyana kills"
-        ],
         "items": [
           {
             "id": 12651,
@@ -441,9 +407,6 @@
       },
       {
         "name": "Corporeal Beast",
-        "completion_labels": [
-          "Corporeal Beast kills"
-        ],
         "items": [
           {
             "id": 12816,
@@ -477,9 +440,6 @@
       },
       {
         "name": "Crazy Archaeologist",
-        "completion_labels": [
-          "Crazy Archaeologist kills"
-        ],
         "items": [
           {
             "id": 11929,
@@ -497,11 +457,6 @@
       },
       {
         "name": "Dagannoth Kings",
-        "completion_labels": [
-          "Dagannoth Rex kills",
-          "Dagannoth Prime kills",
-          "Dagannoth Supreme kills"
-        ],
         "items": [
           {
             "id": 12644,
@@ -547,9 +502,6 @@
       },
       {
         "name": "Deranged Archaeologist",
-        "completion_labels": [
-          "Deranged Archaeologist kills"
-        ],
         "items": [
           {
             "id": 30895,
@@ -559,11 +511,6 @@
       },
       {
         "name": "Doom of Mokhaiotl",
-        "completion_labels": [
-          "Deepest delve",
-          "Deep delves",
-          "Total delves"
-        ],
         "items": [
           {
             "id": 31130,
@@ -593,9 +540,6 @@
       },
       {
         "name": "Duke Sucellus",
-        "completion_labels": [
-          "Duke Sucellus kills"
-        ],
         "items": [
           {
             "id": 28250,
@@ -641,9 +585,6 @@
       },
       {
         "name": "The Fight Caves",
-        "completion_labels": [
-          "TzTok-Jad kills"
-        ],
         "items": [
           {
             "id": 13225,
@@ -657,9 +598,6 @@
       },
       {
         "name": "Fortis Colosseum",
-        "completion_labels": [
-          "Sol Heredit kills"
-        ],
         "items": [
           {
             "id": 28960,
@@ -701,10 +639,6 @@
       },
       {
         "name": "The Gauntlet",
-        "completion_labels": [
-          "Gauntlet completion count",
-          "Corrupted Gauntlet completion count"
-        ],
         "items": [
           {
             "id": 23757,
@@ -730,9 +664,6 @@
       },
       {
         "name": "General Graardor",
-        "completion_labels": [
-          "General Graardor kills"
-        ],
         "items": [
           {
             "id": 12650,
@@ -770,9 +701,6 @@
       },
       {
         "name": "Giant Mole",
-        "completion_labels": [
-          "Giant Mole kills"
-        ],
         "items": [
           {
             "id": 12646,
@@ -790,9 +718,6 @@
       },
       {
         "name": "Grotesque Guardians",
-        "completion_labels": [
-          "Grotesque Guardian kills"
-        ],
         "items": [
           {
             "id": 21748,
@@ -826,9 +751,6 @@
       },
       {
         "name": "Hespori",
-        "completion_labels": [
-          "Hespori kills"
-        ],
         "items": [
           {
             "id": 22994,
@@ -850,9 +772,6 @@
       },
       {
         "name": "The Hueycoatl",
-        "completion_labels": [
-          "Hueycoatl kills"
-        ],
         "items": [
           {
             "id": 30152,
@@ -882,9 +801,6 @@
       },
       {
         "name": "The Inferno",
-        "completion_labels": [
-          "TzKal-Zuk kills"
-        ],
         "items": [
           {
             "id": 21291,
@@ -898,9 +814,6 @@
       },
       {
         "name": "Kalphite Queen",
-        "completion_labels": [
-          "Kalphite Queen kills"
-        ],
         "items": [
           {
             "id": 12647,
@@ -930,9 +843,6 @@
       },
       {
         "name": "King Black Dragon",
-        "completion_labels": [
-          "King Black Dragon kills"
-        ],
         "items": [
           {
             "id": 12653,
@@ -954,9 +864,6 @@
       },
       {
         "name": "Kraken",
-        "completion_labels": [
-          "Kraken kills"
-        ],
         "items": [
           {
             "id": 12655,
@@ -978,9 +885,6 @@
       },
       {
         "name": "Kree\u0027arra",
-        "completion_labels": [
-          "Kree\u0027arra kills"
-        ],
         "items": [
           {
             "id": 12649,
@@ -1018,9 +922,6 @@
       },
       {
         "name": "K\u0027ril Tsutsaroth",
-        "completion_labels": [
-          "K\u0027ril Tsutsaroth kills"
-        ],
         "items": [
           {
             "id": 12652,
@@ -1058,9 +959,6 @@
       },
       {
         "name": "The Leviathan",
-        "completion_labels": [
-          "Leviathan kills"
-        ],
         "items": [
           {
             "id": 28252,
@@ -1106,9 +1004,6 @@
       },
       {
         "name": "Moons of Peril",
-        "completion_labels": [
-          "Lunar Chests opened"
-        ],
         "items": [
           {
             "id": 29004,
@@ -1166,9 +1061,6 @@
       },
       {
         "name": "Nex",
-        "completion_labels": [
-          "Nex kills"
-        ],
         "items": [
           {
             "id": 26348,
@@ -1206,10 +1098,6 @@
       },
       {
         "name": "The Nightmare",
-        "completion_labels": [
-          "Phosani\u0027s Nightmare kills",
-          "Nightmare kills"
-        ],
         "items": [
           {
             "id": 24491,
@@ -1263,9 +1151,6 @@
       },
       {
         "name": "Obor",
-        "completion_labels": [
-          "Obor kills"
-        ],
         "items": [
           {
             "id": 20756,
@@ -1275,9 +1160,6 @@
       },
       {
         "name": "Phantom Muspah",
-        "completion_labels": [
-          "Phantom Muspah kills"
-        ],
         "items": [
           {
             "id": 27590,
@@ -1307,9 +1189,6 @@
       },
       {
         "name": "Royal Titans",
-        "completion_labels": [
-          "Royal Titan kills"
-        ],
         "items": [
           {
             "id": 30622,
@@ -1343,9 +1222,6 @@
       },
       {
         "name": "Sarachnis",
-        "completion_labels": [
-          "Sarachnis kills"
-        ],
         "items": [
           {
             "id": 23495,
@@ -1367,9 +1243,6 @@
       },
       {
         "name": "Scorpia",
-        "completion_labels": [
-          "Scorpia kills"
-        ],
         "items": [
           {
             "id": 13181,
@@ -1391,9 +1264,6 @@
       },
       {
         "name": "Scurrius",
-        "completion_labels": [
-          "Scurrius kills"
-        ],
         "items": [
           {
             "id": 28801,
@@ -1407,17 +1277,14 @@
       },
       {
         "name": "Shellbane Gryphon",
-        "completion_labels": [
-          "Shellbane Gryphon kills"
-        ],
         "items": [
-          {
-            "id": 32921,
-            "name": "Jar of feathers"
-          },
           {
             "id": 31285,
             "name": "Gull"
+          },
+          {
+            "id": 32921,
+            "name": "Jar of feathers"
           },
           {
             "id": 31245,
@@ -1431,9 +1298,6 @@
       },
       {
         "name": "Skotizo",
-        "completion_labels": [
-          "Skotizo kills"
-        ],
         "items": [
           {
             "id": 21273,
@@ -1463,10 +1327,6 @@
       },
       {
         "name": "Tempoross",
-        "completion_labels": [
-          "Reward permits claimed",
-          "Tempoross kills"
-        ],
         "items": [
           {
             "id": 25602,
@@ -1520,9 +1380,6 @@
       },
       {
         "name": "Thermonuclear Smoke Devil",
-        "completion_labels": [
-          "Thermonuclear Smoke Devil kills"
-        ],
         "items": [
           {
             "id": 12648,
@@ -1548,9 +1405,6 @@
       },
       {
         "name": "Vardorvis",
-        "completion_labels": [
-          "Vardorvis kills"
-        ],
         "items": [
           {
             "id": 28248,
@@ -1596,10 +1450,6 @@
       },
       {
         "name": "Venenatis and Spindel",
-        "completion_labels": [
-          "Venenatis kills",
-          "Spindel kills"
-        ],
         "items": [
           {
             "id": 13177,
@@ -1629,10 +1479,6 @@
       },
       {
         "name": "Vet\u0027ion and Calvar\u0027ion",
-        "completion_labels": [
-          "Vet\u0027ion kills",
-          "Calvar\u0027ion kills"
-        ],
         "items": [
           {
             "id": 13179,
@@ -1662,9 +1508,6 @@
       },
       {
         "name": "Vorkath",
-        "completion_labels": [
-          "Vorkath kills"
-        ],
         "items": [
           {
             "id": 21992,
@@ -1694,9 +1537,6 @@
       },
       {
         "name": "The Whisperer",
-        "completion_labels": [
-          "Whisperer kills"
-        ],
         "items": [
           {
             "id": 28246,
@@ -1742,10 +1582,6 @@
       },
       {
         "name": "Wintertodt",
-        "completion_labels": [
-          "Rewards claimed",
-          "Wintertodt kills"
-        ],
         "items": [
           {
             "id": 20693,
@@ -1791,9 +1627,6 @@
       },
       {
         "name": "Yama",
-        "completion_labels": [
-          "Yama kills"
-        ],
         "items": [
           {
             "id": 30888,
@@ -1843,9 +1676,6 @@
       },
       {
         "name": "Zalcano",
-        "completion_labels": [
-          "Zalcano kills"
-        ],
         "items": [
           {
             "id": 23760,
@@ -1867,9 +1697,6 @@
       },
       {
         "name": "Zulrah",
-        "completion_labels": [
-          "Zulrah kills"
-        ],
         "items": [
           {
             "id": 12921,
@@ -1920,10 +1747,6 @@
     "pages": [
       {
         "name": "Chambers of Xeric",
-        "completion_labels": [
-          "Chambers of Xeric completions",
-          "Chambers of Xeric (CM) completions"
-        ],
         "items": [
           {
             "id": 20851,
@@ -2021,11 +1844,6 @@
       },
       {
         "name": "Theatre of Blood",
-        "completion_labels": [
-          "Theatre of Blood completions",
-          "Theatre of Blood (Entry) completions",
-          "Theatre of Blood (Hard) completions"
-        ],
         "items": [
           {
             "id": 22473,
@@ -2099,11 +1917,6 @@
       },
       {
         "name": "Tombs of Amascut",
-        "completion_labels": [
-          "Tombs of Amascut completions",
-          "Tombs of Amascut (Entry) completions",
-          "Tombs of Amascut (Expert) completions"
-        ],
         "items": [
           {
             "id": 27352,
@@ -2222,9 +2035,6 @@
     "pages": [
       {
         "name": "Beginner Treasure Trails",
-        "completion_labels": [
-          "Beginner clues completed"
-        ],
         "items": [
           {
             "id": 23285,
@@ -2294,9 +2104,6 @@
       },
       {
         "name": "Easy Treasure Trails",
-        "completion_labels": [
-          "Easy clues completed"
-        ],
         "items": [
           {
             "id": 20211,
@@ -2826,9 +2633,6 @@
       },
       {
         "name": "Medium Treasure Trails",
-        "completion_labels": [
-          "Medium clues completed"
-        ],
         "items": [
           {
             "id": 2577,
@@ -3294,9 +3098,6 @@
       },
       {
         "name": "Hard Treasure Trails",
-        "completion_labels": [
-          "Hard clues completed"
-        ],
         "items": [
           {
             "id": 2581,
@@ -3838,9 +3639,6 @@
       },
       {
         "name": "Elite Treasure Trails",
-        "completion_labels": [
-          "Elite clues completed"
-        ],
         "items": [
           {
             "id": 23185,
@@ -4082,9 +3880,6 @@
       },
       {
         "name": "Master Treasure Trails",
-        "completion_labels": [
-          "Master clues completed"
-        ],
         "items": [
           {
             "id": 19730,
@@ -4286,9 +4081,6 @@
       },
       {
         "name": "Hard Treasure Trails (Rare)",
-        "completion_labels": [
-          "Hard clues completed"
-        ],
         "items": [
           {
             "id": 10334,
@@ -4390,9 +4182,6 @@
       },
       {
         "name": "Elite Treasure Trails (Rare)",
-        "completion_labels": [
-          "Elite clues completed"
-        ],
         "items": [
           {
             "id": 12426,
@@ -4554,9 +4343,6 @@
       },
       {
         "name": "Master Treasure Trails (Rare)",
-        "completion_labels": [
-          "Master clues completed"
-        ],
         "items": [
           {
             "id": 20014,
@@ -4742,9 +4528,6 @@
       },
       {
         "name": "Shared Treasure Trail Rewards",
-        "completion_labels": [
-          "Total clues completed"
-        ],
         "items": [
           {
             "id": 3827,
@@ -4946,7 +4729,6 @@
       },
       {
         "name": "Scroll Cases",
-        "completion_labels": [],
         "items": [
           {
             "id": 30902,
@@ -5009,9 +4791,6 @@
     "pages": [
       {
         "name": "Barbarian Assault",
-        "completion_labels": [
-          "High-level Gambles"
-        ],
         "items": [
           {
             "id": 12703,
@@ -5061,7 +4840,6 @@
       },
       {
         "name": "Barracuda Trials",
-        "completion_labels": [],
         "items": [
           {
             "id": 31732,
@@ -5103,7 +4881,6 @@
       },
       {
         "name": "Brimhaven Agility Arena",
-        "completion_labels": [],
         "items": [
           {
             "id": 2996,
@@ -5145,7 +4922,6 @@
       },
       {
         "name": "Castle Wars",
-        "completion_labels": [],
         "items": [
           {
             "id": 4071,
@@ -5307,7 +5083,6 @@
       },
       {
         "name": "Fishing Trawler",
-        "completion_labels": [],
         "items": [
           {
             "id": 13258,
@@ -5329,9 +5104,6 @@
       },
       {
         "name": "Giants\u0027 Foundry",
-        "completion_labels": [
-          "Swords created"
-        ],
         "items": [
           {
             "id": 27023,
@@ -5373,10 +5145,6 @@
       },
       {
         "name": "Gnome Restaurant",
-        "completion_labels": [
-          "Gnome restaurant easy deliveries",
-          "Gnome restaurant hard deliveries"
-        ],
         "items": [
           {
             "id": 9469,
@@ -5398,10 +5166,6 @@
       },
       {
         "name": "Guardians of the Rift",
-        "completion_labels": [
-          "Rifts searches",
-          "Rifts closed"
-        ],
         "items": [
           {
             "id": 26901,
@@ -5475,9 +5239,6 @@
       },
       {
         "name": "Hallowed Sepulchre",
-        "completion_labels": [
-          "Grand Hallowed Coffins opened"
-        ],
         "items": [
           {
             "id": 24711,
@@ -5547,11 +5308,6 @@
       },
       {
         "name": "Last Man Standing",
-        "completion_labels": [
-          "Last Man Standing Kills",
-          "Last Man Standing Wins",
-          "Last Man Standing games played"
-        ],
         "items": [
           {
             "id": 24189,
@@ -5685,7 +5441,6 @@
       },
       {
         "name": "Magic Training Arena",
-        "completion_labels": [],
         "items": [
           {
             "id": 6908,
@@ -5735,7 +5490,6 @@
       },
       {
         "name": "Mahogany Homes",
-        "completion_labels": [],
         "items": [
           {
             "id": 24884,
@@ -5773,9 +5527,6 @@
       },
       {
         "name": "Mastering Mixology",
-        "completion_labels": [
-          "Orders fulfilled"
-        ],
         "items": [
           {
             "id": 29974,
@@ -5809,7 +5560,6 @@
       },
       {
         "name": "Pest Control",
-        "completion_labels": [],
         "items": [
           {
             "id": 8841,
@@ -5855,7 +5605,6 @@
       },
       {
         "name": "Rogues\u0027 Den",
-        "completion_labels": [],
         "items": [
           {
             "id": 5554,
@@ -5881,7 +5630,6 @@
       },
       {
         "name": "Shades of Mort\u0027ton",
-        "completion_labels": [],
         "items": [
           {
             "id": 12851,
@@ -5943,9 +5691,6 @@
       },
       {
         "name": "Soul Wars",
-        "completion_labels": [
-          "Spoils of war opened"
-        ],
         "items": [
           {
             "id": 25348,
@@ -5963,7 +5708,6 @@
       },
       {
         "name": "Temple Trekking",
-        "completion_labels": [],
         "items": [
           {
             "id": 10941,
@@ -5985,7 +5729,6 @@
       },
       {
         "name": "Tithe Farm",
-        "completion_labels": [],
         "items": [
           {
             "id": 13646,
@@ -6019,7 +5762,6 @@
       },
       {
         "name": "Trouble Brewing",
-        "completion_labels": [],
         "items": [
           {
             "id": 8952,
@@ -6145,7 +5887,6 @@
       },
       {
         "name": "Vale Totems",
-        "completion_labels": [],
         "items": [
           {
             "id": 31043,
@@ -6167,7 +5908,6 @@
       },
       {
         "name": "Volcanic Mine",
-        "completion_labels": [],
         "items": [
           {
             "id": 21697,
@@ -6210,7 +5950,6 @@
     "pages": [
       {
         "name": "Aerial Fishing",
-        "completion_labels": [],
         "items": [
           {
             "id": 22840,
@@ -6252,7 +5991,6 @@
       },
       {
         "name": "All Pets",
-        "completion_labels": [],
         "items": [
           {
             "id": 13262,
@@ -6526,7 +6264,6 @@
       },
       {
         "name": "Boat Paints",
-        "completion_labels": [],
         "items": [
           {
             "id": 32087,
@@ -6576,7 +6313,6 @@
       },
       {
         "name": "Camdozaal",
-        "completion_labels": [],
         "items": [
           {
             "id": 25641,
@@ -6622,7 +6358,6 @@
       },
       {
         "name": "Champion\u0027s Challenge",
-        "completion_labels": [],
         "items": [
           {
             "id": 6798,
@@ -6672,7 +6407,6 @@
       },
       {
         "name": "Chompy Bird Hunting",
-        "completion_labels": [],
         "items": [
           {
             "id": 13071,
@@ -6754,7 +6488,6 @@
       },
       {
         "name": "Colossal Wyrm Agility",
-        "completion_labels": [],
         "items": [
           {
             "id": 30040,
@@ -6792,7 +6525,6 @@
       },
       {
         "name": "Creature Creation",
-        "completion_labels": [],
         "items": [
           {
             "id": 10859,
@@ -6826,7 +6558,6 @@
       },
       {
         "name": "Cyclopes",
-        "completion_labels": [],
         "items": [
           {
             "id": 8844,
@@ -6864,7 +6595,6 @@
       },
       {
         "name": "Elder Chaos Druids",
-        "completion_labels": [],
         "items": [
           {
             "id": 20517,
@@ -6882,7 +6612,6 @@
       },
       {
         "name": "Forestry",
-        "completion_labels": [],
         "items": [
           {
             "id": 28626,
@@ -6980,7 +6709,6 @@
       },
       {
         "name": "Fossil Island Notes",
-        "completion_labels": [],
         "items": [
           {
             "id": 21664,
@@ -7026,10 +6754,6 @@
       },
       {
         "name": "Glough\u0027s Experiments",
-        "completion_labels": [
-          "Demonic Gorilla kills",
-          "Tortured Gorilla kills"
-        ],
         "items": [
           {
             "id": 19529,
@@ -7059,9 +6783,6 @@
       },
       {
         "name": "Hunter Guild",
-        "completion_labels": [
-          "Rumours Completed"
-        ],
         "items": [
           {
             "id": 28962,
@@ -7091,7 +6812,6 @@
       },
       {
         "name": "Lost Schematics",
-        "completion_labels": [],
         "items": [
           {
             "id": 32401,
@@ -7137,7 +6857,6 @@
       },
       {
         "name": "Monkey Backpacks",
-        "completion_labels": [],
         "items": [
           {
             "id": 24862,
@@ -7167,7 +6886,6 @@
       },
       {
         "name": "Motherlode Mine",
-        "completion_labels": [],
         "items": [
           {
             "id": 12019,
@@ -7197,7 +6915,6 @@
       },
       {
         "name": "My Notes",
-        "completion_labels": [],
         "items": [
           {
             "id": 11341,
@@ -7307,7 +7024,6 @@
       },
       {
         "name": "Ocean Encounters",
-        "completion_labels": [],
         "items": [
           {
             "id": 31770,
@@ -7357,7 +7073,6 @@
       },
       {
         "name": "Random Events",
-        "completion_labels": [],
         "items": [
           {
             "id": 6654,
@@ -7455,9 +7170,6 @@
       },
       {
         "name": "Revenants",
-        "completion_labels": [
-          "Revenant kills"
-        ],
         "items": [
           {
             "id": 22542,
@@ -7519,7 +7231,6 @@
       },
       {
         "name": "Rooftop Agility",
-        "completion_labels": [],
         "items": [
           {
             "id": 11849,
@@ -7553,7 +7264,6 @@
       },
       {
         "name": "Sailing Miscellaneous",
-        "completion_labels": [],
         "items": [
           {
             "id": 31996,
@@ -7603,7 +7313,6 @@
       },
       {
         "name": "Sea Treasures",
-        "completion_labels": [],
         "items": [
           {
             "id": 32388,
@@ -7677,7 +7386,6 @@
       },
       {
         "name": "Shayzien Armour",
-        "completion_labels": [],
         "items": [
           {
             "id": 13357,
@@ -7783,7 +7491,6 @@
       },
       {
         "name": "Shooting Stars",
-        "completion_labels": [],
         "items": [
           {
             "id": 25539,
@@ -7797,7 +7504,6 @@
       },
       {
         "name": "Skilling Pets",
-        "completion_labels": [],
         "items": [
           {
             "id": 13320,
@@ -7839,7 +7545,6 @@
       },
       {
         "name": "Slayer",
-        "completion_labels": [],
         "items": [
           {
             "id": 7975,
@@ -8197,9 +7902,6 @@
       },
       {
         "name": "Tormented Demons",
-        "completion_labels": [
-          "Tormented Demon kills"
-        ],
         "items": [
           {
             "id": 29580,
@@ -8217,7 +7919,6 @@
       },
       {
         "name": "TzHaar",
-        "completion_labels": [],
         "items": [
           {
             "id": 6568,
@@ -8263,7 +7964,6 @@
       },
       {
         "name": "Miscellaneous",
-        "completion_labels": [],
         "items": [
           {
             "id": 21509,

@@ -375,7 +375,7 @@ export const ItemsPage = (): ReactElement => {
               return true;
             }
 
-            if (!itemBitMask || itemBitMask === 0) {
+            if (!itemBitMask || itemBitMask === 0n) {
               return false;
             }
 
@@ -389,16 +389,16 @@ export const ItemsPage = (): ReactElement => {
               return false;
             }
 
-            let bitMask = 0;
+            let bitMask = 0n;
             for (const [tag, bitIndex] of itemTags.tags) {
               if (!tag.includes(suffix.toLocaleLowerCase())) {
                 continue;
               }
 
-              bitMask += 1 << bitIndex;
+              bitMask += 1n << BigInt(bitIndex);
             }
 
-            return (bitMask & itemBitMask) != 0;
+            return (bitMask & itemBitMask) !== 0n;
           });
         if (!matches) return previousValue;
       }

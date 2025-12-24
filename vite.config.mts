@@ -90,43 +90,45 @@ const wikiTagsPlugin = (): PluginOption => ({
       }
     }
 
-    let tags = Array.from(Object.keys(itemNamesByTag));
-    if (tags.length > 64) {
-      console.error("[wikiTags] More than 64 tags - have to truncate.");
-      tags = tags.slice(0, 64);
-    }
-    tags.sort((a, b) => itemNamesByTag[b].length - itemNamesByTag[a].length);
+    const tags = Array.from(Object.keys(itemNamesByTag)).sort(
+      (a, b) => itemNamesByTag[b].length - itemNamesByTag[a].length,
+    );
 
-    const bitIndexByTag: Record<string, number> = {};
+    const bitIndexByTag: Record<string, bigint> = {};
     {
-      let bitIndexCount = 0;
+      let bitIndexCount = 0n;
       for (const tag of tags) {
         bitIndexByTag[tag] = bitIndexCount;
-        bitIndexCount += 1;
+        bitIndexCount++;
       }
     }
 
-    const tagBitMaskByItemID: Record<number, number> = {};
+    const tagBitMaskByItemID: Record<number, bigint> = {};
 
     const itemDataJSON = JSON.parse(fs.readFileSync("public/data/item_data.json", "utf8")) as Record<
       string,
       { name: string; highalch: number }
     >;
     for (const [itemID, item] of Object.entries(itemDataJSON)) {
-      let itemBitMask = 0;
+      let itemBitMask = 0n;
       for (const tag of tags) {
         const included = itemNamesByTag[tag].some((other) => other === item.name.toLowerCase());
         if (included) {
-          itemBitMask += 1 << bitIndexByTag[tag];
+          itemBitMask += 1n << bitIndexByTag[tag];
         }
       }
 
-      if (itemBitMask !== 0) {
+      if (itemBitMask !== 0n) {
         tagBitMaskByItemID[Number.parseInt(itemID)] = itemBitMask;
       }
     }
 
-    const serialized = JSON.stringify({ tags, items: tagBitMaskByItemID }, null, 2);
+    const serialized = JSON.stringify(
+      { tags, items: tagBitMaskByItemID },
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      (_, value) => (typeof value === "bigint" ? value.toString() : value),
+      2,
+    );
 
     fs.writeFileSync(`public/data/item_tags.json`, serialized);
   },

@@ -115,7 +115,10 @@ const ItemsTagsSchema = z.object({
       .transform((id) => Number.parseInt(id) as ItemID)
       .refine(Number.isInteger)
       .refine((id) => id >= 0),
-    z.number(),
+    z
+      .string()
+      .nonempty()
+      .transform((s) => BigInt(s)),
   ),
 });
 

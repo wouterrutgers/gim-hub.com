@@ -1,7 +1,6 @@
 #skill-graph-control-container {
   display: flex;
   gap: 8px;
-  overflow-x: auto;
   flex-wrap: wrap;
 }
 
@@ -26,10 +25,6 @@
   position: absolute;
   inset: 0;
   background: rgb(255 255 255 / 5%);
-}
-
-.skill-graph-dropdown > select {
-  padding: 8px;
 }
 
 #skill-graph-skill-image {

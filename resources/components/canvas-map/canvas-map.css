@@ -62,14 +62,6 @@
   left: 8px;
 }
 
-.canvas-map-plane-select-container {
-  align-self: baseline;
-}
-
-.canvas-map-plane-select {
-  padding: 0.4em;
-}
-
 #canvas-map-controls {
   display: flex;
   gap: 8px;
@@ -77,7 +69,11 @@
   align-self: baseline;
 }
 
+.canvas-map-teleport-button:focus-visible {
+  outline: auto;
+}
+
 .canvas-map-selected-teleport-button {
-  outline: 3px groove rgb(200 200 200);
+  outline: 1px solid rgb(200 200 200);
   filter: brightness(1.2);
 }

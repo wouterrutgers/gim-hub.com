@@ -111,19 +111,19 @@ const ItemPanel = memo(
 
     return (
       <div className={`items-page-panel rsborder rsbackground ${isPinned ? "items-page-panel-pinned" : ""}`}>
-        <button
-          className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
-          onClick={() => onTogglePin(itemID)}
-          title={isPinned ? "Unpin item" : "Pin item to top"}
-          aria-label={isPinned ? "Unpin item" : "Pin item to top"}
-        >
-          {isPinned ? "★" : "☆"}
-        </button>
         <div className="items-page-panel-top rsborder-tiny">
           <div>
             <Link className="items-page-panel-name rstext" to={wikiLink} target="_blank" rel="noopener noreferrer">
               {itemName}
             </Link>
+            <button
+              className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
+              onClick={() => onTogglePin(itemID)}
+              title={isPinned ? "Unpin item" : "Pin item to top"}
+              aria-label={isPinned ? "Unpin item" : "Pin item to top"}
+            >
+              {isPinned ? "★" : "☆"}
+            </button>
             <div className="items-page-panel-item-details">
               <span>Quantity</span>
               <span>{totalQuantity.toLocaleString()}</span>
@@ -605,35 +605,33 @@ export const ItemsPage = (): ReactElement => {
         <span>Tags: {itemTags?.tags.map(([tag]) => tag).join(",")}</span>
       </div>
       <div className="items-page-utility">
-        <span className="rsborder-tiny rsbackground rsbackground-hover">
-          <select
-            value={sortCategory}
-            onChange={(e) => {
-              const newCategory = e.target.value as ItemSortCategory;
-              setSortCategory(newCategory);
-            }}
-          >
-            {ItemSortCategory.map((category) => (
-              <option key={category} value={category}>
-                {`Sort: ${formatTitle(category)}`}
-              </option>
-            ))}
-          </select>
-        </span>
-        <span className="rsborder-tiny rsbackground rsbackground-hover">
-          <select
-            value={containerFilter}
-            onChange={(e) => {
-              setContainerFilter(validateContainerFilter(e.target.value));
-            }}
-          >
-            {["All", ...Member.ItemContainer].map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </span>
+        <select
+          className="rsborder-tiny rsbackground rsbackground-hover"
+          value={sortCategory}
+          onChange={(e) => {
+            const newCategory = e.target.value as ItemSortCategory;
+            setSortCategory(newCategory);
+          }}
+        >
+          {ItemSortCategory.map((category) => (
+            <option key={category} value={category}>
+              {`Sort: ${formatTitle(category)}`}
+            </option>
+          ))}
+        </select>
+        <select
+          className="rsborder-tiny rsbackground rsbackground-hover"
+          value={containerFilter}
+          onChange={(e) => {
+            setContainerFilter(validateContainerFilter(e.target.value));
+          }}
+        >
+          {["All", ...Member.ItemContainer].map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
         {memberFilterElement}
       </div>
       <div className="items-page-utility">

@@ -495,22 +495,21 @@ const SkillGraphDropdown = <TOption extends string>({
   setter,
 }: SkillGraphDropdownProps<TOption>): ReactElement => {
   return (
-    <div className="skill-graph-dropdown rsborder-tiny rsbackground rsbackground-hover">
-      <select
-        value={current}
-        onChange={({ target }) => {
-          const selected = target.options[target.selectedIndex].value;
-          if (!options.includes(selected as TOption)) return;
-          setter(selected as TOption);
-        }}
-      >
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {formatTitle(option)}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select
+      className="rsborder-tiny rsbackground rsbackground-hover"
+      value={current}
+      onChange={({ target }) => {
+        const selected = target.options[target.selectedIndex].value;
+        if (!options.includes(selected as TOption)) return;
+        setter(selected as TOption);
+      }}
+    >
+      {options.map((option) => (
+        <option key={option} value={option}>
+          {formatTitle(option)}
+        </option>
+      ))}
+    </select>
   );
 };
 

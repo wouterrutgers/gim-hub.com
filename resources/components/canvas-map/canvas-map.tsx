@@ -171,22 +171,20 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
   const interactiveClass = interactive ? "interactive" : "";
 
   const planeSelect = (
-    <div className="canvas-map-plane-select-container rsborder-tiny rsbackground">
-      <select
-        className="canvas-map-plane-select"
-        onChange={(e) => {
-          const plane = parseInt(e.target.options[e.target.selectedIndex].value);
-          if (visiblePlane === plane) return;
-          handleSelectPlane(plane);
-        }}
-        value={visiblePlane}
-      >
-        <option value={0}>Plane: 1</option>
-        <option value={1}>Plane: 2</option>
-        <option value={2}>Plane: 3</option>
-        <option value={3}>Plane: 4</option>
-      </select>
-    </div>
+    <select
+      className="rsborder-tiny rsbackground rsbackground-hover"
+      onChange={(e) => {
+        const plane = parseInt(e.target.options[e.target.selectedIndex].value);
+        if (visiblePlane === plane) return;
+        handleSelectPlane(plane);
+      }}
+      value={visiblePlane}
+    >
+      <option value={0}>Plane: 1</option>
+      <option value={1}>Plane: 2</option>
+      <option value={2}>Plane: 3</option>
+      <option value={3}>Plane: 4</option>
+    </select>
   );
 
   /**
@@ -217,27 +215,26 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
    * less convenient, but takes up less space.
    */
   const followDropdown = (
-    <div id="canvas-map-follow-dropdown" className="canvas-map-plane-select-container rsborder-tiny rsbackground">
-      <select
-        className="canvas-map-plane-select"
-        onChange={(e) => {
-          if (!renderer) return;
-          renderer.startFollowingPlayer({
-            player: e.target.value,
-          });
-          renderer.forceRenderNextFrame = true;
-        }}
-      >
-        <option value={undefined}>None</option>
-        {memberCoordinates.map(({ label: player }) => {
-          return (
-            <option key={player} value={player}>
-              {player}
-            </option>
-          );
-        })}
-      </select>
-    </div>
+    <select
+      id="canvas-map-follow-dropdown"
+      className="rsborder-tiny rsbackground rsbackground-hover"
+      onChange={(e) => {
+        if (!renderer) return;
+        renderer.startFollowingPlayer({
+          player: e.target.value,
+        });
+        renderer.forceRenderNextFrame = true;
+      }}
+    >
+      <option value={undefined}>None</option>
+      {memberCoordinates.map(({ label: player }) => {
+        return (
+          <option key={player} value={player}>
+            {player}
+          </option>
+        );
+      })}
+    </select>
   );
 
   const backgroundMap = (

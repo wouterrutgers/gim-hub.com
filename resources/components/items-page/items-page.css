@@ -1,6 +1,6 @@
 #items-page-head {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 6px 8px;
 }
 
@@ -13,6 +13,15 @@
   #items-page-head search-element {
     margin-right: 0;
   }
+}
+
+#items-page-tutorial-button {
+  display: flex;
+  gap: 8px;
+}
+
+#items-page-tutorial-button > img {
+  height: 16px;
 }
 
 .items-page-utility {
@@ -165,10 +174,51 @@
 #items-page-search {
   display: flex;
   position: relative;
-  width: 100%;
-  max-width: 300px;
+  margin: 4px;
+  border: 1px solid var(--light-border);
+  border-radius: 4px;
 }
 
 #items-page-no-items {
   padding: 16px 16px 0;
+}
+
+.items-page-tutorial-window {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin: 20px;
+  max-width: 600px;
+  max-height: 90svh;
+  cursor: auto;
+  box-sizing: border-box;
+}
+
+.items-page-tutorial-tags {
+  padding: 8px;
+  margin: 8px;
+  text-align: justify;
+}
+
+.items-page-tutorial-window-body {
+  overflow-y: auto;
+}
+
+.items-page-tutorial-window-header {
+  position: relative;
+  display: flex;
+  height: 24px;
+}
+
+.items-page-tutorial-window-header > button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 21px;
+  height: 21px;
+}
+
+.items-page-tutorial-window-header > button:focus-visible,
+.items-page-tutorial-window-header > button:hover {
+  outline: 1px solid var(--orange);
 }

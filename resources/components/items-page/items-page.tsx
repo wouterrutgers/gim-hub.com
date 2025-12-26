@@ -11,6 +11,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { CachedImage } from "../cached-image/cached-image";
 import { formatTitle } from "../../ts/format-title";
 import { useLocalStorage } from "../../hooks/local-storage";
+import { useModal } from "../modal/modal";
 
 import "./items-page.css";
 
@@ -471,6 +472,64 @@ const useMemberFilter = (): [ReactElement, MemberNegativeFilter] => {
   return [element, memberFilterRef.current];
 };
 
+const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void }): ReactElement => {
+  const { itemTags } = useContext(GameDataContext);
+  const [pinned, setPinned] = useState(true);
+
+  return (
+    <div className="items-page-tutorial-window rsborder rsbackground">
+      <div className="items-page-tutorial-window-header">
+        <button onClick={onCloseModal}>
+          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} title={formatTitle("Close dialog")} />
+        </button>
+      </div>
+      <div className="items-page-tutorial-window-body">
+        <h2>Searching for Items</h2>
+        <p>Type in the 'Search' box to search item names, and display only the items that match.</p>
+        <p>
+          The match is not exact, unless the phrase is surrounded by double quotes. For example, searching 'coal' will
+          display both 'coal' and 'coal bag', while searching instead '"coal"' will display only 'coal'.
+        </p>
+        <p>
+          Phrases separated with '|' will cause an item to pass if it matches against at least one of the phrases. For
+          example, 'whip|coal' will display both 'abyssal whip' and 'coal bag'.
+        </p>
+        <p>
+          Type 'tag:' followed by a tag to search by category of item instead of name. The following tags are available,
+          with some entries being aliases that contain the same items:
+        </p>
+        <div className="items-page-tutorial-tags rsborder-tiny">{itemTags?.tags.map(([tag]) => tag).join(" ")}</div>
+        <h2>Item Breakdown</h2>
+        <ItemPanel
+          containerFilter="All"
+          gePricePer={200}
+          highAlchPer={100}
+          imageURL="/icons/items/4323.webp"
+          isPinned={pinned}
+          itemID={4323 as ItemID}
+          itemName="Team-5 cape"
+          memberFilter={new Set()}
+          onTogglePin={() => {
+            setPinned(!pinned);
+          }}
+          quantities={new Map([["Zezima" as Member.Name, { Total: 100, Bank: 100, Inventory: 15 }]])}
+          totalQuantity={115}
+        />
+        <ul>
+          <li>
+            Hover over the numbers to see detailed tooltips, including a breakdown of where items are for each member.
+          </li>
+          <li>
+            Hover over the upper right of the panel and click the star (★) to pin the item, causing it to appear before
+            all other items regardless of sorting order.
+          </li>
+          <li>The name is a link that leads to the item's page on the official OSRS wiki.</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 export const ItemsPage = (): ReactElement => {
   const [searchInputElement, searchFilter] = useSearchFilter();
   const [memberFilterElement, memberFilter] = useMemberFilter();
@@ -485,6 +544,7 @@ export const ItemsPage = (): ReactElement => {
 
   const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
   const items = useContext(GroupItemsContext);
+  const { open: openSearchTutorial, modal: searchTutorialModal } = useModal(ItemsPageTutorialWindow);
 
   const [containerFilter, setContainerFilter] = useLocalStorage<ContainerFilter>({
     key: "item-page-container-filter",
@@ -600,9 +660,14 @@ export const ItemsPage = (): ReactElement => {
 
   return (
     <>
+      {searchTutorialModal}
+
       <div id="items-page-head">
         {searchInputElement}
-        <span>Tags: {itemTags?.tags.map(([tag]) => tag).join(",")}</span>
+        <button id="items-page-tutorial-button" className="men-button" onClick={openSearchTutorial}>
+          <CachedImage alt={"items tutorial"} src="/ui/1094-0.png" />
+          Tutorial
+        </button>
       </div>
       <div className="items-page-utility">
         <select

@@ -14,7 +14,9 @@ import { useLocalStorage } from "../../hooks/local-storage";
 
 import "./items-page.css";
 
-type MemberFilter = "All" | Member.Name;
+// Negate the filter, so that new/renamed members aren't filtered by default
+type MemberNegativeFilter = Set<Member.Name>;
+
 const ItemSortCategory = [
   "Total quantity",
   "HA total value",
@@ -32,7 +34,7 @@ interface ItemPanelProps {
   gePricePer: number;
   imageURL: string;
   totalQuantity: number;
-  memberFilter: MemberFilter;
+  memberFilter: MemberNegativeFilter;
   containerFilter: Member.ItemContainer | "All";
   quantities: Map<Member.Name, Member.ItemLocationBreakdown>;
   isPinned: boolean;
@@ -64,7 +66,7 @@ const ItemPanel = memo(
     } = useItemsBreakdownTooltip();
 
     const quantityBreakdown = [...quantities]
-      .filter(([name]) => memberFilter === "All" || name === memberFilter)
+      .filter(([name]) => !memberFilter.has(name))
       .map(([name, breakdown]) => {
         let quantity = 0;
 
@@ -191,7 +193,7 @@ const ItemPanelsScrollArea = ({
   onTogglePin,
 }: {
   sortedItems: FilteredItem[];
-  memberFilter: MemberFilter;
+  memberFilter: MemberNegativeFilter;
   containerFilter: Member.ItemContainer | "All";
   pinnedItems: Set<ItemID>;
   onTogglePin: (itemID: ItemID) => void;
@@ -413,9 +415,65 @@ const useSearchFilter = (): [ReactElement, SearchFilter] => {
   ];
 };
 
+const validateMemberFilter = (value: string | undefined): string | undefined => value;
+const useMemberFilter = (): [ReactElement, MemberNegativeFilter] => {
+  const [memberFilterUserString, setMemberFilterUserString] = useLocalStorage({
+    key: "items-page-member-filter",
+    defaultValue: undefined,
+    validator: validateMemberFilter,
+  });
+
+  const members = useContext(GroupMemberNamesContext);
+
+  const memberFilterRef = useRef<MemberNegativeFilter>(new Set());
+  useEffect(() => {
+    const newFilter = new Set([...(memberFilterUserString ?? "").split(",")] as Member.Name[]);
+    memberFilterRef.current = newFilter;
+    if (members.size > 0) {
+      memberFilterRef.current = memberFilterRef.current.intersection(members);
+    }
+    setMemberFilterUserString([...memberFilterRef.current.values()].join(","));
+  }, [memberFilterUserString]);
+
+  const element = (
+    <span className="items-page-member-filter-container rsborder-tiny rsbackground">
+      {[...members.values()].map((name, index, array) => (
+        <Fragment key={name}>
+          <span className="rsbackground-hover">
+            <input
+              id={`items-page-member-filter-${name}`}
+              type="checkbox"
+              checked={!memberFilterRef.current.has(name)}
+              onChange={() => {
+                const shouldDelete = memberFilterRef.current.has(name);
+                const newFilter = new Set(memberFilterRef.current.values());
+                if (shouldDelete) {
+                  newFilter.delete(name);
+                } else {
+                  newFilter.add(name);
+                }
+
+                memberFilterRef.current = newFilter;
+                if (members.size > 0) {
+                  memberFilterRef.current = memberFilterRef.current.intersection(members);
+                }
+                setMemberFilterUserString([...memberFilterRef.current.values()].join(","));
+              }}
+            />
+            <label htmlFor={`items-page-member-filter-${name}`}>{name}</label>
+          </span>
+          {index < array.length - 1 ? <hr /> : undefined}
+        </Fragment>
+      ))}
+    </span>
+  );
+
+  return [element, memberFilterRef.current];
+};
+
 export const ItemsPage = (): ReactElement => {
-  const [memberFilter, setMemberFilter] = useState<MemberFilter>("All");
   const [searchInputElement, searchFilter] = useSearchFilter();
+  const [memberFilterElement, memberFilter] = useMemberFilter();
 
   const [pinnedItems, togglePin] = usePinnedItems();
 
@@ -426,7 +484,6 @@ export const ItemsPage = (): ReactElement => {
   });
 
   const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
-  const members = useContext(GroupMemberNamesContext);
   const items = useContext(GroupItemsContext);
 
   const [containerFilter, setContainerFilter] = useLocalStorage<ContainerFilter>({
@@ -471,7 +528,7 @@ export const ItemsPage = (): ReactElement => {
 
       let filteredTotalQuantity = 0;
       for (const [name, breakdown] of breakdownByMember) {
-        if (memberFilter !== "All" && memberFilter !== name) continue;
+        if (memberFilter.has(name)) continue;
 
         for (const itemContainer of Member.ItemContainer) {
           if (containerFilter !== "All" && containerFilter !== itemContainer) continue;
@@ -547,8 +604,8 @@ export const ItemsPage = (): ReactElement => {
         {searchInputElement}
         <span>Tags: {itemTags?.tags.map(([tag]) => tag).join(",")}</span>
       </div>
-      <div id="items-page-utility">
-        <div className="rsborder-tiny rsbackground rsbackground-hover">
+      <div className="items-page-utility">
+        <span className="rsborder-tiny rsbackground rsbackground-hover">
           <select
             value={sortCategory}
             onChange={(e) => {
@@ -562,22 +619,8 @@ export const ItemsPage = (): ReactElement => {
               </option>
             ))}
           </select>
-        </div>
-        <div className="rsborder-tiny rsbackground rsbackground-hover">
-          <select
-            value={memberFilter}
-            onChange={(e) => {
-              setMemberFilter(e.target.value as MemberFilter);
-            }}
-          >
-            {["All", ...members].map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="rsborder-tiny rsbackground rsbackground-hover">
+        </span>
+        <span className="rsborder-tiny rsbackground rsbackground-hover">
           <select
             value={containerFilter}
             onChange={(e) => {
@@ -590,7 +633,10 @@ export const ItemsPage = (): ReactElement => {
               </option>
             ))}
           </select>
-        </div>
+        </span>
+        {memberFilterElement}
+      </div>
+      <div className="items-page-utility">
         <span className="rsborder-tiny rsbackground rsbackground-hover">
           <span>{filteredItems.length.toLocaleString()}</span>&nbsp;
           <span>items</span>

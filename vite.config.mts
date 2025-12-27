@@ -5,7 +5,6 @@ import crypto from "crypto";
 import react from "@vitejs/plugin-react";
 import { MapMetadataSchema } from "./resources/game/map-data";
 import laravel from "laravel-vite-plugin";
-import wikiTagCategories from "./resources/assets/wiki_tag_categories.json";
 
 const mapJsonPlugin = (): PluginOption => ({
   name: "mapTilesJson",
@@ -43,94 +42,6 @@ const mapJsonPlugin = (): PluginOption => ({
 
     fs.writeFileSync("public/data/map.json", JSON.stringify(result, null, 2));
     console.info("Built map json.");
-  },
-});
-
-/**
- * Fetches categories from the wiki, then indexes these tags by item ID to enable tagged searching.
- */
-const wikiTagsPlugin = (): PluginOption => ({
-  name: "wikiTags",
-  async buildStart(): Promise<void> {
-    console.info("Fetching categories from wiki to build item tags...");
-
-    const itemNamesByTag: Record<string, string[]> = {};
-
-    for (const [ourNames, wikiNames] of wikiTagCategories) {
-      let names = new Set<string>();
-      for (const wikiName of wikiNames) {
-        let cmcontinue = "";
-        do {
-          const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${wikiName}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
-          const response = await fetch(url);
-          const data = (await response.json()) as {
-            continue?: { cmcontinue?: string };
-            query: { categorymembers: { title: string }[] };
-          };
-          const itemNames = data.query.categorymembers
-            .filter(({ title }) => title !== undefined)
-            .map(({ title }) => title.toLowerCase());
-
-          if (itemNames.length <= 0) {
-            console.error(`[wikiTags] Empty tag '${wikiName}' - Does it exist on the wiki?`);
-          }
-
-          names = new Set([...names, ...itemNames]);
-          cmcontinue = data.continue?.cmcontinue ?? "";
-
-          // Be kind to the wiki
-          await new Promise((resolve) => setTimeout(resolve, 200));
-        } while (cmcontinue);
-      }
-
-      for (const ourName of ourNames) {
-        if (names.size > 0) {
-          itemNamesByTag[ourName.toLowerCase()] = Array.from(names);
-        }
-      }
-    }
-
-    const tags = Array.from(Object.keys(itemNamesByTag)).sort(
-      (a, b) => itemNamesByTag[b].length - itemNamesByTag[a].length,
-    );
-
-    const bitIndexByTag: Record<string, bigint> = {};
-    {
-      let bitIndexCount = 0n;
-      for (const tag of tags) {
-        bitIndexByTag[tag] = bitIndexCount;
-        bitIndexCount++;
-      }
-    }
-
-    const tagBitMaskByItemID: Record<number, bigint> = {};
-
-    const itemDataJSON = JSON.parse(fs.readFileSync("public/data/item_data.json", "utf8")) as Record<
-      string,
-      { name: string; highalch: number }
-    >;
-    for (const [itemID, item] of Object.entries(itemDataJSON)) {
-      let itemBitMask = 0n;
-      for (const tag of tags) {
-        const included = itemNamesByTag[tag].some((other) => other === item.name.toLowerCase());
-        if (included) {
-          itemBitMask += 1n << bitIndexByTag[tag];
-        }
-      }
-
-      if (itemBitMask !== 0n) {
-        tagBitMaskByItemID[Number.parseInt(itemID)] = itemBitMask;
-      }
-    }
-
-    const serialized = JSON.stringify(
-      { tags, items: tagBitMaskByItemID },
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      (_, value) => (typeof value === "bigint" ? value.toString() : value),
-      2,
-    );
-
-    fs.writeFileSync(`public/data/item_tags.json`, serialized);
   },
 });
 
@@ -254,7 +165,6 @@ const imageChunksPlugin = (): PluginOption => ({
 export default defineConfig({
   plugins: [
     mapJsonPlugin(),
-    wikiTagsPlugin(),
     imageChunksPlugin(),
     react(),
     laravel({

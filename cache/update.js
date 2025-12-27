@@ -14,15 +14,20 @@ const tileSize = 256;
 
 const RUNELITE_PATHS = (() => {
   const root = path.resolve("./runelite");
+  const cache = path.resolve(root, "cache");
+  const api = path.resolve(root, "runelite-api");
 
   return {
     DIRS: {
       root,
-      cache: path.resolve(root, "cache"),
-      api: path.resolve(root, "runelite-api"),
+      cache,
+      api,
       client: path.resolve(root, "runelite-client"),
     },
-    BUILD_SCRIPTS: {},
+    BUILD_SCRIPTS: {
+      cache: path.resolve(cache, "build.gradle.kts"),
+      api: path.resolve(api, "build.gradle.kts"),
+    },
   };
 })();
 
@@ -141,7 +146,7 @@ async function dumpItemData() {
   try {
     console.log("\nStep: Dumping items from cache");
     execRuneliteGradleApplication({
-      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.cache, "build.gradle.kts"),
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
       mainClass: "net.runelite.cache.Cache",
       dependencies: [],
       runArgs: `-c ${osrsCacheDirectory} -items ${path.resolve("./item-data")}`,
@@ -167,7 +172,7 @@ async function dumpItemData() {
     );
 
     execRuneliteGradleApplication({
-      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.api, "build.gradle.kts"),
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
       mainClass: "net.runelite.api.ItemDumper",
       dependencies: [
         "implementation(libs.gson)",
@@ -280,7 +285,7 @@ async function dumpItemImages(allIncludedItemIds) {
     );
 
     execRuneliteGradleApplication({
-      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
       mainClass: "net.runelite.cache.Cache",
       dependencies: [],
       runArgs: `-c ${osrsCacheDirectory} -ids ${path.resolve("./items_need_images.csv")} -output ${path.resolve("./item-images")}`,
@@ -337,7 +342,7 @@ async function dumpMapData(xteasLocation) {
     );
 
     execRuneliteGradleApplication({
-      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
       mainClass: "net.runelite.cache.MapImageDumper",
       dependencies: [],
       runArgs: `--cachedir ${osrsCacheDirectory} --xteapath ${xteasLocation} --outputdir ${path.resolve("./map-data")}`,
@@ -359,7 +364,7 @@ async function dumpMapLabels() {
     );
 
     execRuneliteGradleApplication({
-      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
       mainClass: "net.runelite.cache.MapLabelDumper",
       dependencies: [],
       runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("./map-data/labels")}`,
@@ -403,7 +408,7 @@ async function dumpCollectionLog() {
     );
 
     execRuneliteGradleApplication({
-      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
       mainClass: "net.runelite.cache.CollectionLogDumper",
       dependencies: [],
       runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../storage/cache")}`,
@@ -636,7 +641,7 @@ async function dumpQuestMapping() {
   try {
     fs.copyFileSync("./QuestDumper.java", `${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/api/QuestDumper.java`);
     execRuneliteGradleApplication({
-      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.api, "build.gradle.kts"),
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
       mainClass: "net.runelite.api.QuestDumper",
       dependencies: [`implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")`],
       runArgs: SITE_PATHS.FILES.questMapping,
@@ -649,6 +654,8 @@ async function dumpQuestMapping() {
 }
 
 (async () => {
+  execGitCleanInRunelite();
+
   await dumpItemData();
   const allIncludedItemIds = await buildItemDataJson();
   await dumpItemImages(allIncludedItemIds);

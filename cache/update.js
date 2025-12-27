@@ -110,7 +110,7 @@ function execRuneliteGradleApplication(args) {
     cwd: RUNELITE_PATHS.DIRS.root,
     env: {
       ...process.env,
-      JAVA_TOOL_OPTIONS: "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
+      JAVA_TOOL_OPTIONS: "-Xmx4g -Dorg.slf4j.simpleLogger.defaultLogLevel=error",
     },
   });
 }

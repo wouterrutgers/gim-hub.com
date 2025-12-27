@@ -1,6 +1,5 @@
 const child_process = require("child_process");
 const fs = require("fs");
-const xml2js = require("xml2js");
 const glob = require("glob");
 const nAsync = require("async");
 const path = require("path");
@@ -10,35 +9,48 @@ const sharp = require("sharp");
 // NOTE: sharp will keep some files open and prevent them from being deleted
 sharp.cache(false);
 
-const xmlParser = new xml2js.Parser();
-const xmlBuilder = new xml2js.Builder();
-
-const runelitePath = "./runelite";
-const cacheProjectPath = `${runelitePath}/cache`;
-const apiProjectPath = `${runelitePath}/runelite-api`;
-const clientProjectPath = `${runelitePath}/runelite-client`;
-const apiPomPath = `${apiProjectPath}/pom.xml`;
 const osrsCacheDirectory = path.resolve("./cache/cache");
-const siteItemDataPath = "../public/data/item_data.json";
-const siteMapIconMetaPath = "../public/data/map_icons.json";
-const siteMapLabelMetaPath = "../public/data/map_labels.json";
-const siteItemImagesPath = "../public/icons/items";
-const siteMapImagesPath = "../public/map";
-const siteMapLabelsPath = "../public/map/labels";
-const siteMapIconPath = "../public/map/icons/map_icons.webp";
-const siteQuestMapping = path.resolve("../resources/js/quests/mapping.json");
 const tileSize = 256;
 
+const RUNELITE_PATHS = (() => {
+  const root = path.resolve("./runelite");
+
+  return {
+    DIRS: {
+      root,
+      cache: path.resolve(root, "cache"),
+      api: path.resolve(root, "runelite-api"),
+      client: path.resolve(root, "runelite-client"),
+    },
+    BUILD_SCRIPTS: {},
+  };
+})();
+
+const SITE_PATHS = (() => {
+  const public = path.resolve("../public");
+  const resources = path.resolve("../resources");
+
+  return {
+    FILES: {
+      itemData: path.resolve(public, "data/item_data.json"),
+      mapIconMeta: path.resolve(public, "data/map_icons.json"),
+      mapLabelMeta: path.resolve(public, "data/map_labels.json"),
+      mapIconAtlas: path.resolve(public, "map/icons/map_icons.webp"),
+      questMapping: path.resolve(resources, "js/quests/mapping.json"),
+    },
+    DIRS: {
+      itemImages: path.resolve(public, "icons/items"),
+      mapImages: path.resolve(public, "map"),
+      mapLabels: path.resolve(public, "map/labels"),
+    },
+  };
+})();
+
 function exec(command, options) {
-  console.log(command);
+  console.log(`[exec] ${command}`);
   options = options || {};
   options.stdio = "inherit";
-  try {
-    child_process.execSync(command, options);
-  } catch (err) {
-    console.log(err);
-    process.exit(1);
-  }
+  child_process.execSync(command, options);
 }
 
 async function retry(fn, skipLast) {
@@ -60,34 +72,50 @@ async function retry(fn, skipLast) {
   }
 }
 
-function execRuneliteCache(mainClass, arguments) {
-  exec(`MAVEN_OPTS="-Xmx8000m" mvn compile exec:java -Dexec.mainClass="${mainClass}" -Dexec.args="${arguments}"`, {
-    cwd: cacheProjectPath,
+function execGitCleanInRunelite() {
+  exec(`git clean -ffdxq`, { cwd: RUNELITE_PATHS.DIRS.root });
+  exec(`git reset --hard -q`, { cwd: RUNELITE_PATHS.DIRS.root });
+}
+
+function execRuneliteGradleApplication(args) {
+  const { buildScriptPath, mainClass, dependencies, runArgs } = args;
+  let lines = fs.readFileSync(buildScriptPath).toString("utf8").split("\n");
+
+  if (typeof mainClass === "string" && mainClass.length > 0) {
+    const lineOfPlugins = lines.findIndex((line) => !!line.match("plugins"));
+    if (lineOfPlugins < 0) {
+      throw new Error(`No plugins block in ${buildScriptPath}`);
+    }
+    lines = [...lines.slice(0, lineOfPlugins + 1), "application", ...lines.slice(lineOfPlugins + 1)];
+
+    lines.push("", "application {", `mainClass = "${mainClass}"`, "}", "");
+  }
+
+  if (Array.isArray(dependencies) && dependencies.length > 0) {
+    const lineOfDependencies = lines.findIndex((line) => !!line.match("dependencies"));
+    if (lineOfDependencies < 0) {
+      throw new Error(`No dependencies block in ${buildScriptPath}`);
+    }
+    lines = [...lines.slice(0, lineOfDependencies + 1), ...dependencies, ...lines.slice(lineOfDependencies + 1)];
+  }
+
+  fs.writeFileSync(buildScriptPath, lines.join("\n"));
+
+  exec(`gradlew -b ${buildScriptPath} -q run --args="${runArgs}"`, {
+    cwd: RUNELITE_PATHS.DIRS.root,
+    env: {
+      JAVA_TOOL_OPTIONS: "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
+    },
   });
-
-  exec(`git clean -ffdx .; git checkout HEAD -- .`, { cwd: cacheProjectPath });
-}
-
-function execRuneliteApi(mainClass, arguments) {
-  exec(`mvn compile exec:java -Dexec.mainClass="${mainClass}" -Dexec.args="${arguments}"`, { cwd: apiProjectPath });
-
-  exec(`git clean -ffdx .; git checkout HEAD -- .`, { cwd: apiProjectPath });
-}
-
-async function addDependencyInApiPom(groupId, artifactId, version) {
-  xmlParser.reset();
-  const apiPomData = fs.readFileSync(apiPomPath, "utf8");
-  const apiPom = await xmlParser.parseStringPromise(apiPomData);
-
-  const dependencies = apiPom.project.dependencies;
-  dependencies[0].dependency.push({ groupId: groupId, artifactId: artifactId, version: version });
-
-  const apiPomResult = xmlBuilder.buildObject(apiPom);
-  fs.writeFileSync(apiPomPath, apiPomResult);
 }
 
 async function readAllItemFiles() {
-  const itemFiles = glob.sync(`${path.resolve("./item-data")}/*.json`);
+  const itemFiles = glob.sync(`${path.resolve("./item-data")}/*.json`.replace(/\\/g, "/"));
+
+  if (itemFiles.length === 0) {
+    throw new Error("No item files in item-data to read.");
+  }
+
   const result = {};
 
   const q = nAsync.queue((itemFile, callback) => {
@@ -110,31 +138,49 @@ async function readAllItemFiles() {
 }
 
 async function dumpItemData() {
-  console.log("\nStep: Unpacking item data from cache");
-  execRuneliteCache("net.runelite.cache.Cache", `-c ${osrsCacheDirectory} -items ${path.resolve("./item-data")}`);
+  try {
+    console.log("\nStep: Dumping items from cache");
+    execRuneliteGradleApplication({
+      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.cache, "build.gradle.kts"),
+      mainClass: "net.runelite.cache.Cache",
+      dependencies: [],
+      runArgs: `-c ${osrsCacheDirectory} -items ${path.resolve("./item-data")}`,
+    });
 
-  fs.mkdirSync(`${apiProjectPath}/src/main/java/net/runelite/client/game/`, { recursive: true });
-  fs.mkdirSync(`${apiProjectPath}/src/main/resources`);
+    console.log("\nStep: Converting cache item data");
+    fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/client/game/`, { recursive: true });
+    fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/resources`, { recursive: true });
 
-  fs.copyFileSync(
-    `${clientProjectPath}/src/main/java/net/runelite/client/game/ItemMapping.java`,
-    `${apiProjectPath}/src/main/java/net/runelite/client/game/ItemMapping.java`,
-  );
-  fs.copyFileSync(
-    `${clientProjectPath}/src/main/java/net/runelite/client/game/ItemVariationMapping.java`,
-    `${apiProjectPath}/src/main/java/net/runelite/client/game/ItemVariationMapping.java`,
-  );
-  fs.copyFileSync(
-    `${clientProjectPath}/src/main/resources/item_variations.json`,
-    `${apiProjectPath}/src/main/resources/item_variations.json`,
-  );
-  fs.copyFileSync("./ItemDumper.java", `${apiProjectPath}/src/main/java/net/runelite/api/ItemDumper.java`);
+    for (const stub of [
+      "src/main/java/net/runelite/client/game/ItemMapping.java",
+      "src/main/java/net/runelite/client/game/ItemVariationMapping.java",
+      "src/main/resources/item_variations.json",
+    ]) {
+      const from = path.resolve(RUNELITE_PATHS.DIRS.client, stub);
+      const to = path.resolve(RUNELITE_PATHS.DIRS.api, stub);
+      fs.copyFileSync(from, to);
+    }
 
-  await addDependencyInApiPom("com.fasterxml.jackson.core", "jackson-databind", "2.17.0");
-  await addDependencyInApiPom("com.google.guava", "guava", "33.3.1-jre");
-  await addDependencyInApiPom("com.google.code.gson", "gson", "2.11.0");
+    fs.copyFileSync(
+      "./ItemDumper.java",
+      path.resolve(RUNELITE_PATHS.DIRS.api, "src/main/java/net/runelite/api/ItemDumper.java"),
+    );
 
-  execRuneliteApi("net.runelite.api.ItemDumper", path.resolve(`./item-data`));
+    execRuneliteGradleApplication({
+      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.api, "build.gradle.kts"),
+      mainClass: "net.runelite.api.ItemDumper",
+      dependencies: [
+        "implementation(libs.gson)",
+        "implementation(libs.guava)",
+        `implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")`,
+      ],
+      runArgs: path.resolve(`./item-data`),
+    });
+  } catch (e) {
+    console.error("Failed to dumpItemData");
+    console.error(e);
+  }
+  execGitCleanInRunelite();
 }
 
 async function getNonAlchableItemNames() {
@@ -222,35 +268,50 @@ async function dumpItemImages(allIncludedItemIds) {
   // TODO: Zoom on holy symbol is incorrect
   console.log("\nStep: Extract item model images");
 
-  console.log(`Generating images for ${allIncludedItemIds.size} items`);
-  fs.writeFileSync("items_need_images.csv", Array.from(allIncludedItemIds.values()).join(","));
-  const imageDumperDriver = fs.readFileSync("./Cache.java", "utf8");
-  fs.writeFileSync(`${cacheProjectPath}/src/main/java/net/runelite/cache/Cache.java`, imageDumperDriver);
-  const itemSpriteFactory = fs.readFileSync("./ItemSpriteFactory.java", "utf8");
-  fs.writeFileSync(
-    `${cacheProjectPath}/src/main/java/net/runelite/cache/item/ItemSpriteFactory.java`,
-    itemSpriteFactory,
-  );
-  execRuneliteCache(
-    "net.runelite.cache.Cache",
-    `-c ${osrsCacheDirectory} -ids ${path.resolve("./items_need_images.csv")} -output ${path.resolve("./item-images")}`,
-  );
-
-  const itemImages = glob.sync(`./item-images/*.png`);
-  let p = [];
-  for (const itemImage of itemImages) {
-    p.push(
-      new Promise(async (resolve) => {
-        const itemImageData = await sharp(itemImage).webp({ lossless: true }).toBuffer();
-        fs.unlinkSync(itemImage);
-        await sharp(itemImageData)
-          .webp({ lossless: true, effort: 6 })
-          .toFile(itemImage.replace(".png", ".webp"))
-          .then(resolve);
-      }),
+  try {
+    console.log(`Generating images for ${allIncludedItemIds.size} items`);
+    fs.writeFileSync("items_need_images.csv", Array.from(allIncludedItemIds.values()).join(","));
+    const imageDumperDriver = fs.readFileSync("./Cache.java", "utf8");
+    fs.writeFileSync(`${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/Cache.java`, imageDumperDriver);
+    const itemSpriteFactory = fs.readFileSync("./ItemSpriteFactory.java", "utf8");
+    fs.writeFileSync(
+      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/item/ItemSpriteFactory.java`,
+      itemSpriteFactory,
     );
+
+    execRuneliteGradleApplication({
+      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      mainClass: "net.runelite.cache.Cache",
+      dependencies: [],
+      runArgs: `-c ${osrsCacheDirectory} -ids ${path.resolve("./items_need_images.csv")} -output ${path.resolve("./item-images")}`,
+    });
+
+    const itemImages = glob.sync(`${path.resolve("./item-images")}/*.png`.replace(/\\/g, "/"));
+    if (itemImages.length === 0) {
+      console.warn("No item-images to convert to .webp.");
+    } else {
+      console.info(`Converting ${itemImages.length} dumped .png item images to .webp.`);
+    }
+
+    let p = [];
+    for (const itemImage of itemImages) {
+      p.push(
+        new Promise(async (resolve) => {
+          const itemImageData = await sharp(itemImage).webp({ lossless: true }).toBuffer();
+          fs.unlinkSync(itemImage);
+          await sharp(itemImageData)
+            .webp({ lossless: true, effort: 6 })
+            .toFile(itemImage.replace(".png", ".webp"))
+            .then(resolve);
+        }),
+      );
+    }
+    await Promise.all(p);
+  } catch (e) {
+    console.error("Failed to dumpItemImages");
+    console.error(e);
   }
-  await Promise.all(p);
+  execGitCleanInRunelite();
 }
 
 async function convertXteasToRuneliteFormat() {
@@ -260,59 +321,98 @@ async function convertXteasToRuneliteFormat() {
     keys: region.key,
   }));
 
-  const location = `${osrsCacheDirectory}/../xteas-runelite.json`;
-  fs.writeFileSync(location, JSON.stringify(result));
+  const location = path.resolve(`${osrsCacheDirectory}/../xteas-runelite.json`);
+  fs.writeFileSync(location, JSON.stringify(result, null, 2));
 
   return location;
 }
 
 async function dumpMapData(xteasLocation) {
   console.log("\nStep: Dumping map data");
-  const mapImageDumper = fs.readFileSync("./MapImageDumper.java", "utf8");
-  fs.writeFileSync(`${cacheProjectPath}/src/main/java/net/runelite/cache/MapImageDumper.java`, mapImageDumper);
-  execRuneliteCache(
-    "net.runelite.cache.MapImageDumper",
-    `--cachedir ${osrsCacheDirectory} --xteapath ${xteasLocation} --outputdir ${path.resolve("./map-data")}`,
-  );
+  try {
+    const mapImageDumper = fs.readFileSync("./MapImageDumper.java", "utf8");
+    fs.writeFileSync(
+      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/MapImageDumper.java`,
+      mapImageDumper,
+    );
+
+    execRuneliteGradleApplication({
+      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      mainClass: "net.runelite.cache.MapImageDumper",
+      dependencies: [],
+      runArgs: `--cachedir ${osrsCacheDirectory} --xteapath ${xteasLocation} --outputdir ${path.resolve("./map-data")}`,
+    });
+  } catch (e) {
+    console.error("Failed to dumpMapData");
+    console.error(e);
+  }
+  execGitCleanInRunelite();
 }
 
 async function dumpMapLabels() {
   console.log("\nStep: Dumping map labels");
-  const mapLabelDumper = fs.readFileSync("./MapLabelDumper.java", "utf8");
-  fs.writeFileSync(`${cacheProjectPath}/src/main/java/net/runelite/cache/MapLabelDumper.java`, mapLabelDumper);
-  execRuneliteCache(
-    "net.runelite.cache.MapLabelDumper",
-    `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("./map-data/labels")}`,
-  );
-
-  const mapLabels = glob.sync("./map-data/labels/*.png");
-  let p = [];
-  for (const mapLabel of mapLabels) {
-    p.push(
-      new Promise(async (resolve) => {
-        const mapLabelImageData = await sharp(mapLabel).webp({ lossless: true }).toBuffer();
-        fs.unlinkSync(mapLabel);
-        await sharp(mapLabelImageData)
-          .webp({ lossless: true, effort: 6 })
-          .toFile(mapLabel.replace(".png", ".webp"))
-          .then(resolve);
-      }),
+  try {
+    const mapLabelDumper = fs.readFileSync("./MapLabelDumper.java", "utf8");
+    fs.writeFileSync(
+      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/MapLabelDumper.java`,
+      mapLabelDumper,
     );
+
+    execRuneliteGradleApplication({
+      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      mainClass: "net.runelite.cache.MapLabelDumper",
+      dependencies: [],
+      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("./map-data/labels")}`,
+    });
+
+    const mapLabels = glob.sync(path.resolve("./map-data/labels/*.png").replace(/\\/g, "/"));
+    if (mapLabels.length === 0) {
+      console.warn("No map labels to convert to .webp.");
+    } else {
+      console.info(`Converting ${mapLabels.length} dumped .png map labels to .webp.`);
+    }
+
+    let p = [];
+    for (const mapLabel of mapLabels) {
+      p.push(
+        new Promise(async (resolve) => {
+          const mapLabelImageData = await sharp(mapLabel).webp({ lossless: true }).toBuffer();
+          fs.unlinkSync(mapLabel);
+          await sharp(mapLabelImageData)
+            .webp({ lossless: true, effort: 6 })
+            .toFile(mapLabel.replace(".png", ".webp"))
+            .then(resolve);
+        }),
+      );
+    }
+    await Promise.all(p);
+  } catch (e) {
+    console.error("Failed to dumpMapLabels");
+    console.error(e);
   }
-  await Promise.all(p);
+  execGitCleanInRunelite();
 }
 
 async function dumpCollectionLog() {
   console.log("\nStep: Dumping collection log");
-  const collectionLogDumper = fs.readFileSync("./CollectionLogDumper.java", "utf8");
-  fs.writeFileSync(
-    `${cacheProjectPath}/src/main/java/net/runelite/cache/CollectionLogDumper.java`,
-    collectionLogDumper,
-  );
-  execRuneliteCache(
-    "net.runelite.cache.CollectionLogDumper",
-    `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../storage/cache")}`,
-  );
+  try {
+    const collectionLogDumper = fs.readFileSync("./CollectionLogDumper.java", "utf8");
+    fs.writeFileSync(
+      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/CollectionLogDumper.java`,
+      collectionLogDumper,
+    );
+
+    execRuneliteGradleApplication({
+      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.root, "./cache/build.gradle.kts"),
+      mainClass: "net.runelite.cache.CollectionLogDumper",
+      dependencies: [],
+      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../storage/cache")}`,
+    });
+  } catch (e) {
+    console.error("Failed to dumpCollectionLog");
+    console.error(e);
+  }
+  execGitCleanInRunelite();
 }
 
 async function tilePlane(plane) {
@@ -337,34 +437,47 @@ async function outputTileImage(s, plane, x, y) {
 }
 
 async function finalizePlaneTiles(plane, previousTiles) {
-  const tileImages = glob.sync("./output_files/0/*.webp");
-
-  for (const tileImage of tileImages) {
-    const filename = path.basename(tileImage, ".webp");
-    const [x, y] = filename.split("_").map((coord) => parseInt(coord, 10));
-
-    const finalX = x + 4608 / tileSize;
-    const finalY = y + 4864 / tileSize;
-
-    let s;
-    if (plane > 0) {
-      const backgroundPath = `./map-data/tiles/${plane - 1}_${finalX}_${finalY}.webp`;
-      const backgroundExists = fs.existsSync(backgroundPath);
-
-      if (backgroundExists) {
-        const tile = await sharp(tileImage).flip().webp({ lossless: true }).toBuffer();
-        const background = await sharp(backgroundPath).linear(0.5).webp({ lossless: true }).toBuffer();
-        s = sharp(background).composite([{ input: tile }]);
-      }
-    }
-
-    if (!s) {
-      s = sharp(tileImage).flip();
-    }
-
-    previousTiles.add(`${plane}_${finalX}_${finalY}`);
-    await outputTileImage(s, plane, finalX, finalY);
+  const tileImages = glob.sync(path.resolve("./output_files/0/*.webp").replace(/\\/g, "/"));
+  if (tileImages.length === 0) {
+    console.warn("No tileImages to convert to .webp.");
+  } else {
+    console.info(`Processing ${tileImages.length} dumped .png tileImages to .webp.`);
   }
+
+  const p = [];
+  for (const tileImage of tileImages) {
+    p.push(
+      new Promise(async (resolve) => {
+        const filename = path.basename(tileImage, ".webp");
+        const [x, y] = filename.split("_").map((coord) => parseInt(coord, 10));
+
+        const finalX = x + 4608 / tileSize;
+        const finalY = y + 4864 / tileSize;
+
+        let s;
+        if (plane > 0) {
+          const backgroundPath = `./map-data/tiles/${plane - 1}_${finalX}_${finalY}.webp`;
+          const backgroundExists = fs.existsSync(backgroundPath);
+
+          if (backgroundExists) {
+            const tile = await sharp(tileImage).flip().webp({ lossless: true }).toBuffer();
+            const background = await sharp(backgroundPath).linear(0.5).webp({ lossless: true }).toBuffer();
+            s = sharp(background).composite([{ input: tile }]);
+          }
+        }
+
+        if (!s) {
+          s = sharp(tileImage).flip();
+        }
+
+        previousTiles.add(`${plane}_${finalX}_${finalY}`);
+        await outputTileImage(s, plane, finalX, finalY);
+
+        resolve();
+      }),
+    );
+  }
+  await Promise.all(p);
 
   // NOTE: This is just so the plane will have a darker version of the tile below it
   // even if the plane does not have its own image for a tile.
@@ -403,7 +516,10 @@ async function generateMapTiles() {
 }
 
 async function moveFiles(globSource, destination) {
-  const files = glob.sync(globSource);
+  const files = glob.sync(path.resolve(globSource).replace(/\\/g, "/"));
+  if (files.length === 0) {
+    console.warn("No files to move, matching glob: " + globSource);
+  }
   for (file of files) {
     const base = path.parse(file).base;
     if (base) {
@@ -414,26 +530,32 @@ async function moveFiles(globSource, destination) {
 
 async function moveResults() {
   console.log("\nStep: Moving results to site");
-  await retry(() => fs.renameSync("./item_data.json", siteItemDataPath), true);
+  await retry(() => fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData), true);
 
   // Clean up destination folders before moving new files
   console.log("Removing old destination folders...");
-  await retry(() => fs.rmSync(siteItemImagesPath, { recursive: true, force: true }), true);
-  await retry(() => fs.rmSync(siteMapImagesPath, { recursive: true, force: true }), true);
-  await retry(() => fs.rmSync(siteMapLabelsPath, { recursive: true, force: true }), true);
+  await retry(() => fs.rmSync(SITE_PATHS.DIRS.itemImages, { recursive: true, force: true }), true);
+  await retry(() => fs.rmSync(SITE_PATHS.DIRS.mapImages, { recursive: true, force: true }), true);
+  await retry(() => fs.rmSync(SITE_PATHS.DIRS.mapLabels, { recursive: true, force: true }), true);
 
   // Recreate destination folders
-  fs.mkdirSync(siteItemImagesPath, { recursive: true });
-  fs.mkdirSync(siteMapImagesPath, { recursive: true });
-  fs.mkdirSync(siteMapLabelsPath, { recursive: true });
-  fs.mkdirSync(path.dirname(siteMapIconPath), { recursive: true });
+  fs.mkdirSync(SITE_PATHS.DIRS.itemImages, { recursive: true });
+  fs.mkdirSync(SITE_PATHS.DIRS.mapImages, { recursive: true });
+  fs.mkdirSync(SITE_PATHS.DIRS.mapLabels, { recursive: true });
+  fs.mkdirSync(path.dirname(SITE_PATHS.FILES.mapIconAtlas), { recursive: true });
 
-  await moveFiles("./item-images/*.webp", siteItemImagesPath);
-  await moveFiles("./map-data/tiles/*.webp", siteMapImagesPath);
-  await moveFiles("./map-data/labels/*.webp", siteMapLabelsPath);
+  await moveFiles("./item-images/*.webp", SITE_PATHS.DIRS.itemImages);
+  await moveFiles("./map-data/tiles/*.webp", SITE_PATHS.DIRS.mapImages);
+  await moveFiles("./map-data/labels/*.webp", SITE_PATHS.DIRS.mapLabels);
 
   // Create a tile sheet of the map icons
-  const mapIcons = glob.sync("./map-data/icons/*.png");
+  const mapIcons = glob.sync(path.resolve("./map-data/icons/*.png").replace(/\\/g, "/"));
+  if (mapIcons.length === 0) {
+    console.warn("No mapIcons to process into atlas.");
+  } else {
+    console.info(`Copying ${mapIcons.length} dumped .png mapIcons to the .webp atlas.`);
+  }
+
   let mapIconsCompositeOpts = [];
   const iconIdToSpriteMapIndex = {};
   for (let i = 0; i < mapIcons.length; ++i) {
@@ -455,7 +577,7 @@ async function moveResults() {
   })
     .composite(mapIconsCompositeOpts)
     .webp({ lossless: true, effort: 6 })
-    .toFile(siteMapIconPath);
+    .toFile(SITE_PATHS.FILES.mapIconAtlas);
 
   // Convert the output of the map-icons locations to be keyed by the X an Y of the regions
   // that they are in. This is done so that the canvas map component can quickly lookup
@@ -484,7 +606,7 @@ async function moveResults() {
     }
   }
 
-  fs.writeFileSync(siteMapIconMetaPath, JSON.stringify(locationByRegion, null, 2));
+  fs.writeFileSync(SITE_PATHS.FILES.mapIconMeta, JSON.stringify(locationByRegion, null, 2));
 
   // Do the same for map labels
   const mapLabelsMeta = JSON.parse(fs.readFileSync("./map-data/labels/map-labels.json", "utf8"));
@@ -506,14 +628,24 @@ async function moveResults() {
     labelByRegion[regionX][regionY][z].push(x, y, i);
   }
 
-  fs.writeFileSync(siteMapLabelMetaPath, JSON.stringify(labelByRegion, null, 2));
+  fs.writeFileSync(SITE_PATHS.FILES.mapLabelMeta, JSON.stringify(labelByRegion, null, 2));
 }
 
 async function dumpQuestMapping() {
-  await addDependencyInApiPom("com.fasterxml.jackson.core", "jackson-databind", "2.17.0");
-  fs.copyFileSync("./QuestDumper.java", `${apiProjectPath}/src/main/java/net/runelite/api/QuestDumper.java`);
-
-  execRuneliteApi("net.runelite.api.QuestDumper", siteQuestMapping);
+  console.log("Dumping quest mappings.");
+  try {
+    fs.copyFileSync("./QuestDumper.java", `${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/api/QuestDumper.java`);
+    execRuneliteGradleApplication({
+      buildScriptPath: path.resolve(RUNELITE_PATHS.DIRS.api, "build.gradle.kts"),
+      mainClass: "net.runelite.api.QuestDumper",
+      dependencies: [`implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")`],
+      runArgs: SITE_PATHS.FILES.questMapping,
+    });
+  } catch (e) {
+    console.error("Failed to dumpQuestMapping.");
+    console.error(e);
+  }
+  execGitCleanInRunelite();
 }
 
 (async () => {

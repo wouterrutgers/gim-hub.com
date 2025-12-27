@@ -106,9 +106,10 @@ function execRuneliteGradleApplication(args) {
 
   fs.writeFileSync(buildScriptPath, lines.join("\n"));
 
-  exec(`gradlew -b ${buildScriptPath} -q run --args="${runArgs}"`, {
+  exec(`./gradlew -b ${buildScriptPath} -q run --args="${runArgs}"`, {
     cwd: RUNELITE_PATHS.DIRS.root,
     env: {
+      ...process.env,
       JAVA_TOOL_OPTIONS: "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
     },
   });

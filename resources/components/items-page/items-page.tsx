@@ -487,18 +487,33 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
         <h2>Searching for Items</h2>
         <p>Type in the 'Search' box to search item names, and display only the items that match.</p>
         <p>
-          The match is not exact, unless the phrase is surrounded by double quotes. For example, searching 'coal' will
-          display both 'coal' and 'coal bag', while searching instead '"coal"' will display only 'coal'.
+          {`The match is not exact, unless the phrase is surrounded by double quotes. For example, searching `}
+          <span className="items-page-tutorial-inline-search">coal</span>
+          {` will display both the OSRS items `}
+          <b className="items-page-tutorial-inline-item-name">Coal</b> and{" "}
+          <b className="items-page-tutorial-inline-item-name">Coal bag</b>
+          {`, while searching instead `}
+          <span className="items-page-tutorial-inline-search">"coal"</span>
+          {` will display only `}
+          <b className="items-page-tutorial-inline-item-name">Coal</b>. Searches are never case-sensitive.
         </p>
         <p>
-          Phrases separated with '|' will cause an item to pass if it matches against at least one of the phrases. For
-          example, 'whip|coal' will display both 'abyssal whip' and 'coal bag'.
+          {` You can combine searches separated with vertical bars to search for items that match any of the searches. For example, `}
+          <span className="items-page-tutorial-inline-search">whip | coal</span> will display both{" "}
+          <b className="items-page-tutorial-inline-item-name">Abyssal Whip</b>
+          {` and `}
+          <b className="items-page-tutorial-inline-item-name">Coal bag</b> (among other items).
         </p>
         <p>
-          Type 'tag:' followed by a tag to search by category of item instead of name. The following tags are available,
-          with some entries being aliases that contain the same items:
+          Type <span className="items-page-tutorial-inline-search">tag:</span> followed by a tag to search by category
+          of item instead of name. The following tags are available, with some entries being aliases that contain the
+          same items:
         </p>
-        <div className="items-page-tutorial-tags rsborder-tiny">{itemTags?.tags.map(([tag]) => tag).join(" ")}</div>
+        <div className="items-page-tutorial-tags rsborder-tiny">
+          {itemTags?.tags.map(([tag]) => (
+            <span>{tag}</span>
+          ))}
+        </div>
         <h2>Item Breakdown</h2>
         <ItemPanel
           containerFilter="All"
@@ -523,7 +538,7 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
             Hover over the upper right of the panel and click the star (★) to pin the item, causing it to appear before
             all other items regardless of sorting order.
           </li>
-          <li>The name is a link that leads to the item's page on the official OSRS wiki.</li>
+          <li>The name is an interactive link that leads to the item's page on the official OSRS wiki.</li>
         </ul>
       </div>
     </div>

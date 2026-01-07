@@ -197,13 +197,23 @@
 }
 
 .items-page-tutorial-tags {
+  display: flex;
+  flex-flow: row wrap;
   padding: 8px;
   margin: 8px;
-  text-align: justify;
+  gap: 4px 12px;
 }
 
 .items-page-tutorial-window-body {
   overflow-y: auto;
+}
+
+.items-page-tutorial-inline-search {
+  color: var(--orange);
+}
+
+.items-page-tutorial-inline-item-name {
+  color: var(--yellow);
 }
 
 .items-page-tutorial-window-header {

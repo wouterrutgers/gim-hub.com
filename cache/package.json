@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "update": "node update.js && node build-item-tags.ts"
+    "update": "node update.js && node item-tags/build-item-tags.ts"
   },
   "author": "",
   "license": "ISC",

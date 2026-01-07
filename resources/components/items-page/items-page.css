@@ -52,16 +52,18 @@
   margin-inline: 4px;
 }
 
-.items-page-member-filter-container > *:focus-within {
-  outline: auto;
-}
-
 .items-page-member-filter-container input:focus-visible {
   outline: none;
 }
 
+.items-page-member-filter-container > span:focus-within {
+  outline: 2px solid rgb(200 200 200);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
 .items-page-member-filter-container > span:hover {
-  outline: 1px solid var(--light-border);
+  outline: 2px solid rgb(255 255 255);
   outline-offset: 1px;
   border-radius: 2px;
 }

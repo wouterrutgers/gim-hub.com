@@ -87234,17 +87234,17 @@
   },
   "31736": {
     "name": "Storm cruiser's hat",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31738": {
     "name": "Storm cruiser's coat",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31740": {
     "name": "Storm cruiser's trousers",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31742": {
@@ -87269,17 +87269,17 @@
   },
   "31748": {
     "name": "Swamp cruiser's hat",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31750": {
     "name": "Swamp cruiser's jacket",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31752": {
     "name": "Swamp cruiser's trousers",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31754": {
@@ -87304,17 +87304,17 @@
   },
   "31760": {
     "name": "Crystal glider's hat",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31762": {
     "name": "Crystal glider's jacket",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31764": {
     "name": "Crystal glider's trousers",
-    "highalch": 21,
+    "highalch": 0,
     "mapping": null
   },
   "31766": {
@@ -87389,7 +87389,7 @@
   },
   "31805": {
     "name": "Current duck",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31807": {
@@ -87404,7 +87404,7 @@
   },
   "31810": {
     "name": "Data filled portable weather station",
-    "highalch": 0,
+    "highalch": 30,
     "mapping": null
   },
   "31811": {
@@ -87589,7 +87589,7 @@
   },
   "31862": {
     "name": "Bottle of soul juice",
-    "highalch": 30,
+    "highalch": 0,
     "mapping": null
   },
   "31863": {

@@ -14,7 +14,7 @@ class Member extends Model
 
     public const PROPERTY_KEYS = [
         'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
-        'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room', 'quiver',
+        'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room', 'plank_sack', 'quiver',
         'diary_vars', 'interacting',
     ];
 

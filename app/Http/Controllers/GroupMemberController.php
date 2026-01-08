@@ -156,6 +156,7 @@ class GroupMemberController extends Controller
             'seed_vault' => 'nullable|array',
             'potion_storage' => 'nullable|array',
             'poh_costume_room' => 'nullable|array',
+            'plank_sack' => 'nullable|array',
             'quiver' => 'nullable|array',
             'deposited' => 'nullable|array',
             'diary_vars' => 'nullable|array',
@@ -189,12 +190,12 @@ class GroupMemberController extends Controller
             ['seed_vault', 0, 500],
             ['potion_storage', 0, 2000],
             ['poh_costume_room', 0, 2000],
+            ['plank_sack', 0, 14],
             ['quiver', 2, 2],
             ['deposited', 0, 200],
             ['diary_vars', 0, 62],
         ];
-        foreach($validatorBounds as [$propName, $minLength, $maxLength])
-        {
+        foreach ($validatorBounds as [$propName, $minLength, $maxLength]) {
             Validators::validateMemberPropLength($propName, $validated[$propName] ?? null, $minLength, $maxLength);
         }
 

@@ -980,6 +980,12 @@ const GetGroupDataResponseSchema = z
     poh_costume_room: NullableItemCollection,
 
     /**
+     * The items in the player's plank sack.
+     * When defined, it always contains all of the items.
+     */
+    plank_sack: NullableItemCollection,
+
+    /**
      * Information on NPC the player last interacted with.
      */
     interacting: NPCInteractionSchema.nullish().transform((value) => value ?? undefined),
@@ -1005,12 +1011,23 @@ const GetGroupDataResponseSchema = z
     diary_vars: DiariesSchema.nullish().transform((value) => value ?? undefined),
   })
   .transform(
-    ({ last_updated, rune_pouch, seed_vault, potion_storage, poh_costume_room, diary_vars, quiver, ...rest }) => ({
+    ({
+      last_updated,
+      rune_pouch,
+      seed_vault,
+      potion_storage,
+      poh_costume_room,
+      plank_sack,
+      diary_vars,
+      quiver,
+      ...rest
+    }) => ({
       lastUpdated: last_updated,
       runePouch: rune_pouch,
       seedVault: seed_vault,
       potionStorage: potion_storage,
       pohCostumeRoom: poh_costume_room,
+      plankSack: plank_sack,
       quiver,
       diaries: diary_vars,
       ...rest,

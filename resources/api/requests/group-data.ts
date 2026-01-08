@@ -986,6 +986,12 @@ const GetGroupDataResponseSchema = z
     plank_sack: NullableItemCollection,
 
     /**
+     * The items in the player's master scroll book.
+     * When defined
+     */
+    master_scroll_book: NullableItemCollection,
+
+    /**
      * Information on NPC the player last interacted with.
      */
     interacting: NPCInteractionSchema.nullish().transform((value) => value ?? undefined),
@@ -1018,6 +1024,7 @@ const GetGroupDataResponseSchema = z
       potion_storage,
       poh_costume_room,
       plank_sack,
+      master_scroll_book,
       diary_vars,
       quiver,
       ...rest
@@ -1028,6 +1035,7 @@ const GetGroupDataResponseSchema = z
       potionStorage: potion_storage,
       pohCostumeRoom: poh_costume_room,
       plankSack: plank_sack,
+      masterScrollBook: master_scroll_book,
       quiver,
       diaries: diary_vars,
       ...rest,

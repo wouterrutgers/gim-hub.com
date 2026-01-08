@@ -176,21 +176,27 @@ class GroupMemberController extends Controller
             ], 401);
         }
 
-        Validators::validateMemberPropLength('stats', $validated['stats'] ?? null, 7, 7);
-        Validators::validateMemberPropLength('coordinates', $validated['coordinates'] ?? null, 4, 4);
-        Validators::validateMemberPropLength('skills', $validated['skills'] ?? null, 24, 24);
-        Validators::validateMemberPropLength('quests', $validated['quests'] ?? null, 0, 250);
-        Validators::validateMemberPropLength('inventory', $validated['inventory'] ?? null, 56, 56);
-        Validators::validateMemberPropLength('equipment', $validated['equipment'] ?? null, 28, 28);
-        Validators::validateMemberPropLength('bank', $validated['bank'] ?? null, 0, 3000);
-        Validators::validateMemberPropLength('shared_bank', $validated['shared_bank'] ?? null, 0, 1000);
-        Validators::validateMemberPropLength('rune_pouch', $validated['rune_pouch'] ?? null, 6, 8);
-        Validators::validateMemberPropLength('seed_vault', $validated['seed_vault'] ?? null, 0, 500);
-        Validators::validateMemberPropLength('potion_storage', $validated['potion_storage'] ?? null, 0, 2000);
-        Validators::validateMemberPropLength('poh_costume_room', $validated['poh_costume_room'] ?? null, 0, 2000);
-        Validators::validateMemberPropLength('quiver', $validated['quiver'] ?? null, 2, 2);
-        Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);
-        Validators::validateMemberPropLength('diary_vars', $validated['diary_vars'] ?? null, 0, 62);
+        $validatorBounds = [
+            ['stats', 7, 7],
+            ['coordinates', 4, 4],
+            ['skills', 24, 24],
+            ['quests', 0, 250],
+            ['inventory', 56, 56],
+            ['equipment', 28, 28],
+            ['bank', 0, 3000],
+            ['shared_bank', 0, 1000],
+            ['rune_pouch', 6, 8],
+            ['seed_vault', 0, 500],
+            ['potion_storage', 0, 2000],
+            ['poh_costume_room', 0, 2000],
+            ['quiver', 2, 2],
+            ['deposited', 0, 200],
+            ['diary_vars', 0, 62],
+        ];
+        foreach($validatorBounds as [$propName, $minLength, $maxLength])
+        {
+            Validators::validateMemberPropLength($propName, $validated[$propName] ?? null, $minLength, $maxLength);
+        }
 
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 

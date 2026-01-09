@@ -28,6 +28,8 @@ const ItemSortCategory = [
 ] as const;
 type ItemSortCategory = (typeof ItemSortCategory)[number];
 
+const DEFAULT_SORT_CATEGORY: ItemSortCategory = "GE total price";
+
 interface ItemPanelProps {
   itemName: string;
   itemID: ItemID;
@@ -323,6 +325,7 @@ const usePinnedItems = (): [PinnedItems, (toggleID: ItemID) => void] => {
 };
 
 type ContainerFilter = "All" | Member.ItemContainer;
+const DEFAULT_CONTAINER_FILTER: ContainerFilter = "All";
 const validateContainerFilter = (value: string | undefined): ContainerFilter | undefined => {
   if (typeof value !== "string") return undefined;
   if (value !== "All" && !Member.ItemContainer.includes(value as Member.ItemContainer)) return undefined;
@@ -341,7 +344,7 @@ interface SearchFilter {
   )[];
 }
 const validateSearchFilter = (value: string | undefined): string | undefined => value;
-const useSearchFilter = (): [ReactElement, SearchFilter] => {
+const useSearchFilter = (): [ReactElement, SearchFilter, () => void] => {
   const [filterUserString, setFilterUserString] = useLocalStorage({
     key: "search-filter",
     defaultValue: undefined,
@@ -411,20 +414,26 @@ const useSearchFilter = (): [ReactElement, SearchFilter] => {
       return part.lowercase.length > 0;
     });
 
+  const resetSearch = useCallback(() => {
+    setFilterUserString(undefined);
+  }, [setFilterUserString]);
+
   return [
     <SearchElement
       onChange={setFilterUserString}
       id="items-page-search"
       placeholder="Search"
       auto-focus
+      value={filterUserString ?? ""}
       defaultValue={filterUserString}
     />,
     { parts },
+    resetSearch,
   ];
 };
 
 const validateMemberFilter = (value: string | undefined): string | undefined => value;
-const useMemberFilter = (): [ReactElement, MemberNegativeFilter] => {
+const useMemberFilter = (): [ReactElement, MemberNegativeFilter, () => void] => {
   const [memberFilterUserString, setMemberFilterUserString] = useLocalStorage({
     key: "items-page-member-filter",
     defaultValue: undefined,
@@ -435,7 +444,9 @@ const useMemberFilter = (): [ReactElement, MemberNegativeFilter] => {
 
   const memberFilterRef = useRef<MemberNegativeFilter>(new Set());
   useEffect(() => {
-    const newFilter = new Set([...(memberFilterUserString ?? "").split(",")] as Member.Name[]);
+    const newFilter = new Set(
+      (memberFilterUserString ?? "").split(",").filter((name) => name.length > 0) as Member.Name[],
+    );
     memberFilterRef.current = newFilter;
     if (members.size > 0) {
       memberFilterRef.current = memberFilterRef.current.intersection(members);
@@ -476,7 +487,11 @@ const useMemberFilter = (): [ReactElement, MemberNegativeFilter] => {
     </span>
   );
 
-  return [element, memberFilterRef.current];
+  const resetMemberFilter = useCallback(() => {
+    setMemberFilterUserString(undefined);
+  }, [setMemberFilterUserString]);
+
+  return [element, memberFilterRef.current, resetMemberFilter];
 };
 
 const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void }): ReactElement => {
@@ -554,14 +569,14 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
 };
 
 export const ItemsPage = (): ReactElement => {
-  const [searchInputElement, searchFilter] = useSearchFilter();
-  const [memberFilterElement, memberFilter] = useMemberFilter();
+  const [searchInputElement, searchFilter, resetSearchFilter] = useSearchFilter();
+  const [memberFilterElement, memberFilter, resetMemberFilter] = useMemberFilter();
 
   const [pinnedItems, togglePin] = usePinnedItems();
 
   const [sortCategory, setSortCategory] = useLocalStorage<ItemSortCategory>({
     key: "items-page-sort-category",
-    defaultValue: "GE total price",
+    defaultValue: DEFAULT_SORT_CATEGORY,
     validator: validateItemSortCategory,
   });
 
@@ -571,9 +586,22 @@ export const ItemsPage = (): ReactElement => {
 
   const [containerFilter, setContainerFilter] = useLocalStorage<ContainerFilter>({
     key: "item-page-container-filter",
-    defaultValue: "All",
+    defaultValue: DEFAULT_CONTAINER_FILTER,
     validator: validateContainerFilter,
   });
+
+  const resetFilters = useCallback(() => {
+    resetSearchFilter();
+    resetMemberFilter();
+    setSortCategory(undefined);
+    setContainerFilter(undefined);
+  }, [resetSearchFilter, resetMemberFilter, setSortCategory, setContainerFilter]);
+
+  const hasActiveFilters =
+    searchFilter.parts.length > 0 ||
+    memberFilter.size > 0 ||
+    sortCategory !== DEFAULT_SORT_CATEGORY ||
+    containerFilter !== DEFAULT_CONTAINER_FILTER;
 
   interface ItemAggregates {
     totalHighAlch: number;
@@ -689,6 +717,18 @@ export const ItemsPage = (): ReactElement => {
 
       <div id="items-page-head">
         {searchInputElement}
+        {hasActiveFilters ? (
+          <button
+            id="items-page-reset-filters-button"
+            className="men-button"
+            onClick={resetFilters}
+            title="Reset all filters to default"
+            aria-label="Reset all filters to default"
+          >
+            <CachedImage alt={"Reset filters"} src="/ui/1731-0.png" />
+            Reset
+          </button>
+        ) : undefined}
         <button id="items-page-tutorial-button" className="men-button" onClick={openSearchTutorial}>
           <CachedImage alt={"items tutorial"} src="/ui/1094-0.png" />
           Tutorial

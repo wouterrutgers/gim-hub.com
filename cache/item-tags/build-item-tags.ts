@@ -10,9 +10,7 @@ const CONFIG = {
 
 process.stdout.write("Building item tags...\n");
 
-const stdout = process.stdout as Partial<
-  Pick<NodeJS.WriteStream, "isTTY" | "clearLine" | "cursorTo" | "moveCursor">
->;
+const stdout = process.stdout as Partial<Pick<NodeJS.WriteStream, "isTTY" | "clearLine" | "cursorTo" | "moveCursor">>;
 const isTTY = stdout.isTTY === true;
 const clearLine = () => isTTY && typeof stdout.clearLine === "function" && stdout.clearLine(0);
 const cursorToStart = () => isTTY && typeof stdout.cursorTo === "function" && stdout.cursorTo(0);

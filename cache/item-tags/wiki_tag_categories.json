@@ -28,5 +28,12 @@
   [["ranged weapons"], ["Ranged weapons"]],
   [["magic armor", "magic armour"], ["Magic armour"]],
   [["magic weapons"], ["Magic weapons"]],
-  [["jewellery"], ["Jewellery"]]
+  [["jewellery"], ["Jewellery"]],
+  [["runes", "magic runes"], ["Runes"]],
+  [["gems"], ["Gems"]],
+  [["herblore"], ["Herblore"]],
+  [["pets"], ["Pets"]],
+  [["temporary skill boosts", "boosts"], ["Temporary skill boost"]],
+  [["tools"], ["Tools"]],
+  [["unlocks"], ["Single-use ability unlock items"]]
 ]

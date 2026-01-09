@@ -45,6 +45,18 @@ for (const [ourNames, wikiNames] of wikiTagCategories) {
         .filter(({ title }) => title !== undefined)
         .map(({ title }) => title.toLowerCase());
 
+      if (wikiName === "Potions") {
+        // Manually add potion variants as they are not included in the Wiki category
+        const expandedItemNames: string[] = [];
+        for (const itemName of itemNames) {
+          expandedItemNames.push(itemName);
+          for (let i = 1; i <= 4; i++) {
+            expandedItemNames.push(`${itemName}(${i})`);
+          }
+        }
+        itemNames.push(...expandedItemNames);
+      }
+
       names = new Set([...names, ...itemNames]);
       cmcontinue = data.continue?.cmcontinue ?? "";
 

@@ -10,6 +10,14 @@ const CONFIG = {
 
 process.stdout.write("Building item tags...\n");
 
+const stdout = process.stdout as Partial<
+  Pick<NodeJS.WriteStream, "isTTY" | "clearLine" | "cursorTo" | "moveCursor">
+>;
+const isTTY = stdout.isTTY === true;
+const clearLine = () => isTTY && typeof stdout.clearLine === "function" && stdout.clearLine(0);
+const cursorToStart = () => isTTY && typeof stdout.cursorTo === "function" && stdout.cursorTo(0);
+const moveCursorUp = () => isTTY && typeof stdout.moveCursor === "function" && stdout.moveCursor(0, -1);
+
 const itemNamesByTag: Record<string, string[]> = {};
 
 let progress = 0;
@@ -19,9 +27,9 @@ process.stdout.write(`Fetching categories from wiki: ${progress}/${total}\n`);
 for (const [ourNames, wikiNames] of wikiTagCategories) {
   let names = new Set<string>();
   for (const wikiName of wikiNames) {
-    process.stdout.clearLine(0);
-    process.stdout.cursorTo(0);
-    process.stdout.write(`>>>>${wikiName}`);
+    clearLine();
+    cursorToStart();
+    process.stdout.write(`>>>>${wikiName}${isTTY ? "" : "\n"}`);
 
     let cmcontinue = "";
     do {
@@ -54,15 +62,15 @@ for (const [ourNames, wikiNames] of wikiTagCategories) {
   }
 
   progress++;
-  process.stdout.clearLine(0);
-  process.stdout.moveCursor(0, -1);
-  process.stdout.clearLine(0);
-  process.stdout.cursorTo(0);
+  clearLine();
+  moveCursorUp();
+  clearLine();
+  cursorToStart();
   process.stdout.write(`Fetching categories from wiki: ${progress}/${total}\n`);
 }
 
-process.stdout.cursorTo(0);
-process.stdout.clearLine(0);
+cursorToStart();
+clearLine();
 
 const tags = Array.from(Object.keys(itemNamesByTag)).sort(
   (a, b) => itemNamesByTag[b].length - itemNamesByTag[a].length,

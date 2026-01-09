@@ -123,6 +123,58 @@ const ItemsTagsSchema = z.object({
   ),
 });
 
+export const resolveItemVariant = (
+  itemID: ItemID,
+  items: ItemsDatabase | undefined,
+  visited: Set<ItemID> = new Set(),
+): ItemID => {
+  if (!items) return itemID;
+  if (visited.has(itemID)) return itemID;
+  visited.add(itemID);
+
+  const itemEntry = items.get(itemID);
+  const mapping = itemEntry?.mapping;
+  if (mapping?.length !== 1 || mapping[0].quantity !== 1) {
+    return itemID;
+  }
+
+  const next = mapping[0].id as ItemID;
+  if (next === itemID) return itemID;
+
+  return resolveItemVariant(next, items, visited);
+};
+
+export const mappedHighAlch = (itemID: ItemID, items: ItemsDatabase | undefined): number => {
+  if (!items) return 0;
+
+  const itemEntry = items.get(itemID);
+  if (!itemEntry) return 0;
+
+  if (itemEntry.alchable) return itemEntry.highalch;
+
+  const resolvedID = resolveItemVariant(itemID, items);
+  if (resolvedID === itemID) return 0;
+
+  const resolvedEntry = items.get(resolvedID);
+  if (!resolvedEntry?.alchable) return 0;
+
+  return resolvedEntry.highalch;
+};
+
+export const mappedAlchable = (itemID: ItemID, items: ItemsDatabase | undefined): boolean => {
+  if (!items) return false;
+
+  const itemEntry = items.get(itemID);
+  if (!itemEntry) return false;
+
+  if (itemEntry.alchable) return true;
+
+  const resolvedID = resolveItemVariant(itemID, items);
+  if (resolvedID === itemID) return false;
+
+  return Boolean(items.get(resolvedID)?.alchable);
+};
+
 export const mappedGEPrice = (
   itemID: ItemID,
   gePrices: GEPrices | undefined,

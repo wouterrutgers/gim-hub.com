@@ -382,11 +382,11 @@ const useSearchFilter = (): [ReactElement, SearchFilter] => {
         };
       }
 
-      const suffix = splitForTag.slice(1).join(":");
+      const suffix = splitForTag.slice(1).join(":").toLocaleLowerCase();
 
       let bitmask = 0n;
       for (const [tag, bitIndex] of itemTags?.tags ?? []) {
-        const tagMatches = tag.includes(suffix.toLocaleLowerCase());
+        const tagMatches = tag.toLocaleLowerCase() === suffix;
         if (tagMatches) {
           bitmask += 1n << BigInt(bitIndex);
         }
@@ -505,9 +505,9 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
           <b className="items-page-tutorial-inline-item-name">Coal bag</b> (among other items).
         </p>
         <p>
-          Type <span className="items-page-tutorial-inline-search">tag:</span> followed by a tag to search by category
-          of item instead of name. The following tags are available, with some entries being aliases that contain the
-          same items:
+          Type <span className="items-page-tutorial-inline-search">tag:</span> followed by an exact tag to search by
+          category of item instead of name. The following tags are available, with some entries being aliases that
+          contain the same items:
         </p>
         <div className="items-page-tutorial-tags rsborder-tiny">
           {itemTags?.tags.map(([tag]) => (

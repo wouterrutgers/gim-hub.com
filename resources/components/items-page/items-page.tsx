@@ -150,16 +150,19 @@ const ItemPanel = memo(
               </span>
               <span>GE price</span>
               <span
-                onPointerEnter={() =>
-                  showTooltip({
-                    perPiecePrice: gePricePer,
-                    totalPrice: gePrice,
-                    quantity: totalQuantity,
-                  })
+                onPointerEnter={
+                  gePricePer > 0
+                    ? (): void =>
+                        showTooltip({
+                          perPiecePrice: gePricePer,
+                          totalPrice: gePrice,
+                          quantity: totalQuantity,
+                        })
+                    : undefined
                 }
-                onPointerLeave={hideTooltip}
+                onPointerLeave={gePricePer > 0 ? hideTooltip : undefined}
               >
-                {gePrice.toLocaleString()}gp
+                {gePricePer > 0 ? `${gePrice.toLocaleString()}gp` : "n/a"}
               </span>
             </div>
           </div>

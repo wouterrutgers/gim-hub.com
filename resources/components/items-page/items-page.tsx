@@ -32,6 +32,7 @@ interface ItemPanelProps {
   itemName: string;
   itemID: ItemID;
   highAlchPer: number;
+  alchable: boolean;
   gePricePer: number;
   imageURL: string;
   totalQuantity: number;
@@ -50,6 +51,7 @@ const ItemPanel = memo(
     itemName,
     itemID,
     highAlchPer,
+    alchable,
     gePricePer,
     imageURL,
     totalQuantity,
@@ -130,16 +132,19 @@ const ItemPanel = memo(
               <span>{totalQuantity.toLocaleString()}</span>
               <span>High alch</span>
               <span
-                onPointerEnter={() =>
-                  showTooltip({
-                    perPiecePrice: highAlchPer,
-                    totalPrice: highAlch,
-                    quantity: totalQuantity,
-                  })
+                onPointerEnter={
+                  alchable
+                    ? (): void =>
+                        showTooltip({
+                          perPiecePrice: highAlchPer,
+                          totalPrice: highAlch,
+                          quantity: totalQuantity,
+                        })
+                    : undefined
                 }
-                onPointerLeave={hideTooltip}
+                onPointerLeave={alchable ? hideTooltip : undefined}
               >
-                {highAlch.toLocaleString()}gp
+                {alchable ? `${highAlch.toLocaleString()}gp` : "n/a"}
               </span>
               <span>GE price</span>
               <span
@@ -181,6 +186,7 @@ interface FilteredItem {
   totalQuantity: number;
   gePrice: number;
   highAlch: number;
+  alchable: boolean;
 }
 
 // Defines the minimal width of each column, which the panels flex to fill
@@ -259,6 +265,7 @@ const ItemPanelsScrollArea = ({
                   imageURL={item.imageURL}
                   totalQuantity={item.totalQuantity}
                   highAlchPer={item.highAlch}
+                  alchable={item.alchable}
                   gePricePer={item.gePrice}
                   itemName={item.itemName}
                   memberFilter={memberFilter}
@@ -519,6 +526,7 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
           containerFilter="All"
           gePricePer={200}
           highAlchPer={100}
+          alchable={true}
           imageURL="/icons/items/4323.webp"
           isPinned={pinned}
           itemID={4323 as ItemID}
@@ -615,6 +623,7 @@ export const ItemsPage = (): ReactElement => {
       if (filteredTotalQuantity <= 0) return previousValue;
 
       const highAlch = itemDatum?.highalch ?? 0;
+      const alchable = itemDatum.alchable;
       const gePrice = mappedGEPrice(itemID, geData, itemData);
       previousValue.totalHighAlch += filteredTotalQuantity * highAlch;
       previousValue.totalGEPrice += filteredTotalQuantity * gePrice;
@@ -626,6 +635,7 @@ export const ItemsPage = (): ReactElement => {
         totalQuantity: filteredTotalQuantity,
         gePrice,
         highAlch,
+        alchable,
         imageURL: composeItemIconHref({ itemID, quantity: filteredTotalQuantity }, itemDatum),
       });
 

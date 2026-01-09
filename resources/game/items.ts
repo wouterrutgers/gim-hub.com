@@ -74,6 +74,7 @@ export const formatVeryShortQuantity = (quantity: number): string => {
 const ItemsDataEntrySchema = z.object({
   name: z.string(),
   highalch: z.uint32(),
+  alchable: z.boolean(),
   stacks: z
     .array(z.tuple([z.uint32(), z.uint32()]))
     .min(1)

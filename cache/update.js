@@ -216,6 +216,7 @@ async function buildItemDataJson() {
       includedItem = {
         name: item.name,
         highalch: Math.floor(item.cost * 0.6),
+        alchable: true,
         mapping: item.mapping,
       };
 
@@ -249,8 +250,8 @@ async function buildItemDataJson() {
   for (const item of Object.values(includedItems)) {
     const itemName = item.name;
     if (nonAlchableItemNames.has(itemName)) {
-      // NOTE: High alch value = 0 just means unalchable in the context of this program
       item.highalch = 0;
+      item.alchable = false;
       itemsMadeNonAlchable++;
     }
 
@@ -260,6 +261,7 @@ async function buildItemDataJson() {
       const nonVariantItemName = itemName.substring(0, itemName.indexOf("(")).trim();
       if (nonAlchableItemNames.has(nonVariantItemName)) {
         item.highalch = 0;
+        item.alchable = false;
         itemsMadeNonAlchable++;
       }
     }

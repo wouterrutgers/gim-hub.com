@@ -1,4 +1,4 @@
-import { fetchItemDataJSON, type ItemsDatabase } from "../game/items";
+import { fetchItemDataJSON, fetchItemTagsJSON, type ItemsDatabase, type ItemTags } from "../game/items";
 import { fetchQuestDataJSON, type QuestDatabase, type QuestID, type QuestStatus } from "../game/quests";
 import { fetchDiaryDataJSON, type DiaryDatabase } from "../game/diaries";
 import type * as Member from "../game/member";
@@ -20,6 +20,7 @@ export type GroupStateUpdate = Map<Member.Name, Partial<Member.State>>;
 
 export interface GameData {
   items?: ItemsDatabase;
+  itemTags?: ItemTags;
   quests?: QuestDatabase;
   diaries?: DiaryDatabase;
   gePrices?: GEPrices;
@@ -119,6 +120,14 @@ export default class Api {
           this.callbacks?.onGameDataUpdate?.(this.gameData);
         })
         .catch((reason) => console.error("Failed to get item data for API", reason));
+    }
+    if (!this.gameData.itemTags) {
+      fetchItemTagsJSON()
+        .then((data) => {
+          this.gameData.itemTags = data;
+          this.callbacks?.onGameDataUpdate?.(this.gameData);
+        })
+        .catch((reason) => console.error("Failed to get item tags for API", reason));
     }
     if (!this.gameData.diaries) {
       fetchDiaryDataJSON()

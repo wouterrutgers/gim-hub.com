@@ -65,7 +65,8 @@
   width: 21px;
 }
 
-.diary-dialog-close:hover {
+.diary-dialog-close:hover,
+.diary-dialog-close:focus-visible {
   outline: solid var(--orange) 1px;
 }
 

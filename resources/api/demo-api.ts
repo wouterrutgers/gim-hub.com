@@ -1,4 +1,11 @@
-import { fetchItemDataJSON, type ItemID, type ItemsDatabase, type ItemStack } from "../game/items";
+import {
+  fetchItemDataJSON,
+  fetchItemTagsJSON,
+  type ItemID,
+  type ItemsDatabase,
+  type ItemStack,
+  type ItemTags,
+} from "../game/items";
 import { fetchQuestDataJSON, type QuestDatabase, type QuestID, type QuestStatus } from "../game/quests";
 import { fetchDiaryDataJSON, type DiaryDatabase } from "../game/diaries";
 import type * as Member from "../game/member";
@@ -23,6 +30,7 @@ export type GroupStateUpdate = Map<Member.Name, Partial<Member.State>>;
 
 export interface GameData {
   items?: ItemsDatabase;
+  itemTags?: ItemTags;
   quests?: QuestDatabase;
   diaries?: DiaryDatabase;
   gePrices?: GEPrices;
@@ -507,6 +515,10 @@ export default class DemoApi {
       }),
       fetchDiaryDataJSON().then((data) => {
         gameData.diaries = data;
+        this.callbacks?.onGameDataUpdate?.(gameData);
+      }),
+      fetchItemTagsJSON().then((data) => {
+        gameData.itemTags = data;
         this.callbacks?.onGameDataUpdate?.(gameData);
       }),
       fetchGEPrices({ baseURL: this.baseURL }).then((data) => {

@@ -11,10 +11,13 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { CachedImage } from "../cached-image/cached-image";
 import { formatTitle } from "../../ts/format-title";
 import { useLocalStorage } from "../../hooks/local-storage";
+import { useModal } from "../modal/modal";
 
 import "./items-page.css";
 
-type MemberFilter = "All" | Member.Name;
+// Negate the filter, so that new/renamed members aren't filtered by default
+type MemberNegativeFilter = Set<Member.Name>;
+
 const ItemSortCategory = [
   "Total quantity",
   "HA total value",
@@ -32,7 +35,7 @@ interface ItemPanelProps {
   gePricePer: number;
   imageURL: string;
   totalQuantity: number;
-  memberFilter: MemberFilter;
+  memberFilter: MemberNegativeFilter;
   containerFilter: Member.ItemContainer | "All";
   quantities: Map<Member.Name, Member.ItemLocationBreakdown>;
   isPinned: boolean;
@@ -64,7 +67,7 @@ const ItemPanel = memo(
     } = useItemsBreakdownTooltip();
 
     const quantityBreakdown = [...quantities]
-      .filter(([name]): boolean => memberFilter === "All" || name === memberFilter)
+      .filter(([name]) => !memberFilter.has(name))
       .map(([name, breakdown]) => {
         let quantity = 0;
 
@@ -109,19 +112,19 @@ const ItemPanel = memo(
 
     return (
       <div className={`items-page-panel rsborder rsbackground ${isPinned ? "items-page-panel-pinned" : ""}`}>
-        <button
-          className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
-          onClick={() => onTogglePin(itemID)}
-          title={isPinned ? "Unpin item" : "Pin item to top"}
-          aria-label={isPinned ? "Unpin item" : "Pin item to top"}
-        >
-          {isPinned ? "★" : "☆"}
-        </button>
         <div className="items-page-panel-top rsborder-tiny">
           <div>
             <Link className="items-page-panel-name rstext" to={wikiLink} target="_blank" rel="noopener noreferrer">
               {itemName}
             </Link>
+            <button
+              className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
+              onClick={() => onTogglePin(itemID)}
+              title={isPinned ? "Unpin item" : "Pin item to top"}
+              aria-label={isPinned ? "Unpin item" : "Pin item to top"}
+            >
+              {isPinned ? "★" : "☆"}
+            </button>
             <div className="items-page-panel-item-details">
               <span>Quantity</span>
               <span>{totalQuantity.toLocaleString()}</span>
@@ -191,7 +194,7 @@ const ItemPanelsScrollArea = ({
   onTogglePin,
 }: {
   sortedItems: FilteredItem[];
-  memberFilter: MemberFilter;
+  memberFilter: MemberNegativeFilter;
   containerFilter: Member.ItemContainer | "All";
   pinnedItems: Set<ItemID>;
   onTogglePin: (itemID: ItemID) => void;
@@ -321,10 +324,14 @@ const validateContainerFilter = (value: string | undefined): ContainerFilter | u
 };
 
 interface SearchFilter {
-  parts: {
-    lowercase: string;
-    exact: boolean;
-  }[];
+  parts: (
+    | {
+        type: "Name";
+        lowercase: string;
+        exact: boolean;
+      }
+    | { type: "Tag"; bitmask: bigint }
+  )[];
 }
 const validateSearchFilter = (value: string | undefined): string | undefined => value;
 const useSearchFilter = (): [ReactElement, SearchFilter] => {
@@ -333,27 +340,69 @@ const useSearchFilter = (): [ReactElement, SearchFilter] => {
     defaultValue: undefined,
     validator: validateSearchFilter,
   });
+  const { itemTags } = useContext(GameDataContext);
 
   const parts = (filterUserString ?? "")
     .split("|")
     .map((s: string) => {
       return s.trim().toLocaleLowerCase();
     })
-    .map((s: string) => {
+    .map<SearchFilter["parts"][number]>((s: string) => {
+      if (s.length === 0) {
+        return {
+          type: "Name",
+          lowercase: "",
+          exact: false,
+        };
+      }
+
       const exact = s.startsWith('"') && s.endsWith('"');
       if (exact) {
         return {
-          exact: true,
+          type: "Name",
           lowercase: s.slice(1, -1),
+          exact: true,
         };
       }
+
+      const splitForTag = s.split(":");
+      const prefix = splitForTag[0];
+      if (splitForTag.length === 1 || prefix !== "tag") {
+        return {
+          type: "Name",
+          lowercase: s,
+          exact: false,
+        };
+      }
+
+      if (itemTags?.tags === undefined) {
+        return {
+          type: "Tag",
+          bitmask: 0n,
+        };
+      }
+
+      const suffix = splitForTag.slice(1).join(":").toLocaleLowerCase();
+
+      let bitmask = 0n;
+      for (const [tag, bitIndex] of itemTags?.tags ?? []) {
+        const tagMatches = tag.toLocaleLowerCase() === suffix;
+        if (tagMatches) {
+          bitmask += 1n << BigInt(bitIndex);
+        }
+      }
+
       return {
-        exact: false,
-        lowercase: s,
+        type: "Tag" as const,
+        bitmask,
       };
     })
-    .filter(({ lowercase }) => lowercase.length > 0)
-    .sort(({ lowercase: a }, { lowercase: b }) => a.localeCompare(b));
+    .filter((part) => {
+      if (part.type !== "Name") {
+        return true;
+      }
+      return part.lowercase.length > 0;
+    });
 
   return [
     <SearchElement
@@ -367,9 +416,139 @@ const useSearchFilter = (): [ReactElement, SearchFilter] => {
   ];
 };
 
+const validateMemberFilter = (value: string | undefined): string | undefined => value;
+const useMemberFilter = (): [ReactElement, MemberNegativeFilter] => {
+  const [memberFilterUserString, setMemberFilterUserString] = useLocalStorage({
+    key: "items-page-member-filter",
+    defaultValue: undefined,
+    validator: validateMemberFilter,
+  });
+
+  const members = useContext(GroupMemberNamesContext);
+
+  const memberFilterRef = useRef<MemberNegativeFilter>(new Set());
+  useEffect(() => {
+    const newFilter = new Set([...(memberFilterUserString ?? "").split(",")] as Member.Name[]);
+    memberFilterRef.current = newFilter;
+    if (members.size > 0) {
+      memberFilterRef.current = memberFilterRef.current.intersection(members);
+    }
+    setMemberFilterUserString([...memberFilterRef.current.values()].join(","));
+  }, [memberFilterUserString]);
+
+  const element = (
+    <span className="items-page-member-filter-container rsborder-tiny rsbackground">
+      {[...members.values()].map((name, index, array) => (
+        <Fragment key={name}>
+          <span className="rsbackground-hover">
+            <input
+              id={`items-page-member-filter-${name}`}
+              type="checkbox"
+              checked={!memberFilterRef.current.has(name)}
+              onChange={() => {
+                const shouldDelete = memberFilterRef.current.has(name);
+                const newFilter = new Set(memberFilterRef.current.values());
+                if (shouldDelete) {
+                  newFilter.delete(name);
+                } else {
+                  newFilter.add(name);
+                }
+
+                memberFilterRef.current = newFilter;
+                if (members.size > 0) {
+                  memberFilterRef.current = memberFilterRef.current.intersection(members);
+                }
+                setMemberFilterUserString([...memberFilterRef.current.values()].join(","));
+              }}
+            />
+            <label htmlFor={`items-page-member-filter-${name}`}>{name}</label>
+          </span>
+          {index < array.length - 1 ? <hr /> : undefined}
+        </Fragment>
+      ))}
+    </span>
+  );
+
+  return [element, memberFilterRef.current];
+};
+
+const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void }): ReactElement => {
+  const { itemTags } = useContext(GameDataContext);
+  const [pinned, setPinned] = useState(true);
+
+  return (
+    <div className="items-page-tutorial-window rsborder rsbackground">
+      <div className="items-page-tutorial-window-header">
+        <button onClick={onCloseModal}>
+          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} title={formatTitle("Close dialog")} />
+        </button>
+      </div>
+      <div className="items-page-tutorial-window-body">
+        <h2>Searching for Items</h2>
+        <p>Type in the 'Search' box to search item names, and display only the items that match.</p>
+        <p>
+          {`The match is not exact, unless the phrase is surrounded by double quotes. For example, searching `}
+          <span className="items-page-tutorial-inline-search">coal</span>
+          {` will display both the OSRS items `}
+          <b className="items-page-tutorial-inline-item-name">Coal</b> and{" "}
+          <b className="items-page-tutorial-inline-item-name">Coal bag</b>
+          {`, while searching instead `}
+          <span className="items-page-tutorial-inline-search">"coal"</span>
+          {` will display only `}
+          <b className="items-page-tutorial-inline-item-name">Coal</b>. Searches are never case-sensitive.
+        </p>
+        <p>
+          {` You can combine searches separated with vertical bars to search for items that match any of the searches. For example, `}
+          <span className="items-page-tutorial-inline-search">whip | coal</span> will display both{" "}
+          <b className="items-page-tutorial-inline-item-name">Abyssal Whip</b>
+          {` and `}
+          <b className="items-page-tutorial-inline-item-name">Coal bag</b> (among other items).
+        </p>
+        <p>
+          Type <span className="items-page-tutorial-inline-search">tag:</span> followed by an exact tag to search by
+          category of item instead of name. The following tags are available, with some entries being aliases that
+          contain the same items:
+        </p>
+        <div className="items-page-tutorial-tags rsborder-tiny">
+          {itemTags?.tags.map(([tag]) => (
+            <span>{tag}</span>
+          ))}
+        </div>
+        <h2>Item Breakdown</h2>
+        <ItemPanel
+          containerFilter="All"
+          gePricePer={200}
+          highAlchPer={100}
+          imageURL="/icons/items/4323.webp"
+          isPinned={pinned}
+          itemID={4323 as ItemID}
+          itemName="Team-5 cape"
+          memberFilter={new Set()}
+          onTogglePin={() => {
+            setPinned(!pinned);
+          }}
+          quantities={new Map([["Zezima" as Member.Name, { Total: 100, Bank: 100, Inventory: 15 }]])}
+          totalQuantity={115}
+        />
+        <ul>
+          <li>
+            Hover over the numbers to see detailed tooltips, including a breakdown of where items are for each member.
+          </li>
+          <li>
+            Hover over the upper right of the panel and click the star (★) to pin the item, causing it to appear before
+            all other items regardless of sorting order.
+          </li>
+          <li>The name is an interactive link that leads to the item's page on the official OSRS wiki.</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 export const ItemsPage = (): ReactElement => {
-  const [memberFilter, setMemberFilter] = useState<MemberFilter>("All");
   const [searchInputElement, searchFilter] = useSearchFilter();
+  const [memberFilterElement, memberFilter] = useMemberFilter();
+
   const [pinnedItems, togglePin] = usePinnedItems();
 
   const [sortCategory, setSortCategory] = useLocalStorage<ItemSortCategory>({
@@ -378,9 +557,9 @@ export const ItemsPage = (): ReactElement => {
     validator: validateItemSortCategory,
   });
 
-  const { gePrices: geData, items: itemData } = useContext(GameDataContext);
-  const members = useContext(GroupMemberNamesContext);
+  const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
   const items = useContext(GroupItemsContext);
+  const { open: openSearchTutorial, modal: searchTutorialModal } = useModal(ItemsPageTutorialWindow);
 
   const [containerFilter, setContainerFilter] = useLocalStorage<ContainerFilter>({
     key: "item-page-container-filter",
@@ -393,20 +572,30 @@ export const ItemsPage = (): ReactElement => {
     totalGEPrice: number;
     filteredItems: FilteredItem[];
   }
+
   const { totalHighAlch, totalGEPrice, filteredItems } = [...(items ?? [])].reduce<ItemAggregates>(
     (previousValue, [itemID, breakdownByMember]) => {
       const itemDatum = itemData?.get(itemID);
+
       if (!itemDatum) return previousValue;
 
       if (searchFilter.parts.length > 0) {
         const itemLowercase = itemDatum.name.toLocaleLowerCase();
-        const matches = searchFilter.parts.some(({ exact, lowercase: filterLowercase }) => {
-          if (exact) {
-            return filterLowercase == itemLowercase;
-          } else {
-            return itemLowercase.includes(filterLowercase);
+        const matches = searchFilter.parts.some((part) => {
+          switch (part.type) {
+            case "Name": {
+              if (part.exact) {
+                return part.lowercase === itemLowercase;
+              } else {
+                return itemLowercase.includes(part.lowercase);
+              }
+            }
+            case "Tag": {
+              return (part.bitmask & (itemTags?.items[itemID] ?? 0n)) !== 0n;
+            }
           }
         });
+
         if (!matches) {
           return previousValue;
         }
@@ -414,7 +603,7 @@ export const ItemsPage = (): ReactElement => {
 
       let filteredTotalQuantity = 0;
       for (const [name, breakdown] of breakdownByMember) {
-        if (memberFilter !== "All" && memberFilter !== name) continue;
+        if (memberFilter.has(name)) continue;
 
         for (const itemContainer of Member.ItemContainer) {
           if (containerFilter !== "All" && containerFilter !== itemContainer) continue;
@@ -486,51 +675,46 @@ export const ItemsPage = (): ReactElement => {
 
   return (
     <>
-      <div id="items-page-head">{searchInputElement}</div>
-      <div id="items-page-utility">
-        <div className="rsborder-tiny rsbackground rsbackground-hover">
-          <select
-            value={sortCategory}
-            onChange={(e) => {
-              const newCategory = e.target.value as ItemSortCategory;
-              setSortCategory(newCategory);
-            }}
-          >
-            {ItemSortCategory.map((category) => (
-              <option key={category} value={category}>
-                {`Sort: ${formatTitle(category)}`}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="rsborder-tiny rsbackground rsbackground-hover">
-          <select
-            value={memberFilter}
-            onChange={(e) => {
-              setMemberFilter(e.target.value as MemberFilter);
-            }}
-          >
-            {["All", ...members].map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="rsborder-tiny rsbackground rsbackground-hover">
-          <select
-            value={containerFilter}
-            onChange={(e) => {
-              setContainerFilter(validateContainerFilter(e.target.value));
-            }}
-          >
-            {["All", ...Member.ItemContainer].map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </div>
+      {searchTutorialModal}
+
+      <div id="items-page-head">
+        {searchInputElement}
+        <button id="items-page-tutorial-button" className="men-button" onClick={openSearchTutorial}>
+          <CachedImage alt={"items tutorial"} src="/ui/1094-0.png" />
+          Tutorial
+        </button>
+      </div>
+      <div className="items-page-utility">
+        <select
+          className="rsborder-tiny rsbackground rsbackground-hover"
+          value={sortCategory}
+          onChange={(e) => {
+            const newCategory = e.target.value as ItemSortCategory;
+            setSortCategory(newCategory);
+          }}
+        >
+          {ItemSortCategory.map((category) => (
+            <option key={category} value={category}>
+              {`Sort: ${formatTitle(category)}`}
+            </option>
+          ))}
+        </select>
+        <select
+          className="rsborder-tiny rsbackground rsbackground-hover"
+          value={containerFilter}
+          onChange={(e) => {
+            setContainerFilter(validateContainerFilter(e.target.value));
+          }}
+        >
+          {["All", ...Member.ItemContainer].map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+        {memberFilterElement}
+      </div>
+      <div className="items-page-utility">
         <span className="rsborder-tiny rsbackground rsbackground-hover">
           <span>{filteredItems.length.toLocaleString()}</span>&nbsp;
           <span>items</span>

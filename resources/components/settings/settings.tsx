@@ -349,17 +349,16 @@ export const SettingsPage = (): ReactElement => {
         <legend>{formatTitle("Player panels")}</legend>
         {SidebarPosition.map((position) => {
           return (
-            <Fragment key={position}>
+            <div className="settings-page-radio-item" key={position}>
               <input
                 id={`panel-dock-${position}`}
                 value={position}
                 type="radio"
-                name="panel-dock-side"
                 readOnly
                 checked={sidebarPosition === position}
               />
               <label htmlFor={`panel-dock-${position}`}>{labels[position]}</label>
-            </Fragment>
+            </div>
           );
         })}
       </fieldset>
@@ -377,17 +376,12 @@ export const SettingsPage = (): ReactElement => {
         {SiteTheme.map((theme) => {
           const id = `style-${theme}`;
           return (
-            <Fragment key={theme}>
-              <input
-                id={id}
-                readOnly
-                value={theme}
-                type="radio"
-                name="appearance-style"
-                checked={siteTheme === theme}
-              />
-              <label htmlFor={id}>{labels[theme]}</label>
-            </Fragment>
+            <div className="settings-page-radio-item" key={theme}>
+              <input id={id} readOnly value={theme} type="radio" checked={siteTheme === theme} />
+              <label htmlFor={id} key={theme}>
+                {labels[theme]}
+              </label>
+            </div>
           );
         })}
       </fieldset>

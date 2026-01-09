@@ -1,6 +1,6 @@
 #items-page-head {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 6px 8px;
 }
 
@@ -15,17 +15,57 @@
   }
 }
 
-#items-page-utility {
+#items-page-tutorial-button {
+  display: flex;
+  gap: 8px;
+}
+
+#items-page-tutorial-button > img {
+  height: 16px;
+}
+
+.items-page-utility {
   gap: 4px;
   display: flex;
   flex-wrap: wrap;
 }
 
-#items-page-utility > * {
+.items-page-utility > span {
+  padding: 4px;
+}
+
+.items-page-member-filter-container {
   padding: 4px;
   display: flex;
-  place-content: center center;
-  flex-wrap: wrap;
+}
+
+.items-page-member-filter-container > span {
+  display: flex;
+}
+
+.items-page-member-filter-container > hr {
+  width: 0;
+  height: 100%;
+  border: none;
+  border-right: 1px solid var(--light-border);
+  margin: 0;
+  margin-inline: 4px;
+}
+
+.items-page-member-filter-container input:focus-visible {
+  outline: none;
+}
+
+.items-page-member-filter-container > span:focus-within {
+  outline: 2px solid rgb(200 200 200);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+.items-page-member-filter-container > span:hover {
+  outline: 2px solid rgb(255 255 255);
+  outline-offset: 1px;
+  border-radius: 2px;
 }
 
 .items-page-panel {
@@ -106,8 +146,8 @@
     opacity 0.2s ease;
   user-select: none;
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 0;
+  right: 0;
   z-index: 1;
   opacity: 0;
   pointer-events: none;
@@ -117,6 +157,7 @@
   color: rgb(255 215 0);
 }
 
+.items-page-panel-pin-button:focus-visible,
 .items-page-panel:hover .items-page-panel-pin-button,
 .items-page-panel-pin-button.pinned {
   opacity: 1;
@@ -135,10 +176,61 @@
 #items-page-search {
   display: flex;
   position: relative;
-  width: 100%;
-  max-width: 300px;
+  margin: 4px;
+  border: 1px solid var(--light-border);
+  border-radius: 4px;
 }
 
 #items-page-no-items {
   padding: 16px 16px 0;
+}
+
+.items-page-tutorial-window {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin: 20px;
+  max-width: 600px;
+  max-height: 90svh;
+  cursor: auto;
+  box-sizing: border-box;
+}
+
+.items-page-tutorial-tags {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 8px;
+  margin: 8px;
+  gap: 4px 12px;
+}
+
+.items-page-tutorial-window-body {
+  overflow-y: auto;
+}
+
+.items-page-tutorial-inline-search {
+  color: var(--orange);
+}
+
+.items-page-tutorial-inline-item-name {
+  color: var(--yellow);
+}
+
+.items-page-tutorial-window-header {
+  position: relative;
+  display: flex;
+  height: 24px;
+}
+
+.items-page-tutorial-window-header > button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 21px;
+  height: 21px;
+}
+
+.items-page-tutorial-window-header > button:focus-visible,
+.items-page-tutorial-window-header > button:hover {
+  outline: 1px solid var(--orange);
 }

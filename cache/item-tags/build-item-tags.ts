@@ -1,0 +1,108 @@
+import * as fs from "fs";
+import * as path from "path";
+import wikiTagCategories from "./wiki_tag_categories.json" with { type: "json" };
+
+const CONFIG = {
+  itemTagsPath: path.resolve(import.meta.dirname, "../../public/data/item_tags.json"),
+  itemDataPath: path.resolve(import.meta.dirname, "../../public/data/item_data.json"),
+  userAgent: `gim-hub.com (https://github.com/wouterrutgers/gim-hub.com) ${navigator.userAgent}`,
+};
+
+process.stdout.write("Building item tags...\n");
+
+const itemNamesByTag: Record<string, string[]> = {};
+
+let progress = 0;
+const total = wikiTagCategories.length;
+process.stdout.write(`Fetching categories from wiki: ${progress}/${total}\n`);
+
+for (const [ourNames, wikiNames] of wikiTagCategories) {
+  let names = new Set<string>();
+  for (const wikiName of wikiNames) {
+    process.stdout.clearLine(0);
+    process.stdout.cursorTo(0);
+    process.stdout.write(`>>>>${wikiName}`);
+
+    let cmcontinue = "";
+    do {
+      const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${wikiName}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
+      const response = await fetch(url, {
+        headers: {
+          "User-Agent": CONFIG.userAgent,
+        },
+      });
+      const data = (await response.json()) as {
+        continue?: { cmcontinue?: string };
+        query: { categorymembers: { title: string }[] };
+      };
+      const itemNames = data.query.categorymembers
+        .filter(({ title }) => title !== undefined)
+        .map(({ title }) => title.toLowerCase());
+
+      names = new Set([...names, ...itemNames]);
+      cmcontinue = data.continue?.cmcontinue ?? "";
+
+      // Be kind to the wiki
+      await new Promise((resolve) => setTimeout(resolve, 200));
+    } while (cmcontinue);
+  }
+
+  for (const ourName of ourNames) {
+    if (names.size > 0) {
+      itemNamesByTag[ourName.toLowerCase()] = Array.from(names);
+    }
+  }
+
+  progress++;
+  process.stdout.clearLine(0);
+  process.stdout.moveCursor(0, -1);
+  process.stdout.clearLine(0);
+  process.stdout.cursorTo(0);
+  process.stdout.write(`Fetching categories from wiki: ${progress}/${total}\n`);
+}
+
+process.stdout.cursorTo(0);
+process.stdout.clearLine(0);
+
+const tags = Array.from(Object.keys(itemNamesByTag)).sort(
+  (a, b) => itemNamesByTag[b].length - itemNamesByTag[a].length,
+);
+
+const bitIndexByTag: Record<string, bigint> = {};
+{
+  let bitIndexCount = 0n;
+  for (const tag of tags) {
+    bitIndexByTag[tag] = bitIndexCount;
+    bitIndexCount++;
+  }
+}
+
+const tagBitMaskByItemID: Record<number, bigint> = {};
+
+const itemDataJSON = JSON.parse(fs.readFileSync(CONFIG.itemDataPath, "utf8")) as Record<
+  string,
+  { name: string; highalch: number }
+>;
+for (const [itemID, item] of Object.entries(itemDataJSON)) {
+  let itemBitMask = 0n;
+  for (const tag of tags) {
+    const included = itemNamesByTag[tag].some((other) => other === item.name.toLowerCase());
+    if (included) {
+      itemBitMask += 1n << bitIndexByTag[tag];
+    }
+  }
+
+  if (itemBitMask !== 0n) {
+    tagBitMaskByItemID[Number.parseInt(itemID)] = itemBitMask;
+  }
+}
+
+const serialized = JSON.stringify(
+  { tags, items: tagBitMaskByItemID },
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  (_, value) => (typeof value === "bigint" ? value.toString() : value),
+  2,
+);
+
+fs.writeFileSync(CONFIG.itemTagsPath, serialized);
+process.stdout.write(`Wrote results to ${CONFIG.itemTagsPath}\n`);

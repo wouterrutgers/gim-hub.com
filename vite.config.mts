@@ -9,6 +9,8 @@ import laravel from "laravel-vite-plugin";
 const mapJsonPlugin = (): PluginOption => ({
   name: "mapTilesJson",
   buildStart(): void {
+    console.info("Building map json...");
+
     const mapImageFiles = fs
       .readdirSync("public/map")
       .filter((file) => file.endsWith(".webp"))
@@ -39,6 +41,7 @@ const mapJsonPlugin = (): PluginOption => ({
     };
 
     fs.writeFileSync("public/data/map.json", JSON.stringify(result, null, 2));
+    console.info("Built map json.");
   },
 });
 

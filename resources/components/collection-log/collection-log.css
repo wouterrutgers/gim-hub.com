@@ -30,7 +30,8 @@
   display: flex;
 }
 
-.collection-log-close:hover {
+.collection-log-close:hover,
+.collection-log-close:focus-visible {
   outline: solid var(--orange) 1px;
 }
 

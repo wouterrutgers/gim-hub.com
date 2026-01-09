@@ -4,7 +4,7 @@ import wikiTagCategories from "./wiki_tag_categories.json" with { type: "json" }
 
 const CONFIG = {
   itemTagsPath: path.resolve(import.meta.dirname, "../../public/data/item_tags.json"),
-  itemDataPath: path.resolve(import.meta.dirname, "../../public/data/item_data.json"),
+  itemDataPath: path.resolve(import.meta.dirname, "../../public/data/item_datav2.json"),
   userAgent: `gim-hub.com (https://github.com/wouterrutgers/gim-hub.com) ${navigator.userAgent}`,
 };
 

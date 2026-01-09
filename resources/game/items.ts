@@ -29,7 +29,7 @@ export const isRunePouch = (id: ItemID): boolean => {
   return id === RUNE_POUCH || id === DIVINE_RUNE_POUCH;
 };
 export const fetchItemDataJSON = (): Promise<ItemsDatabase> =>
-  fetch("/data/item_data.json")
+  fetch("/data/item_datav2.json")
     .then((response) => response.json())
     .then((data) => {
       return ItemsDataSchema.safeParseAsync(data);

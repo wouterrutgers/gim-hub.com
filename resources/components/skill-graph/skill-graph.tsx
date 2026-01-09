@@ -498,7 +498,7 @@ const SkillGraphDropdown = <TOption extends string>({
     <div className="skill-graph-dropdown rsborder-tiny rsbackground rsbackground-hover">
       <select
         value={current}
-        onChange={({ target }) => {
+        onChange={({ target }): void => {
           const selected = target.options[target.selectedIndex].value;
           if (!options.includes(selected as TOption)) return;
           setter(selected as TOption);

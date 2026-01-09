@@ -64,7 +64,7 @@ const ItemPanel = memo(
     } = useItemsBreakdownTooltip();
 
     const quantityBreakdown = [...quantities]
-      .filter(([name]) => memberFilter === "All" || name === memberFilter)
+      .filter(([name]): boolean => memberFilter === "All" || name === memberFilter)
       .map(([name, breakdown]) => {
         let quantity = 0;
 

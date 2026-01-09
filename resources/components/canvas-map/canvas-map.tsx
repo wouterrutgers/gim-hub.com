@@ -175,7 +175,7 @@ export const CanvasMap = ({ interactive }: { interactive: boolean }): ReactEleme
       <select
         className="canvas-map-plane-select"
         onChange={(e) => {
-          const plane = parseInt(e.target.options[e.target.selectedIndex].value);
+          const plane = parseInt(e.target.options[e.target.selectedIndex].value, 10);
           if (visiblePlane === plane) return;
           handleSelectPlane(plane);
         }}

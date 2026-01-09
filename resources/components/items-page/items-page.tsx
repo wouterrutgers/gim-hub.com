@@ -484,7 +484,7 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
         </button>
       </div>
       <div className="items-page-tutorial-window-body">
-        <h2>Searching for Items</h2>
+        <h2>{formatTitle("Searching for items")}</h2>
         <p>Type in the 'Search' box to search item names, and display only the items that match.</p>
         <p>
           {`The match is not exact, unless the phrase is surrounded by double quotes. For example, searching `}
@@ -514,7 +514,7 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
             <span>{tag}</span>
           ))}
         </div>
-        <h2>Item Breakdown</h2>
+        <h2>{formatTitle("Item breakdown")}</h2>
         <ItemPanel
           containerFilter="All"
           gePricePer={200}

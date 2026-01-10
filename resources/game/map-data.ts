@@ -33,9 +33,3 @@ export const MapMetadataSchema = z.object({
   labels: MapLabelsMetadata,
   tiles: MapTilesMetadata,
 });
-export const fetchMapJSON = (): Promise<MapMetadata> =>
-  fetch("/data/map.json")
-    .then((response) => response.json())
-    .then((data) => {
-      return MapMetadataSchema.parseAsync(data);
-    });

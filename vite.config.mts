@@ -23,8 +23,8 @@ const mapJsonPlugin = (): PluginOption => ({
     }
 
     const map = MapMetadataSchema.safeParse({
-      icons: JSON.parse(fs.readFileSync("public/data/map_icons.json", "utf8")) as unknown,
-      labels: JSON.parse(fs.readFileSync("public/data/map_labels.json", "utf8")) as unknown,
+      icons: JSON.parse(fs.readFileSync("resources/assets/data/map_icons.json", "utf8")) as unknown,
+      labels: JSON.parse(fs.readFileSync("resources/assets/data/map_labels.json", "utf8")) as unknown,
       tiles: tiles,
     });
 
@@ -40,7 +40,7 @@ const mapJsonPlugin = (): PluginOption => ({
       labels: map.data.labels,
     };
 
-    fs.writeFileSync("public/data/map.json", JSON.stringify(result, null, 2));
+    fs.writeFileSync("resources/assets/data/map.json", JSON.stringify(result, null, 2));
     console.info("Built map json.");
   },
 });
@@ -161,11 +161,49 @@ const imageChunksPlugin = (): PluginOption => ({
   },
 });
 
+const versionedJSONPlugin = (): PluginOption => {
+  const manifest: Partial<Record<string, string>> = {};
+  const SKIP_LIST = ["map_icons.json", "map_labels.json"];
+
+  return {
+    name: "versionedJson",
+    buildStart(): void {
+      for (const inPath of fs.globSync("resources/assets/data/**/*.json")) {
+        const { dir, name } = path.parse(path.relative("resources/assets/data", inPath));
+        if (SKIP_LIST.includes(`${name}.json`)) {
+          continue;
+        }
+
+        const fileBuffer = fs.readFileSync(inPath);
+        const hash = crypto.createHash("sha256").update(fileBuffer).digest("hex").substring(0, 6);
+        const outPath = path.resolve("public/data", dir, `${name}-${hash}.json`);
+
+        const unresolvedPath = path.relative("resources/assets", inPath).replace("\\", "/");
+        const resolvedPath = path.relative("public", outPath).replace("\\", "/");
+        manifest["/" + unresolvedPath] = "/" + resolvedPath;
+
+        fs.cpSync(inPath, outPath);
+      }
+    },
+    resolveId(source): string | null {
+      if (!source.startsWith("@manifests/data")) return null;
+
+      return source;
+    },
+    load(id): string | null {
+      if (!id.startsWith("@manifests/data")) return null;
+
+      return `export default ${JSON.stringify(manifest, null, 2)};`;
+    },
+  };
+};
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     mapJsonPlugin(),
     imageChunksPlugin(),
+    versionedJSONPlugin(),
     react(),
     laravel({
       input: ["resources/views/index.tsx"],

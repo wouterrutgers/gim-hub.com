@@ -1,4 +1,5 @@
-import { fetchMapJSON, type MapMetadata } from "../../game/map-data";
+import { MapMetadataSchema, type MapMetadata } from "../../game/map-data";
+import { fetchVersionedJSON } from "../../ts/fetch-data";
 import type { Distinct } from "../../ts/util";
 import type { Context2DScaledWrapper } from "./canvas-wrapper";
 import {
@@ -244,6 +245,11 @@ function* makeInsideOutRegionIterator(
     xCurrentPair = xGenerator.next();
   }
 }
+
+const fetchMapJSON = (): Promise<MapMetadata> =>
+  fetchVersionedJSON("/data/map.json").then((data) => {
+    return MapMetadataSchema.parseAsync(data);
+  });
 
 export class CanvasMapRenderer {
   private regions: RegionGrid;

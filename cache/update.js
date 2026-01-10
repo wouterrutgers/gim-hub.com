@@ -37,9 +37,9 @@ const SITE_PATHS = (() => {
 
   return {
     FILES: {
-      itemData: path.resolve(public, "data/item_datav2.json"),
-      mapIconMeta: path.resolve(public, "data/map_icons.json"),
-      mapLabelMeta: path.resolve(public, "data/map_labels.json"),
+      itemData: path.resolve(resources, "assets/data/item_data.json"),
+      mapIconMeta: path.resolve(resources, "assets/data/map_icons.json"),
+      mapLabelMeta: path.resolve(resources, "assets/data/map_labels.json"),
       mapIconAtlas: path.resolve(public, "map/icons/map_icons.webp"),
       questMapping: path.resolve(resources, "js/quests/mapping.json"),
     },
@@ -106,7 +106,8 @@ function execRuneliteGradleApplication(args) {
 
   fs.writeFileSync(buildScriptPath, lines.join("\n"));
 
-  exec(`./gradlew -b ${buildScriptPath} -q run --args="${runArgs}"`, {
+  const gradlew = "./gradlew".replace("/", path.sep);
+  exec(`${gradlew} -b ${buildScriptPath} -q run --args="${runArgs}"`, {
     cwd: RUNELITE_PATHS.DIRS.root,
     env: {
       ...process.env,
@@ -267,7 +268,7 @@ async function buildItemDataJson() {
     }
   }
   console.log(`${itemsMadeNonAlchable} items were updated to be unalchable`);
-  fs.writeFileSync("./item_datav2.json", JSON.stringify(includedItems, null, 2));
+  fs.writeFileSync("./item_data.json", JSON.stringify(includedItems, null, 2));
 
   return allIncludedItemIds;
 }
@@ -538,7 +539,7 @@ async function moveFiles(globSource, destination) {
 
 async function moveResults() {
   console.log("\nStep: Moving results to site");
-  await retry(() => fs.copyFileSync("./item_datav2.json", SITE_PATHS.FILES.itemData), true);
+  await retry(() => fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData), true);
 
   // Clean up destination folders before moving new files
   console.log("Removing old destination folders...");

@@ -1,6 +1,7 @@
 import * as z from "zod/v4";
 import { Skill } from "./skill";
 import type { QuestID } from "./quests";
+import { fetchVersionedJSON } from "../ts/fetch-data";
 
 export const DiaryTier = ["Easy", "Medium", "Hard", "Elite"] as const;
 export type DiaryTier = (typeof DiaryTier)[number];
@@ -24,8 +25,7 @@ export type DiaryRegion = (typeof DiaryRegion)[number];
 export type DiaryDatabase = z.infer<typeof DiaryDatabaseSchema>;
 
 export const fetchDiaryDataJSON = (): Promise<DiaryDatabase> =>
-  fetch("/data/diary_data.json")
-    .then((response) => response.json())
+  fetchVersionedJSON("/data/diary_data.json")
     .then((data) => {
       return DiaryDatabaseSchema.safeParseAsync(data);
     })

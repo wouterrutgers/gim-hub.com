@@ -1,5 +1,6 @@
 import * as z from "zod/v4";
 import type { Distinct } from "../ts/util";
+import { fetchVersionedJSON } from "../ts/fetch-data";
 
 const QuestDifficulty = ["Novice", "Intermediate", "Experienced", "Master", "Grandmaster", "Special"] as const;
 export type QuestDifficulty = (typeof QuestDifficulty)[number];
@@ -11,8 +12,7 @@ const QuestStatus = ["IN_PROGRESS", "NOT_STARTED", "FINISHED"] as const;
 export type QuestStatus = (typeof QuestStatus)[number];
 
 export const fetchQuestDataJSON = (): Promise<QuestDatabase> =>
-  fetch("/data/quest_data.json")
-    .then((response) => response.json())
+  fetchVersionedJSON("/data/quest_data.json")
     .then((data) => {
       return QuestDatabaseSchema.safeParseAsync(data);
     })

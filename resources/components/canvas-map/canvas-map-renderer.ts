@@ -725,7 +725,7 @@ export class CanvasMapRenderer {
         image.onerror = (): void => {
           this.outboundImageFetchesCount -= 1;
         };
-        void this.getImageUrl(`/map/${regionFileBaseName}.webp`).then((url) => {
+        void this.getImageUrl(`/map-tiles/${regionFileBaseName}.webp`).then((url) => {
           if (url) {
             image.src = url;
 

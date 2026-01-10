@@ -13,41 +13,85 @@ const imageChunksHardVersionedPlugin = (): PluginOption => ({
       return crypto.createHash("sha256").update(fileBuffer).digest("hex").substring(0, 6);
     };
 
-    const allItemIcons = fs.globSync("resources/assets/item-icons/*.webp");
+    {
+      const allItemIcons = fs.globSync("resources/assets/item-icons/*.webp");
 
-    const iconChunks: Record<string, Record<string, string>> = {};
-    const iconNameRegex = /^[0-9]*$/;
+      const iconChunks: Record<string, Record<string, string>> = {};
+      const iconNameRegex = /^[0-9]*$/;
 
-    fs.rmSync("public/item-icons", { recursive: true, force: true });
-    for (const inPath of allItemIcons) {
-      const { name } = path.parse(inPath);
-      if (!iconNameRegex.test(name)) {
-        console.warn(`Invalid item icon file at '${inPath}'`);
+      fs.rmSync("public/item-icons", { recursive: true, force: true });
+      for (const inPath of allItemIcons) {
+        const { name } = path.parse(inPath);
+        if (!iconNameRegex.test(name)) {
+          console.warn(`Invalid item icon file at '${inPath}'`);
+        }
+
+        const itemId = parseInt(name);
+        const chunkIndex = Math.floor(itemId / 1000);
+        const chunkKey = `icons-${chunkIndex}`;
+        iconChunks[chunkKey] ??= {};
+        const chunk = iconChunks[chunkKey];
+        const hash = generateHash(inPath);
+
+        const unresolvedPath = path.join("item-icons", `${name}.webp`).replace("\\", "/");
+        const resolvedPath = path.join("item-icons", `${name}-${hash}.webp`).replace("\\", "/");
+
+        chunk["/" + unresolvedPath] = "/" + resolvedPath;
+
+        fs.cpSync(inPath, path.join("public", resolvedPath));
       }
 
-      const itemId = parseInt(name);
-      const chunkIndex = Math.floor(itemId / 1000);
-      const chunkKey = `icons-${chunkIndex}`;
-      iconChunks[chunkKey] ??= {};
-      const chunk = iconChunks[chunkKey];
-      const hash = generateHash(inPath);
+      const iconChunkDir = "resources/assets/item-icons-chunks";
+      fs.rmSync(iconChunkDir, { recursive: true, force: true });
+      fs.mkdirSync(iconChunkDir);
 
-      const unresolvedPath = path.join("item-icons", `${name}.webp`).replace("\\", "/");
-      const resolvedPath = path.join("item-icons", `${name}-${hash}.webp`).replace("\\", "/");
-
-      chunk["/" + unresolvedPath] = "/" + resolvedPath;
-
-      fs.cpSync(inPath, path.join("public", resolvedPath));
+      for (const [chunkName, chunkData] of Object.entries(iconChunks)) {
+        if (Object.keys(chunkData).length > 0) {
+          const chunkPath = path.join(iconChunkDir, `${chunkName}.json`);
+          fs.writeFileSync(chunkPath, JSON.stringify(chunkData, Object.keys(chunkData).sort()));
+        }
+      }
     }
 
-    const iconChunkDir = "resources/assets/item-icons-chunks";
-    fs.rmSync(iconChunkDir, { recursive: true, force: true });
-    fs.mkdirSync(iconChunkDir);
+    {
+      const allMapTiles = fs.globSync("resources/assets/map-tiles/*.webp");
 
-    for (const [chunkName, chunkData] of Object.entries(iconChunks)) {
-      if (Object.keys(chunkData).length > 0) {
-        const chunkPath = path.join(iconChunkDir, `${chunkName}.json`);
-        fs.writeFileSync(chunkPath, JSON.stringify(chunkData, Object.keys(chunkData).sort()));
+      const tileChunks: Record<string, Record<string, string>> = {};
+      const tileNameRegex = /^(\d+)_(\d+)_(\d+)$/;
+
+      fs.rmSync("public/map-tiles", { recursive: true, force: true });
+      for (const inPath of allMapTiles) {
+        const { name } = path.parse(inPath);
+        const match = tileNameRegex.exec(name);
+        if (!match) {
+          console.warn(`Invalid map tile file at '${inPath}'`);
+          continue;
+        }
+        const [, z, x, y] = match.map(Number);
+        const regionX = Math.floor(x / 20);
+        const regionY = Math.floor(y / 20);
+        const chunkKey = `map-${z}-${regionX}-${regionY}`;
+        tileChunks[chunkKey] ??= {};
+        const chunk = tileChunks[chunkKey];
+        const hash = generateHash(inPath);
+
+        const unresolvedPath = path.join("map-tiles", `${name}.webp`).replace("\\", "/");
+        const resolvedPath = path.join("map-tiles", `${name}-${hash}.webp`).replace("\\", "/");
+
+        chunk["/" + unresolvedPath] = "/" + resolvedPath;
+
+        fs.cpSync(inPath, path.join("public", resolvedPath));
+      }
+
+      const tileChunkDir = "resources/assets/map-tiles-chunks";
+      fs.rmSync(tileChunkDir, { recursive: true, force: true });
+      fs.mkdirSync(tileChunkDir);
+
+      for (const [chunkName, chunkData] of Object.entries(tileChunks)) {
+        if (Object.keys(chunkData).length > 0) {
+          const chunkPath = path.join(tileChunkDir, `${chunkName}.json`);
+          fs.writeFileSync(chunkPath, JSON.stringify(chunkData, Object.keys(chunkData).sort()));
+        }
       }
     }
   },
@@ -246,6 +290,11 @@ export default defineConfig({
         inputResourcesDir: "assets/item-icons-chunks",
         outputPublicDir: "item-icons-chunks",
         manifestKey: "item-icons-chunks",
+      },
+      {
+        inputResourcesDir: "assets/map-tiles-chunks",
+        outputPublicDir: "map-tiles-chunks",
+        manifestKey: "map-tiles-chunks",
       },
     ]),
     react(),

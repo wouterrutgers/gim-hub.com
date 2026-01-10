@@ -1,9 +1,11 @@
 import { useState, useCallback } from "react";
 import itemIconsChunksRaw from "@manifests/item-icons-chunks";
+import mapTilesChunksRaw from "@manifests/map-tiles-chunks";
 import * as z from "zod/v4";
 
 const ManifestSchema = z.record(z.string(), z.string());
 const itemIconsChunks = ManifestSchema.parse(itemIconsChunksRaw);
+const mapTilesChunks = ManifestSchema.parse(mapTilesChunksRaw);
 
 type ImageChunk = Record<string, string>;
 
@@ -33,12 +35,26 @@ export const useImageChunks = (): {
         const unresolvedPath = `/item-icons-chunks/icons-${chunkIndex}.json`;
         const resolvedPath = itemIconsChunks[unresolvedPath];
 
-        //console.log({ itemIconsChunks, unresolvedPath, resolvedPath });
-
         return resolvedPath;
       }
 
       return "icons-misc";
+    }
+
+    if (imagePath.startsWith("/map-tiles/")) {
+      const match = /\/map-tiles\/(\d+)_(\d+)_(\d+)\.webp/.exec(imagePath);
+      if (match?.length && match?.length === 4) {
+        const [, z, x, y] = match.map(Number);
+        const regionX = Math.floor(x / 20);
+        const regionY = Math.floor(y / 20);
+
+        const unresolvedPath = `/map-tiles-chunks/map-${z}-${regionX}-${regionY}.json`;
+        const resolvedPath = mapTilesChunks[unresolvedPath];
+
+        return resolvedPath;
+      }
+
+      return "map-misc";
     }
 
     if (imagePath.startsWith("/ui/")) {
@@ -78,7 +94,7 @@ export const useImageChunks = (): {
 
     try {
       const fetchURL = ((): string => {
-        if (chunkKey.startsWith("/item-icons-chunks/")) {
+        if (chunkKey.startsWith("/item-icons-chunks/") || chunkKey.startsWith("/map-tiles-chunks/")) {
           return chunkKey;
         }
         return `/image-chunks/${chunkKey}.json`;
@@ -106,7 +122,7 @@ export const useImageChunks = (): {
       const chunk = await loadChunk(chunkKey);
       const hash = chunk[path];
 
-      if (hash.startsWith("/item-icons/")) {
+      if (hash.startsWith("/item-icons/") || hash.startsWith("/map-tiles/")) {
         return hash;
       }
 

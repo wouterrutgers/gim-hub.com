@@ -5,6 +5,54 @@ import crypto from "crypto";
 import react from "@vitejs/plugin-react";
 import laravel from "laravel-vite-plugin";
 
+const imageChunksHardVersionedPlugin = (): PluginOption => ({
+  name: "imageChunksHardVersioned",
+  buildStart(): void {
+    const generateHash = (filePath: string): string => {
+      const fileBuffer = fs.readFileSync(filePath);
+      return crypto.createHash("sha256").update(fileBuffer).digest("hex").substring(0, 6);
+    };
+
+    const allItemIcons = fs.globSync("resources/assets/item-icons/*.webp");
+
+    const iconChunks: Record<string, Record<string, string>> = {};
+    const iconNameRegex = /^[0-9]*$/;
+
+    fs.rmSync("public/item-icons", { recursive: true, force: true });
+    for (const inPath of allItemIcons) {
+      const { name } = path.parse(inPath);
+      if (!iconNameRegex.test(name)) {
+        console.warn(`Invalid item icon file at '${inPath}'`);
+      }
+
+      const itemId = parseInt(name);
+      const chunkIndex = Math.floor(itemId / 1000);
+      const chunkKey = `icons-${chunkIndex}`;
+      iconChunks[chunkKey] ??= {};
+      const chunk = iconChunks[chunkKey];
+      const hash = generateHash(inPath);
+
+      const unresolvedPath = path.join("item-icons", `${name}.webp`).replace("\\", "/");
+      const resolvedPath = path.join("item-icons", `${name}-${hash}.webp`).replace("\\", "/");
+
+      chunk["/" + unresolvedPath] = "/" + resolvedPath;
+
+      fs.cpSync(inPath, path.join("public", resolvedPath));
+    }
+
+    const iconChunkDir = "resources/assets/item-icons-chunks";
+    fs.rmSync(iconChunkDir, { recursive: true, force: true });
+    fs.mkdirSync(iconChunkDir);
+
+    for (const [chunkName, chunkData] of Object.entries(iconChunks)) {
+      if (Object.keys(chunkData).length > 0) {
+        const chunkPath = path.join(iconChunkDir, `${chunkName}.json`);
+        fs.writeFileSync(chunkPath, JSON.stringify(chunkData, Object.keys(chunkData).sort()));
+      }
+    }
+  },
+});
+
 const imageChunksPlugin = (): PluginOption => ({
   name: "imageChunks",
   buildStart(): void {
@@ -121,35 +169,68 @@ const imageChunksPlugin = (): PluginOption => ({
   },
 });
 
-const versionedJSONPlugin = (): PluginOption => {
-  const manifest: Partial<Record<string, string>> = {};
+const versionedAssetsPlugin = (
+  configs: { inputResourcesDir: string; outputPublicDir: string; manifestKey: string }[],
+): PluginOption => {
+  const manifestByKey: Partial<Record<string, Partial<Record<string, string>>>> = {};
 
   return {
-    name: "versionedJson",
+    name: "versionedAssets",
     buildStart(): void {
-      for (const inPath of fs.globSync("resources/assets/data/**/*.json")) {
-        const { dir, name } = path.parse(path.relative("resources/assets/data", inPath));
+      const keyRegex = /^[a-z][a-z0-9-]*$/;
 
-        const fileBuffer = fs.readFileSync(inPath);
-        const hash = crypto.createHash("sha256").update(fileBuffer).digest("hex").substring(0, 6);
-        const outPath = path.resolve("public/data", dir, `${name}-${hash}.json`);
+      for (const { inputResourcesDir, outputPublicDir, manifestKey } of configs) {
+        if (!keyRegex.test(manifestKey)) {
+          console.error(`Invalid manifest key ${manifestKey}.`);
+          continue;
+        }
 
-        const unresolvedPath = path.relative("resources/assets", inPath).replace("\\", "/");
-        const resolvedPath = path.relative("public", outPath).replace("\\", "/");
-        manifest["/" + unresolvedPath] = "/" + resolvedPath;
+        fs.rmSync(path.join("public", outputPublicDir), { recursive: true, force: true });
 
-        fs.cpSync(inPath, outPath);
+        const manifest: Partial<Record<string, string>> = {};
+        manifestByKey[manifestKey] = manifest;
+
+        const glob = path.join("resources", inputResourcesDir, "**/*.json");
+        for (const inPath of fs.globSync(glob)) {
+          const { dir, name } = path.parse(path.relative("resources/assets/data", inPath));
+
+          const fileBuffer = fs.readFileSync(inPath);
+          const hash = crypto.createHash("sha256").update(fileBuffer).digest("hex").substring(0, 6);
+          const outPath = path.join("public", outputPublicDir, dir, `${name}-${hash}.json`);
+
+          const unresolvedPath = path.relative("resources/assets", inPath).replace("\\", "/");
+          const resolvedPath = path.relative("public", outPath).replace("\\", "/");
+          manifest["/" + unresolvedPath] = "/" + resolvedPath;
+
+          fs.cpSync(inPath, outPath);
+        }
       }
     },
     resolveId(source): string | null {
-      if (!source.startsWith("@manifests/data")) return null;
+      if (!source.startsWith("@manifests/")) return null;
 
       return source;
     },
     load(id): string | null {
-      if (!id.startsWith("@manifests/data")) return null;
+      if (!id.startsWith("@manifests/")) return null;
 
-      return `export default ${JSON.stringify(manifest, null, 2)};`;
+      const idRegex = /^@manifests\/(?<key>[a-z][a-z0-9-]*)$/;
+
+      const key = idRegex.exec(id)?.groups?.key;
+      if (!key) {
+        console.error(`Invalid name ${id} for imported manifest, skipping it.`);
+        return null;
+      }
+
+      const manifest = manifestByKey[key];
+      if (!manifest) {
+        console.error(`No manifest pre-generated for ${id}, skipping it.`);
+        return null;
+      }
+
+      const module = `export default ${JSON.stringify(manifest, null, 2)};`;
+
+      return module;
     },
   };
 };
@@ -158,7 +239,15 @@ const versionedJSONPlugin = (): PluginOption => {
 export default defineConfig({
   plugins: [
     imageChunksPlugin(),
-    versionedJSONPlugin(),
+    imageChunksHardVersionedPlugin(),
+    versionedAssetsPlugin([
+      { inputResourcesDir: "assets/data", outputPublicDir: "data", manifestKey: "data" },
+      {
+        inputResourcesDir: "assets/item-icons-chunks",
+        outputPublicDir: "item-icons-chunks",
+        manifestKey: "item-icons-chunks",
+      },
+    ]),
     react(),
     laravel({
       input: ["resources/views/index.tsx"],

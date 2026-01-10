@@ -101,7 +101,7 @@ export const PlayerPanel = ({ member }: { member?: Member.Name }): ReactElement 
         category: "Collection log",
         ariaLabel: "collection-log",
         alt: "osrs collection log",
-        src: "/icons/items/22711.webp",
+        src: "/item-icons/22711.webp",
         width: 32,
         height: 32,
         class: "player-panel-collection-log",

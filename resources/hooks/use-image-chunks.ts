@@ -1,4 +1,9 @@
 import { useState, useCallback } from "react";
+import itemIconsChunksRaw from "@manifests/item-icons-chunks";
+import * as z from "zod/v4";
+
+const ManifestSchema = z.record(z.string(), z.string());
+const itemIconsChunks = ManifestSchema.parse(itemIconsChunksRaw);
 
 type ImageChunk = Record<string, string>;
 
@@ -16,12 +21,21 @@ export const useImageChunks = (): {
 
   const getChunkKey = useCallback((imagePath: string): string => {
     if (imagePath.startsWith("/icons/")) {
-      const match = /\/icons\/items\/(\d+)\.webp/.exec(imagePath);
-      if (match) {
-        const itemId = parseInt(match[1], 10);
+      return "icons-misc";
+    }
+
+    if (imagePath.startsWith("/item-icons/")) {
+      const match = /\/item-icons\/(?<itemID>[0-9]+)\.webp/.exec(imagePath);
+      if (match?.groups?.itemID) {
+        const itemId = Number.parseInt(match?.groups?.itemID);
         const chunkIndex = Math.floor(itemId / 1000);
 
-        return `icons-${chunkIndex}`;
+        const unresolvedPath = `/item-icons-chunks/icons-${chunkIndex}.json`;
+        const resolvedPath = itemIconsChunks[unresolvedPath];
+
+        //console.log({ itemIconsChunks, unresolvedPath, resolvedPath });
+
+        return resolvedPath;
       }
 
       return "icons-misc";
@@ -63,7 +77,13 @@ export const useImageChunks = (): {
     loadingChunks.add(chunkKey);
 
     try {
-      const response = await fetch(`/image-chunks/${chunkKey}.json`);
+      const fetchURL = ((): string => {
+        if (chunkKey.startsWith("/item-icons-chunks/")) {
+          return chunkKey;
+        }
+        return `/image-chunks/${chunkKey}.json`;
+      })();
+      const response = await fetch(fetchURL);
 
       if (!response.ok) {
         throw new Error(`Failed to load image chunk: ${chunkKey}`);
@@ -85,6 +105,10 @@ export const useImageChunks = (): {
       const chunkKey = getChunkKey(path);
       const chunk = await loadChunk(chunkKey);
       const hash = chunk[path];
+
+      if (hash.startsWith("/item-icons/")) {
+        return hash;
+      }
 
       if (!hash) {
         return "";

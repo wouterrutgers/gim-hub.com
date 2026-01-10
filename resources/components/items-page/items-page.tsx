@@ -545,7 +545,7 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
           gePricePer={200}
           highAlchPer={100}
           alchable={true}
-          imageURL="/icons/items/4323.webp"
+          imageURL="/item-icons/4323.webp"
           isPinned={pinned}
           itemID={4323 as ItemID}
           itemName="Team-5 cape"

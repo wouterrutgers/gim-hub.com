@@ -22,7 +22,7 @@ export const composeItemIconHref = ({ itemID, quantity }: ItemStack, itemDatum?:
     }
   }
 
-  return `/icons/items/${id}.webp`;
+  return `/item-icons/${id}.webp`;
 };
 export const isRunePouch = (id: ItemID): boolean => {
   const RUNE_POUCH = 12791;

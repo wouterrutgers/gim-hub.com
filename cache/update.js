@@ -38,8 +38,7 @@ const SITE_PATHS = (() => {
   return {
     FILES: {
       itemData: path.resolve(resources, "assets/data/item_data.json"),
-      mapIconMeta: path.resolve(resources, "assets/data/map_icons.json"),
-      mapLabelMeta: path.resolve(resources, "assets/data/map_labels.json"),
+      mapMetadata: path.resolve(resources, "assets/data/map.json"),
       mapIconAtlas: path.resolve(public, "map/icons/map_icons.webp"),
       questMapping: path.resolve(resources, "js/quests/mapping.json"),
     },
@@ -557,6 +556,13 @@ async function moveResults() {
   await moveFiles("./map-data/tiles/*.webp", SITE_PATHS.DIRS.mapImages);
   await moveFiles("./map-data/labels/*.webp", SITE_PATHS.DIRS.mapLabels);
 
+  fs.copyFileSync("./map-data/map.json", SITE_PATHS.FILES.mapMetadata);
+  fs.copyFileSync("./map-data/map_icons.webp", SITE_PATHS.FILES.mapIconAtlas);
+}
+
+async function buildMapJsonAndIconAtlas() {
+  console.info("Step: Building map json and icon atlas...");
+
   // Create a tile sheet of the map icons
   const mapIcons = glob.sync(path.resolve("./map-data/icons/*.png").replace(/\\/g, "/"));
   if (mapIcons.length === 0) {
@@ -586,7 +592,7 @@ async function moveResults() {
   })
     .composite(mapIconsCompositeOpts)
     .webp({ lossless: true, effort: 6 })
-    .toFile(SITE_PATHS.FILES.mapIconAtlas);
+    .toFile("./map-data/map_icons.webp");
 
   // Convert the output of the map-icons locations to be keyed by the X an Y of the regions
   // that they are in. This is done so that the canvas map component can quickly lookup
@@ -615,8 +621,6 @@ async function moveResults() {
     }
   }
 
-  fs.writeFileSync(SITE_PATHS.FILES.mapIconMeta, JSON.stringify(locationByRegion, null, 2));
-
   // Do the same for map labels
   const mapLabelsMeta = JSON.parse(fs.readFileSync("./map-data/labels/map-labels.json", "utf8"));
   const labelByRegion = {};
@@ -637,7 +641,24 @@ async function moveResults() {
     labelByRegion[regionX][regionY][z].push(x, y, i);
   }
 
-  fs.writeFileSync(SITE_PATHS.FILES.mapLabelMeta, JSON.stringify(labelByRegion, null, 2));
+  const mapImageFiles = fs
+    .readdirSync("map-data/tiles")
+    .filter((file) => file.endsWith(".webp"))
+    .map((file) => path.basename(file, ".webp"));
+
+  const tiles = [[], [], [], []];
+  for (const mapImageFile of mapImageFiles) {
+    const [plane, x, y] = mapImageFile.split("_").map((x) => parseInt(x, 10));
+    tiles[plane].push(((x + y) * (x + y + 1)) / 2 + y);
+  }
+
+  const map = {
+    tiles: tiles,
+    icons: locationByRegion,
+    labels: labelByRegion,
+  };
+
+  fs.writeFileSync("./map-data/map.json", JSON.stringify(map, null, 2));
 }
 
 async function dumpQuestMapping() {
@@ -668,6 +689,7 @@ async function dumpQuestMapping() {
   await generateMapTiles();
   await dumpMapLabels();
   await dumpCollectionLog();
+  await buildMapJsonAndIconAtlas();
   await moveResults();
 
   await dumpQuestMapping();

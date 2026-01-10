@@ -3,47 +3,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import react from "@vitejs/plugin-react";
-import { MapMetadataSchema } from "./resources/game/map-data";
 import laravel from "laravel-vite-plugin";
-
-const mapJsonPlugin = (): PluginOption => ({
-  name: "mapTilesJson",
-  buildStart(): void {
-    console.info("Building map json...");
-
-    const mapImageFiles = fs
-      .readdirSync("public/map")
-      .filter((file) => file.endsWith(".webp"))
-      .map((file) => path.basename(file, ".webp"));
-
-    const tiles: number[][] = [[], [], [], []];
-    for (const mapImageFile of mapImageFiles) {
-      const [plane, x, y] = mapImageFile.split("_").map((x) => parseInt(x, 10));
-      tiles[plane].push(((x + y) * (x + y + 1)) / 2 + y);
-    }
-
-    const map = MapMetadataSchema.safeParse({
-      icons: JSON.parse(fs.readFileSync("resources/assets/data/map_icons.json", "utf8")) as unknown,
-      labels: JSON.parse(fs.readFileSync("resources/assets/data/map_labels.json", "utf8")) as unknown,
-      tiles: tiles,
-    });
-
-    if (!map.success) {
-      console.error("Failed to generate 'maps.json'.");
-      console.error(map.error);
-      return;
-    }
-
-    const result = {
-      tiles: map.data.tiles,
-      icons: map.data.icons,
-      labels: map.data.labels,
-    };
-
-    fs.writeFileSync("resources/assets/data/map.json", JSON.stringify(result, null, 2));
-    console.info("Built map json.");
-  },
-});
 
 const imageChunksPlugin = (): PluginOption => ({
   name: "imageChunks",
@@ -163,16 +123,12 @@ const imageChunksPlugin = (): PluginOption => ({
 
 const versionedJSONPlugin = (): PluginOption => {
   const manifest: Partial<Record<string, string>> = {};
-  const SKIP_LIST = ["map_icons.json", "map_labels.json"];
 
   return {
     name: "versionedJson",
     buildStart(): void {
       for (const inPath of fs.globSync("resources/assets/data/**/*.json")) {
         const { dir, name } = path.parse(path.relative("resources/assets/data", inPath));
-        if (SKIP_LIST.includes(`${name}.json`)) {
-          continue;
-        }
 
         const fileBuffer = fs.readFileSync(inPath);
         const hash = crypto.createHash("sha256").update(fileBuffer).digest("hex").substring(0, 6);
@@ -201,7 +157,6 @@ const versionedJSONPlugin = (): PluginOption => {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    mapJsonPlugin(),
     imageChunksPlugin(),
     versionedJSONPlugin(),
     react(),

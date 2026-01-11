@@ -15,7 +15,7 @@ class Member extends Model
     public const PROPERTY_KEYS = [
         'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
         'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room',
-        'plank_sack', 'master_scroll_book', 'quiver', 'diary_vars', 'interacting',
+        'plank_sack', 'master_scroll_book', 'essence_pouches', 'quiver', 'diary_vars', 'interacting',
     ];
 
     public function getProperty(string $key): ?MemberProperty

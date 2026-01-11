@@ -929,67 +929,19 @@ const GetGroupDataResponseSchema = z
      */
     last_updated: DateSchema.nullish().transform((value) => value ?? undefined),
 
-    /**
-     * The items in the player's bank.
-     * When defined, it always contains all of the items.
-     */
+    // When defined, these item containers contain every item and are NOT partial.
+
     bank: NullableItemCollection,
-
-    /**
-     * The items in the player's equipment.
-     * When defined, it always contains all of the items.
-     */
     equipment: z.nullish(EquipmentSchema).transform((value) => value ?? undefined),
-
-    /**
-     * The items in the player's quiver.
-     * When defined, it always contains all of the items (which is always 1 item in case of the quiver).
-     */
     quiver: z.nullish(QuiverSchema).transform((value) => value ?? undefined),
-
-    /**
-     * The items in the player's inventory.
-     * When defined, it always contains all of the items.
-     */
     inventory: z.nullish(InventorySchema).transform((value) => value ?? undefined),
-
-    /**
-     * The items in the player's rune pouch.
-     * When defined, it always contains all of the items.
-     */
     rune_pouch: NullableItemCollection,
-
-    /**
-     * The items in the player's farming guild seed vault.
-     * When defined, it always contains all of the items.
-     */
     seed_vault: NullableItemCollection,
-
-    /**
-     * The items in the player's potion storage.
-     * When defined, it always contains all of the items.
-     */
     potion_storage: NullableItemCollection,
-
-    /**
-     * The items in the player's PoH wardrobe.
-     * When defined, it always contains all of the items.
-     *
-     * Different furniture is required to store specific items, but they use the same inventory under the hood.
-     * */
     poh_costume_room: NullableItemCollection,
-
-    /**
-     * The items in the player's plank sack.
-     * When defined, it always contains all of the items.
-     */
     plank_sack: NullableItemCollection,
-
-    /**
-     * The items in the player's master scroll book.
-     * When defined
-     */
     master_scroll_book: NullableItemCollection,
+    essence_pouches: NullableItemCollection,
 
     /**
      * Information on NPC the player last interacted with.
@@ -1019,27 +971,41 @@ const GetGroupDataResponseSchema = z
   .transform(
     ({
       last_updated,
+      bank,
+      equipment,
+      quiver,
+      inventory,
       rune_pouch,
       seed_vault,
       potion_storage,
       poh_costume_room,
       plank_sack,
       master_scroll_book,
+      essence_pouches,
       diary_vars,
-      quiver,
       ...rest
-    }) => ({
-      lastUpdated: last_updated,
-      runePouch: rune_pouch,
-      seedVault: seed_vault,
-      potionStorage: potion_storage,
-      pohCostumeRoom: poh_costume_room,
-      plankSack: plank_sack,
-      masterScrollBook: master_scroll_book,
-      quiver,
-      diaries: diary_vars,
-      ...rest,
-    }),
+    }) => {
+      const itemContainers = {
+        bank: bank,
+        equipment: equipment,
+        quiver: quiver,
+        inventory: inventory,
+        runePouch: rune_pouch,
+        seedVault: seed_vault,
+        potionStorage: potion_storage,
+        pohCostumeRoom: poh_costume_room,
+        plankSack: plank_sack,
+        masterScrollBook: master_scroll_book,
+        essencePouches: essence_pouches,
+      } satisfies Record<Member.ItemContainerKey, unknown>;
+
+      return {
+        lastUpdated: last_updated,
+        diaries: diary_vars,
+        ...itemContainers,
+        ...rest,
+      };
+    },
   )
   .transform((memberState) => {
     for (const key of Object.keys(memberState)) {

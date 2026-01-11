@@ -21,6 +21,7 @@ export const AllItemContainers = [
   { name: "Costume Room", key: "pohCostumeRoom", getItems: mapToItems },
   { name: "Plank Sack", key: "plankSack", getItems: mapToItems },
   { name: "Master Scroll Book", key: "masterScrollBook", getItems: mapToItems },
+  { name: "Essence Pouches", key: "essencePouches", getItems: mapToItems },
 ] as const;
 
 export type ItemContainerKey = (typeof AllItemContainers)[number]["key"];
@@ -43,6 +44,7 @@ export interface State {
   pohCostumeRoom: ItemCollection;
   plankSack: ItemCollection;
   masterScrollBook: ItemCollection;
+  essencePouches: ItemCollection;
   coordinates?: { coords: WikiPosition2D; plane: number; isOnBoat: boolean };
   interacting?: NPCInteraction;
   stats?: Stats;

@@ -7,8 +7,6 @@ import laravel from "laravel-vite-plugin";
 
 // The directory to store all generated hashed files in. We append a hash to their filename for cache busting.
 const PUBLIC_VERSIONED_ROOT = "public/hashed";
-fs.rmSync(PUBLIC_VERSIONED_ROOT, { recursive: true, force: true });
-fs.mkdirSync(PUBLIC_VERSIONED_ROOT);
 
 const makeVersionedPaths = ({
   hash,
@@ -33,9 +31,9 @@ const generateHash = (filePath: string): string => {
 };
 
 const imageChunksPlugin = (): PluginOption => ({
-  name: "imageChunksHardVersioned",
+  name: "imageChunks",
   buildStart(): void {
-    console.info("Scanning public directory and creating hard versioned image chunks...");
+    console.info("Creating image chunks...");
 
     const chunksResourcesDir = "resources/assets/image-chunks";
     fs.rmSync(chunksResourcesDir, { recursive: true, force: true });
@@ -222,26 +220,33 @@ const versionedJsonPlugin = (configs: string[]): PluginOption => {
 };
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    imageChunksPlugin(),
-    versionedJsonPlugin(["data", "image-chunks"]),
-    react(),
-    laravel({
-      input: ["resources/views/index.tsx"],
-      refresh: true,
-    }),
-  ],
-  define: {
-    __API_URL__: "'/api'",
-  },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
+export default defineConfig(({ isPreview }) => {
+  if (!isPreview) {
+    fs.rmSync(PUBLIC_VERSIONED_ROOT, { recursive: true, force: true });
+    fs.mkdirSync(PUBLIC_VERSIONED_ROOT);
+  }
+
+  return {
+    plugins: [
+      imageChunksPlugin(),
+      versionedJsonPlugin(["data", "image-chunks"]),
+      react(),
+      laravel({
+        input: ["resources/views/index.tsx"],
+        refresh: true,
+      }),
+    ],
+    define: {
+      __API_URL__: "'/api'",
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ["react", "react-dom", "react-router-dom"],
+          },
         },
       },
     },
-  },
+  };
 });

@@ -379,7 +379,7 @@ export class CanvasMapRenderer {
     const iconAtlasPromise = new Promise<ImageBitmap>((resolve) => {
       const ICONS_IN_ATLAS = 123;
       const iconAtlas = new Image(ICONS_IN_ATLAS * ICON_IMAGE_PIXEL_EXTENT.x, ICON_IMAGE_PIXEL_EXTENT.y);
-      void getImageUrl("/map/icons/map_icons.webp").then((url) => {
+      void getImageUrl("/map-misc/map_icons.webp").then((url) => {
         iconAtlas.src = url;
       });
       iconAtlas.onload = (): void => {
@@ -750,7 +750,7 @@ export class CanvasMapRenderer {
 
           const image = new Image();
           this.outboundImageFetchesCount += 1;
-          void this.getImageUrl(`/map/labels/${labelID}.webp`).then((url) => {
+          void this.getImageUrl(`/map-misc/${labelID}.webp`).then((url) => {
             image.src = url;
           });
           image.onload = (): void => {

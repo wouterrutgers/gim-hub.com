@@ -1,11 +1,9 @@
 import { useState, useCallback } from "react";
-import itemIconsChunksRaw from "@manifests/item-icons-chunks";
-import mapTilesChunksRaw from "@manifests/map-tiles-chunks";
+import chunksRaw from "@manifests/image-chunks";
 import * as z from "zod/v4";
 
 const ManifestSchema = z.record(z.string(), z.string());
-const itemIconsChunks = ManifestSchema.parse(itemIconsChunksRaw);
-const mapTilesChunks = ManifestSchema.parse(mapTilesChunksRaw);
+const imageChunksManifest = ManifestSchema.parse(chunksRaw);
 
 type ImageChunk = Record<string, string>;
 
@@ -17,28 +15,24 @@ export const useImageChunks = (): {
   preloadChunk: (chunkKey: string) => Promise<void>;
   preloadMapRegion: (x: number, y: number, z?: number) => Promise<void>;
   loadedChunks: Set<string>;
-  getChunkKey: (imagePath: string) => string;
+  getChunkKey: (imagePath: string) => string | undefined;
 } => {
   const [loadedChunks, setLoadedChunks] = useState<Set<string>>(new Set());
 
-  const getChunkKey = useCallback((imagePath: string): string => {
-    if (imagePath.startsWith("/icons/")) {
-      return "icons-misc";
-    }
-
+  const getChunkKey = useCallback((imagePath: string): string | undefined => {
     if (imagePath.startsWith("/item-icons/")) {
       const match = /\/item-icons\/(?<itemID>[0-9]+)\.webp/.exec(imagePath);
       if (match?.groups?.itemID) {
         const itemId = Number.parseInt(match?.groups?.itemID);
         const chunkIndex = Math.floor(itemId / 1000);
 
-        const unresolvedPath = `/item-icons-chunks/icons-${chunkIndex}.json`;
-        const resolvedPath = itemIconsChunks[unresolvedPath];
+        const unresolvedPath = `/image-chunks/items-${chunkIndex}.json`;
+        const resolvedPath = imageChunksManifest[unresolvedPath];
 
         return resolvedPath;
       }
 
-      return "icons-misc";
+      return undefined;
     }
 
     if (imagePath.startsWith("/map-tiles/")) {
@@ -48,33 +42,21 @@ export const useImageChunks = (): {
         const regionX = Math.floor(x / 20);
         const regionY = Math.floor(y / 20);
 
-        const unresolvedPath = `/map-tiles-chunks/map-${z}-${regionX}-${regionY}.json`;
-        const resolvedPath = mapTilesChunks[unresolvedPath];
+        const unresolvedPath = `/image-chunks/map-${z}-${regionX}-${regionY}.json`;
+        const resolvedPath = imageChunksManifest[unresolvedPath];
 
         return resolvedPath;
       }
 
-      return "map-misc";
+      return undefined;
     }
 
-    if (imagePath.startsWith("/ui/")) {
-      return "ui";
+    for (const prefix of ["map-misc", "ui", "images", "icons"]) {
+      if (!imagePath.startsWith(`/${prefix}/`)) continue;
+      return imageChunksManifest[`/image-chunks/${prefix}.json`];
     }
 
-    if (imagePath.startsWith("/map/")) {
-      const match = /\/map\/(\d+)_(\d+)_(\d+)\.webp/.exec(imagePath);
-      if (match) {
-        const [, z, x, y] = match.map(Number);
-        const regionX = Math.floor(x / 20);
-        const regionY = Math.floor(y / 20);
-
-        return `map-${z}-${regionX}-${regionY}`;
-      }
-
-      return "map-misc";
-    }
-
-    return "misc";
+    return imageChunksManifest["/image-chunks/misc.json"];
   }, []);
 
   const loadChunk = useCallback(async (chunkKey: string): Promise<ImageChunk> => {
@@ -93,13 +75,7 @@ export const useImageChunks = (): {
     loadingChunks.add(chunkKey);
 
     try {
-      const fetchURL = ((): string => {
-        if (chunkKey.startsWith("/item-icons-chunks/") || chunkKey.startsWith("/map-tiles-chunks/")) {
-          return chunkKey;
-        }
-        return `/image-chunks/${chunkKey}.json`;
-      })();
-      const response = await fetch(fetchURL);
+      const response = await fetch(chunkKey);
 
       if (!response.ok) {
         throw new Error(`Failed to load image chunk: ${chunkKey}`);
@@ -119,18 +95,12 @@ export const useImageChunks = (): {
   const getImageUrl = useCallback(
     async (path: string): Promise<string> => {
       const chunkKey = getChunkKey(path);
-      const chunk = await loadChunk(chunkKey);
-      const hash = chunk[path];
-
-      if (hash.startsWith("/item-icons/") || hash.startsWith("/map-tiles/")) {
-        return hash;
-      }
-
-      if (!hash) {
+      if (!chunkKey) {
         return "";
       }
 
-      return `${path}?v=${hash}`;
+      const chunk = await loadChunk(chunkKey);
+      return chunk[path] ?? "";
     },
     [getChunkKey, loadChunk],
   );

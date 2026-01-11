@@ -103416,13 +103416,13 @@
   "32090": {
     "name": "Shark paint",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "32093": {
     "name": "Inky paint",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "32096": {
@@ -103434,7 +103434,7 @@
   "32099": {
     "name": "Salvor's paint",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "32102": {
@@ -103464,7 +103464,7 @@
   "32110": {
     "name": "Merchant's paint",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "32113": {

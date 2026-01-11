@@ -32,20 +32,20 @@ const RUNELITE_PATHS = (() => {
 })();
 
 const SITE_PATHS = (() => {
-  const public = path.resolve("../public");
   const resources = path.resolve("../resources");
+  const assets = path.join(resources, "assets");
 
   return {
     FILES: {
-      itemData: path.resolve(resources, "assets/data/item_data.json"),
-      mapMetadata: path.resolve(resources, "assets/data/map.json"),
-      mapIconAtlas: path.resolve(public, "map/icons/map_icons.webp"),
+      itemData: path.resolve(assets, "data/item_data.json"),
+      mapMetadata: path.resolve(assets, "data/map.json"),
+      mapIconAtlas: path.resolve(assets, "map-misc/map_icons.webp"),
       questMapping: path.resolve(resources, "js/quests/mapping.json"),
     },
     DIRS: {
-      itemImages: path.resolve(public, "icons/items"),
-      mapImages: path.resolve(public, "map"),
-      mapLabels: path.resolve(public, "map/labels"),
+      itemImages: path.resolve(assets, "item-icons"),
+      mapImages: path.resolve(assets, "map-tiles"),
+      mapLabels: path.resolve(assets, "map-misc"),
     },
   };
 })();

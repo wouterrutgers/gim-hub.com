@@ -43,8 +43,7 @@ COPY . /app
 COPY --from=dependencies /app/vendor ./vendor
 
 COPY --from=assets /build/public/build /app/public/build
-COPY --from=assets /build/public/data /app/public/data
-COPY --from=assets /build/public/image-chunks /app/public/image-chunks
+COPY --from=assets /build/public/hashed /app/public/hashed
 COPY --from=assets /build/resources/views/index.blade.php /app/resources/views/index.blade.php
 
 RUN composer dump-autoload --optimize --classmap-authoritative --no-dev --no-interaction

@@ -2,9 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import wikiTagCategories from "./wiki_tag_categories.json" with { type: "json" };
 
+const outDir = "../../resources/assets/data";
+
 const CONFIG = {
-  itemTagsPath: path.resolve(import.meta.dirname, "../../public/data/item_tags.json"),
-  itemDataPath: path.resolve(import.meta.dirname, "../../public/data/item_datav2.json"),
+  itemTagsPath: path.resolve(import.meta.dirname, outDir, "item_tags.json"),
+  itemDataPath: path.resolve(import.meta.dirname, outDir, "item_data.json"),
   userAgent: `gim-hub.com (https://github.com/wouterrutgers/gim-hub.com) ${navigator.userAgent}`,
 };
 

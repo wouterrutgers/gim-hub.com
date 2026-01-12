@@ -1,6 +1,7 @@
 import * as z from "zod/v4";
 import type { Distinct } from "../ts/util";
 import type { GEPrices } from "../api/requests/ge-prices";
+import { fetchVersionedJSON } from "../ts/fetch-data";
 
 export type ItemID = Distinct<number, "ItemID">;
 export interface ItemStack {
@@ -21,7 +22,7 @@ export const composeItemIconHref = ({ itemID, quantity }: ItemStack, itemDatum?:
     }
   }
 
-  return `/icons/items/${id}.webp`;
+  return `/item-icons/${id}.webp`;
 };
 export const isRunePouch = (id: ItemID): boolean => {
   const RUNE_POUCH = 12791;
@@ -29,8 +30,7 @@ export const isRunePouch = (id: ItemID): boolean => {
   return id === RUNE_POUCH || id === DIVINE_RUNE_POUCH;
 };
 export const fetchItemDataJSON = (): Promise<ItemsDatabase> =>
-  fetch("/data/item_datav2.json")
-    .then((response) => response.json())
+  fetchVersionedJSON("/data/item_data.json")
     .then((data) => {
       return ItemsDataSchema.safeParseAsync(data);
     })
@@ -41,8 +41,7 @@ export const fetchItemDataJSON = (): Promise<ItemsDatabase> =>
     });
 
 export const fetchItemTagsJSON = (): Promise<ItemTags> =>
-  fetch("/data/item_tags.json")
-    .then((response) => response.json())
+  fetchVersionedJSON("/data/item_tags.json")
     .then((data) => {
       return ItemsTagsSchema.safeParseAsync(data);
     })

@@ -89,7 +89,7 @@ async function run() {
     }
   }
 
-  fs.writeFileSync("./public/data/quest_data.json", JSON.stringify(result, null, 2));
+  fs.writeFileSync("./resources/assets/data/quest_data.json", JSON.stringify(result, null, 2));
 }
 
 run();

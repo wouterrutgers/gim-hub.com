@@ -1,4 +1,5 @@
 import * as z from "zod/v4";
+import { fetchVersionedJSON } from "../ts/fetch-data";
 
 export const MapIconsMetadata = z.record(
   z.string(),
@@ -34,8 +35,6 @@ export const MapMetadataSchema = z.object({
   tiles: MapTilesMetadata,
 });
 export const fetchMapJSON = (): Promise<MapMetadata> =>
-  fetch("/data/map.json")
-    .then((response) => response.json())
-    .then((data) => {
-      return MapMetadataSchema.parseAsync(data);
-    });
+  fetchVersionedJSON("/data/map.json").then((data) => {
+    return MapMetadataSchema.parseAsync(data);
+  });

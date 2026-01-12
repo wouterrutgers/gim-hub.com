@@ -13,10 +13,11 @@ public/*
 dist/*
 storage/cache/*
 cache/cache
+cache/item_data.json
 cache/item-data
 cache/item-images
 cache/map-data
 cache/output_files
 cache/runelite
-resources/data/*
+resources/assets
 resources/js/quests/mapping.json

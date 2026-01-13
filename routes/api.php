@@ -6,8 +6,7 @@ use App\Http\Controllers\UnauthedController;
 use App\Http\Middleware\AuthenticateGroup;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/ge-prices', [UnauthedController::class, 'getGEPrices']);
-Route::get('/collection-log-info', [UnauthedController::class, 'collectionLogInfo']);
+Route::get('/ge-prices.json', [UnauthedController::class, 'getGEPrices']);
 
 Route::post('/create-group', [GroupController::class, 'createGroup']);
 

@@ -146,7 +146,7 @@ export default class Api {
         .catch((reason) => console.error("Failed to get grand exchange data for API", reason));
     }
     if (!this.gameData.collectionLogInfo) {
-      fetchCollectionLogInfo({ baseURL: this.baseURL })
+      fetchCollectionLogInfo()
         .then((response) => {
           this.gameData.collectionLogInfo = response;
           this.callbacks?.onGameDataUpdate?.(this.gameData);

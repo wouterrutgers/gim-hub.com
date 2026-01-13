@@ -14,13 +14,4 @@ class UnauthedController extends Controller
             ->header('Content-Type', 'application/json')
             ->header('Cache-Control', 'public, max-age=86400');
     }
-
-    public function collectionLogInfo(): JsonResponse
-    {
-        $data = file_get_contents(storage_path('cache/collection_log_info.json'));
-
-        return response()
-            ->json(json_decode($data))
-            ->header('Content-Type', 'application/json');
-    }
 }

@@ -5,7 +5,7 @@ import { canonicalizeCollectionLogItemId } from "../../game/collection-log";
 import { fetchVersionedJSON } from "../../ts/fetch-data";
 
 export type Response = z.infer<typeof CollectionLogInfoSchema>;
-export const fetchCollectionLogInfo = ({ baseURL: _ }: { baseURL: string }): Promise<Response> =>
+export const fetchCollectionLogInfo = (): Promise<Response> =>
   fetchVersionedJSON("/data/collection_log_info.json")
     .then((json) => {
       if (json === undefined) throw new Error("Unable to resolve versioned JSON asset: /data/collection_log_info.json");

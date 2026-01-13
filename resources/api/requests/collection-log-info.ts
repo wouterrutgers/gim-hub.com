@@ -2,18 +2,14 @@ import * as z from "zod/v4";
 import type { ItemID } from "../../game/items";
 import * as CollectionLog from "../../game/collection-log";
 import { canonicalizeCollectionLogItemId } from "../../game/collection-log";
+import { fetchVersionedJSON } from "../../ts/fetch-data";
 
 export type Response = z.infer<typeof CollectionLogInfoSchema>;
-export const fetchCollectionLogInfo = ({ baseURL }: { baseURL: string }): Promise<Response> =>
-  fetch(`${baseURL}/collection-log-info`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("collection-log-info HTTP response was not OK");
-      }
-
-      return response.json();
-    })
+export const fetchCollectionLogInfo = ({ baseURL: _ }: { baseURL: string }): Promise<Response> =>
+  fetchVersionedJSON("/data/collection_log_info.json")
     .then((json) => {
+      if (json === undefined) throw new Error("Unable to resolve versioned JSON asset: /data/collection_log_info.json");
+
       return CollectionLogInfoSchema.safeParseAsync(json);
     })
     .then((parseResult) => {

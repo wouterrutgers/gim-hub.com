@@ -414,7 +414,7 @@ async function dumpCollectionLog() {
       buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
       mainClass: "net.runelite.cache.CollectionLogDumper",
       dependencies: [],
-      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../storage/cache")}`,
+      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../resources/assets/data")}`,
     });
   } catch (e) {
     console.error("Failed to dumpCollectionLog");

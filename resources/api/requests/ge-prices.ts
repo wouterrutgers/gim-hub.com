@@ -9,14 +9,18 @@ export type Response = z.infer<typeof GEPricesSchema>;
  *
  * @param baseURL Base URL of API, such as https://backend.foo.com/api/
  */
-export const fetchGEPrices = ({ baseURL }: { baseURL: string }): Promise<Response> =>
-  fetch(`${baseURL}/ge-prices`)
+export const fetchGEPrices = ({ baseURL }: { baseURL: string }): Promise<Response> => {
+  const FOUR_HOURS_MS = 4 * 60 * 60 * 1000;
+  const cacheBuster = Math.floor(Date.now() / FOUR_HOURS_MS);
+
+  return fetch(`${baseURL}/ge-prices.json?v=${cacheBuster}`)
     .then((response) => response.json())
     .then((json) => GEPricesSchema.safeParseAsync(json))
     .then((parseResult) => {
       if (!parseResult.success) throw new Error("Failed to parse GEPrices response", { cause: parseResult.error });
       return parseResult.data;
     });
+};
 
 export type GEPrices = Map<ItemID, number>;
 

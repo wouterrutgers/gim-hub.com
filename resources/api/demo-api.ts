@@ -525,7 +525,7 @@ export default class DemoApi {
         gameData.gePrices = data;
         this.callbacks?.onGameDataUpdate?.(gameData);
       }),
-      fetchCollectionLogInfo({ baseURL: this.baseURL }).then((response) => {
+      fetchCollectionLogInfo().then((response) => {
         gameData.collectionLogInfo = response;
         this.callbacks?.onGameDataUpdate?.(gameData);
       }),

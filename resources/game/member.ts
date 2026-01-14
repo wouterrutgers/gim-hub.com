@@ -22,6 +22,7 @@ export const AllItemContainers = [
   { name: "Plank Sack", key: "plankSack", getItems: mapToItems },
   { name: "Master Scroll Book", key: "masterScrollBook", getItems: mapToItems },
   { name: "Essence Pouches", key: "essencePouches", getItems: mapToItems },
+  { name: "Tackle Box", key: "tackleBox", getItems: mapToItems },
 ] as const;
 
 export type ItemContainerKey = (typeof AllItemContainers)[number]["key"];

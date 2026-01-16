@@ -63,3 +63,15 @@
 #group-settings-remove-confirmation button {
   margin-block: 4px;
 }
+
+.settings-page-radio-item {
+  display: flex;
+}
+
+.settings-page-radio-item:focus-within {
+  outline: auto;
+}
+
+.settings-page-radio-item input:focus-visible {
+  outline: none;
+}

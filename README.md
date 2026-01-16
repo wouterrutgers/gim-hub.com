@@ -1,7 +1,7 @@
 # 🏆 GIM Hub
 
 <div align="center">
-  <img alt="GIM Hub Logo" src="public/images/logo-full.webp" width="400"/>
+  <img alt="GIM Hub Logo" src="resources/assets/images/logo-full.webp" width="400"/>
   
   **A real-time dashboard for Old School RuneScape Group Ironman teams**
   
@@ -66,7 +66,7 @@
    - View your team's progress on the GIM hub dashboard
    - Invite teammates using your group token
 
-<img alt="RuneLite Plugin Configuration" src="public/images/plugin-screenshot.png" width="300"/>
+<img alt="RuneLite Plugin Configuration" src="resources/assets/images/plugin-screenshot.png" width="300"/>
 <em>Plugin configuration in RuneLite</em>
 
 ## 🏠 Self-hosting

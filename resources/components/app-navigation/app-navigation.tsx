@@ -23,13 +23,13 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
     {
       label: "GitHub",
       href: "https://github.com/wouterrutgers/gim-hub.com",
-      mobileIconSource: "/images/GitHub-Mark-Light-64px.png",
+      mobileIconSource: "/images/github-light.webp",
       isExternal: true,
     },
     {
       label: "Discord",
       href: "https://discord.gg/ZwzW6yYD8V",
-      mobileIconSource: "/images/discord-light.png",
+      mobileIconSource: "/images/discord-light.webp",
       isExternal: true,
     },
     { label: "Setup", href: "/group/setup-instructions", mobileIconSource: "/ui/1094-0.png" },

@@ -14,7 +14,7 @@ export const SocialLinks = (): ReactElement => {
             title={formatTitle("GitHub")}
             target="_blank"
           >
-            <CachedImage alt={formatTitle("GitHub logo")} src="/images/GitHub-Mark-Light-64px.png" height="24" />
+            <CachedImage alt={formatTitle("GitHub logo")} src="/images/github-light.webp" height="24" />
             {formatTitle("GitHub")}
           </a>
         </div>
@@ -25,7 +25,7 @@ export const SocialLinks = (): ReactElement => {
             title={formatTitle("Discord")}
             target="_blank"
           >
-            <CachedImage alt={formatTitle("Discord logo")} src="/images/discord-light.png" height="24" />
+            <CachedImage alt={formatTitle("Discord logo")} src="/images/discord-light.webp" height="24" />
             {formatTitle("Discord")}
           </a>
         </div>
@@ -39,7 +39,7 @@ export const SocialLinks = (): ReactElement => {
             title={formatTitle("Logo by @nin_tan_ on X.com")}
             target="_blank"
           >
-            <CachedImage alt={formatTitle("X logo")} src="/images/x-white.png" height="16" />
+            <CachedImage alt={formatTitle("X logo")} src="/images/x-white.webp" height="16" />
             {formatTitle("Logo by @nin_tan_")}
           </a>
         </div>
@@ -51,7 +51,7 @@ export const SocialLinks = (): ReactElement => {
             title={formatTitle("Original creator's GitHub")}
             target="_blank"
           >
-            <CachedImage alt={formatTitle("GitHub logo")} src="/images/GitHub-Mark-Light-64px.png" height="16" />
+            <CachedImage alt={formatTitle("GitHub logo")} src="/images/github-light.webp" height="16" />
             {formatTitle("Original creator's GitHub")}
           </a>
         </div>

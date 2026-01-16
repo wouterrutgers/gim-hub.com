@@ -28,7 +28,7 @@ const CollectionLogPageItems = ({ items }: CollectionLogPageItemProps): ReactEle
       <CachedImage
         className={`${quantity === 0 ? "collection-log-page-item-missing" : ""}`}
         alt={itemName ?? "osrs item"}
-        src={`/icons/items/${itemID}.webp`}
+        src={`/item-icons/${itemID}.webp`}
       />
     );
     const quantityLabel =

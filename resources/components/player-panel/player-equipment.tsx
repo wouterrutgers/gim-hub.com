@@ -12,7 +12,7 @@ import { CachedImage } from "../cached-image/cached-image";
 
 import "./player-equipment.css";
 import type { ItemID } from "../../game/items";
-import { composeItemIconHref, formatShortQuantity, mappedGEPrice } from "../../game/items";
+import { composeItemIconHref, formatShortQuantity, mappedGEPrice, mappedHighAlch } from "../../game/items";
 
 const DIZANAS_IDS = new Set<ItemID>([
   28902 as ItemID, // Dizana's max cape
@@ -108,7 +108,7 @@ export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactEleme
               type: "Item",
               name: itemDatum.name,
               quantity: item.quantity,
-              highAlch: itemDatum.highalch,
+              highAlch: mappedHighAlch(item.itemID, itemData),
               gePrice: mappedGEPrice(item.itemID, geData, itemData),
             });
           }

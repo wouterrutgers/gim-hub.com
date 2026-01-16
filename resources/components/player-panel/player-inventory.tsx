@@ -9,6 +9,7 @@ import {
   formatVeryShortQuantity,
   isRunePouch,
   mappedGEPrice,
+  mappedHighAlch,
 } from "../../game/items";
 import { CachedImage } from "../cached-image/cached-image";
 
@@ -84,7 +85,7 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
       type: "Item",
       name: itemDatum.name,
       quantity: quantity,
-      highAlch: itemDatum.highalch,
+      highAlch: mappedHighAlch(itemID, itemData),
       gePrice: mappedGEPrice(itemID, geData, itemData),
     };
     if (isRunePouch(itemID) && runePouch) {

@@ -32,21 +32,20 @@ const RUNELITE_PATHS = (() => {
 })();
 
 const SITE_PATHS = (() => {
-  const public = path.resolve("../public");
   const resources = path.resolve("../resources");
+  const assets = path.join(resources, "assets");
 
   return {
     FILES: {
-      itemData: path.resolve(public, "data/item_data.json"),
-      mapIconMeta: path.resolve(public, "data/map_icons.json"),
-      mapLabelMeta: path.resolve(public, "data/map_labels.json"),
-      mapIconAtlas: path.resolve(public, "map/icons/map_icons.webp"),
+      itemData: path.resolve(assets, "data/item_data.json"),
+      mapMetadata: path.resolve(assets, "data/map.json"),
+      mapIconAtlas: path.resolve(assets, "map-misc/map_icons.webp"),
       questMapping: path.resolve(resources, "js/quests/mapping.json"),
     },
     DIRS: {
-      itemImages: path.resolve(public, "icons/items"),
-      mapImages: path.resolve(public, "map"),
-      mapLabels: path.resolve(public, "map/labels"),
+      itemImages: path.resolve(assets, "item-icons"),
+      mapImages: path.resolve(assets, "map-tiles"),
+      mapLabels: path.resolve(assets, "map-misc"),
     },
   };
 })();
@@ -106,7 +105,8 @@ function execRuneliteGradleApplication(args) {
 
   fs.writeFileSync(buildScriptPath, lines.join("\n"));
 
-  exec(`./gradlew -b ${buildScriptPath} -q run --args="${runArgs}"`, {
+  const gradlew = "./gradlew".replace("/", path.sep);
+  exec(`${gradlew} -b ${buildScriptPath} -q run --args="${runArgs}"`, {
     cwd: RUNELITE_PATHS.DIRS.root,
     env: {
       ...process.env,
@@ -216,6 +216,7 @@ async function buildItemDataJson() {
       includedItem = {
         name: item.name,
         highalch: Math.floor(item.cost * 0.6),
+        alchable: true,
         mapping: item.mapping,
       };
 
@@ -249,8 +250,8 @@ async function buildItemDataJson() {
   for (const item of Object.values(includedItems)) {
     const itemName = item.name;
     if (nonAlchableItemNames.has(itemName)) {
-      // NOTE: High alch value = 0 just means unalchable in the context of this program
       item.highalch = 0;
+      item.alchable = false;
       itemsMadeNonAlchable++;
     }
 
@@ -260,6 +261,7 @@ async function buildItemDataJson() {
       const nonVariantItemName = itemName.substring(0, itemName.indexOf("(")).trim();
       if (nonAlchableItemNames.has(nonVariantItemName)) {
         item.highalch = 0;
+        item.alchable = false;
         itemsMadeNonAlchable++;
       }
     }
@@ -412,7 +414,7 @@ async function dumpCollectionLog() {
       buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
       mainClass: "net.runelite.cache.CollectionLogDumper",
       dependencies: [],
-      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../storage/cache")}`,
+      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../resources/assets/data")}`,
     });
   } catch (e) {
     console.error("Failed to dumpCollectionLog");
@@ -554,6 +556,13 @@ async function moveResults() {
   await moveFiles("./map-data/tiles/*.webp", SITE_PATHS.DIRS.mapImages);
   await moveFiles("./map-data/labels/*.webp", SITE_PATHS.DIRS.mapLabels);
 
+  fs.copyFileSync("./map-data/map.json", SITE_PATHS.FILES.mapMetadata);
+  fs.copyFileSync("./map-data/map_icons.webp", SITE_PATHS.FILES.mapIconAtlas);
+}
+
+async function buildMapJsonAndIconAtlas() {
+  console.info("Step: Building map json and icon atlas...");
+
   // Create a tile sheet of the map icons
   const mapIcons = glob.sync(path.resolve("./map-data/icons/*.png").replace(/\\/g, "/"));
   if (mapIcons.length === 0) {
@@ -583,7 +592,7 @@ async function moveResults() {
   })
     .composite(mapIconsCompositeOpts)
     .webp({ lossless: true, effort: 6 })
-    .toFile(SITE_PATHS.FILES.mapIconAtlas);
+    .toFile("./map-data/map_icons.webp");
 
   // Convert the output of the map-icons locations to be keyed by the X an Y of the regions
   // that they are in. This is done so that the canvas map component can quickly lookup
@@ -612,8 +621,6 @@ async function moveResults() {
     }
   }
 
-  fs.writeFileSync(SITE_PATHS.FILES.mapIconMeta, JSON.stringify(locationByRegion, null, 2));
-
   // Do the same for map labels
   const mapLabelsMeta = JSON.parse(fs.readFileSync("./map-data/labels/map-labels.json", "utf8"));
   const labelByRegion = {};
@@ -634,7 +641,24 @@ async function moveResults() {
     labelByRegion[regionX][regionY][z].push(x, y, i);
   }
 
-  fs.writeFileSync(SITE_PATHS.FILES.mapLabelMeta, JSON.stringify(labelByRegion, null, 2));
+  const mapImageFiles = fs
+    .readdirSync("map-data/tiles")
+    .filter((file) => file.endsWith(".webp"))
+    .map((file) => path.basename(file, ".webp"));
+
+  const tiles = [[], [], [], []];
+  for (const mapImageFile of mapImageFiles) {
+    const [plane, x, y] = mapImageFile.split("_").map((x) => parseInt(x, 10));
+    tiles[plane].push(((x + y) * (x + y + 1)) / 2 + y);
+  }
+
+  const map = {
+    tiles: tiles,
+    icons: locationByRegion,
+    labels: labelByRegion,
+  };
+
+  fs.writeFileSync("./map-data/map.json", JSON.stringify(map, null, 2));
 }
 
 async function dumpQuestMapping() {
@@ -665,6 +689,7 @@ async function dumpQuestMapping() {
   await generateMapTiles();
   await dumpMapLabels();
   await dumpCollectionLog();
+  await buildMapJsonAndIconAtlas();
   await moveResults();
 
   await dumpQuestMapping();

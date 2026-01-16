@@ -1,4 +1,9 @@
 import { useState, useCallback } from "react";
+import chunksRaw from "@manifests/image-chunks";
+import * as z from "zod/v4";
+
+const ManifestSchema = z.record(z.string(), z.string());
+const imageChunksManifest = ManifestSchema.parse(chunksRaw);
 
 type ImageChunk = Record<string, string>;
 
@@ -10,41 +15,48 @@ export const useImageChunks = (): {
   preloadChunk: (chunkKey: string) => Promise<void>;
   preloadMapRegion: (x: number, y: number, z?: number) => Promise<void>;
   loadedChunks: Set<string>;
-  getChunkKey: (imagePath: string) => string;
+  getChunkKey: (imagePath: string) => string | undefined;
 } => {
   const [loadedChunks, setLoadedChunks] = useState<Set<string>>(new Set());
 
-  const getChunkKey = useCallback((imagePath: string): string => {
-    if (imagePath.startsWith("/icons/")) {
-      const match = /\/icons\/items\/(\d+)\.webp/.exec(imagePath);
-      if (match) {
-        const itemId = parseInt(match[1], 10);
+  const getChunkKey = useCallback((imagePath: string): string | undefined => {
+    if (imagePath.startsWith("/item-icons/")) {
+      const match = /\/item-icons\/(?<itemID>[0-9]+)\.webp/.exec(imagePath);
+      if (match?.groups?.itemID) {
+        const itemId = Number.parseInt(match?.groups?.itemID);
         const chunkIndex = Math.floor(itemId / 1000);
 
-        return `icons-${chunkIndex}`;
+        const unresolvedPath = `/image-chunks/items-${chunkIndex}.json`;
+        const resolvedPath = imageChunksManifest[unresolvedPath];
+
+        return resolvedPath;
       }
 
-      return "icons-misc";
+      return undefined;
     }
 
-    if (imagePath.startsWith("/ui/")) {
-      return "ui";
-    }
-
-    if (imagePath.startsWith("/map/")) {
-      const match = /\/map\/(\d+)_(\d+)_(\d+)\.webp/.exec(imagePath);
-      if (match) {
+    if (imagePath.startsWith("/map-tiles/")) {
+      const match = /\/map-tiles\/(\d+)_(\d+)_(\d+)\.webp/.exec(imagePath);
+      if (match?.length && match?.length === 4) {
         const [, z, x, y] = match.map(Number);
         const regionX = Math.floor(x / 20);
         const regionY = Math.floor(y / 20);
 
-        return `map-${z}-${regionX}-${regionY}`;
+        const unresolvedPath = `/image-chunks/map-${z}-${regionX}-${regionY}.json`;
+        const resolvedPath = imageChunksManifest[unresolvedPath];
+
+        return resolvedPath;
       }
 
-      return "map-misc";
+      return undefined;
     }
 
-    return "misc";
+    for (const prefix of ["map-misc", "ui", "images", "icons"]) {
+      if (!imagePath.startsWith(`/${prefix}/`)) continue;
+      return imageChunksManifest[`/image-chunks/${prefix}.json`];
+    }
+
+    return imageChunksManifest["/image-chunks/misc.json"];
   }, []);
 
   const loadChunk = useCallback(async (chunkKey: string): Promise<ImageChunk> => {
@@ -63,7 +75,7 @@ export const useImageChunks = (): {
     loadingChunks.add(chunkKey);
 
     try {
-      const response = await fetch(`/image-chunks/${chunkKey}.json`);
+      const response = await fetch(chunkKey);
 
       if (!response.ok) {
         throw new Error(`Failed to load image chunk: ${chunkKey}`);
@@ -83,14 +95,12 @@ export const useImageChunks = (): {
   const getImageUrl = useCallback(
     async (path: string): Promise<string> => {
       const chunkKey = getChunkKey(path);
-      const chunk = await loadChunk(chunkKey);
-      const hash = chunk[path];
-
-      if (!hash) {
+      if (!chunkKey) {
         return "";
       }
 
-      return `${path}?v=${hash}`;
+      const chunk = await loadChunk(chunkKey);
+      return chunk[path] ?? "";
     },
     [getChunkKey, loadChunk],
   );

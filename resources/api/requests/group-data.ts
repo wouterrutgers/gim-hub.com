@@ -944,6 +944,7 @@ const GetGroupDataResponseSchema = z
     essence_pouches: NullableItemCollection,
     tackle_box: NullableItemCollection,
     coal_bag: NullableItemCollection,
+    fish_barrel: NullableItemCollection,
 
     /**
      * Information on NPC the player last interacted with.
@@ -987,6 +988,7 @@ const GetGroupDataResponseSchema = z
       diary_vars,
       tackle_box,
       coal_bag,
+      fish_barrel,
       ...rest
     }) => {
       const itemContainers = {
@@ -1003,6 +1005,7 @@ const GetGroupDataResponseSchema = z
         essencePouches: essence_pouches,
         tackleBox: tackle_box,
         coalBag: coal_bag,
+        fishBarrel: fish_barrel,
       } satisfies Record<Member.ItemContainerKey, unknown>;
 
       return {

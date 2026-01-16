@@ -16,6 +16,7 @@ class Member extends Model
         'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
         'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room',
         'plank_sack', 'master_scroll_book', 'essence_pouches', 'tackle_box', 'coal_bag',
+        'fish_barrel',
         'quiver', 'diary_vars', 'interacting',
     ];
 

@@ -24,6 +24,7 @@ export const AllItemContainers = [
   { name: "Essence Pouches", key: "essencePouches", getItems: mapToItems },
   { name: "Tackle Box", key: "tackleBox", getItems: mapToItems },
   { name: "Coal Bag", key: "coalBag", getItems: mapToItems },
+  { name: "Fish Barrel", key: "fishBarrel", getItems: mapToItems },
 ] as const;
 
 export type ItemContainerKey = (typeof AllItemContainers)[number]["key"];
@@ -47,7 +48,9 @@ export interface State {
   plankSack: ItemCollection;
   masterScrollBook: ItemCollection;
   essencePouches: ItemCollection;
+  tackleBox: ItemCollection;
   coalBag: ItemCollection;
+  fishBarrel: ItemCollection;
   coordinates?: { coords: WikiPosition2D; plane: number; isOnBoat: boolean };
   interacting?: NPCInteraction;
   stats?: Stats;

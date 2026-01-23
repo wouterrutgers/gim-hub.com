@@ -108413,61 +108413,61 @@
   "33053": {
     "name": "Sigil of the gods",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33054": {
     "name": "Sigil of the gods",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33055": {
     "name": "Sigil of conclusion",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33056": {
     "name": "Sigil of conclusion",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33057": {
     "name": "Sigil of automation",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33058": {
     "name": "Sigil of automation",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33059": {
     "name": "Sigil of eternal belief",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33060": {
     "name": "Sigil of eternal belief",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33061": {
     "name": "Sigil of efficiency",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33062": {
     "name": "Sigil of efficiency",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33063": {
@@ -108479,7 +108479,7 @@
   "33065": {
     "name": "Deadman's skull",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33066": {

@@ -151,6 +151,7 @@ class GroupMemberController extends Controller
             'inventory' => 'nullable|array',
             'equipment' => 'nullable|array',
             'bank' => 'nullable|array',
+            'bank_partial' => 'nullable|array',
             'shared_bank' => 'nullable|array',
             'rune_pouch' => 'nullable|array',
             'seed_vault' => 'nullable|array',
@@ -160,10 +161,10 @@ class GroupMemberController extends Controller
             'master_scroll_book' => 'nullable|array',
             'essence_pouches' => 'nullable|array',
             'tackle_box' => 'nullable|array',
+            'tackle_box_partial' => 'nullable|array',
             'coal_bag' => 'nullable|array',
             'fish_barrel' => 'nullable|array',
             'quiver' => 'nullable|array',
-            'deposited' => 'nullable|array',
             'diary_vars' => 'nullable|array',
             'collection_log_v2' => 'nullable|array',
             'interacting' => 'nullable',
@@ -190,6 +191,7 @@ class GroupMemberController extends Controller
             ['inventory', 56, 56],
             ['equipment', 28, 28],
             ['bank', 0, 3000],
+            ['bank_partial', 0, 3000],
             ['shared_bank', 0, 1000],
             ['rune_pouch', 6, 8],
             ['seed_vault', 0, 500],
@@ -199,6 +201,7 @@ class GroupMemberController extends Controller
             ['master_scroll_book', 0, 40],
             ['essence_pouches', 0, 16],
             ['tackle_box', 0, 100],
+            ['tackle_box_partial', 0, 100],
             ['coal_bag', 0, 2],
             ['fish_barrel', 0, 100],
             ['quiver', 2, 2],
@@ -212,11 +215,48 @@ class GroupMemberController extends Controller
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
-            foreach (Member::PROPERTY_KEYS as $property) {
-                if (array_key_exists($property, $validated) && ! is_null($validated[$property])) {
+            foreach (Member::PROPERTY_KEYS as $propertyKey) {
+                $partialKey = Member::PARTIAL_PROPERTY_KEYS[$propertyKey] ?? null;
+
+                if (isset($validated[$propertyKey])) {
                     $member->properties()->updateOrCreate(
-                        ['key' => $property],
-                        ['value' => $validated[$property]]
+                        ['key' => $propertyKey],
+                        ['value' => $validated[$propertyKey]]
+                    );
+                } elseif (isset($partialKey) && isset($validated[$partialKey])) {
+                    $fullFlat = [];
+                    $fullFlatProperty = $member->getProperty($propertyKey);
+                    if (isset($fullFlatProperty)) {
+                        $fullFlat = $fullFlatProperty->value;
+                    }
+
+                    $partialFlat = $validated[$partialKey];
+
+                    $partialReshaped = [];
+
+                    for ($i = 0; $i < count($partialFlat) - 1; $i += 2) {
+                        $itemID = $partialFlat[$i];
+                        $quantity = $partialFlat[$i + 1];
+                        $partialReshaped[$itemID] = $quantity;
+                    }
+
+                    for ($i = 0; $i < count($fullFlat) - 1; $i += 2) {
+                        $itemID = $fullFlat[$i];
+                        $quantity = $fullFlat[$i + 1];
+
+                        $fullFlat[$i + 1] = max(0, $quantity + ($partialReshaped[$itemID] ?? 0));
+
+                        unset($partialReshaped[$itemID]);
+                    }
+
+                    foreach ($partialReshaped as $itemID => $quantity) {
+                        $fullFlat[] = $itemID;
+                        $fullFlat[] = max(0, $quantity);
+                    }
+
+                    $member->properties()->updateOrCreate(
+                        ['key' => $propertyKey],
+                        ['value' => $fullFlat]
                     );
                 }
             }

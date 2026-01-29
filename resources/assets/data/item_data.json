@@ -91684,13 +91684,13 @@
   "28498": {
     "name": "Sigil of the well fed",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28499": {
     "name": "Sigil of the well fed",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28501": {
@@ -91864,25 +91864,25 @@
   "28551": {
     "name": "Fremennik quest lamp",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28552": {
     "name": "Elf quest lamp",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28553": {
     "name": "Gnome quest lamp",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28554": {
     "name": "Mahjarrat 1 quest lamp",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28555": {
@@ -108525,5 +108525,17 @@
         "quantity": 1
       }
     ]
+  },
+  "33074": {
+    "name": "Facility bottle (empty)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33077": {
+    "name": "Facility bottle (full)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
   }
 }

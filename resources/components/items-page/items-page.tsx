@@ -698,6 +698,27 @@ export const ItemsPage = (): ReactElement => {
     }
   });
 
+  const exportTSV = useCallback(() => {
+    const sanitize = (s: string): string => s.replace(/\t/g, " ").replace(/\r?\n/g, " ");
+
+    const lines = [
+      ["Item id", "Item name", "Item quantity"].join("\t"),
+      ...sortedItems.map((item) => [item.itemID, sanitize(item.itemName), item.totalQuantity].join("\t")),
+    ].join("\n");
+
+    const blob = new Blob([lines], { type: "text/tab-separated-values;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `group-items-${new Date().toISOString().replace(/[:]/g, "-")}.tsv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+  }, [sortedItems]);
+
   if ((items?.size ?? 0) <= 0) {
     return (
       <div id="items-page-no-items" className="rsborder rsbackground">
@@ -735,6 +756,15 @@ export const ItemsPage = (): ReactElement => {
         <button id="items-page-tutorial-button" className="men-button" onClick={openSearchTutorial}>
           <CachedImage alt={"items tutorial"} src="/ui/1094-0.png" />
           Tutorial
+        </button>
+        <button
+          id="items-page-export-button"
+          className="men-button"
+          onClick={exportTSV}
+          title="Export current items to TSV"
+          aria-label="Export current items to TSV"
+        >
+          Export TSV
         </button>
       </div>
       <div className="items-page-utility">

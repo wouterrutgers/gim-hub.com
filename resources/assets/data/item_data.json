@@ -36840,13 +36840,13 @@
   },
   "8940": {
     "name": "Rum",
-    "highalch": 1,
+    "highalch": 120,
     "alchable": true,
     "mapping": null
   },
   "8941": {
     "name": "Rum",
-    "highalch": 1,
+    "highalch": 120,
     "alchable": true,
     "mapping": null
   },

@@ -24,8 +24,18 @@ export const fetchMemberHiscores = async ({
 }): Promise<Response> => {
   const url = `${baseURL}/group/${credentials.name}/hiscores?name=${encodeURIComponent(memberName)}`;
   const res = await fetch(url, { headers: { Authorization: credentials.token } });
-  if (!res.ok) throw new Error("hiscores HTTP response was not OK");
-  const json: unknown = await res.json();
+
+  const json: unknown = await res.json().catch(() => undefined);
+
+  if (!res.ok) {
+    const errorField = json && typeof json === "object" ? (json as { error?: unknown }).error : undefined;
+    const message = typeof errorField === "string" ? errorField : `Failed to fetch hiscores (HTTP ${res.status})`;
+
+    const err = new Error(message) as Error & { status?: number };
+    err.status = res.status;
+    throw err;
+  }
+
   const parsed = await HiscoresSchema.safeParseAsync(json);
   if (!parsed.success) throw new Error("hiscores response payload was malformed.", { cause: parsed.error });
   return parsed.data;

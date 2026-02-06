@@ -105083,8 +105083,8 @@
   },
   "32431": {
     "name": "Book about lighthouses",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "32432": {

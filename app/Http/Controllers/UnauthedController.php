@@ -54,6 +54,6 @@ class UnauthedController extends Controller
         return response()
             ->json($entries)
             ->header('Content-Type', 'application/json')
-            ->header('Cache-Control', 'public, max-age=300');
+            ->header('Cache-Control', 'public, max-age='.(app()->environment('local') ? '0' : '300'));
     }
 }

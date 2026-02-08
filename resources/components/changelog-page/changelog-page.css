@@ -4,6 +4,7 @@
   gap: 8px;
   padding: 8px;
   max-width: 1000px;
+  min-width: 50%;
   margin: 0 auto;
 }
 

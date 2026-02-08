@@ -32,6 +32,7 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
       mobileIconSource: "/images/discord-light.webp",
       isExternal: true,
     },
+    { label: "Changelog", href: "/changelog", mobileIconSource: "/ui/183-0.png" },
     { label: "Setup", href: "/group/setup-instructions", mobileIconSource: "/ui/1094-0.png" },
     { label: "Logout", href: isDemo ? "/" : "/logout", mobileIconSource: "/ui/225-0.png" },
   ];

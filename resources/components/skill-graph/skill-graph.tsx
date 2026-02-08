@@ -224,7 +224,8 @@ const buildDatasetsFromMemberSkillData = (
 ): { label: string; data: [Date, number][]; borderColor: string; backgroundColor: string }[] => {
   const sumFilteredExperience = (skills: Experience[]): Experience =>
     skills.reduce((sum, xp, index) => {
-      if (options.skillFilter !== "Overall" && Skill[index] !== options.skillFilter) return sum;
+      const skillAtIndex = SkillsInBackendOrder[index];
+      if (options.skillFilter !== "Overall" && skillAtIndex !== options.skillFilter) return sum;
 
       return sum + xp;
     }, 0) as Experience;

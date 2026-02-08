@@ -30,6 +30,7 @@ export const Homepage = (): ReactElement => {
       <div id="homepage-links">
         <AppLink href="/create-group">Get started</AppLink>
         <AppLink href="/demo">Demo</AppLink>
+        <AppLink href="/changelog">Changelog</AppLink>
         {hasLogin ? groupLink : loginLink}
       </div>
     </div>

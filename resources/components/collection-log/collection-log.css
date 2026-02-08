@@ -59,6 +59,18 @@
   border-radius: 4px;
 }
 
+.collection-log-error {
+  margin: 8px;
+  padding: 8px;
+  border: 1px solid var(--invalid);
+  background: rgb(0 0 0 / 40%);
+  color: var(--invalid);
+  font-family: rssmall, ui-sans-serif, Arial, sans-serif;
+  text-align: center;
+  text-shadow: 1.3px 1.3px var(--black);
+  border-radius: 4px;
+}
+
 .collection-log-main {
   padding: 4px;
   display: flex;

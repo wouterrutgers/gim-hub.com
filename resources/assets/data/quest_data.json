@@ -1223,20 +1223,6 @@
     "points": "1",
     "member": true
   },
-  "5192": {
-    "name": "An Existential Crisis",
-    "difficulty": "Novice",
-    "points": 0,
-    "member": true,
-    "hidden": true
-  },
-  "5193": {
-    "name": "Impending Chaos",
-    "difficulty": "Novice",
-    "points": 0,
-    "member": true,
-    "hidden": true
-  },
   "5194": {
     "name": "Vale Totems",
     "difficulty": "Novice",
@@ -1277,13 +1263,6 @@
   },
   "7107": {
     "name": "The Red Reef",
-    "difficulty": "Novice",
-    "points": 0,
-    "member": true,
-    "hidden": true
-  },
-  "7108": {
-    "name": "Burial at Sea",
     "difficulty": "Novice",
     "points": 0,
     "member": true,

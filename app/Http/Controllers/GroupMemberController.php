@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class GroupMemberController extends Controller
 {
@@ -460,7 +461,7 @@ class GroupMemberController extends Controller
             ->get()->groupBy('member.name')->map->pluck('item_count', 'item_id');
     }
 
-    public function getHiscores(Request $request): Collection
+    public function getHiscores(Request $request): JsonResponse
     {
         $groupId = $request->attributes->get('group')->id;
 
@@ -472,8 +473,29 @@ class GroupMemberController extends Controller
             ->where('name', '=', $validated['name'])
             ->first();
 
-        return Http::get('https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name))
-            ->throw()->collect('activities')->pluck('score', 'name');
+        try {
+            $response = Http::timeout(10)->get(
+                'https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name)
+            );
+        } catch (Throwable) {
+            return response()->json([
+                'error' => 'Failed to fetch hiscores',
+            ], 502);
+        }
+
+        if ($response->status() === 404) {
+            return response()->json([
+                'error' => 'User was not found in the hiscores',
+            ], 404);
+        }
+
+        if (! $response->ok()) {
+            return response()->json([
+                'error' => 'Failed to fetch hiscores',
+            ], 502);
+        }
+
+        return response()->json($response->collect('activities')->pluck('score', 'name'));
     }
 
     public function amILoggedIn(Request $request): JsonResponse

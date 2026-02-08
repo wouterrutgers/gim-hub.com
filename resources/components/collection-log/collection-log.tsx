@@ -190,6 +190,7 @@ export const CollectionLogWindow = ({
   const [currentTabName, setCurrentTabName] = useState<CollectionLog.TabName>("Bosses");
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [hiscores, setHiscores] = useState<Map<string, number>>();
+  const [hiscoresError, setHiscoresError] = useState<string>();
 
   const groupCollections = useContext(GroupCollectionsContext);
 
@@ -202,12 +203,14 @@ export const CollectionLogWindow = ({
     fetchMemberHiscores(player)
       .then((map) => {
         setHiscores(map);
+        setHiscoresError(undefined);
       })
       .catch((err) => {
-        console.warn(
-          `Failed to get hiscores for '${player}': `,
-          (err as { message?: string }).message ?? "unknown error",
-        );
+        const message = err instanceof Error ? err.message : "Unknown error";
+        setHiscoresError(message);
+        setHiscores(new Map<string, number>());
+
+        console.warn(`Failed to get hiscores for '${player}': `, message);
       });
   }, [fetchMemberHiscores, player]);
 
@@ -339,6 +342,17 @@ export const CollectionLogWindow = ({
         </button>
       </div>
       <div className="collection-log-title-border" />
+      {hiscoresError && (
+        <div className="collection-log-error" role="alert">
+          {hiscoresError === "User was not found in the hiscores" ? (
+            <>User {player} was not found in the hiscores.</>
+          ) : (
+            <>
+              Hiscores unavailable for {player}: {hiscoresError}
+            </>
+          )}
+        </div>
+      )}
       <div className="collection-log-main">
         <div className="collection-log-tab-buttons">{tabButtons}</div>
         <div className="collection-log-tab-container">

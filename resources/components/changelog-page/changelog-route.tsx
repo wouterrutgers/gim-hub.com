@@ -16,7 +16,9 @@ export const ChangelogRoute = (): ReactElement => {
   }, [api, loginAttempted, logInLive]);
 
   const loggedIn = !!api;
-  const page = <ChangelogPage backHref={loggedIn ? "/group" : "/"} backLabel={loggedIn ? "Go to group" : "Back"} />;
+  const page = (
+    <ChangelogPage backHref={loggedIn ? "/group/items" : "/"} backLabel={loggedIn ? "Go to group" : "Back"} />
+  );
 
   return loggedIn ? <AuthedLayout showPanels={false}>{page}</AuthedLayout> : <UnauthedLayout>{page}</UnauthedLayout>;
 };

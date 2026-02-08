@@ -67,7 +67,8 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+strong {
   font-family: rsbold, ui-sans-serif, Arial, sans-serif;
 }
 

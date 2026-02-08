@@ -20,6 +20,9 @@ const CreateGroupPage = lazy(() =>
 );
 const SettingsPage = lazy(() => import("../settings/settings").then((m) => ({ default: m.SettingsPage })));
 const DemoPage = lazy(() => import("../demo-page/demo-page").then((m) => ({ default: m.DemoPage })));
+const ChangelogRoute = lazy(() =>
+  import("../changelog-page/changelog-route").then((m) => ({ default: m.ChangelogRoute })),
+);
 
 import "./app.css";
 
@@ -58,6 +61,7 @@ export const App = (): ReactElement => {
               </UnauthedLayout>
             }
           />
+          <Route path="/changelog" element={<ChangelogRoute />} />
           <Route
             path="/login"
             element={

@@ -107399,8 +107399,8 @@
   },
   "32817": {
     "name": "Armoured kraken tentacle",
-    "highalch": 60,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "32818": {
@@ -107453,8 +107453,8 @@
   },
   "32826": {
     "name": "Albatross feather",
-    "highalch": 60,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "32827": {
@@ -107513,8 +107513,8 @@
   },
   "32836": {
     "name": "Armoured kraken ink sac",
-    "highalch": 120,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "32837": {
@@ -107567,8 +107567,8 @@
   },
   "32845": {
     "name": "Albatross beak",
-    "highalch": 120,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "32846": {

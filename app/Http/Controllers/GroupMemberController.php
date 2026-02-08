@@ -152,13 +152,20 @@ class GroupMemberController extends Controller
             'inventory' => 'nullable|array',
             'equipment' => 'nullable|array',
             'bank' => 'nullable|array',
+            'bank_partial' => 'nullable|array',
             'shared_bank' => 'nullable|array',
             'rune_pouch' => 'nullable|array',
             'seed_vault' => 'nullable|array',
             'potion_storage' => 'nullable|array',
             'poh_costume_room' => 'nullable|array',
+            'plank_sack' => 'nullable|array',
+            'master_scroll_book' => 'nullable|array',
+            'essence_pouches' => 'nullable|array',
+            'tackle_box' => 'nullable|array',
+            'tackle_box_partial' => 'nullable|array',
+            'coal_bag' => 'nullable|array',
+            'fish_barrel' => 'nullable|array',
             'quiver' => 'nullable|array',
-            'deposited' => 'nullable|array',
             'diary_vars' => 'nullable|array',
             'collection_log_v2' => 'nullable|array',
             'interacting' => 'nullable',
@@ -177,30 +184,80 @@ class GroupMemberController extends Controller
             ], 401);
         }
 
-        Validators::validateMemberPropLength('stats', $validated['stats'] ?? null, 7, 7);
-        Validators::validateMemberPropLength('coordinates', $validated['coordinates'] ?? null, 4, 4);
-        Validators::validateMemberPropLength('skills', $validated['skills'] ?? null, 24, 24);
-        Validators::validateMemberPropLength('quests', $validated['quests'] ?? null, 0, 250);
-        Validators::validateMemberPropLength('inventory', $validated['inventory'] ?? null, 56, 56);
-        Validators::validateMemberPropLength('equipment', $validated['equipment'] ?? null, 28, 28);
-        Validators::validateMemberPropLength('bank', $validated['bank'] ?? null, 0, 3000);
-        Validators::validateMemberPropLength('shared_bank', $validated['shared_bank'] ?? null, 0, 1000);
-        Validators::validateMemberPropLength('rune_pouch', $validated['rune_pouch'] ?? null, 6, 8);
-        Validators::validateMemberPropLength('seed_vault', $validated['seed_vault'] ?? null, 0, 500);
-        Validators::validateMemberPropLength('potion_storage', $validated['potion_storage'] ?? null, 0, 2000);
-        Validators::validateMemberPropLength('poh_costume_room', $validated['poh_costume_room'] ?? null, 0, 2000);
-        Validators::validateMemberPropLength('quiver', $validated['quiver'] ?? null, 2, 2);
-        Validators::validateMemberPropLength('deposited', $validated['deposited'] ?? null, 0, 200);
-        Validators::validateMemberPropLength('diary_vars', $validated['diary_vars'] ?? null, 0, 62);
+        $validatorBounds = [
+            ['stats', 7, 7],
+            ['coordinates', 4, 4],
+            ['skills', 24, 24],
+            ['quests', 0, 250],
+            ['inventory', 56, 56],
+            ['equipment', 28, 28],
+            ['bank', 0, 3000],
+            ['bank_partial', 0, 3000],
+            ['shared_bank', 0, 1000],
+            ['rune_pouch', 6, 8],
+            ['seed_vault', 0, 500],
+            ['potion_storage', 0, 2000],
+            ['poh_costume_room', 0, 2000],
+            ['plank_sack', 0, 14],
+            ['master_scroll_book', 0, 40],
+            ['essence_pouches', 0, 16],
+            ['tackle_box', 0, 100],
+            ['tackle_box_partial', 0, 100],
+            ['coal_bag', 0, 2],
+            ['fish_barrel', 0, 100],
+            ['quiver', 2, 2],
+            ['deposited', 0, 200],
+            ['diary_vars', 0, 62],
+        ];
+        foreach ($validatorBounds as [$propName, $minLength, $maxLength]) {
+            Validators::validateMemberPropLength($propName, $validated[$propName] ?? null, $minLength, $maxLength);
+        }
 
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
-            foreach (Member::PROPERTY_KEYS as $property) {
-                if (array_key_exists($property, $validated) && ! is_null($validated[$property])) {
+            foreach (Member::PROPERTY_KEYS as $propertyKey) {
+                $partialKey = Member::PARTIAL_PROPERTY_KEYS[$propertyKey] ?? null;
+
+                if (isset($validated[$propertyKey])) {
                     $member->properties()->updateOrCreate(
-                        ['key' => $property],
-                        ['value' => $validated[$property]]
+                        ['key' => $propertyKey],
+                        ['value' => $validated[$propertyKey]]
+                    );
+                } elseif (isset($partialKey) && isset($validated[$partialKey])) {
+                    $fullFlat = [];
+                    $fullFlatProperty = $member->getProperty($propertyKey);
+                    if (isset($fullFlatProperty)) {
+                        $fullFlat = $fullFlatProperty->value;
+                    }
+
+                    $partialFlat = $validated[$partialKey];
+
+                    $partialReshaped = [];
+
+                    for ($i = 0; $i < count($partialFlat) - 1; $i += 2) {
+                        $itemID = $partialFlat[$i];
+                        $quantity = $partialFlat[$i + 1];
+                        $partialReshaped[$itemID] = $quantity;
+                    }
+
+                    for ($i = 0; $i < count($fullFlat) - 1; $i += 2) {
+                        $itemID = $fullFlat[$i];
+                        $quantity = $fullFlat[$i + 1];
+
+                        $fullFlat[$i + 1] = max(0, $quantity + ($partialReshaped[$itemID] ?? 0));
+
+                        unset($partialReshaped[$itemID]);
+                    }
+
+                    foreach ($partialReshaped as $itemID => $quantity) {
+                        $fullFlat[] = $itemID;
+                        $fullFlat[] = max(0, $quantity);
+                    }
+
+                    $member->properties()->updateOrCreate(
+                        ['key' => $propertyKey],
+                        ['value' => $fullFlat]
                     );
                 }
             }

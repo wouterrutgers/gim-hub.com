@@ -72,6 +72,26 @@ const StatsSchema = z
     };
   });
 
+const reshapeFlattenedItemArray = (flat: number[], keepInvalid: boolean): (ItemStack | undefined)[] => {
+  const squeezed = [];
+
+  for (let index = 0; index < Math.floor(flat.length / 2); index++) {
+    const itemID = flat[2 * index] as ItemID;
+    const quantity = flat[2 * index + 1];
+
+    if (itemID <= 0 || quantity <= 0) {
+      if (keepInvalid) {
+        squeezed.push(undefined);
+      }
+      continue;
+    } else {
+      squeezed.push({ itemID, quantity });
+    }
+  }
+
+  return squeezed;
+};
+
 /**
  * Backend obeys this order:
  * https://github.com/runelite/runelite/blob/a8bdd510971fc8974959e2c9b34b6b88b46bb0fd/runelite-api/src/main/java/net/runelite/api/EquipmentInventorySlot.java#L37
@@ -92,82 +112,73 @@ const EquipmentSlotInBackendOrder: EquipmentSlot[] = [
   "Jaw",
   "Ring",
   "Ammo",
+  // Omit quiver, it is an equipment slot but comes as a separate `quiver` key
 ] as const;
+
 const EquipmentSchema = z
   .array(z.uint32())
-  .length(2 * (EquipmentSlot.length - 1)) // Quiver is an equipment slot but comes as a separate `quiver` key
-  .transform((equipmentFlat) => {
-    return equipmentFlat.reduce<Map<EquipmentSlot, ItemStack>>((equipment, _, index, equipmentFlat) => {
-      if (index % 2 !== 0 || index + 1 >= equipmentFlat.length) return equipment;
+  .refine((arr) => (arr.length = 2 * EquipmentSlotInBackendOrder.length))
+  .transform((flat) => reshapeFlattenedItemArray(flat, true))
+  .transform((equipmentArr) => {
+    const equipment = new Map<EquipmentSlot, ItemStack>();
+    for (const [index, itemStack] of equipmentArr.entries()) {
+      if (!itemStack) continue;
 
-      const itemID = equipmentFlat[index] as ItemID;
-      const quantity = equipmentFlat[index + 1];
-
-      if (quantity < 1) return equipment;
-
-      const slot = EquipmentSlotInBackendOrder[index / 2];
-      equipment.set(slot, { itemID, quantity });
-      return equipment;
-    }, new Map());
+      const slot = EquipmentSlotInBackendOrder[index];
+      equipment.set(slot, itemStack);
+    }
+    return equipment;
   });
 
 const QuiverSchema = z
   .array(z.uint32())
   .refine((arr) => arr.length === 0 || arr.length === 2)
-  .transform((flat) => {
-    const result = new Map<ItemID, ItemStack>();
-    if (flat.length === 2) {
-      const itemID = flat[0] as ItemID;
-      const quantity = flat[1];
+  .transform((flat) => reshapeFlattenedItemArray(flat, false))
+  .transform((quiverArr) => {
+    const quiver = new Map<ItemID, ItemStack>();
+    for (const itemStack of quiverArr) {
+      if (!itemStack) continue;
 
-      if (quantity > 0) {
-        result.set(itemID, { itemID, quantity });
-      }
+      const { itemID, quantity: plusQuantity } = itemStack;
+      const quantity = (quiver.get(itemID)?.quantity ?? 0) + plusQuantity;
+
+      quiver.set(itemID, { itemID, quantity });
     }
-
-    return result;
+    return quiver;
   });
 
 const ItemCollectionSchema = z
   .array(z.uint32().or(z.literal(-1)))
-  .refine((arg) => arg.length % 2 === 0)
-  .transform((arg: number[]) =>
-    arg.reduce<Map<ItemID, ItemStack>>((items, _, index, flatItems) => {
-      if (index % 2 !== 0 || index + 1 >= flatItems.length) return items;
+  .refine((arr) => arr.length % 2 === 0)
+  .transform((flat) => reshapeFlattenedItemArray(flat, false))
+  .transform((itemsArr) => {
+    const items = new Map<ItemID, ItemStack>();
+    for (const itemStack of itemsArr) {
+      if (!itemStack) continue;
 
-      const itemID = flatItems[index] as ItemID;
-
-      // -1 seems to be a sentinel for empty rune pouch spots
-      if (itemID < 0) return items;
-
-      const itemQuantity = flatItems[index + 1];
-      const existing = items.get(itemID);
-      const quantity = itemQuantity + (existing?.quantity ?? 0);
+      const { itemID, quantity: plusQuantity } = itemStack;
+      const quantity = (items.get(itemID)?.quantity ?? 0) + plusQuantity;
 
       items.set(itemID, { itemID, quantity });
-
-      return items;
-    }, new Map<ItemID, ItemStack>()),
-  );
+    }
+    return items;
+  });
 
 const INVENTORY_SIZE = 28;
 
-const InventoryFromBackend = z
+const InventorySchema = z
   .array(z.uint32())
   .length(2 * INVENTORY_SIZE)
-  .transform((flat) =>
-    flat.reduce<Map<number, ItemStack>>((inventory, _, index, flat) => {
-      if (index % 2 !== 0) return inventory;
+  .transform((flat) => reshapeFlattenedItemArray(flat, true))
+  .transform((inventoryArr) => {
+    const inventory = new Map<number, ItemStack>();
+    for (const [index, itemStack] of inventoryArr.entries()) {
+      if (!itemStack) continue;
 
-      const itemID = flat[index] as ItemID;
-      const quantity = flat[index + 1];
-
-      if (quantity > 0) {
-        inventory.set(index / 2, { itemID, quantity });
-      }
-      return inventory;
-    }, new Map()),
-  );
+      inventory.set(index, itemStack);
+    }
+    return inventory;
+  });
 
 /**
  * Skills in the order that the backend sends the flat arrays of experience in.
@@ -918,55 +929,22 @@ const GetGroupDataResponseSchema = z
      */
     last_updated: DateSchema.nullish().transform((value) => value ?? undefined),
 
-    /**
-     * The items in the player's bank.
-     * When defined, it always contains all of the items.
-     */
+    // When defined, these item containers contain every item and are NOT partial.
+
     bank: NullableItemCollection,
-
-    /**
-     * The items in the player's equipment.
-     * When defined, it always contains all of the items.
-     */
     equipment: z.nullish(EquipmentSchema).transform((value) => value ?? undefined),
-
-    /**
-     * The items in the player's quiver.
-     * When defined, it always contains all of the items (which is always 1 item in case of the quiver).
-     */
     quiver: z.nullish(QuiverSchema).transform((value) => value ?? undefined),
-
-    /**
-     * The items in the player's inventory.
-     * When defined, it always contains all of the items.
-     */
-    inventory: z.nullish(InventoryFromBackend).transform((value) => value ?? undefined),
-
-    /**
-     * The items in the player's rune pouch.
-     * When defined, it always contains all of the items.
-     */
+    inventory: z.nullish(InventorySchema).transform((value) => value ?? undefined),
     rune_pouch: NullableItemCollection,
-
-    /**
-     * The items in the player's farming guild seed vault.
-     * When defined, it always contains all of the items.
-     */
     seed_vault: NullableItemCollection,
-
-    /**
-     * The items in the player's potion storage.
-     * When defined, it always contains all of the items.
-     */
     potion_storage: NullableItemCollection,
-
-    /**
-     * The items in the player's PoH wardrobe.
-     * When defined, it always contains all of the items.
-     *
-     * Different furniture is required to store specific items, but they use the same inventory under the hood.
-     * */
     poh_costume_room: NullableItemCollection,
+    plank_sack: NullableItemCollection,
+    master_scroll_book: NullableItemCollection,
+    essence_pouches: NullableItemCollection,
+    tackle_box: NullableItemCollection,
+    coal_bag: NullableItemCollection,
+    fish_barrel: NullableItemCollection,
 
     /**
      * Information on NPC the player last interacted with.
@@ -994,16 +972,49 @@ const GetGroupDataResponseSchema = z
     diary_vars: DiariesSchema.nullish().transform((value) => value ?? undefined),
   })
   .transform(
-    ({ last_updated, rune_pouch, seed_vault, potion_storage, poh_costume_room, diary_vars, quiver, ...rest }) => ({
-      lastUpdated: last_updated,
-      runePouch: rune_pouch,
-      seedVault: seed_vault,
-      potionStorage: potion_storage,
-      pohCostumeRoom: poh_costume_room,
+    ({
+      last_updated,
+      bank,
+      equipment,
       quiver,
-      diaries: diary_vars,
-      ...rest,
-    }),
+      inventory,
+      rune_pouch,
+      seed_vault,
+      potion_storage,
+      poh_costume_room,
+      plank_sack,
+      master_scroll_book,
+      essence_pouches,
+      diary_vars,
+      tackle_box,
+      coal_bag,
+      fish_barrel,
+      ...rest
+    }) => {
+      const itemContainers = {
+        bank: bank,
+        equipment: equipment,
+        quiver: quiver,
+        inventory: inventory,
+        runePouch: rune_pouch,
+        seedVault: seed_vault,
+        potionStorage: potion_storage,
+        pohCostumeRoom: poh_costume_room,
+        plankSack: plank_sack,
+        masterScrollBook: master_scroll_book,
+        essencePouches: essence_pouches,
+        tackleBox: tackle_box,
+        coalBag: coal_bag,
+        fishBarrel: fish_barrel,
+      } satisfies Record<Member.ItemContainerKey, unknown>;
+
+      return {
+        lastUpdated: last_updated,
+        diaries: diary_vars,
+        ...itemContainers,
+        ...rest,
+      };
+    },
   )
   .transform((memberState) => {
     for (const key of Object.keys(memberState)) {

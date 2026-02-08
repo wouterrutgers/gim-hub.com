@@ -12,13 +12,19 @@ const mapToItems = (data: Map<unknown, ItemStack>): Iterable<ItemStack> => data.
 
 export const AllItemContainers = [
   { name: "Bank", key: "bank", getItems: mapToItems },
+  { name: "Equipment", key: "equipment", getItems: mapToItems },
+  { name: "Quiver", key: "quiver", getItems: mapToItems },
+  { name: "Inventory", key: "inventory", getItems: mapToItems },
   { name: "Rune Pouch", key: "runePouch", getItems: mapToItems },
   { name: "Seed Vault", key: "seedVault", getItems: mapToItems },
   { name: "Potion Storage", key: "potionStorage", getItems: mapToItems },
   { name: "Costume Room", key: "pohCostumeRoom", getItems: mapToItems },
-  { name: "Quiver", key: "quiver", getItems: mapToItems },
-  { name: "Equipment", key: "equipment", getItems: mapToItems },
-  { name: "Inventory", key: "inventory", getItems: mapToItems },
+  { name: "Plank Sack", key: "plankSack", getItems: mapToItems },
+  { name: "Master Scroll Book", key: "masterScrollBook", getItems: mapToItems },
+  { name: "Essence Pouches", key: "essencePouches", getItems: mapToItems },
+  { name: "Tackle Box", key: "tackleBox", getItems: mapToItems },
+  { name: "Coal Bag", key: "coalBag", getItems: mapToItems },
+  { name: "Fish Barrel", key: "fishBarrel", getItems: mapToItems },
 ] as const;
 
 export type ItemContainerKey = (typeof AllItemContainers)[number]["key"];
@@ -32,13 +38,19 @@ export type ItemLocationBreakdown = Partial<Record<ItemContainer, number>>;
 export interface State {
   lastUpdated: Date;
   bank: ItemCollection;
+  equipment: Equipment;
+  quiver: ItemCollection;
+  inventory: Inventory;
   runePouch: ItemCollection;
   seedVault: ItemCollection;
   potionStorage: ItemCollection;
   pohCostumeRoom: ItemCollection;
-  quiver: ItemCollection;
-  equipment: Equipment;
-  inventory: Inventory;
+  plankSack: ItemCollection;
+  masterScrollBook: ItemCollection;
+  essencePouches: ItemCollection;
+  tackleBox: ItemCollection;
+  coalBag: ItemCollection;
+  fishBarrel: ItemCollection;
   coordinates?: { coords: WikiPosition2D; plane: number; isOnBoat: boolean };
   interacting?: NPCInteraction;
   stats?: Stats;

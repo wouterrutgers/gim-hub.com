@@ -1230,13 +1230,6 @@
     "member": true,
     "miniquest": true
   },
-  "7033": {
-    "name": "Tutorial Island",
-    "difficulty": "Novice",
-    "points": 1,
-    "member": false,
-    "tutorial": true
-  },
   "7103": {
     "name": "Pandemonium",
     "difficulty": "Novice",
@@ -1267,5 +1260,11 @@
     "points": 0,
     "member": true,
     "hidden": true
+  },
+  "9643": {
+    "name": "Learning the Ropes",
+    "difficulty": "Novice",
+    "points": "1",
+    "member": false
   }
 }

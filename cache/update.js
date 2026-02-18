@@ -50,11 +50,12 @@ const SITE_PATHS = (() => {
   };
 })();
 
-function exec(command, options) {
-  console.log(`[exec] ${command}`);
+function exec(command, args, options) {
+  const commandArgs = Array.isArray(args) ? args : [];
+  console.log(`[exec] ${[command, ...commandArgs].join(" ")}`);
   options = options || {};
   options.stdio = "inherit";
-  child_process.execSync(command, options);
+  child_process.execFileSync(command, commandArgs, options);
 }
 
 async function retry(fn, skipLast) {
@@ -77,8 +78,8 @@ async function retry(fn, skipLast) {
 }
 
 function execGitCleanInRunelite() {
-  exec(`git clean -ffdxq`, { cwd: RUNELITE_PATHS.DIRS.root });
-  exec(`git reset --hard -q`, { cwd: RUNELITE_PATHS.DIRS.root });
+  exec("git", ["clean", "-ffdxq"], { cwd: RUNELITE_PATHS.DIRS.root });
+  exec("git", ["reset", "--hard", "-q"], { cwd: RUNELITE_PATHS.DIRS.root });
 }
 
 function execRuneliteGradleApplication(args) {
@@ -105,8 +106,8 @@ function execRuneliteGradleApplication(args) {
 
   fs.writeFileSync(buildScriptPath, lines.join("\n"));
 
-  const gradlew = "./gradlew".replace("/", path.sep);
-  exec(`${gradlew} -b ${buildScriptPath} -q run --args="${runArgs}"`, {
+  const gradlew = path.resolve(RUNELITE_PATHS.DIRS.root, "gradlew");
+  exec(gradlew, ["-b", buildScriptPath, "-q", "run", `--args=${runArgs}`], {
     cwd: RUNELITE_PATHS.DIRS.root,
     env: {
       ...process.env,

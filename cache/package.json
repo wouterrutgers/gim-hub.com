@@ -9,10 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^3.2.3",
-    "axios": "^0.26.1",
-    "glob": "^8.0.1",
-    "sharp": "^0.31.1",
-    "xml2js": "^0.4.23"
+    "async": "^3.2.6",
+    "axios": "^1.13.5",
+    "glob": "^13.0.5",
+    "sharp": "^0.34.5",
+    "xml2js": "^0.6.2"
   }
 }

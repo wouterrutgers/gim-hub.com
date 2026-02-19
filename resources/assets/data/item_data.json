@@ -108537,5 +108537,35 @@
     "highalch": 0,
     "alchable": false,
     "mapping": null
+  },
+  "33080": {
+    "name": "25th anniversary helmet",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33082": {
+    "name": "25th anniversary warrior tabard",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33084": {
+    "name": "25th anniversary skeleton tabard",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33086": {
+    "name": "25th anniversary 5x5 hat",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33088": {
+    "name": "Gary",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
   }
 }

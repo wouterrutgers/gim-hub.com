@@ -4,6 +4,7 @@ RUN install-php-extensions \
     pcntl \
     pdo_mysql \
     pdo_sqlite \
+    redis \
     bcmath \
     zip \
     opcache

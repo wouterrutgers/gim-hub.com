@@ -44,6 +44,10 @@ class SyncMemberSkillsFromHiscores implements ShouldQueue
     {
         $member = Member::with('properties')->find($this->memberId);
 
+        if (! $member) {
+            return;
+        }
+
         $response = Http::withUserAgent('GIM hub (https://gim-hub.com)')->get(
             'https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name)
         );

@@ -90795,8 +90795,8 @@
   },
   "28334": {
     "name": "Awakener's orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28336": {

@@ -11,7 +11,7 @@ class SyncMemberSkillsFromHiscores implements ShouldQueue
 {
     use Queueable;
 
-    private const array SKILLS_IN_BACKEND_ORDER = [
+    protected const array SKILLS_IN_BACKEND_ORDER = [
         'Agility',
         'Attack',
         'Construction',
@@ -38,7 +38,7 @@ class SyncMemberSkillsFromHiscores implements ShouldQueue
         'Sailing',
     ];
 
-    public function __construct(public int $memberId) {}
+    public function __construct(protected int $memberId) {}
 
     public function handle(): void
     {
@@ -62,13 +62,13 @@ class SyncMemberSkillsFromHiscores implements ShouldQueue
             return;
         }
 
-        if (count($existingSkills) !== count(self::SKILLS_IN_BACKEND_ORDER)) {
+        if (count($existingSkills) !== count(static::SKILLS_IN_BACKEND_ORDER)) {
             return;
         }
 
         $mergedSkills = $existingSkills;
 
-        foreach (self::SKILLS_IN_BACKEND_ORDER as $index => $skill) {
+        foreach (static::SKILLS_IN_BACKEND_ORDER as $index => $skill) {
             $hiscoresXP = $hiscoresSkills->get($skill);
             $mergedSkills[$index] = max($mergedSkills[$index], $hiscoresXP);
         }

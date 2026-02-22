@@ -19,6 +19,10 @@ class SyncStaleMembersFromHiscores extends Command
             ->withMax('properties', 'updated_at')
             ->get()
             ->filter(function (Member $member) {
+                if (! $member->properties_max_updated_at) {
+                    return false;
+                }
+
                 return CarbonImmutable::make($member->properties_max_updated_at) < now()->subHours(4);
             })
             ->values();

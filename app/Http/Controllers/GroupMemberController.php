@@ -474,7 +474,7 @@ class GroupMemberController extends Controller
             ->first();
 
         try {
-            $response = Http::timeout(10)->get(
+            $response = Http::timeout(10)->withUserAgent('GIM hub (https://gim-hub.com)')->get(
                 'https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name)
             );
         } catch (Throwable) {

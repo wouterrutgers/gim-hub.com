@@ -26,6 +26,8 @@ php artisan migrate --force
 
 php artisan schedule:work &
 
+php artisan horizon &
+
 if [ -f "/Caddyfile" ]; then
     echo "Using custom Caddyfile"
     exec php artisan octane:frankenphp --host=0.0.0.0 --port=8000 --caddyfile=/Caddyfile "$@"

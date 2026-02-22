@@ -81,6 +81,7 @@ APP_NAME="GIM Hub"
 APP_ENV=production
 APP_KEY=
 APP_DEBUG=false
+ENABLE_HORIZON_ADMIN=false
 APP_URL=http://localhost
 
 DB_CONNECTION=mysql
@@ -224,6 +225,7 @@ OCTANE_HTTPS=true
 
 - Change all default database passwords for production
 - For HTTPS, use a custom Caddyfile with your domain (automatic certificates) or place behind a reverse proxy
+- Keep `ENABLE_HORIZON_ADMIN=false` unless `/horizon` is protected behind additional access controls
 - Consider Docker secrets for sensitive environment variables
 - The application is production ready with Octane providing high performance
 

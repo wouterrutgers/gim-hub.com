@@ -41,6 +41,8 @@ return [
 
     'debug' => (bool) env('APP_DEBUG', false),
 
+    'enable_horizon_admin' => (bool) env('ENABLE_HORIZON_ADMIN', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application URL

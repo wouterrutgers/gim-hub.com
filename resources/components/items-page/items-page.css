@@ -72,13 +72,13 @@
   outline: none;
 }
 
-.items-page-member-filter-container > span:focus-within {
+.items-page-member-filter-container span:focus-within > label {
   outline: 2px solid rgb(200 200 200);
   outline-offset: 1px;
   border-radius: 2px;
 }
 
-.items-page-member-filter-container > span:hover {
+.items-page-member-filter-container span > label:hover {
   outline: 2px solid rgb(255 255 255);
   outline-offset: 1px;
   border-radius: 2px;

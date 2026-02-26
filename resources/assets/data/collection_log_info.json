@@ -264,6 +264,27 @@
         ]
       },
       {
+        "name": "Brutus",
+        "items": [
+          {
+            "id": 33124,
+            "name": "Beef"
+          },
+          {
+            "id": 33101,
+            "name": "Mooleta"
+          },
+          {
+            "id": 33091,
+            "name": "Bottomless milk bucket (empty)"
+          },
+          {
+            "id": 33093,
+            "name": "Cow slippers"
+          }
+        ]
+      },
+      {
         "name": "Bryophyta",
         "items": [
           {
@@ -1238,6 +1259,10 @@
           {
             "id": 23528,
             "name": "Sarachnis cudgel"
+          },
+          {
+            "id": 33133,
+            "name": "Pristine spider silk"
           }
         ]
       },
@@ -6259,6 +6284,10 @@
           {
             "id": 31285,
             "name": "Gull"
+          },
+          {
+            "id": 33124,
+            "name": "Beef"
           }
         ]
       },

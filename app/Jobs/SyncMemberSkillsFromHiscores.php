@@ -11,6 +11,10 @@ class SyncMemberSkillsFromHiscores implements ShouldQueue
 {
     use Queueable;
 
+    public int $tries = 10;
+
+    public int $backoff = 300;
+
     protected const array SKILLS_IN_BACKEND_ORDER = [
         'Agility',
         'Attack',

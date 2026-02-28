@@ -3,26 +3,26 @@ import { type GroupCredentials } from "../api/credentials";
 
 const LOCAL_STORAGE_KEY_SAVED_GROUPS = "savedGroups";
 
+const readFromStorage = (): GroupCredentials[] => {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY_SAVED_GROUPS);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(
+      (item: unknown): item is GroupCredentials =>
+        typeof item === "object" && item !== null && "name" in item && "token" in item,
+    );
+  } catch {
+    return [];
+  }
+};
+
 export const useSavedGroups = (): {
   savedGroups: GroupCredentials[];
   addGroup: (credentials: GroupCredentials) => void;
   removeGroup: (name: string) => GroupCredentials[];
 } => {
-  const readFromStorage = (): GroupCredentials[] => {
-    try {
-      const raw = localStorage.getItem(LOCAL_STORAGE_KEY_SAVED_GROUPS);
-      if (!raw) return [];
-      const parsed: unknown = JSON.parse(raw);
-      if (!Array.isArray(parsed)) return [];
-      return parsed.filter(
-        (item: unknown): item is GroupCredentials =>
-          typeof item === "object" && item !== null && "name" in item && "token" in item,
-      );
-    } catch {
-      return [];
-    }
-  };
-
   const [savedGroups, setSavedGroups] = useState<GroupCredentials[]>(readFromStorage);
 
   const writeToStorage = useCallback((groups: GroupCredentials[]): void => {

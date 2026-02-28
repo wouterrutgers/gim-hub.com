@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState, type ReactElement } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context as APIContext } from "../../context/api-context";
 import { formatTitle } from "../../ts/format-title";
@@ -6,7 +6,7 @@ import { formatTitle } from "../../ts/format-title";
 import "./group-switcher.css";
 
 export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElement => {
-  const { logInLive, logOut, savedGroups, removeSavedGroup } = useContext(APIContext) ?? {};
+  const { logInLive, savedGroups, removeSavedGroup } = useContext(APIContext) ?? {};
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -37,13 +37,9 @@ export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElemen
         if (removeSavedGroup) {
           removeSavedGroup(name);
         }
-
-        if (logOut) {
-          logOut();
-        }
       });
     },
-    [logInLive, removeSavedGroup, logOut],
+    [logInLive, removeSavedGroup],
   );
 
   const handleRemove = useCallback(
@@ -59,7 +55,10 @@ export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElemen
     void navigate("/login", { state: { addGroup: true } });
   }, [navigate]);
 
-  const sortedGroups = savedGroups ? [...savedGroups].sort((a, b) => a.name.localeCompare(b.name)) : [];
+  const sortedGroups = useMemo(
+    () => (savedGroups ? [...savedGroups].sort((a, b) => a.name.localeCompare(b.name)) : []),
+    [savedGroups],
+  );
 
   return (
     <div id="group-switcher" ref={containerRef}>

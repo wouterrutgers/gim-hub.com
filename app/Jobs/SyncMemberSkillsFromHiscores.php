@@ -85,8 +85,6 @@ class SyncMemberSkillsFromHiscores implements ShouldQueue
             return;
         }
 
-        $skillsProperty->withoutTimestamps(function () use ($skillsProperty, $mergedSkills) {
-            $skillsProperty->update(['value' => $mergedSkills]);
-        });
+        $skillsProperty->update(['value' => $mergedSkills]);
     }
 }

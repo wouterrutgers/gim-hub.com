@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\SyncMemberSkillsFromHiscores;
 use App\Models\Member;
-use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 
 class SyncStaleMembersFromHiscores extends Command
@@ -16,16 +15,9 @@ class SyncStaleMembersFromHiscores extends Command
     public function handle(): int
     {
         $staleMembers = Member::where('name', '!=', Member::SHARED_MEMBER)
-            ->withMax('properties', 'updated_at')
-            ->get()
-            ->filter(function (Member $member) {
-                if (! $member->properties_max_updated_at) {
-                    return false;
-                }
-
-                return CarbonImmutable::make($member->properties_max_updated_at) < now()->subHours(4);
-            })
-            ->values();
+            ->whereNotNull('last_online_at')
+            ->where('last_online_at', '<', now()->subHours(4))
+            ->get();
 
         $dispatchTime = now();
         $staleMembers->each(function (Member $member, int $index) use ($dispatchTime) {

@@ -925,9 +925,14 @@ const GetGroupDataResponseSchema = z
     coordinates: CoordinatesSchema.nullish().transform((value) => value ?? undefined),
 
     /**
-     * The last time the player sent an update
+     * The newest property update timestamp for this member.
      */
     last_updated: DateSchema.nullish().transform((value) => value ?? undefined),
+
+    /**
+     * The last time the player was online in game.
+     */
+    last_online_at: DateSchema.nullish().transform((value) => value ?? undefined),
 
     // When defined, these item containers contain every item and are NOT partial.
 
@@ -974,6 +979,7 @@ const GetGroupDataResponseSchema = z
   .transform(
     ({
       last_updated,
+      last_online_at,
       bank,
       equipment,
       quiver,
@@ -1010,6 +1016,7 @@ const GetGroupDataResponseSchema = z
 
       return {
         lastUpdated: last_updated,
+        lastOnlineAt: last_online_at,
         diaries: diary_vars,
         ...itemContainers,
         ...rest,

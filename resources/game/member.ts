@@ -37,6 +37,7 @@ export type ItemLocationBreakdown = Partial<Record<ItemContainer, number>>;
 
 export interface State {
   lastUpdated: Date;
+  lastOnlineAt?: Date;
   bank: ItemCollection;
   equipment: Equipment;
   quiver: ItemCollection;

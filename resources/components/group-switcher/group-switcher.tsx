@@ -35,7 +35,7 @@ export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElemen
       setOpen(false);
       logInLive({ name, token }).catch(() => {
         if (removeSavedGroup) {
-          removeSavedGroup(name);
+          removeSavedGroup({ name, token });
         }
       });
     },
@@ -43,9 +43,9 @@ export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElemen
   );
 
   const handleRemove = useCallback(
-    (name: string): void => {
+    (name: string, token: string): void => {
       if (!removeSavedGroup) return;
-      removeSavedGroup(name);
+      removeSavedGroup({ name, token });
     },
     [removeSavedGroup],
   );
@@ -91,8 +91,8 @@ export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElemen
       </button>
       {open && (
         <div id="group-switcher-dropdown" className="rsborder rsbackground">
-          {sortedGroups.map((group) => (
-            <div key={group.name} className="group-switcher-item">
+          {sortedGroups.map((group, index) => (
+            <div key={`${group.name}-${index}`} className="group-switcher-item">
               <button
                 type="button"
                 className="group-switcher-item-button men-button"
@@ -103,7 +103,7 @@ export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElemen
               <button
                 type="button"
                 className="group-switcher-remove men-button"
-                onClick={(): void => handleRemove(group.name)}
+                onClick={(): void => handleRemove(group.name, group.token)}
                 title={`Remove ${group.name}`}
               >
                 ✕

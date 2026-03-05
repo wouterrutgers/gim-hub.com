@@ -83,7 +83,7 @@ interface APIContext {
   /**
    * Remove a saved group by name.
    */
-  removeSavedGroup: (name: string) => void;
+  removeSavedGroup: (credentials: GroupCredentials) => void;
 
   api?: APIMethods;
 }
@@ -181,9 +181,9 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
   );
 
   const removeSavedGroup = useCallback(
-    (name: string): void => {
-      const remaining = [...removeGroup(name)].sort((a, b) => a.name.localeCompare(b.name));
-      if (groupName === name) {
+    (credentials: GroupCredentials): void => {
+      const remaining = [...removeGroup(credentials)].sort((a, b) => a.name.localeCompare(b.name));
+      if (groupName === credentials.name) {
         if (remaining.length > 0) {
           logInLive(remaining[0]).catch(() => logOut());
         } else {

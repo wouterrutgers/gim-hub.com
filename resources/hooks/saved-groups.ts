@@ -21,7 +21,7 @@ const readFromStorage = (): GroupCredentials[] => {
 export const useSavedGroups = (): {
   savedGroups: GroupCredentials[];
   addGroup: (credentials: GroupCredentials) => void;
-  removeGroup: (name: string) => GroupCredentials[];
+  removeGroup: (credentials: GroupCredentials) => GroupCredentials[];
 } => {
   const [savedGroups, setSavedGroups] = useState<GroupCredentials[]>(readFromStorage);
 
@@ -32,17 +32,18 @@ export const useSavedGroups = (): {
 
   const addGroup = useCallback(
     (credentials: GroupCredentials): void => {
+      const { name, token } = credentials;
       const current = readFromStorage();
-      const filtered = current.filter((g) => g.name !== credentials.name);
-      writeToStorage([...filtered, credentials]);
+      const remaining = current.filter((g) => g.name !== name || g.token !== token);
+      writeToStorage([...remaining, credentials]);
     },
     [writeToStorage],
   );
 
   const removeGroup = useCallback(
-    (name: string): GroupCredentials[] => {
+    ({ name, token }: GroupCredentials): GroupCredentials[] => {
       const current = readFromStorage();
-      const remaining = current.filter((g) => g.name !== name);
+      const remaining = current.filter((g) => g.name !== name || g.token !== token);
       writeToStorage(remaining);
       return remaining;
     },

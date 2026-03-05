@@ -10,7 +10,7 @@ import {
 } from "react";
 import Api from "../../api/api";
 import { Context as APIContext } from "../../context/api-context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import * as z from "zod/v4";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 
@@ -37,6 +37,8 @@ export const LoginPage = (): ReactElement => {
   const [serverError, setServerError] = useState<string[]>();
   const [pendingSubmission, setPendingSubmission] = useState<boolean>(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isAddingGroup = (location.state as { addGroup?: boolean } | null)?.addGroup === true;
 
   const formRef = useRef<HTMLFormElement>(null);
   useEffect(() => {
@@ -54,7 +56,7 @@ export const LoginPage = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    if (!logInLive) return;
+    if (!logInLive || isAddingGroup) return;
 
     logInLive()
       .then(() => {
@@ -63,7 +65,7 @@ export const LoginPage = (): ReactElement => {
       .catch((reason) => {
         console.error("LoginPage: Error while redirecting:", reason);
       });
-  }, [logInLive, navigate]);
+  }, [logInLive, navigate, isAddingGroup]);
 
   const tryLogin = useCallback(
     (formData: FormData): void => {

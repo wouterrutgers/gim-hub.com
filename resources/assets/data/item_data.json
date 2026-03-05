@@ -30278,6 +30278,12 @@
     "alchable": true,
     "mapping": null
   },
+  "7505": {
+    "name": "Red crab",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
   "7508": {
     "name": "Asgoldian ale",
     "highalch": 1,
@@ -108562,21 +108568,15 @@
     "alchable": false,
     "mapping": null
   },
-  "33088": {
-    "name": "Gary",
-    "highalch": 0,
-    "alchable": true,
-    "mapping": null
-  },
   "33089": {
     "name": "Bottomless milk bucket",
-    "highalch": 27000,
+    "highalch": 9000,
     "alchable": true,
     "mapping": null
   },
   "33091": {
     "name": "Bottomless milk bucket (empty)",
-    "highalch": 27000,
+    "highalch": 9000,
     "alchable": true,
     "mapping": null
   },

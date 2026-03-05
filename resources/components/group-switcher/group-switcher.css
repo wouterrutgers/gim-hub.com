@@ -49,6 +49,14 @@
   gap: 4px;
 }
 
+@media screen and (width <= 400px) {
+  #group-switcher-dropdown {
+    place-self: center;
+    left: calc(-100px + 50%);
+    box-sizing: border-box;
+  }
+}
+
 .group-switcher-item {
   display: flex;
   align-items: center;

@@ -197,7 +197,7 @@ class GroupMemberController extends Controller
             ['rune_pouch', 6, 8],
             ['seed_vault', 0, 500],
             ['potion_storage', 0, 2000],
-            ['poh_costume_room', 0, 2000],
+            ['poh_costume_room', 0, 2500],
             ['plank_sack', 0, 14],
             ['master_scroll_book', 0, 40],
             ['essence_pouches', 0, 16],

@@ -198,7 +198,7 @@ class GroupMemberController extends Controller
             ['rune_pouch', 6, 8],
             ['seed_vault', 0, 500],
             ['potion_storage', 0, 2000],
-            ['poh_costume_room', 0, 2000],
+            ['poh_costume_room', 0, 2500],
             ['plank_sack', 0, 14],
             ['master_scroll_book', 0, 40],
             ['essence_pouches', 0, 16],
@@ -218,6 +218,8 @@ class GroupMemberController extends Controller
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
+            $member->update(['last_online_at' => now()]);
+
             foreach (Member::PROPERTY_KEYS as $propertyKey) {
                 $partialKey = Member::PARTIAL_PROPERTY_KEYS[$propertyKey] ?? null;
 
@@ -371,6 +373,7 @@ class GroupMemberController extends Controller
                 $data = [
                     'name' => $member->name,
                     'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
+                    'last_online_at' => is_null($member->last_online_at) ? null : Carbon::make($member->last_online_at)->toIso8601ZuluString(),
                     'shared_bank' => null,
                     'deposited' => null,
                     'collection_log' => null,
@@ -476,7 +479,7 @@ class GroupMemberController extends Controller
             ->first();
 
         try {
-            $response = Http::timeout(10)->get(
+            $response = Http::timeout(10)->withUserAgent('GIM hub (https://gim-hub.com)')->get(
                 'https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name)
             );
         } catch (Throwable) {

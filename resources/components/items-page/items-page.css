@@ -43,35 +43,42 @@
   padding: 4px;
 }
 
+/* Use negative margin + hidden overflow to hide the left border of wrapped member checkboxes */
+.items-page-member-filter-clipbox {
+  overflow: hidden;
+}
+
 .items-page-member-filter-container {
   padding: 4px;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 8px;
+  margin-left: -10px;
 }
 
 .items-page-member-filter-container > span {
   display: flex;
+  margin-left: 9px; /* padding + margin + border of the bordered siblings */
 }
 
-.items-page-member-filter-container > hr {
-  width: 0;
-  height: 100%;
-  border: none;
-  border-right: 1px solid var(--light-border);
-  margin: 0;
-  margin-inline: 4px;
+.items-page-member-filter-container > span:not(:nth-child(1)) {
+  padding-left: 4px;
+  margin-left: 4px;
+  border-left: 1px solid var(--light-border);
 }
 
 .items-page-member-filter-container input:focus-visible {
   outline: none;
 }
 
-.items-page-member-filter-container > span:focus-within {
+.items-page-member-filter-container span:focus-within > label {
   outline: 2px solid rgb(200 200 200);
   outline-offset: 1px;
   border-radius: 2px;
 }
 
-.items-page-member-filter-container > span:hover {
+.items-page-member-filter-container span > label:hover {
   outline: 2px solid rgb(255 255 255);
   outline-offset: 1px;
   border-radius: 2px;

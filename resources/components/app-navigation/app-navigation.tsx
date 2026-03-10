@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { CachedImage } from "../cached-image/cached-image";
 import { Context as APIContext } from "../../context/api-context";
 import { formatTitle } from "../../ts/format-title";
+import { GroupSwitcher } from "../group-switcher/group-switcher";
 
 import "./app-navigation.css";
 
@@ -80,7 +81,7 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
 
   return (
     <div id="app-navigation" className="rsborder-tiny rsbackground">
-      <h4 id="app-navigation-group-name">{groupName}</h4>
+      <GroupSwitcher groupName={groupName} />
       <nav id="app-navigation-nav">{elements}</nav>
     </div>
   );

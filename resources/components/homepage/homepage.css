@@ -11,9 +11,11 @@
 }
 
 #homepage-links {
-  margin-top: 1.5em;
+  margin: 1.5em;
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 #homepage .logo {

@@ -15,9 +15,7 @@ class GePrices
 
     protected static function fetch(): array
     {
-        $response = Http::withHeaders([
-            'User-Agent' => 'Group Ironmen - Laravel',
-        ])->get('https://prices.runescape.wiki/api/v1/osrs/latest');
+        $response = Http::withUserAgent('GIM hub (https://gim-hub.com)')->get('https://prices.runescape.wiki/api/v1/osrs/latest');
 
         if (! $response->successful()) {
             return [];

@@ -5,6 +5,7 @@ import { createContext } from "react";
 import Api from "../api/api";
 import { useLocalStorage } from "../hooks/local-storage";
 import DemoApi from "../api/demo-api";
+import { useSavedGroups } from "../hooks/saved-groups";
 
 /**
  * Public methods to interact with the backend.
@@ -74,6 +75,16 @@ interface APIContext {
    */
   logInDemo: () => Promise<boolean>;
 
+  /**
+   * All saved group credentials that the user has previously logged into.
+   */
+  savedGroups: GroupCredentials[];
+
+  /**
+   * Remove a saved group by name.
+   */
+  removeSavedGroup: (credentials: GroupCredentials) => void;
+
   api?: APIMethods;
 }
 
@@ -102,6 +113,8 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     defaultValue: undefined,
     validator: validateCredential,
   });
+
+  const { savedGroups, addGroup, removeGroup } = useSavedGroups();
 
   const storageCredentials: GroupCredentials | undefined = useMemo(() => {
     if (!groupName || !groupToken) return undefined;
@@ -133,6 +146,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
         if (response.ok) {
           setGroupName(newCredentials.name);
           setGroupToken(newCredentials.token);
+          addGroup(newCredentials);
           setApi(new Api(newCredentials));
           setIsDemo(false);
           return Promise.resolve();
@@ -145,7 +159,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
         throw new Error(`Unexpected status code: ${response.status}`);
       });
     },
-    [setGroupName, setGroupToken, storageCredentials],
+    [setGroupName, setGroupToken, addGroup, storageCredentials],
   );
   const logInDemo = useCallback((): Promise<boolean> => {
     setApi(new DemoApi());
@@ -166,6 +180,20 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     [storageCredentials],
   );
 
+  const removeSavedGroup = useCallback(
+    (credentials: GroupCredentials): void => {
+      const remaining = [...removeGroup(credentials)].sort((a, b) => a.name.localeCompare(b.name));
+      if (groupName === credentials.name) {
+        if (remaining.length > 0) {
+          logInLive(remaining[0]).catch(() => logOut());
+        } else {
+          logOut();
+        }
+      }
+    },
+    [removeGroup, groupName, logInLive, logOut],
+  );
+
   const apiContext: APIContext = useMemo(() => {
     const base: APIContext = {
       loaded: true,
@@ -174,6 +202,8 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
       logInLive,
       logInDemo,
       checkCredentials,
+      savedGroups,
+      removeSavedGroup,
     };
 
     if (!api) return base;
@@ -190,7 +220,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     };
 
     return base;
-  }, [api, checkCredentials, isDemo, logInDemo, logInLive, logOut]);
+  }, [api, checkCredentials, isDemo, logInDemo, logInLive, logOut, savedGroups, removeSavedGroup]);
 
   return <Context value={apiContext}>{children}</Context>;
 };

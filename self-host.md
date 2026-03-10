@@ -1,6 +1,6 @@
 # GIM Hub self‑hosting guide
 
-This guide shows how to run GIM Hub with Laravel Octane and FrankenPHP.
+This guide shows how to run GIM Hub with Laravel Octane, Laravel Horizon, and FrankenPHP.
 
 ## Prerequisites
 
@@ -36,6 +36,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
   mysql:
     image: mysql:8.4
@@ -53,8 +55,21 @@ services:
       retries: 10
       start_period: 10s
 
+  redis:
+    image: redis:8-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
 volumes:
   mysql_data:
+  redis_data:
   caddy_data:
   caddy_config:
 ```
@@ -66,6 +81,7 @@ APP_NAME="GIM Hub"
 APP_ENV=production
 APP_KEY=
 APP_DEBUG=false
+ENABLE_HORIZON_ADMIN=false
 APP_URL=http://localhost
 
 DB_CONNECTION=mysql
@@ -76,8 +92,12 @@ DB_USERNAME=gim
 DB_PASSWORD=secret
 
 SESSION_DRIVER=database
-QUEUE_CONNECTION=database
+QUEUE_CONNECTION=redis
 CACHE_STORE=file
+
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=null
 ```
 
 4. Start the stack
@@ -191,7 +211,7 @@ OCTANE_HTTPS=true
 
 ## Troubleshooting
 
-- Container won't start: `docker compose logs app` (or `mysql`)
+- Container won't start: `docker compose logs app` (or `mysql` / `redis`)
 - Database connection issues: ensure `.env` uses `DB_HOST=mysql` and MySQL is healthy: `docker compose ps mysql`
 - Permission issues: ensure `.env` is readable: `chmod 644 .env`
 - CSS/JS assets not loading: add `ASSET_URL` to `.env` with the same value as `APP_URL`
@@ -205,6 +225,7 @@ OCTANE_HTTPS=true
 
 - Change all default database passwords for production
 - For HTTPS, use a custom Caddyfile with your domain (automatic certificates) or place behind a reverse proxy
+- Keep `ENABLE_HORIZON_ADMIN=false` unless `/horizon` is protected behind additional access controls
 - Consider Docker secrets for sensitive environment variables
 - The application is production ready with Octane providing high performance
 

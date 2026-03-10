@@ -1,9 +1,10 @@
-FROM dunglas/frankenphp:php8.4 AS base
+FROM dunglas/frankenphp:php8.5 AS base
 
 RUN install-php-extensions \
     pcntl \
     pdo_mysql \
     pdo_sqlite \
+    redis \
     bcmath \
     zip \
     opcache

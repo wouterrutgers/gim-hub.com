@@ -6,7 +6,7 @@ import { XpDropper } from "../xp-dropper/xp-dropper";
 import {
   GroupXPDropsContext,
   useMemberInteractingContext,
-  useMemberLastUpdatedContext,
+  useMemberLastOnlineAtContext,
   useMemberStatsContext,
 } from "../../context/group-context";
 
@@ -68,7 +68,9 @@ const PlayerStatsImpl = ({
   health: { current: number; max: number };
   prayer: { current: number; max: number };
   run: { current: number; max: number };
-  status: { online: true; world?: number; interacting?: Member.NPCInteraction } | { online: false; lastUpdated?: Date };
+  status:
+    | { online: true; world?: number; interacting?: Member.NPCInteraction }
+    | { online: false; lastOnlineAt?: Date };
   children?: ReactNode;
 }): ReactElement => {
   let interactionBar: ReactNode = undefined;
@@ -85,8 +87,8 @@ const PlayerStatsImpl = ({
         </>
       );
     }
-  } else if (status.lastUpdated && status.lastUpdated?.getTime() > 0) {
-    statusOverlay = <> - {status.lastUpdated?.toLocaleString()}</>;
+  } else if (status.lastOnlineAt && status.lastOnlineAt?.getTime() > 0) {
+    statusOverlay = <> - {status.lastOnlineAt?.toLocaleString()}</>;
   }
 
   const healthRatio = health.current / health.max;
@@ -145,11 +147,11 @@ export const PlayerStatsPlaceholder = (): ReactElement => {
 export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement => {
   const interacting = useMemberInteractingContext(member);
   const stats = useMemberStatsContext(member);
-  const lastUpdated = useMemberLastUpdatedContext(member);
+  const lastOnlineAt = useMemberLastOnlineAtContext(member);
   const xpDrops = useContext(GroupXPDropsContext);
 
   const now = new Date();
-  const online = now.getTime() - (lastUpdated ?? new Date(0)).getTime() < INACTIVE_TIMER_MS;
+  const online = now.getTime() - (lastOnlineAt ?? new Date(0)).getTime() < INACTIVE_TIMER_MS;
   const isInteractingRecent = interacting && now.getTime() - interacting?.lastUpdated.getTime() < INTERACTION_TIMER_MS;
 
   return (
@@ -161,7 +163,7 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
       status={
         online
           ? { online: true, interacting: isInteractingRecent ? interacting : undefined, world: stats?.world }
-          : { online: false, lastUpdated }
+          : { online: false, lastOnlineAt }
       }
       children={<XpDropper xpDrops={xpDrops.get(member)} />}
     />

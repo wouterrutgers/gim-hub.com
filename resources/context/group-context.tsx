@@ -73,6 +73,7 @@ const createMemberSelector =
     useGroupMemberContext((state) => state?.get(member)?.[key]);
 
 export const useMemberLastUpdatedContext = createMemberSelector("lastUpdated");
+export const useMemberLastOnlineAtContext = createMemberSelector("lastOnlineAt");
 export const useMemberBankContext = createMemberSelector("bank");
 export const useMemberRunePouchContext = createMemberSelector("runePouch");
 export const useMemberSeedVaultContext = createMemberSelector("seedVault");

@@ -458,36 +458,37 @@ const useMemberFilter = (): [ReactElement, MemberNegativeFilter, () => void] => 
   }, [memberFilterUserString]);
 
   const element = (
-    <span className="items-page-member-filter-container rsborder-tiny rsbackground">
-      {[...members.values()].map((name, index, array) => (
-        <Fragment key={name}>
-          <span className="rsbackground-hover">
-            <input
-              id={`items-page-member-filter-${name}`}
-              type="checkbox"
-              checked={!memberFilterRef.current.has(name)}
-              onChange={() => {
-                const shouldDelete = memberFilterRef.current.has(name);
-                const newFilter = new Set(memberFilterRef.current.values());
-                if (shouldDelete) {
-                  newFilter.delete(name);
-                } else {
-                  newFilter.add(name);
-                }
+    <div className="items-page-member-filter-clipbox rsborder-tiny rsbackground" style={{ overflow: "hidden" }}>
+      <span className="items-page-member-filter-container">
+        {[...members.values()].map((name) => (
+          <Fragment key={name}>
+            <span className="rsbackground-hover">
+              <input
+                id={`items-page-member-filter-${name}`}
+                type="checkbox"
+                checked={!memberFilterRef.current.has(name)}
+                onChange={() => {
+                  const shouldDelete = memberFilterRef.current.has(name);
+                  const newFilter = new Set(memberFilterRef.current.values());
+                  if (shouldDelete) {
+                    newFilter.delete(name);
+                  } else {
+                    newFilter.add(name);
+                  }
 
-                memberFilterRef.current = newFilter;
-                if (members.size > 0) {
-                  memberFilterRef.current = memberFilterRef.current.intersection(members);
-                }
-                setMemberFilterUserString([...memberFilterRef.current.values()].join(","));
-              }}
-            />
-            <label htmlFor={`items-page-member-filter-${name}`}>{name}</label>
-          </span>
-          {index < array.length - 1 ? <hr /> : undefined}
-        </Fragment>
-      ))}
-    </span>
+                  memberFilterRef.current = newFilter;
+                  if (members.size > 0) {
+                    memberFilterRef.current = memberFilterRef.current.intersection(members);
+                  }
+                  setMemberFilterUserString([...memberFilterRef.current.values()].join(","));
+                }}
+              />
+              <label htmlFor={`items-page-member-filter-${name}`}>{name}</label>
+            </span>
+          </Fragment>
+        ))}
+      </span>
+    </div>
   );
 
   const resetMemberFilter = useCallback(() => {

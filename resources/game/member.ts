@@ -24,6 +24,7 @@ export const AllItemContainers = [
   { name: "Essence Pouches", key: "essencePouches", getItems: mapToItems },
   { name: "Tackle Box", key: "tackleBox", getItems: mapToItems },
   { name: "Tool Leprechaun", key: "toolLeprechaun", getItems: mapToItems },
+  { name: "Elnock Inquisitor", key: "elnockInquisitor", getItems: mapToItems },
   { name: "Coal Bag", key: "coalBag", getItems: mapToItems },
   { name: "Fish Barrel", key: "fishBarrel", getItems: mapToItems },
 ] as const;
@@ -52,6 +53,7 @@ export interface State {
   essencePouches: ItemCollection;
   tackleBox: ItemCollection;
   toolLeprechaun: ItemCollection;
+  elnockInquisitor: ItemCollection;
   coalBag: ItemCollection;
   fishBarrel: ItemCollection;
   coordinates?: { coords: WikiPosition2D; plane: number; isOnBoat: boolean };

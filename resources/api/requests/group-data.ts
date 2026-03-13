@@ -948,6 +948,8 @@ const GetGroupDataResponseSchema = z
     master_scroll_book: NullableItemCollection,
     essence_pouches: NullableItemCollection,
     tackle_box: NullableItemCollection,
+    tool_leprechaun: NullableItemCollection,
+    elnock_inquisitor: NullableItemCollection,
     coal_bag: NullableItemCollection,
     fish_barrel: NullableItemCollection,
 
@@ -993,6 +995,8 @@ const GetGroupDataResponseSchema = z
       essence_pouches,
       diary_vars,
       tackle_box,
+      tool_leprechaun,
+      elnock_inquisitor,
       coal_bag,
       fish_barrel,
       ...rest
@@ -1010,6 +1014,8 @@ const GetGroupDataResponseSchema = z
         masterScrollBook: master_scroll_book,
         essencePouches: essence_pouches,
         tackleBox: tackle_box,
+        toolLeprechaun: tool_leprechaun,
+        elnockInquisitor: elnock_inquisitor,
         coalBag: coal_bag,
         fishBarrel: fish_barrel,
       } satisfies Record<Member.ItemContainerKey, unknown>;

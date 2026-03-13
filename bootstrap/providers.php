@@ -1,7 +1,11 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\HorizonServiceProvider;
+use Bugsnag\BugsnagLaravel\BugsnagServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
-    Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+    AppServiceProvider::class,
+    HorizonServiceProvider::class,
+    BugsnagServiceProvider::class,
 ];

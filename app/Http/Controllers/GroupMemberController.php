@@ -205,7 +205,7 @@ class GroupMemberController extends Controller
             ['essence_pouches', 0, 16],
             ['tackle_box', 0, 100],
             ['tackle_box_partial', 0, 100],
-            ['tool_leprechaun', 0, 20],
+            ['tool_leprechaun', 0, 24],
             ['elnock_inquisitor', 0, 6],
             ['coal_bag', 0, 2],
             ['fish_barrel', 0, 100],

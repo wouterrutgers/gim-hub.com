@@ -108723,5 +108723,29 @@
     "highalch": 0,
     "alchable": true,
     "mapping": null
+  },
+  "33142": {
+    "name": "Ballistic attractor",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33143": {
+    "name": "Ballistic attractor schematic",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33144": {
+    "name": "Veiled kraken tentacle",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33145": {
+    "name": "Veiled kraken ink sac",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
   }
 }

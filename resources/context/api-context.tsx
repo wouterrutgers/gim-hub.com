@@ -4,7 +4,7 @@ import * as RequestSkillData from "../api/requests/skill-data";
 import { createContext } from "react";
 import Api from "../api/api";
 import { useLocalStorage } from "../hooks/local-storage";
-import DemoApi from "../api/demo-api";
+import type DemoApi from "../api/demo-api";
 import { useSavedGroups } from "../hooks/saved-groups";
 
 /**
@@ -161,10 +161,11 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     },
     [setGroupName, setGroupToken, addGroup, storageCredentials],
   );
-  const logInDemo = useCallback((): Promise<boolean> => {
+  const logInDemo = useCallback(async (): Promise<boolean> => {
+    const { default: DemoApi } = await import("../api/demo-api");
     setApi(new DemoApi());
     setIsDemo(true);
-    return Promise.resolve(true);
+    return true;
   }, []);
   const checkCredentials = useCallback(
     (credentials?: GroupCredentials): Promise<boolean> => {

@@ -279,10 +279,37 @@ export default defineConfig(({ isPreview }) => {
       __API_URL__: "'/api'",
     },
     build: {
-      rollupOptions: {
+      rolldownOptions: {
         output: {
-          manualChunks: {
-            vendor: ["react", "react-dom", "react-router-dom"],
+          manualChunks: (id: string): string | undefined => {
+            if (!id.includes("/node_modules/")) return undefined;
+
+            if (
+              id.includes("/node_modules/react/") ||
+              id.includes("/node_modules/react-dom/") ||
+              id.includes("/node_modules/react-router/") ||
+              id.includes("/node_modules/react-router-dom/")
+            ) {
+              return "vendor-react";
+            }
+
+            if (
+              id.includes("/node_modules/chart.js/") ||
+              id.includes("/node_modules/react-chartjs-2/") ||
+              id.includes("/node_modules/chartjs-adapter-date-fns/")
+            ) {
+              return "vendor-chart";
+            }
+
+            if (id.includes("/node_modules/date-fns/") || id.includes("/node_modules/@date-fns/")) {
+              return "vendor-date";
+            }
+
+            if (id.includes("/node_modules/zod/")) {
+              return "vendor-zod";
+            }
+
+            return undefined;
           },
         },
       },

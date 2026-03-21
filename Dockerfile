@@ -36,6 +36,9 @@ RUN npm run bundle
 
 FROM base AS production
 
+ARG GIM_HUB_RELEASE
+ENV GIM_HUB_RELEASE=${GIM_HUB_RELEASE}
+
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

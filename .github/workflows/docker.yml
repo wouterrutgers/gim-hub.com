@@ -40,6 +40,8 @@ jobs:
           context: .
           push: ${{ github.ref == 'refs/heads/master' }}
           tags: ${{ steps.tags.outputs.tags }}
+          build-args: |
+            GIM_HUB_RELEASE=${{ github.sha }}
           platforms: linux/amd64
           target: production
           cache-from: type=gha

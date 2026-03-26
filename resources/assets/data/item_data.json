@@ -86648,7 +86648,7 @@
     "mapping": null
   },
   "27187": {
-    "name": "Bow of faerdhinen",
+    "name": "Bow of faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -108746,6 +108746,201 @@
     "name": "Veiled kraken ink sac",
     "highalch": 0,
     "alchable": false,
+    "mapping": null
+  },
+  "33146": {
+    "name": "Scribbled notes",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33147": {
+    "name": "Egg box",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33148": {
+    "name": "Egg box",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33149": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33151": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33153": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33155": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33157": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33159": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33161": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33163": {
+    "name": "Archibald",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33166": {
+    "name": "Crystal body",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": [
+      {
+        "id": 23956,
+        "quantity": 3
+      }
+    ]
+  },
+  "33168": {
+    "name": "Crystal legs",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": [
+      {
+        "id": 23956,
+        "quantity": 2
+      }
+    ]
+  },
+  "33170": {
+    "name": "Crystal helm",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": [
+      {
+        "id": 23956,
+        "quantity": 1
+      }
+    ]
+  },
+  "33172": {
+    "name": "Avernic treads (max)",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33174": {
+    "name": "Osmumten's fang",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33176": {
+    "name": "Elidinis' ward (f)",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33178": {
+    "name": "Noxious halberd",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33180": {
+    "name": "Magus ring",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33182": {
+    "name": "Ultor ring",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33184": {
+    "name": "Purging staff",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33186": {
+    "name": "Dragonfire shield",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33188": {
+    "name": "Twisted buckler",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33190": {
+    "name": "Masori body (f)",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33192": {
+    "name": "Masori chaps (f)",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33194": {
+    "name": "Torva platelegs",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33196": {
+    "name": "Virtus robe top",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33198": {
+    "name": "Virtus robe bottom",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33200": {
+    "name": "Burning claws",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33202": {
+    "name": "Aranea boots",
+    "highalch": 60,
+    "alchable": true,
     "mapping": null
   }
 }

@@ -51,10 +51,15 @@
 
 .player-inventory-item-quantity {
   position: absolute;
-  left: 3px;
-  top: -4px;
+  left: 4px;
+  top: -2px;
+  font-size: 14px;
   min-height: 0;
-  color: var(--yellow);
+}
+
+.player-inventory-pouch-item-box .player-inventory-item-quantity {
+  top: -3px;
+  left: 0;
 }
 
 .player-inventory-pouch-vertical .player-inventory-item-quantity {

@@ -12,7 +12,7 @@ import { CachedImage } from "../cached-image/cached-image";
 
 import "./player-equipment.css";
 import type { ItemID } from "../../game/items";
-import { composeItemIconHref, formatShortQuantity, mappedGEPrice, mappedHighAlch } from "../../game/items";
+import { composeItemIconHref, formatShortQuantity, quantityColor, mappedGEPrice, mappedHighAlch } from "../../game/items";
 
 const DIZANAS_IDS = new Set<ItemID>([
   28902 as ItemID, // Dizana's max cape
@@ -116,7 +116,7 @@ export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactEleme
 
       let quantityOverlay: ReactElement | undefined;
       if (item.quantity > 1) {
-        quantityOverlay = <span className="player-equipment-item-quantity">{formatShortQuantity(item.quantity)}</span>;
+        quantityOverlay = <span className="player-equipment-item-quantity" style={{ color: quantityColor(item.quantity) }}>{formatShortQuantity(item.quantity)}</span>;
       }
 
       slotElements.push(

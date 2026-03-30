@@ -51,6 +51,12 @@ export const fetchItemTagsJSON = (): Promise<ItemTags> =>
       return parseResult.data;
     });
 
+export const quantityColor = (quantity: number): string => {
+  if (quantity >= 10_000_000) return "#00ff00";
+  if (quantity >= 100_000) return "#ffffff";
+  return "#ffff00";
+};
+
 export const formatShortQuantity = (quantity: number): string => {
   if (quantity >= 1000000000) {
     return Math.floor(quantity / 1000000000) + "B";

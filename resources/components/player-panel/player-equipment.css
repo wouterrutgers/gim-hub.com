@@ -5,7 +5,6 @@
 }
 
 .player-equipment-item-quantity {
-  color: var(--yellow);
   position: absolute;
   left: 0;
   top: -0.125em;

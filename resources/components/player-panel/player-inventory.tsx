@@ -25,7 +25,9 @@ const ItemBoxPouchRune = ({ iconSource, name, quantity }: ItemBoxPouchRuneProps)
   return (
     <div className="player-inventory-pouch-item-box">
       <CachedImage alt={name} src={iconSource} />
-      <span className="player-inventory-item-quantity" style={{ color: quantityColor(quantity) }}>{formatVeryShortQuantity(quantity)}</span>
+      <span className="player-inventory-item-quantity" style={{ color: quantityColor(quantity) }}>
+        {formatVeryShortQuantity(quantity)}
+      </span>
     </div>
   );
 };
@@ -40,7 +42,11 @@ interface ItemBoxProps {
 const ItemBox = ({ link, iconSource, quantity, onPointerEnter, children }: ItemBoxProps): ReactElement => {
   let quantityOverlay = undefined;
   if (quantity > 1) {
-    quantityOverlay = <span className="player-inventory-item-quantity" style={{ color: quantityColor(quantity) }}>{formatShortQuantity(quantity)}</span>;
+    quantityOverlay = (
+      <span className="player-inventory-item-quantity" style={{ color: quantityColor(quantity) }}>
+        {formatShortQuantity(quantity)}
+      </span>
+    );
   }
 
   return (

@@ -108942,5 +108942,47 @@
     "highalch": 60,
     "alchable": true,
     "mapping": null
+  },
+  "33204": {
+    "name": "Bronze cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33205": {
+    "name": "Iron cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33206": {
+    "name": "Steel cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33207": {
+    "name": "Mithril cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33208": {
+    "name": "Adamant cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33209": {
+    "name": "Rune cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33210": {
+    "name": "Dragon cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
   }
 }

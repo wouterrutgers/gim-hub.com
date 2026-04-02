@@ -1,8 +1,38 @@
 #app-navigation {
   display: flex;
+  position: relative;
   align-items: center;
-  padding: 8px;
+  padding: 14px 8px 8px;
   flex-shrink: 0;
+}
+
+#app-navigation::before,
+#app-navigation::after {
+  position: absolute;
+  top: -10px;
+  width: 14px;
+  height: 18px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 50% 50% 45% 45%;
+  box-shadow: 0 0 12px rgb(255 255 255 / 10%);
+  content: "";
+  pointer-events: none;
+}
+
+#app-navigation::before {
+  left: 16px;
+  background:
+    linear-gradient(90deg, transparent 30%, rgb(255 255 255 / 32%) 30%, rgb(255 255 255 / 32%) 42%, transparent 42%),
+    linear-gradient(180deg, #fff0b0 0%, #ffcc42 100%);
+  animation: app-navigation-egg-left 2.6s ease-in-out infinite;
+}
+
+#app-navigation::after {
+  right: 16px;
+  background:
+    linear-gradient(90deg, transparent 28%, rgb(255 255 255 / 34%) 28%, rgb(255 255 255 / 34%) 40%, transparent 40%),
+    linear-gradient(180deg, #c7fff0 0%, #63e3bf 100%);
+  animation: app-navigation-egg-right 2.9s ease-in-out infinite;
 }
 
 .mobile {
@@ -21,6 +51,14 @@
 
   #app-navigation {
     flex-direction: column;
+  }
+
+  #app-navigation::before {
+    left: 12px;
+  }
+
+  #app-navigation::after {
+    right: 12px;
   }
 }
 
@@ -61,4 +99,26 @@
   margin-right: 8px;
   font-size: 1.5em;
   font-weight: 300;
+}
+
+@keyframes app-navigation-egg-left {
+  0%,
+  100% {
+    transform: rotate(-12deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(-5deg) translateY(-3px);
+  }
+}
+
+@keyframes app-navigation-egg-right {
+  0%,
+  100% {
+    transform: rotate(10deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(4deg) translateY(-3px);
+  }
 }

@@ -43,6 +43,98 @@
   padding: 4px;
 }
 
+.items-page-overview {
+  position: relative;
+  padding-top: 10px;
+}
+
+.items-page-overview-pill {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  overflow: visible;
+  box-shadow: 0 0 12px rgb(255 215 0 / 14%);
+  animation: items-page-overview-float 2.9s ease-in-out infinite;
+}
+
+.items-page-overview-pill::before,
+.items-page-overview-pill::after {
+  position: absolute;
+  content: "";
+}
+
+.items-page-overview-pill::before {
+  top: -12px;
+  right: 8px;
+  width: 14px;
+  height: 18px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 50% 50% 45% 45%;
+  box-shadow: 0 0 10px rgb(255 255 255 / 12%);
+  transform: rotate(14deg);
+  animation: items-page-egg-bob 2.4s ease-in-out infinite;
+}
+
+.items-page-overview-pill::after {
+  top: -6px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 82%);
+  box-shadow: 0 0 10px rgb(255 255 255 / 28%);
+  animation: items-page-egg-sparkle 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.items-page-overview-pill:nth-child(1) {
+  animation-delay: 0s;
+  box-shadow: 0 0 14px rgb(255 214 10 / 15%);
+}
+
+.items-page-overview-pill:nth-child(1)::before {
+  background:
+    linear-gradient(90deg, transparent 32%, rgb(255 255 255 / 35%) 32%, rgb(255 255 255 / 35%) 44%, transparent 44%),
+    linear-gradient(180deg, #fff0b0 0%, #ffcc42 100%);
+  animation-delay: 0.15s;
+}
+
+.items-page-overview-pill:nth-child(1)::after {
+  animation-delay: 0.1s;
+}
+
+.items-page-overview-pill:nth-child(2) {
+  box-shadow: 0 0 14px rgb(255 152 31 / 18%);
+  animation-delay: 0.3s;
+}
+
+.items-page-overview-pill:nth-child(2)::before {
+  background:
+    linear-gradient(90deg, transparent 28%, rgb(255 255 255 / 32%) 28%, rgb(255 255 255 / 32%) 38%, transparent 38%),
+    linear-gradient(180deg, #ffc7df 0%, #ff88be 100%);
+  animation-delay: 0.45s;
+}
+
+.items-page-overview-pill:nth-child(2)::after {
+  animation-delay: 0.4s;
+}
+
+.items-page-overview-pill:nth-child(3) {
+  box-shadow: 0 0 14px rgb(120 255 220 / 18%);
+  animation-delay: 0.6s;
+}
+
+.items-page-overview-pill:nth-child(3)::before {
+  background:
+    linear-gradient(90deg, transparent 30%, rgb(255 255 255 / 34%) 30%, rgb(255 255 255 / 34%) 42%, transparent 42%),
+    linear-gradient(180deg, #c7fff0 0%, #63e3bf 100%);
+  animation-delay: 0.75s;
+}
+
+.items-page-overview-pill:nth-child(3)::after {
+  animation-delay: 0.7s;
+}
+
 /* Use negative margin + hidden overflow to hide the left border of wrapped member checkboxes */
 .items-page-member-filter-clipbox {
   overflow: hidden;
@@ -249,4 +341,39 @@
 .items-page-tutorial-window-header > button:focus-visible,
 .items-page-tutorial-window-header > button:hover {
   outline: 1px solid var(--orange);
+}
+
+@keyframes items-page-overview-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes items-page-egg-bob {
+  0%,
+  100% {
+    transform: rotate(14deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(8deg) translateY(-3px);
+  }
+}
+
+@keyframes items-page-egg-sparkle {
+  0%,
+  100% {
+    transform: scale(0.75);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
 }

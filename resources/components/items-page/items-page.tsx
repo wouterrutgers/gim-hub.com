@@ -768,16 +768,16 @@ export const ItemsPage = (): ReactElement => {
         </select>
         {memberFilterElement}
       </div>
-      <div className="items-page-utility">
-        <span className="rsborder-tiny rsbackground rsbackground-hover">
+      <div className="items-page-utility items-page-overview">
+        <span className="items-page-overview-pill rsborder-tiny rsbackground rsbackground-hover">
           <span>{filteredItems.length.toLocaleString()}</span>&nbsp;
           <span>items</span>
         </span>
-        <span className="rsborder-tiny rsbackground rsbackground-hover">
+        <span className="items-page-overview-pill rsborder-tiny rsbackground rsbackground-hover">
           HA:&nbsp;<span>{totalHighAlch.toLocaleString()}</span>
           <span>gp</span>
         </span>
-        <span className="rsborder-tiny rsbackground rsbackground-hover">
+        <span className="items-page-overview-pill rsborder-tiny rsbackground rsbackground-hover">
           GE:&nbsp;<span>{totalGEPrice.toLocaleString()}</span>
           <span>gp</span>
         </span>

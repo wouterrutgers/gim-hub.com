@@ -18,6 +18,36 @@
   padding: 16px;
 }
 
+#login-page-window::before,
+#login-page-window::after {
+  position: absolute;
+  width: 16px;
+  height: 20px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 50% 50% 45% 45%;
+  box-shadow: 0 0 12px rgb(255 255 255 / 12%);
+  content: "";
+  pointer-events: none;
+}
+
+#login-page-window::before {
+  top: -10px;
+  left: -8px;
+  background:
+    linear-gradient(90deg, transparent 30%, rgb(255 255 255 / 30%) 30%, rgb(255 255 255 / 30%) 42%, transparent 42%),
+    linear-gradient(180deg, #fff0b0 0%, #ffcc42 100%);
+  animation: login-page-egg-left 2.7s ease-in-out infinite;
+}
+
+#login-page-window::after {
+  bottom: -10px;
+  right: -8px;
+  background:
+    linear-gradient(90deg, transparent 28%, rgb(255 255 255 / 30%) 28%, rgb(255 255 255 / 30%) 40%, transparent 40%),
+    linear-gradient(180deg, #ffc7df 0%, #ff88be 100%);
+  animation: login-page-egg-right 3s ease-in-out infinite;
+}
+
 #login-page-window > button {
   align-self: center;
 }
@@ -37,4 +67,26 @@
   opacity: 0.6;
   position: absolute;
   inset: 0;
+}
+
+@keyframes login-page-egg-left {
+  0%,
+  100% {
+    transform: rotate(-10deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(-4deg) translateY(-3px);
+  }
+}
+
+@keyframes login-page-egg-right {
+  0%,
+  100% {
+    transform: rotate(8deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(2deg) translateY(-3px);
+  }
 }

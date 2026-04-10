@@ -15,7 +15,8 @@ class Member extends Model
     public const PROPERTY_KEYS = [
         'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
         'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room',
-        'plank_sack', 'master_scroll_book', 'essence_pouches', 'tackle_box',
+        'plank_sack', 'master_scroll_book', 'essence_pouches',
+        'tackle_box', 'huntsman_kit',
         'tool_leprechaun', 'elnock_inquisitor',
         'coal_bag',
         'fish_barrel',
@@ -26,6 +27,7 @@ class Member extends Model
     public const PARTIAL_PROPERTY_KEYS = [
         'bank' => 'bank_partial',
         'tackle_box' => 'tackle_box_partial',
+        'huntsman_kit' => 'huntsman_kit_partial'
     ];
 
     public function getProperty(string $key): ?MemberProperty

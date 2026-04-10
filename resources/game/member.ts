@@ -23,6 +23,7 @@ export const AllItemContainers = [
   { name: "Master Scroll Book", key: "masterScrollBook", getItems: mapToItems },
   { name: "Essence Pouches", key: "essencePouches", getItems: mapToItems },
   { name: "Tackle Box", key: "tackleBox", getItems: mapToItems },
+  { name: "Huntsman Kit", key: "huntsmanKit", getItems: mapToItems },
   { name: "Tool Leprechaun", key: "toolLeprechaun", getItems: mapToItems },
   { name: "Elnock Inquisitor", key: "elnockInquisitor", getItems: mapToItems },
   { name: "Coal Bag", key: "coalBag", getItems: mapToItems },
@@ -52,6 +53,7 @@ export interface State {
   masterScrollBook: ItemCollection;
   essencePouches: ItemCollection;
   tackleBox: ItemCollection;
+  huntsmanKit: ItemCollection;
   toolLeprechaun: ItemCollection;
   elnockInquisitor: ItemCollection;
   coalBag: ItemCollection;

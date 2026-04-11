@@ -60,7 +60,11 @@ class SyncMemberSkillsFromHiscores implements ShouldQueue
             return;
         }
 
-        $response->throw();
+        if ($response->failed()) {
+            $this->release($this->backoff);
+
+            return;
+        }
 
         $hiscoresSkills = $response->collect('skills')->pluck('xp', 'name');
 

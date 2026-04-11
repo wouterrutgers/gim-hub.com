@@ -8,7 +8,6 @@ import {
   type ReactElement,
   type ReactNode,
 } from "react";
-import Api from "../../api/api";
 import { Context as APIContext } from "../../context/api-context";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as z from "zod/v4";
@@ -94,21 +93,14 @@ export const LoginPage = (): ReactElement => {
       setPendingSubmission(true);
       setNameError(undefined);
       setTokenError(undefined);
-      Api.fetchAmILoggedIn(credentials)
-        .then((response) => new Promise<typeof response>((resolve) => setTimeout(() => resolve(response), 500)))
-        .then((response) => {
-          if (response.ok) {
-            return logInLive(credentials).then(() => navigate("/group"));
-          }
-
-          if (response.status === 401) {
-            setServerError(["Name or token is invalid."]);
-            return;
-          }
-
-          throw new Error(`Unexpected status code: ${response.status}`);
+      new Promise<void>((resolve) => setTimeout(resolve, 500))
+        .then(() => {
+          return logInLive(credentials).then(() => navigate("/group"));
         })
         .catch((reason) => {
+          if (reason instanceof Error) {
+            setServerError([reason.message]);
+          }
           console.error("LoginPage: Error during form submission:", reason);
         })
         .finally(() => {

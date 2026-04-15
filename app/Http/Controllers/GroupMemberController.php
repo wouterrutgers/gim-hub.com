@@ -385,7 +385,12 @@ class GroupMemberController extends Controller
                 ->get()
                 ->each(function (Member $normalMember) use ($members, $leagueNames): void {
                     if (! $leagueNames->has($normalMember->name)) {
-                        $members->push($normalMember->setRelation('properties', collect()));
+                        $members->push(
+                            new Member([
+                                'name' => $normalMember->name,
+                                'mode' => Member::MODE_LEAGUES,
+                            ])->setRelation('properties', collect())
+                        );
                     }
                 });
         }

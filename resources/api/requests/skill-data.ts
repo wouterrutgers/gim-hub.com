@@ -3,6 +3,8 @@ import * as Member from "../../game/member";
 import { DateSchema } from "./shared";
 import type { Experience } from "../../game/skill";
 import type { GroupCredentials } from "../credentials";
+import type { GroupMode } from "../../game/group-mode";
+import { toGroupModeQueryValue } from "../../game/group-mode";
 
 export const AggregatePeriod = ["Day", "Week", "Month", "Year"] as const;
 /**
@@ -23,14 +25,19 @@ export const fetchSkillData = ({
   baseURL,
   credentials,
   period,
+  groupMode,
 }: {
   baseURL: string;
   credentials: GroupCredentials;
   period: AggregatePeriod;
+  groupMode: GroupMode;
 }): Promise<Response> =>
-  fetch(`${baseURL}/group/${credentials.name}/get-skill-data?period=${period}`, {
-    headers: { Authorization: credentials.token },
-  })
+  fetch(
+    `${baseURL}/group/${credentials.name}/get-skill-data?period=${period}&mode=${toGroupModeQueryValue(groupMode)}`,
+    {
+      headers: { Authorization: credentials.token },
+    },
+  )
     .then((response) => response.json())
     .then((json) => GetSkillDataSchema.safeParseAsync(json))
     .then((parseResult) => {

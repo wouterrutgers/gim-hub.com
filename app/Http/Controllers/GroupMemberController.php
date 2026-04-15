@@ -24,7 +24,7 @@ class GroupMemberController extends Controller
         ]);
 
         $name = $validated['name'];
-        $groupId = $request->attributes->get('group')->id;
+        $group = $request->attributes->get('group');
 
         if ($name === Member::SHARED_MEMBER) {
             return response()->json([
@@ -38,9 +38,10 @@ class GroupMemberController extends Controller
             ], 400);
         }
 
-        $memberCount = Member::where('group_id', '=', $groupId)
+        $memberCount = Member::where('group_id', '=', $group->id)
             ->where('name', '!=', Member::SHARED_MEMBER)
-            ->count();
+            ->distinct('name')
+            ->count('name');
 
         if ($memberCount >= 5) {
             return response()->json([
@@ -48,7 +49,7 @@ class GroupMemberController extends Controller
             ], 400);
         }
 
-        $sameNameCount = Member::where('group_id', '=', $groupId)
+        $sameNameCount = Member::where('group_id', '=', $group->id)
             ->where('name', '=', $name)
             ->count();
 
@@ -59,7 +60,7 @@ class GroupMemberController extends Controller
         }
 
         Member::create([
-            'group_id' => $groupId,
+            'group_id' => $group->id,
             'name' => $name,
         ]);
 
@@ -81,17 +82,20 @@ class GroupMemberController extends Controller
             ], 400);
         }
 
-        DB::transaction(function () use ($groupId, $name): void {
-            $member = Member::where('group_id', '=', $groupId)
-                ->where('name', '=', $name)
-                ->firstOrFail();
+        $members = Member::where('group_id', '=', $groupId)
+            ->where('name', '=', $name)
+            ->get();
 
-            $memberId = $member->id;
+        if ($members->isEmpty()) {
+            return response()->json(['error' => 'Member not found'], 404);
+        }
 
-            SkillStat::where('member_id', '=', $memberId)->delete();
-            CollectionLog::where('member_id', '=', $memberId)->delete();
-
-            $member->delete();
+        DB::transaction(function () use ($members): void {
+            foreach ($members as $member) {
+                SkillStat::where('member_id', '=', $member->id)->delete();
+                CollectionLog::where('member_id', '=', $member->id)->delete();
+                $member->delete();
+            }
         });
 
         return response()->json(null, 200);
@@ -175,16 +179,23 @@ class GroupMemberController extends Controller
 
         $name = $validated['name'];
         $groupId = $request->attributes->get('group')->id;
+        $mode = $this->resolvePluginMode($request);
 
-        $member = Member::where('group_id', '=', $groupId)
+        $isMember = Member::where('group_id', '=', $groupId)
             ->where('name', '=', $name)
-            ->first();
+            ->exists();
 
-        if (is_null($member)) {
+        if (! $isMember) {
             return response()->json([
                 'error' => 'Player is not a member of this group',
             ], 401);
         }
+
+        $member = Member::firstOrCreate([
+            'group_id' => $groupId,
+            'name' => $name,
+            'mode' => $mode,
+        ]);
 
         $validatorBounds = [
             ['stats', 7, 7],
@@ -276,13 +287,15 @@ class GroupMemberController extends Controller
             }
 
             if (! empty($validated['deposited'] ?? [])) {
-                $this->depositItems($groupId, $member->name, $validated['deposited']);
+                $this->depositItems($member, $validated['deposited']);
             }
 
             if (! empty($validated['shared_bank'] ?? [])) {
-                $sharedMember = Member::where('group_id', '=', $groupId)
-                    ->where('name', '=', Member::SHARED_MEMBER)
-                    ->first();
+                $sharedMember = Member::firstOrCreate([
+                    'group_id' => $groupId,
+                    'name' => Member::SHARED_MEMBER,
+                    'mode' => $mode,
+                ]);
 
                 $sharedMember?->properties()->updateOrCreate(
                     ['key' => 'bank'],
@@ -309,17 +322,9 @@ class GroupMemberController extends Controller
         }
     }
 
-    protected function depositItems(int $groupId, string $memberName, array $deposited): void
+    protected function depositItems(Member $member, array $deposited): void
     {
         if (empty($deposited)) {
-            return;
-        }
-
-        $member = Member::where('group_id', '=', $groupId)
-            ->where('name', '=', $memberName)
-            ->first();
-
-        if (is_null($member)) {
             return;
         }
 
@@ -364,40 +369,55 @@ class GroupMemberController extends Controller
 
         $fromTime = Carbon::parse($validated['from_time']);
         $groupId = $request->attributes->get('group')->id;
+        $mode = $this->resolveQueryMode($request);
 
         $members = Member::where('group_id', '=', $groupId)
+            ->where('mode', '=', $mode)
             ->with('properties')
-            ->get()
-            ->map(function ($member) use ($fromTime) {
-                $properties = $member->properties->keyBy('key');
-                $lastUpdated = $properties->max('updated_at');
+            ->get();
 
-                $data = [
-                    'name' => $member->name,
-                    'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
-                    'last_online_at' => is_null($member->last_online_at) ? null : Carbon::make($member->last_online_at)->toIso8601ZuluString(),
-                    'shared_bank' => null,
-                    'deposited' => null,
-                    'collection_log' => null,
-                ];
+        if ($mode === Member::MODE_LEAGUES) {
+            $leagueNames = $members->pluck('name')->flip();
 
-                foreach (Member::PROPERTY_KEYS as $key) {
-                    $property = $properties->get($key);
-                    if ($property && $property->updated_at >= $fromTime) {
-                        $value = $property->value;
-                        if ($key === 'interacting') {
-                            $value = $this->withInteractingTimestamp($value, $property->updated_at);
-                        }
-                        $data[$key] = $value;
-                    } else {
-                        $data[$key] = null;
+            Member::where('group_id', '=', $groupId)
+                ->where('mode', '=', Member::MODE_NORMAL)
+                ->where('name', '!=', Member::SHARED_MEMBER)
+                ->get()
+                ->each(function (Member $normalMember) use ($members, $leagueNames): void {
+                    if (! $leagueNames->has($normalMember->name)) {
+                        $members->push($normalMember->setRelation('properties', collect()));
                     }
+                });
+        }
+
+        return response()->json($members->map(function ($member) use ($fromTime) {
+            $properties = $member->properties->keyBy('key');
+            $lastUpdated = $properties->max('updated_at');
+
+            $data = [
+                'name' => $member->name,
+                'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
+                'last_online_at' => is_null($member->last_online_at) ? null : Carbon::make($member->last_online_at)->toIso8601ZuluString(),
+                'shared_bank' => null,
+                'deposited' => null,
+                'collection_log' => null,
+            ];
+
+            foreach (Member::PROPERTY_KEYS as $key) {
+                $property = $properties->get($key);
+                if ($property && $property->updated_at >= $fromTime) {
+                    $value = $property->value;
+                    if ($key === 'interacting') {
+                        $value = $this->withInteractingTimestamp($value, $property->updated_at);
+                    }
+                    $data[$key] = $value;
+                } else {
+                    $data[$key] = null;
                 }
+            }
 
-                return $data;
-            });
-
-        return response()->json($members);
+            return $data;
+        }));
     }
 
     protected function withInteractingTimestamp($interacting, $lastUpdated)
@@ -421,6 +441,7 @@ class GroupMemberController extends Controller
 
         $groupId = $request->attributes->get('group')->id;
         $period = $validated['period'];
+        $mode = $this->resolveQueryMode($request);
 
         $aggregatePeriod = match ($period) {
             'Day' => AggregatePeriod::Day,
@@ -431,6 +452,7 @@ class GroupMemberController extends Controller
         };
 
         $members = Member::where('group_id', '=', $groupId)
+            ->where('mode', '=', $mode)
             ->with(['skillStats' => function ($query) use ($aggregatePeriod) {
                 $query->where('type', '=', $aggregatePeriod->value)
                     ->orderBy('created_at');
@@ -460,10 +482,12 @@ class GroupMemberController extends Controller
     public function getCollectionLog(Request $request): Collection
     {
         $groupId = $request->attributes->get('group')->id;
+        $mode = $this->resolveQueryMode($request);
 
         return CollectionLog::with('member')
-            ->whereHas('member.group', function ($query) use ($groupId) {
-                $query->where('groups.id', '=', $groupId);
+            ->whereHas('member', function ($query) use ($groupId, $mode) {
+                $query->where('group_id', '=', $groupId)
+                    ->where('mode', '=', $mode);
             })
             ->get()->groupBy('member.name')->map->pluck('item_count', 'item_id');
     }
@@ -530,5 +554,19 @@ class GroupMemberController extends Controller
         }
 
         return response()->json(null);
+    }
+
+    protected function resolveQueryMode(Request $request): string
+    {
+        return Member::normalizeMode($request->query('mode'));
+    }
+
+    protected function resolvePluginMode(Request $request): string
+    {
+        $leagueMode = $request->input('league_mode');
+
+        return (is_array($leagueMode) && ($leagueMode[0] ?? 0) === 1)
+            ? Member::MODE_LEAGUES
+            : Member::MODE_NORMAL;
     }
 }

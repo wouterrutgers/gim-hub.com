@@ -15,6 +15,7 @@ class SyncStaleMembersFromHiscores extends Command
     public function handle(): int
     {
         $staleMembers = Member::where('name', '!=', Member::SHARED_MEMBER)
+            ->where('mode', '=', Member::MODE_NORMAL)
             ->whereNotNull('last_online_at')
             ->where('last_online_at', '<', now()->subHours(4))
             ->get();

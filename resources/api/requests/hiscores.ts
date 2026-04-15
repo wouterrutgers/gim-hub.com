@@ -1,5 +1,7 @@
 import * as z from "zod/v4";
 import type { GroupCredentials } from "../credentials";
+import type { GroupMode } from "../../game/group-mode";
+import { toGroupModeQueryValue } from "../../game/group-mode";
 
 export type Response = z.infer<typeof HiscoresSchema>;
 
@@ -17,12 +19,14 @@ export const fetchMemberHiscores = async ({
   baseURL,
   credentials,
   memberName,
+  groupMode,
 }: {
   baseURL: string;
   credentials: GroupCredentials;
   memberName: string;
+  groupMode: GroupMode;
 }): Promise<Response> => {
-  const url = `${baseURL}/group/${credentials.name}/hiscores?name=${encodeURIComponent(memberName)}`;
+  const url = `${baseURL}/group/${credentials.name}/hiscores?name=${encodeURIComponent(memberName)}&mode=${toGroupModeQueryValue(groupMode)}`;
   const res = await fetch(url, { headers: { Authorization: credentials.token } });
 
   const json: unknown = await res.json().catch(() => undefined);

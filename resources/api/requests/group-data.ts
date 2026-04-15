@@ -6,6 +6,8 @@ import { EquipmentSlot } from "../../game/equipment";
 import type { ItemID, ItemStack } from "../../game/items";
 import type { GroupCredentials } from "../credentials";
 import * as Member from "../../game/member";
+import type { GroupMode } from "../../game/group-mode";
+import { toGroupModeQueryValue } from "../../game/group-mode";
 import { DateSchema } from "./shared";
 
 export type Response = z.infer<typeof GetGroupDataResponseSchema>;
@@ -19,19 +21,25 @@ export type Response = z.infer<typeof GetGroupDataResponseSchema>;
  * @param fromTime The time to update from. Timestamped group data that is given
  *  in slices will be given for fromTime until as recent as the server has when
  *  processing the request.
+ * @param groupMode Whether the group is in "normal" or "leagues" mode.
  */
 export const fetchGroupData = ({
   baseURL,
   credentials,
   fromTime,
+  groupMode,
 }: {
   baseURL: string;
   credentials: GroupCredentials;
   fromTime: Date;
+  groupMode: GroupMode;
 }): Promise<Response> =>
-  fetch(`${baseURL}/group/${credentials.name}/get-group-data?from_time=${fromTime.toISOString()}`, {
-    headers: { Authorization: credentials.token },
-  })
+  fetch(
+    `${baseURL}/group/${credentials.name}/get-group-data?from_time=${fromTime.toISOString()}&mode=${toGroupModeQueryValue(groupMode)}`,
+    {
+      headers: { Authorization: credentials.token },
+    },
+  )
     .then((response) => {
       if (!response.ok) {
         throw new Error("GetGroupData HTTP response was not OK");

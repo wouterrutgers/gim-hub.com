@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Member;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class GroupController extends Controller
@@ -26,26 +27,30 @@ class GroupController extends Controller
             }
         }
 
-        $group = Group::create([
-            'name' => $validated['name'],
-            'hash' => Uuid::uuid4(),
-        ]);
+        $token = Uuid::uuid4()->toString();
 
-        Member::create([
-            'group_id' => $group->id,
-            'name' => Member::SHARED_MEMBER,
-        ]);
+        DB::transaction(function () use ($validated, $token) {
+            $group = Group::create([
+                'name' => $validated['name'],
+                'hash' => $token,
+            ]);
 
-        foreach (array_filter($validated['member_names']) as $memberName) {
             Member::create([
                 'group_id' => $group->id,
-                'name' => $memberName,
+                'name' => Member::SHARED_MEMBER,
             ]);
-        }
+
+            foreach (array_filter($validated['member_names']) as $memberName) {
+                Member::create([
+                    'group_id' => $group->id,
+                    'name' => $memberName,
+                ]);
+            }
+        });
 
         return response()->json([
             'name' => $validated['name'],
-            'token' => $group->hash,
+            'token' => $token,
         ], 201);
     }
 }

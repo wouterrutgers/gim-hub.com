@@ -3,6 +3,7 @@ import { type GroupCredentials } from "../api/credentials";
 import * as RequestSkillData from "../api/requests/skill-data";
 import { createContext } from "react";
 import Api from "../api/api";
+import { type GroupMode } from "../game/group-mode";
 import { useLocalStorage } from "../hooks/local-storage";
 import type DemoApi from "../api/demo-api";
 import { useSavedGroups } from "../hooks/saved-groups";
@@ -33,6 +34,8 @@ interface APIMethods {
 interface APIContext {
   loaded: true;
   isDemo: boolean;
+  selectedGroupMode: GroupMode;
+  setSelectedGroupMode: (mode: GroupMode) => void;
 
   /**
    * Delete the credentials from persistent storage, and close any active API
@@ -93,6 +96,7 @@ export const Context = createContext<APIContext | undefined>(undefined);
 
 const LOCAL_STORAGE_KEY_GROUP_NAME = "groupName";
 const LOCAL_STORAGE_KEY_GROUP_TOKEN = "groupToken";
+const LOCAL_STORAGE_KEY_GROUP_MODE = "groupMode";
 
 /**
  * Client-side check that the credentials are a valid string.
@@ -100,6 +104,14 @@ const LOCAL_STORAGE_KEY_GROUP_TOKEN = "groupToken";
 const validateCredential = (value: string | undefined): string | undefined => {
   if (!value || value === "") return undefined;
   return value;
+};
+
+const validateGroupMode = (value: string | undefined): GroupMode | undefined => {
+  if (value === "Normal" || value === "Leagues") {
+    return value;
+  }
+
+  return undefined;
 };
 
 export const APIProvider = ({ children }: { children: ReactNode }): ReactElement => {
@@ -112,6 +124,11 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     key: LOCAL_STORAGE_KEY_GROUP_TOKEN,
     defaultValue: undefined,
     validator: validateCredential,
+  });
+  const [selectedGroupMode, setStoredGroupMode] = useLocalStorage<GroupMode>({
+    key: LOCAL_STORAGE_KEY_GROUP_MODE,
+    defaultValue: "Normal",
+    validator: validateGroupMode,
   });
 
   const { savedGroups, addGroup, removeGroup } = useSavedGroups();
@@ -135,6 +152,18 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     setApi(undefined);
     setIsDemo(false);
   }, [setGroupName, setGroupToken]);
+  const setSelectedGroupMode = useCallback(
+    (mode: GroupMode): void => {
+      setStoredGroupMode(mode);
+
+      if (!storageCredentials || isDemo) {
+        return;
+      }
+
+      setApi(new Api(storageCredentials, mode));
+    },
+    [isDemo, setStoredGroupMode, storageCredentials],
+  );
   const logInLive = useCallback(
     (credentials?: GroupCredentials): Promise<void> => {
       const newCredentials = credentials ?? storageCredentials;
@@ -143,23 +172,23 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
       }
 
       return Api.fetchAmILoggedIn(newCredentials).then((response) => {
-        if (response.ok) {
-          setGroupName(newCredentials.name);
-          setGroupToken(newCredentials.token);
-          addGroup(newCredentials);
-          setApi(new Api(newCredentials));
-          setIsDemo(false);
-          return Promise.resolve();
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error("Name or token is invalid.");
+          }
+
+          throw new Error(`Unexpected status code: ${response.status}`);
         }
 
-        if (response.status === 401) {
-          throw new Error("Name or token is invalid.");
-        }
-
-        throw new Error(`Unexpected status code: ${response.status}`);
+        setGroupName(newCredentials.name);
+        setGroupToken(newCredentials.token);
+        addGroup(newCredentials);
+        setApi(new Api(newCredentials, selectedGroupMode));
+        setIsDemo(false);
+        return Promise.resolve();
       });
     },
-    [setGroupName, setGroupToken, addGroup, storageCredentials],
+    [addGroup, selectedGroupMode, setGroupName, setGroupToken, storageCredentials],
   );
   const logInDemo = useCallback(async (): Promise<boolean> => {
     const { default: DemoApi } = await import("../api/demo-api");
@@ -174,9 +203,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
         return Promise.reject(new Error("checkCredentials: No credentials provided, and none in storage."));
       }
 
-      return Api.fetchAmILoggedIn(newCredentials).then((response) => {
-        return response.ok;
-      });
+      return Api.fetchAmILoggedIn(newCredentials).then((response) => response.ok);
     },
     [storageCredentials],
   );
@@ -199,6 +226,8 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     const base: APIContext = {
       loaded: true,
       isDemo,
+      selectedGroupMode,
+      setSelectedGroupMode,
       logOut,
       logInLive,
       logInDemo,
@@ -221,7 +250,18 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
     };
 
     return base;
-  }, [api, checkCredentials, isDemo, logInDemo, logInLive, logOut, savedGroups, removeSavedGroup]);
+  }, [
+    api,
+    checkCredentials,
+    isDemo,
+    logInDemo,
+    logInLive,
+    logOut,
+    removeSavedGroup,
+    savedGroups,
+    selectedGroupMode,
+    setSelectedGroupMode,
+  ]);
 
   return <Context value={apiContext}>{children}</Context>;
 };

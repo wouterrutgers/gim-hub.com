@@ -230,7 +230,7 @@ class GroupMemberController extends Controller
 
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
-        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
+        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData, $mode) {
             $member->update(['last_online_at' => now()]);
 
             foreach (Member::PROPERTY_KEYS as $propertyKey) {

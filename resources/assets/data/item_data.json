@@ -92489,13 +92489,13 @@
     "mapping": null
   },
   "28769": {
-    "name": "Guardian horn",
+    "name": "Minion whistle",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "28771": {
-    "name": "Sage's greaves",
+    "name": "Searing boots",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -108981,6 +108981,423 @@
   },
   "33210": {
     "name": "Dragon cannon",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33214": {
+    "name": "Cabbage",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33216": {
+    "name": "Cabbage",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33218": {
+    "name": "Knapsack",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33220": {
+    "name": "Knapsack",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33221": {
+    "name": "Barbarian arm",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33227": {
+    "name": "Evil eye",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33229": {
+    "name": "Transmutation ledger",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33231": {
+    "name": "Soul shard",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33233": {
+    "name": "Map of alacrity",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33235": {
+    "name": "Clue contract",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33237": {
+    "name": "Butler's bell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33239": {
+    "name": "Flask of fervour",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33241": {
+    "name": "Flask of fervour",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33243": {
+    "name": "Infernal tecpatl",
+    "highalch": 18000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33245": {
+    "name": "Nature's recurve",
+    "highalch": 45000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33247": {
+    "name": "V's helm",
+    "highalch": 45000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33249": {
+    "name": "Fang of the hound",
+    "highalch": 45000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33251": {
+    "name": "King's barrage",
+    "highalch": 45000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33253": {
+    "name": "Shadowflame quadrant",
+    "highalch": 45000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33255": {
+    "name": "Lithic sceptre",
+    "highalch": 45000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33257": {
+    "name": "Lithic sceptre (uncharged)",
+    "highalch": 45000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33260": {
+    "name": "Demonic hood (t1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33263": {
+    "name": "Demonic robe top (t1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33266": {
+    "name": "Demonic robe bottom (t1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33269": {
+    "name": "Demonic boots (t1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33272": {
+    "name": "Demonic hood (t2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33275": {
+    "name": "Demonic robe top (t2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33278": {
+    "name": "Demonic robe bottom (t2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33281": {
+    "name": "Demonic boots (t2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33284": {
+    "name": "Demonic hood (t3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33287": {
+    "name": "Demonic robe top (t3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33290": {
+    "name": "Demonic robe bottom (t3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33293": {
+    "name": "Demonic boots (t3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33296": {
+    "name": "Demonic sceptre",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33299": {
+    "name": "Demonic pacts banner",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33302": {
+    "name": "Demonic skin contract",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33305": {
+    "name": "Demonic axe ornament kit",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33308": {
+    "name": "Demonic staff ornament kit",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33311": {
+    "name": "Demonic trident ornament kit",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33314": {
+    "name": "Trident of the swamp (o)",
+    "highalch": 47100,
+    "alchable": true,
+    "mapping": null
+  },
+  "33316": {
+    "name": "Uncharged toxic trident (o)",
+    "highalch": 46800,
+    "alchable": true,
+    "mapping": null
+  },
+  "33318": {
+    "name": "Trident of the swamp (e) (o)",
+    "highalch": 65100,
+    "alchable": true,
+    "mapping": null
+  },
+  "33320": {
+    "name": "Uncharged toxic trident (e)",
+    "highalch": 64800,
+    "alchable": true,
+    "mapping": null
+  },
+  "33322": {
+    "name": "Trident of the seas (o)",
+    "highalch": 41100,
+    "alchable": true,
+    "mapping": null
+  },
+  "33323": {
+    "name": "Trident of the seas (full) (o)",
+    "highalch": 41400,
+    "alchable": true,
+    "mapping": null
+  },
+  "33326": {
+    "name": "Trident of the seas (e) (o)",
+    "highalch": 59100,
+    "alchable": true,
+    "mapping": null
+  },
+  "33328": {
+    "name": "Uncharged trident (e) (o)",
+    "highalch": 58800,
+    "alchable": true,
+    "mapping": null
+  },
+  "33330": {
+    "name": "Iban's staff",
+    "highalch": 25500,
+    "alchable": true,
+    "mapping": null
+  },
+  "33332": {
+    "name": "Iban's staff (u) (o)",
+    "highalch": 51000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33333": {
+    "name": "Iban's staff (o)",
+    "highalch": 12,
+    "alchable": true,
+    "mapping": null
+  },
+  "33335": {
+    "name": "Soulreaper axe (o)",
+    "highalch": 144000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33338": {
+    "name": "Demonic slayer helmet",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      }
+    ]
+  },
+  "33340": {
+    "name": "Demonic slayer helmet",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      }
+    ]
+  },
+  "33342": {
+    "name": "Demonic quill",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33345": {
+    "name": "Demonic pacts dragon trophy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33347": {
+    "name": "Demonic pacts rune trophy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33349": {
+    "name": "Demonic pacts adamant trophy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33351": {
+    "name": "Demonic pacts mithril trophy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33353": {
+    "name": "Demonic pacts steel trophy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33355": {
+    "name": "Demonic pacts iron trophy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33357": {
+    "name": "Demonic pacts bronze trophy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33359": {
+    "name": "Impish ritual kit",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33362": {
+    "name": "Demonic pacts throne scroll",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33365": {
+    "name": "Impish whistle",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33368": {
+    "name": "Demonic pacts demon butler scroll",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33371": {
+    "name": "Mark of grace",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 10
+      }
+    ]
+  },
+  "33373": {
+    "name": "Demonic contractor throne",
     "highalch": 0,
     "alchable": true,
     "mapping": null

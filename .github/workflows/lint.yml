@@ -41,6 +41,11 @@ jobs:
           key: cache-pint-${{ hashFiles('**') }}
           restore-keys: cache-pint-
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.5
+
       - name: Check coding styles
         run: |
           rm composer.{lock,json}

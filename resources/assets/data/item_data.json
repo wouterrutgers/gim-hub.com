@@ -109185,8 +109185,8 @@
   },
   "33296": {
     "name": "Demonic sceptre",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 600,
+    "alchable": true,
     "mapping": null
   },
   "33299": {

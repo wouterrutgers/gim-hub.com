@@ -37,4 +37,4 @@ const CreateGroupResponseSchema = z
     name: z.string(),
     token: z.string(),
   })
-  .transform((credentials) => credentials as GroupCredentials);
+  .transform((credentials) => credentials);

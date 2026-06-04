@@ -1208,16 +1208,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v12.61.0",
+            "version": "v12.61.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "1124062a1ca92d290c8bcb9b7f649920fa6816bf"
+                "reference": "e8472ca9774452fe50841d9bdced060679f4d58d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/1124062a1ca92d290c8bcb9b7f649920fa6816bf",
-                "reference": "1124062a1ca92d290c8bcb9b7f649920fa6816bf",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/e8472ca9774452fe50841d9bdced060679f4d58d",
+                "reference": "e8472ca9774452fe50841d9bdced060679f4d58d",
                 "shasum": ""
             },
             "require": {
@@ -1426,20 +1426,20 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-05-26T23:41:33+00:00"
+            "time": "2026-06-04T14:22:52+00:00"
         },
         {
             "name": "laravel/horizon",
-            "version": "v5.47.1",
+            "version": "v5.47.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "356e3ec86321361a4cb8259cb73fdb3406fa3b30"
+                "reference": "a6ac142293ad02db4d7cccb961dd32f56ef1462d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/356e3ec86321361a4cb8259cb73fdb3406fa3b30",
-                "reference": "356e3ec86321361a4cb8259cb73fdb3406fa3b30",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/a6ac142293ad02db4d7cccb961dd32f56ef1462d",
+                "reference": "a6ac142293ad02db4d7cccb961dd32f56ef1462d",
                 "shasum": ""
             },
             "require": {
@@ -1504,9 +1504,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/horizon/issues",
-                "source": "https://github.com/laravel/horizon/tree/v5.47.1"
+                "source": "https://github.com/laravel/horizon/tree/v5.47.2"
             },
-            "time": "2026-05-20T12:12:55+00:00"
+            "time": "2026-06-03T15:11:37+00:00"
         },
         {
             "name": "laravel/octane",
@@ -7662,16 +7662,16 @@
         },
         {
             "name": "laravel/boost",
-            "version": "v2.4.8",
+            "version": "v2.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/boost.git",
-                "reference": "d11d720cf9537f8d236a11d973e99563a598ec9c"
+                "reference": "f0359e55f6c3782023a35baf1d3df817053d69e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/boost/zipball/d11d720cf9537f8d236a11d973e99563a598ec9c",
-                "reference": "d11d720cf9537f8d236a11d973e99563a598ec9c",
+                "url": "https://api.github.com/repos/laravel/boost/zipball/f0359e55f6c3782023a35baf1d3df817053d69e8",
+                "reference": "f0359e55f6c3782023a35baf1d3df817053d69e8",
                 "shasum": ""
             },
             "require": {
@@ -7680,7 +7680,7 @@
                 "illuminate/contracts": "^11.45.3|^12.41.1|^13.0",
                 "illuminate/routing": "^11.45.3|^12.41.1|^13.0",
                 "illuminate/support": "^11.45.3|^12.41.1|^13.0",
-                "laravel/mcp": "^0.5.1|^0.6.0|~0.7.0,<0.7.1",
+                "laravel/mcp": "^0.7.1",
                 "laravel/prompts": "^0.3.10",
                 "laravel/roster": "^0.5.0",
                 "php": "^8.2"
@@ -7724,20 +7724,20 @@
                 "issues": "https://github.com/laravel/boost/issues",
                 "source": "https://github.com/laravel/boost"
             },
-            "time": "2026-05-19T20:09:50+00:00"
+            "time": "2026-06-04T10:33:57+00:00"
         },
         {
             "name": "laravel/mcp",
-            "version": "v0.7.0",
+            "version": "v0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/mcp.git",
-                "reference": "3513b4feca5f1678be4d2261dcfa8e456436d02a"
+                "reference": "08962a276357f89164f78b38407c08187ab26cfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/mcp/zipball/3513b4feca5f1678be4d2261dcfa8e456436d02a",
-                "reference": "3513b4feca5f1678be4d2261dcfa8e456436d02a",
+                "url": "https://api.github.com/repos/laravel/mcp/zipball/08962a276357f89164f78b38407c08187ab26cfe",
+                "reference": "08962a276357f89164f78b38407c08187ab26cfe",
                 "shasum": ""
             },
             "require": {
@@ -7751,7 +7751,8 @@
                 "illuminate/routing": "^11.45.3|^12.41.1|^13.0",
                 "illuminate/support": "^11.45.3|^12.41.1|^13.0",
                 "illuminate/validation": "^11.45.3|^12.41.1|^13.0",
-                "php": "^8.2"
+                "php": "^8.2",
+                "symfony/process": "^7.4.5|^8.0.5"
             },
             "require-dev": {
                 "laravel/pint": "^1.20",
@@ -7797,7 +7798,7 @@
                 "issues": "https://github.com/laravel/mcp/issues",
                 "source": "https://github.com/laravel/mcp"
             },
-            "time": "2026-04-21T10:23:03+00:00"
+            "time": "2026-05-22T11:45:29+00:00"
         },
         {
             "name": "laravel/pail",
@@ -8010,16 +8011,16 @@
         },
         {
             "name": "laravel/sail",
-            "version": "v1.61.0",
+            "version": "v1.62.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "68ef35015630fe510432e63e11e21749006df688"
+                "reference": "3aaeefc979f8ba6586fbc5b6e0b1b3638058f98e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/68ef35015630fe510432e63e11e21749006df688",
-                "reference": "68ef35015630fe510432e63e11e21749006df688",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/3aaeefc979f8ba6586fbc5b6e0b1b3638058f98e",
+                "reference": "3aaeefc979f8ba6586fbc5b6e0b1b3638058f98e",
                 "shasum": ""
             },
             "require": {
@@ -8069,7 +8070,7 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2026-05-23T23:33:57+00:00"
+            "time": "2026-05-27T04:02:01+00:00"
         },
         {
             "name": "mockery/mockery",

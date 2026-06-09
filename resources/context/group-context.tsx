@@ -88,6 +88,7 @@ export const useMemberStatsContext = createMemberSelector("stats");
 export const useMemberSkillsContext = createMemberSelector("skills");
 export const useMemberQuestsContext = createMemberSelector("quests");
 export const useMemberDiariesContext = createMemberSelector("diaries");
+export const useMemberTimezoneContext = createMemberSelector("timezone");
 
 /* eslint-enable react-refresh/only-export-components */
 

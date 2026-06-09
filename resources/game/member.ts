@@ -63,6 +63,7 @@ export interface State {
   quests?: Quests;
   diaries?: Diaries;
   collection?: Collection;
+  timezone?: string;
 }
 
 export interface Position {

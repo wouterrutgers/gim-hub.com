@@ -942,6 +942,14 @@ const GetGroupDataResponseSchema = z
      */
     last_online_at: DateSchema.nullish().transform((value) => value ?? undefined),
 
+    /**
+     * The IANA timezone of the player, e.g. "America/New_York".
+     */
+    timezone: z
+      .string()
+      .nullish()
+      .transform((value) => value ?? undefined),
+
     // When defined, these item containers contain every item and are NOT partial.
 
     bank: NullableItemCollection,

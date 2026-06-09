@@ -22,7 +22,7 @@ class Member extends Model
         'plank_sack', 'master_scroll_book', 'essence_pouches', 'tackle_box',
         'tool_leprechaun', 'elnock_inquisitor',
         'coal_bag', 'fish_barrel',
-        'quiver', 'diary_vars', 'interacting',
+        'quiver', 'diary_vars', 'interacting', 'timezone',
     ];
 
     // Keys that represent a partial view of an item collection, like items that the plugin has seen removed from an unopened tackle box.

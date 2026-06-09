@@ -1,4 +1,5 @@
-import { useContext, type ReactElement, type ReactNode } from "react";
+import { useContext, useEffect, useState, type ReactElement, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { StatBar } from "./stat-bar";
 import * as Member from "../../game/member";
 import { PlayerIcon } from "../player-icon/player-icon";
@@ -8,6 +9,7 @@ import {
   useMemberInteractingContext,
   useMemberLastOnlineAtContext,
   useMemberStatsContext,
+  useMemberTimezoneContext,
 } from "../../context/group-context";
 
 import "./player-stats.css";
@@ -40,6 +42,55 @@ const COLORS = {
   },
 };
 
+const formatLocalTime = (timezone?: string): string | undefined => {
+  if (!timezone) {
+    return undefined;
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    timeZone: timezone,
+    timeStyle: "short",
+  }).format(new Date());
+};
+
+const useLocalTimeTooltip = (): {
+  tooltipElement: ReactElement | undefined;
+  hideTooltip: () => void;
+  showTooltip: (props: { name: Member.Name; timezone: string }) => void;
+} => {
+  const [tooltipData, setTooltipData] = useState<{ name: Member.Name; timezone: string }>();
+  const [tooltipElement, setTooltipElement] = useState<HTMLElement>();
+
+  useEffect(() => {
+    setTooltipElement(document.getElementById("tooltip")!);
+  }, []);
+
+  const hideTooltip = (): void => {
+    setTooltipData(undefined);
+  };
+
+  const showTooltip = (props: { name: Member.Name; timezone: string }): void => {
+    setTooltipData(props);
+  };
+
+  let content: ReactElement = <></>;
+  if (tooltipData) {
+    content = (
+      <>
+        Local time for {tooltipData.name}
+        <br />
+        Timezone: {tooltipData.timezone}
+      </>
+    );
+  }
+
+  return {
+    tooltipElement: tooltipElement ? createPortal(content, tooltipElement) : undefined,
+    hideTooltip,
+    showTooltip,
+  };
+};
+
 // Shows what the player is interacting with, like attacking/talking to an npc
 const PlayerInteracting = ({ npcName, healthRatio }: { npcName: string; healthRatio?: number }): ReactElement => {
   const isNonCombatNPC = healthRatio === undefined;
@@ -62,6 +113,7 @@ const PlayerStatsImpl = ({
   prayer,
   run,
   status,
+  timezone,
   children,
 }: {
   name: Member.Name;
@@ -71,10 +123,14 @@ const PlayerStatsImpl = ({
   status:
     | { online: true; world?: number; interacting?: Member.NPCInteraction }
     | { online: false; lastOnlineAt?: Date };
+  timezone?: string;
   children?: ReactNode;
 }): ReactElement => {
+  const { tooltipElement, hideTooltip, showTooltip } = useLocalTimeTooltip();
   let interactionBar: ReactNode = undefined;
   let statusOverlay: ReactNode = undefined;
+  const localTime = formatLocalTime(timezone);
+
   if (status.online) {
     if (status.interacting) {
       const { healthRatio, name } = status.interacting;
@@ -98,6 +154,7 @@ const PlayerStatsImpl = ({
   return (
     <div className={`player-stats ${status.online ? "" : "player-stats-inactive"}`}>
       {children}
+      {tooltipElement}
       <div className="player-stats-hitpoints">
         <StatBar
           className="player-stats-hitpoints-bar"
@@ -109,6 +166,17 @@ const PlayerStatsImpl = ({
         <div className="player-stats-name">
           <PlayerIcon name={name} /> {name} {statusOverlay}
         </div>
+        {localTime && timezone ? (
+          <span
+            className="player-stats-local-time"
+            onPointerEnter={(): void => {
+              showTooltip({ name, timezone });
+            }}
+            onPointerLeave={hideTooltip}
+          >
+            {localTime}
+          </span>
+        ) : undefined}
         <div className="player-stats-hitpoints-numbers">{`${health.current} / ${health.max}`}</div>
       </div>
       <div className="player-stats-prayer">
@@ -148,6 +216,7 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
   const interacting = useMemberInteractingContext(member);
   const stats = useMemberStatsContext(member);
   const lastOnlineAt = useMemberLastOnlineAtContext(member);
+  const timezone = useMemberTimezoneContext(member);
   const xpDrops = useContext(GroupXPDropsContext);
 
   const now = new Date();
@@ -165,6 +234,7 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
           ? { online: true, interacting: isInteractingRecent ? interacting : undefined, world: stats?.world }
           : { online: false, lastOnlineAt }
       }
+      timezone={timezone}
       children={<XpDropper xpDrops={xpDrops.get(member)} />}
     />
   );

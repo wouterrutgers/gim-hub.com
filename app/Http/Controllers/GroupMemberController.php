@@ -175,6 +175,7 @@ class GroupMemberController extends Controller
             'diary_vars' => 'nullable|array',
             'collection_log_v2' => 'nullable|array',
             'interacting' => 'nullable',
+            'timezone' => 'nullable|string|timezone',
         ]);
 
         $name = $validated['name'];

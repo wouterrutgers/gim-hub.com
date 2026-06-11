@@ -48,12 +48,15 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
         const xp = skills?.[skill] ?? (0 as Experience);
         xpTotal += xp;
 
-        const { xpDeltaFromMax, levelReal, levelVirtual, xpMilestoneOfNext } = decomposeExperience(xp);
+        const { xpDeltaFromMax, levelReal, levelVirtual, xpMilestoneOfNext, xpMilestoneOfCurrent } =
+          decomposeExperience(xp);
 
         levelTotal += levelReal;
 
         const wikiURLRaw = `https://oldschool.runescape.wiki/w/${skill}`;
         const iconURLRaw = SkillIconsBySkill[skill];
+
+        const levelProgress = (xp - xpMilestoneOfCurrent) / (xpMilestoneOfNext - xpMilestoneOfCurrent);
 
         return (
           <a
@@ -70,7 +73,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
                 untilMax: Math.max(0, xpDeltaFromMax - xp) as Experience,
                 untilMaxRatio: Math.min(xp / xpDeltaFromMax, 1.0),
                 untilNext: (xpMilestoneOfNext - xp) as Experience,
-                untilNextRatio: Math.min(xp / xpMilestoneOfNext, 1.0),
+                untilNextRatio: Math.min(levelProgress, 1.0),
               })
             }
           >
@@ -82,7 +85,13 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
               <div className="skill-box-baseline-level">{levelReal}</div>
             </div>
             <div className="skill-box-progress">
-              <div className="skill-box-progress-bar" style={{}}></div>
+              <div
+                className="skill-box-progress-bar"
+                style={{
+                  transform: `scaleX(${levelProgress})`,
+                  background: `hsl(${levelProgress * 100}, 100%, 50%)`,
+                }}
+              ></div>
             </div>
           </a>
         );

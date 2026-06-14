@@ -4,16 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    ignore:
-      - dependency-name: "eslint"
-        versions:
-          - "10.x"
-      - dependency-name: "@vitejs/plugin-react"
-        versions:
-          - "6.x"
-      - dependency-name: "vite"
-        versions:
-          - "8.x"
     groups:
       npm-dependencies:
         patterns:

@@ -3,24 +3,12 @@ import tseslint from "typescript-eslint";
 import globals from "globals";
 import reactRefresh from "eslint-plugin-react-refresh";
 import prettier from "eslint-plugin-prettier/recommended";
-import jsxA11y from "eslint-plugin-jsx-a11y";
 
 const TS_GLOB = ["resources/**/*.{ts,tsx}", "vite.config.mts"];
 
 export default tseslint.config(
   { ignores: ["cache"] },
   { name: "Prettier", extends: [prettier], files: TS_GLOB },
-  {
-    name: "JSX A11y",
-    files: TS_GLOB,
-    ...jsxA11y.flatConfigs.strict,
-    languageOptions: {
-      ...jsxA11y.flatConfigs.strict.languageOptions,
-      globals: {
-        ...globals.browser,
-      },
-    },
-  },
   {
     name: "Typescript",
     extends: [

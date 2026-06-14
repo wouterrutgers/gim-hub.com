@@ -180,7 +180,6 @@ class GroupMemberController extends Controller
 
         $name = $validated['name'];
         $groupId = $request->attributes->get('group')->id;
-        $mode = $this->resolvePluginMode($request);
 
         $isMember = Member::where('group_id', '=', $groupId)
             ->where('name', '=', $name)
@@ -195,7 +194,6 @@ class GroupMemberController extends Controller
         $member = Member::firstOrCreate([
             'group_id' => $groupId,
             'name' => $name,
-            'mode' => $mode,
         ]);
 
         $validatorBounds = [
@@ -231,7 +229,7 @@ class GroupMemberController extends Controller
 
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
-        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData, $mode) {
+        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData) {
             $member->update(['last_online_at' => now()]);
 
             foreach (Member::PROPERTY_KEYS as $propertyKey) {
@@ -295,7 +293,6 @@ class GroupMemberController extends Controller
                 $sharedMember = Member::firstOrCreate([
                     'group_id' => $groupId,
                     'name' => Member::SHARED_MEMBER,
-                    'mode' => $mode,
                 ]);
 
                 $sharedMember?->properties()->updateOrCreate(
@@ -370,31 +367,10 @@ class GroupMemberController extends Controller
 
         $fromTime = Carbon::parse($validated['from_time']);
         $groupId = $request->attributes->get('group')->id;
-        $mode = $this->resolveQueryMode($request);
 
         $members = Member::where('group_id', '=', $groupId)
-            ->where('mode', '=', $mode)
             ->with('properties')
             ->get();
-
-        if ($mode === Member::MODE_LEAGUES) {
-            $leagueNames = $members->pluck('name')->flip();
-
-            Member::where('group_id', '=', $groupId)
-                ->where('mode', '=', Member::MODE_NORMAL)
-                ->where('name', '!=', Member::SHARED_MEMBER)
-                ->get()
-                ->each(function (Member $normalMember) use ($members, $leagueNames): void {
-                    if (! $leagueNames->has($normalMember->name)) {
-                        $members->push(
-                            new Member([
-                                'name' => $normalMember->name,
-                                'mode' => Member::MODE_LEAGUES,
-                            ])->setRelation('properties', collect())
-                        );
-                    }
-                });
-        }
 
         return response()->json($members->map(function ($member) use ($fromTime) {
             $properties = $member->properties->keyBy('key');
@@ -447,7 +423,6 @@ class GroupMemberController extends Controller
 
         $groupId = $request->attributes->get('group')->id;
         $period = $validated['period'];
-        $mode = $this->resolveQueryMode($request);
 
         $aggregatePeriod = match ($period) {
             'Day' => AggregatePeriod::Day,
@@ -458,7 +433,6 @@ class GroupMemberController extends Controller
         };
 
         $members = Member::where('group_id', '=', $groupId)
-            ->where('mode', '=', $mode)
             ->with(['skillStats' => function ($query) use ($aggregatePeriod) {
                 $query->where('type', '=', $aggregatePeriod->value)
                     ->orderBy('created_at');
@@ -488,12 +462,10 @@ class GroupMemberController extends Controller
     public function getCollectionLog(Request $request): Collection
     {
         $groupId = $request->attributes->get('group')->id;
-        $mode = $this->resolveQueryMode($request);
 
         return CollectionLog::with('member')
-            ->whereHas('member', function ($query) use ($groupId, $mode) {
-                $query->where('group_id', '=', $groupId)
-                    ->where('mode', '=', $mode);
+            ->whereHas('member', function ($query) use ($groupId) {
+                $query->where('group_id', '=', $groupId);
             })
             ->get()->groupBy('member.name')->map->pluck('item_count', 'item_id');
     }
@@ -560,19 +532,5 @@ class GroupMemberController extends Controller
         }
 
         return response()->json(null);
-    }
-
-    protected function resolveQueryMode(Request $request): string
-    {
-        return Member::normalizeMode($request->query('mode'));
-    }
-
-    protected function resolvePluginMode(Request $request): string
-    {
-        $leagueMode = $request->input('league_mode');
-
-        return (is_array($leagueMode) && ($leagueMode[0] ?? 0) === 1)
-            ? Member::MODE_LEAGUES
-            : Member::MODE_NORMAL;
     }
 }

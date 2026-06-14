@@ -1,7 +1,6 @@
 import { fetchItemDataJSON, fetchItemTagsJSON, type ItemsDatabase, type ItemTags } from "../game/items";
 import { fetchQuestDataJSON, type QuestDatabase, type QuestID, type QuestStatus } from "../game/quests";
 import { fetchDiaryDataJSON, type DiaryDatabase } from "../game/diaries";
-import { type GroupMode } from "../game/group-mode";
 import type * as Member from "../game/member";
 import { Vec2D, type WikiPosition2D } from "../components/canvas-map/coordinates";
 import type { CollectionLogInfo } from "../game/collection-log";
@@ -36,7 +35,6 @@ export default class Api {
   private readonly baseURL: string;
   private closed: boolean;
   private readonly credentials: GroupCredentials;
-  private readonly groupMode: GroupMode;
 
   private getGroupDataPromise: Promise<void> | undefined;
 
@@ -165,7 +163,6 @@ export default class Api {
       baseURL: this.baseURL,
       credentials: this.credentials,
       fromTime: fetchDate,
-      groupMode: this.groupMode,
     })
       .then((response) => {
         this.updateGroupData(response);
@@ -201,10 +198,9 @@ export default class Api {
     this.gameData = {};
   }
 
-  constructor(credentials: GroupCredentials, groupMode: GroupMode) {
+  constructor(credentials: GroupCredentials) {
     this.baseURL = __API_URL__;
     this.credentials = credentials;
-    this.groupMode = groupMode;
     this.closed = false;
 
     this.queueGetGameData();
@@ -228,7 +224,6 @@ export default class Api {
       baseURL: this.baseURL,
       credentials: this.credentials,
       period,
-      groupMode: this.groupMode,
     });
   }
 
@@ -261,7 +256,6 @@ export default class Api {
     const collections = await fetchGroupCollectionLogsRequest({
       baseURL: this.baseURL,
       credentials: this.credentials,
-      groupMode: this.groupMode,
     });
     const updates = new Map<Member.Name, Partial<Member.State>>();
     for (const [name, collection] of Object.entries(collections)) {
@@ -276,7 +270,6 @@ export default class Api {
       baseURL: this.baseURL,
       credentials: this.credentials,
       memberName,
-      groupMode: this.groupMode,
     });
   }
 }

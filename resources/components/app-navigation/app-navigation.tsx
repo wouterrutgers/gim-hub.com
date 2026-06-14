@@ -10,11 +10,7 @@ import "./app-navigation.css";
 
 export const AppNavigation = ({ groupName }: { groupName: string }): ReactElement => {
   const location = useLocation();
-  const { isDemo, selectedGroupMode, setSelectedGroupMode } = useContext(APIContext) ?? {};
-
-  const toggleGroupMode = (): void => {
-    setSelectedGroupMode?.(selectedGroupMode === "Normal" ? "Leagues" : "Normal");
-  };
+  const { isDemo } = useContext(APIContext) ?? {};
 
   const mainLinks = [
     { label: "Items", href: "/group/items", mobileIconSource: "/ui/777-0.png" },
@@ -86,9 +82,6 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
   return (
     <div id="app-navigation" className="rsborder-tiny rsbackground">
       <GroupSwitcher groupName={groupName} />
-      <button id="app-navigation-mode" type="button" className="men-button" onClick={toggleGroupMode}>
-        {selectedGroupMode}
-      </button>
       <nav id="app-navigation-nav">{elements}</nav>
     </div>
   );

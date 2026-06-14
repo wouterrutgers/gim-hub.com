@@ -12,10 +12,6 @@ class Member extends Model
 
     public const SHARED_MEMBER = '@SHARED';
 
-    public const MODE_NORMAL = 'normal';
-
-    public const MODE_LEAGUES = 'leagues';
-
     public const PROPERTY_KEYS = [
         'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
         'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room',
@@ -30,11 +26,6 @@ class Member extends Model
         'bank' => 'bank_partial',
         'tackle_box' => 'tackle_box_partial',
     ];
-
-    public static function normalizeMode(?string $mode): string
-    {
-        return $mode === self::MODE_LEAGUES ? self::MODE_LEAGUES : self::MODE_NORMAL;
-    }
 
     public function getProperty(string $key): ?MemberProperty
     {

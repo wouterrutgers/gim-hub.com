@@ -29,14 +29,6 @@
   height: 24px;
 }
 
-#app-navigation-mode {
-  margin-right: 8px;
-  font-size: 0.9em;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 #app-navigation-nav {
   display: flex;
   align-items: center;

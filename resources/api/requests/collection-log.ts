@@ -3,8 +3,6 @@ import type { ItemID } from "../../game/items";
 import type { GroupCredentials } from "../credentials";
 import * as Member from "../../game/member";
 import { canonicalizeCollectionLogItemId } from "../../game/collection-log";
-import type { GroupMode } from "../../game/group-mode";
-import { toGroupModeQueryValue } from "../../game/group-mode";
 
 const MemberCollectionLogSchema = z.record(z.string(), z.uint32()).transform((itemsRecord) => {
   const obtained = new Map<ItemID, number>();
@@ -36,13 +34,11 @@ export type GroupResponse = z.infer<typeof GroupCollectionLogsSchema>;
 export const fetchGroupCollectionLogs = ({
   baseURL,
   credentials,
-  groupMode,
 }: {
   baseURL: string;
   credentials: GroupCredentials;
-  groupMode: GroupMode;
 }): Promise<GroupResponse> =>
-  fetch(`${baseURL}/group/${credentials.name}/collection-log?mode=${toGroupModeQueryValue(groupMode)}`, {
+  fetch(`${baseURL}/group/${credentials.name}/collection-log`, {
     headers: { Authorization: credentials.token },
   })
     .then((response) => {

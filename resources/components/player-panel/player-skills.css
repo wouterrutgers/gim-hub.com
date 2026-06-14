@@ -7,6 +7,7 @@
 }
 
 .skill-box {
+  position: relative;
   display: flex;
   font-family: rstiny, sans-serif;
 }

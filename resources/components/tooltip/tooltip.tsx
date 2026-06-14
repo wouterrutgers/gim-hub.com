@@ -23,6 +23,15 @@ export const Tooltip = (): ReactElement => {
       if (!elementRef.current) return;
 
       elementRef.current.style.transform = `translate(${x}px, ${y}px)`;
+
+      const tooltip = elementRef.current.firstElementChild as HTMLElement | null;
+      if (!tooltip) return;
+
+      const rect = tooltip.getBoundingClientRect();
+      const offsetX = x + 5 + rect.width > window.innerWidth ? -(rect.width + 5) : 5;
+      const offsetY = y - rect.height - 5 < 0 ? rect.height + 5 : -(rect.height + 5);
+
+      tooltip.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
     };
     window.addEventListener("pointermove", handlePointerMove);
     return (): void => {

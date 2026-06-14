@@ -29,7 +29,7 @@ export const Tooltip = (): ReactElement => {
 
       const rect = tooltip.getBoundingClientRect();
       const offsetX = x + 5 + rect.width > window.innerWidth ? -(rect.width + 5) : 5;
-      const offsetY = y - rect.height - 5 < 0 ? rect.height + 5 : -(rect.height + 5);
+      const offsetY = y - rect.height - 5 < 0 ? 5 : -(rect.height + 5);
 
       tooltip.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
     };

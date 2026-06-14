@@ -55,8 +55,11 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
 
         const wikiURLRaw = `https://oldschool.runescape.wiki/w/${skill}`;
         const iconURLRaw = SkillIconsBySkill[skill];
-
-        const levelProgress = (xp - xpMilestoneOfCurrent) / (xpMilestoneOfNext - xpMilestoneOfCurrent);
+        const hasNextLevel = xpMilestoneOfNext > xpMilestoneOfCurrent;
+        const levelProgress = hasNextLevel
+          ? (xp - xpMilestoneOfCurrent) / (xpMilestoneOfNext - xpMilestoneOfCurrent)
+          : 1;
+        const xpUntilNext = hasNextLevel ? ((xpMilestoneOfNext - xp) as Experience) : (0 as Experience);
 
         return (
           <a
@@ -72,7 +75,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
                 levelVirtual,
                 untilMax: Math.max(0, xpDeltaFromMax - xp) as Experience,
                 untilMaxRatio: Math.min(xp / xpDeltaFromMax, 1.0),
-                untilNext: (xpMilestoneOfNext - xp) as Experience,
+                untilNext: xpUntilNext,
                 untilNextRatio: Math.min(levelProgress, 1.0),
               })
             }

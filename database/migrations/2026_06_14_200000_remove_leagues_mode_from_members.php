@@ -32,9 +32,12 @@ return new class extends Migration
             ->delete();
 
         Schema::table('members', function (Blueprint $table): void {
+            $table->index(['group_id', 'name'], 'members_group_id_name_index');
+        });
+
+        Schema::table('members', function (Blueprint $table): void {
             $table->dropIndex('members_group_id_mode_name_index');
             $table->dropColumn('mode');
-            $table->index(['group_id', 'name'], 'members_group_id_name_index');
         });
     }
 };

@@ -1256,10 +1256,9 @@
   },
   "7107": {
     "name": "The Red Reef",
-    "difficulty": "Novice",
-    "points": 0,
-    "member": true,
-    "hidden": true
+    "difficulty": "Experienced",
+    "points": "2",
+    "member": true
   },
   "9643": {
     "name": "Learning the Ropes",

@@ -66661,8 +66661,8 @@
   },
   "21909": {
     "name": "Vorkath's stuffed head",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "21911": {
@@ -72350,7 +72350,7 @@
     "mapping": null
   },
   "23595": {
-    "name": "Berserker ring",
+    "name": "Berserker ring (i)",
     "highalch": 18,
     "alchable": true,
     "mapping": [
@@ -93067,8 +93067,8 @@
   },
   "28945": {
     "name": "Echo boots",
-    "highalch": 270000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 21733,
@@ -93083,7 +93083,7 @@
     "mapping": null
   },
   "28949": {
-    "name": "Dizana's quiver (uncharged) (l)",
+    "name": "Dizana's quiver (l) (uncharged)",
     "highalch": 48000,
     "alchable": true,
     "mapping": null
@@ -109223,92 +109223,196 @@
     "name": "Trident of the swamp (o)",
     "highalch": 47100,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 12900,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33316": {
     "name": "Uncharged toxic trident (o)",
     "highalch": 46800,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 12900,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33318": {
     "name": "Trident of the swamp (e) (o)",
     "highalch": 65100,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 22294,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33320": {
-    "name": "Uncharged toxic trident (e)",
+    "name": "Uncharged toxic trident (e) (o)",
     "highalch": 64800,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 22294,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33322": {
     "name": "Trident of the seas (o)",
     "highalch": 41100,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 11908,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33323": {
     "name": "Trident of the seas (full) (o)",
     "highalch": 41400,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 11905,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33326": {
     "name": "Trident of the seas (e) (o)",
     "highalch": 59100,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 22290,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33328": {
     "name": "Uncharged trident (e) (o)",
     "highalch": 58800,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 22290,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
   },
   "33330": {
-    "name": "Iban's staff",
+    "name": "Iban's staff (o)",
     "highalch": 25500,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 33308,
+        "quantity": 1
+      }
+    ]
   },
   "33332": {
     "name": "Iban's staff (u) (o)",
     "highalch": 51000,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 33308,
+        "quantity": 1
+      }
+    ]
   },
   "33333": {
     "name": "Iban's staff (o)",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 33308,
+        "quantity": 1
+      }
+    ]
   },
   "33335": {
     "name": "Soulreaper axe (o)",
     "highalch": 144000,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 28338,
+        "quantity": 1
+      },
+      {
+        "id": 33305,
+        "quantity": 1
+      }
+    ]
   },
   "33338": {
-    "name": "Demonic slayer helmet",
-    "highalch": 54000,
+    "name": "Oathplate slayer helmet",
+    "highalch": 24000,
     "alchable": true,
     "mapping": [
       {
         "id": 8921,
         "quantity": 1
+      },
+      {
+        "id": 33342,
+        "quantity": 1
       }
     ]
   },
   "33340": {
-    "name": "Demonic slayer helmet",
-    "highalch": 54000,
+    "name": "Radiant slayer helmet",
+    "highalch": 24000,
     "alchable": true,
     "mapping": [
       {
         "id": 8921,
+        "quantity": 1
+      },
+      {
+        "id": 33342,
         "quantity": 1
       }
     ]
@@ -109362,7 +109466,7 @@
     "mapping": null
   },
   "33359": {
-    "name": "Impish ritual kit",
+    "name": "Impish ritual scroll",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -109399,6 +109503,483 @@
   "33373": {
     "name": "Demonic contractor throne",
     "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33378": {
+    "name": "Incoming damage modifier",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33380": {
+    "name": "Incoming damage clamping",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33382": {
+    "name": "Immaculate mole skin",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33384": {
+    "name": "Gem pouch",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33386": {
+    "name": "Open gem pouch",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33387": {
+    "name": "Gem satchel",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33389": {
+    "name": "Open gem satchel",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33390": {
+    "name": "Gem tote",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33392": {
+    "name": "Open gem tote",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33393": {
+    "name": "Gem sack",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33395": {
+    "name": "Open gem sack",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33404": {
+    "name": "Granite cannonball",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33420": {
+    "name": "Bosun's workbench",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33421": {
+    "name": "Recoloured sail",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33422": {
+    "name": "Dyes",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33423": {
+    "name": "Bosun's workbench schematic",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33424": {
+    "name": "Mission totem",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33427": {
+    "name": "Spectator oculus",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "33428": {
+    "name": "Trinket of vengeance (2)",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33431": {
+    "name": "Trinket of vengeance (1)",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33434": {
+    "name": "Uncharged trident (o)",
+    "highalch": 40800,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 11908,
+        "quantity": 1
+      },
+      {
+        "id": 33311,
+        "quantity": 1
+      }
+    ]
+  },
+  "33437": {
+    "name": "Sulphurous fertiliser",
+    "highalch": 28,
+    "alchable": true,
+    "mapping": null
+  },
+  "33439": {
+    "name": "Oathplate slayer helmet (i)",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      },
+      {
+        "id": 33342,
+        "quantity": 1
+      }
+    ]
+  },
+  "33441": {
+    "name": "Oathplate slayer helmet (i)",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      },
+      {
+        "id": 33342,
+        "quantity": 1
+      }
+    ]
+  },
+  "33443": {
+    "name": "Oathplate slayer helmet (i)",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      },
+      {
+        "id": 33342,
+        "quantity": 1
+      }
+    ]
+  },
+  "33445": {
+    "name": "Radiant slayer helmet (i)",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      },
+      {
+        "id": 33342,
+        "quantity": 1
+      }
+    ]
+  },
+  "33447": {
+    "name": "Radiant slayer helmet (i)",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      },
+      {
+        "id": 33342,
+        "quantity": 1
+      }
+    ]
+  },
+  "33449": {
+    "name": "Radiant slayer helmet (i)",
+    "highalch": 54000,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 8921,
+        "quantity": 1
+      },
+      {
+        "id": 33342,
+        "quantity": 1
+      }
+    ]
+  },
+  "33451": {
+    "name": "Demonic pacts relic hunter (t1) armour set",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33454": {
+    "name": "Demonic pacts relic hunter (t2) armour set",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33457": {
+    "name": "Demonic pacts relic hunter (t3) armour set",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33460": {
+    "name": "Dragon crossbow",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33462": {
+    "name": "Oathplate helm",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33464": {
+    "name": "Void melee helm (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33466": {
+    "name": "Void melee helm (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33468": {
+    "name": "Void mage helm (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33470": {
+    "name": "Void mage helm (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33472": {
+    "name": "Void ranger helm (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33474": {
+    "name": "Void ranger helm (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33476": {
+    "name": "Void knight top (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33478": {
+    "name": "Void knight top (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33480": {
+    "name": "Elite void top (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33482": {
+    "name": "Elite void top (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33484": {
+    "name": "Void knight robe (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33486": {
+    "name": "Void knight robe (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33488": {
+    "name": "Elite void robe (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33490": {
+    "name": "Elite void robe (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33492": {
+    "name": "Void knight gloves (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33494": {
+    "name": "Void knight gloves (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33496": {
+    "name": "Infernal max cape (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33498": {
+    "name": "Infernal max cape (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33500": {
+    "name": "Infernal cape (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33502": {
+    "name": "Infernal cape (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33504": {
+    "name": "Blood ancient sceptre (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33506": {
+    "name": "Blood ancient sceptre (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33508": {
+    "name": "Ice ancient sceptre (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33510": {
+    "name": "Ice ancient sceptre (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33512": {
+    "name": "Smoke ancient sceptre (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33514": {
+    "name": "Smoke ancient sceptre (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33516": {
+    "name": "Shadow ancient sceptre (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33518": {
+    "name": "Shadow ancient sceptre (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33520": {
+    "name": "Fighter torso (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33522": {
+    "name": "Fighter torso (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33524": {
+    "name": "Dizana's quiver (l) (broken)",
+    "highalch": 48000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33526": {
+    "name": "Dizana's quiver (l) (mangled)",
+    "highalch": 48000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33528": {
+    "name": "Blessed dizana's quiver (l) (broken)",
+    "highalch": 60000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33530": {
+    "name": "Blessed dizana's quiver (l) (mangled)",
+    "highalch": 60000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33532": {
+    "name": "Dizana's max cape (l) (broken)",
+    "highalch": 59400,
+    "alchable": true,
+    "mapping": null
+  },
+  "33533": {
+    "name": "Dizana's max cape (l) (mangled)",
+    "highalch": 59400,
     "alchable": true,
     "mapping": null
   }

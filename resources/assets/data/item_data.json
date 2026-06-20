@@ -92694,8 +92694,8 @@
   },
   "28826": {
     "name": "Dizana's quiver (broken)",
-    "highalch": 48000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28828": {

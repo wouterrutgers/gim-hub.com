@@ -86792,8 +86792,8 @@
   },
   "27216": {
     "name": "Fossilised dung",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "27219": {

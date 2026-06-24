@@ -23,16 +23,18 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 FROM node:26-alpine AS assets
 WORKDIR /build
 
-COPY package.json ./
+RUN corepack enable pnpm
 
-RUN --mount=type=cache,target=/root/.npm \
-    npm install
+COPY package.json pnpm-lock.yaml ./
+
+RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile
 
 COPY vite.config.mts ./
 COPY resources ./resources
 COPY public ./public
 
-RUN npm run bundle
+RUN pnpm run bundle
 
 FROM base AS production
 

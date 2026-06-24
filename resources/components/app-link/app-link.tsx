@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode } from "react";
-import { Link as RouterLink } from "react-router";
+import { Link as RouterLink } from "react-router-dom";
 
 import "./app-link.css";
 

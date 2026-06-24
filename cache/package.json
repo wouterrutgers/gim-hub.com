@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "update": "node update.js && node item-tags/build-item-tags.ts"
   },
@@ -10,9 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "async": "^3.2.6",
-    "axios": "^1.17.0",
+    "axios": "^1.18.1",
     "glob": "^13.0.6",
-    "sharp": "^0.35.1",
+    "sharp": "^0.35.2",
     "xml2js": "^0.6.2"
   }
 }

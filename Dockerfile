@@ -23,11 +23,14 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 FROM node:26-alpine AS assets
 WORKDIR /build
 
-RUN corepack enable pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN wget -qO- https://get.pnpm.io/install.sh | env PNPM_VERSION=10.33.0 ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN --mount=type=cache,target=/root/.local/share/pnpm/store \
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile
 
 COPY vite.config.mts ./

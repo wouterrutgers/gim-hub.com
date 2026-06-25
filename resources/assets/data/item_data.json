@@ -28098,7 +28098,7 @@
   "6949": {
     "name": "A magic scroll",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "6950": {
@@ -36405,7 +36405,7 @@
   "8849": {
     "name": "Adamant defender",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "8850": {
@@ -36459,7 +36459,7 @@
   "8859": {
     "name": "22lb shot",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "8860": {
@@ -54738,8 +54738,8 @@
   },
   "13218": {
     "name": "Amur leopard toy",
-    "highalch": 60,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13221": {
@@ -60989,7 +60989,7 @@
   "20459": {
     "name": "Adamant defender (broken)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "20461": {
@@ -69109,8 +69109,8 @@
   },
   "22508": {
     "name": "Arachnids of vampyrium",
-    "highalch": 30,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "22510": {
@@ -74416,7 +74416,7 @@
   "24141": {
     "name": "Adamant defender (l)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": [
       {
         "id": 995,
@@ -76273,7 +76273,7 @@
   "24539": {
     "name": "'24-carat' sword",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24541": {
@@ -79290,43 +79290,43 @@
   "25322": {
     "name": "20th anniversary hat",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25324": {
     "name": "20th anniversary top",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25326": {
     "name": "20th anniversary bottom",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25328": {
     "name": "20th anniversary boots",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25330": {
     "name": "20th anniversary gloves",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25332": {
     "name": "20th anniversary necklace",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25334": {
     "name": "20th anniversary cape",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25336": {
@@ -83908,7 +83908,7 @@
   "26551": {
     "name": "Arcane grimoire",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26554": {
@@ -85198,8 +85198,8 @@
   },
   "26792": {
     "name": "Abyssal pearls",
-    "highalch": 30,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null,
     "stacks": [
       [
@@ -87198,14 +87198,14 @@
   },
   "27347": {
     "name": "Ambrosia (2)",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "27349": {
     "name": "Ambrosia (1)",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "27351": {
@@ -87348,8 +87348,8 @@
   },
   "27381": {
     "name": "Ancient remnant",
-    "highalch": 6000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "27382": {
@@ -87558,8 +87558,8 @@
   },
   "27442": {
     "name": "Adventurer's cape",
-    "highalch": 30,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "27444": {
@@ -89318,8 +89318,8 @@
   },
   "27861": {
     "name": "Abyssal dagger (bh)",
-    "highalch": 69000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 13265,
@@ -90807,8 +90807,8 @@
   },
   "28336": {
     "name": "Ancient blood ornament kit",
-    "highalch": 5700,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28338": {
@@ -90975,8 +90975,8 @@
   },
   "28369": {
     "name": "Anima portal",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28370": {
@@ -91437,8 +91437,8 @@
   },
   "28448": {
     "name": "Air nerve",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28449": {
@@ -95346,26 +95346,26 @@
   },
   "29619": {
     "name": "Armageddon rug",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29622": {
     "name": "Armageddon teleport scroll",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29625": {
     "name": "Armageddon weapon scroll",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29628": {
     "name": "Armageddon cape fabric",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29631": {
@@ -96577,32 +96577,32 @@
   },
   "29978": {
     "name": "Alchemist labcoat",
-    "highalch": 228,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29980": {
     "name": "Alchemist labcoat",
-    "highalch": 228,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29982": {
     "name": "Alchemist pants",
-    "highalch": 204,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29984": {
     "name": "Alchemist pants",
-    "highalch": 204,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29986": {
     "name": "Alchemist gloves",
-    "highalch": 234,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "29988": {
@@ -100143,8 +100143,8 @@
   },
   "30973": {
     "name": "Alan's bones",
-    "highalch": 30,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30975": {
@@ -103434,7 +103434,7 @@
   "32096": {
     "name": "Angler's paint",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "32099": {
@@ -108673,7 +108673,7 @@
   "33122": {
     "name": "Annihilation exit portal blueprints",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33124": {

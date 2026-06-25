@@ -15,14 +15,6 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-
-      - uses: s4u/setup-maven-action@v1.20.0
-        with:
-          java-version: 11
-
       - uses: actions/checkout@v6
         with:
           token: ${{ secrets.PAT }}
@@ -31,6 +23,22 @@ jobs:
         with:
           repository: runelite/runelite
           path: cache/runelite
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            cache/pnpm-lock.yaml
+
+      - uses: s4u/setup-maven-action@v1.20.0
+        with:
+          java-version: 11
 
       - run: |
           cache=$(curl -s https://archive.openrs2.org/caches.json | jq -r '
@@ -42,10 +50,10 @@ jobs:
           echo "CACHE_ID=$id" >> $GITHUB_ENV
           echo "VALID_KEYS=$valid_keys" >> $GITHUB_ENV
 
-      - run: npm install
+      - run: pnpm install --frozen-lockfile
         working-directory: ./cache
 
-      - run: npm install
+      - run: pnpm install --frozen-lockfile
         working-directory: ./
 
       - uses: actions/cache@v5
@@ -63,12 +71,12 @@ jobs:
       - if: steps.cache.outputs.cache-hit != 'true'
         run: unzip cache/cache/disk.zip -d cache/cache
 
-      - run: npm run update
+      - run: pnpm run update
         working-directory: ./cache
 
       - run: node resources/js/quests/scraper.js
 
-      - run: npm run bundle
+      - run: pnpm run bundle
 
       - uses: stefanzweifel/git-auto-commit-action@v7
         if: ${{ ! env.ACT }}

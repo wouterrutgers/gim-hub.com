@@ -12,21 +12,20 @@ use Throwable;
 class ImportGroupironData extends Command
 {
     protected $signature = 'groupiron:import
-        {group : Group name}
-        {token : Group token}';
+        {--name= : Group name}
+        {--token= : Group token}
+        {--url= : base URL}';
 
     protected $description = 'Import group data from groupiron.men';
 
     public function handle(): int
     {
-        $groupName = $this->argument('group');
-        $token = $this->argument('token');
-        $endpoint = sprintf('%s/api/group/%s/get-group-data', 'https://groupiron.men', rawurlencode($groupName));
-
-        $response = Http::acceptJson()
-            ->withHeaders(['Authorization' => $token])
-            ->get($endpoint, ['from_time' => '1970-01-01T00:00:00.000Z'])
-            ->throw();
+        $groupName = $this->option('name');
+        $token = $this->option('token');
+        $response = $groupName
+            |> rawurlencode(...)
+            |> (fn ($x) => sprintf('/api/group/%s/get-group-data', $x))
+            |> (fn ($x) => Http::acceptJson()->baseUrl($this->option('url') ?: 'https://groupiron.men')->withHeaders(['Authorization' => $token])->get($x, ['from_time' => '1970-01-01T00:00:00.000Z'])->throw());
 
         $payload = $response->json();
 

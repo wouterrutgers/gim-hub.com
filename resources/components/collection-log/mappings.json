@@ -42,6 +42,7 @@
   "Kree'arra": [{ "label": "Kree'arra kills", "lookupKey": "Kree'Arra" }],
   "K'ril Tsutsaroth": "kills",
   "The Leviathan": "kills",
+  "Maggot King": "kills",
   "Moons of Peril": [{ "label": "Lunar Chests opened", "lookupKey": "Lunar Chests" }],
   "Nex": "kills",
   "The Nightmare": [
@@ -152,5 +153,6 @@
   "Slayer": [],
   "Tormented Demons": [],
   "TzHaar": [],
+  "Venators": [],
   "Miscellaneous": []
 }

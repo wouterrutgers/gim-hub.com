@@ -122,7 +122,7 @@
           },
           {
             "id": 29784,
-            "name": "Araxyte venom sack"
+            "name": "Araxyte venom sac"
           },
           {
             "id": 29782,
@@ -1024,6 +1024,23 @@
           {
             "id": 28334,
             "name": "Awakener\u0027s orb"
+          }
+        ]
+      },
+      {
+        "name": "Maggot King",
+        "items": [
+          {
+            "id": 33642,
+            "name": "Maggot marquess"
+          },
+          {
+            "id": 33631,
+            "name": "Crimson kisten"
+          },
+          {
+            "id": 33634,
+            "name": "Elder venator fang"
           }
         ]
       },
@@ -6292,6 +6309,10 @@
           {
             "id": 33124,
             "name": "Beef"
+          },
+          {
+            "id": 33642,
+            "name": "Maggot marquess"
           }
         ]
       },
@@ -8004,6 +8025,19 @@
           {
             "id": 21304,
             "name": "Obsidian platelegs"
+          }
+        ]
+      },
+      {
+        "name": "Venators",
+        "items": [
+          {
+            "id": 33663,
+            "name": "Venator tooth"
+          },
+          {
+            "id": 33661,
+            "name": "Venator fang"
           }
         ]
       },

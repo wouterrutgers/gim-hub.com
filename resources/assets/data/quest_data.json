@@ -1271,5 +1271,11 @@
     "difficulty": "Novice",
     "points": "1",
     "member": false
+  },
+  "16414": {
+    "name": "The Blood Moon Rises",
+    "difficulty": "Grandmaster",
+    "points": "4",
+    "member": true
   }
 }

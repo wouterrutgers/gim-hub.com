@@ -6153,7 +6153,7 @@
   },
   "1549": {
     "name": "Stake",
-    "highalch": 4,
+    "highalch": 18,
     "alchable": true,
     "mapping": null
   },
@@ -11507,7 +11507,7 @@
   },
   "2945": {
     "name": "Iron key",
-    "highalch": 1,
+    "highalch": 18,
     "alchable": true,
     "mapping": null
   },
@@ -55107,19 +55107,19 @@
   "13317": {
     "name": "Deadman's chest",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "13318": {
     "name": "Deadman's legs",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "13319": {
     "name": "Deadman's cape",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 1,
+    "alchable": true,
     "mapping": null
   },
   "13320": {
@@ -55497,7 +55497,7 @@
   "13382": {
     "name": "Shayzien medpack",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "13383": {
@@ -55532,14 +55532,14 @@
   },
   "13392": {
     "name": "Xeric's talisman (inert)",
-    "highalch": 210,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13393": {
     "name": "Xeric's talisman",
-    "highalch": 210,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13394": {
@@ -55694,8 +55694,8 @@
   },
   "13419": {
     "name": "Sulphurous fertiliser",
-    "highalch": 28,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13420": {
@@ -56356,68 +56356,68 @@
   },
   "13538": {
     "name": "Shayzien supply gloves (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13539": {
     "name": "Shayzien supply boots (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13540": {
     "name": "Shayzien supply helm (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13541": {
     "name": "Shayzien supply greaves (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13542": {
     "name": "Shayzien supply platebody (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13543": {
     "name": "Shayzien supply gloves (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13544": {
     "name": "Shayzien supply boots (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13545": {
     "name": "Shayzien supply helm (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13546": {
     "name": "Shayzien supply greaves (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13547": {
     "name": "Shayzien supply platebody (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13548": {
     "name": "Shayzien supply gloves (3)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13549": {
@@ -56428,8 +56428,8 @@
   },
   "13550": {
     "name": "Shayzien supply helm (3)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13551": {
@@ -56440,110 +56440,110 @@
   },
   "13552": {
     "name": "Shayzien supply platebody (3)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13553": {
     "name": "Shayzien supply gloves (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13554": {
     "name": "Shayzien supply boots (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13555": {
     "name": "Shayzien supply helm (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13556": {
     "name": "Shayzien supply greaves (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13557": {
     "name": "Shayzien supply platebody (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13558": {
     "name": "Shayzien supply gloves (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13559": {
     "name": "Shayzien supply boots (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13560": {
     "name": "Shayzien supply helm (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13561": {
     "name": "Shayzien supply greaves (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13562": {
     "name": "Shayzien supply platebody (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13563": {
     "name": "Shayzien supply crate",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "13564": {
     "name": "Shayzien supply crate",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "13565": {
     "name": "Shayzien supply set (1)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13566": {
     "name": "Shayzien supply set (2)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13567": {
     "name": "Shayzien supply set (3)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13568": {
     "name": "Shayzien supply set (4)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13569": {
     "name": "Shayzien supply set (5)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "13570": {
@@ -57627,79 +57627,79 @@
   "18459": {
     "name": "Shayzien medpack",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "18467": {
     "name": "Sulphurous fertiliser",
-    "highalch": 28,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18555": {
     "name": "Shayzien supply gloves (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18556": {
     "name": "Shayzien supply boots (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18557": {
     "name": "Shayzien supply helm (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18558": {
     "name": "Shayzien supply greaves (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18559": {
     "name": "Shayzien supply platebody (1)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18560": {
     "name": "Shayzien supply gloves (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18561": {
     "name": "Shayzien supply boots (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18562": {
     "name": "Shayzien supply helm (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18563": {
     "name": "Shayzien supply greaves (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18564": {
     "name": "Shayzien supply platebody (2)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18565": {
     "name": "Shayzien supply gloves (3)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18566": {
@@ -57710,8 +57710,8 @@
   },
   "18567": {
     "name": "Shayzien supply helm (3)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18568": {
@@ -57722,104 +57722,104 @@
   },
   "18569": {
     "name": "Shayzien supply platebody (3)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18570": {
     "name": "Shayzien supply gloves (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18571": {
     "name": "Shayzien supply boots (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18572": {
     "name": "Shayzien supply helm (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18573": {
     "name": "Shayzien supply greaves (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18574": {
     "name": "Shayzien supply platebody (4)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18575": {
     "name": "Shayzien supply gloves (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18576": {
     "name": "Shayzien supply boots (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18577": {
     "name": "Shayzien supply helm (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18578": {
     "name": "Shayzien supply greaves (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18579": {
     "name": "Shayzien supply platebody (5)",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18580": {
     "name": "Shayzien supply crate",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "18581": {
     "name": "Shayzien supply set (1)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18582": {
     "name": "Shayzien supply set (2)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18583": {
     "name": "Shayzien supply set (3)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18584": {
     "name": "Shayzien supply set (4)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "18585": {
     "name": "Shayzien supply set (5)",
-    "highalch": 33,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "19473": {
@@ -65567,26 +65567,26 @@
   },
   "21562": {
     "name": "Unidentified small fossil",
-    "highalch": 60,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "21564": {
     "name": "Unidentified medium fossil",
-    "highalch": 120,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "21566": {
     "name": "Unidentified large fossil",
-    "highalch": 180,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "21568": {
     "name": "Unidentified rare fossil",
-    "highalch": 750,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "21570": {
@@ -74952,20 +74952,20 @@
   },
   "24189": {
     "name": "Deadman's chest",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 1,
+    "alchable": true,
     "mapping": null
   },
   "24190": {
     "name": "Deadman's legs",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "24191": {
     "name": "Deadman's cape",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 1,
+    "alchable": true,
     "mapping": null
   },
   "24192": {
@@ -75330,8 +75330,8 @@
   },
   "24255": {
     "name": "Venom gland",
-    "highalch": 60,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24256": {
@@ -75721,127 +75721,127 @@
   "24372": {
     "name": "Twisted dragon trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24374": {
     "name": "Twisted rune trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24376": {
     "name": "Twisted adamant trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24378": {
     "name": "Twisted mithril trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24380": {
     "name": "Twisted steel trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24382": {
     "name": "Twisted iron trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24384": {
     "name": "Twisted bronze trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24387": {
     "name": "Twisted hat (t3)",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24389": {
     "name": "Twisted coat (t3)",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24391": {
     "name": "Twisted trousers (t3)",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24393": {
     "name": "Twisted boots (t3)",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24395": {
     "name": "Twisted cane",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24397": {
     "name": "Twisted hat (t2)",
-    "highalch": 6000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24399": {
     "name": "Twisted coat (t2)",
-    "highalch": 6000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24401": {
     "name": "Twisted trousers (t2)",
-    "highalch": 6000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24403": {
     "name": "Twisted boots (t2)",
-    "highalch": 6000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24405": {
     "name": "Twisted hat (t1)",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24407": {
     "name": "Twisted coat (t1)",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24409": {
     "name": "Twisted trousers (t1)",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24411": {
     "name": "Twisted boots (t1)",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24413": {
     "name": "Twisted banner",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24416": {
@@ -76053,20 +76053,20 @@
   },
   "24460": {
     "name": "Twisted teleport scroll",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24463": {
     "name": "Twisted blueprints",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24466": {
     "name": "Twisted horns",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "24469": {
@@ -77386,13 +77386,13 @@
   "24866": {
     "name": "Kruk jr",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24867": {
     "name": "Princely monkey",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24868": {
@@ -77997,134 +77997,134 @@
   },
   "25001": {
     "name": "Trailblazer hood (t3)",
-    "highalch": 90000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25004": {
     "name": "Trailblazer top (t3)",
-    "highalch": 90000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25007": {
     "name": "Trailblazer trousers (t3)",
-    "highalch": 90000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25010": {
     "name": "Trailblazer boots (t3)",
-    "highalch": 90000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25013": {
     "name": "Trailblazer cane",
-    "highalch": 90000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25016": {
     "name": "Trailblazer hood (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25019": {
     "name": "Trailblazer top (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25022": {
     "name": "Trailblazer trousers (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25025": {
     "name": "Trailblazer boots (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25028": {
     "name": "Trailblazer hood (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25031": {
     "name": "Trailblazer top (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25034": {
     "name": "Trailblazer trousers (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25037": {
     "name": "Trailblazer boots (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25042": {
     "name": "Trailblazer dragon trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25044": {
     "name": "Trailblazer rune trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25046": {
     "name": "Trailblazer adamant trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25048": {
     "name": "Trailblazer mithril trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25050": {
     "name": "Trailblazer steel trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25052": {
     "name": "Trailblazer iron trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25054": {
     "name": "Trailblazer bronze trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25056": {
     "name": "Trailblazer banner",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25059": {
     "name": "Infernal harpoon (or)",
-    "highalch": 33000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 21031,
@@ -78138,8 +78138,8 @@
   },
   "25063": {
     "name": "Infernal pickaxe (or)",
-    "highalch": 58770,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 13243,
@@ -78153,8 +78153,8 @@
   },
   "25066": {
     "name": "Infernal axe (or)",
-    "highalch": 33000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 13241,
@@ -78324,20 +78324,20 @@
   },
   "25087": {
     "name": "Trailblazer teleport scroll",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25090": {
     "name": "Trailblazer tool ornament kit",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25093": {
     "name": "Trailblazer globe",
-    "highalch": 24000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25096": {
@@ -78348,8 +78348,8 @@
   },
   "25099": {
     "name": "Trailblazer graceful ornament kit",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25102": {
@@ -78378,20 +78378,20 @@
   },
   "25110": {
     "name": "Echo axe",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25112": {
     "name": "Echo pickaxe",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25114": {
     "name": "Echo harpoon",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25117": {
@@ -79440,7 +79440,7 @@
   "25361": {
     "name": "Trailblazer globe",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25362": {
@@ -79565,20 +79565,20 @@
   },
   "25380": {
     "name": "Trailblazer relic hunter (t1) armour set",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25383": {
     "name": "Trailblazer relic hunter (t2) armour set",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25386": {
     "name": "Trailblazer relic hunter (t3) armour set",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25389": {
@@ -79685,26 +79685,26 @@
   },
   "25434": {
     "name": "Zealot's robe top",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25436": {
     "name": "Zealot's robe bottom",
-    "highalch": 14700,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25438": {
     "name": "Zealot's helm",
-    "highalch": 14640,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25440": {
     "name": "Zealot's boots",
-    "highalch": 14640,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "25442": {
@@ -81900,577 +81900,577 @@
   "25990": {
     "name": "Sigil of resilience",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25991": {
     "name": "Sigil of resilience",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25993": {
     "name": "Sigil of consistency",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25994": {
     "name": "Sigil of consistency",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25996": {
     "name": "Sigil of the formidable fighter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25997": {
     "name": "Sigil of the formidable fighter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25999": {
     "name": "Sigil of the rigorous ranger",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26000": {
     "name": "Sigil of the rigorous ranger",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26002": {
     "name": "Sigil of the meticulous mage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26003": {
     "name": "Sigil of the meticulous mage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26005": {
     "name": "Sigil of fortification",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26006": {
     "name": "Sigil of fortification",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26008": {
     "name": "Sigil of barrows",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26009": {
     "name": "Sigil of barrows",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26011": {
     "name": "Sigil of deft strikes",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26012": {
     "name": "Sigil of deft strikes",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26014": {
     "name": "Sigil of freedom",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26015": {
     "name": "Sigil of freedom",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26017": {
     "name": "Sigil of enhanced harvest",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26018": {
     "name": "Sigil of enhanced harvest",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26020": {
     "name": "Sigil of storage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26021": {
     "name": "Sigil of storage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26023": {
     "name": "Sigil of the smith",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26024": {
     "name": "Sigil of the smith",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26026": {
     "name": "Sigil of the alchemist",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26027": {
     "name": "Sigil of the alchemist",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26029": {
     "name": "Sigil of the fletcher",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26030": {
     "name": "Sigil of the fletcher",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26032": {
     "name": "Sigil of the chef",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26033": {
     "name": "Sigil of the chef",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26035": {
     "name": "Sigil of the craftsman",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26036": {
     "name": "Sigil of the craftsman",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26038": {
     "name": "Sigil of the abyss",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26039": {
     "name": "Sigil of the abyss",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26041": {
     "name": "Sigil of stamina",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26042": {
     "name": "Sigil of stamina",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26044": {
     "name": "Sigil of the potion master",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26045": {
     "name": "Sigil of the potion master",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26047": {
     "name": "Sigil of the eternal jeweller",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26048": {
     "name": "Sigil of the eternal jeweller",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26050": {
     "name": "Sigil of the treasure hunter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26051": {
     "name": "Sigil of the treasure hunter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26053": {
     "name": "Sigil of mobility",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26054": {
     "name": "Sigil of mobility",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26056": {
     "name": "Sigil of exaggeration",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26057": {
     "name": "Sigil of exaggeration",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26059": {
     "name": "Sigil of specialised strikes",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26060": {
     "name": "Sigil of specialised strikes",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26062": {
     "name": "Sigil of the porcupine",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26063": {
     "name": "Sigil of the porcupine",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26065": {
     "name": "Sigil of binding",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26066": {
     "name": "Sigil of binding",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26068": {
     "name": "Sigil of escaping",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26069": {
     "name": "Sigil of escaping",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26071": {
     "name": "Sigil of the ruthless ranger",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26072": {
     "name": "Sigil of the ruthless ranger",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26074": {
     "name": "Sigil of the feral fighter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26075": {
     "name": "Sigil of the feral fighter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26077": {
     "name": "Sigil of the menacing mage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26078": {
     "name": "Sigil of the menacing mage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26080": {
     "name": "Sigil of prosperity",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26081": {
     "name": "Sigil of prosperity",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26083": {
     "name": "Sigil of the dwarves",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26084": {
     "name": "Sigil of the dwarves",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26086": {
     "name": "Sigil of the elves",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26087": {
     "name": "Sigil of the elves",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26089": {
     "name": "Sigil of the barbarians",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26090": {
     "name": "Sigil of the barbarians",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26092": {
     "name": "Sigil of the gnomes",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26093": {
     "name": "Sigil of the gnomes",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26095": {
     "name": "Sigil of nature",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26096": {
     "name": "Sigil of nature",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26098": {
     "name": "Sigil of devotion",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26099": {
     "name": "Sigil of devotion",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26101": {
     "name": "Sigil of the forager",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26102": {
     "name": "Sigil of the forager",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26104": {
     "name": "Sigil of garments",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26105": {
     "name": "Sigil of garments",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26107": {
     "name": "Sigil of slaughter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26108": {
     "name": "Sigil of slaughter",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26110": {
     "name": "Sigil of the fortune farmer",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26111": {
     "name": "Sigil of the fortune farmer",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26113": {
     "name": "Sigil of versatility",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26114": {
     "name": "Sigil of versatility",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26116": {
     "name": "Sigil of the serpent",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26117": {
     "name": "Sigil of the serpent",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26119": {
     "name": "Sigil of supreme stamina",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26120": {
     "name": "Sigil of supreme stamina",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26122": {
     "name": "Sigil of preservation",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26123": {
     "name": "Sigil of preservation",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26125": {
     "name": "Sigil of finality",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26126": {
     "name": "Sigil of finality",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26128": {
     "name": "Sigil of pious protection",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26129": {
     "name": "Sigil of pious protection",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26131": {
     "name": "Sigil of aggression",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26132": {
     "name": "Sigil of aggression",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26134": {
@@ -82488,49 +82488,49 @@
   "26137": {
     "name": "Sigil of the skiller",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26138": {
     "name": "Sigil of the skiller",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26140": {
     "name": "Sigil of remote storage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26141": {
     "name": "Sigil of remote storage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26143": {
     "name": "Sigil of last recall",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26144": {
     "name": "Sigil of last recall",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26146": {
     "name": "Sigil of the guardian angel",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26147": {
     "name": "Sigil of the guardian angel",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26149": {
@@ -83381,86 +83381,86 @@
   },
   "26421": {
     "name": "Shattered relics variety ornament kit",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26424": {
     "name": "Shattered banner",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26427": {
     "name": "Shattered hood (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26430": {
     "name": "Shattered top (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26433": {
     "name": "Shattered trousers (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26436": {
     "name": "Shattered boots (t1)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26439": {
     "name": "Shattered hood (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26442": {
     "name": "Shattered top (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26445": {
     "name": "Shattered trousers (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26448": {
     "name": "Shattered boots (t2)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26451": {
     "name": "Shattered hood (t3)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26454": {
     "name": "Shattered top (t3)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26457": {
     "name": "Shattered trousers (t3)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26460": {
     "name": "Shattered boots (t3)",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26463": {
@@ -83553,8 +83553,8 @@
   },
   "26479": {
     "name": "Shattered relics void ornament kit",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26482": {
@@ -83670,50 +83670,50 @@
   },
   "26500": {
     "name": "Shattered teleport scroll",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26503": {
     "name": "Shattered relics bronze trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26505": {
     "name": "Shattered relics iron trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26507": {
     "name": "Shattered relics steel trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26509": {
     "name": "Shattered relics mithril trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26511": {
     "name": "Shattered relics adamant trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26513": {
     "name": "Shattered relics rune trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26515": {
     "name": "Shattered relics dragon trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "26517": {
@@ -83784,8 +83784,8 @@
   },
   "26528": {
     "name": "Shattered cannon ornament kit",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26531": {
@@ -83865,8 +83865,8 @@
   },
   "26541": {
     "name": "Shattered relics mystic ornament kit",
-    "highalch": 15000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26544": {
@@ -83913,20 +83913,20 @@
   },
   "26554": {
     "name": "Shattered relic hunter (t1) armour set",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26557": {
     "name": "Shattered relic hunter (t2) armour set",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26560": {
     "name": "Shattered relic hunter (t3) armour set",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26566": {
@@ -92334,8 +92334,8 @@
   },
   "28702": {
     "name": "Trailblazer reloaded banner",
-    "highalch": 600,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28705": {
@@ -92430,50 +92430,50 @@
   },
   "28748": {
     "name": "Trailblazer reloaded torch",
-    "highalch": 9000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28751": {
     "name": "Trailblazer reloaded dragon trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28753": {
     "name": "Trailblazer reloaded rune trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28755": {
     "name": "Trailblazer reloaded adamant trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28757": {
     "name": "Trailblazer reloaded mithril trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28759": {
     "name": "Trailblazer reloaded steel trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28761": {
     "name": "Trailblazer reloaded iron trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28763": {
     "name": "Trailblazer reloaded bronze trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "28765": {
@@ -92994,14 +92994,14 @@
   },
   "28919": {
     "name": "Tonalztics of ralos (uncharged)",
-    "highalch": 360000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28922": {
     "name": "Tonalztics of ralos",
-    "highalch": 360000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 28919,
@@ -93011,8 +93011,8 @@
   },
   "28924": {
     "name": "Sunfire splinters",
-    "highalch": 60,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null,
     "stacks": [
       [
@@ -95407,133 +95407,133 @@
   "29648": {
     "name": "Sigil of meticulousness",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29649": {
     "name": "Sigil of meticulousness",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29651": {
     "name": "Sigil of revoked limitation",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29652": {
     "name": "Sigil of revoked limitation",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29654": {
     "name": "Sigil of the rampart",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29655": {
     "name": "Sigil of the rampart",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29657": {
     "name": "Sigil of deception",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29658": {
     "name": "Sigil of deception",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29660": {
     "name": "Sigil of litheness",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29661": {
     "name": "Sigil of litheness",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29663": {
     "name": "Sigil of the adroit",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29664": {
     "name": "Sigil of the adroit",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29666": {
     "name": "Sigil of onslaught",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29667": {
     "name": "Sigil of onslaught",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29669": {
     "name": "Sigil of restoration",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29670": {
     "name": "Sigil of restoration",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29672": {
     "name": "Sigil of the swashbuckler",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29673": {
     "name": "Sigil of the swashbuckler",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29675": {
     "name": "Sigil of the gunslinger",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29676": {
     "name": "Sigil of the gunslinger",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29678": {
     "name": "Sigil of arcane swiftness",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29679": {
     "name": "Sigil of arcane swiftness",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "29684": {
@@ -95837,7 +95837,7 @@
     "mapping": null
   },
   "29784": {
-    "name": "Araxyte venom sack",
+    "name": "Araxyte venom sac",
     "highalch": 300,
     "alchable": true,
     "mapping": null
@@ -97279,379 +97279,379 @@
   "30237": {
     "name": "Beige pumpkin (disgusted)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30239": {
     "name": "Beige pumpkin (silly)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30241": {
     "name": "Beige pumpkin (evil)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30242": {
     "name": "Beige pumpkin (angry)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30243": {
     "name": "Beige pumpkin (depressed)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30244": {
     "name": "Beige pumpkin (shocked)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30245": {
     "name": "Beige pumpkin (sad)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30246": {
     "name": "Beige pumpkin (happy)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30247": {
     "name": "Beige pumpkin (laughing)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30248": {
     "name": "White pumpkin (disgusted)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30249": {
     "name": "White pumpkin (silly)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30250": {
     "name": "White pumpkin (evil)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30251": {
     "name": "White pumpkin (angry)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30252": {
     "name": "White pumpkin (depressed)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30253": {
     "name": "White pumpkin (shocked)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30254": {
     "name": "White pumpkin (sad)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30255": {
     "name": "White pumpkin (happy)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30256": {
     "name": "White pumpkin (laughing)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30257": {
     "name": "Yellow pumpkin (disgusted)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30258": {
     "name": "Yellow pumpkin (silly)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30259": {
     "name": "Yellow pumpkin (evil)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30260": {
     "name": "Yellow pumpkin (angry)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30261": {
     "name": "Yellow pumpkin (depressed)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30262": {
     "name": "Yellow pumpkin (shocked)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30263": {
     "name": "Yellow pumpkin (sad)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30264": {
     "name": "Yellow pumpkin (happy)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30265": {
     "name": "Yellow pumpkin (laughing)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30266": {
     "name": "Orange pumpkin (disgusted)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30267": {
     "name": "Orange pumpkin (silly)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30268": {
     "name": "Orange pumpkin (evil)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30269": {
     "name": "Orange pumpkin (angry)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30270": {
     "name": "Orange pumpkin (depressed)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30271": {
     "name": "Orange pumpkin (shocked)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30272": {
     "name": "Orange pumpkin (sad)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30273": {
     "name": "Orange pumpkin (happy)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30274": {
     "name": "Orange pumpkin (laughing)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30275": {
     "name": "Red pumpkin (disgusted)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30276": {
     "name": "Red pumpkin (silly)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30277": {
     "name": "Red pumpkin (evil)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30278": {
     "name": "Red pumpkin (angry)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30279": {
     "name": "Red pumpkin (depressed)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30280": {
     "name": "Red pumpkin (shocked)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30281": {
     "name": "Red pumpkin (sad)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30282": {
     "name": "Red pumpkin (happy)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30283": {
     "name": "Red pumpkin (laughing)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30284": {
     "name": "Dark green pumpkin (disgusted)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30285": {
     "name": "Dark green pumpkin (silly)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30286": {
     "name": "Dark green pumpkin (evil)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30287": {
     "name": "Dark green pumpkin (angry)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30288": {
     "name": "Dark green pumpkin (depressed)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30289": {
     "name": "Dark green pumpkin (shocked)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30290": {
     "name": "Dark green pumpkin (sad)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30291": {
     "name": "Dark green pumpkin (happy)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30292": {
     "name": "Dark green pumpkin (laughing)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30293": {
     "name": "Powder grey pumpkin (disgusted)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30294": {
     "name": "Powder grey pumpkin (silly)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30295": {
     "name": "Powder grey pumpkin (evil)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30296": {
     "name": "Powder grey pumpkin (angry)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30297": {
     "name": "Powder grey pumpkin (depressed)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30298": {
     "name": "Powder grey pumpkin (shocked)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30299": {
     "name": "Powder grey pumpkin (sad)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30300": {
     "name": "Powder grey pumpkin (happy)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30301": {
     "name": "Powder grey pumpkin (laughing)",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30302": {
@@ -97800,8 +97800,8 @@
   },
   "30342": {
     "name": "Infernal harpoon (or)",
-    "highalch": 33000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 21031,
@@ -97830,8 +97830,8 @@
   },
   "30345": {
     "name": "Infernal pickaxe (or)",
-    "highalch": 58770,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 13243,
@@ -97856,8 +97856,8 @@
   },
   "30347": {
     "name": "Infernal axe (or)",
-    "highalch": 33000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 13241,
@@ -98045,56 +98045,56 @@
   },
   "30393": {
     "name": "Asgarnia echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30394": {
     "name": "Desert echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30395": {
     "name": "Fremennik echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30396": {
     "name": "Kandarin echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30397": {
     "name": "Morytania echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30398": {
     "name": "Tirannwn echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30399": {
     "name": "Wilderness echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30400": {
     "name": "Kourend echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30401": {
     "name": "Varlamore echo orb",
-    "highalch": 45000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "30402": {
@@ -98225,8 +98225,8 @@
   },
   "30437": {
     "name": "Echo virtus mask",
-    "highalch": 120000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 26241,
@@ -98240,8 +98240,8 @@
   },
   "30439": {
     "name": "Echo virtus robe top",
-    "highalch": 360000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 26243,
@@ -98255,8 +98255,8 @@
   },
   "30441": {
     "name": "Echo virtus robe bottom",
-    "highalch": 240000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 26245,
@@ -98276,8 +98276,8 @@
   },
   "30445": {
     "name": "Echo ahrim's hood",
-    "highalch": 7800,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 4708,
@@ -98291,8 +98291,8 @@
   },
   "30447": {
     "name": "Echo ahrim's robetop",
-    "highalch": 30000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 4712,
@@ -98306,8 +98306,8 @@
   },
   "30449": {
     "name": "Echo ahrim's robeskirt",
-    "highalch": 28200,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": [
       {
         "id": 4714,
@@ -98358,43 +98358,43 @@
   "30465": {
     "name": "Raging echoes dragon trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30467": {
     "name": "Raging echoes rune trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30469": {
     "name": "Raging echoes adamant trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30471": {
     "name": "Raging echoes mithril trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30473": {
     "name": "Raging echoes steel trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30475": {
     "name": "Raging echoes iron trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30477": {
     "name": "Raging echoes bronze trophy",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "30479": {
@@ -100883,26 +100883,26 @@
   },
   "31193": {
     "name": "Swords and emblem",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "31196": {
     "name": "Swords and emblem (b)",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "31199": {
     "name": "Swords and emblem (p)",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "31202": {
     "name": "Swords and emblem (g)",
-    "highalch": 60000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "31205": {
@@ -109643,8 +109643,8 @@
   },
   "33437": {
     "name": "Sulphurous fertiliser",
-    "highalch": 28,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33439": {
@@ -109980,6 +109980,1266 @@
   "33533": {
     "name": "Dizana's max cape (l) (mangled)",
     "highalch": 59400,
+    "alchable": true,
+    "mapping": null
+  },
+  "33534": {
+    "name": "Etched araxyte fang",
+    "highalch": 120000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33537": {
+    "name": "Garlic cocktail",
+    "highalch": 12,
+    "alchable": true,
+    "mapping": null
+  },
+  "33539": {
+    "name": "Bucket of bloodwood sap",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33541": {
+    "name": "Seeking arrow shaft",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33543
+      ],
+      [
+        3,
+        33544
+      ],
+      [
+        4,
+        33545
+      ],
+      [
+        5,
+        33546
+      ]
+    ]
+  },
+  "33547": {
+    "name": "Seeking headless arrow",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33549
+      ],
+      [
+        3,
+        33550
+      ],
+      [
+        4,
+        33551
+      ],
+      [
+        5,
+        33552
+      ]
+    ]
+  },
+  "33553": {
+    "name": "Seeking bronze arrow",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33555
+      ],
+      [
+        3,
+        33556
+      ],
+      [
+        4,
+        33557
+      ],
+      [
+        5,
+        33558
+      ]
+    ]
+  },
+  "33559": {
+    "name": "Seeking iron arrow",
+    "highalch": 1,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33561
+      ],
+      [
+        3,
+        33562
+      ],
+      [
+        4,
+        33563
+      ],
+      [
+        5,
+        33564
+      ]
+    ]
+  },
+  "33565": {
+    "name": "Seeking steel arrow",
+    "highalch": 7,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33567
+      ],
+      [
+        3,
+        33568
+      ],
+      [
+        4,
+        33569
+      ],
+      [
+        5,
+        33570
+      ]
+    ]
+  },
+  "33571": {
+    "name": "Seeking mithril arrow",
+    "highalch": 19,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33573
+      ],
+      [
+        3,
+        33574
+      ],
+      [
+        4,
+        33575
+      ],
+      [
+        5,
+        33576
+      ]
+    ]
+  },
+  "33577": {
+    "name": "Seeking adamant arrow",
+    "highalch": 48,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33579
+      ],
+      [
+        3,
+        33580
+      ],
+      [
+        4,
+        33581
+      ],
+      [
+        5,
+        33582
+      ]
+    ]
+  },
+  "33583": {
+    "name": "Seeking rune arrow",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33585
+      ],
+      [
+        3,
+        33586
+      ],
+      [
+        4,
+        33587
+      ],
+      [
+        5,
+        33588
+      ]
+    ]
+  },
+  "33589": {
+    "name": "Seeking amethyst arrow",
+    "highalch": 294,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33591
+      ],
+      [
+        3,
+        33592
+      ],
+      [
+        4,
+        33593
+      ],
+      [
+        5,
+        33594
+      ]
+    ]
+  },
+  "33595": {
+    "name": "Seeking dragon arrow",
+    "highalch": 480,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33597
+      ],
+      [
+        3,
+        33598
+      ],
+      [
+        4,
+        33599
+      ],
+      [
+        5,
+        33600
+      ]
+    ]
+  },
+  "33601": {
+    "name": "Seeking broad arrows",
+    "highalch": 36,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        33606
+      ],
+      [
+        3,
+        33605
+      ],
+      [
+        4,
+        33604
+      ],
+      [
+        5,
+        33603
+      ]
+    ]
+  },
+  "33607": {
+    "name": "Sap-treated logs",
+    "highalch": 2,
+    "alchable": true,
+    "mapping": null
+  },
+  "33609": {
+    "name": "Sap-treated magic logs",
+    "highalch": 192,
+    "alchable": true,
+    "mapping": null
+  },
+  "33611": {
+    "name": "Sap-treated yew logs",
+    "highalch": 96,
+    "alchable": true,
+    "mapping": null
+  },
+  "33613": {
+    "name": "Sap-treated maple logs",
+    "highalch": 48,
+    "alchable": true,
+    "mapping": null
+  },
+  "33615": {
+    "name": "Sap-treated willow logs",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "33617": {
+    "name": "Sap-treated oak logs",
+    "highalch": 12,
+    "alchable": true,
+    "mapping": null
+  },
+  "33619": {
+    "name": "Sap-treated redwood logs",
+    "highalch": 270,
+    "alchable": true,
+    "mapping": null
+  },
+  "33621": {
+    "name": "Leechfin",
+    "highalch": 102,
+    "alchable": true,
+    "mapping": null
+  },
+  "33623": {
+    "name": "Blood sac",
+    "highalch": 13,
+    "alchable": true,
+    "mapping": null
+  },
+  "33625": {
+    "name": "Letvek",
+    "highalch": 144,
+    "alchable": true,
+    "mapping": null
+  },
+  "33627": {
+    "name": "Dull ancient medal",
+    "highalch": 30,
+    "alchable": true,
+    "mapping": null
+  },
+  "33628": {
+    "name": "Stymphike tartare",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33629": {
+    "name": "Rotten stymphike tartare",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33630": {
+    "name": "Supplies",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33631": {
+    "name": "Crimson kisten",
+    "highalch": 144000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33634": {
+    "name": "Elder venator fang",
+    "highalch": 120000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33636": {
+    "name": "Etched elder venator fang",
+    "highalch": 120000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33639": {
+    "name": "Necklace of rupture",
+    "highalch": 145200,
+    "alchable": true,
+    "mapping": null
+  },
+  "33642": {
+    "name": "Maggot marquess",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33644": {
+    "name": "Dummy stymphike feather",
+    "highalch": 900,
+    "alchable": true,
+    "mapping": null
+  },
+  "33651": {
+    "name": "Stymphike feather",
+    "highalch": 7,
+    "alchable": true,
+    "mapping": null
+  },
+  "33653": {
+    "name": "Stymphike carcass",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33655": {
+    "name": "Makeshift spear",
+    "highalch": 210,
+    "alchable": true,
+    "mapping": null
+  },
+  "33657": {
+    "name": "Orikalkum gravel",
+    "highalch": 102000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33659": {
+    "name": "Grapevine",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33661": {
+    "name": "Venator fang",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33663": {
+    "name": "Venator tooth",
+    "highalch": 150,
+    "alchable": true,
+    "mapping": null
+  },
+  "33665": {
+    "name": "Maggot egg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33667": {
+    "name": "Maggot egg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33669": {
+    "name": "Maggot egg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33671": {
+    "name": "Maggot egg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33673": {
+    "name": "Maggot egg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33675": {
+    "name": "Maggot egg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33677": {
+    "name": "Tarnished longsword",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33679": {
+    "name": "Tarnished spear",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33681": {
+    "name": "Tarnished 2h sword",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33683": {
+    "name": "Tarnished battleaxe",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33685": {
+    "name": "Tarnished halberd",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33687": {
+    "name": "Tarnished ring",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33689": {
+    "name": "Tarnished necklace",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33691": {
+    "name": "Tarnished necklace",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33693": {
+    "name": "Tarnished amulet",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33695": {
+    "name": "Venator heart",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33697": {
+    "name": "Dried out venator heart",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33699": {
+    "name": "Vial",
+    "highalch": 1,
+    "alchable": true,
+    "mapping": null
+  },
+  "33701": {
+    "name": "Squire's journal",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33702": {
+    "name": "From Misthalin to Morytania",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33703": {
+    "name": "Sarl's journal",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33704": {
+    "name": "Scruffy notebook",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33705": {
+    "name": "Pious proceedings",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33706": {
+    "name": "The Life of Friar",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33707": {
+    "name": "Essiandar's notes",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33708": {
+    "name": "Ivandis' writings",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33709": {
+    "name": "Diamond sickle (b)",
+    "highalch": 150,
+    "alchable": true,
+    "mapping": null
+  },
+  "33711": {
+    "name": "Enchanted diamond sickle (b)",
+    "highalch": 150,
+    "alchable": true,
+    "mapping": null
+  },
+  "33713": {
+    "name": "Blisterwood sickle (e)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33715": {
+    "name": "Tome of experience",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "33716": {
+    "name": "Blisterwood stake",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "33718": {
+    "name": "Hallowed flail",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33720": {
+    "name": "Ivan strom",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33721": {
+    "name": "Veliaf hurtz",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33722": {
+    "name": "Sunspear",
+    "highalch": 60000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33724": {
+    "name": "Full moon key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33725": {
+    "name": "Half moon key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33726": {
+    "name": "Crescent moon key",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33727": {
+    "name": "Gibbous moon key",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33728": {
+    "name": "New moon key",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33729": {
+    "name": "Gilded key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33730": {
+    "name": "Solid key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33731": {
+    "name": "Drakan emblem",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33732": {
+    "name": "Drakan emblem",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33733": {
+    "name": "Drakan emblem",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33734": {
+    "name": "Left crest half",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33735": {
+    "name": "Right crest half",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33736": {
+    "name": "Full crest",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33737": {
+    "name": "Ancient symbol",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33738": {
+    "name": "Ancient shield",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33739": {
+    "name": "Shield with symbol",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33740": {
+    "name": "Ornate knife",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33741": {
+    "name": "Ornate skull",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33742": {
+    "name": "Ornate hourglass",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33743": {
+    "name": "Explosive barrel",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33744": {
+    "name": "Small clock hand",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33745": {
+    "name": "Large clock hand",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33746": {
+    "name": "Poem scroll",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33747": {
+    "name": "Sink plug",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33748": {
+    "name": "Broken pipe",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33749": {
+    "name": "Sharp knife",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33750": {
+    "name": "Tongs",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33751": {
+    "name": "Syringe needle",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33752": {
+    "name": "Syringe barrel",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33753": {
+    "name": "Syringe plunger",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33754": {
+    "name": "Empty syringe",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33755": {
+    "name": "Full syringe",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33756": {
+    "name": "Venator stomach",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33757": {
+    "name": "Sword",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33758": {
+    "name": "Spear",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33759": {
+    "name": "Battleaxe",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33760": {
+    "name": "Mace",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33761": {
+    "name": "Lockbox",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33762": {
+    "name": "Ancestral dagger",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33763": {
+    "name": "Grid note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33764": {
+    "name": "Mysterious book",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33765": {
+    "name": "Fancy gem",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33766": {
+    "name": "Fancy gem",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33767": {
+    "name": "Gilded book",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33768": {
+    "name": "Vampyre book",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33769": {
+    "name": "Cloudy grey potion",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33770": {
+    "name": "Weightless black potion",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33771": {
+    "name": "Thick red potion",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33772": {
+    "name": "Cold bluish-white potion",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33773": {
+    "name": "Lab notes",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33774": {
+    "name": "Vial of water",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33775": {
+    "name": "Vial of blood",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33776": {
+    "name": "Pure essence",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33777": {
+    "name": "Daeyalt ore",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33778": {
+    "name": "Chemical vial",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33779": {
+    "name": "Old cog",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33780": {
+    "name": "Jovkai key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33781": {
+    "name": "Loop half of key",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33782": {
+    "name": "Tooth half of key",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33783": {
+    "name": "Myrmel key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33784": {
+    "name": "Shadum key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33785": {
+    "name": "Vitur key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33786": {
+    "name": "Trapdoor key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33787": {
+    "name": "Bolt cutters",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33788": {
+    "name": "Crank wheel",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33789": {
+    "name": "Dusty book",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33790": {
+    "name": "Spine",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33791": {
+    "name": "Dead blood serpent",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33792": {
+    "name": "Serpent rope",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33793": {
+    "name": "Tick",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33794": {
+    "name": "Tattered journal",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33795": {
+    "name": "Rotten diary",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33796": {
+    "name": "Amitire leaves",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33797": {
+    "name": "Amitire stew",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33798": {
+    "name": "Hallowed marks",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "33799": {
+    "name": "Healing potion",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33800": {
+    "name": "Silvthrill ballista",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33801": {
+    "name": "Silvthrill javelin",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33802": {
+    "name": "Mysterious jerky",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33803": {
+    "name": "Putrid sticky potion (4)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33804": {
+    "name": "Putrid sticky potion (3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33805": {
+    "name": "Putrid sticky potion (2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33806": {
+    "name": "Putrid sticky potion (1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33807": {
+    "name": "Foul chunky potion (4)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33808": {
+    "name": "Foul chunky potion (3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33809": {
+    "name": "Foul chunky potion (2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33810": {
+    "name": "Foul chunky potion (1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33811": {
+    "name": "Rancid slimy potion (4)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33812": {
+    "name": "Rancid slimy potion (3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33813": {
+    "name": "Rancid slimy potion (2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33814": {
+    "name": "Rancid slimy potion (1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33815": {
+    "name": "Rank frothy potion (4)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33816": {
+    "name": "Rank frothy potion (3)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33817": {
+    "name": "Rank frothy potion (2)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33818": {
+    "name": "Rank frothy potion (1)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33819": {
+    "name": "Jar of congealed blood",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33820": {
+    "name": "Smelly kebab",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33821": {
+    "name": "Raw impaler meat",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33824": {
+    "name": "Stymphike",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33825": {
+    "name": "Letvek",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "33826": {
+    "name": "Venator",
+    "highalch": 0,
     "alchable": true,
     "mapping": null
   }

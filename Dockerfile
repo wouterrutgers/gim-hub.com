@@ -20,7 +20,7 @@ COPY composer.json composer.lock ./
 RUN --mount=type=cache,target=/root/.composer/cache \
     composer install --no-dev --prefer-dist --no-interaction --classmap-authoritative --no-scripts
 
-FROM node:26-alpine AS assets
+FROM --platform=$BUILDPLATFORM node:26-alpine AS assets
 WORKDIR /build
 
 ENV PNPM_HOME="/pnpm"

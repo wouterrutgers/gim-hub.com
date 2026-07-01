@@ -20,18 +20,15 @@ COPY composer.json composer.lock ./
 RUN --mount=type=cache,target=/root/.composer/cache \
     composer install --no-dev --prefer-dist --no-interaction --classmap-authoritative --no-scripts
 
-FROM --platform=$BUILDPLATFORM node:26-alpine AS assets
+FROM node:26-alpine AS assets
 WORKDIR /build
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME/bin:$PATH"
-
-RUN wget -qO- https://get.pnpm.io/install.sh | env PNPM_VERSION=11.9.0 ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
+RUN npm install --global pnpm@11.9.0
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm-store \
-    pnpm install --frozen-lockfile --store-dir /pnpm-store
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile --store-dir /pnpm/store
 
 COPY vite.config.mts ./
 COPY resources ./resources

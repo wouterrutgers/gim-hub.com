@@ -24,7 +24,7 @@ FROM --platform=$BUILDPLATFORM node:26-alpine AS assets
 WORKDIR /build
 
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+ENV PATH="$PNPM_HOME/bin:$PATH"
 
 RUN wget -qO- https://get.pnpm.io/install.sh | env PNPM_VERSION=11.9.0 ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
 

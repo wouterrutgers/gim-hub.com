@@ -30,8 +30,8 @@ RUN wget -qO- https://get.pnpm.io/install.sh | env PNPM_VERSION=11.9.0 ENV="$HOM
 
 COPY package.json pnpm-lock.yaml ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
-    pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm-store \
+    pnpm install --frozen-lockfile --store-dir /pnpm-store
 
 COPY vite.config.mts ./
 COPY resources ./resources

@@ -12,15 +12,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  docker:
-    name: Build and push Docker image
-    runs-on: ubuntu-latest
+  build:
+    name: Build Docker image (${{ matrix.platform }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+            platform_name: linux-amd64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            platform_name: linux-arm64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v4
@@ -32,21 +39,61 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Determine Docker tags
-        id: tags
-        run: |
-          echo "tags=wouterrutgers/gim-hub.com:octane" >> $GITHUB_OUTPUT
-
-      - name: Build and push
+      - name: Build
+        id: build
         uses: docker/build-push-action@v7
         with:
           context: .
-          push: ${{ github.ref == 'refs/heads/master' }}
-          tags: ${{ steps.tags.outputs.tags }}
           build-args: |
             GIM_HUB_RELEASE=${{ github.sha }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ matrix.platform }}
           target: production
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          outputs: type=image,name=wouterrutgers/gim-hub.com,push-by-digest=true,name-canonical=true,push=${{ github.ref == 'refs/heads/master' }}
+          cache-from: type=gha,scope=${{ matrix.platform_name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.platform_name }}
           provenance: false
+
+      - name: Export digest
+        if: github.ref == 'refs/heads/master'
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v6
+        with:
+          name: digests-${{ matrix.platform_name }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  manifest:
+    name: Create Docker manifest
+    if: github.ref == 'refs/heads/master'
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v7
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create manifest
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create \
+            --tag wouterrutgers/gim-hub.com:octane \
+            $(printf 'wouterrutgers/gim-hub.com@sha256:%s ' *)

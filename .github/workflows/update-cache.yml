@@ -38,6 +38,7 @@ jobs:
 
       - uses: s4u/setup-maven-action@v1.20.0
         with:
+          checkout-enabled: false
           java-version: 11
 
       - run: |

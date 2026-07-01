@@ -2,7 +2,7 @@
   "name": "gim-hub.com",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.9.0",
   "devDependencies": {
     "@date-fns/utc": "^2.1.1",
     "@eslint/js": "^10.0.1",

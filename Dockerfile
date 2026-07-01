@@ -26,7 +26,7 @@ WORKDIR /build
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN wget -qO- https://get.pnpm.io/install.sh | env PNPM_VERSION=10.33.0 ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
+RUN wget -qO- https://get.pnpm.io/install.sh | env PNPM_VERSION=11.9.0 ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
 
 COPY package.json pnpm-lock.yaml ./
 

@@ -2,6 +2,7 @@ name: Dump game data
 
 permissions:
   contents: write
+  issues: write
 
 # To run locally: act --env GROUP_IRONMEN_PATH=$PWD -W .github/workflows/update-cache.yml -s PAT="$(gh auth token)" -P macos-latest=-self-hosted workflow_dispatch
 
@@ -78,6 +79,10 @@ jobs:
       - run: node resources/js/quests/scraper.js
 
       - run: pnpm run bundle
+
+      - run: node resources/js/check-collection-log-mappings.js --github-issue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - uses: stefanzweifel/git-auto-commit-action@v7
         if: ${{ ! env.ACT }}

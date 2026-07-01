@@ -13,6 +13,13 @@ import mappings from "./mappings.json";
 
 import "./collection-log.css";
 
+interface CompletionLine {
+  label: string;
+  lookupKey: string;
+}
+
+const completionMappings = mappings as Partial<Record<string, "kills" | CompletionLine[]>>;
+
 interface CollectionLogPageItemProps {
   items: { item: ItemID; quantity: number; otherMembers: { name: Member.Name; quantity: number }[] }[];
 }
@@ -155,20 +162,18 @@ const ResolvePageWikiLink = ({
   return new URL(urlRaw);
 };
 
-const buildCompletionLines = (pageName: string): { label: string; lookupKey: string }[] => {
-  const kills = (boss: string, key?: string): { label: string; lookupKey: string } => ({
+const buildCompletionLines = (pageName: string): CompletionLine[] => {
+  const kills = (boss: string, key?: string): CompletionLine => ({
     label: `${boss} kills`,
     lookupKey: key ?? boss,
   });
 
-  const map: Record<string, string | { label: string; lookupKey: string }[]> = mappings;
-
-  const entry = map[pageName];
+  const entry = completionMappings[pageName];
   if (entry === "kills") {
     return [kills(pageName)];
   }
 
-  if (typeof entry === "string") {
+  if (entry === undefined) {
     return [];
   }
 

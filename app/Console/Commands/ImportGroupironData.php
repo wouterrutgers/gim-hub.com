@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\AggregatePeriod;
 use App\Models\Group;
 use App\Models\Member;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -22,19 +24,23 @@ class ImportGroupironData extends Command
     {
         $groupName = $this->option('name');
         $token = $this->option('token');
+        $baseUrl = $this->option('url') ?: 'https://groupiron.men';
+
         $response = $groupName
             |> rawurlencode(...)
             |> (fn ($x) => sprintf('/api/group/%s/get-group-data', $x))
-            |> (fn ($x) => Http::acceptJson()->baseUrl($this->option('url') ?: 'https://groupiron.men')->withHeaders(['Authorization' => $token])->get($x, ['from_time' => '1970-01-01T00:00:00.000Z'])->throw());
+            |> (fn ($x) => Http::acceptJson()->baseUrl($baseUrl)->withHeaders(['Authorization' => $token])->get($x, ['from_time' => '1970-01-01T00:00:00.000Z'])->throw());
 
         $payload = $response->json();
+        $skillPayloads = $this->fetchSkillPayloads($baseUrl, $token, $groupName);
 
         $importedMembers = 0;
         $importedProperties = 0;
         $importedCollectionItems = 0;
+        $importedSkillStats = 0;
 
         try {
-            DB::transaction(function () use ($groupName, $token, $payload, &$importedMembers, &$importedProperties, &$importedCollectionItems): void {
+            DB::transaction(function () use ($groupName, $token, $payload, $skillPayloads, &$importedMembers, &$importedProperties, &$importedCollectionItems, &$importedSkillStats): void {
                 $group = Group::firstOrCreate(
                     ['name' => $groupName],
                     ['hash' => $token]
@@ -81,6 +87,8 @@ class ImportGroupironData extends Command
 
                     $importedMembers++;
                 }
+
+                $importedSkillStats = $this->syncSkillData($group, $skillPayloads);
             });
         } catch (Throwable $e) {
             $this->error("Import failed: {$e->getMessage()}");
@@ -92,8 +100,23 @@ class ImportGroupironData extends Command
         $this->line("Members imported: {$importedMembers}");
         $this->line("Properties imported: {$importedProperties}");
         $this->line("Collection log items imported: {$importedCollectionItems}");
+        $this->line("Skill stat rows imported: {$importedSkillStats}");
 
         return static::SUCCESS;
+    }
+
+    protected function fetchSkillPayloads(string $url, string $token, string $groupName): array
+    {
+        $payloads = [];
+
+        foreach (['Day', 'Week', 'Month', 'Year'] as $period) {
+            $payloads[$period] = $groupName
+                |> rawurlencode(...)
+                |> (fn ($x) => sprintf('/api/group/%s/get-skill-data', $x))
+                |> (fn ($x) => Http::acceptJson()->baseUrl($url)->withHeaders(['Authorization' => $token])->get($x, ['period' => $period])->throw()->json());
+        }
+
+        return $payloads;
     }
 
     protected function normalizePropertyValue(string $propertyKey, mixed $value): mixed
@@ -143,5 +166,42 @@ class ImportGroupironData extends Command
         DB::table('collection_logs')->insert($insertRows);
 
         return count($insertRows);
+    }
+
+    protected function syncSkillData(Group $group, array $skillPayloads): int
+    {
+        $importedSkillStats = 0;
+
+        foreach ($skillPayloads as $period => $payload) {
+            $aggregatePeriod = match ($period) {
+                'Day' => AggregatePeriod::Day,
+                'Week', 'Month' => AggregatePeriod::Month,
+                'Year' => AggregatePeriod::Year,
+            };
+
+            foreach ($payload as $memberData) {
+                $member = Member::firstOrCreate([
+                    'group_id' => $group->id,
+                    'name' => $memberData['name'],
+                ]);
+
+                foreach ($memberData['skill_data'] as $skillData) {
+                    $member->skillStats()->updateOrCreate(
+                        [
+                            'type' => $aggregatePeriod->value,
+                            'created_at' => Carbon::parse($skillData['time'])->toDateTimeString(),
+                        ],
+                        [
+                            'skills' => $this->normalizePropertyValue('skills', $skillData['data']),
+                            'updated_at' => now(),
+                        ]
+                    );
+
+                    $importedSkillStats++;
+                }
+            }
+        }
+
+        return $importedSkillStats;
     }
 }

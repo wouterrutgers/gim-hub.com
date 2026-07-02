@@ -110657,8 +110657,8 @@
   },
   "33727": {
     "name": "Gibbous moon key",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33728": {
@@ -110729,14 +110729,14 @@
   },
   "33739": {
     "name": "Shield with symbol",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33740": {
     "name": "Ornate knife",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33741": {
@@ -111036,7 +111036,7 @@
   "33790": {
     "name": "Spine",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33791": {

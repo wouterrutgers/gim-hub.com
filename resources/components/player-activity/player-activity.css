@@ -1,0 +1,324 @@
+.player-activity {
+  width: min(640px, 95vw);
+  max-height: 90svh;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  color: var(--white);
+}
+
+.player-activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.player-activity-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.player-activity-close {
+  flex-shrink: 0;
+}
+
+.player-activity-footer {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.player-activity-dismiss {
+  flex: 1 1 auto;
+}
+
+.player-activity-since {
+  margin: 0 0 4px;
+  font-size: 0.875rem;
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+.player-activity-empty {
+  opacity: 0.65;
+  font-style: italic;
+}
+
+.player-activity-body {
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.player-activity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-activity-section-title {
+  margin: 0;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 4px;
+}
+
+.player-activity-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.player-activity-subsection-title {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Level ups */
+.player-activity-levelups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.player-activity-levelup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+.player-activity-skill-icon {
+  width: 18px;
+  height: 18px;
+  image-rendering: pixelated;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.player-activity-skill-name {
+  font-size: 1rem;
+}
+
+.player-activity-level-change {
+  font-weight: bold;
+  color: var(--orange);
+  margin-left: 2px;
+}
+
+.player-activity-arrow {
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+  margin: 0 2px;
+}
+
+/* XP list */
+.player-activity-xp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.player-activity-xp-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto auto;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  padding: 1px 0;
+}
+
+.player-activity-xp-gained {
+  color: var(--green);
+  text-align: right;
+  font-weight: bold;
+}
+
+.player-activity-xp-total {
+  opacity: 0.55;
+  text-align: right;
+  font-size: 0.875rem;
+  min-width: 60px;
+}
+
+/* Quests */
+.player-activity-quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.player-activity-quest-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+}
+
+.player-activity-quest-status {
+  font-size: 0.875rem;
+  font-weight: bold;
+  min-width: 70px;
+  flex-shrink: 0;
+}
+
+.player-activity-quest-finished .player-activity-quest-status {
+  color: var(--green);
+}
+
+.player-activity-quest-in-progress .player-activity-quest-status {
+  color: var(--orange);
+}
+
+.player-activity-quest-not-started .player-activity-quest-status {
+  color: var(--red);
+}
+
+.player-activity-quest-name {
+  opacity: 0.9;
+}
+
+/* Achievement diaries */
+.player-activity-diary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-activity-diary-region {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.player-activity-diary-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.player-activity-diary-count {
+  color: var(--green);
+  font-size: 0.875rem;
+  font-weight: normal;
+}
+
+.player-activity-diary-tasks {
+  margin: 0;
+  padding: 0 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style-position: outside;
+}
+
+.player-activity-diary-tasks li {
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+.player-activity-diary-tasks li::marker {
+  content: "✓  ";
+}
+
+/* Collection log */
+.player-activity-collection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.player-activity-collection-row {
+  display: flex;
+}
+
+.player-activity-collection-item {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  text-decoration: none;
+  color: inherit;
+  padding: 2px 4px;
+  border-radius: 3px;
+  width: 100%;
+}
+
+.player-activity-collection-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.player-activity-collection-icon {
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+  object-fit: contain;
+  justify-self: center;
+}
+
+.player-activity-collection-name {
+  opacity: 0.9;
+}
+
+.player-activity-collection-new {
+  color: var(--orange);
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+.player-activity-collection-qty {
+  color: var(--green);
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.player-activity-counter {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+}
+
+.player-activity-counter .arrow {
+  margin-top: -0.125rem;
+}
+
+.player-activity-bosskc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.player-activity-bosskc-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  padding: 1px 0;
+}
+
+.player-activity-bosskc-change {
+  opacity: 0.55;
+  font-size: 0.875rem;
+}
+
+.player-activity-bosskc-gained {
+  color: var(--green);
+  font-weight: bold;
+  text-align: right;
+  min-width: 48px;
+}

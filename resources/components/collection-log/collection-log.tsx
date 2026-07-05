@@ -354,7 +354,7 @@ export const CollectionLogWindow = ({
           {formatTitle(`${player}'s collection log`)} - {totalCollected} / {collectionLogInfo?.uniqueSlots ?? 0} (Group:{" "}
           {totalGroupCollected} / {collectionLogInfo?.uniqueSlots ?? 0})
         </h1>
-        <button className="collection-log-close dialog__close" onClick={onCloseModal}>
+        <button className="collection-log-close dialog-close" onClick={onCloseModal}>
           <CachedImage src="/ui/1731-0.png" alt="Close dialog" title="Close dialog" />
         </button>
       </div>

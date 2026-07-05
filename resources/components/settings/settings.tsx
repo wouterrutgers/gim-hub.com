@@ -230,7 +230,16 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
  * A component that contains fields for tweaking site settings such as sidebar position, and group settings like member names.
  */
 export const SettingsPage = (): ReactElement => {
-  const { siteTheme, setSiteTheme, sidebarPosition, setSidebarPosition } = useContext(SettingsContext);
+  const {
+    siteTheme,
+    setSiteTheme,
+    sidebarPosition,
+    setSidebarPosition,
+    snapshotIntervalMinutes,
+    setSnapshotIntervalMinutes,
+    enableRecentActivity,
+    setEnableRecentActivity,
+  } = useContext(SettingsContext);
   const members = useContext(GroupMemberNamesContext);
   const [addMemberErrors, setAddMemberErrors] = useState<string[]>();
   const addMemberInputRef = useRef<HTMLInputElement>(null);
@@ -384,6 +393,36 @@ export const SettingsPage = (): ReactElement => {
             </div>
           );
         })}
+      </fieldset>
+
+      <fieldset>
+        <legend>{formatTitle("Player Activity Settings")}</legend>
+        <div className="settings-page-radio-item">
+          <input
+            id="enable-recent-activity-input"
+            type="checkbox"
+            checked={enableRecentActivity}
+            onChange={(e) => setEnableRecentActivity?.(e.target.checked)}
+          />
+          <label htmlFor="enable-recent-activity-input">Show recent activity summaries on player panels</label>
+        </div>
+        <div className="settings-page-number-item">
+          <input
+            id="snapshot-interval-input"
+            type="number"
+            min={0}
+            step={1}
+            value={snapshotIntervalMinutes}
+            onChange={(e) => {
+              const raw = e.target.value.trim();
+              const n = parseInt(raw, 10);
+              if (Number.isInteger(n) && n >= 0) {
+                setSnapshotIntervalMinutes?.(String(n));
+              }
+            }}
+          />
+          <label htmlFor="snapshot-interval-input">minutes between snapshots to show recent activity</label>
+        </div>
       </fieldset>
     </div>
   );

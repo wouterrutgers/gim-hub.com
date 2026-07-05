@@ -38,6 +38,22 @@ button {
   font-family: rssmall, ui-sans-serif, Arial, sans-serif;
 }
 
+.dialog-close {
+  display: flex;
+  height: 21px;
+  width: 21px;
+}
+
+.dialog-close:hover,
+.dialog-close:focus-visible {
+  outline: solid var(--orange) 1px;
+}
+
+.dialog-close > img {
+  width: 100%;
+  object-fit: contain;
+}
+
 a {
   color: unset;
 }

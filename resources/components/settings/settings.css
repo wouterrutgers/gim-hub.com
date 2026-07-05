@@ -75,3 +75,14 @@
 .settings-page-radio-item input:focus-visible {
   outline: none;
 }
+
+.settings-page-number-item {
+  padding-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-page-number-item input[type="number"] {
+  width: 72px;
+}

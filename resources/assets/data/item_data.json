@@ -57576,6 +57576,24 @@
       }
     ]
   },
+  "16492": {
+    "name": "Stake",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "16494": {
+    "name": "Golden key",
+    "highalch": 180,
+    "alchable": true,
+    "mapping": null
+  },
+  "16495": {
+    "name": "Iron key",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
   "16684": {
     "name": "Useless key",
     "highalch": 0,
@@ -92706,8 +92724,8 @@
   },
   "28830": {
     "name": "Dizana's max cape (broken)",
-    "highalch": 59400,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28831": {
@@ -92904,8 +92922,8 @@
   },
   "28902": {
     "name": "Dizana's max cape",
-    "highalch": 59400,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28904": {
@@ -92916,8 +92934,8 @@
   },
   "28906": {
     "name": "Dizana's max cape (l)",
-    "highalch": 59400,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "28907": {
@@ -109973,14 +109991,14 @@
   },
   "33532": {
     "name": "Dizana's max cape (l) (broken)",
-    "highalch": 59400,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33533": {
     "name": "Dizana's max cape (l) (mangled)",
-    "highalch": 59400,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33534": {
@@ -110399,7 +110417,7 @@
   },
   "33655": {
     "name": "Makeshift spear",
-    "highalch": 210,
+    "highalch": 12,
     "alchable": true,
     "mapping": null
   },
@@ -110500,7 +110518,7 @@
     "mapping": null
   },
   "33689": {
-    "name": "Tarnished necklace",
+    "name": "Tarnished bracelet",
     "highalch": 300,
     "alchable": true,
     "mapping": null
@@ -111241,6 +111259,18 @@
     "name": "Venator",
     "highalch": 0,
     "alchable": true,
+    "mapping": null
+  },
+  "33827": {
+    "name": "Ancient sceptre (l) (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "33829": {
+    "name": "Ancient sceptre (l) (mangled)",
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   }
 }

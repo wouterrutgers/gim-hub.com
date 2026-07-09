@@ -7963,6 +7963,14 @@
           {
             "id": 31235,
             "name": "Gryphon feather"
+          },
+          {
+            "id": 33663,
+            "name": "Venator tooth"
+          },
+          {
+            "id": 33661,
+            "name": "Venator fang"
           }
         ]
       },
@@ -8025,19 +8033,6 @@
           {
             "id": 21304,
             "name": "Obsidian platelegs"
-          }
-        ]
-      },
-      {
-        "name": "Venators",
-        "items": [
-          {
-            "id": 33663,
-            "name": "Venator tooth"
-          },
-          {
-            "id": 33661,
-            "name": "Venator fang"
           }
         ]
       },

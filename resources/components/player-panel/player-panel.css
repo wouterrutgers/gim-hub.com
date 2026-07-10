@@ -56,12 +56,19 @@ button.player-panel-tab-active {
   display: flex;
 }
 
+.player-panel-activity-error {
+  margin: 0;
+  padding: 4px 6px;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
 .player-panel-activity-btn {
   flex: 1;
-  background: rgba(255, 200, 50, 0.15);
-  border: 1px solid rgba(255, 200, 50, 0.4);
+  background: rgb(255 200 50 / 15%);
+  border: 1px solid rgb(255 200 50 / 40%);
   border-right: none;
-  color: rgb(255, 200, 50);
+  color: rgb(255 200 50);
   font-size: 0.8rem;
   padding: 3px 6px;
   cursor: pointer;
@@ -70,13 +77,18 @@ button.player-panel-tab-active {
 }
 
 .player-panel-activity-btn:hover {
-  background: rgba(255, 200, 50, 0.28);
+  background: rgb(255 200 50 / 28%);
+}
+
+.player-panel-activity-btn:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 
 .player-panel-activity-clear {
-  background: rgba(255, 200, 50, 0.1);
-  border: 1px solid rgba(255, 200, 50, 0.4);
-  color: rgb(255, 200, 50);
+  background: rgb(255 200 50 / 10%);
+  border: 1px solid rgb(255 200 50 / 40%);
+  color: rgb(255 200 50);
   font-size: 0.75rem;
   padding: 3px 7px;
   cursor: pointer;
@@ -85,7 +97,12 @@ button.player-panel-tab-active {
 }
 
 .player-panel-activity-clear:hover {
-  background: rgba(255, 100, 80, 0.25);
-  border-color: rgba(255, 100, 80, 0.5);
-  color: rgb(255, 140, 120);
+  background: rgb(255 100 80 / 25%);
+  border-color: rgb(255 100 80 / 50%);
+  color: rgb(255 140 120);
+}
+
+.player-panel-activity-clear:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }

@@ -9,16 +9,13 @@ interface Settings {
   setSidebarPosition?: (value: SidebarPosition) => void;
   enableRecentActivity: boolean;
   setEnableRecentActivity?: (value: boolean) => void;
-  snapshotIntervalMinutes: string;
-  setSnapshotIntervalMinutes?: (value: string) => void;
 }
 
 const DEFAULT_SITE_SETTINGS = Object.freeze({
-  sidebarPosition: "left" as SidebarPosition,
-  siteTheme: "light" as SiteTheme,
-  snapshotIntervalMinutes: "60",
+  sidebarPosition: "left",
+  siteTheme: "light",
   enableRecentActivity: true,
-});
+} satisfies Settings);
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -36,21 +33,18 @@ const KEY_RECENT_ACTIVITY = "settings-recent-activity";
 
 interface RecentActivitySettings {
   enabled: boolean;
-  intervalMinutes: number;
+  intervalMinutes?: number;
 }
 
 const DEFAULT_RECENT_ACTIVITY: RecentActivitySettings = {
   enabled: true,
-  intervalMinutes: 60,
 };
 
 const validateSiteTheme = (value: string | undefined): SiteTheme | undefined => {
-  const validated = SiteTheme.find((theme) => theme === value);
-  return validated;
+  return SiteTheme.find((theme) => theme === value);
 };
 const validateSidebarPosition = (value: string | undefined): SidebarPosition | undefined => {
-  const validated = SidebarPosition.find((position) => position === value);
-  return validated;
+  return SidebarPosition.find((position) => position === value);
 };
 const validateRecentActivitySettings = (value: string | undefined): string | undefined => {
   if (!value) return undefined;
@@ -58,8 +52,13 @@ const validateRecentActivitySettings = (value: string | undefined): string | und
     const parsed = JSON.parse(value) as unknown;
     if (typeof parsed !== "object" || parsed === null) return undefined;
     const obj = parsed as Record<string, unknown>;
-    if (typeof obj["enabled"] !== "boolean") return undefined;
-    if (!Number.isInteger(obj["intervalMinutes"]) || (obj["intervalMinutes"] as number) < 0) return undefined;
+    if (typeof obj.enabled !== "boolean") return undefined;
+    if (
+      obj.intervalMinutes !== undefined &&
+      (typeof obj.intervalMinutes !== "number" || !Number.isInteger(obj.intervalMinutes) || obj.intervalMinutes < 0)
+    ) {
+      return undefined;
+    }
     return value;
   } catch {
     return undefined;
@@ -94,16 +93,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }): ReactEl
   }
 
   const enableRecentActivity = recentActivity.enabled;
-  const snapshotIntervalMinutes = String(recentActivity.intervalMinutes);
 
   const setEnableRecentActivity = (value: boolean): void => {
     setRecentActivityStr(JSON.stringify({ ...recentActivity, enabled: value }));
-  };
-  const setSnapshotIntervalMinutes = (value: string): void => {
-    const n = parseInt(value, 10);
-    if (Number.isInteger(n) && n >= 0) {
-      setRecentActivityStr(JSON.stringify({ ...recentActivity, intervalMinutes: n }));
-    }
   };
 
   return (
@@ -113,8 +105,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }): ReactEl
         sidebarPosition,
         setSidebarPosition,
         setSiteTheme,
-        snapshotIntervalMinutes,
-        setSnapshotIntervalMinutes,
         enableRecentActivity,
         setEnableRecentActivity,
       }}

@@ -1,131 +1,184 @@
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { type ReactNode, useCallback, useContext, useEffect, useRef, useState } from "react";
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
-import { GroupMemberStatesContext } from "./group-context";
+import { SnapshotContext, type SnapshotBaseline, type SnapshotView } from "./snapshot-context-value";
 import { SettingsContext } from "./settings-context";
-import { type PlayerSnapshot, loadSnapshot, saveSnapshot, snapshotFromMemberState } from "../hooks/player-snapshot";
+import type { MemberSnapshotBaselines, SnapshotMarkers } from "../api/requests/player-snapshot";
 
-interface SnapshotContextValue {
-  getBaselineSnapshot: (playerName: Member.Name) => PlayerSnapshot | undefined;
-  clearBaselineSnapshot: (playerName: Member.Name) => void;
+interface SeenSnapshotState {
+  groupName?: string;
+  markers: SnapshotMarkers;
 }
 
-export const SnapshotContext = createContext<SnapshotContextValue>({
-  getBaselineSnapshot: () => undefined,
-  clearBaselineSnapshot: () => undefined,
-});
+const snapshotSeenStorageKey = (groupName: string): string => `recent-activity-seen-${groupName}`;
 
-export const snapshotIntervalToMs = (minutes: string): number => Math.max(0, Number(minutes)) * 60 * 1000;
+const parseSeenSnapshotMarkers = (value: string | null): SnapshotMarkers => {
+  if (!value) return {};
+
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) return {};
+
+    const markers: SnapshotMarkers = {};
+    for (const [member, timestamp] of Object.entries(parsed)) {
+      if (typeof timestamp === "number" && Number.isFinite(timestamp)) {
+        markers[member] = timestamp;
+      }
+    }
+
+    return markers;
+  } catch {
+    return {};
+  }
+};
+
+const loadSeenSnapshotMarkers = (storageKey: string): SnapshotMarkers =>
+  parseSeenSnapshotMarkers(localStorage.getItem(storageKey));
+
+const saveSeenSnapshotMarkers = (storageKey: string, markers: SnapshotMarkers): void => {
+  localStorage.setItem(storageKey, JSON.stringify(markers));
+  window.dispatchEvent(new CustomEvent("local-storage", { detail: { key: storageKey } }));
+};
 
 /**
- * Manages player data snapshots in localStorage.
- *
- * On each session, when live player data first arrives:
- * - If a stored snapshot exists and is older than the configured interval,
- *   it becomes the "baseline" for recent activity and a fresh snapshot is saved.
- * - If no stored snapshot exists, a fresh snapshot is saved (no activity yet).
- * - If a stored snapshot exists but is too recent, it is left unchanged.
+ * Manages player data snapshots stored by the group API.
  */
 export const SnapshotProvider = ({ children }: { children: ReactNode }): ReactNode => {
   const apiContext = useContext(APIContext);
-  const memberStates = useContext(GroupMemberStatesContext);
-  const { snapshotIntervalMinutes } = useContext(SettingsContext);
+  const { enableRecentActivity } = useContext(SettingsContext);
 
-  // Baseline snapshots: loaded at session start for each member, locked for the session.
-  const [baselineSnapshots, setBaselineSnapshots] = useState<Map<Member.Name, PlayerSnapshot>>(new Map());
-
-  // Tracks members whose snapshot has already been handled this session.
-  const handledMembersRef = useRef<Set<Member.Name>>(new Set());
+  const [serverSnapshots, setServerSnapshots] = useState<Map<Member.Name, MemberSnapshotBaselines>>();
+  const [seenSnapshotState, setSeenSnapshotState] = useState<SeenSnapshotState>({ markers: {} });
+  const [collectionLogsLoaded, setCollectionLogsLoaded] = useState(false);
 
   const api = apiContext?.api;
+  const groupName = api?.getCredentials().name;
+  const activeConnection = useRef({ api, groupName });
+  activeConnection.current = { api, groupName };
+
+  useEffect(() => {
+    if (!groupName) {
+      setSeenSnapshotState({ markers: {} });
+      return;
+    }
+
+    const storageKey = snapshotSeenStorageKey(groupName);
+    setSeenSnapshotState({ groupName, markers: loadSeenSnapshotMarkers(storageKey) });
+
+    const handleStorageEvent = (event: CustomEvent | StorageEvent): void => {
+      let eventKey: string | undefined = undefined;
+      if (event.type === "local-storage") {
+        eventKey = (event as CustomEvent<{ key: string }>).detail?.key;
+      } else if (event.type === "storage") {
+        eventKey = (event as StorageEvent).key ?? undefined;
+      }
+
+      if (eventKey === storageKey) {
+        setSeenSnapshotState({ groupName, markers: loadSeenSnapshotMarkers(storageKey) });
+      }
+    };
+
+    window.addEventListener("local-storage", handleStorageEvent);
+    window.addEventListener("storage", handleStorageEvent);
+
+    return (): void => {
+      window.removeEventListener("local-storage", handleStorageEvent);
+      window.removeEventListener("storage", handleStorageEvent);
+    };
+  }, [groupName]);
 
   // Reset when the API changes (new login / logout).
   useEffect(() => {
-    setBaselineSnapshots(new Map());
-    handledMembersRef.current = new Set();
-  }, [api]);
+    setServerSnapshots(undefined);
+    setCollectionLogsLoaded(false);
+  }, [api, enableRecentActivity]);
 
   useEffect(() => {
-    if (!api) return;
+    let cancelled = false;
 
-    const groupName = api.getCredentials().name;
-    const intervalMs = snapshotIntervalToMs(snapshotIntervalMinutes);
-    const now = Date.now();
+    if (!api || !enableRecentActivity || !groupName || seenSnapshotState.groupName !== groupName) return;
 
-    let baselineChanged = false;
-    const newBaselines = new Map(baselineSnapshots);
+    api
+      .fetchMemberSnapshots(seenSnapshotState.markers)
+      .then((snapshots) => {
+        if (cancelled) return;
+        setServerSnapshots(snapshots);
+      })
+      .catch((reason) => {
+        console.error("Failed to fetch member snapshots", reason);
+        if (cancelled) return;
+        setServerSnapshots((snapshots) => snapshots ?? new Map());
+      });
 
-    for (const [memberName, state] of memberStates) {
-      if (handledMembersRef.current.has(memberName)) continue;
-      handledMembersRef.current.add(memberName);
+    return (): void => {
+      cancelled = true;
+    };
+  }, [api, enableRecentActivity, groupName, seenSnapshotState]);
 
-      const existing = loadSnapshot(groupName, memberName);
+  useEffect(() => {
+    let cancelled = false;
 
-      const saveFreshWithHiscores = (fresh: PlayerSnapshot): void => {
-        saveSnapshot(groupName, memberName, fresh);
-        api
-          .fetchMemberHiscores(memberName)
-          .then((hiscores) => {
-            const bossKc: Record<string, number> = Object.fromEntries(hiscores);
-            const stored = loadSnapshot(groupName, memberName);
-            if (stored && stored.timestamp === fresh.timestamp) {
-              saveSnapshot(groupName, memberName, { ...stored, bossKc });
-            }
-          })
-          .catch(() => {
-            /* hiscores unavailable — bossKc stays absent */
-          });
+    if (!api || !enableRecentActivity) return;
+
+    const collectionLogsPromise = api.fetchGroupCollectionLogs?.() ?? Promise.resolve();
+    collectionLogsPromise
+      .catch((reason) => console.error("Failed to fetch collection logs", reason))
+      .finally(() => {
+        if (cancelled) return;
+        setCollectionLogsLoaded(true);
+      });
+
+    return (): void => {
+      cancelled = true;
+    };
+  }, [api, enableRecentActivity]);
+
+  const getBaselineSnapshot = useCallback(
+    (playerName: Member.Name, view: SnapshotView = "lastVisit"): SnapshotBaseline | undefined => {
+      if (!enableRecentActivity || !serverSnapshots || !collectionLogsLoaded) return undefined;
+
+      const baselines = serverSnapshots.get(playerName);
+      if (!baselines) return undefined;
+
+      return {
+        snapshot: baselines[view],
+        view,
+        hasSeenMarker: seenSnapshotState.groupName === groupName && seenSnapshotState.markers[playerName] !== undefined,
       };
-
-      if (existing && now - existing.timestamp >= intervalMs) {
-        newBaselines.set(memberName, existing);
-        baselineChanged = true;
-        saveFreshWithHiscores({ timestamp: now, ...snapshotFromMemberState(state) });
-      } else if (!existing) {
-        saveFreshWithHiscores({ timestamp: now, ...snapshotFromMemberState(state) });
-      }
-    }
-
-    if (baselineChanged) {
-      setBaselineSnapshots(newBaselines);
-    }
-  }, [memberStates, api]);
-
-  const getBaselineSnapshot = (playerName: Member.Name): PlayerSnapshot | undefined =>
-    baselineSnapshots.get(playerName);
+    },
+    [collectionLogsLoaded, enableRecentActivity, groupName, seenSnapshotState, serverSnapshots],
+  );
 
   const clearBaselineSnapshot = useCallback(
-    (playerName: Member.Name): void => {
-      const currentState = memberStates.get(playerName);
-      if (api && currentState) {
-        const groupName = api.getCredentials().name;
-        const fresh: PlayerSnapshot = {
-          timestamp: Date.now(),
-          ...snapshotFromMemberState(currentState),
-        };
-        saveSnapshot(groupName, playerName, fresh);
-        api
-          .fetchMemberHiscores(playerName)
-          .then((hiscores) => {
-            const bossKc: Record<string, number> = Object.fromEntries(hiscores);
-            const stored = loadSnapshot(groupName, playerName);
-            if (stored && stored.timestamp === fresh.timestamp) {
-              saveSnapshot(groupName, playerName, { ...stored, bossKc });
-            }
-          })
-          .catch(() => {
-            /* hiscores unavailable — bossKc stays absent */
-          });
+    async (playerName: Member.Name): Promise<void> => {
+      if (!api || !groupName) {
+        throw new Error("No active API connection.");
       }
 
-      setBaselineSnapshots((prev) => {
-        if (!prev.has(playerName)) return prev;
-        const next = new Map(prev);
-        next.delete(playerName);
-        return next;
+      const snapshotApi = api;
+      const snapshotGroupName = groupName;
+      const snapshot = await snapshotApi.createMemberSnapshot(playerName);
+      const storageKey = snapshotSeenStorageKey(snapshotGroupName);
+      const markers = { ...loadSeenSnapshotMarkers(storageKey), [playerName]: snapshot.timestamp };
+      saveSeenSnapshotMarkers(storageKey, markers);
+
+      if (activeConnection.current.api !== snapshotApi || activeConnection.current.groupName !== snapshotGroupName) {
+        return;
+      }
+
+      setServerSnapshots((previousSnapshots) => {
+        const nextSnapshots = new Map(previousSnapshots);
+        const previousBaselines = previousSnapshots?.get(playerName);
+        nextSnapshots.set(playerName, {
+          lastVisit: snapshot,
+          lastWeek: previousBaselines?.lastWeek ?? snapshot,
+        });
+        return nextSnapshots;
       });
+
+      setSeenSnapshotState({ groupName: snapshotGroupName, markers });
     },
-    [api, memberStates],
+    [api, groupName],
   );
 
   return <SnapshotContext value={{ getBaselineSnapshot, clearBaselineSnapshot }}>{children}</SnapshotContext>;

@@ -235,8 +235,6 @@ export const SettingsPage = (): ReactElement => {
     setSiteTheme,
     sidebarPosition,
     setSidebarPosition,
-    snapshotIntervalMinutes,
-    setSnapshotIntervalMinutes,
     enableRecentActivity,
     setEnableRecentActivity,
   } = useContext(SettingsContext);
@@ -396,7 +394,7 @@ export const SettingsPage = (): ReactElement => {
       </fieldset>
 
       <fieldset>
-        <legend>{formatTitle("Player Activity Settings")}</legend>
+        <legend>{formatTitle("Player activity settings")}</legend>
         <div className="settings-page-radio-item">
           <input
             id="enable-recent-activity-input"
@@ -405,23 +403,6 @@ export const SettingsPage = (): ReactElement => {
             onChange={(e) => setEnableRecentActivity?.(e.target.checked)}
           />
           <label htmlFor="enable-recent-activity-input">Show recent activity summaries on player panels</label>
-        </div>
-        <div className="settings-page-number-item">
-          <input
-            id="snapshot-interval-input"
-            type="number"
-            min={0}
-            step={1}
-            value={snapshotIntervalMinutes}
-            onChange={(e) => {
-              const raw = e.target.value.trim();
-              const n = parseInt(raw, 10);
-              if (Number.isInteger(n) && n >= 0) {
-                setSnapshotIntervalMinutes?.(String(n));
-              }
-            }}
-          />
-          <label htmlFor="snapshot-interval-input">minutes between snapshots to show recent activity</label>
         </div>
       </fieldset>
     </div>

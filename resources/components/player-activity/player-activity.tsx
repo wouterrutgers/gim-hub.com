@@ -1,12 +1,14 @@
-import { useContext, type ReactElement } from "react";
+import { useContext, useState, type ChangeEvent, type ReactElement } from "react";
 import { GameDataContext } from "../../context/game-data-context";
+import { GroupMemberStatesContext } from "../../context/group-context";
+import { SnapshotContext, type SnapshotBaseline, type SnapshotView } from "../../context/snapshot-context-value";
 import { DiaryRegion, DiaryTier } from "../../game/diaries";
 import type * as Member from "../../game/member";
 import { SkillIconsBySkill } from "../../game/skill";
-import type { PlayerActivity } from "../../hooks/player-snapshot";
+import { computeActivity } from "../../hooks/player-snapshot";
 import { formatTitle } from "../../ts/format-title";
 import { CachedImage } from "../cached-image/cached-image";
-import mappings from "../collection-log/mappings.json";
+import { BOSS_KC_KEYS } from "../collection-log/boss-kc";
 
 import "./player-activity.css";
 
@@ -24,34 +26,40 @@ const formatRelativeTime = (timestamp: number): string => {
   return "just now";
 };
 
-type MappingEntry = "kills" | { label: string; lookupKey: string }[] | [];
+const formatSnapshotLabel = (baseline: SnapshotBaseline): string => {
+  if (baseline.view === "lastWeek" || !baseline.hasSeenMarker) return "Since a week";
 
-export const BOSS_KC_KEYS: Set<string> = new Set(
-  Object.entries(mappings as Record<string, MappingEntry>).flatMap(([pageName, entry]) => {
-    if (entry === "kills") return [pageName];
-    if (Array.isArray(entry)) return entry.map((e) => e.lookupKey);
-    return [];
-  }),
-);
+  return `Since ${formatRelativeTime(baseline.snapshot.timestamp)}`;
+};
 
 export interface PlayerActivityWindowProps {
   player: Member.Name;
-  activity: PlayerActivity;
   currentHiscores?: Map<string, number>;
-  onClearSnapshot?: () => void;
+  onClearSnapshot?: () => Promise<void>;
   onCloseModal: () => void;
 }
 
 export const PlayerActivityWindow = ({
   player,
-  activity,
   currentHiscores,
   onClearSnapshot,
   onCloseModal,
 }: PlayerActivityWindowProps): ReactElement => {
   const { quests: questData, diaries: diaryData, items: itemData } = useContext(GameDataContext);
+  const memberStates = useContext(GroupMemberStatesContext);
+  const { getBaselineSnapshot } = useContext(SnapshotContext);
+  const [snapshotView, setSnapshotView] = useState<SnapshotView>("lastVisit");
+  const [clearingSnapshot, setClearingSnapshot] = useState(false);
+  const [clearSnapshotError, setClearSnapshotError] = useState<string>();
 
-  const { skillChanges, questChanges, diaryChanges, collectionChanges, bossKcBefore } = activity;
+  const baseline = getBaselineSnapshot(player, snapshotView);
+  const currentState = memberStates.get(player);
+  const activity = baseline && currentState ? computeActivity(baseline.snapshot, currentState) : undefined;
+  const skillChanges = activity?.skillChanges ?? [];
+  const questChanges = activity?.questChanges ?? [];
+  const diaryChanges = activity?.diaryChanges ?? [];
+  const collectionChanges = activity?.collectionChanges ?? [];
+  const bossKcBefore = activity?.bossKcBefore ?? {};
   const levelUps = skillChanges.filter((c) => c.levelAfter > c.levelBefore);
 
   const sortedDiaryChanges = [...diaryChanges].sort((a, b) => {
@@ -73,9 +81,24 @@ export const PlayerActivityWindow = ({
           })
           .sort((a, b) => b.after - b.before - (a.after - a.before));
 
-  const handleClear = (): void => {
-    onClearSnapshot?.();
-    onCloseModal();
+  async function handleClear(): Promise<void> {
+    if (!onClearSnapshot || clearingSnapshot) return;
+
+    setClearingSnapshot(true);
+    setClearSnapshotError(undefined);
+
+    try {
+      await onClearSnapshot();
+      onCloseModal();
+    } catch {
+      setClearSnapshotError("Could not clear activity. Please try again.");
+    } finally {
+      setClearingSnapshot(false);
+    }
+  }
+
+  const handleSnapshotViewChange = (event: ChangeEvent<HTMLSelectElement>): void => {
+    setSnapshotView(event.currentTarget.value as SnapshotView);
   };
 
   const hasChanges =
@@ -84,14 +107,27 @@ export const PlayerActivityWindow = ({
   return (
     <div className="player-activity rsborder rsbackground">
       <div className="player-activity-header">
-        <h2>{formatTitle(`${player}'s Recent Activity`)}</h2>
-        <button className="player-activity-close dialog-close" onClick={onCloseModal} aria-label="Close">
-          <CachedImage src="/ui/1731-0.png" alt="Close dialog" title="Close dialog" />
+        <h2>{formatTitle(`${player}'s recent activity`)}</h2>
+        <button className="player-activity-close dialog-close" onClick={onCloseModal} aria-label={formatTitle("Close")}>
+          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} title={formatTitle("Close dialog")} />
         </button>
       </div>
-      <p className="player-activity-since">
-        Since {formatRelativeTime(activity.snapshotTimestamp)} - {new Date(activity.snapshotTimestamp).toLocaleString()}
-      </p>
+      <div className="player-activity-meta">
+        {baseline && (
+          <p className="player-activity-since">
+            {formatSnapshotLabel(baseline)} - {new Date(baseline.snapshot.timestamp).toLocaleString()}
+          </p>
+        )}
+        <select
+          className="player-activity-view"
+          value={snapshotView}
+          onChange={handleSnapshotViewChange}
+          aria-label={formatTitle("Activity view")}
+        >
+          <option value="lastVisit">Since last visit</option>
+          <option value="lastWeek">Last week</option>
+        </select>
+      </div>
       {!hasChanges && !hasBossKcBefore && <p className="player-activity-empty">No activity recorded.</p>}
 
       <div className="player-activity-body">
@@ -264,8 +300,18 @@ export const PlayerActivityWindow = ({
 
       {onClearSnapshot && (
         <div className="player-activity-footer">
-          <button className="player-activity-dismiss men-button small" type="button" onClick={handleClear}>
-            Clear Activity
+          {clearSnapshotError && (
+            <p className="player-activity-clear-error validation-error" role="alert">
+              {clearSnapshotError}
+            </p>
+          )}
+          <button
+            className="player-activity-dismiss men-button small"
+            type="button"
+            disabled={clearingSnapshot}
+            onClick={() => void handleClear()}
+          >
+            {clearingSnapshot ? "Clearing activity…" : "Clear activity"}
           </button>
         </div>
       )}

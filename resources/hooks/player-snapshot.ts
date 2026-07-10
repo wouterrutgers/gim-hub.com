@@ -7,7 +7,6 @@ import { decomposeExperience } from "../game/skill";
 
 /**
  * A snapshot of a player's relevant tracked state at a point in time.
- * This is serialized to/from localStorage as JSON.
  */
 export interface PlayerSnapshot {
   timestamp: number;
@@ -71,9 +70,10 @@ export const snapshotFromMemberState = (state: Member.State): Omit<PlayerSnapsho
   const diaries: Partial<Record<DiaryRegion, Partial<Record<DiaryTier, boolean[]>>>> = {};
   if (state.diaries) {
     for (const [region, tierMap] of Object.entries(state.diaries) as [DiaryRegion, Record<DiaryTier, boolean[]>][]) {
-      diaries[region] = {};
+      const diaryRegion: Partial<Record<DiaryTier, boolean[]>> = {};
+      diaries[region] = diaryRegion;
       for (const [tier, tasks] of Object.entries(tierMap) as [DiaryTier, boolean[]][]) {
-        diaries[region]![tier] = [...tasks];
+        diaryRegion[tier] = [...tasks];
       }
     }
   }
@@ -164,29 +164,4 @@ export const activityHasChanges = (activity: PlayerActivity): boolean => {
     activity.diaryChanges.length > 0 ||
     activity.collectionChanges.length > 0
   );
-};
-
-export const snapshotStorageKey = (groupName: string, playerName: string): string =>
-  `gimhub-snapshot-v1-${groupName}-${playerName}`;
-
-export const loadSnapshot = (groupName: string, playerName: string): PlayerSnapshot | undefined => {
-  try {
-    const raw = localStorage.getItem(snapshotStorageKey(groupName, playerName));
-    if (!raw) return undefined;
-    const parsed = JSON.parse(raw) as unknown;
-    if (typeof parsed !== "object" || parsed === null) return undefined;
-    const obj = parsed as Record<string, unknown>;
-    if (typeof obj["timestamp"] !== "number") return undefined;
-    return obj as unknown as PlayerSnapshot;
-  } catch {
-    return undefined;
-  }
-};
-
-export const saveSnapshot = (groupName: string, playerName: string, snapshot: PlayerSnapshot): void => {
-  try {
-    localStorage.setItem(snapshotStorageKey(groupName, playerName), JSON.stringify(snapshot));
-  } catch {
-    // localStorage full or unavailable; silently ignore
-  }
 };

@@ -7,7 +7,7 @@ import {
   type ItemTags,
 } from "../game/items";
 import { fetchQuestDataJSON, type QuestDatabase, type QuestID, type QuestStatus } from "../game/quests";
-import { fetchDiaryDataJSON, type DiaryDatabase } from "../game/diaries";
+import { fetchDiaryDataJSON, type DiaryDatabase, type DiaryRegion, type DiaryTier } from "../game/diaries";
 import type * as Member from "../game/member";
 import { Vec2D, type WikiPosition2D } from "../components/canvas-map/coordinates";
 import { type CollectionLogInfo } from "../game/collection-log";
@@ -19,12 +19,14 @@ import * as RequestAddGroupMember from "./requests/add-group-member";
 import * as RequestDeleteGroupMember from "./requests/delete-group-member";
 import * as RequestRenameGroupMember from "./requests/rename-group-member";
 import * as RequestHiscores from "./requests/hiscores";
+import * as RequestPlayerSnapshot from "./requests/player-snapshot";
 import type { GroupCredentials } from "./credentials";
 import { Skill, type Experience } from "../game/skill";
 import { EquipmentSlot } from "../game/equipment";
 import { fetchCollectionLogInfo } from "./requests/collection-log-info";
 import * as DateFNS from "date-fns";
 import { utc } from "@date-fns/utc";
+import type { PlayerSnapshot } from "../hooks/player-snapshot";
 
 export type GroupStateUpdate = Map<Member.Name, Partial<Member.State>>;
 
@@ -40,6 +42,7 @@ export interface GameData {
 const EXPERIENCE_99 = 13034431 as Experience;
 const EXPERIENCE_90 = 5346332 as Experience;
 const EXPERIENCE_80 = 1986068 as Experience;
+const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 const DEFAULT_MEMBER = GetGroupDataResponseSchema.parse([{ name: "" }])[0];
 const DEFAULT_SKILLS = {
   Agility: 0 as Experience,
@@ -395,6 +398,7 @@ interface DemoGroup {
   skillData: Record<RequestSkillData.AggregatePeriod, RequestSkillData.Response>;
   hiscores: Map<Member.Name, RequestHiscores.Response>;
   collections: Map<Member.Name, Member.Collection>;
+  snapshots: Map<Member.Name, PlayerSnapshot[]>;
   banks: Map<Member.Name, Member.ItemCollection>;
   sharedBank: Member.ItemCollection;
 }
@@ -430,6 +434,7 @@ const INITIAL_STATE = {
   skillData: { Day: new Map(), Week: new Map(), Month: new Map(), Year: new Map() },
   hiscores: new Map(),
   collections: new Map(),
+  snapshots: new Map(),
   banks: new Map(),
   sharedBank: new Map(),
 };
@@ -568,6 +573,187 @@ export default class DemoApi {
     this.gameData = {};
   }
 
+  private populateSnapshotHistory(): void {
+    const cowName = "Cow31337Killer" as Member.Name;
+    const gamerName = "xXgamerXx" as Member.Name;
+    const weekAgo = Date.now() - 7 * MILLISECONDS_PER_DAY;
+    const dayAgo = Date.now() - MILLISECONDS_PER_DAY;
+
+    const cowSkills = {
+      ...this.state.cowKiller.skills,
+      Attack: EXPERIENCE_99,
+      Defence: EXPERIENCE_99,
+      Prayer: EXPERIENCE_80,
+      Strength: EXPERIENCE_99,
+      Hitpoints: EXPERIENCE_90,
+    };
+
+    const gamerSkills = { ...DEFAULT_SKILLS };
+    for (const skill of Skill) {
+      gamerSkills[skill] = EXPERIENCE_99;
+    }
+
+    this.state.collections.get(cowName)?.set(12932 as ItemID, 1);
+    this.state.collections.get(cowName)?.set(12922 as ItemID, 2);
+    this.state.collections.get(cowName)?.set(4716 as ItemID, 1);
+    this.state.collections.get(gamerName)?.set(27277 as ItemID, 1);
+    this.state.collections.get(gamerName)?.set(26219 as ItemID, 2);
+    this.state.collections.get(gamerName)?.set(27279 as ItemID, 4);
+
+    this.state.hiscores.get(cowName)?.set("Zulrah", 87);
+    this.state.hiscores.get(cowName)?.set("Barrows Chests", 134);
+    this.state.hiscores.get(gamerName)?.set("Tombs of Amascut", 312);
+    this.state.hiscores.get(gamerName)?.set("Tombs of Amascut: Expert Mode", 94);
+
+    this.state.snapshots.set(cowName, [
+      {
+        timestamp: weekAgo,
+        skills: this.skillsSnapshot(cowSkills, { Strength: 240_000, Hitpoints: 80_000, Slayer: 120_000 }),
+        quests: this.questSnapshot(this.state.cowKiller.quests),
+        diaries: this.diarySnapshot(this.state.cowKiller.diaries, [
+          { region: "Morytania", tier: "Medium", taskCount: 2 },
+          { region: "Western Provinces", tier: "Hard", taskCount: 1 },
+        ]),
+        collection: this.collectionSnapshot(this.state.collections.get(cowName), {
+          [12932]: 1,
+          [12922]: 1,
+          [4716]: 1,
+        }),
+        bossKc: this.bossKcSnapshot(this.state.hiscores.get(cowName), {
+          Zulrah: 14,
+          "Barrows Chests": 21,
+        }),
+      },
+      {
+        timestamp: dayAgo,
+        skills: this.skillsSnapshot(cowSkills, { Strength: 80_000, Hitpoints: 25_000, Slayer: 35_000 }),
+        quests: this.questSnapshot(this.state.cowKiller.quests),
+        diaries: this.diarySnapshot(this.state.cowKiller.diaries, [
+          { region: "Western Provinces", tier: "Hard", taskCount: 1 },
+        ]),
+        collection: this.collectionSnapshot(this.state.collections.get(cowName), {
+          [12922]: 1,
+        }),
+        bossKc: this.bossKcSnapshot(this.state.hiscores.get(cowName), {
+          Zulrah: 4,
+          "Barrows Chests": 6,
+        }),
+      },
+    ]);
+
+    this.state.snapshots.set(gamerName, [
+      {
+        timestamp: weekAgo,
+        skills: this.skillsSnapshot(gamerSkills, { Ranged: 1_200_000, Magic: 1_500_000, Slayer: 900_000 }),
+        quests: this.questSnapshot(MAX_QUEST, 4),
+        diaries: this.diarySnapshot(MAX_DIARY, [
+          { region: "Kourend & Kebos", tier: "Elite", taskCount: 3 },
+          { region: "Desert", tier: "Elite", taskCount: 2 },
+        ]),
+        collection: this.collectionSnapshot(this.state.collections.get(gamerName), {
+          [27277]: 1,
+          [26219]: 1,
+          [27279]: 3,
+        }),
+        bossKc: this.bossKcSnapshot(this.state.hiscores.get(gamerName), {
+          "Tombs of Amascut": 32,
+          "Tombs of Amascut: Expert Mode": 11,
+        }),
+      },
+      {
+        timestamp: dayAgo,
+        skills: this.skillsSnapshot(gamerSkills, { Ranged: 300_000, Magic: 350_000, Slayer: 200_000 }),
+        quests: this.questSnapshot(MAX_QUEST, 1),
+        diaries: this.diarySnapshot(MAX_DIARY, [{ region: "Desert", tier: "Elite", taskCount: 1 }]),
+        collection: this.collectionSnapshot(this.state.collections.get(gamerName), {
+          [27279]: 1,
+        }),
+        bossKc: this.bossKcSnapshot(this.state.hiscores.get(gamerName), {
+          "Tombs of Amascut": 8,
+          "Tombs of Amascut: Expert Mode": 2,
+        }),
+      },
+    ]);
+  }
+
+  private skillsSnapshot(
+    skills: Record<Skill, Experience>,
+    reductions: Partial<Record<Skill, number>>,
+  ): PlayerSnapshot["skills"] {
+    const snapshot: PlayerSnapshot["skills"] = {};
+
+    for (const skill of Skill) {
+      snapshot[skill] = Math.max(0, skills[skill] - (reductions[skill] ?? 0));
+    }
+
+    return snapshot;
+  }
+
+  private questSnapshot(statuses: QuestStatus[], unfinishedQuestCount = 0): PlayerSnapshot["quests"] {
+    const snapshot: PlayerSnapshot["quests"] = {};
+    const questIds = [...(this.gameData.quests?.keys() ?? [])];
+
+    for (const [index, questId] of questIds.entries()) {
+      snapshot[String(questId)] = statuses[index] ?? "NOT_STARTED";
+    }
+
+    for (const questId of questIds.slice(0, unfinishedQuestCount)) {
+      snapshot[String(questId)] = "IN_PROGRESS";
+    }
+
+    return snapshot;
+  }
+
+  private diarySnapshot(
+    diaries: Member.Diaries,
+    removals: { region: DiaryRegion; tier: DiaryTier; taskCount: number }[],
+  ): PlayerSnapshot["diaries"] {
+    const snapshot = {} as Member.Diaries;
+
+    for (const [region, tiers] of Object.entries(diaries) as [DiaryRegion, Record<DiaryTier, boolean[]>][]) {
+      snapshot[region] = {
+        Easy: [...tiers.Easy],
+        Medium: [...tiers.Medium],
+        Hard: [...tiers.Hard],
+        Elite: [...tiers.Elite],
+      };
+    }
+
+    for (const { region, tier, taskCount } of removals) {
+      snapshot[region][tier] = snapshot[region][tier].map((completed, index) =>
+        index < taskCount ? false : completed,
+      );
+    }
+
+    return snapshot;
+  }
+
+  private collectionSnapshot(
+    collection: Member.Collection | undefined,
+    reductions: Record<number, number>,
+  ): PlayerSnapshot["collection"] {
+    const snapshot: PlayerSnapshot["collection"] = {};
+
+    for (const [itemId, quantity] of collection ?? []) {
+      snapshot[String(itemId)] = Math.max(0, quantity - (reductions[itemId] ?? 0));
+    }
+
+    return snapshot;
+  }
+
+  private bossKcSnapshot(
+    hiscores: RequestHiscores.Response | undefined,
+    reductions: Record<string, number>,
+  ): PlayerSnapshot["bossKc"] {
+    const snapshot: PlayerSnapshot["bossKc"] = {};
+
+    for (const [boss, reduction] of Object.entries(reductions)) {
+      snapshot[boss] = Math.max(0, (hiscores?.get(boss) ?? 0) - reduction);
+    }
+
+    return snapshot;
+  }
+
   constructor() {
     this.closed = false;
     this.startMS = performance.now();
@@ -651,6 +837,7 @@ export default class DemoApi {
         }
 
         this.state.sharedBank = sharedBank;
+        this.populateSnapshotHistory();
 
         this.queueFetchGroupData();
       })
@@ -793,6 +980,54 @@ export default class DemoApi {
 
     this.callbacks?.onGroupUpdate?.(updates, true);
   }
+
+  async fetchMemberSnapshots(markers: RequestPlayerSnapshot.SnapshotMarkers): Promise<RequestPlayerSnapshot.Response> {
+    await this.demoDataPromise;
+
+    const baselines: RequestPlayerSnapshot.Response = new Map();
+    for (const [member, snapshots] of this.state.snapshots) {
+      const lastWeek = snapshots[0];
+      if (!lastWeek) continue;
+
+      const marker = markers[member];
+      const lastVisit =
+        marker === undefined ? lastWeek : (snapshots.findLast((snapshot) => snapshot.timestamp <= marker) ?? lastWeek);
+
+      baselines.set(member, structuredClone({ lastVisit, lastWeek }));
+    }
+
+    return baselines;
+  }
+
+  async createMemberSnapshot(member: Member.Name): Promise<PlayerSnapshot> {
+    await this.demoDataPromise;
+
+    const currentMember = (await mockGroupDataResponse(this.state, this.startMS, this.demoData!)).find(
+      ({ name }) => name === member,
+    );
+    if (!currentMember) {
+      throw new Error("No member has that name.");
+    }
+    if (!currentMember.skills || !currentMember.quests || !currentMember.diaries) {
+      throw new Error("Member data is incomplete.");
+    }
+
+    const snapshot: PlayerSnapshot = {
+      timestamp: Date.now(),
+      skills: this.skillsSnapshot(currentMember.skills, {}),
+      quests: this.questSnapshot(currentMember.quests),
+      diaries: this.diarySnapshot(currentMember.diaries, []),
+      collection: this.collectionSnapshot(this.state.collections.get(member), {}),
+      bossKc: Object.fromEntries(this.state.hiscores.get(member) ?? []),
+    };
+
+    const snapshots = this.state.snapshots.get(member) ?? [];
+    snapshots.push(snapshot);
+    this.state.snapshots.set(member, snapshots);
+
+    return structuredClone(snapshot);
+  }
+
   async fetchMemberHiscores(memberName: Member.Name): Promise<RequestHiscores.Response> {
     await this.demoDataPromise;
     return Promise.resolve(this.state.hiscores.get(memberName) ?? new Map<string, number>());

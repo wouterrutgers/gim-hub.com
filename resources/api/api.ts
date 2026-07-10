@@ -15,6 +15,7 @@ import * as RequestAddGroupMember from "./requests/add-group-member";
 import * as RequestDeleteGroupMember from "./requests/delete-group-member";
 import * as RequestRenameGroupMember from "./requests/rename-group-member";
 import * as RequestHiscores from "./requests/hiscores";
+import * as RequestPlayerSnapshot from "./requests/player-snapshot";
 
 export type GroupStateUpdate = Map<Member.Name, Partial<Member.State>>;
 
@@ -262,6 +263,24 @@ export default class Api {
       updates.set(name as Member.Name, { collection });
     }
     this.callbacks?.onGroupUpdate?.(updates, true);
+  }
+
+  async fetchMemberSnapshots(markers: RequestPlayerSnapshot.SnapshotMarkers): Promise<RequestPlayerSnapshot.Response> {
+    if (this.credentials === undefined) return Promise.reject(new Error("No active API connection."));
+    return RequestPlayerSnapshot.fetchMemberSnapshots({
+      baseURL: this.baseURL,
+      credentials: this.credentials,
+      markers,
+    });
+  }
+
+  async createMemberSnapshot(member: Member.Name): Promise<RequestPlayerSnapshot.PlayerSnapshot> {
+    if (this.credentials === undefined) return Promise.reject(new Error("No active API connection."));
+    return RequestPlayerSnapshot.createMemberSnapshot({
+      baseURL: this.baseURL,
+      credentials: this.credentials,
+      member,
+    });
   }
 
   async fetchMemberHiscores(memberName: string): Promise<RequestHiscores.Response> {

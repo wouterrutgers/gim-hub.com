@@ -2,10 +2,16 @@
   "name": "gim-hub.com",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8",
+  "scripts": {
+    "dev": "vp dev",
+    "bundle": "vp build",
+    "lint": "vp check && stylelint resources/**/*.css",
+    "lint:fix": "vp check --fix && stylelint resources/**/*.css --fix",
+    "format": "vp fmt",
+    "format:check": "vp fmt --check"
+  },
   "devDependencies": {
     "@date-fns/utc": "^2.1.1",
-    "@eslint/js": "^10.0.1",
     "@tanstack/react-virtual": "^3.14.5",
     "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
@@ -16,34 +22,18 @@
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^4.4.0",
-    "eslint": "^10.6.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.6",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.3",
-    "globals": "^17.7.0",
     "jsdom": "^29.1.1",
     "laravel-vite-plugin": "^3.1.0",
-    "prettier": "^3.9.4",
     "react": "^19.2.7",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1",
     "stylelint": "^17.14.0",
     "stylelint-config-standard": "^40.0.0",
-    "stylelint-prettier": "^5.0.3",
     "title": "^4.0.1",
-    "typescript": "^7.0.2",
-    "typescript-eslint": "^8.63.0",
-    "vite": "^8.1.4",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.4",
+    "vite-plus": "0.2.4",
     "zod": "^4.4.3"
   },
-  "scripts": {
-    "dev": "vite",
-    "bundle": "vite build",
-    "lint": "eslint . && tsc --noemit -p . && stylelint resources/**/*.css",
-    "lint:fix": "eslint . --fix && tsc --noemit -p . && stylelint resources/**/*.css --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  }
+  "packageManager": "pnpm@11.10.0+sha512.0b7f8b98060031904c017e3a41eb187a16d40eeb829b95c4f8cb03681761fc4ab53dd219115b9b447f4dce1a05a214764461e7d3703392a9f32f9511ce8c86c8"
 }

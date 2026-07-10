@@ -17,7 +17,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
   enableRecentActivity: true,
 } satisfies Settings);
 
-/* eslint-disable react-refresh/only-export-components */
+/* oxlint-disable react/only-export-components */
 
 /**
  * Provides user settings for the website, such as the position of the sidebar
@@ -25,7 +25,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
  */
 export const SettingsContext = createContext<Settings>(DEFAULT_SITE_SETTINGS);
 
-/* eslint-enable react-refresh/only-export-components */
+/* oxlint-enable react/only-export-components */
 
 const KEY_SITE_THEME = "settings-site-theme";
 const KEY_SIDEBAR_POSITION = "settings-sidebar-position";

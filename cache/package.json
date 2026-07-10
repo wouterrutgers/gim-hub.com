@@ -2,18 +2,18 @@
   "name": "osrs-cache",
   "version": "1.0.0",
   "description": "",
+  "license": "ISC",
+  "author": "",
   "main": "index.js",
-  "packageManager": "pnpm@11.9.0",
   "scripts": {
     "update": "node update.js && node item-tags/build-item-tags.ts"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "async": "^3.2.6",
     "axios": "^1.18.1",
     "glob": "^13.0.6",
     "sharp": "^0.35.3",
     "xml2js": "^0.6.2"
-  }
+  },
+  "packageManager": "pnpm@11.9.0"
 }

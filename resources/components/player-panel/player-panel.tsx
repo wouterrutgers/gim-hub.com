@@ -19,7 +19,7 @@ import { PlayerStats, PlayerStatsPlaceholder } from "./player-stats";
 
 import "./player-panel.css";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// oxlint-disable-next-line no-unused-vars
 const PlayerPanelSubcategories = ["Inventory", "Equipment", "Skills", "Quests", "Diaries", "Collection log"] as const;
 type PlayerPanelSubcategory = (typeof PlayerPanelSubcategories)[number];
 

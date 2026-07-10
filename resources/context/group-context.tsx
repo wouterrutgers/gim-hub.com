@@ -19,7 +19,7 @@ interface GroupState {
   xpDrops: Map<Member.Name, Member.ExperienceDrop[]>;
 }
 
-/* eslint-disable react-refresh/only-export-components */
+/* oxlint-disable react/only-export-components */
 
 /**
  * Contains all items held by the group, indexed by ItemID then member name.
@@ -90,7 +90,7 @@ export const useMemberQuestsContext = createMemberSelector("quests");
 export const useMemberDiariesContext = createMemberSelector("diaries");
 export const useMemberTimezoneContext = createMemberSelector("timezone");
 
-/* eslint-enable react-refresh/only-export-components */
+/* oxlint-enable react/only-export-components */
 
 // TODO: Use full HSL colors with varying saturation/lightness, since
 // perceptively just rotating the colors doesn't look very good.

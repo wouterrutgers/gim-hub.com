@@ -1,4 +1,5 @@
-import { defineConfig, type PluginOption } from "vite";
+import { defineConfig, lazyPlugins } from "vite-plus";
+import type { PluginOption } from "vite";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
@@ -227,6 +228,9 @@ const assetsPlugin = (allManifestKeys: string[]): PluginOption => {
   return {
     name: "assetsPlugin",
     async buildStart(): Promise<void> {
+      fs.rmSync(PUBLIC_VERSIONED_ROOT, { recursive: true, force: true });
+      fs.mkdirSync(PUBLIC_VERSIONED_ROOT);
+
       await generateImageChunks();
       Object.assign(manifestByKey, await generateVersionedJson(allManifestKeys));
     },
@@ -259,60 +263,95 @@ const assetsPlugin = (allManifestKeys: string[]): PluginOption => {
   };
 };
 
-// https://vite.dev/config/
-export default defineConfig(({ isPreview }) => {
-  if (!isPreview) {
-    fs.rmSync(PUBLIC_VERSIONED_ROOT, { recursive: true, force: true });
-    fs.mkdirSync(PUBLIC_VERSIONED_ROOT);
-  }
-
-  return {
-    plugins: [
-      assetsPlugin(["data", "image-chunks"]),
-      react(),
-      laravel({
-        input: ["resources/views/index.tsx"],
-        refresh: true,
-      }),
-    ],
-    define: {
-      __API_URL__: "'/api'",
+export default defineConfig({
+  lint: {
+    plugins: ["typescript", "react"],
+    categories: {
+      correctness: "error",
     },
-    build: {
-      rolldownOptions: {
-        output: {
-          manualChunks: (id: string): string | undefined => {
-            if (!id.includes("/node_modules/")) return undefined;
+    options: {
+      typeAware: true,
+      typeCheck: true,
+    },
+    ignorePatterns: ["cache", "resources/js"],
+    rules: {
+      "no-useless-rename": "off",
+      "react/jsx-key": "off",
+      "react/no-children-prop": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "typescript/explicit-function-return-type": "error",
+      "no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_[^_].*$|^_$",
+          varsIgnorePattern: "^_[^_].*$|^_$",
+          caughtErrorsIgnorePattern: "^_[^_].*$|^_$",
+        },
+      ],
+      "no-console": ["error", { allow: ["warn", "error", "info", "groupCollapsed", "groupEnd"] }],
+      "react/only-export-components": "error",
+    },
+    overrides: [
+      {
+        files: ["resources/**/*.{ts,tsx}"],
+        env: {
+          browser: true,
+        },
+      },
+    ],
+  },
+  fmt: {
+    tabWidth: 2,
+    semi: true,
+    printWidth: 120,
+    endOfLine: "lf",
+    sortPackageJson: true,
+  },
+  plugins: lazyPlugins(() => [
+    assetsPlugin(["data", "image-chunks"]),
+    react(),
+    laravel({
+      input: ["resources/views/index.tsx"],
+      refresh: true,
+    }),
+  ]),
+  define: {
+    __API_URL__: "'/api'",
+  },
+  build: {
+    rolldownOptions: {
+      output: {
+        manualChunks: (id: string): string | undefined => {
+          if (!id.includes("/node_modules/")) return undefined;
 
-            if (
-              id.includes("/node_modules/react/") ||
-              id.includes("/node_modules/react-dom/") ||
-              id.includes("/node_modules/react-router/") ||
-              id.includes("/node_modules/react-router-dom/")
-            ) {
-              return "vendor-react";
-            }
+          if (
+            id.includes("/node_modules/react/") ||
+            id.includes("/node_modules/react-dom/") ||
+            id.includes("/node_modules/react-router/") ||
+            id.includes("/node_modules/react-router-dom/")
+          ) {
+            return "vendor-react";
+          }
 
-            if (
-              id.includes("/node_modules/chart.js/") ||
-              id.includes("/node_modules/react-chartjs-2/") ||
-              id.includes("/node_modules/chartjs-adapter-date-fns/")
-            ) {
-              return "vendor-chart";
-            }
+          if (
+            id.includes("/node_modules/chart.js/") ||
+            id.includes("/node_modules/react-chartjs-2/") ||
+            id.includes("/node_modules/chartjs-adapter-date-fns/")
+          ) {
+            return "vendor-chart";
+          }
 
-            if (id.includes("/node_modules/date-fns/") || id.includes("/node_modules/@date-fns/")) {
-              return "vendor-date";
-            }
+          if (id.includes("/node_modules/date-fns/") || id.includes("/node_modules/@date-fns/")) {
+            return "vendor-date";
+          }
 
-            if (id.includes("/node_modules/zod/")) {
-              return "vendor-zod";
-            }
+          if (id.includes("/node_modules/zod/")) {
+            return "vendor-zod";
+          }
 
-            return undefined;
-          },
+          return undefined;
         },
       },
     },
-  };
+  },
 });

@@ -23,7 +23,7 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 FROM node:26-alpine AS assets
 WORKDIR /build
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN npm install --global "$(node --print 'require("./package.json").packageManager.split("+")[0]')"
 

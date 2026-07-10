@@ -92,7 +92,7 @@ interface APIContext {
   api?: APIMethods;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
+// oxlint-disable-next-line react/only-export-components
 export const Context = createContext<APIContext | undefined>(undefined);
 
 const LOCAL_STORAGE_KEY_GROUP_NAME = "groupName";

@@ -3,7 +3,7 @@ import type { GameData } from "../api/api";
 import { useContext, useEffect, useState, type ReactElement, type ReactNode } from "react";
 import { Context as APIContext } from "./api-context";
 
-/* eslint-disable react-refresh/only-export-components */
+/* oxlint-disable react/only-export-components */
 
 /**
  * Provides static game data for OSRS such as quests, diaries, item
@@ -11,7 +11,7 @@ import { Context as APIContext } from "./api-context";
  */
 export const GameDataContext = createContext<GameData>({});
 
-/* eslint-enable react-refresh/only-export-components */
+/* oxlint-enable react/only-export-components */
 
 /**
  * The provider for {@link GameDataContext}.

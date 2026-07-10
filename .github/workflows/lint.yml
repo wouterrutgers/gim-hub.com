@@ -27,9 +27,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run various JS linters
-        run: |
-          pnpm run lint
-          pnpm run format:check
+        run: pnpm run lint
 
   php-lint:
     name: Laravel Pint

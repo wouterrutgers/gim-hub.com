@@ -1,6 +1,7 @@
 #changelog-page {
   display: grid;
   gap: 14px;
+  overflow-y: auto;
   padding: 16px;
   width: min(calc(100vw - 16px), 940px);
   margin: 0 auto;

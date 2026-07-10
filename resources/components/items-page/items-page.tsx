@@ -537,7 +537,7 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
         </p>
         <div className="items-page-tutorial-tags rsborder-tiny">
           {itemTags?.tags.map(([tag]) => (
-            <span>{tag}</span>
+            <span key={tag}>{tag}</span>
           ))}
         </div>
         <h2>{formatTitle("Item breakdown")}</h2>

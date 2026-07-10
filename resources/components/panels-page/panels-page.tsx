@@ -10,6 +10,7 @@ export const PanelsPage = (): ReactElement => {
   const panels = groupMembers
     .values()
     .filter((member) => member !== "@SHARED")
+    .toArray()
     .map<ReactElement>((member) => <PlayerPanel key={member} member={member} />);
 
   return <div id="panels-page-container">{panels}</div>;

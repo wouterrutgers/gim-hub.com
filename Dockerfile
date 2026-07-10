@@ -23,9 +23,9 @@ RUN --mount=type=cache,target=/root/.composer/cache \
 FROM node:26-alpine AS assets
 WORKDIR /build
 
-RUN npm install --global pnpm@11.9.0
-
 COPY package.json pnpm-lock.yaml ./
+
+RUN npm install --global "$(node --print 'require("./package.json").packageManager.split("+")[0]')"
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile --store-dir /pnpm/store

@@ -1,8 +1,9 @@
-import { type ReactElement } from "react";
+import { useContext, type ReactElement } from "react";
 import { type Experience, Skill, SkillIconsBySkill, decomposeExperience } from "../../game/skill";
 import { useSkillTooltip } from "../tooltip/skill-tooltip";
 import type * as Member from "../../game/member";
 import { useMemberSkillsContext } from "../../context/group-context";
+import { SettingsContext } from "../../context/settings-context";
 import { CachedImage } from "../cached-image/cached-image";
 
 import "./player-skills.css";
@@ -37,6 +38,7 @@ const SkillsInOSRSDisplayOrder: Skill[] = [
 export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement => {
   const { tooltipElement, hideTooltip, showTooltip } = useSkillTooltip();
   const skills = useMemberSkillsContext(member);
+  const { enableVirtualLevels, enableSkillProgressBars } = useContext(SettingsContext);
 
   let levelTotal = 0;
   let xpTotal = 0;
@@ -85,8 +87,13 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
             </div>
             <div className="skill-box-right">
               <div className="skill-box-current-level">{levelReal}</div>
-              <div className="skill-box-baseline-level">{levelReal}</div>
+              <div
+                className={`skill-box-baseline-level ${enableVirtualLevels && levelVirtual !== levelReal ? "shrink-level" : ""}`}
+              >
+                {enableVirtualLevels ? levelVirtual : levelReal}
+              </div>
             </div>
+            {enableSkillProgressBars && (
             <div className="skill-box-progress">
               <div
                 className="skill-box-progress-bar"
@@ -96,6 +103,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
                 }}
               ></div>
             </div>
+            )}
           </a>
         );
       })}

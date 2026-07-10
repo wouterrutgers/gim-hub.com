@@ -1,40 +1,77 @@
-#group-settings-container {
-  padding: 8px 12px;
-  max-width: 500px;
+#settings-page {
+  padding: 0.25rem;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: start;
   overflow-y: auto;
 }
 
-#group-settings-container h2 {
+.group-settings-container {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 500px;
+  gap: 8px;
+}
+
+.group-settings-container h2 {
   font-size: 32px;
   margin: 0;
 }
 
-#group-settings-container .validation-error {
+.group-settings-container .setting-title {
+  margin-block: 0.5rem 0.125rem;
+  font-weight: bold;
+  opacity: 0.7;
+}
+
+.group-settings-container .validation-error {
   min-height: 20px;
 }
 
 .group-settings-member-section {
-  padding: 4px;
+  padding: 0.5rem;
   position: relative;
 }
 
-.group-settings-member-section h3 {
-  font-size: 24px;
+.group-settings-member-title {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
 }
 
-.group-settings-member-section h3 img {
-  width: 30px;
-  height: 30px;
+.group-settings-member-title h3 {
+  font-size: 24px;
+  display: flex;
+  gap: 0.25em;
+}
+
+.group-settings-member-title h3 img,
+#group-settings-remove-confirmation h1 img {
   object-fit: contain;
   image-rendering: pixelated;
 }
 
-.group-settings-member-buttons {
+.group-settings-member-title h3 img {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.group-settings-member-name {
   display: flex;
-  gap: 4px;
+  flex-direction: column;
+}
+
+.group-settings-member-name-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.group-settings-member-name-input input {
+  flex: 1;
 }
 
 .group-settings-member-remove {

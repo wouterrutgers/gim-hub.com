@@ -59,6 +59,10 @@
   text-align: right;
 }
 
+.shrink-level {
+  transform: translate(calc(50% - 5px), 8px);
+}
+
 .skill-box-current-level {
   transform: translate(calc(-50% - 2px), -5px);
   text-align: left;

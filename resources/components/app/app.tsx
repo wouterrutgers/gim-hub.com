@@ -14,7 +14,7 @@ const LogoutPage = lazy(() => import("../logout-page/logout-page").then((m) => (
 const CanvasMap = lazy(() => import("../canvas-map/canvas-map").then((m) => ({ default: m.CanvasMap })));
 const ItemsPage = lazy(() => import("../items-page/items-page").then((m) => ({ default: m.ItemsPage })));
 const PanelsPage = lazy(() => import("../panels-page/panels-page").then((m) => ({ default: m.PanelsPage })));
-const SkillGraph = lazy(() => import("../skill-graph/skill-graph").then((m) => ({ default: m.SkillGraph })));
+const HistoryPage = lazy(() => import("../history-page/history-page").then((m) => ({ default: m.HistoryPage })));
 const CreateGroupPage = lazy(() =>
   import("../create-group-page/create-group-page").then((m) => ({ default: m.CreateGroupPage })),
 );
@@ -91,10 +91,10 @@ export const App = (): ReactElement => {
             />
             <Route path="map" element={<AuthedLayout showPanels={true} />} />
             <Route
-              path="graphs"
+              path="history"
               element={
                 <AuthedLayout showPanels={true}>
-                  <SkillGraph />
+                  <HistoryPage />
                 </AuthedLayout>
               }
             />

@@ -2,7 +2,6 @@ import { type ReactNode, useCallback, useContext, useEffect, useRef, useState } 
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
 import { SnapshotContext, type SnapshotBaseline, type SnapshotView } from "./snapshot-context-value";
-import { SettingsContext } from "./settings-context";
 import type { MemberSnapshotBaselines, SnapshotMarkers } from "../api/requests/player-snapshot";
 
 interface SeenSnapshotState {
@@ -45,7 +44,6 @@ const saveSeenSnapshotMarkers = (storageKey: string, markers: SnapshotMarkers): 
  */
 export const SnapshotProvider = ({ children }: { children: ReactNode }): ReactNode => {
   const apiContext = useContext(APIContext);
-  const { enableRecentActivity } = useContext(SettingsContext);
 
   const [serverSnapshots, setServerSnapshots] = useState<Map<Member.Name, MemberSnapshotBaselines>>();
   const [seenSnapshotState, setSeenSnapshotState] = useState<SeenSnapshotState>({ markers: {} });
@@ -91,12 +89,12 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }): ReactNo
   useEffect(() => {
     setServerSnapshots(undefined);
     setCollectionLogsLoaded(false);
-  }, [api, enableRecentActivity]);
+  }, [api]);
 
   useEffect(() => {
     let cancelled = false;
 
-    if (!api || !enableRecentActivity || !groupName || seenSnapshotState.groupName !== groupName) return;
+    if (!api || !groupName || seenSnapshotState.groupName !== groupName) return;
 
     api
       .fetchMemberSnapshots(seenSnapshotState.markers)
@@ -113,12 +111,12 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }): ReactNo
     return (): void => {
       cancelled = true;
     };
-  }, [api, enableRecentActivity, groupName, seenSnapshotState]);
+  }, [api, groupName, seenSnapshotState]);
 
   useEffect(() => {
     let cancelled = false;
 
-    if (!api || !enableRecentActivity) return;
+    if (!api) return;
 
     const collectionLogsPromise = api.fetchGroupCollectionLogs?.() ?? Promise.resolve();
     collectionLogsPromise
@@ -131,11 +129,11 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }): ReactNo
     return (): void => {
       cancelled = true;
     };
-  }, [api, enableRecentActivity]);
+  }, [api]);
 
   const getBaselineSnapshot = useCallback(
     (playerName: Member.Name, view: SnapshotView = "lastVisit"): SnapshotBaseline | undefined => {
-      if (!enableRecentActivity || !serverSnapshots || !collectionLogsLoaded) return undefined;
+      if (!serverSnapshots || !collectionLogsLoaded) return undefined;
 
       const baselines = serverSnapshots.get(playerName);
       if (!baselines) return undefined;
@@ -146,7 +144,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }): ReactNo
         hasSeenMarker: seenSnapshotState.groupName === groupName && seenSnapshotState.markers[playerName] !== undefined,
       };
     },
-    [collectionLogsLoaded, enableRecentActivity, groupName, seenSnapshotState, serverSnapshots],
+    [collectionLogsLoaded, groupName, seenSnapshotState, serverSnapshots],
   );
 
   const clearBaselineSnapshot = useCallback(

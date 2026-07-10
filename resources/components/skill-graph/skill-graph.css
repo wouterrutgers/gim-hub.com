@@ -6,7 +6,6 @@
 
 #skill-graph-body {
   display: flex;
-  overflow-y: auto;
   position: relative;
   flex-direction: column;
   flex: 1;

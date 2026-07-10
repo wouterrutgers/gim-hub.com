@@ -15,7 +15,7 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
   const mainLinks = [
     { label: "Items", href: "/group/items", mobileIconSource: "/ui/777-0.png" },
     { label: "Map", href: "/group/map", mobileIconSource: "/ui/1698-0.png" },
-    { label: "Graphs", href: "/group/graphs", mobileIconSource: "/ui/3579-0.png" },
+    { label: "History", href: "/group/history", mobileIconSource: "/ui/3579-0.png" },
     { label: "Panels", href: "/group/panels", mobileIconSource: "/ui/1707-0.png" },
     { label: "Settings", href: "/group/settings", mobileIconSource: "/ui/785-0.png" },
   ];

@@ -1,14 +1,21 @@
-import { useCallback, useState, type ReactElement } from "react";
-import { PlayerSkills } from "./player-skills";
-import { PlayerInventory } from "./player-inventory";
-import { PlayerEquipment } from "./player-equipment";
-import { PlayerStats, PlayerStatsPlaceholder } from "./player-stats";
-import { PlayerQuests } from "./player-quests";
-import { PlayerDiaries } from "./player-diaries";
+import { useCallback, useContext, useEffect, useState, type ReactElement } from "react";
+import { Context as APIContext } from "../../context/api-context";
+import { GroupMemberStatesContext } from "../../context/group-context";
+import { SettingsContext } from "../../context/settings-context";
+import { SnapshotContext } from "../../context/snapshot-context-value";
 import * as Member from "../../game/member";
-import { useModal } from "../modal/modal";
-import { CollectionLogWindow } from "../collection-log/collection-log";
+import { activityHasChanges, computeActivity, type PlayerActivity } from "../../hooks/player-snapshot";
 import { CachedImage } from "../cached-image/cached-image";
+import { BOSS_KC_KEYS } from "../collection-log/boss-kc";
+import { CollectionLogWindow } from "../collection-log/collection-log";
+import { useModal } from "../modal/modal";
+import { PlayerActivityWindow } from "../player-activity/player-activity";
+import { PlayerDiaries } from "./player-diaries";
+import { PlayerEquipment } from "./player-equipment";
+import { PlayerInventory } from "./player-inventory";
+import { PlayerQuests } from "./player-quests";
+import { PlayerSkills } from "./player-skills";
+import { PlayerStats, PlayerStatsPlaceholder } from "./player-stats";
 
 import "./player-panel.css";
 
@@ -30,6 +37,62 @@ interface PlayerPanelButtonProps {
 export const PlayerPanel = ({ member }: { member?: Member.Name }): ReactElement => {
   const [subcategory, setSubcategory] = useState<PlayerPanelSubcategory>();
   const { open: openCollectionLogModal, modal: collectionLogModal } = useModal(CollectionLogWindow);
+
+  const [readActivity, setReadActivity] = useState<PlayerActivity>();
+  const [clearingActivity, setClearingActivity] = useState(false);
+  const [clearActivityError, setClearActivityError] = useState<string>();
+  const { open: openActivityModal, modal: activityModal } = useModal(PlayerActivityWindow);
+
+  const { getBaselineSnapshot, clearBaselineSnapshot } = useContext(SnapshotContext);
+  const memberStates = useContext(GroupMemberStatesContext);
+  const { enableRecentActivity } = useContext(SettingsContext);
+  const { fetchMemberHiscores } = useContext(APIContext)?.api ?? {};
+
+  const baseline = member ? getBaselineSnapshot(member) : undefined;
+  const baselineSnapshot = baseline?.snapshot;
+  const baselineBossKc = baselineSnapshot?.bossKc;
+  const currentState = member ? memberStates.get(member) : undefined;
+  const activity = baselineSnapshot && currentState ? computeActivity(baselineSnapshot, currentState) : undefined;
+  const hasActivity = activity ? activityHasChanges(activity) : false;
+
+  const [hiscores, setHiscores] = useState<Map<string, number>>();
+
+  useEffect(() => {
+    if (!baselineBossKc || !fetchMemberHiscores || !member) return;
+    fetchMemberHiscores(member)
+      .then(setHiscores)
+      .catch(() => setHiscores(new Map()));
+  }, [baselineBossKc, fetchMemberHiscores, member]);
+
+  const hasBossKcChanges =
+    hiscores !== undefined && baselineBossKc !== undefined
+      ? Object.entries(baselineBossKc).some(
+          ([key, before]) => BOSS_KC_KEYS.has(key) && (hiscores.get(key) ?? 0) > before,
+        )
+      : false;
+
+  const isRead = readActivity !== undefined;
+  const showActivityRow =
+    enableRecentActivity && (isRead || ((hasActivity || hasBossKcChanges) && activity !== undefined));
+  const activityToDisplay = readActivity ?? activity;
+
+  const handleClear = useCallback(async (): Promise<void> => {
+    if (!member || clearingActivity) return;
+
+    setClearingActivity(true);
+    setClearActivityError(undefined);
+
+    try {
+      await clearBaselineSnapshot(member);
+      setReadActivity(undefined);
+    } catch (reason) {
+      console.error("Failed to clear recent activity", reason);
+      setClearActivityError("Could not clear activity. Please try again.");
+      throw reason;
+    } finally {
+      setClearingActivity(false);
+    }
+  }, [clearBaselineSnapshot, clearingActivity, member]);
 
   const toggleCategory = useCallback(
     (newSubcategory: PlayerPanelSubcategory) => {
@@ -157,8 +220,49 @@ export const PlayerPanel = ({ member }: { member?: Member.Name }): ReactElement 
   return (
     <>
       {collectionLogModal}
+      {activityModal}
       <div className={`player-panel rsborder rsbackground ${content !== undefined ? "expanded" : ""}`}>
         <PlayerStats member={member} />
+
+        {showActivityRow && activityToDisplay && (
+          <div className="player-panel-activity">
+            <div className="player-panel-activity-row">
+              <button
+                className="player-panel-activity-btn"
+                type="button"
+                aria-label="View recent activity"
+                disabled={clearingActivity}
+                onClick={() => {
+                  const frozen = readActivity ?? activity;
+                  if (!frozen) return;
+                  if (!isRead) setReadActivity(frozen);
+                  openActivityModal({
+                    player: member,
+                    currentHiscores: hiscores,
+                    onClearSnapshot: handleClear,
+                  });
+                }}
+              >
+                {isRead ? "View recent activity" : "New recent activity!"}
+              </button>
+              <button
+                className="player-panel-activity-clear"
+                type="button"
+                aria-label={clearingActivity ? "Clearing activity" : "Clear activity"}
+                disabled={clearingActivity}
+                onClick={() => void handleClear().catch(() => undefined)}
+              >
+                ✕
+              </button>
+            </div>
+            {clearActivityError && (
+              <p className="player-panel-activity-error validation-error" role="alert">
+                {clearActivityError}
+              </p>
+            )}
+          </div>
+        )}
+
         <div className="player-panel-minibar">{buttons}</div>
         <div className="player-panel-content">{content}</div>
       </div>

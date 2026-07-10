@@ -283,7 +283,7 @@ const NPCInteractionSchema = z
  * I don't think there's an easy way around this, besides storing things differently in the backend.
  * It is unfortunate that we have to hardcode this. For now, the backend sends the data as the raw varbits/varps that OSRS uses.
  */
-const DiariesSchema = z
+export const DiariesSchema = z
   .int32()
   .array()
   .transform(

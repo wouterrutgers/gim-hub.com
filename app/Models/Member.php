@@ -47,6 +47,11 @@ class Member extends Model
         return $this->hasMany(CollectionLog::class);
     }
 
+    public function snapshots(): HasMany
+    {
+        return $this->hasMany(MemberSnapshot::class);
+    }
+
     public function skillStats(): HasMany
     {
         return $this->hasMany(SkillStat::class);

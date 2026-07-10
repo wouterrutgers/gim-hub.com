@@ -51,3 +51,58 @@ button.player-panel-tab-active {
 .player-panel-content > * {
   margin: 8px 0;
 }
+
+.player-panel-activity-row {
+  display: flex;
+}
+
+.player-panel-activity-error {
+  margin: 0;
+  padding: 4px 6px;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.player-panel-activity-btn {
+  flex: 1;
+  background: rgb(255 200 50 / 15%);
+  border: 1px solid rgb(255 200 50 / 40%);
+  border-right: none;
+  color: rgb(255 200 50);
+  font-size: 0.8rem;
+  padding: 3px 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s;
+}
+
+.player-panel-activity-btn:hover {
+  background: rgb(255 200 50 / 28%);
+}
+
+.player-panel-activity-btn:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.player-panel-activity-clear {
+  background: rgb(255 200 50 / 10%);
+  border: 1px solid rgb(255 200 50 / 40%);
+  color: rgb(255 200 50);
+  font-size: 0.75rem;
+  padding: 3px 7px;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.player-panel-activity-clear:hover {
+  background: rgb(255 100 80 / 25%);
+  border-color: rgb(255 100 80 / 50%);
+  color: rgb(255 140 120);
+}
+
+.player-panel-activity-clear:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}

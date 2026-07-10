@@ -13,7 +13,7 @@ class Validators
 
     public static function validateMemberPropLength(string $propName, ?array $prop, int $minLength, int $maxLength): void
     {
-        if ($prop === null) {
+        if (is_null($prop)) {
             return;
         }
 

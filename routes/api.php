@@ -19,6 +19,8 @@ Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(func
     Route::get('/get-group-data', [GroupMemberController::class, 'getGroupData']);
     Route::get('/get-skill-data', [GroupMemberController::class, 'getSkillData']);
     Route::get('/collection-log', [GroupMemberController::class, 'getCollectionLog']);
+    Route::get('/snapshots', [GroupMemberController::class, 'getSnapshots']);
+    Route::post('/snapshots', [GroupMemberController::class, 'createSnapshot']);
     Route::get('/am-i-logged-in', [GroupMemberController::class, 'amILoggedIn']);
     Route::get('/am-i-in-group', [GroupMemberController::class, 'amIInGroup']);
     Route::get('/hiscores', [GroupMemberController::class, 'getHiscores']);

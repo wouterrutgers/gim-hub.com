@@ -50,7 +50,7 @@ export const DiaryRegionWindow = ({ region, player, progress, onCloseModal }: Di
             {formatTitle(`${region} achievement diary`)}
           </a>
         </h1>
-        <button className="diary-dialog-close" onClick={onCloseModal}>
+        <button className="diary-dialog-close dialog-close" onClick={onCloseModal}>
           <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} title={formatTitle("Close dialog")} />
         </button>
       </div>

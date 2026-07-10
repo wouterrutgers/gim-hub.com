@@ -7,8 +7,15 @@ interface Settings {
   setSiteTheme?: (value: SiteTheme) => void;
   sidebarPosition: SidebarPosition;
   setSidebarPosition?: (value: SidebarPosition) => void;
+  enableRecentActivity: boolean;
+  setEnableRecentActivity?: (value: boolean) => void;
 }
-const DEFAULT_SITE_SETTINGS = Object.freeze({ sidebarPosition: "left", siteTheme: "light" });
+
+const DEFAULT_SITE_SETTINGS = Object.freeze({
+  sidebarPosition: "left",
+  siteTheme: "light",
+  enableRecentActivity: true,
+} satisfies Settings);
 
 /* eslint-disable react-refresh/only-export-components */
 
@@ -22,14 +29,40 @@ export const SettingsContext = createContext<Settings>(DEFAULT_SITE_SETTINGS);
 
 const KEY_SITE_THEME = "settings-site-theme";
 const KEY_SIDEBAR_POSITION = "settings-sidebar-position";
+const KEY_RECENT_ACTIVITY = "settings-recent-activity";
+
+interface RecentActivitySettings {
+  enabled: boolean;
+  intervalMinutes?: number;
+}
+
+const DEFAULT_RECENT_ACTIVITY: RecentActivitySettings = {
+  enabled: true,
+};
 
 const validateSiteTheme = (value: string | undefined): SiteTheme | undefined => {
-  const validated = SiteTheme.find((theme) => theme === value);
-  return validated;
+  return SiteTheme.find((theme) => theme === value);
 };
 const validateSidebarPosition = (value: string | undefined): SidebarPosition | undefined => {
-  const validated = SidebarPosition.find((position) => position === value);
-  return validated;
+  return SidebarPosition.find((position) => position === value);
+};
+const validateRecentActivitySettings = (value: string | undefined): string | undefined => {
+  if (!value) return undefined;
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (typeof parsed !== "object" || parsed === null) return undefined;
+    const obj = parsed as Record<string, unknown>;
+    if (typeof obj.enabled !== "boolean") return undefined;
+    if (
+      obj.intervalMinutes !== undefined &&
+      (typeof obj.intervalMinutes !== "number" || !Number.isInteger(obj.intervalMinutes) || obj.intervalMinutes < 0)
+    ) {
+      return undefined;
+    }
+    return value;
+  } catch {
+    return undefined;
+  }
 };
 
 /**
@@ -46,9 +79,36 @@ export const SettingsProvider = ({ children }: { children: ReactNode }): ReactEl
     defaultValue: DEFAULT_SITE_SETTINGS.sidebarPosition,
     validator: validateSidebarPosition,
   });
+  const [recentActivityStr, setRecentActivityStr] = useLocalStorage<string>({
+    key: KEY_RECENT_ACTIVITY,
+    defaultValue: JSON.stringify(DEFAULT_RECENT_ACTIVITY),
+    validator: validateRecentActivitySettings,
+  });
+
+  let recentActivity: RecentActivitySettings;
+  try {
+    recentActivity = JSON.parse(recentActivityStr) as RecentActivitySettings;
+  } catch {
+    recentActivity = DEFAULT_RECENT_ACTIVITY;
+  }
+
+  const enableRecentActivity = recentActivity.enabled;
+
+  const setEnableRecentActivity = (value: boolean): void => {
+    setRecentActivityStr(JSON.stringify({ ...recentActivity, enabled: value }));
+  };
 
   return (
-    <SettingsContext value={{ siteTheme, sidebarPosition, setSidebarPosition, setSiteTheme }}>
+    <SettingsContext
+      value={{
+        siteTheme,
+        sidebarPosition,
+        setSidebarPosition,
+        setSiteTheme,
+        enableRecentActivity,
+        setEnableRecentActivity,
+      }}
+    >
       {children}
     </SettingsContext>
   );

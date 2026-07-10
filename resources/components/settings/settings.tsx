@@ -230,7 +230,14 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
  * A component that contains fields for tweaking site settings such as sidebar position, and group settings like member names.
  */
 export const SettingsPage = (): ReactElement => {
-  const { siteTheme, setSiteTheme, sidebarPosition, setSidebarPosition } = useContext(SettingsContext);
+  const {
+    siteTheme,
+    setSiteTheme,
+    sidebarPosition,
+    setSidebarPosition,
+    enableRecentActivity,
+    setEnableRecentActivity,
+  } = useContext(SettingsContext);
   const members = useContext(GroupMemberNamesContext);
   const [addMemberErrors, setAddMemberErrors] = useState<string[]>();
   const addMemberInputRef = useRef<HTMLInputElement>(null);
@@ -384,6 +391,19 @@ export const SettingsPage = (): ReactElement => {
             </div>
           );
         })}
+      </fieldset>
+
+      <fieldset>
+        <legend>{formatTitle("Player activity settings")}</legend>
+        <div className="settings-page-radio-item">
+          <input
+            id="enable-recent-activity-input"
+            type="checkbox"
+            checked={enableRecentActivity}
+            onChange={(e) => setEnableRecentActivity?.(e.target.checked)}
+          />
+          <label htmlFor="enable-recent-activity-input">Show recent activity summaries on player panels</label>
+        </div>
       </fieldset>
     </div>
   );

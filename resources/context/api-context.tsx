@@ -25,6 +25,10 @@ interface APIMethods {
 
   fetchGroupCollectionLogs?: Api["fetchGroupCollectionLogs"];
 
+  fetchMemberSnapshots: Api["fetchMemberSnapshots"];
+
+  createMemberSnapshot: Api["createMemberSnapshot"];
+
   fetchMemberHiscores: Api["fetchMemberHiscores"];
 
   getCredentials: Api["getCredentials"];
@@ -216,6 +220,8 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
       getCredentials: api.getCredentials.bind(api),
       fetchMemberHiscores: api.fetchMemberHiscores.bind(api),
       fetchGroupCollectionLogs: api.fetchGroupCollectionLogs.bind(api),
+      fetchMemberSnapshots: api.fetchMemberSnapshots.bind(api),
+      createMemberSnapshot: api.createMemberSnapshot.bind(api),
     };
 
     return base;

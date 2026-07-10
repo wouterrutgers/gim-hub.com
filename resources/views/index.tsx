@@ -7,6 +7,7 @@ import { GameDataProvider } from "../context/game-data-context";
 import { SettingsProvider } from "../context/settings-context";
 import { GroupProvider } from "../context/group-context";
 import { ImageProvider } from "../context/image-provider";
+import { SnapshotProvider } from "../context/snapshot-context";
 
 import "../api/fetch-with-csrf";
 
@@ -19,9 +20,11 @@ createRoot(root).render(
         <GameDataProvider>
           <GroupProvider>
             <SettingsProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
+              <SnapshotProvider>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </SnapshotProvider>
             </SettingsProvider>
           </GroupProvider>
         </GameDataProvider>

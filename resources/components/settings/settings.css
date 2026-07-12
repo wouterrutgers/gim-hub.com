@@ -28,7 +28,7 @@
 
 .group-settings-container .setting-group {
   border: 0;
-  margin: 0;
+  margin: 0.5rem 0 0;
   padding: 0;
 }
 
@@ -103,6 +103,10 @@
 
 .settings-page-radio-item {
   display: flex;
+}
+
+.settings-page-radio-item + .settings-page-radio-item {
+  margin-top: 0.125rem;
 }
 
 .settings-page-radio-item:focus-within {

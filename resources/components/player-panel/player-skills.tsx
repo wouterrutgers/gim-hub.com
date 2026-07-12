@@ -52,6 +52,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
 
         const { xpDeltaFromMax, levelReal, levelVirtual, xpMilestoneOfNext, xpMilestoneOfCurrent } =
           decomposeExperience(xp);
+        const displayedLevel = enableVirtualLevels ? levelVirtual : levelReal;
 
         levelTotal += levelReal;
 
@@ -74,7 +75,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
               showTooltip({
                 style: "Individual",
                 xp,
-                levelVirtual,
+                level: displayedLevel,
                 untilMax: Math.max(0, xpDeltaFromMax - xp) as Experience,
                 untilMaxRatio: Math.min(xp / xpDeltaFromMax, 1.0),
                 untilNext: xpUntilNext,
@@ -90,19 +91,19 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
               <div
                 className={`skill-box-baseline-level ${enableVirtualLevels && levelVirtual !== levelReal ? "shrink-level" : ""}`}
               >
-                {enableVirtualLevels ? levelVirtual : levelReal}
+                {displayedLevel}
               </div>
             </div>
             {enableSkillProgressBars && (
-            <div className="skill-box-progress">
-              <div
-                className="skill-box-progress-bar"
-                style={{
-                  transform: `scaleX(${levelProgress})`,
-                  background: `hsl(${levelProgress * 100}, 100%, 50%)`,
-                }}
-              ></div>
-            </div>
+              <div className="skill-box-progress">
+                <div
+                  className="skill-box-progress-bar"
+                  style={{
+                    transform: `scaleX(${levelProgress})`,
+                    background: `hsl(${levelProgress * 100}, 100%, 50%)`,
+                  }}
+                ></div>
+              </div>
             )}
           </a>
         );

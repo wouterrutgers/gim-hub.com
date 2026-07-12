@@ -12,7 +12,7 @@ export type SkillTooltipProps =
     }
   | {
       style: "Individual";
-      levelVirtual: number;
+      level: number;
       xp: Experience;
       untilNextRatio: number;
       untilNext: Experience;
@@ -44,7 +44,7 @@ export const useSkillTooltip = (): {
   } else if (skillProps?.style === "Individual") {
     element = (
       <>
-        Level: {skillProps.levelVirtual.toLocaleString()}
+        Level: {skillProps.level.toLocaleString()}
         <br />
         Total XP: {skillProps.xp.toLocaleString()}
         <br />

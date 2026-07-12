@@ -38,6 +38,13 @@
   flex-wrap: wrap;
 }
 
+@media only screen and (width <= 800px) {
+  #app-navigation-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  }
+}
+
 .nav-main-links {
   display: flex;
   align-items: center;

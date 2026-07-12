@@ -13,6 +13,24 @@ import { formatTitle } from "../../ts/format-title";
 
 import "./settings.css";
 
+const PendingOverlay = ({ show }: { show: boolean }): ReactElement | undefined =>
+  show ? (
+    <div className="group-settings-pending-overlay">
+      <LoadingScreen />
+    </div>
+  ) : undefined;
+
+const ErrorList = ({ id, errors }: { id: string; errors?: string[] }): ReactElement => (
+  <div id={id} className="validation-error">
+    {errors?.map((error, index) => (
+      <Fragment key={error}>
+        {index > 0 ? <br /> : undefined}
+        {error}
+      </Fragment>
+    ))}
+  </div>
+);
+
 const labels: Record<SiteTheme | SidebarPosition, string> = {
   light: "Light",
   dark: "Dark",
@@ -82,12 +100,6 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
   const { open, modal: removeConfirmationModal } = useModal(RemoveConfirmationWindow);
 
   const pending = pendingDelete || !!pendingRename;
-
-  const pendingOverlay = pending ? (
-    <div className="group-settings-pending-overlay">
-      <LoadingScreen />
-    </div>
-  ) : undefined;
 
   const onRename = useCallback(() => {
     if (pendingRename || !renameMember || !nameInputRef.current) return;
@@ -176,40 +188,11 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
 
   return (
     <div className="group-settings-member-section rsborder-tiny">
-      <h3>
-        <PlayerIcon name={member} />
-        {member}
-      </h3>
-      <div>
-        <label htmlFor={id}>New name</label>
-        <br />
-        <input
-          aria-describedby={errorID}
-          disabled={pending}
-          ref={nameInputRef}
-          id={id}
-          className={invalid ? "invalid" : "valid"}
-          defaultValue={member}
-          maxLength={12}
-          onBlur={(e) => {
-            e.target.value = e.target.value.trim();
-          }}
-        />
-        <br />
-        <div id={errorID} className="validation-error">
-          {errors?.map((error, index) => (
-            <Fragment key={error}>
-              {index > 0 ? <br /> : undefined}
-              {error}
-            </Fragment>
-          ))}
-        </div>
-      </div>
-
-      <div className="group-settings-member-buttons">
-        <button disabled={pending} className="men-button small" onClick={onRename}>
-          Rename
-        </button>
+      <div className="group-settings-member-title">
+        <h3>
+          <PlayerIcon name={member} />
+          {member}
+        </h3>
         <button
           disabled={pending}
           className="group-settings-member-remove men-button small"
@@ -220,7 +203,29 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
           Remove
         </button>
       </div>
-      {pendingOverlay}
+      <div className="group-settings-member-name">
+        <label htmlFor={id}>New name</label>
+        <div className="group-settings-member-name-input">
+          <input
+            aria-describedby={errorID}
+            disabled={pending}
+            ref={nameInputRef}
+            id={id}
+            className={invalid ? "invalid" : "valid"}
+            defaultValue={member}
+            maxLength={12}
+            onBlur={(e) => {
+              e.target.value = e.target.value.trim();
+            }}
+          />
+          <button disabled={pending} className="men-button small" onClick={onRename}>
+            Rename
+          </button>
+        </div>
+        {errors && errors.length > 0 && <ErrorList id={errorID} errors={errors} />}
+      </div>
+
+      <PendingOverlay show={pending} />
       {removeConfirmationModal}
     </div>
   );
@@ -237,18 +242,16 @@ export const SettingsPage = (): ReactElement => {
     setSidebarPosition,
     enableRecentActivity,
     setEnableRecentActivity,
+    enableVirtualLevels,
+    setEnableVirtualLevels,
+    enableSkillProgressBars,
+    setEnableSkillProgressBars,
   } = useContext(SettingsContext);
   const members = useContext(GroupMemberNamesContext);
   const [addMemberErrors, setAddMemberErrors] = useState<string[]>();
   const addMemberInputRef = useRef<HTMLInputElement>(null);
   const { addMember } = useContext(APIContext)?.api ?? {};
   const [pendingAddMember, setPendingAddMember] = useState(false);
-
-  const pendingOverlay = pendingAddMember ? (
-    <div className="group-settings-pending-overlay">
-      <LoadingScreen />
-    </div>
-  ) : undefined;
 
   const memberElements = [];
   for (const member of members) {
@@ -301,110 +304,132 @@ export const SettingsPage = (): ReactElement => {
     const invalid = (addMemberErrors?.length ?? 0) > 0;
     memberElements.push(
       <div key="add-new-member-element" className="group-settings-member-section rsborder-tiny">
-        <label htmlFor="add-member-input">Name for new member</label>
-        <br />
-        <input
-          aria-describedby="add-member-errors"
-          ref={addMemberInputRef}
-          disabled={pendingAddMember}
-          className={invalid ? "invalid" : "valid"}
-          id="add-member-input"
-          maxLength={12}
-          onBlur={(e) => {
-            e.target.value = e.target.value.trim();
-          }}
-        />
-        <br />
-        <div id="add-member-errors" className="validation-error">
-          {addMemberErrors?.map((error, index) => (
-            <Fragment key={error}>
-              {index > 0 ? <br /> : undefined}
-              {error}
-            </Fragment>
-          ))}
+        <div className="group-settings-member-name">
+          <label htmlFor="add-member-input">Name for new member</label>
+          <div className="group-settings-member-name-input">
+            <input
+              aria-describedby="add-member-errors"
+              ref={addMemberInputRef}
+              disabled={pendingAddMember}
+              className={invalid ? "invalid" : "valid"}
+              id="add-member-input"
+              maxLength={12}
+              onBlur={(e) => {
+                e.target.value = e.target.value.trim();
+              }}
+            />
+            <button
+              disabled={pendingAddMember}
+              key="add-member"
+              className="edit-member__add men-button small"
+              onClick={onAdd}
+            >
+              Add member
+            </button>
+          </div>
         </div>
-        <button
-          disabled={pendingAddMember}
-          key="add-member"
-          className="edit-member__add men-button small"
-          onClick={onAdd}
-        >
-          Add member
-        </button>
-        {pendingOverlay}
+        {invalid && <ErrorList id="add-member-errors" errors={addMemberErrors} />}
+        <PendingOverlay show={pendingAddMember} />
       </div>,
     );
   }
 
   return (
-    <div id="group-settings-container" className="rsborder rsbackground">
-      <h2>{formatTitle("Member settings")}</h2>
-      <p>
-        These <span className="emphasize">do</span> need to match the in-game names.
-      </p>
-      {memberElements}
-      <h3>{formatTitle("Appearance settings")}</h3>
-      <fieldset
-        onChange={(e) => {
-          const selected = (e.target as Partial<HTMLInputElement>).value;
-          const position = SidebarPosition.find((position) => position === selected);
-          if (!position) return;
-
-          setSidebarPosition?.(position);
-        }}
-      >
-        <legend>{formatTitle("Player panels")}</legend>
-        {SidebarPosition.map((position) => {
-          return (
-            <div className="settings-page-radio-item" key={position}>
-              <input
-                id={`panel-dock-${position}`}
-                value={position}
-                type="radio"
-                readOnly
-                checked={sidebarPosition === position}
-              />
-              <label htmlFor={`panel-dock-${position}`}>{labels[position]}</label>
-            </div>
-          );
-        })}
-      </fieldset>
-
-      <fieldset
-        onChange={(e) => {
-          const selected = (e.target as Partial<HTMLInputElement>).value;
-          const theme = SiteTheme.find((theme) => theme === selected);
-          if (!theme) return;
-
-          setSiteTheme?.(theme);
-        }}
-      >
-        <legend>{formatTitle("Style")}</legend>
-        {SiteTheme.map((theme) => {
-          const id = `style-${theme}`;
-          return (
-            <div className="settings-page-radio-item" key={theme}>
-              <input id={id} readOnly value={theme} type="radio" checked={siteTheme === theme} />
-              <label htmlFor={id} key={theme}>
-                {labels[theme]}
-              </label>
-            </div>
-          );
-        })}
-      </fieldset>
-
-      <fieldset>
-        <legend>{formatTitle("Player activity settings")}</legend>
-        <div className="settings-page-radio-item">
-          <input
-            id="enable-recent-activity-input"
-            type="checkbox"
-            checked={enableRecentActivity}
-            onChange={(e) => setEnableRecentActivity?.(e.target.checked)}
-          />
-          <label htmlFor="enable-recent-activity-input">Show recent activity summaries on player panels</label>
+    <div id="settings-page">
+      <div className="group-settings-container rsborder rsbackground">
+        <h2>{formatTitle("Member settings")}</h2>
+        <div>
+          These <span className="emphasize">do</span> need to match the in-game names.
         </div>
-      </fieldset>
+        {memberElements}
+      </div>
+
+      <div className="group-settings-container rsborder rsbackground">
+        <h2>{formatTitle("Appearance settings")}</h2>
+        <fieldset
+          onChange={(e) => {
+            const selected = (e.target as Partial<HTMLInputElement>).value;
+            const position = SidebarPosition.find((position) => position === selected);
+            if (!position) return;
+
+            setSidebarPosition?.(position);
+          }}
+        >
+          <legend>{formatTitle("Player panels")}</legend>
+          {SidebarPosition.map((position) => {
+            return (
+              <div className="settings-page-radio-item" key={position}>
+                <input
+                  id={`panel-dock-${position}`}
+                  value={position}
+                  type="radio"
+                  readOnly
+                  checked={sidebarPosition === position}
+                />
+                <label htmlFor={`panel-dock-${position}`}>{labels[position]}</label>
+              </div>
+            );
+          })}
+
+          <fieldset className="setting-group">
+            <legend className="setting-title">Skills</legend>
+            <div className="settings-page-radio-item">
+              <input
+                id="enable-virtual-levels-input"
+                type="checkbox"
+                checked={enableVirtualLevels}
+                onChange={(e) => setEnableVirtualLevels?.(e.target.checked)}
+              />
+              <label htmlFor="enable-virtual-levels-input">Show virtual levels</label>
+            </div>
+            <div className="settings-page-radio-item">
+              <input
+                id="enable-skill-progress-bars-input"
+                type="checkbox"
+                checked={enableSkillProgressBars}
+                onChange={(e) => setEnableSkillProgressBars?.(e.target.checked)}
+              />
+              <label htmlFor="enable-skill-progress-bars-input">Show skill progress bars</label>
+            </div>
+          </fieldset>
+
+          <fieldset className="setting-group">
+            <legend className="setting-title">Recent activity</legend>
+            <div className="settings-page-radio-item">
+              <input
+                id="enable-recent-activity-input"
+                type="checkbox"
+                checked={enableRecentActivity}
+                onChange={(e) => setEnableRecentActivity?.(e.target.checked)}
+              />
+              <label htmlFor="enable-recent-activity-input">Show recent activity summaries on player panels</label>
+            </div>
+          </fieldset>
+        </fieldset>
+
+        <fieldset
+          onChange={(e) => {
+            const selected = (e.target as Partial<HTMLInputElement>).value;
+            const theme = SiteTheme.find((theme) => theme === selected);
+            if (!theme) return;
+
+            setSiteTheme?.(theme);
+          }}
+        >
+          <legend>{formatTitle("Style")}</legend>
+          {SiteTheme.map((theme) => {
+            const id = `style-${theme}`;
+            return (
+              <div className="settings-page-radio-item" key={theme}>
+                <input id={id} readOnly value={theme} type="radio" checked={siteTheme === theme} />
+                <label htmlFor={id} key={theme}>
+                  {labels[theme]}
+                </label>
+              </div>
+            );
+          })}
+        </fieldset>
+      </div>
     </div>
   );
 };

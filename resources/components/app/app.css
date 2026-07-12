@@ -54,6 +54,10 @@ button {
   object-fit: contain;
 }
 
+img.pixelated {
+  image-rendering: pixelated;
+}
+
 a {
   color: unset;
 }

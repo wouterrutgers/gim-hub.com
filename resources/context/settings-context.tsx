@@ -9,12 +9,18 @@ interface Settings {
   setSidebarPosition?: (value: SidebarPosition) => void;
   enableRecentActivity: boolean;
   setEnableRecentActivity?: (value: boolean) => void;
+  enableVirtualLevels: boolean;
+  setEnableVirtualLevels?: (value: boolean) => void;
+  enableSkillProgressBars: boolean;
+  setEnableSkillProgressBars?: (value: boolean) => void;
 }
 
 const DEFAULT_SITE_SETTINGS = Object.freeze({
   sidebarPosition: "left",
   siteTheme: "light",
   enableRecentActivity: true,
+  enableVirtualLevels: true,
+  enableSkillProgressBars: true,
 } satisfies Settings);
 
 /* oxlint-disable react/only-export-components */
@@ -30,15 +36,8 @@ export const SettingsContext = createContext<Settings>(DEFAULT_SITE_SETTINGS);
 const KEY_SITE_THEME = "settings-site-theme";
 const KEY_SIDEBAR_POSITION = "settings-sidebar-position";
 const KEY_RECENT_ACTIVITY = "settings-recent-activity";
-
-interface RecentActivitySettings {
-  enabled: boolean;
-  intervalMinutes?: number;
-}
-
-const DEFAULT_RECENT_ACTIVITY: RecentActivitySettings = {
-  enabled: true,
-};
+const KEY_VIRTUAL_LEVELS = "settings-virtual-levels";
+const KEY_SKILL_PROGRESS_BARS = "settings-skill-progress-bars";
 
 const validateSiteTheme = (value: string | undefined): SiteTheme | undefined => {
   return SiteTheme.find((theme) => theme === value);
@@ -46,23 +45,9 @@ const validateSiteTheme = (value: string | undefined): SiteTheme | undefined => 
 const validateSidebarPosition = (value: string | undefined): SidebarPosition | undefined => {
   return SidebarPosition.find((position) => position === value);
 };
-const validateRecentActivitySettings = (value: string | undefined): string | undefined => {
-  if (!value) return undefined;
-  try {
-    const parsed = JSON.parse(value) as unknown;
-    if (typeof parsed !== "object" || parsed === null) return undefined;
-    const obj = parsed as Record<string, unknown>;
-    if (typeof obj.enabled !== "boolean") return undefined;
-    if (
-      obj.intervalMinutes !== undefined &&
-      (typeof obj.intervalMinutes !== "number" || !Number.isInteger(obj.intervalMinutes) || obj.intervalMinutes < 0)
-    ) {
-      return undefined;
-    }
-    return value;
-  } catch {
-    return undefined;
-  }
+const validateBoolean = (value: string | undefined): string | undefined => {
+  if (value === "true" || value === "false") return value;
+  return undefined;
 };
 
 /**
@@ -79,23 +64,36 @@ export const SettingsProvider = ({ children }: { children: ReactNode }): ReactEl
     defaultValue: DEFAULT_SITE_SETTINGS.sidebarPosition,
     validator: validateSidebarPosition,
   });
-  const [recentActivityStr, setRecentActivityStr] = useLocalStorage<string>({
+  const [recentActivity, setRecentActivity] = useLocalStorage<string>({
     key: KEY_RECENT_ACTIVITY,
-    defaultValue: JSON.stringify(DEFAULT_RECENT_ACTIVITY),
-    validator: validateRecentActivitySettings,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.enableRecentActivity),
+    validator: validateBoolean,
+  });
+  const [virtualLevels, setVirtualLevels] = useLocalStorage<string>({
+    key: KEY_VIRTUAL_LEVELS,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.enableVirtualLevels),
+    validator: validateBoolean,
   });
 
-  let recentActivity: RecentActivitySettings;
-  try {
-    recentActivity = JSON.parse(recentActivityStr) as RecentActivitySettings;
-  } catch {
-    recentActivity = DEFAULT_RECENT_ACTIVITY;
-  }
-
-  const enableRecentActivity = recentActivity.enabled;
-
+  const enableRecentActivity = recentActivity === "true";
   const setEnableRecentActivity = (value: boolean): void => {
-    setRecentActivityStr(JSON.stringify({ ...recentActivity, enabled: value }));
+    setRecentActivity(String(value));
+  };
+
+  const enableVirtualLevels = virtualLevels === "true";
+  const setEnableVirtualLevels = (value: boolean): void => {
+    setVirtualLevels(String(value));
+  };
+
+  const [skillProgressBars, setSkillProgressBars] = useLocalStorage<string>({
+    key: KEY_SKILL_PROGRESS_BARS,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.enableSkillProgressBars),
+    validator: validateBoolean,
+  });
+
+  const enableSkillProgressBars = skillProgressBars === "true";
+  const setEnableSkillProgressBars = (value: boolean): void => {
+    setSkillProgressBars(String(value));
   };
 
   return (
@@ -107,6 +105,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }): ReactEl
         setSiteTheme,
         enableRecentActivity,
         setEnableRecentActivity,
+        enableVirtualLevels,
+        setEnableVirtualLevels,
+        enableSkillProgressBars,
+        setEnableSkillProgressBars,
       }}
     >
       {children}

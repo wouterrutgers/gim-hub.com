@@ -33,7 +33,7 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
       mobileIconSource: "/images/discord-light.webp",
       isExternal: true,
     },
-    { label: "Changelog", href: "/changelog", mobileIconSource: "/ui/183-0.png" },
+    { label: "Changelog", href: "/changelog", mobileIconSource: "/ui/2414-0.png" },
     { label: "Setup", href: "/group/setup-instructions", mobileIconSource: "/ui/1094-0.png" },
     { label: "Logout", href: isDemo ? "/" : "/logout", mobileIconSource: "/ui/225-0.png" },
   ];
@@ -48,8 +48,8 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
         <Fragment key={label}>
           <span className="desktop">
             {isExternal ? (
-              <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
-                <CachedImage alt={formattedLabel} src={mobileIconSource} height="16" style={{ marginRight: "8px" }} />
+              <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button pixelated">
+                <CachedImage alt={formattedLabel} src={mobileIconSource} height="20" style={{ marginRight: "8px" }} />
                 {formattedLabel}
               </a>
             ) : (
@@ -60,12 +60,12 @@ export const AppNavigation = ({ groupName }: { groupName: string }): ReactElemen
           </span>
           <span className="mobile">
             {isExternal ? (
-              <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button">
+              <a href={href} target="_blank" rel="noopener noreferrer" className="app-link men-button pixelated">
                 <CachedImage alt={formattedLabel} src={mobileIconSource} />
               </a>
             ) : (
               <AppLink href={href} selected={location.pathname === href}>
-                <CachedImage alt={formattedLabel} src={mobileIconSource} />
+                <CachedImage alt={formattedLabel} src={mobileIconSource} className="pixelated" />
               </AppLink>
             )}
           </span>

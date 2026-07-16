@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Feature request
+    url: https://github.com/wouterrutgers/gim-hub.com/discussions
+    about: Suggest an idea in GitHub Discussions.

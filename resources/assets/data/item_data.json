@@ -39529,13 +39529,25 @@
     "mapping": null
   },
   "9487": {
-    "name": "Wizard blizzard",
+    "name": "Cocktail glass",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "9488": {
+    "name": "Cocktail glass",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "9489": {
-    "name": "Wizard blizzard",
+    "name": "Cocktail glass",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "9490": {
+    "name": "Cocktail glass",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -110483,55 +110495,55 @@
   },
   "33677": {
     "name": "Tarnished longsword",
-    "highalch": 300,
+    "highalch": 18000,
     "alchable": true,
     "mapping": null
   },
   "33679": {
     "name": "Tarnished spear",
-    "highalch": 300,
+    "highalch": 12000,
     "alchable": true,
     "mapping": null
   },
   "33681": {
     "name": "Tarnished 2h sword",
-    "highalch": 300,
+    "highalch": 36000,
     "alchable": true,
     "mapping": null
   },
   "33683": {
     "name": "Tarnished battleaxe",
-    "highalch": 300,
+    "highalch": 24000,
     "alchable": true,
     "mapping": null
   },
   "33685": {
     "name": "Tarnished halberd",
-    "highalch": 300,
+    "highalch": 36000,
     "alchable": true,
     "mapping": null
   },
   "33687": {
     "name": "Tarnished ring",
-    "highalch": 300,
+    "highalch": 1800,
     "alchable": true,
     "mapping": null
   },
   "33689": {
     "name": "Tarnished bracelet",
-    "highalch": 300,
+    "highalch": 2100,
     "alchable": true,
     "mapping": null
   },
   "33691": {
     "name": "Tarnished necklace",
-    "highalch": 300,
+    "highalch": 2100,
     "alchable": true,
     "mapping": null
   },
   "33693": {
     "name": "Tarnished amulet",
-    "highalch": 300,
+    "highalch": 1800,
     "alchable": true,
     "mapping": null
   },

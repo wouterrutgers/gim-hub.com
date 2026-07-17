@@ -110681,8 +110681,8 @@
   },
   "33726": {
     "name": "Crescent moon key",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33727": {
@@ -110693,8 +110693,8 @@
   },
   "33728": {
     "name": "New moon key",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33729": {
@@ -110711,20 +110711,20 @@
   },
   "33731": {
     "name": "Drakan emblem",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33732": {
     "name": "Drakan emblem",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33733": {
     "name": "Drakan emblem",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33734": {
@@ -110741,8 +110741,8 @@
   },
   "33736": {
     "name": "Full crest",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33737": {
@@ -110771,8 +110771,8 @@
   },
   "33741": {
     "name": "Ornate skull",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33742": {

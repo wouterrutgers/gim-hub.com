@@ -8,10 +8,11 @@ import * as z from "zod/v4";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { PlayerIcon } from "../player-icon/player-icon";
 import { useModal } from "../modal/modal";
-import { GroupMemberNamesContext } from "../../context/group-context";
+import { GroupMemberColorsContext, GroupMemberNamesContext, memberColorHues } from "../../context/group-context";
 import { formatTitle } from "../../ts/format-title";
 
 import "./settings.css";
+import { CachedImage } from "../cached-image/cached-image";
 
 const PendingOverlay = ({ show }: { show: boolean }): ReactElement | undefined =>
   show ? (
@@ -96,8 +97,11 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
   const [pendingDelete, setPendingDelete] = useState(false);
 
   const [errors, setErrors] = useState<string[]>();
-  const { deleteMember, renameMember } = useContext(APIContext)?.api ?? {};
+  const { deleteMember, renameMember, updateMemberColor } = useContext(APIContext)?.api ?? {};
+  const { colors: allMemberColors, updateColors: updateMemberColors } = useContext(GroupMemberColorsContext);
   const { open, modal: removeConfirmationModal } = useModal(RemoveConfirmationWindow);
+
+  const hueDegrees = allMemberColors.get(member)?.hueDegrees;
 
   const pending = pendingDelete || !!pendingRename;
 
@@ -225,6 +229,59 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
         {errors && errors.length > 0 && <ErrorList id={errorID} errors={errors} />}
       </div>
 
+      <div className="group-settings-member-color">
+        <label>Color</label>
+        <div
+          className="group-settings-member-color-options"
+          role="group"
+          aria-label="Member color"
+        >
+          {memberColorHues.map((hue) => {
+            const isSelected = hueDegrees === hue;
+            const isTaken =
+              !isSelected &&
+              [...allMemberColors.entries()].some(
+                ([otherName, { hueDegrees: h }]) =>
+                  h === hue && otherName !== member && otherName !== ("@SHARED" as Member.Name),
+              );
+            return (
+              <button
+                key={hue}
+                className={`group-settings-member-color-option ${isSelected ? "selected" : ""} ${isTaken ? "taken" : ""}`}
+                onClick={() => {
+                  if (!updateMemberColor || !updateMemberColors) return;
+                  updateMemberColor({ memberName: member, colorHueDegrees: hue })
+                    .then((response) => {
+                      if (response.status === "error") {
+                        return;
+                      }
+                      const updates: Array<{ name: Member.Name; hueDegrees: number }> = [
+                        { name: member, hueDegrees: response.updated.color_hue_degrees },
+                      ];
+                      if (response.swapped) {
+                        updates.push({
+                          name: response.swapped.name as Member.Name,
+                          hueDegrees: response.swapped.color_hue_degrees,
+                        });
+                      }
+                      updateMemberColors(updates);
+                    })
+                }}
+                aria-pressed={isSelected}
+              >
+                <CachedImage
+                  alt={`Player icon for ${member}`}
+                  src="/ui/player-icon.webp"
+                  style={{ filter: `hue-rotate(${hue}deg) saturate(100%)` }}
+                  width="12"
+                  height="15"
+                />
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       <PendingOverlay show={pending} />
       {removeConfirmationModal}
     </div>
@@ -329,6 +386,7 @@ export const SettingsPage = (): ReactElement => {
           </div>
         </div>
         {invalid && <ErrorList id="add-member-errors" errors={addMemberErrors} />}
+
         <PendingOverlay show={pendingAddMember} />
       </div>,
     );

@@ -985,6 +985,11 @@ const GetGroupDataResponseSchema = z
      * Achievement diary progression
      */
     diary_vars: DiariesSchema.nullish().transform((value) => value ?? undefined),
+
+    /**
+     * The hue rotation in degrees used to tint this member's player icon.
+     */
+    color_hue_degrees: z.number().int().nullish().transform((v) => v ?? undefined),
   })
   .transform(
     ({
@@ -1002,6 +1007,7 @@ const GetGroupDataResponseSchema = z
       master_scroll_book,
       essence_pouches,
       diary_vars,
+      color_hue_degrees,
       tackle_box,
       tool_leprechaun,
       elnock_inquisitor,
@@ -1032,6 +1038,7 @@ const GetGroupDataResponseSchema = z
         lastUpdated: last_updated,
         lastOnlineAt: last_online_at,
         diaries: diary_vars,
+        colorHueDegrees: color_hue_degrees,
         ...itemContainers,
         ...rest,
       };

@@ -20,6 +20,8 @@ import * as RequestDeleteGroupMember from "./requests/delete-group-member";
 import * as RequestRenameGroupMember from "./requests/rename-group-member";
 import * as RequestHiscores from "./requests/hiscores";
 import * as RequestPlayerSnapshot from "./requests/player-snapshot";
+import * as RequestUpdateMemberColor from "./requests/update-member-color";
+import { memberColorHues } from "../context/group-context";
 import type { GroupCredentials } from "./credentials";
 import { Skill, type Experience } from "../game/skill";
 import { EquipmentSlot } from "../game/equipment";
@@ -369,7 +371,7 @@ const mockGroupDataResponse = (
 };
 
 interface UpdateCallbacks {
-  onGroupUpdate: (group: GroupStateUpdate, partial: boolean) => void;
+  onGroupUpdate: (group: GroupStateUpdate, partial: boolean, colorUpdates: Map<Member.Name, number>) => void;
   onGameDataUpdate: (data: GameData) => void;
 }
 interface DemoGroup {
@@ -394,7 +396,7 @@ interface DemoGroup {
     quests: typeof MAX_QUEST;
     diaries: typeof MAX_DIARY;
   };
-  roster: { displayName: Member.Name; originalName?: "Thurgo" | "Cow31337Killer" | "Gary" | "xXgamerXx" }[];
+  roster: { displayName: Member.Name; originalName?: "Thurgo" | "Cow31337Killer" | "Gary" | "xXgamerXx"; colorHueDegrees: number }[];
   skillData: Record<RequestSkillData.AggregatePeriod, RequestSkillData.Response>;
   hiscores: Map<Member.Name, RequestHiscores.Response>;
   collections: Map<Member.Name, Member.Collection>;
@@ -426,10 +428,10 @@ const INITIAL_STATE = {
     diaries: structuredClone(MAX_DIARY),
   },
   roster: [
-    { displayName: "Thurgo" as Member.Name, originalName: "Thurgo" as const },
-    { displayName: "Cow31337Killer" as Member.Name, originalName: "Cow31337Killer" as const },
-    { displayName: "Gary" as Member.Name, originalName: "Gary" as const },
-    { displayName: "xXgamerXx" as Member.Name, originalName: "xXgamerXx" as const },
+    { displayName: "Thurgo" as Member.Name, originalName: "Thurgo" as const, colorHueDegrees: 230 },
+    { displayName: "Cow31337Killer" as Member.Name, originalName: "Cow31337Killer" as const, colorHueDegrees: 330 },
+    { displayName: "Gary" as Member.Name, originalName: "Gary" as const, colorHueDegrees: 100 },
+    { displayName: "xXgamerXx" as Member.Name, originalName: "xXgamerXx" as const, colorHueDegrees: 170 },
   ],
   skillData: { Day: new Map(), Week: new Map(), Month: new Map(), Year: new Map() },
   hiscores: new Map(),
@@ -458,7 +460,7 @@ export default class DemoApi {
   private updateGroupData(response: GetGroupDataResponse): void {
     const updates: GroupStateUpdate = new Map();
 
-    for (const { name, coordinates, quests, ...rest } of response) {
+    for (const { name, coordinates, quests, colorHueDegrees: _, ...rest } of response) {
       for (const [key, value] of Object.entries(rest)) {
         if (value === undefined) {
           delete rest[key as keyof typeof rest];
@@ -489,7 +491,11 @@ export default class DemoApi {
       updates.set(name, update);
     }
 
-    this.callbacks?.onGroupUpdate?.(updates, false);
+    const colorUpdates = new Map<Member.Name, number>(
+      this.state.roster.map(({ displayName, colorHueDegrees }) => [displayName, colorHueDegrees]),
+    );
+
+    this.callbacks?.onGroupUpdate?.(updates, false, colorUpdates);
   }
 
   public getCredentials(): GroupCredentials {
@@ -932,7 +938,10 @@ export default class DemoApi {
       return Promise.resolve({ status: "error", text: "A member of that name already exists." });
     }
 
-    this.state.roster.push({ displayName: member });
+    const takenHues = new Set(this.state.roster.map(({ colorHueDegrees }) => colorHueDegrees));
+    const colorHueDegrees = memberColorHues.find((h) => !takenHues.has(h)) ?? memberColorHues[0];
+
+    this.state.roster.push({ displayName: member, colorHueDegrees });
 
     this.populateSkillDataFromRoster();
 
@@ -978,7 +987,7 @@ export default class DemoApi {
       updates.set(name, { collection: clog });
     }
 
-    this.callbacks?.onGroupUpdate?.(updates, true);
+    this.callbacks?.onGroupUpdate?.(updates, true, new Map());
   }
 
   async fetchMemberSnapshots(markers: RequestPlayerSnapshot.SnapshotMarkers): Promise<RequestPlayerSnapshot.Response> {
@@ -1031,5 +1040,41 @@ export default class DemoApi {
   async fetchMemberHiscores(memberName: Member.Name): Promise<RequestHiscores.Response> {
     await this.demoDataPromise;
     return Promise.resolve(this.state.hiscores.get(memberName) ?? new Map<string, number>());
+  }
+
+  async updateMemberColor({
+    memberName,
+    colorHueDegrees,
+  }: {
+    memberName: Member.Name;
+    colorHueDegrees: number;
+  }): Promise<RequestUpdateMemberColor.Response> {
+    const SHARED_NAME = "@SHARED" as Member.Name;
+
+    const member = this.state.roster.find(({ displayName }) => displayName === memberName);
+    if (!member) {
+      return Promise.resolve({ status: "error", text: "Member not found." });
+    }
+
+    let swapped: RequestUpdateMemberColor.ColorUpdate | undefined;
+
+    const occupant = this.state.roster.find(
+      ({ displayName, colorHueDegrees: h }) =>
+        h === colorHueDegrees && displayName !== memberName && displayName !== SHARED_NAME,
+    );
+
+    if (occupant) {
+      const oldMemberHue = member.colorHueDegrees;
+      occupant.colorHueDegrees = oldMemberHue;
+      swapped = { name: occupant.displayName, color_hue_degrees: oldMemberHue };
+    }
+
+    member.colorHueDegrees = colorHueDegrees;
+
+    return Promise.resolve({
+      status: "ok",
+      updated: { name: memberName, color_hue_degrees: colorHueDegrees },
+      ...(swapped && { swapped }),
+    });
   }
 }

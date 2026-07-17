@@ -16,6 +16,7 @@ Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(func
     Route::delete('/delete-group-member', [GroupMemberController::class, 'deleteGroupMember']);
     Route::put('/rename-group-member', [GroupMemberController::class, 'renameGroupMember']);
     Route::post('/update-group-member', [GroupMemberController::class, 'updateGroupMember']);
+    Route::put('/update-member-color', [GroupMemberController::class, 'updateMemberColor']);
     Route::get('/get-group-data', [GroupMemberController::class, 'getGroupData']);
     Route::get('/get-skill-data', [GroupMemberController::class, 'getSkillData']);
     Route::get('/collection-log', [GroupMemberController::class, 'getCollectionLog']);

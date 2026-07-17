@@ -4,7 +4,7 @@ import { CachedImage } from "../cached-image/cached-image";
 import { GroupMemberColorsContext } from "../../context/group-context";
 
 export const PlayerIcon = ({ name }: { name: Member.Name }): ReactElement => {
-  const hueDegrees = useContext(GroupMemberColorsContext).get(name)?.hueDegrees ?? 0;
+  const hueDegrees = useContext(GroupMemberColorsContext).colors.get(name)?.hueDegrees ?? 0;
 
   return (
     <CachedImage

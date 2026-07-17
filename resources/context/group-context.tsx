@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext, useEffect, useReducer } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useReducer } from "react";
 import * as Member from "../game/member";
 import { Context as APIContext } from "./api-context";
 import { type ItemID, type ItemStack } from "../game/items";
@@ -43,10 +43,19 @@ export const GroupMemberNamesContext = createContext<GroupState["memberNames"]>(
  */
 export const GroupXPDropsContext = createContext<GroupState["xpDrops"]>(new Map());
 
+export interface GroupMemberColorsContextValue {
+  colors: GroupState["memberColors"];
+  updateColors: (updates: Array<{ name: Member.Name; hueDegrees: number }>) => void;
+}
+
 /**
- * Contains the colors of the group. These colors are not stable if the group changes.
+ * Contains the colors of the group and a function to update them directly,
+ * e.g. after a successful color update API call. 
  */
-export const GroupMemberColorsContext = createContext<GroupState["memberColors"]>(new Map());
+export const GroupMemberColorsContext = createContext<GroupMemberColorsContextValue>({
+  colors: new Map(),
+  updateColors: () => {},
+});
 
 /**
  * Contains the collection logs of the group.
@@ -94,7 +103,7 @@ export const useMemberTimezoneContext = createMemberSelector("timezone");
 
 // TODO: Use full HSL colors with varying saturation/lightness, since
 // perceptively just rotating the colors doesn't look very good.
-const memberColorHues: number[] = [330, 100, 230, 170, 40];
+export const memberColorHues: number[] = [330, 100, 230, 170, 40];
 
 type GroupStateAction =
   | { type: "Wipe" }
@@ -110,7 +119,9 @@ type GroupStateAction =
        */
       partial: boolean;
       update: GroupStateUpdate;
-    };
+      colorUpdates: Map<Member.Name, number>;
+    }
+  | { type: "UpdateColors"; updates: Array<{ name: Member.Name; hueDegrees: number }> };
 
 /**
  * Taking in the new group state, perform some diff checking and update
@@ -119,7 +130,10 @@ type GroupStateAction =
  * A lot of these checks should probably be done by the backend and diffs
  * performed in the API class, but for now we can just do the checks here.
  */
-const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: GroupStateUpdate }): GroupState => {
+const actionUpdate = (
+  oldState: GroupState,
+  action: { partial: boolean; update: GroupStateUpdate; colorUpdates: Map<Member.Name, number> },
+): GroupState => {
   const newState: Partial<GroupState> = {};
 
   let updated = false;
@@ -140,19 +154,50 @@ const actionUpdate = (oldState: GroupState, action: { partial: boolean; update: 
   if (namesHaveChanged) {
     const newMemberColors = new Map<Member.Name, MemberColor>();
     const SHARED_NAME = "@SHARED" as Member.Name;
-    let colorIndex = Array.from(newMemberColors.keys()).filter((n) => n !== SHARED_NAME).length;
+
+    // Use server-provided colors when available, otherwise preserve existing.
     for (const name of memberNames) {
-      if (newMemberColors.has(name)) continue;
       if (name === SHARED_NAME) {
         newMemberColors.set(SHARED_NAME, { hueDegrees: 0 });
         continue;
       }
-      const hueDegrees = memberColorHues.at(colorIndex) ?? 0;
-      newMemberColors.set(name, { hueDegrees });
-      colorIndex += 1;
+      const serverHue = action.colorUpdates.get(name);
+      if (serverHue !== undefined) {
+        newMemberColors.set(name, { hueDegrees: serverHue });
+      } else {
+        const existing = oldState.memberColors.get(name);
+        if (existing) {
+          newMemberColors.set(name, existing);
+        }
+      }
     }
+
+    // Assign default colors only to members with no server color and no existing color.
+    const takenHues = new Set(Array.from(newMemberColors.values()).map(({ hueDegrees }) => hueDegrees));
+    for (const name of memberNames) {
+      if (newMemberColors.has(name)) continue;
+      const hueDegrees = memberColorHues.find((h) => !takenHues.has(h)) ?? 0;
+      newMemberColors.set(name, { hueDegrees });
+      takenHues.add(hueDegrees);
+    }
+
     newState.memberColors = newMemberColors;
     updated = true;
+  } else if (!action.partial && action.colorUpdates.size > 0) {
+    // Membership is stable but server may have fresher colors (e.g. another session changed a color).
+    const newMemberColors = new Map(oldState.memberColors);
+    let colorsChanged = false;
+    for (const [name, hue] of action.colorUpdates) {
+      const existing = newMemberColors.get(name);
+      if (existing && existing.hueDegrees !== hue) {
+        newMemberColors.set(name, { hueDegrees: hue });
+        colorsChanged = true;
+      }
+    }
+    if (colorsChanged) {
+      newState.memberColors = newMemberColors;
+      updated = true;
+    }
   }
 
   {
@@ -369,6 +414,15 @@ const reducer = (oldState: GroupState, action: GroupStateAction): GroupState => 
     case "Update": {
       return actionUpdate(oldState, action);
     }
+    case "UpdateColors": {
+      const newMemberColors = new Map(oldState.memberColors);
+      for (const { name, hueDegrees } of action.updates) {
+        if (newMemberColors.has(name)) {
+          newMemberColors.set(name, { hueDegrees });
+        }
+      }
+      return { ...oldState, memberColors: newMemberColors };
+    }
   }
 };
 
@@ -388,13 +442,20 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
   });
   const { setUpdateCallbacks } = useContext(APIContext)?.api ?? {};
 
+  const updateMemberColors = useCallback(
+    (updates: Array<{ name: Member.Name; hueDegrees: number }>) => {
+      updateContexts({ type: "UpdateColors", updates });
+    },
+    [],
+  );
+
   useEffect(() => {
     updateContexts({ type: "Wipe" });
     if (!setUpdateCallbacks) return;
 
     setUpdateCallbacks({
-      onGroupUpdate: (update, partial) => {
-        updateContexts({ type: "Update", partial, update });
+      onGroupUpdate: (update, partial, colorUpdates) => {
+        updateContexts({ type: "Update", partial, update, colorUpdates });
       },
     });
   }, [setUpdateCallbacks]);
@@ -403,7 +464,7 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
 
   return (
     <GroupMemberNamesContext value={memberNames}>
-      <GroupMemberColorsContext value={memberColors}>
+      <GroupMemberColorsContext value={{ colors: memberColors, updateColors: updateMemberColors }}>
         <GroupCollectionsContext value={collections}>
           <GroupItemsContext value={items}>
             <GroupMemberStatesContext value={memberStates}>

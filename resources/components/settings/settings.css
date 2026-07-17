@@ -127,3 +127,55 @@
 .settings-page-number-item input[type="number"] {
   width: 72px;
 }
+
+.group-settings-member-color {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.group-settings-member-color-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.group-settings-member-color-option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../assets/ui/170-0.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 36px;
+  height: 36px;
+}
+
+.group-settings-member-color-option:hover {
+  box-shadow: inset 0 0 0 1000px rgb(255 255 255 / 10%);
+  border-radius: 0.5rem;
+}
+
+.dark-mode .group-settings-member-color-option {
+  background-image: url("../../assets/ui/170-0-dark.png");
+}
+
+.group-settings-member-color-option {
+  padding: 3px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.group-settings-member-color-option.selected {
+  background-image: url("../../assets/ui/179-0.png");
+}
+
+.group-settings-member-color-option.taken {
+  opacity: 0.3;
+}
+
+.group-settings-member-color-option img {
+  width: 12px;
+  height: 15px;
+}

@@ -60,9 +60,19 @@ class GroupMemberController extends Controller
             ], 400);
         }
 
+        $takenHues = Member::where('group_id', '=', $group->id)
+            ->where('name', '!=', Member::SHARED_MEMBER)
+            ->whereNotNull('color_hue_degrees')
+            ->pluck('color_hue_degrees')
+            ->all();
+
+        $defaultHues = [330, 100, 230, 170, 40];
+        $colorHueDegrees = collect($defaultHues)->first(fn ($h) => ! in_array($h, $takenHues)) ?? $defaultHues[0];
+
         Member::create([
             'group_id' => $group->id,
             'name' => $name,
+            'color_hue_degrees' => $colorHueDegrees,
         ]);
 
         return response()->json(null, 201);
@@ -379,6 +389,7 @@ class GroupMemberController extends Controller
 
             $data = [
                 'name' => $member->name,
+                'color_hue_degrees' => $member->color_hue_degrees,
                 'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
                 'last_online_at' => is_null($member->last_online_at) ? null : Carbon::make($member->last_online_at)->toIso8601ZuluString(),
                 'shared_bank' => null,
@@ -596,5 +607,70 @@ class GroupMemberController extends Controller
         }
 
         return response()->json(null);
+    }
+
+    public function updateMemberColor(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'color_hue_degrees' => 'required|integer|in:330,100,230,170,40',
+        ]);
+
+        $name = $validated['name'];
+        $hue = $validated['color_hue_degrees'];
+        $groupId = $request->attributes->get('group')->id;
+
+        if ($name === Member::SHARED_MEMBER) {
+            return response()->json([
+                'error' => "Member name {$name} not allowed",
+            ], 400);
+        }
+
+        $result = DB::transaction(function () use ($name, $hue, $groupId): array|false {
+            $member = Member::where('group_id', '=', $groupId)
+                ->where('name', '=', $name)
+                ->lockForUpdate()
+                ->first();
+
+            if (! $member) {
+                return false;
+            }
+
+            $swapped = null;
+
+            $occupant = Member::where('group_id', '=', $groupId)
+                ->where('name', '!=', $name)
+                ->where('name', '!=', Member::SHARED_MEMBER)
+                ->where('color_hue_degrees', '=', $hue)
+                ->lockForUpdate()
+                ->first();
+
+            if ($occupant) {
+                $oldMemberHue = $member->color_hue_degrees;
+                $occupant->update(['color_hue_degrees' => $oldMemberHue]);
+                $swapped = ['name' => $occupant->name, 'color_hue_degrees' => $oldMemberHue];
+            }
+
+            $member->update(['color_hue_degrees' => $hue]);
+
+            return ['name' => $name, 'color_hue_degrees' => $hue, 'swapped' => $swapped];
+        });
+
+        if ($result === false) {
+            return response()->json(['error' => 'Member not found'], 404);
+        }
+
+        $response = [
+            'updated' => [
+                'name' => $result['name'],
+                'color_hue_degrees' => $result['color_hue_degrees'],
+            ],
+        ];
+
+        if ($result['swapped'] !== null) {
+            $response['swapped'] = $result['swapped'];
+        }
+
+        return response()->json($response, 200);
     }
 }

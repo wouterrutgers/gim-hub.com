@@ -14,6 +14,7 @@ import * as RequestCreateGroup from "./requests/create-group";
 import * as RequestAddGroupMember from "./requests/add-group-member";
 import * as RequestDeleteGroupMember from "./requests/delete-group-member";
 import * as RequestRenameGroupMember from "./requests/rename-group-member";
+import * as RequestUpdateMemberColor from "./requests/update-member-color";
 import * as RequestHiscores from "./requests/hiscores";
 import * as RequestPlayerSnapshot from "./requests/player-snapshot";
 
@@ -29,7 +30,7 @@ export interface GameData {
 }
 
 interface UpdateCallbacks {
-  onGroupUpdate: (group: GroupStateUpdate, partial: boolean) => void;
+  onGroupUpdate: (group: GroupStateUpdate, partial: boolean, colorUpdates: Map<Member.Name, number>) => void;
   onGameDataUpdate: (data: GameData) => void;
 }
 export default class Api {
@@ -49,8 +50,9 @@ export default class Api {
 
   private updateGroupData(response: GetGroupDataResponse): void {
     const updates: GroupStateUpdate = new Map();
+    const colorUpdates = new Map<Member.Name, number>();
 
-    for (const { name, coordinates, quests, ...rest } of response) {
+    for (const { name, coordinates, quests, colorHueDegrees, ...rest } of response) {
       for (const [key, value] of Object.entries(rest)) {
         if (value === undefined) {
           delete rest[key as keyof typeof rest];
@@ -78,10 +80,14 @@ export default class Api {
         update.quests = questsByID;
       }
 
+      if (colorHueDegrees !== undefined) {
+        colorUpdates.set(name, colorHueDegrees);
+      }
+
       updates.set(name, update);
     }
 
-    this.callbacks?.onGroupUpdate?.(updates, false);
+    this.callbacks?.onGroupUpdate?.(updates, false, colorUpdates);
   }
 
   private callbacks: Partial<UpdateCallbacks> = {};
@@ -262,7 +268,7 @@ export default class Api {
     for (const [name, collection] of Object.entries(collections)) {
       updates.set(name as Member.Name, { collection });
     }
-    this.callbacks?.onGroupUpdate?.(updates, true);
+    this.callbacks?.onGroupUpdate?.(updates, true, new Map());
   }
 
   async fetchMemberSnapshots(markers: RequestPlayerSnapshot.SnapshotMarkers): Promise<RequestPlayerSnapshot.Response> {
@@ -289,6 +295,22 @@ export default class Api {
       baseURL: this.baseURL,
       credentials: this.credentials,
       memberName,
+    });
+  }
+
+  async updateMemberColor({
+    memberName,
+    colorHueDegrees
+  }: {
+    memberName: Member.Name;
+    colorHueDegrees: number;
+  }): Promise<RequestUpdateMemberColor.Response> {
+    if (this.credentials === undefined) return Promise.reject(new Error("No active API connection."));
+    return RequestUpdateMemberColor.updateMemberColor({
+      baseURL: this.baseURL,
+      credentials: this.credentials,
+      name: memberName,
+      colorHueDegrees,
     });
   }
 }

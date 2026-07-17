@@ -532,7 +532,7 @@ export const SkillGraph = (): ReactElement => {
   const [loading, setLoading] = useState<boolean>(true);
   const updateChartPromiseRef = useRef<Promise<void>>(undefined);
 
-  const memberColors = useContext(GroupMemberColorsContext);
+  const { colors: memberColors } = useContext(GroupMemberColorsContext);
 
   const { fetchSkillData } = useContext(APIContext)?.api ?? {};
 

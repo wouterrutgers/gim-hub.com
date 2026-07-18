@@ -110801,8 +110801,8 @@
   },
   "33746": {
     "name": "Poem scroll",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33747": {
@@ -111077,8 +111077,8 @@
   },
   "33792": {
     "name": "Serpent rope",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "33793": {
@@ -111120,7 +111120,7 @@
   "33799": {
     "name": "Healing potion",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "33800": {

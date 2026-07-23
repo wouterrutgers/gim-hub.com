@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState, type ReactElement, type ReactNode } from "react";
-import { createPortal } from "react-dom";
+import { useContext, type ReactElement, type ReactNode } from "react";
 import { StatBar } from "./stat-bar";
 import * as Member from "../../game/member";
 import { PlayerIcon } from "../player-icon/player-icon";
@@ -11,6 +10,7 @@ import {
   useMemberStatsContext,
   useMemberTimezoneContext,
 } from "../../context/group-context";
+import { serializeTooltip } from "../tooltip/tooltip-data";
 
 import "./player-stats.css";
 
@@ -53,44 +53,6 @@ const formatLocalTime = (timezone?: string): string | undefined => {
   }).format(new Date());
 };
 
-const useLocalTimeTooltip = (): {
-  tooltipElement: ReactElement | undefined;
-  hideTooltip: () => void;
-  showTooltip: (props: { name: Member.Name; timezone: string }) => void;
-} => {
-  const [tooltipData, setTooltipData] = useState<{ name: Member.Name; timezone: string }>();
-  const [tooltipElement, setTooltipElement] = useState<HTMLElement>();
-
-  useEffect(() => {
-    setTooltipElement(document.getElementById("tooltip")!);
-  }, []);
-
-  const hideTooltip = (): void => {
-    setTooltipData(undefined);
-  };
-
-  const showTooltip = (props: { name: Member.Name; timezone: string }): void => {
-    setTooltipData(props);
-  };
-
-  let content: ReactElement = <></>;
-  if (tooltipData) {
-    content = (
-      <>
-        Local time for {tooltipData.name}
-        <br />
-        Timezone: {tooltipData.timezone}
-      </>
-    );
-  }
-
-  return {
-    tooltipElement: tooltipElement ? createPortal(content, tooltipElement) : undefined,
-    hideTooltip,
-    showTooltip,
-  };
-};
-
 // Shows what the player is interacting with, like attacking/talking to an npc
 const PlayerInteracting = ({ npcName, healthRatio }: { npcName: string; healthRatio?: number }): ReactElement => {
   const isNonCombatNPC = healthRatio === undefined;
@@ -126,7 +88,6 @@ const PlayerStatsImpl = ({
   timezone?: string;
   children?: ReactNode;
 }): ReactElement => {
-  const { tooltipElement, hideTooltip, showTooltip } = useLocalTimeTooltip();
   let interactionBar: ReactNode = undefined;
   let statusOverlay: ReactNode = undefined;
   const localTime = formatLocalTime(timezone);
@@ -154,7 +115,6 @@ const PlayerStatsImpl = ({
   return (
     <div className={`player-stats ${status.online ? "" : "player-stats-inactive"}`}>
       {children}
-      {tooltipElement}
       <div className="player-stats-hitpoints">
         <StatBar
           className="player-stats-hitpoints-bar"
@@ -169,10 +129,7 @@ const PlayerStatsImpl = ({
         {localTime && timezone ? (
           <span
             className="player-stats-local-time"
-            onPointerEnter={(): void => {
-              showTooltip({ name, timezone });
-            }}
-            onPointerLeave={hideTooltip}
+            data-tooltip={serializeTooltip({ type: "local-time", name, timezone })}
           >
             {localTime}
           </span>

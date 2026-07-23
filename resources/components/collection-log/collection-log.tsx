@@ -3,12 +3,12 @@ import { GameDataContext } from "../../context/game-data-context";
 import * as CollectionLog from "../../game/collection-log";
 import type * as Member from "../../game/member";
 import { GroupCollectionsContext } from "../../context/group-context";
-import { useCollectionLogItemTooltip } from "./collection-log-tooltip";
 import { PlayerIcon } from "../player-icon/player-icon";
 import type { ItemID } from "../../game/items";
 import { CachedImage } from "../cached-image/cached-image";
 import { Context as APIContext } from "../../context/api-context";
 import { formatTitle } from "../../ts/format-title";
+import { serializeTooltip } from "../tooltip/tooltip-data";
 import mappings from "./mappings.json";
 
 import "./collection-log.css";
@@ -24,7 +24,6 @@ interface CollectionLogPageItemProps {
   items: { item: ItemID; quantity: number; otherMembers: { name: Member.Name; quantity: number }[] }[];
 }
 const CollectionLogPageItems = ({ items }: CollectionLogPageItemProps): ReactElement => {
-  const { tooltipElement, showTooltip, hideTooltip } = useCollectionLogItemTooltip();
   const { items: itemDatabase } = useContext(GameDataContext);
 
   const itemElements = items.map(({ item: itemID, quantity, otherMembers }, i): ReactElement => {
@@ -54,14 +53,11 @@ const CollectionLogPageItems = ({ items }: CollectionLogPageItemProps): ReactEle
     return (
       <a
         key={`${itemID}-${i}`}
-        onPointerEnter={() => {
-          if (!itemName) {
-            hideTooltip();
-            return;
-          }
-          showTooltip({ name: itemName, memberQuantities: otherMembers });
-        }}
-        onPointerLeave={hideTooltip}
+        data-tooltip={
+          itemName
+            ? serializeTooltip({ type: "collection-log-item", name: itemName, memberQuantities: otherMembers })
+            : undefined
+        }
         className="collection-log-page-item"
         href={wikiLink}
         target="_blank"
@@ -74,19 +70,7 @@ const CollectionLogPageItems = ({ items }: CollectionLogPageItemProps): ReactEle
     );
   });
 
-  return (
-    <>
-      <div onPointerLeave={hideTooltip} className="collection-log-page-items">
-        {itemElements}
-        {/* The outer div is rectangular. Thus, when the item grid is not
-         *  rectangular, the empty section at the end wouldn't hide the cursor.
-         *  So we insert this span, and that hides the cursor.
-         */}
-        <span onPointerEnter={hideTooltip} style={{ flex: 1 }} />
-      </div>
-      {tooltipElement}
-    </>
-  );
+  return <div className="collection-log-page-items">{itemElements}</div>;
 };
 
 interface CollectionLogPageHeaderProps {
@@ -354,8 +338,8 @@ export const CollectionLogWindow = ({
           {formatTitle(`${player}'s collection log`)} - {totalCollected} / {collectionLogInfo?.uniqueSlots ?? 0} (Group:{" "}
           {totalGroupCollected} / {collectionLogInfo?.uniqueSlots ?? 0})
         </h1>
-        <button className="collection-log-close dialog-close" onClick={onCloseModal}>
-          <CachedImage src="/ui/1731-0.png" alt="Close dialog" title="Close dialog" />
+        <button className="collection-log-close dialog-close" onClick={onCloseModal} data-tooltip="Close dialog">
+          <CachedImage src="/ui/1731-0.png" alt="Close dialog" />
         </button>
       </div>
       <div className="collection-log-title-border" />

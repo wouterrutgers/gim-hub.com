@@ -1,5 +1,4 @@
 import { type ReactElement, useContext } from "react";
-import { useItemTooltip } from "../tooltip/item-tooltip";
 import { GameDataContext } from "../../context/game-data-context";
 import { EquipmentSlot } from "../../game/equipment";
 import type * as Member from "../../game/member";
@@ -19,6 +18,7 @@ import {
   mappedGEPrice,
   mappedHighAlch,
 } from "../../game/items";
+import { serializeTooltip } from "../tooltip/tooltip-data";
 
 const DIZANAS_IDS = new Set<ItemID>([
   28902 as ItemID, // Dizana's max cape
@@ -61,7 +61,6 @@ const EquipmentSlotEmptyIcons = new Map<EquipmentSlot, string>([
 ]);
 
 export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactElement => {
-  const { tooltipElement, hideTooltip, showTooltip } = useItemTooltip();
   const { items: itemData, gePrices: geData } = useContext(GameDataContext);
   const equipment = useMemberEquipmentContext(member);
   const inventory = useMemberInventoryContext(member);
@@ -108,16 +107,14 @@ export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactEleme
       const iconHref = composeItemIconHref(item, itemDatum);
       const wikiLink = `https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=${item.itemID}`;
 
-      const onPointerEnter = itemDatum
-        ? (): void => {
-            showTooltip({
-              type: "Item",
-              name: itemDatum.name,
-              quantity: item.quantity,
-              highAlch: mappedHighAlch(item.itemID, itemData),
-              gePrice: mappedGEPrice(item.itemID, geData, itemData),
-            });
-          }
+      const tooltip = itemDatum
+        ? serializeTooltip({
+            type: "item",
+            name: itemDatum.name,
+            quantity: item.quantity,
+            highAlch: mappedHighAlch(item.itemID, itemData),
+            gePrice: mappedGEPrice(item.itemID, geData, itemData),
+          })
         : undefined;
 
       let quantityOverlay: ReactElement | undefined;
@@ -135,8 +132,7 @@ export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactEleme
           target="_blank"
           rel="noopener noreferrer"
           key={slot}
-          onPointerEnter={onPointerEnter}
-          onPointerLeave={hideTooltip}
+          data-tooltip={tooltip}
           className={classNames}
         >
           {!iconHref && (
@@ -156,10 +152,5 @@ export const PlayerEquipment = ({ member }: { member: Member.Name }): ReactEleme
     );
   }
 
-  return (
-    <div className="player-equipment">
-      {slotElements}
-      {tooltipElement}
-    </div>
-  );
+  return <div className="player-equipment">{slotElements}</div>;
 };

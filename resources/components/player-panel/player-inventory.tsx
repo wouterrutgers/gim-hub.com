@@ -1,5 +1,4 @@
 import { useContext, type ReactElement, type ReactNode } from "react";
-import { useItemTooltip, type ItemTooltipProps } from "../tooltip/item-tooltip";
 import { GameDataContext } from "../../context/game-data-context";
 import * as Member from "../../game/member";
 import { useMemberInventoryContext, useMemberRunePouchContext } from "../../context/group-context";
@@ -13,6 +12,7 @@ import {
   mappedHighAlch,
 } from "../../game/items";
 import { CachedImage } from "../cached-image/cached-image";
+import { serializeTooltip, type ItemTooltipData } from "../tooltip/tooltip-data";
 
 import "./player-inventory.css";
 
@@ -36,10 +36,10 @@ interface ItemBoxProps {
   link: string;
   iconSource: string;
   quantity: number;
-  onPointerEnter: () => void;
+  tooltip: string;
   children?: ReactNode;
 }
-const ItemBox = ({ link, iconSource, quantity, onPointerEnter, children }: ItemBoxProps): ReactElement => {
+const ItemBox = ({ link, iconSource, quantity, tooltip, children }: ItemBoxProps): ReactElement => {
   let quantityOverlay = undefined;
   if (quantity > 1) {
     quantityOverlay = (
@@ -55,7 +55,7 @@ const ItemBox = ({ link, iconSource, quantity, onPointerEnter, children }: ItemB
       className="player-inventory-item-box"
       target="_blank"
       rel="noopener noreferrer"
-      onPointerEnter={onPointerEnter}
+      data-tooltip={tooltip}
     >
       <CachedImage alt="osrs item" src={iconSource} />
       {quantityOverlay}
@@ -65,8 +65,6 @@ const ItemBox = ({ link, iconSource, quantity, onPointerEnter, children }: ItemB
 };
 
 export const PlayerInventory = ({ member }: { member: Member.Name }): ReactElement => {
-  const { tooltipElement, hideTooltip, showTooltip } = useItemTooltip();
-
   const { items: itemData, gePrices: geData } = useContext(GameDataContext);
   const items = useMemberInventoryContext(member);
   const runePouch = useMemberRunePouchContext(member);
@@ -75,7 +73,7 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
   for (let index = 0; index < 28; index++) {
     const item = items?.get(index);
     if (!item || !itemData?.has(item.itemID)) {
-      itemElements.push(<span onPointerEnter={hideTooltip} key={`empty ${index}`} />);
+      itemElements.push(<span key={`empty ${index}`} />);
       continue;
     }
 
@@ -88,8 +86,8 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
     let pouchOverlay = undefined;
 
     let key = `${item.itemID} ${item.quantity} ${index} `;
-    let tooltipProps: ItemTooltipProps = {
-      type: "Item",
+    let tooltipData: ItemTooltipData = {
+      type: "item",
       name: itemDatum.name,
       quantity: quantity,
       highAlch: mappedHighAlch(itemID, itemData),
@@ -115,8 +113,8 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
           <ItemBoxPouchRune key={runeKey} iconSource={runeIconSource} name={runeDatum.name} quantity={runeQuantity} />,
         );
       }
-      tooltipProps = {
-        type: "Rune Pouch",
+      tooltipData = {
+        type: "rune-pouch",
         name: itemDatum.name,
         totalHighAlch,
         totalGePrice,
@@ -137,10 +135,7 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
         quantity={quantity}
         link={wikiLinkHref}
         iconSource={iconHref}
-        onPointerEnter={() => {
-          if (!tooltipProps) return;
-          showTooltip(tooltipProps);
-        }}
+        tooltip={serializeTooltip(tooltipData)}
       >
         {pouchOverlay}
       </ItemBox>,
@@ -149,10 +144,7 @@ export const PlayerInventory = ({ member }: { member: Member.Name }): ReactEleme
 
   return (
     <div className="player-inventory">
-      <div onPointerLeave={hideTooltip} className="player-inventory-background">
-        {itemElements}
-      </div>
-      {tooltipElement}
+      <div className="player-inventory-background">{itemElements}</div>
     </div>
   );
 };

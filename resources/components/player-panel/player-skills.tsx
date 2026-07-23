@@ -1,10 +1,10 @@
 import { useContext, type ReactElement } from "react";
 import { type Experience, Skill, SkillIconsBySkill, decomposeExperience } from "../../game/skill";
-import { useSkillTooltip } from "../tooltip/skill-tooltip";
 import type * as Member from "../../game/member";
 import { useMemberSkillsContext } from "../../context/group-context";
 import { SettingsContext } from "../../context/settings-context";
 import { CachedImage } from "../cached-image/cached-image";
+import { serializeTooltip } from "../tooltip/tooltip-data";
 
 import "./player-skills.css";
 
@@ -36,7 +36,6 @@ const SkillsInOSRSDisplayOrder: Skill[] = [
 ];
 
 export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement => {
-  const { tooltipElement, hideTooltip, showTooltip } = useSkillTooltip();
   const skills = useMemberSkillsContext(member);
   const { enableVirtualLevels, enableSkillProgressBars } = useContext(SettingsContext);
 
@@ -44,8 +43,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
   let xpTotal = 0;
 
   return (
-    <div className="player-skills" onPointerLeave={hideTooltip}>
-      {tooltipElement}
+    <div className="player-skills">
       {SkillsInOSRSDisplayOrder.map((skill) => {
         const xp = skills?.[skill] ?? (0 as Experience);
         xpTotal += xp;
@@ -71,17 +69,15 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
             rel="noopener noreferrer"
             key={skill}
             className="skill-box"
-            onPointerEnter={() =>
-              showTooltip({
-                style: "Individual",
-                xp,
-                level: displayedLevel,
-                untilMax: Math.max(0, xpDeltaFromMax - xp) as Experience,
-                untilMaxRatio: Math.min(xp / xpDeltaFromMax, 1.0),
-                untilNext: xpUntilNext,
-                untilNextRatio: Math.min(levelProgress, 1.0),
-              })
-            }
+            data-tooltip={serializeTooltip({
+              type: "skill-individual",
+              experience: xp,
+              level: displayedLevel,
+              untilMax: Math.max(0, xpDeltaFromMax - xp) as Experience,
+              untilMaxRatio: Math.min(xp / xpDeltaFromMax, 1.0),
+              untilNext: xpUntilNext,
+              untilNextRatio: Math.min(levelProgress, 1.0),
+            })}
           >
             <div className="skill-box-left">
               <CachedImage alt={`osrs ${skill} icon`} className="skill-box__icon" src={iconURLRaw ?? ""} />
@@ -111,7 +107,7 @@ export const PlayerSkills = ({ member }: { member: Member.Name }): ReactElement 
       <div
         className="total-level-box"
         style={{ gridColumn: "1 / span 3" }}
-        onPointerEnter={() => showTooltip({ style: "Total", xp: xpTotal as Experience })}
+        data-tooltip={serializeTooltip({ type: "skill-total", experience: xpTotal as Experience })}
       >
         <div className="total-level-box-content">
           <span>Total level: {levelTotal}</span>

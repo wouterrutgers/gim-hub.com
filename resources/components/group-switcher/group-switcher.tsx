@@ -104,7 +104,7 @@ export const GroupSwitcher = ({ groupName }: { groupName: string }): ReactElemen
                 type="button"
                 className="group-switcher-remove men-button"
                 onClick={(): void => handleRemove(group.name, group.token)}
-                title={`Remove ${group.name}`}
+                data-tooltip={`Remove ${group.name}`}
               >
                 ✕
               </button>

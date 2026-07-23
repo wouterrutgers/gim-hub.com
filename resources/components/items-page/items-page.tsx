@@ -5,8 +5,6 @@ import { GameDataContext } from "../../context/game-data-context";
 import { type ItemID, mappedAlchable, mappedGEPrice, mappedHighAlch, composeItemIconHref } from "../../game/items";
 import { GroupItemsContext, GroupMemberNamesContext } from "../../context/group-context";
 import { Link } from "react-router-dom";
-import { useItemsPriceTooltip } from "./items-page-tooltip";
-import { useItemsBreakdownTooltip } from "./items-breakdown-tooltip";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { CachedImage } from "../cached-image/cached-image";
 import { formatTitle } from "../../ts/format-title";
@@ -14,6 +12,7 @@ import { useLocalStorage } from "../../hooks/local-storage";
 import { useModal } from "../modal/modal";
 import { copyGearscapeItems } from "./gearscape-export";
 import { SettingsContext } from "../../context/settings-context";
+import { serializeTooltip } from "../tooltip/tooltip-data";
 
 import "./items-page.css";
 
@@ -65,13 +64,6 @@ const ItemPanel = memo(
     isPinned,
     onTogglePin,
   }: ItemPanelProps): ReactElement => {
-    const { tooltipElement, hideTooltip, showTooltip } = useItemsPriceTooltip();
-    const {
-      tooltipElement: breakdownTooltip,
-      hideTooltip: hideBreakdownTooltip,
-      showTooltip: showBreakdownTooltip,
-    } = useItemsBreakdownTooltip();
-
     const quantityBreakdown = [...quantities]
       .filter(([name]) => !memberFilter.has(name))
       .map(([name, breakdown]) => {
@@ -88,23 +80,23 @@ const ItemPanel = memo(
       .filter(({ quantity }) => quantity > 0)
       .map(({ name, quantity, breakdown }) => {
         const quantityPercent = (quantity / totalQuantity) * 100;
-        const onPointerEnter = (): void => {
-          if (containerFilter !== "All") {
-            return;
-          }
-          showBreakdownTooltip({
-            name,
-            filter: containerFilter,
-            breakdown,
-          });
-        };
+        const tooltip =
+          containerFilter === "All"
+            ? serializeTooltip({
+                type: "item-breakdown",
+                name,
+                filter: containerFilter,
+                breakdown,
+              })
+            : undefined;
+
         return (
           <Fragment key={name}>
-            <span onPointerEnter={onPointerEnter}>{name}</span>
-            <span onPointerEnter={onPointerEnter}>{quantity.toLocaleString()}</span>
+            <span data-tooltip={tooltip}>{name}</span>
+            <span data-tooltip={tooltip}>{quantity.toLocaleString()}</span>
             <span
               className="items-page-panel-quantity-contribution"
-              onPointerEnter={onPointerEnter}
+              data-tooltip={tooltip}
               style={{ transform: `scaleX(${quantityPercent}%)`, background: `hsl(${quantityPercent}, 100%, 40%)` }}
             />
           </Fragment>
@@ -126,7 +118,7 @@ const ItemPanel = memo(
             <button
               className={`items-page-panel-pin-button ${isPinned ? "pinned" : ""}`}
               onClick={() => onTogglePin(itemID)}
-              title={isPinned ? "Unpin item" : "Pin item to top"}
+              data-tooltip={isPinned ? "Unpin item" : "Pin item to top"}
               aria-label={isPinned ? "Unpin item" : "Pin item to top"}
             >
               {isPinned ? "★" : "☆"}
@@ -136,33 +128,29 @@ const ItemPanel = memo(
               <span>{totalQuantity.toLocaleString()}</span>
               <span>High alch</span>
               <span
-                onPointerEnter={
+                data-tooltip={
                   alchable
-                    ? (): void =>
-                        showTooltip({
-                          perPiecePrice: highAlchPer,
-                          totalPrice: highAlch,
-                          quantity: totalQuantity,
-                        })
+                    ? serializeTooltip({
+                        type: "item-price",
+                        perPiecePrice: highAlchPer,
+                        quantity: totalQuantity,
+                      })
                     : undefined
                 }
-                onPointerLeave={alchable ? hideTooltip : undefined}
               >
                 {alchable ? `${highAlch.toLocaleString()}gp` : "n/a"}
               </span>
               <span>GE price</span>
               <span
-                onPointerEnter={
+                data-tooltip={
                   gePricePer > 0
-                    ? (): void =>
-                        showTooltip({
-                          perPiecePrice: gePricePer,
-                          totalPrice: gePrice,
-                          quantity: totalQuantity,
-                        })
+                    ? serializeTooltip({
+                        type: "item-price",
+                        perPiecePrice: gePricePer,
+                        quantity: totalQuantity,
+                      })
                     : undefined
                 }
-                onPointerLeave={gePricePer > 0 ? hideTooltip : undefined}
               >
                 {gePricePer > 0 ? `${gePrice.toLocaleString()}gp` : "n/a"}
               </span>
@@ -175,11 +163,7 @@ const ItemPanel = memo(
             src={imageURL}
           />
         </div>
-        <div className="items-page-panel-quantity-breakdown" onPointerLeave={hideBreakdownTooltip}>
-          {quantityBreakdown}
-        </div>
-        {tooltipElement}
-        {breakdownTooltip}
+        <div className="items-page-panel-quantity-breakdown">{quantityBreakdown}</div>
       </div>
     );
   },
@@ -507,8 +491,8 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
   return (
     <div className="items-page-tutorial-window rsborder rsbackground">
       <div className="items-page-tutorial-window-header">
-        <button onClick={onCloseModal}>
-          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} title={formatTitle("Close dialog")} />
+        <button onClick={onCloseModal} data-tooltip={formatTitle("Close dialog")}>
+          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} />
         </button>
       </div>
       <div className="items-page-tutorial-window-body">
@@ -760,7 +744,7 @@ export const ItemsPage = (): ReactElement => {
             id="items-page-reset-filters-button"
             className="men-button"
             onClick={resetFilters}
-            title="Reset all filters to default"
+            data-tooltip="Reset all filters to default"
             aria-label="Reset all filters to default"
           >
             <CachedImage alt={"Reset filters"} src="/ui/1731-0.png" />
@@ -812,7 +796,7 @@ export const ItemsPage = (): ReactElement => {
             id="items-page-gearscape-export-button"
             className="men-button men-button-small"
             onClick={copyItemsForGearscape}
-            title="Copy only the currently filtered items to the clipboard for importing into Gearscape"
+            data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
             aria-label="Copy current items to clipboard for Gearscape"
           >
             {gearscapeExportLabel}

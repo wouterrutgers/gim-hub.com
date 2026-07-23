@@ -108,8 +108,13 @@ export const PlayerActivityWindow = ({
     <div className="player-activity rsborder rsbackground">
       <div className="player-activity-header">
         <h2>{formatTitle(`${player}'s recent activity`)}</h2>
-        <button className="player-activity-close dialog-close" onClick={onCloseModal} aria-label={formatTitle("Close")}>
-          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} title={formatTitle("Close dialog")} />
+        <button
+          className="player-activity-close dialog-close"
+          onClick={onCloseModal}
+          aria-label={formatTitle("Close")}
+          data-tooltip={formatTitle("Close dialog")}
+        >
+          <CachedImage src="/ui/1731-0.png" alt={formatTitle("Close dialog")} />
         </button>
       </div>
       <div className="player-activity-meta">

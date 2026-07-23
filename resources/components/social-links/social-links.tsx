@@ -11,7 +11,7 @@ export const SocialLinks = (): ReactElement => {
           <a
             className="homepage-link"
             href="https://github.com/wouterrutgers/gim-hub.com"
-            title={formatTitle("GitHub")}
+            data-tooltip={formatTitle("GitHub")}
             target="_blank"
           >
             <CachedImage alt={formatTitle("GitHub logo")} src="/images/github-light.webp" height="24" />
@@ -22,7 +22,7 @@ export const SocialLinks = (): ReactElement => {
           <a
             className="homepage-link"
             href="https://discord.gg/ZwzW6yYD8V"
-            title={formatTitle("Discord")}
+            data-tooltip={formatTitle("Discord")}
             target="_blank"
           >
             <CachedImage alt={formatTitle("Discord logo")} src="/images/discord-light.webp" height="24" />
@@ -36,7 +36,7 @@ export const SocialLinks = (): ReactElement => {
           <a
             className="homepage-link"
             href="https://x.com/nin_tan_"
-            title={formatTitle("Logo by @nin_tan_ on X.com")}
+            data-tooltip={formatTitle("Logo by @nin_tan_ on X.com")}
             target="_blank"
           >
             <CachedImage alt={formatTitle("X logo")} src="/images/x-white.webp" height="16" />
@@ -48,7 +48,7 @@ export const SocialLinks = (): ReactElement => {
           <a
             className="homepage-link"
             href="https://github.com/christoabrown/group-ironmen-tracker"
-            title={formatTitle("Original creator's GitHub")}
+            data-tooltip={formatTitle("Original creator's GitHub")}
             target="_blank"
           >
             <CachedImage alt={formatTitle("GitHub logo")} src="/images/github-light.webp" height="16" />

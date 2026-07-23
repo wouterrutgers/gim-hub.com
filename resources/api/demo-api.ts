@@ -21,7 +21,7 @@ import * as RequestRenameGroupMember from "./requests/rename-group-member";
 import * as RequestHiscores from "./requests/hiscores";
 import * as RequestPlayerSnapshot from "./requests/player-snapshot";
 import * as RequestUpdateMemberColor from "./requests/update-member-color";
-import { memberColorHues } from "../context/group-context";
+import { memberColorHues } from "../game/member-colors";
 import type { GroupCredentials } from "./credentials";
 import { Skill, type Experience } from "../game/skill";
 import { EquipmentSlot } from "../game/equipment";
@@ -396,7 +396,11 @@ interface DemoGroup {
     quests: typeof MAX_QUEST;
     diaries: typeof MAX_DIARY;
   };
-  roster: { displayName: Member.Name; originalName?: "Thurgo" | "Cow31337Killer" | "Gary" | "xXgamerXx"; colorHueDegrees: number }[];
+  roster: {
+    displayName: Member.Name;
+    originalName?: "Thurgo" | "Cow31337Killer" | "Gary" | "xXgamerXx";
+    colorHueDegrees: number;
+  }[];
   skillData: Record<RequestSkillData.AggregatePeriod, RequestSkillData.Response>;
   hiscores: Map<Member.Name, RequestHiscores.Response>;
   collections: Map<Member.Name, Member.Collection>;

@@ -4,6 +4,7 @@ import { Context as APIContext } from "./api-context";
 import { type ItemID, type ItemStack } from "../game/items";
 import type { GroupStateUpdate } from "../api/api";
 import { type Experience, Skill } from "../game/skill";
+import { memberColorHues } from "../game/member-colors";
 
 interface MemberColor {
   hueDegrees: number;
@@ -50,7 +51,7 @@ export interface GroupMemberColorsContextValue {
 
 /**
  * Contains the colors of the group and a function to update them directly,
- * e.g. after a successful color update API call. 
+ * e.g. after a successful color update API call.
  */
 export const GroupMemberColorsContext = createContext<GroupMemberColorsContextValue>({
   colors: new Map(),
@@ -100,10 +101,6 @@ export const useMemberDiariesContext = createMemberSelector("diaries");
 export const useMemberTimezoneContext = createMemberSelector("timezone");
 
 /* oxlint-enable react/only-export-components */
-
-// TODO: Use full HSL colors with varying saturation/lightness, since
-// perceptively just rotating the colors doesn't look very good.
-export const memberColorHues: number[] = [330, 100, 230, 170, 40];
 
 type GroupStateAction =
   | { type: "Wipe" }
@@ -442,12 +439,9 @@ export const GroupProvider = ({ children }: { children: ReactNode }): ReactNode 
   });
   const { setUpdateCallbacks } = useContext(APIContext)?.api ?? {};
 
-  const updateMemberColors = useCallback(
-    (updates: Array<{ name: Member.Name; hueDegrees: number }>) => {
-      updateContexts({ type: "UpdateColors", updates });
-    },
-    [],
-  );
+  const updateMemberColors = useCallback((updates: Array<{ name: Member.Name; hueDegrees: number }>) => {
+    updateContexts({ type: "UpdateColors", updates });
+  }, []);
 
   useEffect(() => {
     updateContexts({ type: "Wipe" });

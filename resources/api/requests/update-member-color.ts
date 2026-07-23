@@ -47,11 +47,11 @@ export const updateMemberColor = ({
       throw new Error("updateMemberColor HTTP response was not OK");
     }
 
-    return response
-      .json()
-      .then((json: { updated: ColorUpdate; swapped?: ColorUpdate }): Response => ({
+    return response.json().then(
+      (json: { updated: ColorUpdate; swapped?: ColorUpdate }): Response => ({
         status: "ok",
         updated: json.updated,
         swapped: json.swapped,
-      }));
+      }),
+    );
   });

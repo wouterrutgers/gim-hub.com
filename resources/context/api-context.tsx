@@ -223,7 +223,7 @@ export const APIProvider = ({ children }: { children: ReactNode }): ReactElement
       fetchGroupCollectionLogs: api.fetchGroupCollectionLogs.bind(api),
       fetchMemberSnapshots: api.fetchMemberSnapshots.bind(api),
       createMemberSnapshot: api.createMemberSnapshot.bind(api),
-      updateMemberColor: api.updateMemberColor.bind(api)
+      updateMemberColor: api.updateMemberColor.bind(api),
     };
 
     return base;

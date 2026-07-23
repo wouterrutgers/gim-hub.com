@@ -8,8 +8,9 @@ import * as z from "zod/v4";
 import { LoadingScreen } from "../loading-screen/loading-screen";
 import { PlayerIcon } from "../player-icon/player-icon";
 import { useModal } from "../modal/modal";
-import { GroupMemberColorsContext, GroupMemberNamesContext, memberColorHues } from "../../context/group-context";
+import { GroupMemberColorsContext, GroupMemberNamesContext } from "../../context/group-context";
 import { formatTitle } from "../../ts/format-title";
+import { memberColorHues } from "../../game/member-colors";
 
 import "./settings.css";
 import { CachedImage } from "../cached-image/cached-image";

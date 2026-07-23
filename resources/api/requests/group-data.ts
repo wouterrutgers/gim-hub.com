@@ -989,7 +989,11 @@ const GetGroupDataResponseSchema = z
     /**
      * The hue rotation in degrees used to tint this member's player icon.
      */
-    color_hue_degrees: z.number().int().nullish().transform((v) => v ?? undefined),
+    color_hue_degrees: z
+      .number()
+      .int()
+      .nullish()
+      .transform((v) => v ?? undefined),
   })
   .transform(
     ({

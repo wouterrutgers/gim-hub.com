@@ -300,7 +300,7 @@ export default class Api {
 
   async updateMemberColor({
     memberName,
-    colorHueDegrees
+    colorHueDegrees,
   }: {
     memberName: Member.Name;
     colorHueDegrees: number;

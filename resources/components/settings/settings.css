@@ -41,6 +41,11 @@
   position: relative;
 }
 
+.group-settings-member-color-option img {
+  width: 12px;
+  height: 15px;
+}
+
 .group-settings-member-title {
   display: flex;
   gap: 1rem;
@@ -150,6 +155,9 @@
   background-repeat: no-repeat;
   width: 36px;
   height: 36px;
+  padding: 3px;
+  border: 2px solid transparent;
+  cursor: pointer;
 }
 
 .group-settings-member-color-option:hover {
@@ -161,21 +169,10 @@
   background-image: url("../../assets/ui/170-0-dark.png");
 }
 
-.group-settings-member-color-option {
-  padding: 3px;
-  border: 2px solid transparent;
-  cursor: pointer;
-}
-
 .group-settings-member-color-option.selected {
   background-image: url("../../assets/ui/179-0.png");
 }
 
 .group-settings-member-color-option.taken {
   opacity: 0.3;
-}
-
-.group-settings-member-color-option img {
-  width: 12px;
-  height: 15px;
 }

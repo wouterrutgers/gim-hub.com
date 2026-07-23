@@ -2,14 +2,14 @@
 
 <div align="center">
   <img alt="GIM Hub Logo" src="resources/assets/images/logo-full.webp" width="400"/>
-  
-  **A real-time dashboard for Old School RuneScape Group Ironman teams**
-  
-  Track your team's progress and view member locations with live data streaming from RuneLite.
-  
-  **🌐 [Visit GIM Hub](https://gim-hub.com)**
-  
-  **💬 [Join our Discord](https://discord.gg/ZwzW6yYD8V)**
+
+**A real-time dashboard for Old School RuneScape Group Ironman teams**
+
+Track your team's progress and view member locations with live data streaming from RuneLite.
+
+**🌐 [Visit GIM Hub](https://gim-hub.com)**
+
+**💬 [Join our Discord](https://discord.gg/ZwzW6yYD8V)**
 </div>
 
 ## ✨ Features

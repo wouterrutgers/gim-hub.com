@@ -13,6 +13,8 @@ interface Settings {
   setEnableVirtualLevels?: (value: boolean) => void;
   enableSkillProgressBars: boolean;
   setEnableSkillProgressBars?: (value: boolean) => void;
+  enableGearscapeExport: boolean;
+  setEnableGearscapeExport?: (value: boolean) => void;
 }
 
 const DEFAULT_SITE_SETTINGS = Object.freeze({
@@ -21,6 +23,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
   enableRecentActivity: true,
   enableVirtualLevels: true,
   enableSkillProgressBars: true,
+  enableGearscapeExport: false,
 } satisfies Settings);
 
 /* oxlint-disable react/only-export-components */
@@ -38,6 +41,7 @@ const KEY_SIDEBAR_POSITION = "settings-sidebar-position";
 const KEY_RECENT_ACTIVITY = "settings-recent-activity";
 const KEY_VIRTUAL_LEVELS = "settings-virtual-levels";
 const KEY_SKILL_PROGRESS_BARS = "settings-skill-progress-bars";
+const KEY_GEARSCAPE_EXPORT = "settings-gearscape-export";
 
 const validateSiteTheme = (value: string | undefined): SiteTheme | undefined => {
   return SiteTheme.find((theme) => theme === value);
@@ -96,6 +100,17 @@ export const SettingsProvider = ({ children }: { children: ReactNode }): ReactEl
     setSkillProgressBars(String(value));
   };
 
+  const [gearscapeExport, setGearscapeExport] = useLocalStorage<string>({
+    key: KEY_GEARSCAPE_EXPORT,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.enableGearscapeExport),
+    validator: validateBoolean,
+  });
+
+  const enableGearscapeExport = gearscapeExport === "true";
+  const setEnableGearscapeExport = (value: boolean): void => {
+    setGearscapeExport(String(value));
+  };
+
   return (
     <SettingsContext
       value={{
@@ -109,6 +124,8 @@ export const SettingsProvider = ({ children }: { children: ReactNode }): ReactEl
         setEnableVirtualLevels,
         enableSkillProgressBars,
         setEnableSkillProgressBars,
+        enableGearscapeExport,
+        setEnableGearscapeExport,
       }}
     >
       {children}

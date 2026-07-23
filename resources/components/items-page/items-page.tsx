@@ -12,6 +12,8 @@ import { CachedImage } from "../cached-image/cached-image";
 import { formatTitle } from "../../ts/format-title";
 import { useLocalStorage } from "../../hooks/local-storage";
 import { useModal } from "../modal/modal";
+import { copyGearscapeItems } from "./gearscape-export";
+import { SettingsContext } from "../../context/settings-context";
 
 import "./items-page.css";
 
@@ -575,6 +577,7 @@ const ItemsPageTutorialWindow = ({ onCloseModal }: { onCloseModal: () => void })
 export const ItemsPage = (): ReactElement => {
   const [searchInputElement, searchFilter, resetSearchFilter] = useSearchFilter();
   const [memberFilterElement, memberFilter, resetMemberFilter] = useMemberFilter();
+  const [gearscapeExportStatus, setGearscapeExportStatus] = useState<"idle" | "success" | "error">("idle");
 
   const [pinnedItems, togglePin] = usePinnedItems();
 
@@ -586,6 +589,7 @@ export const ItemsPage = (): ReactElement => {
 
   const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
   const items = useContext(GroupItemsContext);
+  const { enableGearscapeExport } = useContext(SettingsContext);
   const { open: openSearchTutorial, modal: searchTutorialModal } = useModal(ItemsPageTutorialWindow);
 
   const [containerFilter, setContainerFilter] = useLocalStorage<ContainerFilter>({
@@ -593,6 +597,20 @@ export const ItemsPage = (): ReactElement => {
     defaultValue: DEFAULT_CONTAINER_FILTER,
     validator: validateContainerFilter,
   });
+
+  useEffect(() => {
+    if (gearscapeExportStatus === "idle") {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setGearscapeExportStatus("idle");
+    }, 3000);
+
+    return (): void => {
+      window.clearTimeout(timeout);
+    };
+  }, [gearscapeExportStatus]);
 
   const resetFilters = useCallback(() => {
     resetSearchFilter();
@@ -699,6 +717,22 @@ export const ItemsPage = (): ReactElement => {
     }
   });
 
+  async function copyItemsForGearscape(): Promise<void> {
+    try {
+      await copyGearscapeItems(sortedItems);
+      setGearscapeExportStatus("success");
+    } catch (reason) {
+      console.error("Failed to copy items for Gearscape:", reason);
+      setGearscapeExportStatus("error");
+    }
+  }
+
+  const gearscapeExportLabel = {
+    idle: "Copy for Gearscape",
+    success: "Copied for Gearscape",
+    error: "Copy failed",
+  }[gearscapeExportStatus];
+
   if ((items?.size ?? 0) <= 0) {
     return (
       <div id="items-page-no-items" className="rsborder rsbackground">
@@ -773,6 +807,17 @@ export const ItemsPage = (): ReactElement => {
           <span>{filteredItems.length.toLocaleString()}</span>&nbsp;
           <span>items</span>
         </span>
+        {enableGearscapeExport ? (
+          <button
+            id="items-page-gearscape-export-button"
+            className="men-button men-button-small"
+            onClick={copyItemsForGearscape}
+            title="Copy only the currently filtered items to the clipboard for importing into Gearscape"
+            aria-label="Copy current items to clipboard for Gearscape"
+          >
+            {gearscapeExportLabel}
+          </button>
+        ) : undefined}
         <span className="rsborder-tiny rsbackground rsbackground-hover">
           HA:&nbsp;<span>{totalHighAlch.toLocaleString()}</span>
           <span>gp</span>

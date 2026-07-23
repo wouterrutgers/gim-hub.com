@@ -306,6 +306,8 @@ export const SettingsPage = (): ReactElement => {
     setEnableVirtualLevels,
     enableSkillProgressBars,
     setEnableSkillProgressBars,
+    enableGearscapeExport,
+    setEnableGearscapeExport,
   } = useContext(SettingsContext);
   const members = useContext(GroupMemberNamesContext);
   const [addMemberErrors, setAddMemberErrors] = useState<string[]>();
@@ -451,6 +453,19 @@ export const SettingsPage = (): ReactElement => {
                 onChange={(e) => setEnableSkillProgressBars?.(e.target.checked)}
               />
               <label htmlFor="enable-skill-progress-bars-input">Show skill progress bars</label>
+            </div>
+          </fieldset>
+
+          <fieldset className="setting-group">
+            <legend className="setting-title">Items</legend>
+            <div className="settings-page-radio-item">
+              <input
+                id="enable-gearscape-export-input"
+                type="checkbox"
+                checked={enableGearscapeExport}
+                onChange={(e) => setEnableGearscapeExport?.(e.target.checked)}
+              />
+              <label htmlFor="enable-gearscape-export-input">Show Gearscape export button</label>
             </div>
           </fieldset>
 

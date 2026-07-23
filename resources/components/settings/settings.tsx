@@ -231,11 +231,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
 
       <div className="group-settings-member-color">
         <label>Color</label>
-        <div
-          className="group-settings-member-color-options"
-          role="group"
-          aria-label="Member color"
-        >
+        <div className="group-settings-member-color-options" role="group" aria-label="Member color">
           {memberColorHues.map((hue) => {
             const isSelected = hueDegrees === hue;
             const isTaken =
@@ -253,6 +249,7 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
                   updateMemberColor({ memberName: member, colorHueDegrees: hue })
                     .then((response) => {
                       if (response.status === "error") {
+                        setErrors([response.text]);
                         return;
                       }
                       const updates: Array<{ name: Member.Name; hueDegrees: number }> = [
@@ -265,7 +262,12 @@ const EditMemberInput = ({ member }: { member: Member.Name }): ReactElement => {
                         });
                       }
                       updateMemberColors(updates);
+                      setErrors(undefined);
                     })
+                    .catch((reason) => {
+                      console.error("Update Member Color Failed:", reason);
+                      setErrors(["Failed to update color."]);
+                    });
                 }}
                 aria-pressed={isSelected}
               >

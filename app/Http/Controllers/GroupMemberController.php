@@ -66,8 +66,9 @@ class GroupMemberController extends Controller
             ->pluck('color_hue_degrees')
             ->all();
 
-        $defaultHues = [330, 100, 230, 170, 40];
-        $colorHueDegrees = collect($defaultHues)->first(fn ($h) => ! in_array($h, $takenHues)) ?? $defaultHues[0];
+        $colorHueDegrees = collect(Member::DEFAULT_COLOR_HUES)
+            ->first(fn (int $colorHueDegrees): bool => ! in_array($colorHueDegrees, $takenHues))
+            ?? Member::DEFAULT_COLOR_HUES[0];
 
         Member::create([
             'group_id' => $group->id,

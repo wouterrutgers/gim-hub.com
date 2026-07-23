@@ -12,6 +12,8 @@ class Member extends Model
 
     public const SHARED_MEMBER = '@SHARED';
 
+    public const DEFAULT_COLOR_HUES = [330, 100, 230, 170, 40];
+
     public const PROPERTY_KEYS = [
         'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
         'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room',

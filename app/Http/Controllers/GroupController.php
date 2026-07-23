@@ -19,7 +19,18 @@ class GroupController extends Controller
             'member_names' => 'required|array',
         ]);
 
-        foreach (array_filter($validated['member_names']) as $memberName) {
+        $memberNames = collect($validated['member_names'])
+            ->filter()
+            ->values();
+
+        $memberColorHues = $memberNames
+            ->sort(fn (string $firstMemberName, string $secondMemberName): int => strcasecmp($firstMemberName, $secondMemberName))
+            ->values()
+            ->mapWithKeys(fn (string $memberName, int $index): array => [
+                $memberName => Member::DEFAULT_COLOR_HUES[$index] ?? 0,
+            ]);
+
+        foreach ($memberNames as $memberName) {
             if (! Validators::validName($memberName)) {
                 return response()->json([
                     'error' => "Invalid member name: {$memberName}",
@@ -29,7 +40,7 @@ class GroupController extends Controller
 
         $token = Uuid::uuid4()->toString();
 
-        DB::transaction(function () use ($validated, $token) {
+        DB::transaction(function () use ($validated, $token, $memberNames, $memberColorHues) {
             $group = Group::create([
                 'name' => $validated['name'],
                 'hash' => $token,
@@ -40,10 +51,11 @@ class GroupController extends Controller
                 'name' => Member::SHARED_MEMBER,
             ]);
 
-            foreach (array_filter($validated['member_names']) as $memberName) {
+            foreach ($memberNames as $memberName) {
                 Member::create([
                     'group_id' => $group->id,
                     'name' => $memberName,
+                    'color_hue_degrees' => $memberColorHues[$memberName],
                 ]);
             }
         });

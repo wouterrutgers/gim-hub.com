@@ -8,15 +8,12 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    const DEFAULT_HUES = [330, 100, 230, 170, 40];
-
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
             $table->unsignedSmallInteger('color_hue_degrees')->nullable();
         });
 
-        // Assign default colors to existing members within each group, ordered by creation.
         $groupIds = DB::table('members')
             ->where('name', '!=', Member::SHARED_MEMBER)
             ->distinct()
@@ -25,19 +22,12 @@ return new class extends Migration
         foreach ($groupIds as $groupId) {
             $members = Member::where('group_id', '=', $groupId)
                 ->where('name', '!=', Member::SHARED_MEMBER)
-                ->orderBy('id')
+                ->orderBy('name')
                 ->get();
 
             foreach ($members as $index => $member) {
-                $member->update(['color_hue_degrees' => self::DEFAULT_HUES[$index] ?? 0]);
+                $member->update(['color_hue_degrees' => Member::DEFAULT_COLOR_HUES[$index] ?? 0]);
             }
         }
-    }
-
-    public function down(): void
-    {
-        Schema::table('members', function (Blueprint $table) {
-            $table->dropColumn('color_hue_degrees');
-        });
     }
 };

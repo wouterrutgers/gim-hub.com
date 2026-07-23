@@ -1,0 +1,56 @@
+name: Open issue when workflow fails
+
+on:
+  workflow_run:
+    workflows:
+      - Dump game data
+      - Lint
+      - Mark stale issues and pull requests
+      - Push Docker image
+    types:
+      - completed
+    branches:
+      - master
+
+permissions:
+  issues: write
+
+concurrency:
+  group: workflow-failure-${{ github.event.workflow_run.name }}
+
+jobs:
+  open-issue:
+    if: github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Open or update failure issue
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_TITLE: "Workflow failed: ${{ github.event.workflow_run.name }}"
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+          RUN_NUMBER: ${{ github.event.workflow_run.run_number }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          body=$(printf 'The **%s** workflow failed.\n\n- Run: [%s](%s)\n- Branch: `%s`\n- Commit: `%s`\n' \
+            "$WORKFLOW_NAME" \
+            "$RUN_NUMBER" \
+            "$RUN_URL" \
+            "$BRANCH" \
+            "$COMMIT_SHA")
+
+          issue_number=$(gh issue list \
+            --state open \
+            --limit 1000 \
+            --json number,title |
+            jq -r --arg title "$ISSUE_TITLE" \
+              '[.[] | select(.title == $title)][0].number // empty')
+
+          if [[ -n "$issue_number" ]]; then
+            gh issue comment "$issue_number" --body "$body"
+          else
+            gh issue create --title "$ISSUE_TITLE" --body "$body"
+          fi

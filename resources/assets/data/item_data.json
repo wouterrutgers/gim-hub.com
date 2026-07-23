@@ -111284,5 +111284,11 @@
     "highalch": 0,
     "alchable": false,
     "mapping": null
+  },
+  "33833": {
+    "name": "Letvek in a bucket",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
   }
 }

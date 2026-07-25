@@ -136,4 +136,5 @@ export interface Stats {
   run: { current: number; max: number };
   prayer: { current: number; max: number };
   world: number;
+  specialAttack: { current: number; max: number };
 }

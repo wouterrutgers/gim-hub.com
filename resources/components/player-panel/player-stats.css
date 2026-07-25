@@ -18,7 +18,8 @@
 
 .player-stats-prayer,
 .player-stats-hitpoints,
-.player-stats-energy {
+.player-stats-energy,
+.player-stats-special-attack {
   box-sizing: border-box;
   position: relative;
   padding: 2px 0;
@@ -26,7 +27,8 @@
 
 .player-stats-prayer-bar,
 .player-stats-hitpoints-bar,
-.player-stats-energy-bar {
+.player-stats-energy-bar,
+.player-stats-special-attack-bar {
   position: absolute;
   left: 0;
   top: 0;
@@ -34,7 +36,8 @@
   z-index: 0;
 }
 
-.player-stats-energy {
+.player-stats-energy,
+.player-stats-special-attack {
   height: 3px;
 }
 

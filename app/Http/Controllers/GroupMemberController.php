@@ -209,7 +209,7 @@ class GroupMemberController extends Controller
         ]);
 
         $validatorBounds = [
-            ['stats', 7, 7],
+            ['stats', 7, 8],
             ['coordinates', 4, 4],
             ['skills', 24, 24],
             ['quests', 0, 250],

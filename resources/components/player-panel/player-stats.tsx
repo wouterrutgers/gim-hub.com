@@ -34,6 +34,8 @@ const COLORS = {
     prayerBG: "#112233",
     energy: "#a9a9a9",
     energyBG: "#383838",
+    specialAttack: "#397D3B",
+    specialAttackBackground: "#383838",
   },
   interaction: {
     combat: "#A41623",
@@ -74,6 +76,7 @@ const PlayerStatsImpl = ({
   health,
   prayer,
   run,
+  specialAttack,
   status,
   timezone,
   children,
@@ -82,6 +85,7 @@ const PlayerStatsImpl = ({
   health: { current: number; max: number };
   prayer: { current: number; max: number };
   run: { current: number; max: number };
+  specialAttack: { current: number; max: number };
   status:
     | { online: true; world?: number; interacting?: Member.NPCInteraction }
     | { online: false; lastOnlineAt?: Date };
@@ -111,6 +115,7 @@ const PlayerStatsImpl = ({
   const healthRatio = health.current / health.max;
   const prayerRatio = prayer.current / prayer.max;
   const runRatio = run.current / run.max;
+  const specialAttackRatio = specialAttack.current / specialAttack.max;
 
   return (
     <div className={`player-stats ${status.online ? "" : "player-stats-inactive"}`}>
@@ -145,12 +150,23 @@ const PlayerStatsImpl = ({
         />
         <div className="player-stats-prayer-numbers">{`${prayer.current} / ${prayer.max}`}</div>
       </div>
-      <div className="player-stats-energy">
+      <div className="player-stats-energy" data-tooltip={`Run energy: ${Math.floor(runRatio * 100)}%`}>
         <StatBar
           className="player-stats-energy-bar"
           color={COLORS.player.energy}
           bgColor={COLORS.player.energyBG}
           ratio={runRatio}
+        />
+      </div>
+      <div
+        className="player-stats-special-attack"
+        data-tooltip={`Special attack: ${Math.floor(specialAttackRatio * 100)}%`}
+      >
+        <StatBar
+          className="player-stats-special-attack-bar"
+          color={COLORS.player.specialAttack}
+          bgColor={COLORS.player.specialAttackBackground}
+          ratio={specialAttackRatio}
         />
       </div>
     </div>
@@ -164,6 +180,7 @@ export const PlayerStatsPlaceholder = (): ReactElement => {
       health={{ current: 10, max: 10 }}
       prayer={{ current: 1, max: 1 }}
       run={{ current: 1, max: 1 }}
+      specialAttack={{ current: 1, max: 1 }}
       status={{ online: false }}
     />
   );
@@ -186,6 +203,7 @@ export const PlayerStats = ({ member }: { member: Member.Name }): ReactElement =
       health={stats?.health ?? { current: 10, max: 10 }}
       prayer={stats?.prayer ?? { current: 1, max: 1 }}
       run={stats?.run ?? { current: 1, max: 1 }}
+      specialAttack={stats?.specialAttack ?? { current: 1, max: 1 }}
       status={
         online
           ? { online: true, interacting: isInteractingRecent ? interacting : undefined, world: stats?.world }

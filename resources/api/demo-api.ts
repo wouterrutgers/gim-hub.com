@@ -116,6 +116,7 @@ const mockGroupDataResponse = (
         prayer: { current: 1, max: 1 },
         run: { current: 100, max: 100 },
         world: 201,
+        specialAttack: { current: 100, max: 100 },
       },
       coordinates: { x: 2465, y: 2848, plane: 1, isOnBoat: false },
     } satisfies GetGroupDataResponse[number];
@@ -187,6 +188,7 @@ const mockGroupDataResponse = (
         prayer: { current: 80, max: 80 },
         run: { current: 100, max: 100 },
         world: 201,
+        specialAttack: { current: 100, max: 100 },
       },
       equipment: new Map([
         ["Weapon", { itemID: 25516 as ItemID, quantity: 1 }], // dharok greataxe
@@ -252,6 +254,7 @@ const mockGroupDataResponse = (
         prayer: { current: 1, max: 1 },
         run: { current: 100, max: 100 },
         world: 201,
+        specialAttack: { current: 100, max: 100 },
       },
       lastUpdated: new Date(Date.now()),
       equipment: new Map([
@@ -297,6 +300,7 @@ const mockGroupDataResponse = (
         prayer: { current: 99, max: 99 },
         run: { current: 100, max: 100 },
         world: 329,
+        specialAttack: { current: 100, max: 100 },
       },
       quests: MAX_QUEST,
       diaries: MAX_DIARY,

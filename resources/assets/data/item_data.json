@@ -95912,7 +95912,12 @@
     "name": "Araxyte fang",
     "highalch": 120000,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 33534,
+        "quantity": 1
+      }
+    ]
   },
   "29801": {
     "name": "Amulet of rancour",
@@ -110389,7 +110394,12 @@
     "name": "Elder venator fang",
     "highalch": 120000,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 33636,
+        "quantity": 1
+      }
+    ]
   },
   "33636": {
     "name": "Etched elder venator fang",

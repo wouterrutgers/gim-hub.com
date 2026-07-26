@@ -267,13 +267,13 @@ const NPCInteractionSchema = z
     last_updated: DateSchema,
   })
   .refine((interaction) => {
-    const noHP = interaction.scale === -1 && interaction.ratio === -1;
-    const hasHP = interaction.scale > 0 && interaction.ratio >= 0;
-    return noHP || hasHP;
+    const hasNoHealth = interaction.ratio === -1;
+    const hasHealth = interaction.scale > 0 && interaction.ratio >= 0;
+    return hasNoHealth || hasHealth;
   })
   .transform(({ name, scale, ratio, location, last_updated }) => ({
     name,
-    healthRatio: scale > 0 ? ratio / scale : undefined,
+    healthRatio: scale > 0 && ratio >= 0 ? ratio / scale : undefined,
     location,
     lastUpdated: new Date(last_updated),
   }));

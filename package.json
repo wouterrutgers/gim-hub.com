@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@date-fns/utc": "^2.1.1",
-    "@tanstack/react-virtual": "^3.14.8",
-    "@types/node": "^26.1.1",
+    "@tanstack/react-virtual": "^3.14.9",
+    "@types/node": "^26.1.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/react-router-dom": "^5.3.3",
@@ -20,18 +20,18 @@
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^4.4.0",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "laravel-vite-plugin": "^3.1.3",
     "react": "^19.2.8",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.1",
+    "react-router-dom": "^7.18.2",
     "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",
     "title": "^4.0.1",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.5",
-    "vite-plus": "0.2.5",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.6",
+    "vite-plus": "0.2.6",
     "zod": "^4.4.3"
   },
-  "packageManager": "pnpm@11.16.0+sha512.b767e9a98fc87aec0f42daefcd0e84941c2cdb45d73c4e1e68860fb2bdfdbe032ab592105479e5e05c237f740c8a5ffdbbb52385797ddc2296745a1bbb883e8d"
+  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
 }

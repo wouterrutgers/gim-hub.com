@@ -1028,6 +1028,31 @@
         ]
       },
       {
+        "name": "The Mad Angel",
+        "items": [
+          {
+            "id": 34027,
+            "name": "Hallowfell"
+          },
+          {
+            "id": 34033,
+            "name": "Ardeaglais teleport"
+          },
+          {
+            "id": 21726,
+            "name": "Granite dust"
+          },
+          {
+            "id": 34042,
+            "name": "Aggy"
+          },
+          {
+            "id": 34030,
+            "name": "Jar of light"
+          }
+        ]
+      },
+      {
         "name": "Maggot King",
         "items": [
           {
@@ -6313,6 +6338,14 @@
           {
             "id": 33642,
             "name": "Maggot marquess"
+          },
+          {
+            "id": 34040,
+            "name": "Mr mcgroot"
+          },
+          {
+            "id": 34042,
+            "name": "Aggy"
           }
         ]
       },
@@ -7606,6 +7639,10 @@
           {
             "id": 31283,
             "name": "Soup"
+          },
+          {
+            "id": 34040,
+            "name": "Mr mcgroot"
           }
         ]
       },
@@ -8286,6 +8323,10 @@
           {
             "id": 31572,
             "name": "Squid beak"
+          },
+          {
+            "id": 34024,
+            "name": "Jeweller\u0027s chisel"
           }
         ]
       }

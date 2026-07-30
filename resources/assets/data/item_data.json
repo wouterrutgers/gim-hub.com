@@ -40537,7 +40537,7 @@
     "mapping": null
   },
   "9735": {
-    "name": "Desert goat horn",
+    "name": "Goat horn",
     "highalch": 7,
     "alchable": true,
     "mapping": null
@@ -98373,7 +98373,7 @@
     "mapping": null
   },
   "30457": {
-    "name": "Raging echoes npc contact scroll",
+    "name": "Raging echoes astral contact scroll",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -111299,6 +111299,534 @@
     "name": "Letvek in a bucket",
     "highalch": 0,
     "alchable": false,
+    "mapping": null
+  },
+  "33835": {
+    "name": "Wyrmscraig goat hoof",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "33836": {
+    "name": "Noble robe top",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33839": {
+    "name": "Noble robe top",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33842": {
+    "name": "Noble robe top",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33845": {
+    "name": "Noble robe top",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33848": {
+    "name": "Noble robe top",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33851": {
+    "name": "Noble robe top",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33854": {
+    "name": "Noble robe top",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33857": {
+    "name": "Wyrmscraig noble skirt",
+    "highalch": 24000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33860": {
+    "name": "Wyrmscraig noble skirt",
+    "highalch": 24000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33863": {
+    "name": "Wyrmscraig noble skirt",
+    "highalch": 24000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33866": {
+    "name": "Wyrmscraig noble skirt",
+    "highalch": 24000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33869": {
+    "name": "Wyrmscraig noble skirt",
+    "highalch": 24000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33872": {
+    "name": "Wyrmscraig noble skirt",
+    "highalch": 24000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33875": {
+    "name": "Wyrmscraig noble skirt",
+    "highalch": 24000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33878": {
+    "name": "Wyrmscraig shoes",
+    "highalch": 6000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33881": {
+    "name": "Wyrmscraig boots",
+    "highalch": 6000,
+    "alchable": true,
+    "mapping": null
+  },
+  "33884": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33887": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33890": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33893": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33896": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33899": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33902": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33905": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33908": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33911": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33914": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33917": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33920": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33923": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33926": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33929": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33932": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33935": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33938": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33941": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33944": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33947": {
+    "name": "Wyrmscraig villager robe bottom",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33950": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33953": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33956": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33959": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33962": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33965": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33968": {
+    "name": "Wyrmscraig villager robe top",
+    "highalch": 300,
+    "alchable": true,
+    "mapping": null
+  },
+  "33971": {
+    "name": "Wyrmscraig villager skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33974": {
+    "name": "Wyrmscraig villager skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33977": {
+    "name": "Wyrmscraig villager skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33980": {
+    "name": "Wyrmscraig villager skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33983": {
+    "name": "Wyrmscraig villager skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33986": {
+    "name": "Wyrmscraig villager skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33989": {
+    "name": "Wyrmscraig villager skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33992": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33995": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "33998": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "34001": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "34004": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "34007": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "34010": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "34013": {
+    "name": "Wyrmscraig villager work skirt",
+    "highalch": 240,
+    "alchable": true,
+    "mapping": null
+  },
+  "34016": {
+    "name": "Wooden spikes",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34017": {
+    "name": "Wyrmscraig goat fur",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34020": {
+    "name": "Sunstone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34022": {
+    "name": "Sunstone core",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34024": {
+    "name": "Jeweller's chisel",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34026": {
+    "name": "Golem crafting",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34027": {
+    "name": "Hallowfell",
+    "highalch": 750000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34030": {
+    "name": "Jar of light",
+    "highalch": 120000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34032": {
+    "name": "Sunstone crystal",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34033": {
+    "name": "Ardeaglais teleport",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34035": {
+    "name": "Placeholder",
+    "highalch": 750000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34040": {
+    "name": "Mr mcgroot",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34042": {
+    "name": "Aggy",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34044": {
+    "name": "Large hat",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34045": {
+    "name": "Worn journal",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34046": {
+    "name": "Scrawled notebook",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34048": {
+    "name": "Scorched note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34049": {
+    "name": "Scorched note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34050": {
+    "name": "Scorched note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34051": {
+    "name": "Observations",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34052": {
+    "name": "Warning note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34053": {
+    "name": "Golem primer",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34054": {
+    "name": "Ancient sunstone core",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34055": {
+    "name": "Staircase key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34056": {
+    "name": "Dull sunstone core",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34057": {
+    "name": "Final letter",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34058": {
+    "name": "Wyrmscraig",
+    "highalch": 0,
+    "alchable": true,
     "mapping": null
   }
 }

@@ -52,7 +52,8 @@ export const fetchGroupData = ({
 
 const StatsSchema = z
   .array(z.uint32())
-  .length(7)
+  .min(7)
+  .max(8)
   .refine((stats) => stats[5] === 100) // Plugin reports max run energy as 100, when it actually is 10000.
   .transform((args) => {
     return {
@@ -69,6 +70,10 @@ const StatsSchema = z
         max: 10000,
       },
       world: args[6],
+      specialAttack: {
+        current: args[7] ?? 100,
+        max: 100,
+      },
     };
   });
 

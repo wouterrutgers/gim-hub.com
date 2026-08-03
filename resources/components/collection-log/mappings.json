@@ -42,7 +42,7 @@
   "Kree'arra": [{ "label": "Kree'arra kills", "lookupKey": "Kree'Arra" }],
   "K'ril Tsutsaroth": "kills",
   "The Leviathan": "kills",
-  "The Mad Angel": "kills",
+  "The Mad Angel": [{ "label": "Mad Angel kills", "lookupKey": "Mad Angel" }],
   "Maggot King": "kills",
   "Moons of Peril": [{ "label": "Lunar Chests opened", "lookupKey": "Lunar Chests" }],
   "Nex": "kills",

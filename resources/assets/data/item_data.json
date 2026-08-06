@@ -111828,5 +111828,11 @@
     "highalch": 0,
     "alchable": true,
     "mapping": null
+  },
+  "34059": {
+    "name": "Fairy tale quest lamp",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
   }
 }

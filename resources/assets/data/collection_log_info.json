@@ -1031,6 +1031,10 @@
         "name": "The Mad Angel",
         "items": [
           {
+            "id": 34042,
+            "name": "Aggy"
+          },
+          {
             "id": 34027,
             "name": "Hallowfell"
           },
@@ -1041,10 +1045,6 @@
           {
             "id": 21726,
             "name": "Granite dust"
-          },
-          {
-            "id": 34042,
-            "name": "Aggy"
           },
           {
             "id": 34030,

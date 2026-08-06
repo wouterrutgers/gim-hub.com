@@ -25,15 +25,14 @@ jobs:
           repository: runelite/runelite
           path: cache/runelite
 
-      - uses: pnpm/action-setup@v6
-
-      - uses: actions/setup-node@v7
+      - uses: pnpm/setup@v2
         with:
-          node-version: 22
-          cache: pnpm
+          runtime: node@22
+          cache: true
           cache-dependency-path: |
             pnpm-lock.yaml
             cache/pnpm-lock.yaml
+          install: false
 
       - uses: s4u/setup-maven-action@v1.20.0
         with:

@@ -42,9 +42,10 @@
   display: flex;
   gap: 4px;
   align-items: center;
-  min-height: 12px;
-  padding: 2px 8px 0;
+  height: 14px;
+  padding: 1px 8px;
   overflow: hidden;
+  box-sizing: border-box;
   color: rgb(255 255 255 / 72%);
   font-size: 11px;
   text-overflow: ellipsis;
@@ -116,12 +117,17 @@
 }
 
 .player-interacting {
-  height: 15px;
-  margin: 5px 8px 0;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   overflow: hidden;
+  z-index: 1;
+  width: 40%;
+  height: 12px;
+  box-sizing: border-box;
   border: 1px solid rgb(255 255 255 / 10%);
   border-radius: 2px;
+  transform: translate(-50%, -50%);
 }
 
 .player-interacting > .stat-bar {

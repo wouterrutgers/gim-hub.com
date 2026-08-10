@@ -69,13 +69,13 @@ const PlayerInteracting = ({ npcName, healthRatio }: { npcName: string; healthRa
   const isNonCombatNPC = healthRatio === undefined;
 
   return (
-    <div className="player-interacting">
+    <div className="player-interacting" data-tooltip={`Interacting with ${npcName}`}>
       <StatBar
         color={isNonCombatNPC ? COLORS.interaction.nonCombat : COLORS.interaction.combat}
         bgColor={isNonCombatNPC ? COLORS.interaction.nonCombat : COLORS.interaction.combatBG}
         ratio={healthRatio}
       />
-      <div className="player-interacting-name">Interacting with {npcName}</div>
+      <div className="player-interacting-name">{npcName}</div>
     </div>
   );
 };
@@ -121,7 +121,9 @@ const PlayerStatsImpl = ({
         <span>Online</span>
         {status.world !== undefined ? (
           <>
-            <span aria-hidden="true">·</span>
+            <span className="player-stats-status-separator" aria-hidden="true">
+              ·
+            </span>
             <span className="player-stats-world">{`W${status.world}`}</span>
           </>
         ) : undefined}
@@ -159,7 +161,6 @@ const PlayerStatsImpl = ({
         ) : undefined}
       </div>
       <div className="player-stats-status">{statusContent}</div>
-      {interactionBar}
       <div className="player-stats-hitpoints" data-tooltip={`Hitpoints: ${health.current} / ${health.max}`}>
         <StatBar
           className="player-stats-hitpoints-bar"
@@ -167,6 +168,7 @@ const PlayerStatsImpl = ({
           bgColor={COLORS.player.hitpointsBG}
           ratio={healthRatio}
         />
+        {interactionBar}
         <div className="player-stats-hitpoints-numbers">{`${health.current} / ${health.max}`}</div>
       </div>
       <div className="player-stats-prayer" data-tooltip={`Prayer: ${prayer.current} / ${prayer.max}`}>

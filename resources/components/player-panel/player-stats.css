@@ -1,19 +1,75 @@
 .player-stats {
-  display: block;
   width: 100%;
   overflow: visible;
   white-space: nowrap;
   line-height: 1;
   position: relative;
   color: var(--white);
+  box-sizing: border-box;
+  padding-top: 5px;
+  background: linear-gradient(180deg, rgb(0 0 0 / 18%), rgb(255 255 255 / 4%));
 }
 
-.player-stats-prayer-numbers,
-.player-stats-name,
-.player-stats-hitpoints-numbers {
-  margin-left: 8px;
-  z-index: 1;
-  position: relative;
+.player-stats-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.player-stats-identity {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-width: 0;
+}
+
+.player-stats-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-stats-local-time {
+  font-size: 10px;
+  line-height: 1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.72;
+}
+
+.player-stats-status {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-height: 12px;
+  padding: 2px 8px 0;
+  overflow: hidden;
+  color: rgb(255 255 255 / 72%);
+  font-size: 11px;
+  text-overflow: ellipsis;
+}
+
+.player-stats-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #35c759;
+  box-shadow: 0 0 4px rgb(53 199 89 / 70%);
+  flex: 0 0 auto;
+}
+
+.player-stats-inactive .player-stats-status-dot {
+  background: #9b9b9b;
+  box-shadow: none;
+}
+
+.player-stats-world {
+  color: var(--orange);
+}
+
+.player-stats-hitpoints {
+  margin-top: 5px;
 }
 
 .player-stats-prayer,
@@ -25,20 +81,28 @@
   padding: 2px 0;
 }
 
+.player-stats-prayer-numbers,
+.player-stats-hitpoints-numbers {
+  margin-left: 8px;
+  position: relative;
+  z-index: 1;
+}
+
 .player-stats-prayer-bar,
 .player-stats-hitpoints-bar,
 .player-stats-energy-bar,
 .player-stats-special-attack-bar {
   position: absolute;
-  left: 0;
   top: 0;
-  width: 100%;
+  left: 0;
   z-index: 0;
+  width: 100%;
 }
 
 .player-stats-energy,
 .player-stats-special-attack {
   height: 3px;
+  padding: 0;
 }
 
 .stat-bar {
@@ -52,7 +116,18 @@
 }
 
 .player-interacting {
-  display: block;
+  height: 15px;
+  margin: 5px 8px 0;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 2px;
+}
+
+.player-interacting > .stat-bar {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
 }
 
 .player-interacting-name {
@@ -61,26 +136,11 @@
   left: 0;
   padding: 0 4px;
   overflow: hidden;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 11px;
+  text-align: center;
   text-overflow: ellipsis;
   transform: translateY(-50%);
-  max-width: 100%;
-}
-
-.player-stats .player-interacting {
-  height: 45%;
-  width: 40%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -10%);
-}
-
-.player-stats-local-time {
-  position: absolute;
-  top: 3px;
-  right: 8px;
-  z-index: 1;
-  font-size: 10px;
-  line-height: 1;
-  opacity: 0.72;
 }

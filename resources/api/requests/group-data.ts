@@ -54,7 +54,7 @@ const StatsSchema = z
   .array(z.uint32())
   .min(7)
   .max(8)
-  .refine((stats) => stats[5] === 100) // Plugin reports max run energy as 100, when it actually is 10000.
+  .refine((stats) => stats[5] === 100) // Plugin reports current run energy in units of 1/100th of a percentage.
   .transform((args) => {
     return {
       health: {
@@ -66,8 +66,8 @@ const StatsSchema = z
         max: args[3],
       },
       run: {
-        current: args[4],
-        max: 10000,
+        current: Math.floor(args[4] / 100),
+        max: args[5],
       },
       world: args[6],
       specialAttack: {

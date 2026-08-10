@@ -55,6 +55,15 @@ const formatLocalTime = (timezone?: string): string | undefined => {
   }).format(new Date());
 };
 
+function formatLastOnlineAt(lastOnlineAt: Date): string {
+  return new Intl.DateTimeFormat(undefined, {
+    day: "numeric",
+    month: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(lastOnlineAt);
+}
+
 // Shows what the player is interacting with, like attacking/talking to an npc
 const PlayerInteracting = ({ npcName, healthRatio }: { npcName: string; healthRatio?: number }): ReactElement => {
   const isNonCombatNPC = healthRatio === undefined;
@@ -66,7 +75,7 @@ const PlayerInteracting = ({ npcName, healthRatio }: { npcName: string; healthRa
         bgColor={isNonCombatNPC ? COLORS.interaction.nonCombat : COLORS.interaction.combatBG}
         ratio={healthRatio}
       />
-      <div className="player-interacting-name">{npcName}</div>
+      <div className="player-interacting-name">Interacting with {npcName}</div>
     </div>
   );
 };
@@ -93,7 +102,12 @@ const PlayerStatsImpl = ({
   children?: ReactNode;
 }): ReactElement => {
   let interactionBar: ReactNode = undefined;
-  let statusOverlay: ReactNode = undefined;
+  let statusContent = (
+    <>
+      <span className="player-stats-status-dot" aria-hidden="true" />
+      <span>Offline</span>
+    </>
+  );
   const localTime = formatLocalTime(timezone);
 
   if (status.online) {
@@ -101,15 +115,25 @@ const PlayerStatsImpl = ({
       const { healthRatio, name } = status.interacting;
       interactionBar = <PlayerInteracting healthRatio={healthRatio} npcName={name} />;
     }
-    if (status.world !== undefined) {
-      statusOverlay = (
-        <>
-          - <span className="player-stats-world">{`W${status.world}`}</span>
-        </>
-      );
-    }
-  } else if (status.lastOnlineAt && status.lastOnlineAt?.getTime() > 0) {
-    statusOverlay = <> - {status.lastOnlineAt?.toLocaleString()}</>;
+    statusContent = (
+      <>
+        <span className="player-stats-status-dot" aria-hidden="true" />
+        <span>Online</span>
+        {status.world !== undefined ? (
+          <>
+            <span aria-hidden="true">·</span>
+            <span className="player-stats-world">{`W${status.world}`}</span>
+          </>
+        ) : undefined}
+      </>
+    );
+  } else if (status.lastOnlineAt && status.lastOnlineAt.getTime() > 0) {
+    statusContent = (
+      <>
+        <span className="player-stats-status-dot" aria-hidden="true" />
+        <span>Last online {formatLastOnlineAt(status.lastOnlineAt)}</span>
+      </>
+    );
   }
 
   const healthRatio = health.current / health.max;
@@ -120,16 +144,10 @@ const PlayerStatsImpl = ({
   return (
     <div className={`player-stats ${status.online ? "" : "player-stats-inactive"}`}>
       {children}
-      <div className="player-stats-hitpoints">
-        <StatBar
-          className="player-stats-hitpoints-bar"
-          color={COLORS.player.hitpoints}
-          bgColor={COLORS.player.hitpointsBG}
-          ratio={healthRatio}
-        />
-        {interactionBar}
-        <div className="player-stats-name">
-          <PlayerIcon name={name} /> {name} {statusOverlay}
+      <div className="player-stats-header">
+        <div className="player-stats-identity">
+          <PlayerIcon name={name} />
+          <span className="player-stats-name">{name}</span>
         </div>
         {localTime && timezone ? (
           <span
@@ -139,9 +157,19 @@ const PlayerStatsImpl = ({
             {localTime}
           </span>
         ) : undefined}
+      </div>
+      <div className="player-stats-status">{statusContent}</div>
+      {interactionBar}
+      <div className="player-stats-hitpoints" data-tooltip={`Hitpoints: ${health.current} / ${health.max}`}>
+        <StatBar
+          className="player-stats-hitpoints-bar"
+          color={COLORS.player.hitpoints}
+          bgColor={COLORS.player.hitpointsBG}
+          ratio={healthRatio}
+        />
         <div className="player-stats-hitpoints-numbers">{`${health.current} / ${health.max}`}</div>
       </div>
-      <div className="player-stats-prayer">
+      <div className="player-stats-prayer" data-tooltip={`Prayer: ${prayer.current} / ${prayer.max}`}>
         <StatBar
           className="player-stats-prayer-bar"
           color={COLORS.player.prayer}

@@ -11,12 +11,12 @@
   "devDependencies": {
     "@date-fns/utc": "^2.1.1",
     "@tanstack/react-virtual": "^3.14.9",
-    "@types/node": "^26.1.2",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "@types/react-router-dom": "^5.3.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "axios": "^1.18.1",
+    "@vitejs/plugin-react": "^6.0.5",
+    "axios": "^1.19.0",
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^4.4.0",
@@ -29,8 +29,8 @@
     "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",
     "title": "^4.0.1",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.6",
-    "vite-plus": "0.2.6",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.8",
+    "vite-plus": "0.2.8",
     "zod": "^4.4.3"
   },
   "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"

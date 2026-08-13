@@ -9,6 +9,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { CachedImage } from "../cached-image/cached-image";
 import { formatTitle } from "../../ts/format-title";
 import { useLocalStorage } from "../../hooks/local-storage";
+import { useRememberedState } from "../../hooks/remembered-state";
 import { useModal } from "../modal/modal";
 import { copyGearscapeItems } from "./gearscape-export";
 import { SettingsContext } from "../../context/settings-context";
@@ -274,13 +275,6 @@ const ItemPanelsScrollArea = ({
   );
 };
 
-const validateItemSortCategory = (value: string | undefined): ItemSortCategory | undefined => {
-  if (typeof value !== "string") return undefined;
-  if (!ItemSortCategory.includes(value as ItemSortCategory)) return undefined;
-
-  return value as ItemSortCategory;
-};
-
 type PinnedItems = Set<ItemID>;
 const validatePinnedItems = (value: string | undefined): string | undefined => value;
 const usePinnedItems = (): [PinnedItems, (toggleID: ItemID) => void] => {
@@ -332,12 +326,10 @@ interface SearchFilter {
     | { type: "Tag"; bitmask: bigint }
   )[];
 }
-const validateSearchFilter = (value: string | undefined): string | undefined => value;
 const useSearchFilter = (): [ReactElement, SearchFilter, () => void] => {
-  const [filterUserString, setFilterUserString] = useLocalStorage({
+  const [filterUserString, setFilterUserString] = useRememberedState<string | undefined>({
     key: "search-filter",
     defaultValue: undefined,
-    validator: validateSearchFilter,
   });
   const { itemTags } = useContext(GameDataContext);
 
@@ -421,12 +413,10 @@ const useSearchFilter = (): [ReactElement, SearchFilter, () => void] => {
   ];
 };
 
-const validateMemberFilter = (value: string | undefined): string | undefined => value;
 const useMemberFilter = (): [ReactElement, MemberNegativeFilter, () => void] => {
-  const [memberFilterUserString, setMemberFilterUserString] = useLocalStorage({
+  const [memberFilterUserString, setMemberFilterUserString] = useRememberedState<string | undefined>({
     key: "items-page-member-filter",
     defaultValue: undefined,
-    validator: validateMemberFilter,
   });
 
   const members = useContext(GroupMemberNamesContext);
@@ -565,10 +555,9 @@ export const ItemsPage = (): ReactElement => {
 
   const [pinnedItems, togglePin] = usePinnedItems();
 
-  const [sortCategory, setSortCategory] = useLocalStorage<ItemSortCategory>({
+  const [sortCategory, setSortCategory] = useRememberedState<ItemSortCategory>({
     key: "items-page-sort-category",
     defaultValue: DEFAULT_SORT_CATEGORY,
-    validator: validateItemSortCategory,
   });
 
   const { gePrices: geData, items: itemData, itemTags } = useContext(GameDataContext);
@@ -576,10 +565,9 @@ export const ItemsPage = (): ReactElement => {
   const { enableGearscapeExport } = useContext(SettingsContext);
   const { open: openSearchTutorial, modal: searchTutorialModal } = useModal(ItemsPageTutorialWindow);
 
-  const [containerFilter, setContainerFilter] = useLocalStorage<ContainerFilter>({
+  const [containerFilter, setContainerFilter] = useRememberedState<ContainerFilter>({
     key: "item-page-container-filter",
     defaultValue: DEFAULT_CONTAINER_FILTER,
-    validator: validateContainerFilter,
   });
 
   useEffect(() => {

@@ -9,31 +9,14 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
 
     <script>
-      window.getTheme = () => {
-        let theme = localStorage.getItem("settings-site-theme");
-
-        if (!theme && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          theme = "dark";
-        }
-
-        return theme;
-      };
-
-      window.updateTheme = () => {
-        const theme = window.getTheme();
-        const darkMode = theme === "dark";
-        if (darkMode) {
-          document.documentElement.classList.add("dark-mode");
-        } else {
-          document.documentElement.classList.remove("dark-mode");
-        }
-      };
-
-      window.updateTheme(true);
+      const storedTheme = localStorage.getItem("settings-site-theme");
+      const prefersDarkTheme = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle(
+        "dark-mode",
+        storedTheme === "dark" || (!storedTheme && prefersDarkTheme),
+      );
     </script>
-    @viteReactRefresh
-    @vite(['resources/views/index.tsx'])
+    @vite(['resources/views/index.js'])
   </head>
-  <body id="root">
-  </body>
+  <body id="root"></body>
 </html>

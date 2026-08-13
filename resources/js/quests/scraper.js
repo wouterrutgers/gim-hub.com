@@ -1,5 +1,4 @@
 import { JSDOM } from "jsdom";
-import axios from "axios";
 import fs from "fs";
 import questsMapping from "./mapping.json" with { type: "json" };
 
@@ -30,8 +29,13 @@ function getQuestTableData(table) {
 }
 
 async function run() {
-  const questsListHtml = await axios.get("https://oldschool.runescape.wiki/w/Quests/List");
-  const dom = new JSDOM(questsListHtml.data);
+  const response = await fetch("https://oldschool.runescape.wiki/w/Quests/List");
+
+  if (!response.ok) {
+    throw new Error("Unable to fetch the quest list.");
+  }
+
+  const dom = new JSDOM(await response.text());
 
   const questTables = Array.from(dom.window.document.querySelectorAll("table")).filter((table) => {
     const ths = Array.from(table.querySelectorAll("th"));

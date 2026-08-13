@@ -450,7 +450,7 @@
     "mapping": null
   },
   "84": {
-    "name": "Staff of armadyl",
+    "name": "Staff of Armadyl",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -954,7 +954,7 @@
     "mapping": null
   },
   "245": {
-    "name": "Wine of zamorak",
+    "name": "Wine of Zamorak",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -1152,7 +1152,7 @@
     "mapping": null
   },
   "292": {
-    "name": "Book on baxtorian",
+    "name": "Book on Baxtorian",
     "highalch": 1,
     "alchable": true,
     "mapping": null
@@ -14812,7 +14812,7 @@
     "mapping": null
   },
   "3844": {
-    "name": "Book of balance",
+    "name": "Book of Balance",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -16221,7 +16221,7 @@
     "mapping": null
   },
   "4248": {
-    "name": "Book of haricanto",
+    "name": "Book of Haricanto",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -18451,7 +18451,7 @@
     "mapping": null
   },
   "4829": {
-    "name": "Book of 'h.a.m'",
+    "name": "Book of 'H.A.M'",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -28726,7 +28726,7 @@
     "mapping": null
   },
   "7144": {
-    "name": "Book o' piracy",
+    "name": "Book o' Piracy",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -47262,7 +47262,7 @@
     "mapping": null
   },
   "11640": {
-    "name": "Book of knowledge",
+    "name": "Book of Knowledge",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -48153,7 +48153,7 @@
     "mapping": null
   },
   "11791": {
-    "name": "Staff of the dead",
+    "name": "Staff of the Dead",
     "highalch": 600003,
     "alchable": true,
     "mapping": null
@@ -49119,7 +49119,7 @@
     ]
   },
   "11995": {
-    "name": "Pet chaos elemental",
+    "name": "Pet Chaos Elemental",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -51879,7 +51879,7 @@
     "mapping": null
   },
   "12608": {
-    "name": "Book of war",
+    "name": "Book of War",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -51891,7 +51891,7 @@
     "mapping": null
   },
   "12610": {
-    "name": "Book of law",
+    "name": "Book of Law",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -51903,7 +51903,7 @@
     "mapping": null
   },
   "12612": {
-    "name": "Book of darkness",
+    "name": "Book of Darkness",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -52071,81 +52071,81 @@
     "mapping": null
   },
   "12643": {
-    "name": "Pet dagannoth supreme",
+    "name": "Pet Dagannoth Supreme",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12644": {
-    "name": "Pet dagannoth prime",
+    "name": "Pet Dagannoth Prime",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12645": {
-    "name": "Pet dagannoth rex",
+    "name": "Pet Dagannoth Rex",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12646": {
-    "name": "Baby mole",
+    "name": "Baby Mole",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12647": {
-    "name": "Kalphite princess",
+    "name": "Kalphite Princess",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12648": {
-    "name": "Pet smoke devil",
+    "name": "Pet Smoke Devil",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12649": {
-    "name": "Pet kree'arra",
+    "name": "Pet Kree'arra",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12650": {
-    "name": "Pet general graardor",
+    "name": "Pet General Graardor",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12651": {
-    "name": "Pet zilyana",
+    "name": "Pet Zilyana",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12652": {
-    "name": "Pet k'ril tsutsaroth",
+    "name": "Pet K'ril Tsutsaroth",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12653": {
-    "name": "Prince black dragon",
+    "name": "Prince Black Dragon",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12654": {
-    "name": "Kalphite princess",
+    "name": "Kalphite Princess",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12655": {
-    "name": "Pet kraken",
+    "name": "Pet Kraken",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12656": {
@@ -52417,9 +52417,9 @@
     "mapping": null
   },
   "12703": {
-    "name": "Pet penance queen",
+    "name": "Pet Penance Queen",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12704": {
@@ -52621,12 +52621,6 @@
     "mapping": null
   },
   "12746": {
-    "name": "Archaic emblem (tier 1)",
-    "highalch": 0,
-    "alchable": false,
-    "mapping": null
-  },
-  "12747": {
     "name": "Archaic emblem (tier 1)",
     "highalch": 0,
     "alchable": false,
@@ -53465,9 +53459,9 @@
     "mapping": null
   },
   "12921": {
-    "name": "Pet snakeling",
+    "name": "Pet Snakeling",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12922": {
@@ -53565,15 +53559,15 @@
     "mapping": null
   },
   "12939": {
-    "name": "Pet snakeling",
+    "name": "Pet Snakeling",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12940": {
-    "name": "Pet snakeling",
+    "name": "Pet Snakeling",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "12954": {
@@ -54460,25 +54454,25 @@
     "mapping": null
   },
   "13153": {
-    "name": "Book of balance page set",
+    "name": "Book of Balance page set",
     "highalch": 4200,
     "alchable": true,
     "mapping": null
   },
   "13155": {
-    "name": "Book of war page set",
+    "name": "Book of War page set",
     "highalch": 4500,
     "alchable": true,
     "mapping": null
   },
   "13157": {
-    "name": "Book of law page set",
+    "name": "Book of Law page set",
     "highalch": 4500,
     "alchable": true,
     "mapping": null
   },
   "13159": {
-    "name": "Book of darkness page set",
+    "name": "Book of Darkness page set",
     "highalch": 4500,
     "alchable": true,
     "mapping": null
@@ -54773,9 +54767,9 @@
     "mapping": null
   },
   "13225": {
-    "name": "Tzrek-jad",
+    "name": "TzRek-Jad",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "13226": {
@@ -57955,7 +57949,7 @@
     "mapping": null
   },
   "19515": {
-    "name": "Book of spyology",
+    "name": "Book of Spyology",
     "highalch": 3,
     "alchable": true,
     "mapping": null
@@ -61943,9 +61937,9 @@
     ]
   },
   "20659": {
-    "name": "Giant squirrel",
+    "name": "Giant Squirrel",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "20661": {
@@ -64516,9 +64510,9 @@
     "mapping": null
   },
   "21291": {
-    "name": "Jal-nib-rek",
+    "name": "Jal-Nib-Rek",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "21293": {
@@ -66260,37 +66254,37 @@
     "mapping": null
   },
   "21776": {
-    "name": "Imbued saradomin max cape",
+    "name": "Imbued Saradomin max cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "21778": {
-    "name": "Imbued saradomin max hood",
+    "name": "Imbued Saradomin max hood",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "21780": {
-    "name": "Imbued zamorak max cape",
+    "name": "Imbued Zamorak max cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "21782": {
-    "name": "Imbued zamorak max hood",
+    "name": "Imbued Zamorak max hood",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "21784": {
-    "name": "Imbued guthix max cape",
+    "name": "Imbued Guthix max cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "21786": {
-    "name": "Imbued guthix max hood",
+    "name": "Imbued Guthix max hood",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -66302,19 +66296,19 @@
     "mapping": null
   },
   "21791": {
-    "name": "Imbued saradomin cape",
+    "name": "Imbued Saradomin cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "21793": {
-    "name": "Imbued guthix cape",
+    "name": "Imbued Guthix cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "21795": {
-    "name": "Imbued zamorak cape",
+    "name": "Imbued Zamorak cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -68439,7 +68433,7 @@
     "mapping": null
   },
   "22296": {
-    "name": "Staff of light",
+    "name": "Staff of Light",
     "highalch": 600003,
     "alchable": true,
     "mapping": null
@@ -68517,13 +68511,13 @@
     "mapping": null
   },
   "22318": {
-    "name": "Pet corporeal critter",
+    "name": "Pet Corporeal Critter",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "22319": {
-    "name": "Tzrek-zuk",
+    "name": "TzRek-Zuk",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -68790,7 +68784,7 @@
     "mapping": null
   },
   "22382": {
-    "name": "Vasa minirio",
+    "name": "Vasa Minirio",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -69066,9 +69060,9 @@
     "mapping": null
   },
   "22473": {
-    "name": "Lil' zik",
+    "name": "Lil' Zik",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "22475": {
@@ -69555,9 +69549,9 @@
     "mapping": null
   },
   "22663": {
-    "name": "Pet smoke devil",
+    "name": "Pet Smoke Devil",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "22664": {
@@ -69801,27 +69795,27 @@
     "mapping": null
   },
   "22746": {
-    "name": "Ikkle hydra",
+    "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "22748": {
-    "name": "Ikkle hydra",
+    "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "22750": {
-    "name": "Ikkle hydra",
+    "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "22752": {
-    "name": "Ikkle hydra",
+    "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "22754": {
@@ -71633,19 +71627,19 @@
     "mapping": null
   },
   "23321": {
-    "name": "Rune scimitar ornament kit (guthix)",
+    "name": "Rune scimitar ornament kit (Guthix)",
     "highalch": 3000,
     "alchable": true,
     "mapping": null
   },
   "23324": {
-    "name": "Rune scimitar ornament kit (saradomin)",
+    "name": "Rune scimitar ornament kit (Saradomin)",
     "highalch": 3000,
     "alchable": true,
     "mapping": null
   },
   "23327": {
-    "name": "Rune scimitar ornament kit (zamorak)",
+    "name": "Rune scimitar ornament kit (Zamorak)",
     "highalch": 3000,
     "alchable": true,
     "mapping": null
@@ -71750,7 +71744,7 @@
     "mapping": null
   },
   "23363": {
-    "name": "Staff of bob the cat",
+    "name": "Staff of Bob the Cat",
     "highalch": 900,
     "alchable": true,
     "mapping": null
@@ -72077,7 +72071,7 @@
     "mapping": null
   },
   "23489": {
-    "name": "Wine of zamorak",
+    "name": "Wine of Zamorak",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -72409,19 +72403,19 @@
     "mapping": null
   },
   "23603": {
-    "name": "Imbued guthix cape",
+    "name": "Imbued Guthix cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23605": {
-    "name": "Imbued zamorak cape",
+    "name": "Imbued Zamorak cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23607": {
-    "name": "Imbued saradomin cape",
+    "name": "Imbued Saradomin cape",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -72439,7 +72433,7 @@
     "mapping": null
   },
   "23613": {
-    "name": "Staff of the dead",
+    "name": "Staff of the Dead",
     "highalch": 18,
     "alchable": true,
     "mapping": null
@@ -72909,7 +72903,7 @@
     "mapping": null
   },
   "23759": {
-    "name": "Corrupted youngllef",
+    "name": "Corrupted Youngllef",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -73802,49 +73796,49 @@
     "mapping": null
   },
   "23927": {
-    "name": "Crystal of ithell",
+    "name": "Crystal of Ithell",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23929": {
-    "name": "Crystal of iorwerth",
+    "name": "Crystal of Iorwerth",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23931": {
-    "name": "Crystal of trahaearn",
+    "name": "Crystal of Trahaearn",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23933": {
-    "name": "Crystal of cadarn",
+    "name": "Crystal of Cadarn",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23935": {
-    "name": "Crystal of crwys",
+    "name": "Crystal of Crwys",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23937": {
-    "name": "Crystal of meilyr",
+    "name": "Crystal of Meilyr",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23939": {
-    "name": "Crystal of hefin",
+    "name": "Crystal of Hefin",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "23941": {
-    "name": "Crystal of amlodd",
+    "name": "Crystal of Amlodd",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -74058,7 +74052,7 @@
     ]
   },
   "23995": {
-    "name": "Blade of saeldor",
+    "name": "Blade of Saeldor",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -74069,7 +74063,7 @@
     ]
   },
   "23997": {
-    "name": "Blade of saeldor (inactive)",
+    "name": "Blade of Saeldor (inactive)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": null
@@ -74489,7 +74483,7 @@
     ]
   },
   "24144": {
-    "name": "Staff of balance",
+    "name": "Staff of Balance",
     "highalch": 600002,
     "alchable": true,
     "mapping": null
@@ -75209,7 +75203,7 @@
     "mapping": null
   },
   "24232": {
-    "name": "Imbued saradomin max cape (l)",
+    "name": "Imbued Saradomin max cape (l)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -75224,7 +75218,7 @@
     ]
   },
   "24233": {
-    "name": "Imbued zamorak max cape (l)",
+    "name": "Imbued Zamorak max cape (l)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -75239,7 +75233,7 @@
     ]
   },
   "24234": {
-    "name": "Imbued guthix max cape (l)",
+    "name": "Imbued Guthix max cape (l)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -75260,43 +75254,43 @@
     "mapping": null
   },
   "24236": {
-    "name": "Imbued saradomin cape (broken)",
+    "name": "Imbued Saradomin cape (broken)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "24238": {
-    "name": "Imbued saradomin max cape (broken)",
+    "name": "Imbued Saradomin max cape (broken)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "24240": {
-    "name": "Imbued guthix cape (broken)",
+    "name": "Imbued Guthix cape (broken)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "24242": {
-    "name": "Imbued guthix max cape (broken)",
+    "name": "Imbued Guthix max cape (broken)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "24244": {
-    "name": "Imbued zamorak cape (broken)",
+    "name": "Imbued Zamorak cape (broken)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "24246": {
-    "name": "Imbued zamorak max cape (broken)",
+    "name": "Imbued Zamorak max cape (broken)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "24248": {
-    "name": "Imbued saradomin cape (l)",
+    "name": "Imbued Saradomin cape (l)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -75311,7 +75305,7 @@
     ]
   },
   "24249": {
-    "name": "Imbued guthix cape (l)",
+    "name": "Imbued Guthix cape (l)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -75326,7 +75320,7 @@
     ]
   },
   "24250": {
-    "name": "Imbued zamorak cape (l)",
+    "name": "Imbued Zamorak cape (l)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -75926,7 +75920,7 @@
     "mapping": null
   },
   "24423": {
-    "name": "Harmonised nightmare staff",
+    "name": "Harmonised Nightmare staff",
     "highalch": 2760000,
     "alchable": true,
     "mapping": [
@@ -75941,7 +75935,7 @@
     ]
   },
   "24424": {
-    "name": "Volatile nightmare staff",
+    "name": "Volatile Nightmare staff",
     "highalch": 2760000,
     "alchable": true,
     "mapping": [
@@ -75956,7 +75950,7 @@
     ]
   },
   "24425": {
-    "name": "Eldritch nightmare staff",
+    "name": "Eldritch Nightmare staff",
     "highalch": 2760000,
     "alchable": true,
     "mapping": [
@@ -76178,9 +76172,9 @@
     "mapping": null
   },
   "24491": {
-    "name": "Little nightmare",
+    "name": "Little Nightmare",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "24493": {
@@ -76355,7 +76349,7 @@
     "mapping": null
   },
   "24551": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -76366,7 +76360,7 @@
     ]
   },
   "24553": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 0,
     "alchable": true,
     "mapping": [
@@ -76629,13 +76623,13 @@
     "mapping": null
   },
   "24656": {
-    "name": "Enraged tektiny",
+    "name": "Enraged Tektiny",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24658": {
-    "name": "Flying vespina",
+    "name": "Flying Vespina",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -76806,7 +76800,7 @@
     "mapping": null
   },
   "24701": {
-    "name": "Dark squirrel",
+    "name": "Dark Squirrel",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -77426,25 +77420,25 @@
     "mapping": null
   },
   "24868": {
-    "name": "Golden armadyl special attack",
+    "name": "Golden Armadyl special attack",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24869": {
-    "name": "Golden bandos special attack",
+    "name": "Golden Bandos special attack",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24870": {
-    "name": "Golden saradomin special attack",
+    "name": "Golden Saradomin special attack",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24871": {
-    "name": "Golden zamorak special attack",
+    "name": "Golden Zamorak special attack",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -79396,13 +79390,13 @@
     "mapping": null
   },
   "25348": {
-    "name": "Lil' creator",
+    "name": "Lil' Creator",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "25350": {
-    "name": "Lil' destructor",
+    "name": "Lil' Destructor",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -79993,7 +79987,7 @@
     "mapping": null
   },
   "25517": {
-    "name": "Volatile nightmare staff",
+    "name": "Volatile Nightmare staff",
     "highalch": 30,
     "alchable": true,
     "mapping": null
@@ -80005,7 +79999,7 @@
     "mapping": null
   },
   "25519": {
-    "name": "Jalrek-jad",
+    "name": "JalRek-Jad",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -80356,7 +80350,7 @@
     "mapping": null
   },
   "25613": {
-    "name": "Baby mole-rat",
+    "name": "Baby Mole-rat",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -80930,31 +80924,31 @@
     "mapping": null
   },
   "25748": {
-    "name": "Lil' maiden",
+    "name": "Lil' Maiden",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "25749": {
-    "name": "Lil' bloat",
+    "name": "Lil' Bloat",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "25750": {
-    "name": "Lil' nylo",
+    "name": "Lil' Nylo",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "25751": {
-    "name": "Lil' sot",
+    "name": "Lil' Sot",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "25752": {
-    "name": "Lil' xarp",
+    "name": "Lil' Xarp",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -81284,7 +81278,7 @@
     "mapping": null
   },
   "25818": {
-    "name": "Book of the dead",
+    "name": "Book of the Dead",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -81416,13 +81410,13 @@
     "mapping": null
   },
   "25862": {
-    "name": "Bow of faerdhinen (inactive)",
+    "name": "Bow of Faerdhinen (inactive)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "25865": {
-    "name": "Bow of faerdhinen",
+    "name": "Bow of Faerdhinen",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81433,7 +81427,7 @@
     ]
   },
   "25867": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81444,7 +81438,7 @@
     ]
   },
   "25869": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81455,7 +81449,7 @@
     ]
   },
   "25870": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -81466,7 +81460,7 @@
     ]
   },
   "25872": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -81477,7 +81471,7 @@
     ]
   },
   "25874": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -81488,7 +81482,7 @@
     ]
   },
   "25876": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -81499,7 +81493,7 @@
     ]
   },
   "25878": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -81510,7 +81504,7 @@
     ]
   },
   "25880": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -81521,7 +81515,7 @@
     ]
   },
   "25882": {
-    "name": "Blade of saeldor (c)",
+    "name": "Blade of Saeldor (c)",
     "highalch": 3000000,
     "alchable": true,
     "mapping": [
@@ -81532,7 +81526,7 @@
     ]
   },
   "25884": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81543,7 +81537,7 @@
     ]
   },
   "25886": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81554,7 +81548,7 @@
     ]
   },
   "25888": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81565,7 +81559,7 @@
     ]
   },
   "25890": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81576,7 +81570,7 @@
     ]
   },
   "25892": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81587,7 +81581,7 @@
     ]
   },
   "25894": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -81598,7 +81592,7 @@
     ]
   },
   "25896": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -83284,27 +83278,27 @@
     "mapping": null
   },
   "26358": {
-    "name": "Frozen key piece (armadyl)",
-    "highalch": 0,
-    "alchable": false,
+    "name": "Frozen key piece (Armadyl)",
+    "highalch": 3000,
+    "alchable": true,
     "mapping": null
   },
   "26360": {
-    "name": "Frozen key piece (bandos)",
-    "highalch": 0,
-    "alchable": false,
+    "name": "Frozen key piece (Bandos)",
+    "highalch": 3000,
+    "alchable": true,
     "mapping": null
   },
   "26362": {
-    "name": "Frozen key piece (zamorak)",
-    "highalch": 0,
-    "alchable": false,
+    "name": "Frozen key piece (Zamorak)",
+    "highalch": 3000,
+    "alchable": true,
     "mapping": null
   },
   "26364": {
-    "name": "Frozen key piece (saradomin)",
-    "highalch": 0,
-    "alchable": false,
+    "name": "Frozen key piece (Saradomin)",
+    "highalch": 3000,
+    "alchable": true,
     "mapping": null
   },
   "26366": {
@@ -83633,7 +83627,7 @@
     ]
   },
   "26488": {
-    "name": "Book of balance (or)",
+    "name": "Book of Balance (or)",
     "highalch": 120,
     "alchable": true,
     "mapping": [
@@ -83644,7 +83638,7 @@
     ]
   },
   "26490": {
-    "name": "Book of darkness (or)",
+    "name": "Book of Darkness (or)",
     "highalch": 120,
     "alchable": true,
     "mapping": [
@@ -83655,7 +83649,7 @@
     ]
   },
   "26492": {
-    "name": "Book of law (or)",
+    "name": "Book of Law (or)",
     "highalch": 120,
     "alchable": true,
     "mapping": [
@@ -83666,7 +83660,7 @@
     ]
   },
   "26494": {
-    "name": "Book of war (or)",
+    "name": "Book of War (or)",
     "highalch": 120,
     "alchable": true,
     "mapping": [
@@ -86678,7 +86672,7 @@
     "mapping": null
   },
   "27187": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -88438,15 +88432,15 @@
     "mapping": null
   },
   "27650": {
-    "name": "Vet'ion jr.",
+    "name": "Vet'ion Jr.",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "27651": {
-    "name": "Vet'ion jr.",
+    "name": "Vet'ion Jr.",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "27652": {
@@ -93149,7 +93143,7 @@
     "mapping": null
   },
   "28960": {
-    "name": "Smol heredit",
+    "name": "Smol Heredit",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -95303,13 +95297,13 @@
     "mapping": null
   },
   "29602": {
-    "name": "Corrupted volatile nightmare staff",
+    "name": "Corrupted Volatile Nightmare staff",
     "highalch": 150000,
     "alchable": true,
     "mapping": null
   },
   "29605": {
-    "name": "Armadyl godsword (deadman)",
+    "name": "Armadyl godsword (Deadman)",
     "highalch": 750000,
     "alchable": true,
     "mapping": [
@@ -95320,7 +95314,7 @@
     ]
   },
   "29607": {
-    "name": "Voidwaker (deadman)",
+    "name": "Voidwaker (Deadman)",
     "highalch": 1200000,
     "alchable": true,
     "mapping": [
@@ -95331,7 +95325,7 @@
     ]
   },
   "29609": {
-    "name": "Volatile nightmare staff (deadman)",
+    "name": "Volatile Nightmare staff (Deadman)",
     "highalch": 2760000,
     "alchable": true,
     "mapping": [
@@ -95346,7 +95340,7 @@
     ]
   },
   "29611": {
-    "name": "Dark bow (deadman)",
+    "name": "Dark bow (Deadman)",
     "highalch": 72001,
     "alchable": true,
     "mapping": [
@@ -95357,19 +95351,19 @@
     ]
   },
   "29613": {
-    "name": "Imbued zamorak cape (deadman)",
+    "name": "Imbued Zamorak cape (Deadman)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29615": {
-    "name": "Imbued guthix cape (deadman)",
+    "name": "Imbued Guthix cape (Deadman)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29617": {
-    "name": "Imbued saradomin cape (deadman)",
+    "name": "Imbued Saradomin cape (Deadman)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -97264,7 +97258,7 @@
     "mapping": null
   },
   "30151": {
-    "name": "Bone squirrel",
+    "name": "Bone Squirrel",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -108333,7 +108327,7 @@
     "mapping": null
   },
   "33021": {
-    "name": "Bow of faerdhinen (c)",
+    "name": "Bow of Faerdhinen (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -108416,7 +108410,7 @@
     "mapping": null
   },
   "33036": {
-    "name": "Toxic staff (deadman)",
+    "name": "Toxic staff (Deadman)",
     "highalch": 600003,
     "alchable": true,
     "mapping": null
@@ -111734,7 +111728,7 @@
     "mapping": null
   },
   "34040": {
-    "name": "Mr mcgroot",
+    "name": "Mr McGroot",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -111833,6 +111827,18 @@
     "name": "Fairy tale quest lamp",
     "highalch": 0,
     "alchable": false,
+    "mapping": null
+  },
+  "34061": {
+    "name": "Vampyre snail shell",
+    "highalch": 90,
+    "alchable": true,
+    "mapping": null
+  },
+  "34063": {
+    "name": "Vampyre snelm",
+    "highalch": 180,
+    "alchable": true,
     "mapping": null
   }
 }

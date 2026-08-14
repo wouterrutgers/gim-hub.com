@@ -52073,79 +52073,79 @@
   "12643": {
     "name": "Pet Dagannoth Supreme",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12644": {
     "name": "Pet Dagannoth Prime",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12645": {
     "name": "Pet Dagannoth Rex",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12646": {
     "name": "Baby Mole",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12647": {
     "name": "Kalphite Princess",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12648": {
     "name": "Pet Smoke Devil",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12649": {
     "name": "Pet Kree'arra",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12650": {
     "name": "Pet General Graardor",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12651": {
     "name": "Pet Zilyana",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12652": {
     "name": "Pet K'ril Tsutsaroth",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12653": {
     "name": "Prince Black Dragon",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12654": {
     "name": "Kalphite Princess",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12655": {
     "name": "Pet Kraken",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12656": {
@@ -52419,7 +52419,7 @@
   "12703": {
     "name": "Pet Penance Queen",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12704": {
@@ -53461,7 +53461,7 @@
   "12921": {
     "name": "Pet Snakeling",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12922": {
@@ -53561,13 +53561,13 @@
   "12939": {
     "name": "Pet Snakeling",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12940": {
     "name": "Pet Snakeling",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "12954": {
@@ -54540,13 +54540,13 @@
   "13179": {
     "name": "Vet'ion jr.",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "13180": {
     "name": "Vet'ion jr.",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "13181": {
@@ -54769,7 +54769,7 @@
   "13225": {
     "name": "TzRek-Jad",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "13226": {
@@ -64512,7 +64512,7 @@
   "21291": {
     "name": "Jal-Nib-Rek",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "21293": {
@@ -69062,7 +69062,7 @@
   "22473": {
     "name": "Lil' Zik",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "22475": {
@@ -69551,7 +69551,7 @@
   "22663": {
     "name": "Pet Smoke Devil",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "22664": {
@@ -69797,25 +69797,25 @@
   "22746": {
     "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "22748": {
     "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "22750": {
     "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "22752": {
     "name": "Ikkle Hydra",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "22754": {
@@ -76174,7 +76174,7 @@
   "24491": {
     "name": "Little Nightmare",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "24493": {
@@ -83279,26 +83279,26 @@
   },
   "26358": {
     "name": "Frozen key piece (Armadyl)",
-    "highalch": 3000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26360": {
     "name": "Frozen key piece (Bandos)",
-    "highalch": 3000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26362": {
     "name": "Frozen key piece (Zamorak)",
-    "highalch": 3000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26364": {
     "name": "Frozen key piece (Saradomin)",
-    "highalch": 3000,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "26366": {
@@ -88434,13 +88434,13 @@
   "27650": {
     "name": "Vet'ion Jr.",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "27651": {
     "name": "Vet'ion Jr.",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "27652": {

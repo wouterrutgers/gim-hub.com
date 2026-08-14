@@ -30,7 +30,7 @@ RUN npm install --global "$(node --print 'require("./package.json").packageManag
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile --store-dir /pnpm/store
 
-COPY vite.config.mts ./
+COPY vite.config.js ./
 COPY resources ./resources
 COPY public ./public
 

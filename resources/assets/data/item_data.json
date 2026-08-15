@@ -79392,7 +79392,7 @@
   "25348": {
     "name": "Lil' Creator",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "25350": {

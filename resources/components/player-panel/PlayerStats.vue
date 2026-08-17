@@ -1,5 +1,5 @@
 <script setup>
-  import { computed } from "vue";
+  import { computed, onBeforeUnmount, onMounted, ref } from "vue";
   import {
     useGroupStore,
     useMemberInteracting,
@@ -34,6 +34,18 @@
   });
 
   const groupStore = useGroupStore();
+  const currentTimeMilliseconds = ref(Date.now());
+  let currentTimeInterval;
+
+  onMounted(function startCurrentTimeInterval() {
+    currentTimeInterval = window.setInterval(function updateCurrentTime() {
+      currentTimeMilliseconds.value = Date.now();
+    }, 1000);
+  });
+  onBeforeUnmount(function clearCurrentTimeInterval() {
+    window.clearInterval(currentTimeInterval);
+  });
+
   const interacting = useMemberInteracting(function getMember() {
     return props.member;
   });
@@ -58,10 +70,13 @@
     );
   });
   const online = computed(function isOnline() {
-    return Date.now() - (lastOnlineAt.value ?? new Date(0)).getTime() < INACTIVE_TIMER_MS;
+    return currentTimeMilliseconds.value - (lastOnlineAt.value ?? new Date(0)).getTime() < INACTIVE_TIMER_MS;
   });
   const recentInteraction = computed(function getRecentInteraction() {
-    if (!interacting.value || Date.now() - interacting.value.lastUpdated.getTime() >= INTERACTION_TIMER_MS) {
+    if (
+      !interacting.value ||
+      currentTimeMilliseconds.value - interacting.value.lastUpdated.getTime() >= INTERACTION_TIMER_MS
+    ) {
       return undefined;
     }
 

@@ -3,10 +3,10 @@ name: Open issue when workflow fails
 on:
   workflow_run:
     workflows:
+      - CI
+      - Docker
       - Dump game data
-      - Lint
       - Mark stale issues and pull requests
-      - Push Docker image
     types:
       - completed
     branches:

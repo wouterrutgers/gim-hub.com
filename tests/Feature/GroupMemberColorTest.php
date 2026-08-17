@@ -2,9 +2,15 @@
 
 use App\Models\Group;
 use App\Models\Member;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 it('backfills existing member colors in alphabetical order', function () {
     $migration = require database_path('migrations/2026_07_16_000000_add_color_hue_degrees_to_members_table.php');
+
+    Schema::table('members', function (Blueprint $table): void {
+        $table->dropColumn('color_hue_degrees');
+    });
 
     $group = Group::create([
         'name' => 'color-migration-test',

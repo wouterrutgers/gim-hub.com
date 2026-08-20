@@ -462,7 +462,7 @@
     "mapping": null
   },
   "86": {
-    "name": "Pendant of lucien",
+    "name": "Pendant of Lucien",
     "highalch": 7,
     "alchable": true,
     "mapping": null
@@ -2208,13 +2208,13 @@
     "mapping": null
   },
   "587": {
-    "name": "Orb of protection",
+    "name": "Orb of Protection",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "588": {
-    "name": "Orbs of protection",
+    "name": "Orbs of Protection",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -2376,7 +2376,7 @@
     "mapping": null
   },
   "616": {
-    "name": "Beads of the dead",
+    "name": "Beads of the Dead",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -4236,7 +4236,7 @@
     "mapping": null
   },
   "981": {
-    "name": "Disk of returning",
+    "name": "Disk of Returning",
     "highalch": 72,
     "alchable": true,
     "mapping": null
@@ -5858,7 +5858,7 @@
     "mapping": null
   },
   "1492": {
-    "name": "Doll of iban",
+    "name": "Doll of Iban",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -5870,7 +5870,7 @@
     "mapping": null
   },
   "1494": {
-    "name": "History of iban",
+    "name": "History of Iban",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -5888,19 +5888,19 @@
     "mapping": null
   },
   "1497": {
-    "name": "Amulet of othanian",
+    "name": "Amulet of Othanian",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "1498": {
-    "name": "Amulet of doomion",
+    "name": "Amulet of Doomion",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "1499": {
-    "name": "Amulet of holthion",
+    "name": "Amulet of Holthion",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -15957,7 +15957,7 @@
     "mapping": null
   },
   "4202": {
-    "name": "Ring of charos",
+    "name": "Ring of Charos",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -24404,7 +24404,7 @@
     "mapping": null
   },
   "6040": {
-    "name": "Amulet of nature",
+    "name": "Amulet of Nature",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -26070,7 +26070,7 @@
     "mapping": null
   },
   "6465": {
-    "name": "Ring of charos(a)",
+    "name": "Ring of Charos(a)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -27328,13 +27328,13 @@
     "mapping": null
   },
   "6786": {
-    "name": "Robe of elidinis",
+    "name": "Robe of Elidinis",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "6787": {
-    "name": "Robe of elidinis",
+    "name": "Robe of Elidinis",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -30483,7 +30483,7 @@
     "mapping": null
   },
   "7542": {
-    "name": "Cake of guidance",
+    "name": "Cake of Guidance",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -30927,7 +30927,7 @@
     "mapping": null
   },
   "7634": {
-    "name": "Histories of the hallowland",
+    "name": "Histories of the Hallowland",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -30957,61 +30957,61 @@
     "mapping": null
   },
   "7639": {
-    "name": "Rod of ivandis (10)",
+    "name": "Rod of Ivandis (10)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7640": {
-    "name": "Rod of ivandis (9)",
+    "name": "Rod of Ivandis (9)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7641": {
-    "name": "Rod of ivandis (8)",
+    "name": "Rod of Ivandis (8)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7642": {
-    "name": "Rod of ivandis (7)",
+    "name": "Rod of Ivandis (7)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7643": {
-    "name": "Rod of ivandis (6)",
+    "name": "Rod of Ivandis (6)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7644": {
-    "name": "Rod of ivandis (5)",
+    "name": "Rod of Ivandis (5)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7645": {
-    "name": "Rod of ivandis (4)",
+    "name": "Rod of Ivandis (4)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7646": {
-    "name": "Rod of ivandis (3)",
+    "name": "Rod of Ivandis (3)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7647": {
-    "name": "Rod of ivandis (2)",
+    "name": "Rod of Ivandis (2)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
   },
   "7648": {
-    "name": "Rod of ivandis (1)",
+    "name": "Rod of Ivandis (1)",
     "highalch": 600,
     "alchable": true,
     "mapping": null
@@ -43143,73 +43143,73 @@
     "mapping": null
   },
   "10330": {
-    "name": "3rd age range top",
+    "name": "3rd Age range top",
     "highalch": 30480,
     "alchable": true,
     "mapping": null
   },
   "10332": {
-    "name": "3rd age range legs",
+    "name": "3rd Age range legs",
     "highalch": 30360,
     "alchable": true,
     "mapping": null
   },
   "10334": {
-    "name": "3rd age range coif",
+    "name": "3rd Age range coif",
     "highalch": 30240,
     "alchable": true,
     "mapping": null
   },
   "10336": {
-    "name": "3rd age vambraces",
+    "name": "3rd Age vambraces",
     "highalch": 30300,
     "alchable": true,
     "mapping": null
   },
   "10338": {
-    "name": "3rd age robe top",
+    "name": "3rd Age robe top",
     "highalch": 30480,
     "alchable": true,
     "mapping": null
   },
   "10340": {
-    "name": "3rd age robe",
+    "name": "3rd Age robe",
     "highalch": 30360,
     "alchable": true,
     "mapping": null
   },
   "10342": {
-    "name": "3rd age mage hat",
+    "name": "3rd Age mage hat",
     "highalch": 30240,
     "alchable": true,
     "mapping": null
   },
   "10344": {
-    "name": "3rd age amulet",
+    "name": "3rd Age amulet",
     "highalch": 30300,
     "alchable": true,
     "mapping": null
   },
   "10346": {
-    "name": "3rd age platelegs",
+    "name": "3rd Age platelegs",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
   },
   "10348": {
-    "name": "3rd age platebody",
+    "name": "3rd Age platebody",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
   },
   "10350": {
-    "name": "3rd age full helmet",
+    "name": "3rd Age full helmet",
     "highalch": 54000,
     "alchable": true,
     "mapping": null
   },
   "10352": {
-    "name": "3rd age kiteshield",
+    "name": "3rd Age kiteshield",
     "highalch": 108000,
     "alchable": true,
     "mapping": null
@@ -44274,7 +44274,7 @@
     "mapping": null
   },
   "10828": {
-    "name": "Helm of neitiznot",
+    "name": "Helm of Neitiznot",
     "highalch": 30000,
     "alchable": true,
     "mapping": null
@@ -47790,7 +47790,7 @@
     "mapping": null
   },
   "11740": {
-    "name": "Scroll of redirection",
+    "name": "Scroll of Redirection",
     "highalch": 6,
     "alchable": true,
     "mapping": null
@@ -48333,7 +48333,7 @@
     "mapping": null
   },
   "11849": {
-    "name": "Mark of grace",
+    "name": "Mark of Grace",
     "highalch": 0,
     "alchable": true,
     "mapping": [
@@ -48750,13 +48750,13 @@
     "mapping": null
   },
   "11905": {
-    "name": "Trident of the seas (full)",
+    "name": "Trident of the Seas (full)",
     "highalch": 41400,
     "alchable": true,
     "mapping": null
   },
   "11907": {
-    "name": "Trident of the seas",
+    "name": "Trident of the Seas",
     "highalch": 41100,
     "alchable": true,
     "mapping": [
@@ -49172,7 +49172,7 @@
     ]
   },
   "12007": {
-    "name": "Jar of dirt",
+    "name": "Jar of Dirt",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -51117,19 +51117,19 @@
     ]
   },
   "12422": {
-    "name": "3rd age wand",
+    "name": "3rd Age wand",
     "highalch": 90000,
     "alchable": true,
     "mapping": null
   },
   "12424": {
-    "name": "3rd age bow",
+    "name": "3rd Age bow",
     "highalch": 90000,
     "alchable": true,
     "mapping": null
   },
   "12426": {
-    "name": "3rd age longsword",
+    "name": "3rd Age longsword",
     "highalch": 90000,
     "alchable": true,
     "mapping": null
@@ -51174,7 +51174,7 @@
     ]
   },
   "12437": {
-    "name": "3rd age cloak",
+    "name": "3rd Age cloak",
     "highalch": 51000,
     "alchable": true,
     "mapping": null
@@ -53179,13 +53179,13 @@
     "mapping": null
   },
   "12851": {
-    "name": "Amulet of the damned (full)",
+    "name": "Amulet of the Damned (full)",
     "highalch": 34800,
     "alchable": true,
     "mapping": null
   },
   "12853": {
-    "name": "Amulet of the damned",
+    "name": "Amulet of the Damned",
     "highalch": 34800,
     "alchable": true,
     "mapping": null
@@ -53299,7 +53299,7 @@
     "mapping": null
   },
   "12885": {
-    "name": "Jar of sand",
+    "name": "Jar of Sand",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -53377,7 +53377,7 @@
     "mapping": null
   },
   "12899": {
-    "name": "Trident of the swamp",
+    "name": "Trident of the Swamp",
     "highalch": 47100,
     "alchable": true,
     "mapping": [
@@ -53547,7 +53547,7 @@
     "mapping": null
   },
   "12936": {
-    "name": "Jar of swamp",
+    "name": "Jar of Swamp",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -54689,7 +54689,7 @@
     ]
   },
   "13203": {
-    "name": "Mask of balance",
+    "name": "Mask of Balance",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -54845,7 +54845,7 @@
     "mapping": null
   },
   "13245": {
-    "name": "Jar of souls",
+    "name": "Jar of Souls",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -54894,25 +54894,25 @@
   },
   "13258": {
     "name": "Angler hat",
-    "highalch": 60,
+    "highalch": 30,
     "alchable": true,
     "mapping": null
   },
   "13259": {
     "name": "Angler top",
-    "highalch": 60,
+    "highalch": 30,
     "alchable": true,
     "mapping": null
   },
   "13260": {
     "name": "Angler waders",
-    "highalch": 60,
+    "highalch": 30,
     "alchable": true,
     "mapping": null
   },
   "13261": {
     "name": "Angler boots",
-    "highalch": 60,
+    "highalch": 30,
     "alchable": true,
     "mapping": null
   },
@@ -54977,7 +54977,7 @@
     "mapping": null
   },
   "13277": {
-    "name": "Jar of miasma",
+    "name": "Jar of Miasma",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -56277,7 +56277,7 @@
     "mapping": null
   },
   "13524": {
-    "name": "Rada's census",
+    "name": "Rada's Census",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -56289,13 +56289,13 @@
     "mapping": null
   },
   "13526": {
-    "name": "Eathram & rada extract",
+    "name": "Eathram & Rada extract",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13527": {
-    "name": "Killing of a king",
+    "name": "Killing of a King",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -56307,55 +56307,55 @@
     "mapping": null
   },
   "13529": {
-    "name": "Wintertodt parable",
+    "name": "Wintertodt Parable",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13530": {
-    "name": "Twill accord",
+    "name": "Twill Accord",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13531": {
-    "name": "Byrne's coronation speech",
+    "name": "Byrne's Coronation Speech",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13532": {
-    "name": "Ideology of darkness",
+    "name": "Ideology of Darkness",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13533": {
-    "name": "Rada's journey",
+    "name": "Rada's Journey",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13534": {
-    "name": "Transvergence theory",
+    "name": "Transvergence Theory",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13535": {
-    "name": "Tristessa's tragedy",
+    "name": "Tristessa's Tragedy",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13536": {
-    "name": "Treachery of royalty",
+    "name": "Treachery of Royalty",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "13537": {
-    "name": "Transportation incantations",
+    "name": "Transportation Incantations",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -58429,7 +58429,7 @@
     "mapping": null
   },
   "19637": {
-    "name": "Soul journey",
+    "name": "Soul Journey",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -58591,7 +58591,7 @@
     "mapping": null
   },
   "19687": {
-    "name": "Helm of raedwald",
+    "name": "Helm of Raedwald",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -58633,7 +58633,7 @@
     "mapping": null
   },
   "19701": {
-    "name": "Jar of darkness",
+    "name": "Jar of Darkness",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -60037,13 +60037,13 @@
     "mapping": null
   },
   "20011": {
-    "name": "3rd age axe",
+    "name": "3rd Age axe",
     "highalch": 33000,
     "alchable": true,
     "mapping": null
   },
   "20014": {
-    "name": "3rd age pickaxe",
+    "name": "3rd Age pickaxe",
     "highalch": 58770,
     "alchable": true,
     "mapping": null
@@ -61489,13 +61489,13 @@
     ]
   },
   "20576": {
-    "name": "3rd age robe top",
+    "name": "3rd Age robe top",
     "highalch": 24,
     "alchable": true,
     "mapping": null
   },
   "20577": {
-    "name": "3rd age robe",
+    "name": "3rd Age robe",
     "highalch": 24,
     "alchable": true,
     "mapping": null
@@ -62129,7 +62129,7 @@
     "mapping": null
   },
   "20714": {
-    "name": "Tome of fire",
+    "name": "Tome of Fire",
     "highalch": 12000,
     "alchable": true,
     "mapping": [
@@ -62140,7 +62140,7 @@
     ]
   },
   "20716": {
-    "name": "Tome of fire (empty)",
+    "name": "Tome of Fire (empty)",
     "highalch": 12000,
     "alchable": true,
     "mapping": null
@@ -64302,7 +64302,7 @@
     "mapping": null
   },
   "21243": {
-    "name": "Bucket of wester sand",
+    "name": "Bucket of Wester sand",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -66147,7 +66147,7 @@
     "mapping": null
   },
   "21745": {
-    "name": "Jar of stone",
+    "name": "Jar of Stone",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -66206,31 +66206,31 @@
     "mapping": null
   },
   "21762": {
-    "name": "Lunch by the lancalliums",
+    "name": "Lunch by the Lancalliums",
     "highalch": 120,
     "alchable": true,
     "mapping": null
   },
   "21764": {
-    "name": "The fisher's flute",
+    "name": "The Fisher's Flute",
     "highalch": 120,
     "alchable": true,
     "mapping": null
   },
   "21766": {
-    "name": "History and hearsay",
+    "name": "History and Hearsay",
     "highalch": 120,
     "alchable": true,
     "mapping": null
   },
   "21768": {
-    "name": "Jewellery of jubilation",
+    "name": "Jewellery of Jubilation",
     "highalch": 120,
     "alchable": true,
     "mapping": null
   },
   "21770": {
-    "name": "A dark disposition",
+    "name": "A Dark Disposition",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -67799,7 +67799,7 @@
     "mapping": null
   },
   "22106": {
-    "name": "Jar of decay",
+    "name": "Jar of Decay",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -68399,7 +68399,7 @@
     "mapping": null
   },
   "22288": {
-    "name": "Trident of the seas (e)",
+    "name": "Trident of the Seas (e)",
     "highalch": 59100,
     "alchable": true,
     "mapping": [
@@ -68416,7 +68416,7 @@
     "mapping": null
   },
   "22292": {
-    "name": "Trident of the swamp (e)",
+    "name": "Trident of the Swamp (e)",
     "highalch": 65100,
     "alchable": true,
     "mapping": [
@@ -68558,7 +68558,7 @@
     "mapping": null
   },
   "22325": {
-    "name": "Scythe of vitur",
+    "name": "Scythe of Vitur",
     "highalch": 2400000,
     "alchable": true,
     "mapping": [
@@ -68922,13 +68922,13 @@
     "mapping": null
   },
   "22416": {
-    "name": "The turncloak",
+    "name": "The Turncloak",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "22418": {
-    "name": "Explosive discovery",
+    "name": "Explosive Discovery",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -68940,13 +68940,13 @@
     "mapping": null
   },
   "22422": {
-    "name": "Elixir of everlasting",
+    "name": "Elixir of Everlasting",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "22424": {
-    "name": "Buried alive",
+    "name": "Buried Alive",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -69084,7 +69084,7 @@
     "mapping": null
   },
   "22486": {
-    "name": "Scythe of vitur (uncharged)",
+    "name": "Scythe of Vitur (uncharged)",
     "highalch": 2400000,
     "alchable": true,
     "mapping": null
@@ -69126,31 +69126,31 @@
     "mapping": null
   },
   "22506": {
-    "name": "The butcher",
+    "name": "The Butcher",
     "highalch": 30,
     "alchable": true,
     "mapping": null
   },
   "22508": {
-    "name": "Arachnids of vampyrium",
+    "name": "Arachnids of Vampyrium",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "22510": {
-    "name": "The shadow realm",
+    "name": "The Shadow Realm",
     "highalch": 30,
     "alchable": true,
     "mapping": null
   },
   "22512": {
-    "name": "The wild hunt",
+    "name": "The Wild Hunt",
     "highalch": 30,
     "alchable": true,
     "mapping": null
   },
   "22514": {
-    "name": "Verzik vitur - patient record",
+    "name": "Verzik Vitur - Patient Record",
     "highalch": 30,
     "alchable": true,
     "mapping": null
@@ -69417,25 +69417,25 @@
     "mapping": null
   },
   "22606": {
-    "name": "Fire of eternal light",
+    "name": "Fire of Eternal Light",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "22607": {
-    "name": "Fire of dehumidification",
+    "name": "Fire of Dehumidification",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "22608": {
-    "name": "Fire of nourishment",
+    "name": "Fire of Nourishment",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "22609": {
-    "name": "Fire of unseasonal warmth",
+    "name": "Fire of Unseasonal Warmth",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -69555,7 +69555,7 @@
     "mapping": null
   },
   "22664": {
-    "name": "Scythe of vitur",
+    "name": "Scythe of Vitur",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -70100,7 +70100,7 @@
   },
   "22838": {
     "name": "Fish sack",
-    "highalch": 600,
+    "highalch": 300,
     "alchable": true,
     "mapping": null
   },
@@ -70471,7 +70471,7 @@
     "mapping": null
   },
   "22951": {
-    "name": "Boots of brimstone",
+    "name": "Boots of Brimstone",
     "highalch": 12000,
     "alchable": true,
     "mapping": null
@@ -70784,7 +70784,7 @@
     "mapping": null
   },
   "23064": {
-    "name": "Jar of chemicals",
+    "name": "Jar of Chemicals",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -71318,7 +71318,7 @@
     "mapping": null
   },
   "23185": {
-    "name": "Ring of 3rd age",
+    "name": "Ring of 3rd Age",
     "highalch": 7200,
     "alchable": true,
     "mapping": null
@@ -71465,7 +71465,7 @@
     ]
   },
   "23242": {
-    "name": "3rd age plateskirt",
+    "name": "3rd Age plateskirt",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
@@ -71690,25 +71690,25 @@
     ]
   },
   "23336": {
-    "name": "3rd age druidic robe top",
+    "name": "3rd Age druidic robe top",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
   },
   "23339": {
-    "name": "3rd age druidic robe bottoms",
+    "name": "3rd Age druidic robe bottoms",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
   },
   "23342": {
-    "name": "3rd age druidic staff",
+    "name": "3rd Age druidic staff",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
   },
   "23345": {
-    "name": "3rd age druidic cloak",
+    "name": "3rd Age druidic cloak",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
@@ -72125,19 +72125,19 @@
     "mapping": null
   },
   "23504": {
-    "name": "Tome of the moon",
+    "name": "Tome of the Moon",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "23506": {
-    "name": "Tome of the sun",
+    "name": "Tome of the Sun",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "23508": {
-    "name": "Tome of the temple",
+    "name": "Tome of the Temple",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -72194,13 +72194,13 @@
     "mapping": null
   },
   "23522": {
-    "name": "Mask of ranul",
+    "name": "Mask of Ranul",
     "highalch": 3000,
     "alchable": true,
     "mapping": null
   },
   "23525": {
-    "name": "Jar of eyes",
+    "name": "Jar of Eyes",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -72362,7 +72362,7 @@
     "mapping": null
   },
   "23591": {
-    "name": "Helm of neitiznot",
+    "name": "Helm of Neitiznot",
     "highalch": 18,
     "alchable": true,
     "mapping": null
@@ -74189,13 +74189,13 @@
     "mapping": null
   },
   "24051": {
-    "name": "A dear friend",
+    "name": "A Dear Friend",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24053": {
-    "name": "On leprechauns",
+    "name": "On Leprechauns",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -74207,7 +74207,7 @@
     "mapping": null
   },
   "24057": {
-    "name": "The eight clans",
+    "name": "The Eight Clans",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -74219,7 +74219,7 @@
     "mapping": null
   },
   "24061": {
-    "name": "Niff & harry",
+    "name": "Niff & Harry",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -74243,25 +74243,25 @@
     "mapping": null
   },
   "24069": {
-    "name": "The truth behind the myth (excerpt)",
+    "name": "The Truth Behind the Myth (excerpt)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24071": {
-    "name": "The living statues",
+    "name": "The Living Statues",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24073": {
-    "name": "The spurned demon",
+    "name": "The Spurned Demon",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "24075": {
-    "name": "Legends of the mountain",
+    "name": "Legends of the Mountain",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -75401,7 +75401,7 @@
     "mapping": null
   },
   "24263": {
-    "name": "Ballad of the basilisk",
+    "name": "Ballad of the Basilisk",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -76190,7 +76190,7 @@
     "mapping": null
   },
   "24495": {
-    "name": "Jar of dreams",
+    "name": "Jar of Dreams",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -76244,7 +76244,7 @@
     "mapping": null
   },
   "24528": {
-    "name": "Lamp of the gatherer",
+    "name": "Lamp of the Gatherer",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -78383,7 +78383,7 @@
     "mapping": null
   },
   "25104": {
-    "name": "Crystal of echoes",
+    "name": "Crystal of Echoes",
     "highalch": 6,
     "alchable": true,
     "mapping": null
@@ -79372,7 +79372,7 @@
     "mapping": null
   },
   "25342": {
-    "name": "Spoils of war",
+    "name": "Spoils of War",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -80005,13 +80005,13 @@
     "mapping": null
   },
   "25521": {
-    "name": "Jar of spirits",
+    "name": "Jar of Spirits",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "25524": {
-    "name": "Jar of smoke",
+    "name": "Jar of Smoke",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -80173,7 +80173,7 @@
     "mapping": null
   },
   "25574": {
-    "name": "Tome of water",
+    "name": "Tome of Water",
     "highalch": 11700,
     "alchable": true,
     "mapping": [
@@ -80184,7 +80184,7 @@
     ]
   },
   "25576": {
-    "name": "Tome of water (empty)",
+    "name": "Tome of Water (empty)",
     "highalch": 11700,
     "alchable": true,
     "mapping": null
@@ -84008,7 +84008,7 @@
     "mapping": null
   },
   "26577": {
-    "name": "Plain of mud sphere",
+    "name": "Plain of Mud sphere",
     "highalch": 12,
     "alchable": true,
     "mapping": null
@@ -84584,7 +84584,7 @@
   "26696": {
     "name": "Wristbands of the arena (broken)",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "26697": {
@@ -84743,49 +84743,49 @@
     "mapping": null
   },
   "26723": {
-    "name": "Wristbands of the arena",
+    "name": "Wristbands of the Arena",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26724": {
-    "name": "Wristbands of the arena (l)",
+    "name": "Wristbands of the Arena (l)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26725": {
-    "name": "Wristbands of the arena (c)",
+    "name": "Wristbands of the Arena (c)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26726": {
-    "name": "Wristbands of the arena (cl)",
+    "name": "Wristbands of the Arena (cl)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26727": {
-    "name": "Wristbands of the arena (i)",
+    "name": "Wristbands of the Arena (i)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26728": {
-    "name": "Wristbands of the arena (il)",
+    "name": "Wristbands of the Arena (il)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26729": {
-    "name": "Wristbands of the arena (ic)",
+    "name": "Wristbands of the Arena (ic)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26730": {
-    "name": "Wristbands of the arena (ilc)",
+    "name": "Wristbands of the Arena (ilc)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -85394,79 +85394,79 @@
     "mapping": null
   },
   "26850": {
-    "name": "Hat of the eye",
+    "name": "Hat of the Eye",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26852": {
-    "name": "Robe top of the eye",
+    "name": "Robe top of the Eye",
     "highalch": 210,
     "alchable": true,
     "mapping": null
   },
   "26854": {
-    "name": "Robe bottoms of the eye",
+    "name": "Robe bottoms of the Eye",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26856": {
-    "name": "Boots of the eye",
+    "name": "Boots of the Eye",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26858": {
-    "name": "Hat of the eye (red)",
+    "name": "Hat of the Eye (red)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26860": {
-    "name": "Robe top of the eye (red)",
+    "name": "Robe top of the Eye (red)",
     "highalch": 210,
     "alchable": true,
     "mapping": null
   },
   "26862": {
-    "name": "Robe bottoms of the eye (red)",
+    "name": "Robe bottoms of the Eye (red)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26864": {
-    "name": "Hat of the eye (green)",
+    "name": "Hat of the Eye (green)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26866": {
-    "name": "Robe top of the eye (green)",
+    "name": "Robe top of the Eye (green)",
     "highalch": 210,
     "alchable": true,
     "mapping": null
   },
   "26868": {
-    "name": "Robe bottoms of the eye (green)",
+    "name": "Robe bottoms of the Eye (green)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26870": {
-    "name": "Hat of the eye (blue)",
+    "name": "Hat of the Eye (blue)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26872": {
-    "name": "Robe top of the eye (blue)",
+    "name": "Robe top of the Eye (blue)",
     "highalch": 210,
     "alchable": true,
     "mapping": null
   },
   "26874": {
-    "name": "Robe bottoms of the eye (blue)",
+    "name": "Robe bottoms of the Eye (blue)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -85658,7 +85658,7 @@
     "mapping": null
   },
   "26914": {
-    "name": "Amulet of the eye",
+    "name": "Amulet of the Eye",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -85896,7 +85896,7 @@
     "mapping": null
   },
   "26961": {
-    "name": "Lily of the elid",
+    "name": "Lily of the Elid",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -85980,19 +85980,19 @@
     "mapping": null
   },
   "26990": {
-    "name": "Amulet of the eye",
+    "name": "Amulet of the Eye",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26992": {
-    "name": "Amulet of the eye",
+    "name": "Amulet of the Eye",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26994": {
-    "name": "Amulet of the eye",
+    "name": "Amulet of the Eye",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -86648,7 +86648,7 @@
     "mapping": null
   },
   "27183": {
-    "name": "3rd age mage hat",
+    "name": "3rd Age mage hat",
     "highalch": 24,
     "alchable": true,
     "mapping": null
@@ -86767,19 +86767,19 @@
     "mapping": null
   },
   "27199": {
-    "name": "3rd age range top",
+    "name": "3rd Age range top",
     "highalch": 12,
     "alchable": true,
     "mapping": null
   },
   "27200": {
-    "name": "3rd age range legs",
+    "name": "3rd Age range legs",
     "highalch": 12,
     "alchable": true,
     "mapping": null
   },
   "27201": {
-    "name": "3rd age range coif",
+    "name": "3rd Age range coif",
     "highalch": 12,
     "alchable": true,
     "mapping": null
@@ -86976,7 +86976,7 @@
     "mapping": null
   },
   "27272": {
-    "name": "Lily of the sands",
+    "name": "Lily of the Sands",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -86999,7 +86999,7 @@
     "mapping": null
   },
   "27279": {
-    "name": "Thread of elidinis",
+    "name": "Thread of Elidinis",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -87011,13 +87011,13 @@
     "mapping": null
   },
   "27283": {
-    "name": "Breach of the scarab",
+    "name": "Breach of the Scarab",
     "highalch": 180000,
     "alchable": true,
     "mapping": null
   },
   "27285": {
-    "name": "Eye of the corruptor",
+    "name": "Eye of the Corruptor",
     "highalch": 180000,
     "alchable": true,
     "mapping": null
@@ -87029,7 +87029,7 @@
     "mapping": null
   },
   "27289": {
-    "name": "Jewel of the sun",
+    "name": "Jewel of the Sun",
     "highalch": 180000,
     "alchable": true,
     "mapping": null
@@ -87161,25 +87161,25 @@
     "mapping": null
   },
   "27327": {
-    "name": "Tears of elidinis (4)",
+    "name": "Tears of Elidinis (4)",
     "highalch": 18,
     "alchable": true,
     "mapping": null
   },
   "27329": {
-    "name": "Tears of elidinis (3)",
+    "name": "Tears of Elidinis (3)",
     "highalch": 18,
     "alchable": true,
     "mapping": null
   },
   "27331": {
-    "name": "Tears of elidinis (2)",
+    "name": "Tears of Elidinis (2)",
     "highalch": 18,
     "alchable": true,
     "mapping": null
   },
   "27333": {
-    "name": "Tears of elidinis (1)",
+    "name": "Tears of Elidinis (1)",
     "highalch": 18,
     "alchable": true,
     "mapping": null
@@ -87257,7 +87257,7 @@
     "mapping": null
   },
   "27358": {
-    "name": "Tome of fire",
+    "name": "Tome of Fire",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -87314,7 +87314,7 @@
     "mapping": null
   },
   "27370": {
-    "name": "Mask of rebirth",
+    "name": "Mask of Rebirth",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -87347,25 +87347,25 @@
     ]
   },
   "27377": {
-    "name": "Remnant of akkha",
+    "name": "Remnant of Akkha",
     "highalch": 6000,
     "alchable": true,
     "mapping": null
   },
   "27378": {
-    "name": "Remnant of ba-ba",
+    "name": "Remnant of Ba-Ba",
     "highalch": 6000,
     "alchable": true,
     "mapping": null
   },
   "27379": {
-    "name": "Remnant of kephri",
+    "name": "Remnant of Kephri",
     "highalch": 6000,
     "alchable": true,
     "mapping": null
   },
   "27380": {
-    "name": "Remnant of zebak",
+    "name": "Remnant of Zebak",
     "highalch": 6000,
     "alchable": true,
     "mapping": null
@@ -88495,19 +88495,19 @@
     ]
   },
   "27667": {
-    "name": "Claws of callisto",
+    "name": "Claws of Callisto",
     "highalch": 48000,
     "alchable": true,
     "mapping": null
   },
   "27670": {
-    "name": "Fangs of venenatis",
+    "name": "Fangs of Venenatis",
     "highalch": 48000,
     "alchable": true,
     "mapping": null
   },
   "27673": {
-    "name": "Skull of vet'ion",
+    "name": "Skull of Vet'ion",
     "highalch": 48000,
     "alchable": true,
     "mapping": null
@@ -90000,7 +90000,7 @@
     "mapping": null
   },
   "28070": {
-    "name": "Helm of neitiznot (or)",
+    "name": "Helm of Neitiznot (or)",
     "highalch": 30600,
     "alchable": true,
     "mapping": [
@@ -90473,7 +90473,7 @@
     ]
   },
   "28226": {
-    "name": "3rd age felling axe",
+    "name": "3rd Age felling axe",
     "highalch": 33000,
     "alchable": true,
     "mapping": null
@@ -90770,7 +90770,7 @@
     "mapping": null
   },
   "28321": {
-    "name": "Eye of the duke",
+    "name": "Eye of the Duke",
     "highalch": 30000,
     "alchable": true,
     "mapping": null
@@ -92633,7 +92633,7 @@
     "mapping": null
   },
   "28807": {
-    "name": "Shield of arrav",
+    "name": "Shield of Arrav",
     "highalch": 18,
     "alchable": true,
     "mapping": null
@@ -92723,7 +92723,7 @@
     "mapping": null
   },
   "28828": {
-    "name": "Blessed dizana's quiver (broken)",
+    "name": "Blessed Dizana's quiver (broken)",
     "highalch": 60000,
     "alchable": true,
     "mapping": null
@@ -93017,13 +93017,13 @@
     "mapping": null
   },
   "28919": {
-    "name": "Tonalztics of ralos (uncharged)",
+    "name": "Tonalztics of Ralos (uncharged)",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28922": {
-    "name": "Tonalztics of ralos",
+    "name": "Tonalztics of Ralos",
     "highalch": 0,
     "alchable": false,
     "mapping": [
@@ -93125,13 +93125,13 @@
     "mapping": null
   },
   "28955": {
-    "name": "Blessed dizana's quiver",
+    "name": "Blessed Dizana's quiver",
     "highalch": 60000,
     "alchable": true,
     "mapping": null
   },
   "28957": {
-    "name": "Blessed dizana's quiver (l)",
+    "name": "Blessed Dizana's quiver (l)",
     "highalch": 60000,
     "alchable": true,
     "mapping": null
@@ -93227,7 +93227,7 @@
     "mapping": null
   },
   "28977": {
-    "name": "Knight of varlamore",
+    "name": "Knight of Varlamore",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -94626,13 +94626,13 @@
     "mapping": null
   },
   "29433": {
-    "name": "Book of egg",
+    "name": "Book of Egg",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29435": {
-    "name": "Book of egg",
+    "name": "Book of Egg",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -95867,7 +95867,7 @@
     "mapping": null
   },
   "29786": {
-    "name": "Jar of venom",
+    "name": "Jar of Venom",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
@@ -96305,13 +96305,13 @@
     "mapping": null
   },
   "29892": {
-    "name": "Pendant of ates (inert)",
+    "name": "Pendant of Ates (inert)",
     "highalch": 210,
     "alchable": true,
     "mapping": null
   },
   "29893": {
-    "name": "Pendant of ates",
+    "name": "Pendant of Ates",
     "highalch": 210,
     "alchable": true,
     "mapping": null
@@ -97007,7 +97007,7 @@
     ]
   },
   "30064": {
-    "name": "Tome of earth",
+    "name": "Tome of Earth",
     "highalch": 12000,
     "alchable": true,
     "mapping": [
@@ -97018,7 +97018,7 @@
     ]
   },
   "30066": {
-    "name": "Tome of earth (empty)",
+    "name": "Tome of Earth (empty)",
     "highalch": 12000,
     "alchable": true,
     "mapping": null
@@ -98031,7 +98031,7 @@
     "mapping": null
   },
   "30380": {
-    "name": "Gloves of the damned",
+    "name": "Gloves of the Damned",
     "highalch": 30000,
     "alchable": true,
     "mapping": null
@@ -99641,67 +99641,67 @@
     "mapping": null
   },
   "30810": {
-    "name": "Contract of glyphic attenuation",
+    "name": "Contract of Glyphic Attenuation",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30813": {
-    "name": "Contract of sensory clouding",
+    "name": "Contract of Sensory Clouding",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30816": {
-    "name": "Contract of bloodied blows",
+    "name": "Contract of Bloodied Blows",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30819": {
-    "name": "Contract of divine severance",
+    "name": "Contract of Divine Severance",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30822": {
-    "name": "Contract of forfeit breath",
+    "name": "Contract of Forfeit Breath",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30825": {
-    "name": "Contract of oathplate acquisition",
+    "name": "Contract of Oathplate Acquisition",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30828": {
-    "name": "Contract of shard acquisition",
+    "name": "Contract of Shard Acquisition",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30831": {
-    "name": "Contract of catalyst acquisition",
+    "name": "Contract of Catalyst Acquisition",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30834": {
-    "name": "Contract of worm acquisition",
+    "name": "Contract of Worm Acquisition",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30837": {
-    "name": "Contract of harmony acquisition",
+    "name": "Contract of Harmony Acquisition",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "30840": {
-    "name": "Contract of familiar acquisition",
+    "name": "Contract of Familiar Acquisition",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -99853,7 +99853,7 @@
     "mapping": null
   },
   "30893": {
-    "name": "Jewel of amascut",
+    "name": "Jewel of Amascut",
     "highalch": 180000,
     "alchable": true,
     "mapping": null
@@ -100339,7 +100339,7 @@
     ]
   },
   "31016": {
-    "name": "Sacraments of ent folk",
+    "name": "Sacraments of Ent Folk",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -100708,7 +100708,7 @@
     "mapping": null
   },
   "31113": {
-    "name": "Eye of ayak",
+    "name": "Eye of Ayak",
     "highalch": 3600000,
     "alchable": true,
     "mapping": [
@@ -100719,7 +100719,7 @@
     ]
   },
   "31115": {
-    "name": "Eye of ayak (uncharged)",
+    "name": "Eye of Ayak (uncharged)",
     "highalch": 3600000,
     "alchable": true,
     "mapping": null
@@ -101037,13 +101037,13 @@
     ]
   },
   "31241": {
-    "name": "Horn of plenty",
+    "name": "Horn of Plenty",
     "highalch": 12000,
     "alchable": true,
     "mapping": null
   },
   "31243": {
-    "name": "Horn of plenty (empty)",
+    "name": "Horn of Plenty (empty)",
     "highalch": 12000,
     "alchable": true,
     "mapping": null
@@ -101295,7 +101295,7 @@
     "mapping": null
   },
   "31331": {
-    "name": "Mayor of catherby",
+    "name": "Mayor of Catherby",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102441,7 +102441,7 @@
     "mapping": null
   },
   "31757": {
-    "name": "Heart of ithell",
+    "name": "Heart of Ithell",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102615,7 +102615,7 @@
     "mapping": null
   },
   "31832": {
-    "name": "Bottle of sorodamin's bru",
+    "name": "Bottle of sOrodamin's bru",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102627,7 +102627,7 @@
     "mapping": null
   },
   "31834": {
-    "name": "Bottle of potterington's marrow wine",
+    "name": "Bottle of Potterington's marrow wine",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102645,7 +102645,7 @@
     "mapping": null
   },
   "31837": {
-    "name": "Bottle of barracuda brew",
+    "name": "Bottle of Barracuda brew",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102657,13 +102657,13 @@
     "mapping": null
   },
   "31839": {
-    "name": "Bottle of kharazi cooler",
+    "name": "Bottle of Kharazi cooler",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "31840": {
-    "name": "Bottle of dognose draught",
+    "name": "Bottle of Dognose draught",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102699,7 +102699,7 @@
     "mapping": null
   },
   "31846": {
-    "name": "Bottle of oo'glug",
+    "name": "Bottle of Oo'glug",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102747,7 +102747,7 @@
     "mapping": null
   },
   "31854": {
-    "name": "Bottle of captain clop's mango gin",
+    "name": "Bottle of Captain Clop's mango gin",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102837,7 +102837,7 @@
     "mapping": null
   },
   "31872": {
-    "name": "Bottle of waterbirth blue lagoon",
+    "name": "Bottle of Waterbirth blue lagoon",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102891,7 +102891,7 @@
     "mapping": null
   },
   "31882": {
-    "name": "Bottle of kgp standard issue martini",
+    "name": "Bottle of KGP standard issue martini",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102903,7 +102903,7 @@
     "mapping": null
   },
   "31884": {
-    "name": "Bottle of weiss meltwater",
+    "name": "Bottle of Weiss meltwater",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102915,7 +102915,7 @@
     "mapping": null
   },
   "31886": {
-    "name": "Bottle of elidinis's life water",
+    "name": "Bottle of Elidinis's life water",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -102981,13 +102981,13 @@
     "mapping": null
   },
   "31897": {
-    "name": "Bottle of robert's port",
+    "name": "Bottle of Robert's Port",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "31898": {
-    "name": "Bottle of sea shandy 2",
+    "name": "Bottle of Sea Shandy 2",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -103023,7 +103023,7 @@
     "mapping": null
   },
   "31905": {
-    "name": "Bottle of captain cat's black rum",
+    "name": "Bottle of Captain Cat's black rum",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -104463,7 +104463,7 @@
     "mapping": null
   },
   "32276": {
-    "name": "Ruins of unkah",
+    "name": "Ruins of Unkah",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -104865,7 +104865,7 @@
     "mapping": null
   },
   "32386": {
-    "name": "Medallion of the deep",
+    "name": "Medallion of the Deep",
     "highalch": 120,
     "alchable": true,
     "mapping": null
@@ -107817,7 +107817,7 @@
     "mapping": null
   },
   "32921": {
-    "name": "Jar of feathers",
+    "name": "Jar of Feathers",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
@@ -109249,7 +109249,7 @@
     "mapping": null
   },
   "33314": {
-    "name": "Trident of the swamp (o)",
+    "name": "Trident of the Swamp (o)",
     "highalch": 47100,
     "alchable": true,
     "mapping": [
@@ -109279,7 +109279,7 @@
     ]
   },
   "33318": {
-    "name": "Trident of the swamp (e) (o)",
+    "name": "Trident of the Swamp (e) (o)",
     "highalch": 65100,
     "alchable": true,
     "mapping": [
@@ -109309,7 +109309,7 @@
     ]
   },
   "33322": {
-    "name": "Trident of the seas (o)",
+    "name": "Trident of the Seas (o)",
     "highalch": 41100,
     "alchable": true,
     "mapping": [
@@ -109324,7 +109324,7 @@
     ]
   },
   "33323": {
-    "name": "Trident of the seas (full) (o)",
+    "name": "Trident of the Seas (full) (o)",
     "highalch": 41400,
     "alchable": true,
     "mapping": [
@@ -109339,7 +109339,7 @@
     ]
   },
   "33326": {
-    "name": "Trident of the seas (e) (o)",
+    "name": "Trident of the Seas (e) (o)",
     "highalch": 59100,
     "alchable": true,
     "mapping": [
@@ -109519,7 +109519,7 @@
     "mapping": null
   },
   "33371": {
-    "name": "Mark of grace",
+    "name": "Mark of Grace",
     "highalch": 0,
     "alchable": true,
     "mapping": [
@@ -109989,13 +109989,13 @@
     "mapping": null
   },
   "33528": {
-    "name": "Blessed dizana's quiver (l) (broken)",
+    "name": "Blessed Dizana's quiver (l) (broken)",
     "highalch": 60000,
     "alchable": true,
     "mapping": null
   },
   "33530": {
-    "name": "Blessed dizana's quiver (l) (mangled)",
+    "name": "Blessed Dizana's quiver (l) (mangled)",
     "highalch": 60000,
     "alchable": true,
     "mapping": null
@@ -111687,8 +111687,8 @@
   },
   "34024": {
     "name": "Jeweller's chisel",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 60000,
+    "alchable": true,
     "mapping": null
   },
   "34026": {
@@ -111704,7 +111704,7 @@
     "mapping": null
   },
   "34030": {
-    "name": "Jar of light",
+    "name": "Jar of Light",
     "highalch": 120000,
     "alchable": true,
     "mapping": null
@@ -111718,12 +111718,6 @@
   "34033": {
     "name": "Ardeaglais teleport",
     "highalch": 6,
-    "alchable": true,
-    "mapping": null
-  },
-  "34035": {
-    "name": "Placeholder",
-    "highalch": 750000,
     "alchable": true,
     "mapping": null
   },
@@ -111838,6 +111832,12 @@
   "34063": {
     "name": "Vampyre snelm",
     "highalch": 180,
+    "alchable": true,
+    "mapping": null
+  },
+  "34065": {
+    "name": "Shark lure pack",
+    "highalch": 0,
     "alchable": true,
     "mapping": null
   }

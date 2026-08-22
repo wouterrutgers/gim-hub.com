@@ -13,11 +13,13 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
   const results = [];
   startMS ??= performance.now();
   const elapsedMS = performance.now() - startMS;
+  const lastOnlineAt = new Date(Date.now());
   const thurgoRoster = roster.find(({ originalName }) => originalName === "Thurgo");
   if (thurgoRoster) {
     const member = {
       ...DEFAULT_MEMBER,
       name: thurgoRoster.displayName,
+      lastOnlineAt,
       bank: banks.get("Thurgo"),
       stats: {
         health: {
@@ -115,6 +117,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     const member = {
       ...DEFAULT_MEMBER,
       name: cow31337KillerRoster.displayName,
+      lastOnlineAt,
       bank: banks.get("Cow31337Killer"),
       quests: [...cowKiller.quests],
       diaries: {
@@ -244,6 +247,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     const member = {
       ...DEFAULT_MEMBER,
       name: garyRoster.displayName,
+      lastOnlineAt,
       bank: banks.get("Gary"),
       stats: {
         health: {
@@ -316,6 +320,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     const member = {
       ...DEFAULT_MEMBER,
       name: xXgamerXxRoster.displayName,
+      lastOnlineAt,
       bank: banks.get("xXgamerXx"),
       lastUpdated: new Date(Date.now()),
       skills: {
@@ -585,6 +590,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     results.push({
       ...DEFAULT_MEMBER,
       name: displayName,
+      lastOnlineAt,
     });
   }
   results.push({

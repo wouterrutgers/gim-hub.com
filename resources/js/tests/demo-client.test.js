@@ -31,6 +31,7 @@ describe("demo client", function describeDemoClient() {
   });
 
   it("creates a complete simulated group response", function testGroupResponse() {
+    const requestTime = new Date();
     const response = mockGroupDataResponse(createInitialState(), performance.now(), demoData);
 
     expect(
@@ -43,6 +44,15 @@ describe("demo client", function describeDemoClient() {
         return member.name === "Cow31337Killer";
       }).skills,
     ).toBeDefined();
+    expect(
+      response
+        .filter(function filterSharedBank(member) {
+          return member.name !== "@SHARED";
+        })
+        .every(function isOnline(member) {
+          return member.lastOnlineAt >= requestTime;
+        }),
+    ).toBe(true);
   });
 
   it("retries initialization after a failure", async function testInitializationRetry() {

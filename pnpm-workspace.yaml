@@ -6,3 +6,6 @@ peerDependencyRules:
     - vite
   allowedVersions:
     vite: "*"
+
+settings:
+  minimumReleaseAge: 10080

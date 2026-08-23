@@ -1,12 +1,6 @@
 #!/bin/bash
 set -e
 
-function shutdown {
-    echo "Shutting down services..."
-    kill -TERM $(jobs -p) 2>/dev/null || true
-}
-trap shutdown SIGTERM SIGINT
-
 echo "Starting application entrypoint..."
 
 if [ ! -s ".env" ]; then
@@ -24,14 +18,7 @@ php artisan route:cache
 php artisan view:cache
 php artisan migrate --force
 
-php artisan schedule:work &
+export OCTANE_ARGUMENTS="$*"
 
-php artisan horizon &
-
-if [ -f "/Caddyfile" ]; then
-    echo "Using custom Caddyfile"
-    exec php artisan octane:frankenphp --host=0.0.0.0 --port=8000 --caddyfile=/Caddyfile "$@"
-else
-    echo "Using Octane default configuration"
-    exec php artisan octane:frankenphp --host=0.0.0.0 --port=8000 "$@"
-fi
+echo "Starting managed services..."
+exec /usr/bin/supervisord --configuration=/etc/supervisor/supervisord.conf

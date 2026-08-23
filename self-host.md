@@ -22,6 +22,7 @@ mkdir gim-hub && cd gim-hub
 services:
   app:
     image: wouterrutgers/gim-hub.com:octane
+    restart: unless-stopped
     ports:
       - "80:8000"
       # Optional: enable HTTPS (requires custom Caddyfile)

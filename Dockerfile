@@ -1,5 +1,9 @@
 FROM dunglas/frankenphp:php8.5 AS base
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends supervisor \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN install-php-extensions \
     pcntl \
     pdo_mysql \
@@ -42,7 +46,9 @@ ARG GIM_HUB_RELEASE
 ENV GIM_HUB_RELEASE=${GIM_HUB_RELEASE}
 
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY docker/octane.sh /usr/local/bin/octane.sh
+COPY docker/supervisord.conf /etc/supervisor/supervisord.conf
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/octane.sh
 
 COPY . /app
 

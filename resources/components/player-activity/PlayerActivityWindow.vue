@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, ref, watch } from "vue";
+  import { computed, onMounted, ref, watch } from "vue";
   import { useApiStore } from "../../stores/api";
   import { useGameDataStore } from "../../stores/game-data";
   import { useGroupStore } from "../../stores/group";
@@ -13,7 +13,6 @@
 
   const props = defineProps({
     player: { type: String, required: true },
-    currentHiscores: { type: Map, default: undefined },
     onClearSnapshot: { type: Function, default: undefined },
   });
   const emit = defineEmits(["close"]);
@@ -24,7 +23,7 @@
   const snapshotStore = useSnapshotStore();
 
   const snapshotView = ref("lastVisit");
-  const fetchedHiscores = ref();
+  const hiscores = ref();
   const clearingSnapshot = ref(false);
   const clearSnapshotError = ref();
 
@@ -62,9 +61,6 @@
 
       return regionDifference !== 0 ? regionDifference : diaryTiers.indexOf(left.tier) - diaryTiers.indexOf(right.tier);
     });
-  });
-  const hiscores = computed(function getHiscores() {
-    return props.currentHiscores ?? fetchedHiscores.value;
   });
   const bossKillCountChanges = computed(function getBossKillCountChanges() {
     if (hiscores.value === undefined) {
@@ -151,18 +147,21 @@
     }
   }
 
+  onMounted(function refreshCollectionLogs() {
+    groupStore.refreshCollectionLogs().catch(function reportCollectionLogError(reason) {
+      console.error("Failed to fetch collection logs", reason);
+    });
+  });
+
   watch(
     [
       function getPlayer() {
         return props.player;
       },
       bossKcBefore,
-      function getPassedHiscores() {
-        return props.currentHiscores;
-      },
     ],
-    function loadHiscores([player, bossCounts, passedHiscores], _previousValues, onCleanup) {
-      if (passedHiscores !== undefined || Object.keys(bossCounts).length === 0 || !apiStore.client) {
+    function loadHiscores([player, bossCounts], _previousValues, onCleanup) {
+      if (Object.keys(bossCounts).length === 0 || !apiStore.client) {
         return;
       }
 
@@ -172,10 +171,10 @@
       });
       apiStore.client.fetchMemberHiscores(player).then(
         function storeHiscores(result) {
-          if (!cancelled) fetchedHiscores.value = result;
+          if (!cancelled) hiscores.value = result;
         },
         function storeEmptyHiscores() {
-          if (!cancelled) fetchedHiscores.value = new Map();
+          if (!cancelled) hiscores.value = new Map();
         },
       );
     },

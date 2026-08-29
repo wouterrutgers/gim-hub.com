@@ -78,7 +78,7 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
             return;
           }
 
-          const response = await client.fetchGroupData(new Date(validUpTo.getTime() + 1));
+          const response = await client.fetchGroupData(validUpTo);
 
           if (cancelled) {
             return;

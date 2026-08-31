@@ -74,8 +74,8 @@
   line-height: 1;
 }
 
-.group-chat-member-dot--disabled,
-.group-chat-member-name--disabled {
+.group-chat-member-dot-disabled,
+.group-chat-member-name-disabled {
   color: rgb(255 255 255 / 25%);
 }
 
@@ -119,7 +119,7 @@
 .group-chat-text {
   color: var(--white);
   text-shadow: 1px 1px var(--black);
-  word-break: break-word;
+  overflow-wrap: break-word;
   flex: 1;
   min-width: 0;
 }

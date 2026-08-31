@@ -66,8 +66,6 @@ export default class LiveClient {
   fetchChatMessages(afterId) {
     return fetchChatMessages({ baseURL: this.baseURL, credentials: this.credentials, afterId });
   }
-
-
 }
 
 export async function authenticateGroup({ name, token }) {

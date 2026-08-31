@@ -120,30 +120,28 @@
           v-for="member in memberRelayStatuses"
           :key="member.name"
           class="group-chat-member-status"
-          :data-tooltip="member.chatRelayEnabled ? `${member.name}: chat relay enabled` : `${member.name}: chat relay disabled`"
+          :data-tooltip="
+            member.chatRelayEnabled ? `${member.name}: chat relay enabled` : `${member.name}: chat relay disabled`
+          "
         >
           <span
             class="group-chat-member-dot"
-            :class="{ 'group-chat-member-dot--disabled': !member.chatRelayEnabled }"
+            :class="{ 'group-chat-member-dot-disabled': !member.chatRelayEnabled }"
             :style="member.chatRelayEnabled ? { color: senderColor(member.colorHueDegrees) } : {}"
-          >{{member.chatRelayEnabled ? "✓" : "✗"}}</span>
+            >{{ member.chatRelayEnabled ? "✓" : "✗" }}</span
+          >
           <span
             class="group-chat-member-name"
-            :class="{ 'group-chat-member-name--disabled': !member.chatRelayEnabled }"
+            :class="{ 'group-chat-member-name-disabled': !member.chatRelayEnabled }"
             :style="member.chatRelayEnabled ? { color: senderColor(member.colorHueDegrees) } : {}"
-          >{{ member.name }}</span>
+            >{{ member.name }}</span
+          >
         </span>
       </div>
 
       <div ref="messagesContainer" class="group-chat-panel-messages">
-        <div v-if="messages.length === 0" class="group-chat-empty">
-          No messages yet.
-        </div>
-        <div
-          v-for="msg in messages"
-          :key="msg.id"
-          class="group-chat-message"
-        >
+        <div v-if="messages.length === 0" class="group-chat-empty">No messages yet.</div>
+        <div v-for="msg in messages" :key="msg.id" class="group-chat-message">
           <span class="group-chat-sender" :style="{ color: messageSenderColor(msg) }">{{ msg.senderName }}:</span>
           <span class="group-chat-text">{{ msg.message }}</span>
           <span class="group-chat-timestamp">{{ formatTimestamp(msg.sentAt) }}</span>

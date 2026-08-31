@@ -41,9 +41,11 @@ function validateBoolean(value) {
   return undefined;
 }
 
-const knownChatPanelPaths = new Set(chatPanelPageOptions.map(function getPath(option) {
-  return option.path;
-}));
+const knownChatPanelPaths = new Set(
+  chatPanelPageOptions.map(function getPath(option) {
+    return option.path;
+  }),
+);
 
 function validateChatPanelPages(value) {
   if (typeof value !== "string") {

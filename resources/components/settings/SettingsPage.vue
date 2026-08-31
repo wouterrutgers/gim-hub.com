@@ -75,13 +75,13 @@
         settingsStore.setChatPanelPages([...current, path]);
       }
     } else {
-      settingsStore.setChatPanelPages(current.filter(function excludePath(p) {
-        return p !== path;
-      }));
+      settingsStore.setChatPanelPages(
+        current.filter(function excludePath(p) {
+          return p !== path;
+        }),
+      );
     }
   }
-
-
 </script>
 
 <template>

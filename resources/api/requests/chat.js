@@ -6,9 +6,13 @@ const chatMessageSchema = z.object({
   sender_name: z.string(),
   message: z.string(),
   sent_at: dateSchema,
-  color_hue_degrees: z.number().int().nullish().transform(function omitNull(value) {
-    return value ?? undefined;
-  }),
+  color_hue_degrees: z
+    .number()
+    .int()
+    .nullish()
+    .transform(function omitNull(value) {
+      return value ?? undefined;
+    }),
 });
 
 const chatMessagesSchema = z.array(chatMessageSchema).transform(function mapMessages(messages) {
@@ -23,12 +27,9 @@ const chatMessagesSchema = z.array(chatMessageSchema).transform(function mapMess
 });
 
 export async function fetchChatMessages({ baseURL, credentials, afterId }) {
-  const response = await fetch(
-    `${baseURL}/group/${credentials.name}/chat-messages?after_id=${afterId ?? 0}`,
-    {
-      headers: { Authorization: credentials.token },
-    },
-  );
+  const response = await fetch(`${baseURL}/group/${credentials.name}/chat-messages?after_id=${afterId ?? 0}`, {
+    headers: { Authorization: credentials.token },
+  });
 
   if (!response.ok) {
     throw new Error("fetchChatMessages HTTP response was not OK");

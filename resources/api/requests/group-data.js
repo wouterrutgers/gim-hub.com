@@ -897,6 +897,7 @@ const groupDataSchema = z
         .transform(function omitNull(value) {
           return value ?? undefined;
         }),
+      chat_relay_enabled: z.boolean().optional(),
     }),
   )
   .transform(function mapMembers(members) {
@@ -915,6 +916,7 @@ function mapMember({
   essence_pouches,
   diary_vars,
   color_hue_degrees,
+  chat_relay_enabled,
   tackle_box,
   tool_leprechaun,
   elnock_inquisitor,
@@ -935,6 +937,7 @@ function mapMember({
     essencePouches: essence_pouches,
     diaries: diary_vars,
     colorHueDegrees: color_hue_degrees,
+    chatRelayEnabled: chat_relay_enabled,
     tackleBox: tackle_box,
     toolLeprechaun: tool_leprechaun,
     elnockInquisitor: elnock_inquisitor,

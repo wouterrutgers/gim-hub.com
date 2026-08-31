@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GroupChatController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\UnauthedController;
@@ -25,4 +26,6 @@ Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(func
     Route::get('/am-i-logged-in', [GroupMemberController::class, 'amILoggedIn']);
     Route::get('/am-i-in-group', [GroupMemberController::class, 'amIInGroup']);
     Route::get('/hiscores', [GroupMemberController::class, 'getHiscores']);
+    Route::post('/relay-chat', [GroupChatController::class, 'relayMessage']);
+    Route::get('/chat-messages', [GroupChatController::class, 'getMessages']);
 });

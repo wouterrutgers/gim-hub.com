@@ -161,6 +161,7 @@ class GroupMemberController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
+            'chat_relay_enabled' => 'nullable|boolean',
             'stats' => 'nullable|array',
             'coordinates' => 'nullable|array',
             'skills' => 'nullable|array',
@@ -242,7 +243,11 @@ class GroupMemberController extends Controller
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData) {
-            $member->update(['last_online_at' => now()]);
+            $memberUpdates = ['last_online_at' => now()];
+            if (array_key_exists('chat_relay_enabled', $validated) && ! is_null($validated['chat_relay_enabled'])) {
+                $memberUpdates['chat_relay_enabled'] = $validated['chat_relay_enabled'];
+            }
+            $member->update($memberUpdates);
 
             foreach (Member::PROPERTY_KEYS as $propertyKey) {
                 $partialKey = Member::PARTIAL_PROPERTY_KEYS[$propertyKey] ?? null;
@@ -391,6 +396,7 @@ class GroupMemberController extends Controller
             $data = [
                 'name' => $member->name,
                 'color_hue_degrees' => $member->color_hue_degrees,
+                'chat_relay_enabled' => (bool) $member->chat_relay_enabled,
                 'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
                 'last_online_at' => is_null($member->last_online_at) ? null : Carbon::make($member->last_online_at)->toIso8601ZuluString(),
                 'shared_bank' => null,

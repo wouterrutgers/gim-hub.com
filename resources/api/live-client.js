@@ -1,4 +1,5 @@
 import { fetchGameData } from "./game-data";
+import { fetchChatMessages } from "./requests/chat";
 import { fetchGroupCollectionLogs } from "./requests/collection-log";
 import { fetchGroupData } from "./requests/group-data";
 import { fetchMemberHiscores } from "./requests/hiscores";
@@ -61,6 +62,12 @@ export default class LiveClient {
       colorHueDegrees,
     });
   }
+
+  fetchChatMessages(afterId) {
+    return fetchChatMessages({ baseURL: this.baseURL, credentials: this.credentials, afterId });
+  }
+
+
 }
 
 export async function authenticateGroup({ name, token }) {

@@ -14,6 +14,28 @@ import {
   populateSnapshotHistory,
 } from "./demo/snapshot-history";
 
+const MINUTES = 60 * 1000;
+
+function demoChatMessages(startMS, roster) {
+  const now = Date.now();
+  const elapsed = performance.now() - startMS;
+
+  function colorFor(displayName) {
+    return roster.find((r) => r.displayName === displayName)?.colorHueDegrees;
+  }
+
+  return [
+    { id: 1, senderName: "Thurgo",        colorHueDegrees: colorFor("Thurgo"),        message: "Just banked another load, pies are flying out",    sentAt: new Date(now - 18 * MINUTES) },
+    { id: 2, senderName: "Cow31337Killer", colorHueDegrees: colorFor("Cow31337Killer"), message: "You're going to smell like redberry forever lol", sentAt: new Date(now - 15 * MINUTES) },
+    { id: 3, senderName: "Thurgo",        colorHueDegrees: colorFor("Thurgo"),        message: "Worth it, cooking xp is insane",                  sentAt: new Date(now - 13 * MINUTES) },
+    { id: 4, senderName: "Cow31337Killer", colorHueDegrees: colorFor("Cow31337Killer"), message: "Almost at 10k kills, cows have no chance",       sentAt: new Date(now - 10 * MINUTES) },
+    { id: 5, senderName: "Thurgo",        colorHueDegrees: colorFor("Thurgo"),        message: "lmaoo get them",                                  sentAt: new Date(now -  7 * MINUTES) },
+    ...(elapsed >= 0.5 * MINUTES ? [{ id: 6, senderName: "Cow31337Killer", colorHueDegrees: colorFor("Cow31337Killer"), message: "Another one bites the dust",  sentAt: new Date(now - 3 * MINUTES) }] : []),
+    ...(elapsed >= 1.0 * MINUTES ? [{ id: 7, senderName: "Thurgo",         colorHueDegrees: colorFor("Thurgo"),         message: "brb banking",                sentAt: new Date(now - 2 * MINUTES) }] : []),
+    ...(elapsed >= 2.0 * MINUTES ? [{ id: 8, senderName: "Cow31337Killer", colorHueDegrees: colorFor("Cow31337Killer"), message: "gz on the bank trip",        sentAt: new Date(now - 1 * MINUTES) }] : []),
+  ];
+}
+
 export default class DemoClient {
   baseURL = __API_URL__;
   credentials = {
@@ -285,6 +307,13 @@ export default class DemoClient {
     await this.fetchGameData();
 
     return structuredClone(this.state.hiscores.get(memberName) ?? new Map());
+  }
+
+  async fetchChatMessages(afterId) {
+    const all = demoChatMessages(this.startMS, this.state.roster);
+    return all.filter(function isNew(msg) {
+      return msg.id > afterId;
+    });
   }
 
   async updateMemberColor({ memberName, colorHueDegrees }) {

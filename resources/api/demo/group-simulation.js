@@ -110,6 +110,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
         quantity: 1,
       });
     }
+    member.chatRelayEnabled = true;
     results.push(member);
   }
   const cow31337KillerRoster = roster.find(({ originalName }) => originalName === "Cow31337Killer");
@@ -240,6 +241,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       },
       lastUpdated: new Date(Date.now()),
     };
+    member.chatRelayEnabled = true;
     results.push(member);
   }
   const garyRoster = roster.find(({ originalName }) => originalName === "Gary");
@@ -313,6 +315,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       plane: 0,
       isOnBoat: false,
     };
+    member.chatRelayEnabled = false;
     results.push(member);
   }
   const xXgamerXxRoster = roster.find(({ originalName }) => originalName === "xXgamerXx");
@@ -584,6 +587,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     for (const skill of skills) {
       member.skills[skill] = EXPERIENCE_99;
     }
+    member.chatRelayEnabled = false;
     results.push(member);
   }
   for (const { displayName } of roster.filter(({ originalName }) => originalName === undefined)) {

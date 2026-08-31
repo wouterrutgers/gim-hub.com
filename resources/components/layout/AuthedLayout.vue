@@ -1,8 +1,10 @@
 <script setup>
   import { computed } from "vue";
+  import { useRoute } from "vue-router";
   import { useApiStore } from "../../stores/api";
   import { useSettingsStore } from "../../stores/settings";
   import AppNavigation from "../app-navigation/AppNavigation.vue";
+  import GroupChatPanel from "../group-chat-panel/GroupChatPanel.vue";
   import SidePanels from "./SidePanels.vue";
   import "./layout.css";
 
@@ -13,8 +15,14 @@
 
   const apiStore = useApiStore();
   const settingsStore = useSettingsStore();
+  const route = useRoute();
+
   const groupName = computed(function getGroupName() {
     return apiStore.credentials?.name ?? "";
+  });
+
+  const showChatPanel = computed(function getChatPanelVisibility() {
+    return settingsStore.chatPanelPages.includes(route.path);
   });
 </script>
 
@@ -23,6 +31,7 @@
     <div id="main-content" class="pointer-passthrough">
       <AppNavigation v-if="!props.hideHeader" :group-name="groupName" />
       <slot />
+      <GroupChatPanel v-if="showChatPanel" />
     </div>
     <SidePanels v-if="props.showPanels" />
   </template>
@@ -32,6 +41,7 @@
     <div id="main-content" class="pointer-passthrough">
       <AppNavigation v-if="!props.hideHeader" :group-name="groupName" />
       <slot />
+      <GroupChatPanel v-if="showChatPanel" />
     </div>
   </template>
 </template>

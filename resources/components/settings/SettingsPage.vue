@@ -4,7 +4,7 @@
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
-  import { sidebarPositions, siteThemes } from "../../stores/settings-options";
+  import { chatPanelPageOptions, sidebarPositions, siteThemes } from "../../stores/settings-options";
   import { memberNameSchema } from "../../game/member-name";
   import LoadingScreen from "../loading-screen/LoadingScreen.vue";
   import EditMemberInput from "./EditMemberInput.vue";
@@ -21,7 +21,6 @@
   const apiStore = useApiStore();
   const groupStore = useGroupStore();
   const settingsStore = useSettingsStore();
-
   const addMemberInput = ref();
   const addMemberErrors = ref();
   const pendingAddMember = ref(false);
@@ -63,6 +62,26 @@
       pendingAddMember.value = false;
     }
   }
+
+  function isChatPageEnabled(path) {
+    return settingsStore.chatPanelPages.includes(path);
+  }
+
+  function toggleChatPage(path, enabled) {
+    const current = settingsStore.chatPanelPages;
+
+    if (enabled) {
+      if (!current.includes(path)) {
+        settingsStore.setChatPanelPages([...current, path]);
+      }
+    } else {
+      settingsStore.setChatPanelPages(current.filter(function excludePath(p) {
+        return p !== path;
+      }));
+    }
+  }
+
+
 </script>
 
 <template>
@@ -172,6 +191,19 @@
             @change="settingsStore.setSiteTheme(theme)"
           />
           <label :for="`style-${theme}`">{{ labels[theme] }}</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Chat panel pages</legend>
+        <div v-for="page in chatPanelPageOptions" :key="page.path" class="settings-page-radio-item">
+          <input
+            :id="`chat-page-${page.path}`"
+            type="checkbox"
+            :checked="isChatPageEnabled(page.path)"
+            @change="toggleChatPage(page.path, $event.target.checked)"
+          />
+          <label :for="`chat-page-${page.path}`">{{ page.label }}</label>
         </div>
       </fieldset>
     </div>

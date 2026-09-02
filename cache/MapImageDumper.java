@@ -134,7 +134,7 @@ public class MapImageDumper
 
     @Getter
     @Setter
-    private boolean lowMemory = false;
+    private boolean lowMemory = true;
 
     public MapImageDumper(Store store, KeyProvider keyProvider)
     {
@@ -200,6 +200,7 @@ public class MapImageDumper
                         File imageFile = new File(outDir, "img-" + i + ".png");
 
                         ImageIO.write(image, "png", imageFile);
+                        BigBufferedImage.dispose(image);
                         log.info("Wrote image {}", imageFile);
                     }
             }

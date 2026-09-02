@@ -59,10 +59,8 @@ async function run() {
     quest.member = true;
     quest.miniquest = true;
   });
-  const tutorialQuests = [{ name: "Tutorial Island", difficulty: "Novice", points: 1, member: false, tutorial: true }];
-
   const result = {};
-  for (const quest of [...freeToPlayQuests, ...memberQuests, ...miniQuests, ...tutorialQuests]) {
+  for (const quest of [...freeToPlayQuests, ...memberQuests, ...miniQuests]) {
     if (quest.name.includes("Quick guide")) {
       continue;
     }

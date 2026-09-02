@@ -34,9 +34,9 @@ jobs:
             cache/pnpm-lock.yaml
           install: false
 
-      - uses: s4u/setup-maven-action@v1.20.0
+      - uses: actions/setup-java@v6
         with:
-          checkout-enabled: false
+          distribution: zulu
           java-version: 11
 
       - run: |

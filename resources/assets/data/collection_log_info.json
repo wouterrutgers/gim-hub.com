@@ -7706,6 +7706,10 @@
             "name": "Leaf-bladed sword"
           },
           {
+            "id": 34401,
+            "name": "Necklace of fangs"
+          },
+          {
             "id": 20727,
             "name": "Leaf-bladed battleaxe"
           },
@@ -8004,6 +8008,22 @@
           {
             "id": 33661,
             "name": "Venator fang"
+          },
+          {
+            "id": 34404,
+            "name": "Air diamond"
+          },
+          {
+            "id": 34410,
+            "name": "Water sapphire"
+          },
+          {
+            "id": 34416,
+            "name": "Earth emerald"
+          },
+          {
+            "id": 34422,
+            "name": "Fire ruby"
           }
         ]
       },

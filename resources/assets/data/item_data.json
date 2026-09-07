@@ -112800,5 +112800,115 @@
     "highalch": 0,
     "alchable": false,
     "mapping": null
+  },
+  "34388": {
+    "name": "Big red button",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34390": {
+    "name": "Lanscape coins",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        34392
+      ],
+      [
+        3,
+        34393
+      ],
+      [
+        4,
+        34394
+      ],
+      [
+        5,
+        34395
+      ],
+      [
+        25,
+        34396
+      ],
+      [
+        100,
+        34397
+      ],
+      [
+        250,
+        34398
+      ],
+      [
+        1000,
+        34399
+      ],
+      [
+        10000,
+        34400
+      ]
+    ]
+  },
+  "34401": {
+    "name": "Necklace of fangs",
+    "highalch": 30000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34404": {
+    "name": "Air diamond",
+    "highalch": 12000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34407": {
+    "name": "Amulet of air",
+    "highalch": 12600,
+    "alchable": true,
+    "mapping": null
+  },
+  "34410": {
+    "name": "Water sapphire",
+    "highalch": 12000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34413": {
+    "name": "Amulet of water",
+    "highalch": 12600,
+    "alchable": true,
+    "mapping": null
+  },
+  "34416": {
+    "name": "Earth emerald",
+    "highalch": 12000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34419": {
+    "name": "Amulet of earth",
+    "highalch": 12600,
+    "alchable": true,
+    "mapping": null
+  },
+  "34422": {
+    "name": "Fire ruby",
+    "highalch": 12000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34425": {
+    "name": "Amulet of fire",
+    "highalch": 12600,
+    "alchable": true,
+    "mapping": null
+  },
+  "34428": {
+    "name": "Elemental amulet",
+    "highalch": 50400,
+    "alchable": true,
+    "mapping": null
   }
 }

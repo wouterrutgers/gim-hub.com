@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Domain\MemberSnapshotCreator;
+use App\Domain\SkillHistory;
 use App\Domain\Validators;
-use App\Enums\AggregatePeriod;
 use App\Models\CollectionLog;
 use App\Models\Member;
 use App\Models\SkillStat;
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -428,48 +429,19 @@ class GroupMemberController extends Controller
         return $interacting;
     }
 
-    public function getSkillData(Request $request): JsonResponse
+    public function getSkillData(): JsonResponse
     {
+        $request = request();
         $validated = $request->validate([
-            'period' => 'required|in:Day,Week,Month,Year',
+            'start' => ['sometimes', 'required', 'date', ['before', 'end']],
+            'end' => ['required', 'date', ['before_or_equal', 'now']],
         ]);
 
-        $groupId = $request->attributes->get('group')->id;
-        $period = $validated['period'];
-
-        $aggregatePeriod = match ($period) {
-            'Day' => AggregatePeriod::Day,
-            'Week' => AggregatePeriod::Month,
-            'Month' => AggregatePeriod::Month,
-            'Year' => AggregatePeriod::Year,
-            default => AggregatePeriod::Day,
-        };
-
-        $members = Member::where('group_id', '=', $groupId)
-            ->with(['skillStats' => function ($query) use ($aggregatePeriod) {
-                $query->where('type', '=', $aggregatePeriod->value)
-                    ->orderBy('created_at');
-            }])
-            ->get();
-
-        $memberData = [];
-        foreach ($members as $member) {
-            $skillData = $member->skillStats->map(function ($stat) {
-                return [
-                    'time' => Carbon::make($stat->created_at)->toIso8601ZuluString(),
-                    'data' => $stat->skills,
-                ];
-            })->toArray();
-
-            $memberData[] = [
-                'name' => $member->name,
-                'skill_data' => $skillData,
-            ];
-        }
-
-        return response()->json(array_values(array_filter($memberData, function ($member) {
-            return ! empty($member['skill_data']);
-        })));
+        return response()->json(app(SkillHistory::class)->get(
+            $request->attributes->get('group'),
+            isset($validated['start']) ? CarbonImmutable::parse($validated['start'])->utc() : null,
+            CarbonImmutable::parse($validated['end'])->utc(),
+        ));
     }
 
     public function getCollectionLog(Request $request): Collection

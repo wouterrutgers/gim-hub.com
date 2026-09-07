@@ -1,19 +1,8 @@
 <script setup>
-  import { computed, ref, watch } from "vue";
+  import { computed, onBeforeUnmount, ref, shallowRef, watch } from "vue";
   import { Line } from "vue-chartjs";
-  import {
-    CategoryScale,
-    Chart as ChartJS,
-    Legend,
-    LinearScale,
-    LineElement,
-    PointElement,
-    TimeScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
-  import * as DateFNS from "date-fns";
-  import { aggregatePeriods } from "../../api/requests/skill-data";
+  import { Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, TimeScale, Tooltip } from "chart.js";
+  import zoomPlugin from "chartjs-plugin-zoom";
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
   import { skills, skillIcons } from "../../game/skill";
@@ -23,190 +12,213 @@
     buildDatasetsFromMemberSkillData,
     buildLineChartOptions,
     buildTableRowsFromMemberSkillData,
-    enumerateDateBinsForPeriod,
+    rangeForPeriod,
     lineChartYAxisOptions,
   } from "./skill-graph-data";
   import "chartjs-adapter-date-fns";
   import "./skill-graph.css";
 
-  ChartJS.register(CategoryScale, TimeScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+  ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Tooltip, Legend, zoomPlugin);
 
   const skillFilteringOptions = ["Overall", ...skills];
-
+  const historyPresets = ["Day", "Week", "Month", "Year", "All"];
   const apiStore = useApiStore();
   const groupStore = useGroupStore();
-
-  const period = ref("Day");
+  const lastPreset = ref("Day");
+  const activePreset = ref("Day");
   const yAxisUnit = ref("Cumulative experience gained");
   const skillFilter = ref("Overall");
-  const tableData = ref();
-  const chart = ref({
-    data: { datasets: [] },
-    options: buildLineChartOptions({ period: period.value, yAxisUnit: yAxisUnit.value }),
-  });
-  const loading = ref(true);
+  const latest = ref(new Date());
+  const range = ref(rangeForPeriod(lastPreset.value, latest.value));
+  const history = shallowRef();
+  const loading = ref(false);
+  const error = ref(false);
+  let requestSequence = 0;
+  let navigationTimer;
 
-  let updateChartPromise;
-
-  const hasChartData = computed(() => chart.value.data.datasets.length > 0);
-
-  const chartRows = computed(() => {
-    return (tableData.value?.rows ?? []).map(function prepareChartRow(row) {
-      const fillPercent = Math.max(0.1, Math.min(100, 100 * row.fillFraction));
-
-      return {
-        ...row,
-        key: `${row.iconSource} ${row.name} ${row.quantity} ${row.fillFraction} ${row.colorCSS}`,
-        background: `linear-gradient(90deg, ${row.colorCSS} ${fillPercent}%, transparent ${fillPercent}%)`,
-      };
-    });
-  });
-
-  function configureChartDefaults() {
-    const style = getComputedStyle(document.body);
-    ChartJS.defaults.font.family = "rssmall";
-    ChartJS.defaults.font.size = 16;
-    ChartJS.defaults.color = style.getPropertyValue("--white");
-    ChartJS.defaults.scale.grid.color = style.getPropertyValue("--graph-grid-border");
-  }
-
-  function buildMemberChartData(skillData) {
-    const memberChartData = [];
-
-    for (const [member, skillSamples] of skillData) {
-      const hueDegrees = groupStore.memberColors.get(member)?.hueDegrees;
-      if (!hueDegrees || skillSamples.length === 0) {
+  const memberChartData = computed(function buildMemberChartData() {
+    const members = [];
+    for (const [member, skillSamples] of history.value?.members ?? []) {
+      if (!groupStore.memberColors.has(member) || !skillSamples.length) {
         continue;
       }
-
-      memberChartData.push({
+      const { hueDegrees } = groupStore.memberColors.get(member);
+      members.push({
         member,
+        skillSamples,
         style: {
           lineBorder: `hsl(${hueDegrees}deg 60% 50%)`,
           lineBackground: `hsl(${hueDegrees}deg 60% 40%)`,
           barBackground: `hsl(${hueDegrees}deg 60% 40%)`,
         },
-        skillSamples: [...skillSamples].sort(function sortSamples({ time: firstTime }, { time: secondTime }) {
-          return DateFNS.compareAsc(firstTime, secondTime);
-        }),
       });
     }
+    return members;
+  });
 
-    return memberChartData;
-  }
-
-  function buildTableData(memberChartData, dateBins) {
-    const data = {
-      title: "",
-      numberPrefix: "",
-      rows: buildTableRowsFromMemberSkillData(memberChartData, dateBins, {
+  const chart = computed(function buildChart() {
+    return {
+      data: {
+        datasets: buildDatasetsFromMemberSkillData(memberChartData.value, range.value, {
+          yAxisUnit: yAxisUnit.value,
+          skillFilter: skillFilter.value,
+        }),
+      },
+      options: buildLineChartOptions({
+        range: range.value,
+        earliest: history.value?.earliest,
+        latest: latest.value,
         yAxisUnit: yAxisUnit.value,
-        skillFilter: skillFilter.value,
+        onNavigate: navigate,
+        onNavigateStart: invalidateRequest,
       }),
     };
-
-    switch (yAxisUnit.value) {
-      case "Cumulative experience gained":
-        data.title = `Experience gained over the preceding ${period.value.toLowerCase()}`;
-        data.numberPrefix = "+";
-        break;
-      case "Total experience":
-        data.title = "Current total experience";
-        break;
-      case "Experience per hour":
-        data.title = `Experience per hour averaged over the preceding ${period.value.toLowerCase()}`;
-        data.numberPrefix = "+";
-        break;
+  });
+  const hasChartData = computed(function hasData() {
+    return chart.value.data.datasets.some(function hasPoints(dataset) {
+      return dataset.data.length > 0;
+    });
+  });
+  const dateRangeLabel = computed(function formatRange() {
+    if (!range.value.start) {
+      return "All recorded history";
     }
+    return `${range.value.start.toLocaleString()} – ${range.value.end.toLocaleString()}`;
+  });
+  const tableTitle = computed(function describeMetric() {
+    return {
+      "Cumulative experience gained": "Experience gained in the visible period",
+      "Total experience": "Total experience at the end of the visible period",
+      "Experience per hour": "Experience per hour averaged over the visible period",
+    }[yAxisUnit.value];
+  });
+  const chartRows = computed(function buildRows() {
+    return buildTableRowsFromMemberSkillData(memberChartData.value, range.value, {
+      yAxisUnit: yAxisUnit.value,
+      skillFilter: skillFilter.value,
+    }).map(function prepareRow(row) {
+      const fillPercent = Math.max(0.1, 100 * row.fillFraction);
+      return {
+        ...row,
+        key: `${row.name} ${row.iconSource} ${row.isMemberHeader}`,
+        background: `linear-gradient(90deg, ${row.colorCSS} ${fillPercent}%, transparent ${fillPercent}%)`,
+      };
+    });
+  });
 
-    return data;
+  function invalidateRequest() {
+    clearTimeout(navigationTimer);
+    requestSequence += 1;
   }
 
-  function updateSkillGraph() {
+  async function loadRange(requestedRange, sequence) {
+    try {
+      const result = await apiStore.client.fetchSkillData(requestedRange);
+      if (sequence !== requestSequence) {
+        return;
+      }
+      history.value = result;
+      range.value = { start: result.start, end: result.end };
+    } catch (reason) {
+      if (sequence === requestSequence) {
+        console.error("Unable to load skill history", reason);
+        error.value = true;
+      }
+    } finally {
+      if (sequence === requestSequence) {
+        loading.value = false;
+      }
+    }
+  }
+
+  function requestRange(requestedRange, delay = 0) {
+    invalidateRequest();
     if (!apiStore.client) {
       return;
     }
-
-    const selectedPeriod = period.value;
-    const selectedYAxisUnit = yAxisUnit.value;
-    const selectedSkillFilter = skillFilter.value;
+    const sequence = requestSequence;
     loading.value = true;
-
-    const promise = Promise.allSettled([
-      apiStore.client.fetchSkillData(selectedPeriod),
-      new Promise(function waitForLoadingIndicator(resolve) {
-        setTimeout(resolve, 1000);
-      }),
-    ])
-      .then(function renderSkillData([result]) {
-        if (result.status !== "fulfilled" || updateChartPromise !== promise) {
-          return;
-        }
-
-        const dateBins = enumerateDateBinsForPeriod(selectedPeriod);
-        const memberChartData = buildMemberChartData(result.value);
-        const datasets = buildDatasetsFromMemberSkillData(memberChartData, dateBins, {
-          yAxisUnit: selectedYAxisUnit,
-          skillFilter: selectedSkillFilter,
-        }).map(function configureDataset(dataset) {
-          return {
-            ...dataset,
-            pointBorderWidth: 0,
-            pointHoverBorderWidth: 0,
-            pointHoverRadius: 3,
-            pointRadius: 0,
-            borderWidth: 2,
-          };
-        });
-
-        chart.value = {
-          data: { datasets },
-          options: buildLineChartOptions({ period: selectedPeriod, yAxisUnit: selectedYAxisUnit }),
-        };
-        tableData.value = buildTableData(memberChartData, dateBins);
-      })
-      .finally(function finishLoading() {
-        if (updateChartPromise !== promise) {
-          return;
-        }
-
-        updateChartPromise = undefined;
-        loading.value = false;
-      });
-
-    updateChartPromise = promise;
+    error.value = false;
+    range.value = requestedRange;
+    if (delay) {
+      navigationTimer = setTimeout(function fetchVisibleRange() {
+        loadRange(requestedRange, sequence);
+      }, delay);
+    } else {
+      loadRange(requestedRange, sequence);
+    }
   }
 
-  configureChartDefaults();
+  function navigate({ chart: chartInstance }) {
+    chartInstance.setActiveElements([]);
+    chartInstance.tooltip.setActiveElements([], { x: 0, y: 0 });
+    if (
+      chartInstance.scales.x.min !== range.value.start?.getTime() ||
+      chartInstance.scales.x.max !== range.value.end.getTime()
+    ) {
+      activePreset.value = undefined;
+    }
+    requestRange({ start: new Date(chartInstance.scales.x.min), end: new Date(chartInstance.scales.x.max) }, 300);
+  }
+
+  function selectPreset(preset) {
+    lastPreset.value = preset;
+    resetZoom();
+  }
+
+  function resetZoom() {
+    latest.value = new Date();
+    activePreset.value = lastPreset.value;
+    requestRange(rangeForPeriod(lastPreset.value, latest.value));
+  }
+
+  function retry() {
+    requestRange(range.value);
+  }
+
+  const style = getComputedStyle(document.body);
+  ChartJS.defaults.font.family = "rssmall";
+  ChartJS.defaults.font.size = 16;
+  ChartJS.defaults.color = style.getPropertyValue("--white");
+  ChartJS.defaults.scale.grid.color = style.getPropertyValue("--graph-grid-border");
 
   watch(
-    [
-      period,
-      yAxisUnit,
-      skillFilter,
-      function getClient() {
-        return apiStore.client;
-      },
-      function getMemberColors() {
-        return groupStore.memberColors;
-      },
-    ],
-    updateSkillGraph,
+    function getClient() {
+      return apiStore.client;
+    },
+    function resetHistory() {
+      history.value = undefined;
+      resetZoom();
+    },
     { immediate: true },
   );
+  onBeforeUnmount(invalidateRequest);
 </script>
 
 <template>
   <div id="skill-graph-control-container">
-    <select v-model="period" class="rsborder-tiny rsbackground rsbackground-hover">
-      <option v-for="option in aggregatePeriods" :key="option" :value="option">{{ option }}</option>
-    </select>
-    <select v-model="yAxisUnit" class="rsborder-tiny rsbackground rsbackground-hover">
+    <div id="skill-graph-presets" class="rsbackground" role="group" aria-label="History period">
+      <button
+        v-for="preset in historyPresets"
+        :key="preset"
+        type="button"
+        :aria-pressed="activePreset === preset"
+        @click="selectPreset(preset)"
+      >
+        {{ preset }}
+      </button>
+    </div>
+    <select aria-label="Experience metric" v-model="yAxisUnit" class="rsborder-tiny rsbackground rsbackground-hover">
       <option v-for="option in lineChartYAxisOptions" :key="option" :value="option">{{ option }}</option>
     </select>
-    <select v-model="skillFilter" class="rsborder-tiny rsbackground rsbackground-hover">
+    <select aria-label="Skill" v-model="skillFilter" class="rsborder-tiny rsbackground rsbackground-hover">
       <option v-for="option in skillFilteringOptions" :key="option" :value="option">{{ option }}</option>
     </select>
+    <button type="button" class="rsborder-tiny rsbackground rsbackground-hover" @click="resetZoom">Reset zoom</button>
+  </div>
+  <div id="skill-graph-details" class="rsborder-tiny rsbackground">
+    <p id="skill-graph-range">{{ dateRangeLabel }}</p>
+    <p id="skill-graph-navigation-help">Scroll or pinch to zoom. Drag to pan.</p>
   </div>
 
   <div id="skill-graph-body" class="rsborder rsbackground">
@@ -217,19 +229,21 @@
       </div>
     </div>
 
-    <div v-if="!loading && !hasChartData" id="skill-graph-no-data">
-      <h3>Your group has no recorded skill data!</h3>
+    <div v-if="error" id="skill-graph-error" role="alert">
+      <p>Skill history could not be loaded.</p>
+      <button type="button" class="rsborder-tiny rsbackground rsbackground-hover" @click="retry">Try again</button>
+    </div>
+    <div v-else-if="!loading && !hasChartData" id="skill-graph-no-data">
       <p>
-        Either no members have logged in more than a couple hours with the plugin, or there is an issue. Please double
-        check that the names in the <RouterLink to="../settings" class="orange-link">settings</RouterLink> page
-        <span class="emphasize">exactly</span> match your group members' in-game display names.
+        No skill history is available for this period. New samples are recorded every five minutes while the plugin
+        sends updates.
       </p>
     </div>
 
-    <table v-else-if="hasChartData && tableData" id="skill-graph-xp-change-table">
+    <table v-else-if="hasChartData" id="skill-graph-xp-change-table">
       <thead>
         <tr>
-          <th colspan="2">{{ tableData.title }}</th>
+          <th colspan="2">{{ tableTitle }}</th>
         </tr>
       </thead>
       <tbody>
@@ -241,11 +255,13 @@
         >
           <td class="skill-graph-xp-change-table-label">
             <span class="skill-graph-xp-change-table-image-container">
-              <CachedImage alt="attack" :src="row.iconSource" />
+              <CachedImage :alt="row.name" :src="row.iconSource" />
             </span>
             {{ row.name }}
           </td>
-          <td class="skill-graph-xp-change-data">{{ tableData.numberPrefix }}{{ row.quantity.toLocaleString() }}</td>
+          <td class="skill-graph-xp-change-data">
+            {{ yAxisUnit === "Total experience" ? "" : "+" }}{{ row.quantity.toLocaleString() }}
+          </td>
         </tr>
       </tbody>
     </table>

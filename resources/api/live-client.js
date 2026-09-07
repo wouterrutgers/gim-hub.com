@@ -21,8 +21,8 @@ export default class LiveClient {
     return fetchGroupData({ baseURL: this.baseURL, credentials: this.credentials, fromTime });
   }
 
-  fetchSkillData(period) {
-    return fetchSkillData({ baseURL: this.baseURL, credentials: this.credentials, period });
+  fetchSkillData(range) {
+    return fetchSkillData({ baseURL: this.baseURL, credentials: this.credentials, ...range });
   }
 
   addGroupMember(member) {

@@ -174,9 +174,9 @@ class ImportGroupironData extends Command
 
         foreach ($skillPayloads as $period => $payload) {
             $aggregatePeriod = match ($period) {
-                'Day' => AggregatePeriod::Day,
-                'Week', 'Month' => AggregatePeriod::Month,
-                'Year' => AggregatePeriod::Year,
+                'Day' => AggregatePeriod::Hourly,
+                'Week', 'Month' => AggregatePeriod::Daily,
+                'Year' => AggregatePeriod::Monthly,
             };
 
             foreach ($payload as $memberData) {

@@ -105,12 +105,7 @@ const INITIAL_STATE = {
       colorHueDegrees: 170,
     },
   ],
-  skillData: {
-    Day: new Map(),
-    Week: new Map(),
-    Month: new Map(),
-    Year: new Map(),
-  },
+  skillData: new Map(),
   hiscores: new Map(),
   collections: new Map(),
   snapshots: new Map(),

@@ -2,33 +2,37 @@
 
 namespace App\Enums;
 
+use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
+
 enum AggregatePeriod: string
 {
-    case Day = 'day';
-    case Month = 'month';
-    case Year = 'year';
+    case FiveMinutes = 'five_minutes';
+    case Hourly = 'hourly';
+    case Daily = 'daily';
+    case Monthly = 'monthly';
 
-    /**
-     * Get the date truncation format for SQL
-     */
-    public function getTruncateFormat(): string
+    public function bucketStart(CarbonInterface $date): CarbonImmutable
     {
+        $date = CarbonImmutable::instance($date)->utc();
+
         return match ($this) {
-            self::Day => 'hour',
-            self::Month => 'day',
-            self::Year => 'month',
+            self::FiveMinutes => $date->floorMinutes(5)->startOfMinute(),
+            self::Hourly => $date->startOfHour(),
+            self::Daily => $date->startOfDay(),
+            self::Monthly => $date->startOfMonth(),
         };
     }
 
-    /**
-     * Get the retention interval
-     */
-    public function getRetentionInterval(): string
+    public function cutoff(CarbonInterface $date): ?CarbonImmutable
     {
+        $date = CarbonImmutable::instance($date);
+
         return match ($this) {
-            self::Day => '1 day',
-            self::Month => '1 month',
-            self::Year => '1 year',
+            self::FiveMinutes => $date->subDays(30),
+            self::Hourly => $date->subYear(),
+            self::Daily => $date->subMonth(),
+            self::Monthly => null,
         };
     }
 }

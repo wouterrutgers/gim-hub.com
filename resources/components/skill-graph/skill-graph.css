@@ -4,6 +4,40 @@
   flex-wrap: wrap;
 }
 
+#skill-graph-presets {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--light-border);
+  border-radius: 5px;
+}
+
+#skill-graph-presets button {
+  min-width: 3.25rem;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--white);
+  line-height: 1;
+  text-align: center;
+}
+
+#skill-graph-presets button:hover {
+  background: var(--elevated);
+}
+
+#skill-graph-presets button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--orange) 16%, transparent);
+  color: var(--orange);
+}
+
+#skill-graph-presets button:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: -2px;
+}
+
 #skill-graph-body {
   display: flex;
   position: relative;
@@ -45,7 +79,8 @@
 
 #skill-graph-loading-overlay {
   background-color: black;
-  opacity: 0.8;
+  opacity: 0.5;
+  pointer-events: none;
   position: absolute;
   inset: 0;
 }
@@ -110,4 +145,27 @@
 
 #skill-graph-no-data {
   padding: 8px;
+}
+
+#skill-graph-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 8px 12px;
+}
+
+#skill-graph-range,
+#skill-graph-navigation-help {
+  margin: 0;
+}
+
+#skill-graph-navigation-help {
+  margin-left: auto;
+  text-align: right;
+}
+
+#skill-graph-error {
+  padding: 12px;
 }

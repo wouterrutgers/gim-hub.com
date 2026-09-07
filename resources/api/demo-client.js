@@ -4,7 +4,7 @@ import { skills } from "../game/skill";
 import { fetchGameData } from "./game-data";
 import { EXPERIENCE_99, createInitialState } from "./demo/fixtures";
 import { mockGroupDataResponse } from "./demo/group-simulation";
-import { populateSkillDataFromRoster } from "./demo/skill-history";
+import { getDemoSkillHistory, populateSkillDataFromRoster } from "./demo/skill-history";
 import {
   createBossKillCountSnapshot,
   createCollectionSnapshot,
@@ -153,15 +153,8 @@ export default class DemoClient {
   populateSkillDataFromRoster() {
     populateSkillDataFromRoster(this.state);
   }
-  async fetchSkillData(period) {
-    await this.fetchGameData();
-    const skillData = structuredClone(this.state.skillData[period]);
-
-    return new Promise(function waitForSkillData(resolve) {
-      setTimeout(function resolveSkillData() {
-        resolve(skillData);
-      }, 700);
-    });
+  async fetchSkillData(range) {
+    return getDemoSkillHistory(this.state, range);
   }
 
   async addGroupMember(member) {

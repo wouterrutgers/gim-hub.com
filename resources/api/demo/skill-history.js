@@ -1,110 +1,50 @@
 import * as DateFNS from "date-fns";
 import { utc } from "@date-fns/utc";
-import { skills } from "../../game/skill";
-import { aggregatePeriods } from "../requests/skill-data";
+import { skillsInBackendOrder } from "../requests/group-data";
 
 export function populateSkillDataFromRoster(state) {
-  for (const period of aggregatePeriods) {
-    const now = new Date(Date.now());
-    let dates = [];
-    switch (period) {
-      case "Day": {
-        const start = DateFNS.startOfHour(
-          DateFNS.sub(now, {
-            days: 1,
-          }),
-          {
-            in: utc,
-          },
-        );
-        dates.push(
-          ...DateFNS.eachHourOfInterval({
-            start,
-            end: now,
-          }),
-        );
-        break;
-      }
-      case "Week": {
-        const start = DateFNS.startOfDay(
-          DateFNS.sub(now, {
-            weeks: 1,
-          }),
-          {
-            in: utc,
-          },
-        );
-        dates.push(
-          ...DateFNS.eachDayOfInterval({
-            start,
-            end: now,
-          }),
-        );
-        break;
-      }
-      case "Month": {
-        const start = DateFNS.startOfDay(
-          DateFNS.sub(now, {
-            months: 1,
-          }),
-          {
-            in: utc,
-          },
-        );
-        dates.push(
-          ...DateFNS.eachDayOfInterval({
-            start,
-            end: now,
-          }),
-        );
-        break;
-      }
-      case "Year": {
-        const start = DateFNS.startOfMonth(
-          DateFNS.sub(now, {
-            years: 1,
-          }),
-          {
-            in: utc,
-          },
-        );
-        dates.push(
-          ...DateFNS.eachMonthOfInterval({
-            start,
-            end: now,
-          }),
-        );
-      }
-    }
-    dates.push(now);
-    dates = dates.slice(1);
-    const result = new Map();
-    for (const { displayName } of state.roster) {
-      const samples = [];
-      const currentExperience = new Array(skills.length).fill(Math.round(Math.random() * 100_000));
-      for (let dateIndex = 0; dateIndex < dates.length; dateIndex++) {
-        const time = dates[dateIndex];
-        const playerIsOffline =
-          (period === "Day" && dateIndex >= 8 && dateIndex <= 16) || (period === "Year" && dateIndex <= 2);
-        if (!playerIsOffline) {
-          if (dateIndex >= 1) {
-            const MILLISECONDS_PER_HOUR = 60 * 60 * 1000;
-            const hoursSince =
-              Math.abs(DateFNS.differenceInMilliseconds(time, dates[dateIndex - 1])) / MILLISECONDS_PER_HOUR;
-            for (let skillIndex = 0; skillIndex < currentExperience.length; skillIndex++) {
-              const experiencePerHour = Math.max(0, Math.random() - 0.7) * 100_000;
-              currentExperience[skillIndex] =
-                currentExperience[skillIndex] + Math.floor(hoursSince * experiencePerHour);
-            }
-          }
-          samples.push({
-            time,
-            data: [...currentExperience],
-          });
-        }
-      }
-      result.set(displayName, samples);
-    }
-    state.skillData[period] = result;
+  const now = new Date();
+  const recentStart = DateFNS.startOfDay(DateFNS.subDays(now, 30), { in: utc });
+  const hourlyStart = DateFNS.startOfMonth(DateFNS.subYears(now, 1), { in: utc });
+  const earliest = DateFNS.startOfMonth(DateFNS.subYears(now, 2), { in: utc });
+  const dates = [
+    ...DateFNS.eachMonthOfInterval({ start: earliest, end: DateFNS.subMonths(hourlyStart, 1) }, { in: utc }),
+    ...DateFNS.eachHourOfInterval({ start: hourlyStart, end: DateFNS.subHours(recentStart, 1) }, { in: utc }),
+    ...DateFNS.eachMinuteOfInterval({ start: recentStart, end: now }, { step: 5, in: utc }),
+  ];
+  state.skillData = new Map();
+  for (const [memberIndex, { displayName }] of state.roster.entries()) {
+    const samples = dates.map(function createSample(time) {
+      const hours = (time - earliest) / 3_600_000;
+      const activeHours = Math.floor(hours / 24) * 6 + Math.min(6, Math.max(0, (hours % 24) - 12));
+      return {
+        time,
+        data: skillsInBackendOrder.map(function createExperience(_, skillIndex) {
+          return Math.floor(100_000 + activeHours * (memberIndex + 1) * ((skillIndex % 5) + 1) * 150);
+        }),
+      };
+    });
+    state.skillData.set(displayName, samples);
   }
+}
+
+export function getDemoSkillHistory(state, { start, end }) {
+  const earliest = state.skillData.values().next().value?.[0].time ?? null;
+  start ??= earliest ?? DateFNS.subDays(end, 1);
+  const bucketMilliseconds = Math.max(1000, Math.ceil((end - start) / 1500 / 1000) * 1000);
+  const members = new Map();
+  for (const [member, samples] of state.skillData) {
+    const baseline = samples.findLast(function isBaseline(sample) {
+      return sample.time <= start;
+    });
+    const visible = samples.filter(function isVisible(sample) {
+      return sample.time > start && sample.time <= end;
+    });
+    const buckets = new Map();
+    for (const sample of visible) {
+      buckets.set(Math.floor((sample.time - start - 1) / bucketMilliseconds), sample);
+    }
+    members.set(member, [...new Set([baseline, visible[0], ...buckets.values()].filter(Boolean))]);
+  }
+  return structuredClone({ start, end, earliest, members });
 }

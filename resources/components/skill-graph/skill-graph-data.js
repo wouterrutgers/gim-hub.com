@@ -5,131 +5,102 @@ import { skillIcons } from "../../game/skill";
 
 export const lineChartYAxisOptions = ["Cumulative experience gained", "Total experience", "Experience per hour"];
 
-export function enumerateDateBinsForPeriod(period) {
-  const now = new Date(Date.now());
-  const dates = [];
-
-  switch (period) {
-    case "Day": {
-      const start = DateFNS.startOfHour(DateFNS.sub(now, { days: 1 }), { in: utc });
-      dates.push(...DateFNS.eachHourOfInterval({ start, end: now }));
-      break;
-    }
-    case "Week": {
-      const start = DateFNS.startOfDay(DateFNS.sub(now, { weeks: 1 }), { in: utc });
-      dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
-      break;
-    }
-    case "Month": {
-      const start = DateFNS.startOfDay(DateFNS.sub(now, { months: 1 }), { in: utc });
-      dates.push(...DateFNS.eachDayOfInterval({ start, end: now }));
-      break;
-    }
-    case "Year": {
-      const start = DateFNS.startOfMonth(DateFNS.sub(now, { years: 1 }), { in: utc });
-      dates.push(...DateFNS.eachMonthOfInterval({ start, end: now }));
-      break;
-    }
-  }
-
-  dates.push(now);
-
-  return dates.slice(1);
+export function rangeForPeriod(period, end = new Date()) {
+  const durations = { Day: { days: 1 }, Week: { weeks: 1 }, Month: { months: 1 }, Year: { years: 1 } };
+  return { start: period === "All" ? undefined : DateFNS.sub(end, durations[period], { in: utc }), end };
 }
 
-export function buildLineChartOptions({ period, yAxisUnit }) {
-  const minimumTimeUnitPerPeriod = {
-    Day: "hour",
-    Week: "day",
-    Month: "day",
-    Year: "month",
-  };
-
+export function buildLineChartOptions({ range, earliest, latest, yAxisUnit, onNavigate, onNavigateStart }) {
   return {
     maintainAspectRatio: false,
     animation: false,
-    normalized: true,
+    parsing: false,
     responsive: true,
     plugins: {
       legend: { position: "top" },
-      title: {
-        display: true,
-        text: `Group ${yAxisUnit.toLowerCase()} over the preceding ${period.toLowerCase()}`,
+      zoom: {
+        limits: { x: { min: earliest?.getTime(), max: latest.getTime(), minRange: 5 * 60 * 1000 } },
+        pan: { enabled: true, mode: "x", onPanStart: onNavigateStart, onPanComplete: onNavigate },
+        zoom: {
+          mode: "x",
+          wheel: { enabled: true },
+          pinch: { enabled: true },
+          onZoomStart: onNavigateStart,
+          onZoomComplete: onNavigate,
+        },
       },
     },
-    interaction: {
-      intersect: false,
-      mode: "index",
-    },
+    interaction: { intersect: false, mode: "nearest", axis: "x" },
     layout: { padding: 4 },
     scales: {
-      x: {
-        title: { display: false, text: "Time" },
-        type: "time",
-        time: { minUnit: minimumTimeUnitPerPeriod[period] },
-      },
-      y: {
-        title: { display: true, text: yAxisUnit },
-        type: "linear",
-        min: 0,
-      },
+      x: { type: "time", min: range.start?.getTime(), max: range.end.getTime(), time: { minUnit: "minute" } },
+      y: { title: { display: true, text: yAxisUnit }, type: "linear", min: 0 },
     },
   };
 }
 
-export function buildDatasetsFromMemberSkillData(members, dateBins, options) {
-  const datasets = [];
-
-  for (const { member, skillSamples, style } of members) {
-    const interpolatedSamples = [];
-    let skillDataIndex = 0;
-
-    while (interpolatedSamples.length < dateBins.length) {
-      const firstSample = skillSamples.at(skillDataIndex);
-      const secondSample = skillSamples.at(skillDataIndex + 1);
-
-      if (!firstSample) {
-        interpolatedSamples.push(interpolatedSamples.at(-1) ?? 0);
-        continue;
-      }
-
-      const dateBin = dateBins[interpolatedSamples.length];
-
-      if (DateFNS.compareAsc(firstSample.time, dateBin) > 0) {
-        interpolatedSamples.push(
-          options.yAxisUnit === "Experience per hour"
-            ? sumFilteredExperience(firstSample.data, options.skillFilter)
-            : 0,
-        );
-        continue;
-      }
-
-      if (secondSample && DateFNS.compareAsc(dateBin, secondSample.time) > 0) {
-        skillDataIndex += 1;
-        continue;
-      }
-
-      interpolatedSamples.push(
-        sumFilteredExperience(interpolateSkillSamples(firstSample, secondSample, dateBin), options.skillFilter),
-      );
-    }
-
-    datasets.push({
-      label: member,
-      data: buildChartPoints(interpolatedSamples, dateBins, options.yAxisUnit),
-      borderColor: style.lineBorder,
-      backgroundColor: style.lineBackground,
+export function buildDatasetsFromMemberSkillData(members, range, options) {
+  return members
+    .map(function buildDataset({ member, skillSamples, style }) {
+      const samples = samplesForRange(skillSamples, range);
+      const baseline = samples[0];
+      const startingExperience = baseline ? sumFilteredExperience(baseline.data, options.skillFilter) : 0;
+      const data = samples.map(function buildPoint(sample, index) {
+        const experience = sumFilteredExperience(sample.data, options.skillFilter);
+        let value = experience;
+        if (options.yAxisUnit === "Cumulative experience gained") {
+          value = Math.max(0, experience - startingExperience);
+        } else if (options.yAxisUnit === "Experience per hour") {
+          const previous = samples[index - 1];
+          value = previous
+            ? Math.max(
+                0,
+                (experience - sumFilteredExperience(previous.data, options.skillFilter)) /
+                  differenceInHoursPrecise({
+                    earlierDate: previous.observationTime ?? previous.time,
+                    laterDate: sample.time,
+                  }),
+              )
+            : null;
+        }
+        return { x: sample.time.getTime(), y: value };
+      });
+      return {
+        label: member,
+        data,
+        borderColor: style.lineBorder,
+        backgroundColor: style.lineBackground,
+        stepped: options.yAxisUnit !== "Experience per hour",
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        pointBorderWidth: 0,
+        borderWidth: 2,
+      };
+    })
+    .sort(function sortDatasets(first, second) {
+      return first.label.localeCompare(second.label);
     });
-  }
-
-  return datasets.sort(function sortDatasets({ label: firstLabel }, { label: secondLabel }) {
-    return firstLabel.localeCompare(secondLabel);
-  });
 }
 
-export function buildTableRowsFromMemberSkillData(members, dateBins, options) {
-  const startTime = dateBins.at(0);
-  const endTime = dateBins.at(-1);
+export function samplesForRange(skillSamples, range) {
+  const previous = skillSamples.findLast(function isBaseline(sample) {
+    return sample.time <= range.start;
+  });
+  const samples = skillSamples.filter(function isVisible(sample) {
+    return sample.time > range.start && sample.time <= range.end;
+  });
+  if (previous) {
+    samples.unshift({ time: range.start, observationTime: previous.time, data: previous.data });
+  }
+  if (samples.length && samples.at(-1).time < range.end) {
+    samples.push({ time: range.end, data: samples.at(-1).data });
+  }
+  return samples;
+}
+
+export function buildTableRowsFromMemberSkillData(members, range, options) {
+  const startTime = range.start;
+  const endTime = range.end;
 
   if (!startTime || !endTime) {
     return [];
@@ -145,8 +116,12 @@ export function buildTableRowsFromMemberSkillData(members, dateBins, options) {
   const groupMetrics = [];
 
   for (const { member, skillSamples, style } of members) {
-    const startSkills = getExperienceSnapshot(skillSamples, startTime, options.yAxisUnit);
-    const endSkills = getExperienceSnapshot(skillSamples, endTime, options.yAxisUnit);
+    const samples = samplesForRange(skillSamples, range);
+    if (!samples.length) {
+      continue;
+    }
+    const startSkills = samples[0].data;
+    const endSkills = samples.at(-1).data;
     const memberMetrics = { name: member, total: 0, perSkill: [], colorCSS: style.barBackground };
 
     for (let skillIndex = 0; skillIndex < skillsInBackendOrder.length; skillIndex++) {
@@ -235,89 +210,8 @@ function sumFilteredExperience(skills, skillFilter) {
   }, 0);
 }
 
-function interpolateSkillSamples(firstSample, secondSample, interpolationTime) {
-  if (!firstSample && !secondSample) {
-    throw new Error("Both XP samples to be interpolated can't be undefined.");
-  }
-
-  if (!firstSample) {
-    return [...secondSample.data];
-  }
-
-  if (!secondSample) {
-    return [...firstSample.data];
-  }
-
-  if (firstSample.data.length !== secondSample.data.length) {
-    throw new Error("Interpolated xp samples don't have same exp length");
-  }
-
-  return [...(DateFNS.compareAsc(interpolationTime, secondSample.time) >= 0 ? secondSample : firstSample).data];
-}
-
-function buildChartPoints(interpolatedSamples, dateBins, yAxisUnit) {
-  const chartPoints = [];
-
-  switch (yAxisUnit) {
-    case "Cumulative experience gained": {
-      const start = interpolatedSamples[0] ?? 0;
-      for (let index = 0; index < interpolatedSamples.length; index++) {
-        chartPoints[index] = [dateBins[index], interpolatedSamples[index] - start];
-      }
-      break;
-    }
-    case "Experience per hour": {
-      chartPoints[0] = [dateBins[0], 0];
-      for (let index = 1; index < interpolatedSamples.length; index++) {
-        const hoursPerSample = differenceInHoursPrecise({
-          laterDate: dateBins[index],
-          earlierDate: dateBins[index - 1],
-        });
-        chartPoints[index] = [
-          dateBins[index],
-          (interpolatedSamples[index] - interpolatedSamples[index - 1]) / hoursPerSample,
-        ];
-      }
-      break;
-    }
-    case "Total experience":
-      for (let index = 0; index < interpolatedSamples.length; index++) {
-        chartPoints[index] = [dateBins[index], interpolatedSamples[index]];
-      }
-      break;
-  }
-
-  return chartPoints;
-}
-
 function differenceInHoursPrecise({ earlierDate, laterDate }) {
   return DateFNS.differenceInMilliseconds(laterDate, earlierDate) / (60 * 60 * 1000);
-}
-
-function padExperienceArray(experience) {
-  return skillsInBackendOrder.map(function getExperience(_, index) {
-    return experience?.[index] ?? 0;
-  });
-}
-
-function getExperienceSnapshot(skillSamples, target, yAxisUnit) {
-  if (skillSamples.length === 0) {
-    return padExperienceArray(undefined);
-  }
-
-  const firstSample = skillSamples[0];
-  if (DateFNS.compareAsc(firstSample.time, target) > 0) {
-    return yAxisUnit === "Experience per hour" ? padExperienceArray(firstSample.data) : padExperienceArray(undefined);
-  }
-
-  for (let index = skillSamples.length - 1; index >= 0; index--) {
-    const sample = skillSamples[index];
-    if (DateFNS.compareAsc(sample.time, target) <= 0) {
-      return padExperienceArray(sample.data);
-    }
-  }
-
-  return padExperienceArray(skillSamples.at(-1)?.data);
 }
 
 function calculateMetricValue({ start, end, elapsedHours, yAxisUnit }) {

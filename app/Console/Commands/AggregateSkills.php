@@ -18,67 +18,33 @@ class AggregateSkills extends Command
 
     public function handle(): int
     {
-        DB::transaction(function () {
-            $lastAggregation = $this->getLastSkillsAggregation();
+        DB::transaction(function (): void {
+            $aggregationTime = now();
+            $lastAggregation = AggregationInfo::where('type', '=', 'skills')->value('updated_at');
 
-            AggregationInfo::updateOrCreate(
-                ['type' => 'skills'],
-                ['updated_at' => now()]
-            );
+            $properties = MemberProperty::where('key', '=', 'skills')
+                ->where('updated_at', '>=', is_null($lastAggregation) ? Carbon::createFromTimestamp(0) : $lastAggregation)
+                ->where('updated_at', '<=', $aggregationTime)
+                ->lazyById();
 
-            $this->aggregateSkillsForPeriod(AggregatePeriod::Day, $lastAggregation);
-            $this->aggregateSkillsForPeriod(AggregatePeriod::Month, $lastAggregation);
-            $this->aggregateSkillsForPeriod(AggregatePeriod::Year, $lastAggregation);
+            foreach ($properties as $property) {
+                foreach ([AggregatePeriod::FiveMinutes, AggregatePeriod::Hourly, AggregatePeriod::Monthly] as $period) {
+                    SkillStat::updateOrCreate(
+                        [
+                            'member_id' => $property->member_id,
+                            'type' => $period->value,
+                            'created_at' => $period->bucketStart($property->updated_at),
+                        ],
+                        ['skills' => $property->value, 'updated_at' => $aggregationTime],
+                    );
+                }
+            }
+
+            AggregationInfo::updateOrCreate(['type' => 'skills'], ['updated_at' => $aggregationTime]);
         });
 
         $this->info('Skills data aggregated successfully.');
 
         return static::SUCCESS;
-    }
-
-    protected function getLastSkillsAggregation(): Carbon
-    {
-        $lastAggregation = AggregationInfo::where('type', '=', 'skills')
-            ->value('updated_at');
-
-        return is_null($lastAggregation)
-            ? Carbon::createFromTimestamp(0)
-            : Carbon::parse($lastAggregation);
-    }
-
-    protected function aggregateSkillsForPeriod(AggregatePeriod $period, Carbon $lastAggregation): void
-    {
-        $properties = MemberProperty::where('key', '=', 'skills')
-            ->where('updated_at', '>=', $lastAggregation)
-            ->with('member')
-            ->get();
-
-        foreach ($properties as $property) {
-            $member = $property->member;
-            $timeValue = $this->getAggregateTimeValue($period, $property->updated_at);
-
-            SkillStat::updateOrCreate(
-                [
-                    'member_id' => $member->id,
-                    'type' => $period->value,
-                    'created_at' => $timeValue,
-                ],
-                [
-                    'skills' => $property->value,
-                    'updated_at' => now(),
-                ]
-            );
-        }
-    }
-
-    protected function getAggregateTimeValue(AggregatePeriod $period, $date): string
-    {
-        $date = is_string($date) ? Carbon::parse($date) : $date;
-
-        return match ($period) {
-            AggregatePeriod::Day => $date->copy()->minute(0)->second(0)->format('Y-m-d H:00:00'),
-            AggregatePeriod::Month => $date->copy()->startOfDay()->format('Y-m-d 00:00:00'),
-            AggregatePeriod::Year => $date->copy()->startOfMonth()->startOfDay()->format('Y-m-01 00:00:00'),
-        };
     }
 }

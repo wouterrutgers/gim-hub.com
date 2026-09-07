@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\CollectionLogUpdates;
 use App\Domain\MemberSnapshotCreator;
 use App\Domain\SkillHistory;
 use App\Domain\Validators;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class GroupMemberController extends Controller
@@ -158,8 +160,10 @@ class GroupMemberController extends Controller
         return response()->json(null, 200);
     }
 
-    public function updateGroupMember(Request $request): JsonResponse
+    public function updateGroupMember(): JsonResponse
     {
+        $request = request();
+
         $validated = $request->validate([
             'name' => 'required|string',
             'stats' => 'nullable|array',
@@ -187,6 +191,17 @@ class GroupMemberController extends Controller
             'quiver' => 'nullable|array',
             'diary_vars' => 'nullable|array',
             'collection_log_v2' => 'nullable|array',
+            'collection_log_updates' => ['sometimes', 'array', 'list', ['prohibits', 'collection_log_v2']],
+            'collection_log_updates.*' => ['required', ['array', 'type', 'items']],
+            'collection_log_updates.*.type' => ['required', ['in', 'drop', 'unlock', 'scan']],
+            'collection_log_updates.*.items' => ['required', 'array', 'list', ['min', 1]],
+            'collection_log_updates.*.items.*' => ['required', ['array', 'item_id', 'quantity']],
+            'collection_log_updates.*.items.*.item_id' => ['required', 'integer', ['min', 1]],
+            'collection_log_updates.*.items.*.quantity' => Rule::forEach(function (mixed $value, string $attribute) use ($request): array {
+                $index = explode('.', $attribute)[1];
+
+                return ['required', 'integer', ['min', $request->input("collection_log_updates.{$index}.type") === 'scan' ? 0 : 1], ['max', 2147483647]];
+            }),
             'interacting' => 'nullable',
             'timezone' => 'nullable|string|timezone',
         ]);
@@ -242,7 +257,8 @@ class GroupMemberController extends Controller
 
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
-        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData) {
+        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
+            Member::where('id', '=', $member->id)->lockForUpdate()->firstOrFail();
             $member->update(['last_online_at' => now()]);
 
             foreach (Member::PROPERTY_KEYS as $propertyKey) {
@@ -316,6 +332,10 @@ class GroupMemberController extends Controller
 
             if (! is_null($collectionLogData)) {
                 $this->updateCollectionLog($member, $collectionLogData);
+            }
+
+            if (! empty($validated['collection_log_updates'])) {
+                CollectionLogUpdates::apply($member, $validated['collection_log_updates']);
             }
         });
 

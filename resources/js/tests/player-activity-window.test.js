@@ -21,76 +21,88 @@ describe("player activity window", function describePlayerActivityWindow() {
     vi.restoreAllMocks();
   });
 
-  it("refreshes collection logs and hiscores when opened", async function testActivityRefresh() {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async function fetchImageChunk() {
-        return {
-          ok: true,
-          async json() {
-            return {
-              "/item-icons/227.webp": "/hashed/item-icons/227.webp",
-              "/ui/1731-0.png": "/hashed/ui/1731-0.png",
-            };
-          },
-        };
-      }),
-    );
+  it.each([
+    { description: "new unlock", quantityBefore: 0, quantityAfter: 1 },
+    { description: "repeat drop", quantityBefore: 2, quantityAfter: 3 },
+  ])(
+    "refreshes collection logs and hiscores for a $description",
+    async function testActivityRefresh({ quantityBefore, quantityAfter }) {
+      vi.stubGlobal(
+        "fetch",
+        vi.fn(async function fetchImageChunk() {
+          return {
+            ok: true,
+            async json() {
+              return {
+                "/item-icons/227.webp": "/hashed/item-icons/227.webp",
+                "/ui/1731-0.png": "/hashed/ui/1731-0.png",
+              };
+            },
+          };
+        }),
+      );
 
-    const player = "Test player";
-    const snapshot = {
-      timestamp: Date.now() - 60_000,
-      skills: {},
-      quests: {},
-      diaries: {},
-      collection: {},
-      bossKc: { "Abyssal Sire": 10 },
-    };
-    let collectionLogs = new Map([[player, new Map()]]);
-    const client = {
-      credentials: { name: "Test group", token: "test token" },
-      fetchGameData: vi.fn(async function fetchGameData() {
-        return {
-          diaries: new Map(),
-          items: new Map([[227, { name: "Fresh drop" }]]),
-          quests: new Map(),
-        };
-      }),
-      fetchGroupCollectionLogs: vi.fn(async function fetchGroupCollectionLogs() {
-        return collectionLogs;
-      }),
-      fetchGroupData: vi.fn(async function fetchGroupData() {
-        return [{ name: player }];
-      }),
-      fetchMemberHiscores: vi.fn(async function fetchMemberHiscores() {
-        return new Map([["Abyssal Sire", 12]]);
-      }),
-      fetchMemberSnapshots: vi.fn(async function fetchMemberSnapshots() {
-        return new Map([[player, { lastVisit: snapshot, lastWeek: snapshot }]]);
-      }),
-    };
-    const pinia = createPinia();
-    apiStore = useApiStore(pinia);
-    apiStore.client = client;
-    const groupStore = useGroupStore(pinia);
+      const player = "Test player";
+      const snapshot = {
+        timestamp: Date.now() - 60_000,
+        skills: {},
+        quests: {},
+        diaries: {},
+        collection: { 227: quantityBefore },
+        bossKc: { "Abyssal Sire": 10 },
+      };
+      let collectionLogs = new Map([[player, new Map()]]);
+      const client = {
+        credentials: { name: "Test group", token: "test token" },
+        fetchGameData: vi.fn(async function fetchGameData() {
+          return {
+            diaries: new Map(),
+            items: new Map([[227, { name: "Fresh drop" }]]),
+            quests: new Map(),
+          };
+        }),
+        fetchGroupCollectionLogs: vi.fn(async function fetchGroupCollectionLogs() {
+          return collectionLogs;
+        }),
+        fetchGroupData: vi.fn(async function fetchGroupData() {
+          return [{ name: player }];
+        }),
+        fetchMemberHiscores: vi.fn(async function fetchMemberHiscores() {
+          return new Map([["Abyssal Sire", 12]]);
+        }),
+        fetchMemberSnapshots: vi.fn(async function fetchMemberSnapshots() {
+          return new Map([[player, { lastVisit: snapshot, lastWeek: snapshot }]]);
+        }),
+      };
+      const pinia = createPinia();
+      apiStore = useApiStore(pinia);
+      apiStore.client = client;
+      const groupStore = useGroupStore(pinia);
 
-    await vi.waitFor(function initialCollectionLogsLoaded() {
-      expect(groupStore.collectionLogsLoaded).toBe(true);
-    });
-    expect(groupStore.collections.get(player)).toEqual(new Map());
+      await vi.waitFor(function initialCollectionLogsLoaded() {
+        expect(groupStore.collectionLogsLoaded).toBe(true);
+      });
+      expect(groupStore.collections.get(player)).toEqual(new Map());
 
-    collectionLogs = new Map([[player, new Map([[227, 1]])]]);
-    const container = document.createElement("div");
-    document.body.append(container);
-    app = createApp(PlayerActivityWindow, { player });
-    app.use(pinia);
-    app.mount(container);
+      collectionLogs = new Map([[player, new Map([[227, quantityAfter]])]]);
+      const container = document.createElement("div");
+      document.body.append(container);
+      app = createApp(PlayerActivityWindow, { player });
+      app.use(pinia);
+      app.mount(container);
 
-    await vi.waitFor(function activityDataRendered() {
-      expect(client.fetchGroupCollectionLogs).toHaveBeenCalledTimes(2);
-      expect(client.fetchMemberHiscores).toHaveBeenCalledWith(player);
-      expect(container.querySelector(".player-activity-collection-name")?.textContent).toBe("Fresh drop");
-      expect(container.querySelector(".player-activity-bosskc-change")?.textContent).toBe("10→12");
-    });
-  });
+      await vi.waitFor(function activityDataRendered() {
+        expect(client.fetchGroupCollectionLogs).toHaveBeenCalledTimes(2);
+        expect(client.fetchMemberHiscores).toHaveBeenCalledWith(player);
+        expect(container.querySelector(".player-activity-collection-name")?.textContent).toBe("Fresh drop");
+        expect(container.querySelector(".player-activity-bosskc-change")?.textContent).toBe("10→12");
+        if (quantityBefore > 0) {
+          expect(container.querySelector(".player-activity-collection-qty")?.textContent).toBe("2→3");
+          expect(container.querySelector(".player-activity-collection-new")).toBeNull();
+        } else {
+          expect(container.querySelector(".player-activity-collection-new")).not.toBeNull();
+        }
+      });
+    },
+  );
 });

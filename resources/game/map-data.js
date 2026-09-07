@@ -27,6 +27,7 @@ const mapDataSchema = z.object({
     ),
   ),
   tiles: z.array(z.array(z.int())).length(4),
+  labelNames: z.record(z.string(), z.string().min(1)),
 });
 
 export async function fetchMapData() {

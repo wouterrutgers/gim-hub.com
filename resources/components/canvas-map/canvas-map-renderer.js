@@ -2,6 +2,8 @@ import { fetchMapData } from "../../game/map-data";
 import { Pos2D, Vec2D, REGION_IMAGE_PIXEL_EXTENT, ICON_IMAGE_PIXEL_EXTENT, Disp2D, Rect2D } from "./coordinates";
 
 const FOLLOW_ANIMATION_TIME_MS = 300;
+const LOCATION_ANIMATION_DISTANCE_PIXELS = 6000;
+const LOCATION_ZOOM = 1 / 8;
 const REGION_FADE_IN_SECONDS = 1;
 const REGION_FADE_IN_ALPHA_PER_MS = 1 / (REGION_FADE_IN_SECONDS * 1000);
 function hashMapRegionCoordinate2Ds({ x, y }) {
@@ -152,6 +154,7 @@ export class CanvasMapRenderer {
   iconsAtlas;
   iconsByRegion;
   labelsByRegion;
+  selectedLocation;
   playerPositions = new Map();
   getImageUrl;
   interactive = false;
@@ -209,6 +212,7 @@ export class CanvasMapRenderer {
                 });
                 labels.push({
                   labelID: labelFlat[index + 2],
+                  name: mapData.labelNames[labelFlat[index + 2]],
                   plane,
                   worldPosition: position,
                 });
@@ -305,6 +309,9 @@ export class CanvasMapRenderer {
     this.onDraggingUpdate?.(this.cursor.isDragging);
   }
   handleScroll(amount) {
+    if (!this.camera.followPlayer) {
+      this.camera.followingAnimation = undefined;
+    }
     this.cursor.accumulatedScroll += amount;
   }
   setPlane(plane) {
@@ -317,6 +324,33 @@ export class CanvasMapRenderer {
   onDraggingUpdate;
   onFollowPlayerUpdate;
   onVisiblePlaneUpdate;
+  selectLocation(location) {
+    this.startFollowingPlayer({ player: undefined });
+    this.handlePointerLeave();
+    this.cursor.rateSamples = [];
+    this.cursor.accumulatedScroll = 0;
+    if (
+      this.plane === location.plane &&
+      Vec2D.lengthSquared(Vec2D.sub(location.worldPosition, this.camera.position)) <=
+        (LOCATION_ANIMATION_DISTANCE_PIXELS * this.camera.zoom) ** 2
+    ) {
+      this.camera.followingAnimation = {
+        from: this.camera.position,
+        to: Vec2D.create(location.worldPosition),
+        fromZoom: this.camera.zoom,
+        timeRemainingMS: FOLLOW_ANIMATION_TIME_MS,
+      };
+    } else {
+      this.camera.position = Vec2D.create(location.worldPosition);
+      this.camera.zoom = LOCATION_ZOOM;
+    }
+    this.selectedLocation = location;
+    this.setPlane(location.plane);
+  }
+  clearSelectedLocation() {
+    this.selectedLocation = undefined;
+    this.forceRenderNextFrame = true;
+  }
   startFollowingPlayer({ player }) {
     if (!player || !this.playerPositions.has(player)) {
       this.camera.followPlayer = undefined;
@@ -324,6 +358,7 @@ export class CanvasMapRenderer {
       this.onFollowPlayerUpdate?.(undefined);
       return;
     }
+    this.clearSelectedLocation();
     const { coords, plane } = this.playerPositions.get(player);
     this.camera.followPlayer = player;
     this.camera.followingAnimation = {
@@ -409,13 +444,20 @@ export class CanvasMapRenderer {
         player: undefined,
       });
     } else if (this.camera.followingAnimation) {
-      const { to, from, timeRemainingMS } = this.camera.followingAnimation;
+      const { to, from, fromZoom, timeRemainingMS } = this.camera.followingAnimation;
       const t = 1.0 - timeRemainingMS / FOLLOW_ANIMATION_TIME_MS;
+      const progress = this.camera.followPlayer ? t : t * t * (3 - 2 * t);
       this.camera.position = Vec2D.lerp({
-        t,
+        t: progress,
         from,
         to,
       });
+      if (!this.camera.followPlayer) {
+        this.camera.zoom = (1 - progress) * fromZoom + progress * LOCATION_ZOOM;
+      }
+      if (!this.camera.followPlayer && timeRemainingMS === 0) {
+        this.camera.followingAnimation = undefined;
+      }
     } else {
       const SPEED_THRESHOLD = 0.05;
       const FRICTION_PER_MS = 0.004;
@@ -717,6 +759,18 @@ export class CanvasMapRenderer {
       }
     }
   }
+  drawSelectedLocation(context) {
+    if (!this.selectedLocation || this.selectedLocation.plane !== this.plane || !this.interactive) return;
+    const size = 16 * context.getCamera().scale;
+    context.drawRect({
+      fillStyle: "rgb(255 215 0 / 20%)",
+      insetBorder: { style: "#ffd700", widthPixels: 2 },
+      rect: Rect2D.create({
+        position: Vec2D.add(this.selectedLocation.worldPosition, { x: -size / 2, y: -size / 2 }),
+        extent: { x: size, y: size },
+      }),
+    });
+  }
   drawPlayerPositionMarkers(context) {
     const zoom = context.getCamera().scale;
     const labelOffsetBoat = -1 - 8.5 * zoom;
@@ -807,6 +861,7 @@ export class CanvasMapRenderer {
     this.drawVisibleRegions(context);
     this.drawVisibleIcons(context);
     this.drawVisibleAreaLabels(context);
+    this.drawSelectedLocation(context);
     this.drawPlayerPositionMarkers(context);
     if (this.cursor.isVisible && this.interactive) {
       this.drawCursor(context);

@@ -9,6 +9,9 @@ export const useMapStore = defineStore("map", function createMapStore() {
   const coordinates = ref();
   const followedPlayer = ref();
   const visiblePlane = ref(0);
+  const locations = computed(function getLocations() {
+    return renderer.value ? [...renderer.value.labelsByRegion.values()].flat() : [];
+  });
 
   const memberCoordinates = computed(function getMemberCoordinates() {
     return [...groupStore.memberStates]
@@ -51,16 +54,27 @@ export const useMapStore = defineStore("map", function createMapStore() {
     renderer.value.forceRenderNextFrame = true;
   }
 
+  function selectLocation(location) {
+    renderer.value.selectLocation(location);
+  }
+
+  function clearSelectedLocation() {
+    renderer.value?.clearSelectedLocation();
+  }
+
   return {
     renderer,
     dragging,
     coordinates,
     followedPlayer,
     visiblePlane,
+    locations,
     memberCoordinates,
     coordinatesLabel,
     setRenderer,
     selectPlane,
     followPlayer,
+    selectLocation,
+    clearSelectedLocation,
   };
 });

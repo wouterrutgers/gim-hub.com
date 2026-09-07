@@ -69,6 +69,64 @@
   align-self: baseline;
 }
 
+.canvas-map-search {
+  position: relative;
+  width: 280px;
+  max-width: 100%;
+}
+
+.canvas-map-search input {
+  box-sizing: border-box;
+}
+
+.canvas-map-search-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 1;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.canvas-map-search ul {
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+}
+
+.canvas-map-search button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: var(--orange);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.canvas-map-search [aria-selected="true"] {
+  background: rgb(0 0 0 / 25%);
+  outline: 1px solid rgb(200 200 200 / 50%);
+}
+
+.canvas-map-search small {
+  color: var(--white);
+  font-family: rssmall, ui-sans-serif, Arial, sans-serif;
+}
+
+.canvas-map-search-empty {
+  padding: 12px;
+}
+
+.canvas-map-search input:disabled {
+  opacity: 0.5;
+}
+
 .canvas-map-teleport-button:focus-visible {
   outline: auto;
 }

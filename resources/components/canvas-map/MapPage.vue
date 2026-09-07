@@ -1,5 +1,6 @@
 <script setup>
   import { useMapStore } from "../../stores/map";
+  import MapSearch from "./MapSearch.vue";
 
   const mapStore = useMapStore();
 
@@ -11,12 +12,14 @@
 <template>
   <div id="canvas-map-coordinates">{{ mapStore.coordinatesLabel }}</div>
   <div id="canvas-map-controls">
+    <MapSearch />
     <select class="rsborder-tiny rsbackground rsbackground-hover" :value="mapStore.visiblePlane" @change="selectPlane">
       <option v-for="plane in [0, 1, 2, 3]" :key="plane" :value="plane">Plane: {{ plane + 1 }}</option>
     </select>
     <select
       id="canvas-map-follow-dropdown"
       class="rsborder-tiny rsbackground rsbackground-hover"
+      :value="mapStore.followedPlayer ?? ''"
       @change="mapStore.followPlayer($event.target.value)"
     >
       <option value="">None</option>

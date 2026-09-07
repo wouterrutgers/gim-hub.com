@@ -86,7 +86,8 @@ public class MapLabelDumper
 				result.add(new Object[]{
 						worldPosition.getX(),
 						worldPosition.getY(),
-						worldPosition.getZ()
+						worldPosition.getZ(),
+						area.getName()
 				});
 
 				FontName fontSize = fontSizes[area.getTextScale()];

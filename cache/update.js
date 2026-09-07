@@ -5,6 +5,7 @@ const nAsync = require("async");
 const path = require("path");
 const axios = require("axios");
 const sharp = require("sharp");
+const { buildMapLabels } = require("./map-labels");
 
 // NOTE: sharp will keep some files open and prevent them from being deleted
 sharp.cache(false);
@@ -624,23 +625,7 @@ async function buildMapJsonAndIconAtlas() {
 
   // Do the same for map labels
   const mapLabelsMeta = JSON.parse(fs.readFileSync("./map-data/labels/map-labels.json", "utf8"));
-  const labelByRegion = {};
-
-  for (let i = 0; i < mapLabelsMeta.length; ++i) {
-    const coordinates = mapLabelsMeta[i];
-    const x = coordinates[0] + 128;
-    const y = coordinates[1] + 1;
-    const z = coordinates[2];
-
-    const regionX = Math.floor(x / 64);
-    const regionY = Math.floor(y / 64);
-
-    labelByRegion[regionX] = labelByRegion[regionX] || {};
-    labelByRegion[regionX][regionY] = labelByRegion[regionX][regionY] || {};
-    labelByRegion[regionX][regionY][z] = labelByRegion[regionX][regionY][z] || [];
-
-    labelByRegion[regionX][regionY][z].push(x, y, i);
-  }
+  const { labels, labelNames } = buildMapLabels(mapLabelsMeta);
 
   const mapImageFiles = fs
     .readdirSync("map-data/tiles")
@@ -656,7 +641,8 @@ async function buildMapJsonAndIconAtlas() {
   const map = {
     tiles: tiles,
     icons: locationByRegion,
-    labels: labelByRegion,
+    labels,
+    labelNames,
   };
 
   fs.writeFileSync("./map-data/map.json", JSON.stringify(map, null, 2));

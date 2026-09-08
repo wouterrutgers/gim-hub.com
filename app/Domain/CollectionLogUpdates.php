@@ -15,16 +15,16 @@ class CollectionLogUpdates
                 |> resource_path(...)
                 |> file_get_contents(...)
                 |> (fn ($x) => json_decode($x, associative: true, flags: JSON_THROW_ON_ERROR));
-        $items = 'assets/data/collection_log_info.json'
+        $items = ('assets/data/collection_log_info.json'
             |> resource_path(...)
             |> file_get_contents(...)
             |> (fn ($x) => json_decode($x, associative: true, flags: JSON_THROW_ON_ERROR))
-            |> collect(...)
-                ->pluck('pages')->flatten(1)->pluck('items')->flatten(1)->pluck('id')
-                ->mapWithKeys(fn (int $identifier): array => [$aliases[$identifier] ?? $identifier => true]);
+            |> collect(...))
+            ->pluck('pages')->flatten(1)->pluck('items')->flatten(1)->pluck('id')
+            ->mapWithKeys(fn (int $identifier): array => [$aliases[$identifier] ?? $identifier => true]);
         $counts = [];
 
-        foreach ($member->collectionLogs()->get() as $log) {
+        foreach ($member->collectionLogs as $log) {
             $identifier = $aliases[$log->item_id] ?? $log->item_id;
             $counts[$identifier] = max($counts[$identifier] ?? 0, $log->item_count);
         }

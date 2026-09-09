@@ -112910,5 +112910,593 @@
     "highalch": 50400,
     "alchable": true,
     "mapping": null
+  },
+  "34431": {
+    "name": "Labrador",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34433": {
+    "name": "Labrador",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34435": {
+    "name": "Labrador",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34437": {
+    "name": "Chihuahua",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34439": {
+    "name": "Chihuahua",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34441": {
+    "name": "Chihuahua",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34443": {
+    "name": "Border collie",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34445": {
+    "name": "Border collie",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34447": {
+    "name": "Border collie",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34449": {
+    "name": "Corgi",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34451": {
+    "name": "Corgi",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34453": {
+    "name": "Corgi",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34455": {
+    "name": "Greyhound",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34457": {
+    "name": "Greyhound",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34459": {
+    "name": "Greyhound",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34461": {
+    "name": "Husky",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34463": {
+    "name": "Husky",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34465": {
+    "name": "Husky",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34467": {
+    "name": "Pug",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34469": {
+    "name": "Pug",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34471": {
+    "name": "Pug",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34473": {
+    "name": "Samoyed",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34475": {
+    "name": "Samoyed",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34477": {
+    "name": "Samoyed",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34479": {
+    "name": "Bernese mountain dog",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34481": {
+    "name": "Bernese mountain dog",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34483": {
+    "name": "Bernese mountain dog",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34485": {
+    "name": "Shiba",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34487": {
+    "name": "Shiba",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34489": {
+    "name": "Shiba",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34491": {
+    "name": "Spaniel",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34493": {
+    "name": "Spaniel",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34495": {
+    "name": "Spaniel",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34497": {
+    "name": "Yorkie",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34499": {
+    "name": "Yorkie",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34501": {
+    "name": "Yorkie",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34503": {
+    "name": "Labrador puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34505": {
+    "name": "Labrador puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34507": {
+    "name": "Labrador puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34509": {
+    "name": "Husky puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34511": {
+    "name": "Husky puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34513": {
+    "name": "Husky puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34515": {
+    "name": "Chihuahua puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34517": {
+    "name": "Chihuahua puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34519": {
+    "name": "Chihuahua puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34521": {
+    "name": "Border collie puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34523": {
+    "name": "Border collie puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34525": {
+    "name": "Border collie puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34527": {
+    "name": "Corgi puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34529": {
+    "name": "Corgi puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34531": {
+    "name": "Corgi puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34533": {
+    "name": "Greyhound puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34535": {
+    "name": "Greyhound puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34537": {
+    "name": "Greyhound puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34539": {
+    "name": "Pug puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34541": {
+    "name": "Pug puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34543": {
+    "name": "Pug puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34545": {
+    "name": "Samoyed puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34547": {
+    "name": "Samoyed puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34549": {
+    "name": "Samoyed puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34551": {
+    "name": "Bernese mountain dog puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34553": {
+    "name": "Bernese mountain dog puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34555": {
+    "name": "Bernese mountain dog puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34557": {
+    "name": "Shiba puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34559": {
+    "name": "Shiba puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34561": {
+    "name": "Shiba puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34563": {
+    "name": "Spaniel puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34565": {
+    "name": "Spaniel puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34567": {
+    "name": "Spaniel puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34569": {
+    "name": "Yorkie puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34571": {
+    "name": "Yorkie puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34573": {
+    "name": "Yorkie puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34575": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34576": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34577": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34578": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34579": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34580": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34581": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34582": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34583": {
+    "name": "Shell",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34584": {
+    "name": "Weathered rosewood plank",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34585": {
+    "name": "Battered barrel",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34586": {
+    "name": "Sea-soaked bowstring",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34587": {
+    "name": "Instrument",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34589": {
+    "name": "Shell collection",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34591": {
+    "name": "Shell C",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34592": {
+    "name": "Shell D",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34593": {
+    "name": "Shell E",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34594": {
+    "name": "Shell F",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34595": {
+    "name": "Shell G",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34596": {
+    "name": "Shell A",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34597": {
+    "name": "Shell A#",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34598": {
+    "name": "Stray puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34599": {
+    "name": "Stray puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34600": {
+    "name": "Stray puppy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34601": {
+    "name": "Stray dog",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34602": {
+    "name": "Stuffed dog",
+    "highalch": 180,
+    "alchable": true,
+    "mapping": null
   }
 }

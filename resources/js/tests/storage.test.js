@@ -54,18 +54,20 @@ describe("storage integration", function describeStorage() {
     expect(emptied.items.get(1095).get("Alice")).toEqual({ "STASH units": 1 });
   });
 
-  it("includes exact STASH contents without counting unresolved variants or unbuilt units", function knownStashContents() {
+  it("counts only filled STASH contents even when other units retain item data", function knownStashContents() {
     const state = update(createGroupState(), [
       {
         name: "Alice",
         stash_units: [
           unit(28958, "Lumbridge Swamp", "filled", [1095, 1]),
           unit(29019, "Kharazi Jungle", "filled", [], ["Any stole", "Any heraldic rune shield"]),
-          unit(34736, "Varrock", "unbuilt", []),
+          unit(34736, "Varrock", "unbuilt", [1095, 1]),
+          unit(28959, "Wizards' Tower", "empty", [1095, 1]),
         ],
       },
     ]);
     expect([...state.items.keys()]).toEqual([1095]);
+    expect(state.items.get(1095).get("Alice")).toEqual({ "STASH units": 1 });
   });
 
   it("accepts older member data without storage fields", function oldPayload() {

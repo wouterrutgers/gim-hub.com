@@ -78,8 +78,6 @@ it('rejects malformed storage snapshots without replacing saved contents', funct
     'non-array unit contents' => [['stash_units' => [[...stashUnit(28958), 'items' => 1095]]], 'stash_units.0.items'],
     'odd unit pairs' => [['stash_units' => [stashUnit(28958, items: [1095])]], 'stash_units.0.items'],
     'duplicate units' => [['stash_units' => [stashUnit(28958), stashUnit(28958)]], 'stash_units.0.id'],
-    'empty with items' => [['stash_units' => [stashUnit(28958, 'empty')]], 'stash_units.0.state'],
-    'unbuilt with alternatives' => [['stash_units' => [[...stashUnit(29019, 'unbuilt', []), 'alternatives' => ['Any stole']]]], 'stash_units.0.state'],
     'unreadable state' => [['stash_units' => [stashUnit(28958, 'unknown')]], 'stash_units.0.state'],
     'missing contents' => [['stash_units' => [array_diff_key(stashUnit(28958), ['items' => true])]], 'stash_units.0.items'],
 ]);

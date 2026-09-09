@@ -875,6 +875,33 @@ const groupDataSchema = z
       elnock_inquisitor: nullableItemCollectionSchema,
       coal_bag: nullableItemCollectionSchema,
       fish_barrel: nullableItemCollectionSchema,
+      herb_sack: nullableItemCollectionSchema,
+      looting_bag: nullableItemCollectionSchema,
+      seed_box: nullableItemCollectionSchema,
+      gem_bag: nullableItemCollectionSchema,
+      chugging_barrel: nullableItemCollectionSchema,
+      stash_units: z
+        .nullish(
+          z.array(
+            z.object({
+              id: z.number().int().positive(),
+              name: z.string(),
+              tier: z.enum(["Beginner", "Easy", "Medium", "Hard", "Elite", "Master"]),
+              state: z.enum(["unbuilt", "empty", "filled"]),
+              items: itemCollectionSchema,
+              alternatives: z.array(z.string()),
+            }),
+          ),
+        )
+        .transform(function mapStashUnits(units) {
+          return units == null
+            ? undefined
+            : new Map(
+                units.map(function mapUnit(unit) {
+                  return [unit.id, unit];
+                }),
+              );
+        }),
       interacting: interactionSchema.nullish().transform(function omitNull(value) {
         return value ?? undefined;
       }),
@@ -920,6 +947,12 @@ function mapMember({
   elnock_inquisitor,
   coal_bag,
   fish_barrel,
+  herb_sack,
+  looting_bag,
+  seed_box,
+  gem_bag,
+  chugging_barrel,
+  stash_units,
   ...member
 }) {
   const mappedMember = {
@@ -940,6 +973,12 @@ function mapMember({
     elnockInquisitor: elnock_inquisitor,
     coalBag: coal_bag,
     fishBarrel: fish_barrel,
+    herbSack: herb_sack,
+    lootingBag: looting_bag,
+    seedBox: seed_box,
+    gemBag: gem_bag,
+    chuggingBarrel: chugging_barrel,
+    stashUnits: stash_units,
   };
 
   for (const key of Object.keys(mappedMember)) {

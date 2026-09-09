@@ -11,6 +11,7 @@ use App\Models\Member;
 use App\Models\SkillStat;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -163,34 +164,63 @@ class GroupMemberController extends Controller
     public function updateGroupMember(): JsonResponse
     {
         $request = request();
+        $itemQuantityPairs = function (string $attribute, mixed $value, Closure $fail): void {
+            if (count($value) % 2 !== 0) {
+                $fail('Storage contents must contain item and quantity pairs.');
 
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'stats' => 'nullable|array',
-            'coordinates' => 'nullable|array',
-            'skills' => 'nullable|array',
-            'quests' => 'nullable|array',
-            'inventory' => 'nullable|array',
-            'equipment' => 'nullable|array',
-            'bank' => 'nullable|array',
-            'bank_partial' => 'nullable|array',
-            'shared_bank' => 'nullable|array',
-            'rune_pouch' => 'nullable|array',
-            'seed_vault' => 'nullable|array',
-            'potion_storage' => 'nullable|array',
-            'poh_costume_room' => 'nullable|array',
-            'plank_sack' => 'nullable|array',
-            'master_scroll_book' => 'nullable|array',
-            'essence_pouches' => 'nullable|array',
-            'tackle_box' => 'nullable|array',
-            'tackle_box_partial' => 'nullable|array',
-            'tool_leprechaun' => 'nullable|array',
-            'elnock_inquisitor' => 'nullable|array',
-            'coal_bag' => 'nullable|array',
-            'fish_barrel' => 'nullable|array',
-            'quiver' => 'nullable|array',
-            'diary_vars' => 'nullable|array',
-            'collection_log_v2' => 'nullable|array',
+                return;
+            }
+
+            foreach ($value as $itemValue) {
+                if (! is_int($itemValue) || $itemValue < 1 || $itemValue > 2147483647) {
+                    $fail('Storage items and quantities must be positive integers.');
+
+                    return;
+                }
+            }
+        };
+
+        $validator = validator($request->all(), [
+            'name' => ['required', 'string'],
+            'stats' => ['nullable', 'array', ['min', 7], ['max', 8]],
+            'coordinates' => ['nullable', 'array', ['size', 4]],
+            'skills' => ['nullable', 'array', ['size', 24]],
+            'quests' => ['nullable', 'array', ['max', 250]],
+            'inventory' => ['nullable', 'array', ['size', 56]],
+            'equipment' => ['nullable', 'array', ['size', 28]],
+            'bank' => ['nullable', 'array', ['max', 3000]],
+            'bank_partial' => ['nullable', 'array', ['max', 3000]],
+            'shared_bank' => ['nullable', 'array', ['max', 1000]],
+            'rune_pouch' => ['nullable', 'array', ['min', 6], ['max', 8]],
+            'seed_vault' => ['nullable', 'array', ['max', 500]],
+            'potion_storage' => ['nullable', 'array', ['max', 2000]],
+            'poh_costume_room' => ['nullable', 'array', ['max', 2500]],
+            'plank_sack' => ['nullable', 'array', ['max', 14]],
+            'master_scroll_book' => ['nullable', 'array', ['max', 40]],
+            'essence_pouches' => ['nullable', 'array', ['max', 16]],
+            'tackle_box' => ['nullable', 'array', ['max', 100]],
+            'tackle_box_partial' => ['nullable', 'array', ['max', 100]],
+            'tool_leprechaun' => ['nullable', 'array', ['max', 24]],
+            'elnock_inquisitor' => ['nullable', 'array', ['max', 6]],
+            'coal_bag' => ['nullable', 'array', ['max', 2]],
+            'fish_barrel' => ['nullable', 'array', ['max', 100]],
+            'herb_sack' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 30], $itemQuantityPairs],
+            'looting_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 56], $itemQuantityPairs],
+            'seed_box' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 12], $itemQuantityPairs],
+            'gem_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 10], $itemQuantityPairs],
+            'chugging_barrel' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 100], $itemQuantityPairs],
+            'stash_units' => ['sometimes', 'nullable', 'array', 'list', ['max', 200]],
+            'stash_units.*' => ['required', ['array', 'id', 'name', 'tier', 'state', 'items', 'alternatives']],
+            'stash_units.*.id' => ['required', 'integer', 'distinct', ['min', 1]],
+            'stash_units.*.name' => ['required', 'string', ['max', 200]],
+            'stash_units.*.tier' => ['required', ['in', 'Beginner', 'Easy', 'Medium', 'Hard', 'Elite', 'Master']],
+            'stash_units.*.state' => ['required', ['in', 'unbuilt', 'empty', 'filled']],
+            'stash_units.*.items' => ['bail', 'present', 'array', 'list', ['max', 40], $itemQuantityPairs],
+            'stash_units.*.alternatives' => ['present', 'array', 'list', ['max', 10]],
+            'stash_units.*.alternatives.*' => ['required', 'string', ['max', 200]],
+            'quiver' => ['nullable', 'array', ['size', 2]],
+            'diary_vars' => ['nullable', 'array', ['max', 62]],
+            'collection_log_v2' => ['nullable', 'array'],
             'collection_log_updates' => ['sometimes', 'array', 'list', ['prohibits', 'collection_log_v2']],
             'collection_log_updates.*' => ['required', ['array', 'type', 'items']],
             'collection_log_updates.*.type' => ['required', ['in', 'drop', 'unlock', 'scan']],
@@ -202,9 +232,11 @@ class GroupMemberController extends Controller
 
                 return ['required', 'integer', ['min', $request->input("collection_log_updates.{$index}.type") === 'scan' ? 0 : 1], ['max', 2147483647]];
             }),
-            'interacting' => 'nullable',
-            'timezone' => 'nullable|string|timezone',
+            'interacting' => ['nullable'],
+            'timezone' => ['nullable', 'string', 'timezone'],
         ]);
+
+        $validated = $validator->validate();
 
         $name = $validated['name'];
         $groupId = $request->attributes->get('group')->id;
@@ -224,37 +256,6 @@ class GroupMemberController extends Controller
             'name' => $name,
         ]);
 
-        $validatorBounds = [
-            ['stats', 7, 8],
-            ['coordinates', 4, 4],
-            ['skills', 24, 24],
-            ['quests', 0, 250],
-            ['inventory', 56, 56],
-            ['equipment', 28, 28],
-            ['bank', 0, 3000],
-            ['bank_partial', 0, 3000],
-            ['shared_bank', 0, 1000],
-            ['rune_pouch', 6, 8],
-            ['seed_vault', 0, 500],
-            ['potion_storage', 0, 2000],
-            ['poh_costume_room', 0, 2500],
-            ['plank_sack', 0, 14],
-            ['master_scroll_book', 0, 40],
-            ['essence_pouches', 0, 16],
-            ['tackle_box', 0, 100],
-            ['tackle_box_partial', 0, 100],
-            ['tool_leprechaun', 0, 24],
-            ['elnock_inquisitor', 0, 6],
-            ['coal_bag', 0, 2],
-            ['fish_barrel', 0, 100],
-            ['quiver', 2, 2],
-            ['deposited', 0, 200],
-            ['diary_vars', 0, 62],
-        ];
-        foreach ($validatorBounds as [$propName, $minLength, $maxLength]) {
-            Validators::validateMemberPropLength($propName, $validated[$propName] ?? null, $minLength, $maxLength);
-        }
-
         $collectionLogData = $validated['collection_log_v2'] ?? null;
 
         DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
@@ -264,7 +265,16 @@ class GroupMemberController extends Controller
             foreach (Member::PROPERTY_KEYS as $propertyKey) {
                 $partialKey = Member::PARTIAL_PROPERTY_KEYS[$propertyKey] ?? null;
 
-                if (isset($validated[$propertyKey])) {
+                if ($propertyKey === 'stash_units' && isset($validated[$propertyKey])) {
+                    $units = collect($member->getProperty($propertyKey)?->value ?? [])->keyBy('id');
+                    foreach ($validated[$propertyKey] as $unit) {
+                        $units->put($unit['id'], $unit);
+                    }
+                    $member->properties()->updateOrCreate(
+                        ['key' => $propertyKey],
+                        ['value' => $units->values()->all()]
+                    );
+                } elseif (isset($validated[$propertyKey])) {
                     $member->properties()->updateOrCreate(
                         ['key' => $propertyKey],
                         ['value' => $validated[$propertyKey]]

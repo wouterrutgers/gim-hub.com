@@ -1,6 +1,24 @@
 function mapToItems(data) {
   return data.values();
 }
+function* stashToItems(units) {
+  for (const unit of units.values()) {
+    if (unit.state === "filled") {
+      yield* unit.items.values();
+    }
+  }
+}
+
+export function stashItemLocations(units, itemID) {
+  return [...units.values()]
+    .filter(function containsItem(unit) {
+      return unit.state === "filled" && unit.items.has(itemID);
+    })
+    .map(function describeLocation(unit) {
+      return { id: unit.id, name: unit.name, tier: unit.tier, quantity: unit.items.get(itemID).quantity };
+    });
+}
+
 export const itemContainers = [
   {
     name: "Bank",
@@ -82,7 +100,25 @@ export const itemContainers = [
     key: "fishBarrel",
     getItems: mapToItems,
   },
+  {
+    name: "Herb sack",
+    key: "herbSack",
+    itemIds: [13226, 24478, 33135, 33137],
+    initiallyUnknown: true,
+    getItems: mapToItems,
+  },
+  { name: "Looting bag", key: "lootingBag", itemIds: [11941, 22586], initiallyUnknown: true, getItems: mapToItems },
+  { name: "Seed box", key: "seedBox", itemIds: [13639, 24482], initiallyUnknown: true, getItems: mapToItems },
+  { name: "Gem bag", key: "gemBag", itemIds: [12020, 24481], initiallyUnknown: true, getItems: mapToItems },
+  { name: "Chugging barrel", key: "chuggingBarrel", itemIds: [30000], initiallyUnknown: true, getItems: mapToItems },
+  { name: "STASH units", key: "stashUnits", getItems: stashToItems },
 ];
 export const itemContainerNames = itemContainers.map(function getContainerName({ name }) {
   return name;
 });
+
+export function portableStorageKey(itemID) {
+  return itemContainers.find(function containsVariant(container) {
+    return container.itemIds?.includes(itemID);
+  })?.key;
+}

@@ -77,6 +77,19 @@
       }
     }
 
+    if (data.storageItems !== undefined) {
+      lines.push({ key: "storage-separator", type: "separator" });
+      if (data.storageItems === null) {
+        lines.push({ key: "storage-unknown", value: "Contents unknown. Check this container in game." });
+      } else if (data.storageItems.length === 0) {
+        lines.push({ key: "storage-empty", value: "Empty" });
+      } else {
+        for (const { name, quantity } of data.storageItems) {
+          lines.push({ key: `stored-${name}`, value: `${quantity.toLocaleString()} ${name}` });
+        }
+      }
+    }
+
     let previousWasSeparator = false;
 
     return lines.map(function addBreakInformation(line, index) {
@@ -193,6 +206,12 @@
             >
               <span>{{ itemContainer }}</span>
               <span>{{ (tooltip.breakdown[itemContainer] ?? 0).toLocaleString() }}</span>
+            </template>
+          </template>
+          <template v-if="tooltip.filter === 'All' || tooltip.filter === 'STASH units'">
+            <template v-for="unit in tooltip.stashLocations ?? []" :key="unit.id">
+              <span>{{ unit.name }} ({{ unit.tier }})</span>
+              <span>{{ unit.quantity.toLocaleString() }}</span>
             </template>
           </template>
         </div>

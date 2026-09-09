@@ -1,7 +1,7 @@
 <script setup>
   import { computed } from "vue";
   import { useGameDataStore } from "../../stores/game-data";
-  import { useMemberInventory, useMemberRunePouch } from "../../stores/group";
+  import { useGroupStore, useMemberInventory, useMemberRunePouch } from "../../stores/group";
   import {
     composeItemIconHref,
     formatShortQuantity,
@@ -11,6 +11,7 @@
     mappedHighAlch,
     quantityColor,
   } from "../../game/items";
+  import { portableStorageKey } from "../../game/member";
   import { serializeTooltip } from "../tooltip/tooltip-data";
   import CachedImage from "../cached-image/CachedImage.vue";
   import "./player-inventory.css";
@@ -19,6 +20,7 @@
     member: { type: String, required: true },
   });
 
+  const groupStore = useGroupStore();
   const gameDataStore = useGameDataStore();
   const inventory = useMemberInventory(function getMember() {
     return props.member;
@@ -44,6 +46,19 @@
         highAlch: mappedHighAlch(item.itemID, gameDataStore.gameData.items),
         gePrice: mappedGEPrice(item.itemID, gameDataStore.gameData.gePrices, gameDataStore.gameData.items),
       };
+
+      const storageKey = portableStorageKey(item.itemID);
+      if (storageKey) {
+        const contents = groupStore.memberStates.get(props.member)?.[storageKey];
+        tooltipData.storageItems = contents
+          ? [...contents.values()].map(function describeStoredItem(storedItem) {
+              return {
+                name: gameDataStore.gameData.items?.get(storedItem.itemID)?.name ?? `Item ${storedItem.itemID}`,
+                quantity: storedItem.quantity,
+              };
+            })
+          : null;
+      }
 
       if (isRunePouch(item.itemID) && runePouch.value) {
         let totalHighAlch = 0;

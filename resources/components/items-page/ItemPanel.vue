@@ -1,5 +1,6 @@
 <script setup>
   import { computed } from "vue";
+  import { useGroupStore } from "../../stores/group";
   import * as Member from "../../game/member";
   import { serializeTooltip } from "../tooltip/tooltip-data";
   import CachedImage from "../cached-image/CachedImage.vue";
@@ -17,6 +18,7 @@
     quantities: { type: Map, required: true },
     isPinned: { type: Boolean, required: true },
   });
+  const groupStore = useGroupStore();
   const emit = defineEmits(["togglePin"]);
 
   const quantityBreakdown = computed(function getQuantityBreakdown() {
@@ -45,8 +47,17 @@
           name,
           quantity,
           tooltip:
-            props.containerFilter === "All"
-              ? serializeTooltip({ type: "item-breakdown", name, filter: props.containerFilter, breakdown })
+            props.containerFilter === "All" || props.containerFilter === "STASH units"
+              ? serializeTooltip({
+                  type: "item-breakdown",
+                  name,
+                  filter: props.containerFilter,
+                  breakdown,
+                  stashLocations: Member.stashItemLocations(
+                    groupStore.memberStates.get(name)?.stashUnits ?? new Map(),
+                    props.itemID,
+                  ),
+                })
               : undefined,
           contributionStyle: {
             transform: `scaleX(${quantityPercent}%)`,

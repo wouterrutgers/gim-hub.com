@@ -106,8 +106,8 @@ function createMemberColors(oldState, memberNames, colorUpdates, partial) {
 
 function createEmptyItemContainers() {
   return Object.fromEntries(
-    itemContainers.map(function createEmptyContainer({ key }) {
-      return [key, new Map()];
+    itemContainers.map(function createEmptyContainer({ key, initiallyUnknown }) {
+      return [key, initiallyUnknown ? undefined : new Map()];
     }),
   );
 }

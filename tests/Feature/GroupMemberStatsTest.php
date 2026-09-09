@@ -2,9 +2,8 @@
 
 use App\Models\Group;
 use App\Models\Member;
-use Illuminate\Support\Facades\Exceptions;
 
-it('stores supported member stats payloads', function (array $stats) {
+it('stores supported member stats payloads', function (array $stats): void {
     $group = Group::create([
         'name' => 'special-attack',
         'hash' => 'special-attack-token',
@@ -26,9 +25,7 @@ it('stores supported member stats payloads', function (array $stats) {
     'with special attack' => [[90, 99, 80, 85, 7000, 100, 301, 75]],
 ]);
 
-it('requires between seven and eight member stats', function (array $stats) {
-    Exceptions::fake(Exception::class);
-
+it('rejects invalid stats lengths without changing saved stats', function (array $stats): void {
     $group = Group::create([
         'name' => 'invalid-special-attack',
         'hash' => 'invalid-special-attack-token',
@@ -37,17 +34,18 @@ it('requires between seven and eight member stats', function (array $stats) {
         'group_id' => $group->id,
         'name' => 'Alice',
     ]);
+    $savedStats = [90, 99, 80, 85, 7000, 100, 301, 75];
+    $member->properties()->create(['key' => 'stats', 'value' => $savedStats]);
 
     $this->withHeader('Authorization', $group->hash)
         ->postJson("/api/group/{$group->name}/update-group-member", [
             'name' => $member->name,
             'stats' => $stats,
         ])
-        ->assertServerError();
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('stats');
 
-    Exceptions::assertReported(
-        fn (Exception $exception): bool => $exception->getMessage() === 'stats length must be between 7 and 8'
-    );
+    expect($member->load('properties')->getProperty('stats')->value)->toBe($savedStats);
 })->with([
     'too few stats' => [[90, 99, 80, 85, 7000, 100]],
     'additional stat' => [[90, 99, 80, 85, 7000, 100, 301, 75, 1]],

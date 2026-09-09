@@ -19,7 +19,7 @@ class Member extends Model
         'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room',
         'plank_sack', 'master_scroll_book', 'essence_pouches', 'tackle_box',
         'tool_leprechaun', 'elnock_inquisitor',
-        'coal_bag', 'fish_barrel',
+        'coal_bag', 'fish_barrel', 'herb_sack', 'looting_bag', 'seed_box', 'gem_bag', 'chugging_barrel', 'stash_units',
         'quiver', 'diary_vars', 'interacting', 'timezone',
     ];
 

@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@date-fns/utc": "^2.1.1",
-    "@tanstack/vue-virtual": "^3.13.36",
+    "@tanstack/vue-virtual": "^3.13.37",
     "@vitejs/plugin-vue": "^6.0.8",
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",

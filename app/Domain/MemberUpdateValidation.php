@@ -26,7 +26,7 @@ class MemberUpdateValidation
 
         $rules = [
             'name' => ['required', 'string'],
-            'stats' => ['nullable', 'array', ['min', 7], ['max', 8]],
+            'stats' => ['nullable', 'array', ['size', 8]],
             'coordinates' => ['nullable', 'array', ['size', 4]],
             'skills' => ['nullable', 'array', ['size', 24]],
             'quests' => ['nullable', 'array', ['max', 250]],
@@ -35,7 +35,7 @@ class MemberUpdateValidation
             'bank' => ['nullable', 'array', ['max', 3000]],
             'bank_partial' => ['nullable', 'array', ['max', 3000]],
             'shared_bank' => ['nullable', 'array', ['max', 1000]],
-            'rune_pouch' => ['nullable', 'array', ['min', 6], ['max', 8]],
+            'rune_pouch' => ['nullable', 'array', ['size', 8]],
             'seed_vault' => ['nullable', 'array', ['max', 500]],
             'potion_storage' => ['nullable', 'array', ['max', 2000]],
             'poh_costume_room' => ['nullable', 'array', ['max', 2500]],
@@ -56,8 +56,7 @@ class MemberUpdateValidation
             'stash_units' => ['sometimes', 'nullable', 'array', 'list', ['max', 200]],
             'quiver' => ['nullable', 'array', ['size', 2]],
             'diary_vars' => ['nullable', 'array', ['max', 62]],
-            'collection_log_v2' => ['nullable', 'array'],
-            'collection_log_updates' => ['sometimes', 'array', 'list', ['prohibits', 'collection_log_v2']],
+            'collection_log_updates' => ['sometimes', 'array', 'list'],
             'interacting' => ['nullable'],
             'timezone' => ['nullable', 'string', 'timezone'],
         ];

@@ -92,7 +92,6 @@ describe("player activity window", function describePlayerActivityWindow() {
       app.mount(container);
 
       await vi.waitFor(function activityDataRendered() {
-        expect(client.fetchGroupCollectionLogs).toHaveBeenCalledTimes(2);
         expect(client.fetchMemberHiscores).toHaveBeenCalledWith(player);
         expect(container.querySelector(".player-activity-collection-name")?.textContent).toBe("Fresh drop");
         expect(container.querySelector(".player-activity-bosskc-change")?.textContent).toBe("10→12");

@@ -69,24 +69,6 @@ class CollectionLogUpdates
             $member->collectionLogs()->whereIn('item_id', $obsolete)->delete();
         }
 
-        static::store($member, $counts, $stored);
-    }
-
-    public static function applyLegacy(Member $member, array $items): void
-    {
-        $counts = [];
-
-        foreach (array_chunk($items, 2) as [$identifier, $quantity]) {
-            $counts[$identifier] = $quantity;
-        }
-
-        $stored = $member->collectionLogs()->whereIn('item_id', array_keys($counts))->pluck('item_count', 'item_id')->all();
-
-        static::store($member, $counts, $stored);
-    }
-
-    protected static function store(Member $member, array $counts, array $stored): void
-    {
         $rows = [];
 
         foreach ($counts as $identifier => $quantity) {

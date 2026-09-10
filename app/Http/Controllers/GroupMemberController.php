@@ -204,9 +204,6 @@ class GroupMemberController extends Controller
                 'color_hue_degrees' => $member->color_hue_degrees,
                 'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
                 'last_online_at' => is_null($member->last_online_at) ? null : Carbon::make($member->last_online_at)->toIso8601ZuluString(),
-                'shared_bank' => null,
-                'deposited' => null,
-                'collection_log' => null,
             ];
 
             foreach (Member::PROPERTY_KEYS as $key) {

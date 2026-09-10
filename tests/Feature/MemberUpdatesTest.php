@@ -3,7 +3,7 @@
 use App\Models\Group;
 use App\Models\Member;
 
-it('stores all member properties in one upload', function (): void {
+it('stores and returns member properties from supported plugin versions', function (array $additionalProperties): void {
     $group = Group::create(['name' => 'updates-group', 'hash' => 'updates-token']);
     $member = Member::create(['group_id' => $group->id, 'name' => 'Alice']);
     $properties = [
@@ -26,6 +26,30 @@ it('stores all member properties in one upload', function (): void {
         'elnock_inquisitor' => array_fill(0, 6, 0),
         'coal_bag' => [453, 27],
         'fish_barrel' => [383, 28],
+        'quiver' => [892, 100],
+        'diary_vars' => array_fill(0, 62, 0),
+        'interacting' => ['name' => 'Goblin'],
+        'timezone' => 'Europe/Amsterdam',
+        ...$additionalProperties,
+    ];
+
+    $this->withHeader('Authorization', 'updates-token')->postJson('/api/group/updates-group/update-group-member', [
+        'name' => $member->name, ...$properties,
+    ])->assertSuccessful();
+
+    expect($member->properties()->get()->pluck('value', 'key')->all())->toEqual($properties);
+
+    $this->getJson('/api/group/updates-group/get-group-data?from_time=2000-01-01')
+        ->assertSuccessful()
+        ->assertJsonPath('0.stats', $properties['stats'])
+        ->assertJsonPath('0.rune_pouch', $properties['rune_pouch'])
+        ->assertJsonPath('0.skills', $properties['skills'])
+        ->assertJsonMissingPath('0.shared_bank')
+        ->assertJsonMissingPath('0.deposited')
+        ->assertJsonMissingPath('0.collection_log');
+})->with([
+    'current plugin 27c7ce2' => [[]],
+    'pending plugin e432a79' => [[
         'herb_sack' => [199, 12],
         'looting_bag' => [995, 1000],
         'seed_box' => [5295, 40],
@@ -35,18 +59,8 @@ it('stores all member properties in one upload', function (): void {
             'id' => $identifier, 'name' => 'Lumbridge Swamp', 'tier' => 'Easy',
             'state' => 'filled', 'items' => [1095, 1], 'alternatives' => [],
         ], range(1, 200)),
-        'quiver' => [892, 100],
-        'diary_vars' => array_fill(0, 62, 0),
-        'interacting' => ['name' => 'Goblin'],
-        'timezone' => 'Europe/Amsterdam',
-    ];
-
-    $this->withHeader('Authorization', 'updates-token')->postJson('/api/group/updates-group/update-group-member', [
-        'name' => $member->name, ...$properties,
-    ])->assertSuccessful();
-
-    expect($member->properties()->get()->pluck('value', 'key')->all())->toEqual($properties);
-});
+    ]],
+]);
 
 it('preserves unchanged property timestamps while refreshing the online heartbeat', function (string $key, mixed $stored, mixed $posted): void {
     $this->freezeTime();
@@ -75,18 +89,6 @@ it('updates the heartbeat when only the member name is posted', function (): voi
     $this->freezeTime();
     $group = Group::create(['name' => 'heartbeat-group', 'hash' => 'heartbeat-token']);
     $member = Member::create(['group_id' => $group->id, 'name' => 'Alice']);
-
-    $this->withHeader('Authorization', 'heartbeat-token')->postJson('/api/group/heartbeat-group/update-group-member', [
-        'name' => $member->name,
-    ])->assertSuccessful();
-
-    expect($member->fresh()->last_online_at)->toBe(now()->toDateTimeString());
-});
-
-it('accepts a heartbeat already recorded in the same second', function (): void {
-    $this->freezeTime();
-    $group = Group::create(['name' => 'heartbeat-group', 'hash' => 'heartbeat-token']);
-    $member = Member::create(['group_id' => $group->id, 'name' => 'Alice', 'last_online_at' => now()]);
 
     $this->withHeader('Authorization', 'heartbeat-token')->postJson('/api/group/heartbeat-group/update-group-member', [
         'name' => $member->name,

@@ -109,13 +109,6 @@ it('requires a valid group token for collection increments', function (): void {
     expect($member->collectionLogs()->count())->toBe(0);
 });
 
-it('continues accepting legacy absolute collection counts', function (): void {
-    $member = collectionMember();
-    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', ['name' => $member->name, 'collection_log_v2' => [6739, 4]])->assertSuccessful();
-
-    expect($member->collectionLogs()->sole()->item_count)->toBe(4);
-});
-
 it('keeps the obtained count when a scan includes both an item and an unobtained alias', function (): void {
     $member = collectionMember();
     $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
@@ -123,17 +116,6 @@ it('keeps the obtained count when a scan includes both an item and an unobtained
     ])->assertSuccessful();
 
     expect($member->collectionLogs()->sole()->only('item_id', 'item_count'))->toBe(['item_id' => 24882, 'item_count' => 3]);
-});
-
-it('requires quantities and rejects mixed legacy and ordered collection uploads', function (): void {
-    $member = collectionMember();
-    $update = collectionUpdate('drop', [6739 => 1]);
-    unset($update['items'][0]['quantity']);
-    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
-        'name' => $member->name, 'collection_log_updates' => [$update], 'collection_log_v2' => [6739, 5],
-    ])->assertUnprocessable()->assertJsonValidationErrors(['collection_log_updates', 'collection_log_updates.0.items.0.quantity']);
-
-    expect($member->collectionLogs()->count())->toBe(0);
 });
 
 it('returns 422 for invalid quantities without applying earlier collection updates', function (string $type, mixed $quantity): void {
@@ -213,15 +195,4 @@ it('does not share collection counts between members processed by the same worke
 
     expect($member->collectionLogs()->sole()->item_count)->toBe(12);
     expect($other->collectionLogs()->sole()->item_count)->toBe(1);
-});
-
-it('stores legacy counts with the last supplied count winning', function (): void {
-    $member = collectionMember();
-    $member->collectionLogs()->create(['item_id' => 4151, 'item_count' => 2]);
-
-    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
-        'name' => $member->name, 'collection_log_v2' => [6739, 7, 6739, 3, 25629, 1],
-    ])->assertSuccessful();
-
-    expect($member->collectionLogs()->pluck('item_count', 'item_id')->all())->toEqual([4151 => 2, 6739 => 3, 25629 => 1]);
 });

@@ -10,7 +10,7 @@ describe("parseGroupData", function describeParseGroupData() {
         last_updated: "2026-08-13T10:00:00.000Z",
         bank: [995, 2, 995, 3],
         stats: [90, 99, 50, 70, 8750, 100, 301, 42],
-        skills: new Array(skillsInBackendOrder.length).fill(0),
+        skills: [123, 456, ...new Array(skillsInBackendOrder.length - 3).fill(0), 789],
         quests: [0, 1, 2],
       },
     ]);
@@ -20,12 +20,19 @@ describe("parseGroupData", function describeParseGroupData() {
     expect(member.bank.get(995)).toEqual({ itemID: 995, quantity: 5 });
     expect(member.stats.run.current).toBe(87);
     expect(member.stats.specialAttack.current).toBe(42);
+    expect(member.skills.Agility).toBe(123);
+    expect(member.skills.Attack).toBe(456);
+    expect(member.skills.Sailing).toBe(789);
     expect(member.quests).toEqual(["IN_PROGRESS", "NOT_STARTED", "FINISHED"]);
   });
 
-  it("rejects malformed API payloads", function testMalformedGroupData() {
+  it.each([
+    ["missing special attack", [90, 99, 50, 70, 8750, 100, 301]],
+    ["additional stat", [90, 99, 50, 70, 8750, 100, 301, 42, 1]],
+    ["invalid run maximum", [90, 99, 50, 70, 8750, 99, 301, 42]],
+  ])("rejects stats with %s", function testMalformedGroupData(reason, stats) {
     expect(function parseMalformedPayload() {
-      parseGroupData([{ name: "Wise Old Man", stats: [90, 99, 50, 70, 8750, 99, 301] }]);
+      parseGroupData([{ name: "Wise Old Man", stats }]);
     }).toThrow("GetGroupData response payload was malformed.");
   });
 });

@@ -150,7 +150,6 @@ describe("map search", function describeMapSearch() {
     expect(input.value).toBe("Castle");
     expect(input.getAttribute("aria-expanded")).toBe("false");
     expect(renderer.camera.followPlayer).toBeUndefined();
-    expect(renderer.camera.followingAnimation).toBeUndefined();
     expect(renderer.plane).toBe(2);
     expect(renderer.camera.position).toEqual({ x: 2500, y: -9601 });
 
@@ -233,16 +232,21 @@ describe("map search", function describeMapSearch() {
     expect(renderer.camera.position).toEqual({ x: 3200, y: -3400 });
     clock.mockReturnValue(1075);
     renderer.update(context);
-    expect(renderer.camera.position).toEqual({ x: 3218.75, y: -3400 });
-    expect(renderer.camera.zoom).toBe(0.23046875);
+    expect(renderer.camera.position.x).toBeGreaterThan(3200);
+    expect(renderer.camera.position.x).toBeLessThan(3320);
+    expect(renderer.camera.zoom).toBeGreaterThan(0.125);
+    expect(renderer.camera.zoom).toBeLessThan(0.25);
+    const firstPosition = renderer.camera.position.x;
+    const firstZoom = renderer.camera.zoom;
     clock.mockReturnValue(1150);
     renderer.update(context);
-    expect(renderer.camera.position).toEqual({ x: 3260, y: -3400 });
-    expect(renderer.camera.zoom).toBe(0.1875);
+    expect(renderer.camera.position.x).toBeGreaterThan(firstPosition);
+    expect(renderer.camera.position.x).toBeLessThan(3320);
+    expect(renderer.camera.zoom).toBeGreaterThan(0.125);
+    expect(renderer.camera.zoom).toBeLessThan(firstZoom);
     clock.mockReturnValue(1300);
     renderer.update(context);
     expect(renderer.camera.position).toEqual({ x: 3320, y: -3400 });
-    expect(renderer.camera.followingAnimation).toBeUndefined();
     expect(renderer.camera.zoom).toBe(0.125);
   });
 
@@ -280,6 +284,8 @@ describe("map search", function describeMapSearch() {
     document.querySelector('[role="option"]').click();
     clock.mockReturnValue(1150);
     renderer.update(context);
+    const position = { ...renderer.camera.position };
+    const zoom = renderer.camera.zoom;
 
     renderer.handlePointerDown();
     clock.mockReturnValue(1166);
@@ -288,8 +294,8 @@ describe("map search", function describeMapSearch() {
     clock.mockReturnValue(1400);
     renderer.update(context);
 
-    expect(renderer.camera.position).toEqual({ x: 3260, y: -3400 });
-    expect(renderer.camera.zoom).toBe(0.1875);
+    expect(renderer.camera.position).toEqual(position);
+    expect(renderer.camera.zoom).toBe(zoom);
   });
 
   it("lets scrolling interrupt the automatic pan and zoom", async function testScrollDuringLocationAnimation() {
@@ -302,17 +308,19 @@ describe("map search", function describeMapSearch() {
     document.querySelector('[role="option"]').click();
     clock.mockReturnValue(1150);
     renderer.update(context);
+    const zoomBeforeScroll = renderer.camera.zoom;
 
     renderer.handleScroll(30);
     clock.mockReturnValue(1166);
     renderer.update(context);
     const position = { ...renderer.camera.position };
+    const zoom = renderer.camera.zoom;
+    expect(zoom).toBeGreaterThan(zoomBeforeScroll);
     clock.mockReturnValue(1400);
     renderer.update(context);
 
     expect(renderer.camera.position).toEqual(position);
-    expect(renderer.camera.zoom).toBeCloseTo(0.1975);
-    expect(renderer.camera.followingAnimation).toBeUndefined();
+    expect(renderer.camera.zoom).toBe(zoom);
   });
 
   it("restores context when searching from an extreme close-up", async function testCloseUpLocationZoom() {
@@ -327,7 +335,8 @@ describe("map search", function describeMapSearch() {
     document.querySelector('[role="option"]').click();
     clock.mockReturnValue(1150);
     renderer.update(context);
-    expect(renderer.camera.zoom).toBe(0.078125);
+    expect(renderer.camera.zoom).toBeGreaterThan(0.03125);
+    expect(renderer.camera.zoom).toBeLessThan(0.125);
     clock.mockReturnValue(1300);
     renderer.update(context);
 

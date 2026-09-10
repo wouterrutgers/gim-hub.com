@@ -4,7 +4,7 @@ export function computeActivity(snapshot, current) {
   const skillChanges = [];
   if (current.skills) {
     for (const [skill, experienceAfter] of Object.entries(current.skills)) {
-      const experienceBefore = snapshot.skills[skill] ?? 0;
+      const experienceBefore = snapshot.skills[skill];
       if (experienceAfter > experienceBefore) {
         skillChanges.push({
           skill,
@@ -33,7 +33,7 @@ export function computeActivity(snapshot, current) {
   if (current.diaries) {
     for (const [region, tierMap] of Object.entries(current.diaries)) {
       for (const [tier, tasks] of Object.entries(tierMap)) {
-        const oldTasks = snapshot.diaries[region]?.[tier] ?? [];
+        const oldTasks = snapshot.diaries[region][tier];
         const newlyCompletedIndices = [];
         for (let index = 0; index < tasks.length; index++) {
           if (tasks[index] && !oldTasks[index]) {
@@ -69,7 +69,7 @@ export function computeActivity(snapshot, current) {
     questChanges,
     diaryChanges,
     collectionChanges,
-    bossKcBefore: snapshot.bossKc ?? {},
+    bossKcBefore: snapshot.bossKc,
   };
 }
 

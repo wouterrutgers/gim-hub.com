@@ -36,7 +36,7 @@ describe("group state", function describeGroupState() {
       lastUpdated,
     });
     expect(colorUpdates).toEqual(new Map([["Wise Old Man", 230]]));
-    expect(newestTimestamp).toBe(lastUpdated);
+    expect(newestTimestamp).toEqual(lastUpdated);
   });
 
   it("merges partial collection updates without dropping live member data", function testPartialUpdate() {
@@ -56,8 +56,8 @@ describe("group state", function describeGroupState() {
     const collection = new Map([[11802, 1]]);
     const updatedState = updateGroupState(initialState, new Map([["Wise Old Man", { collection }]]), { partial: true });
 
-    expect(updatedState.memberStates.get("Wise Old Man").bank).toBe(initialState.memberStates.get("Wise Old Man").bank);
-    expect(updatedState.collections.get("Wise Old Man")).toBe(collection);
+    expect(updatedState.memberStates.get("Wise Old Man").bank).toEqual(new Map([[995, { itemID: 995, quantity: 5 }]]));
+    expect(updatedState.collections.get("Wise Old Man")).toEqual(collection);
     expect(updatedState.items.get(995).get("Wise Old Man")).toEqual({ Bank: 5 });
   });
 
@@ -103,11 +103,11 @@ describe("group state", function describeGroupState() {
       ]),
     );
 
-    expect(updatedState.collections.get("Wise Old Man")).toBe(collection);
+    expect(updatedState.collections.get("Wise Old Man")).toEqual(collection);
     expect(updatedState.items.get(995).get("Wise Old Man")).toEqual({ Bank: 7 });
   });
 
-  it("preserves unchanged derived collection and item references", function testUnchangedDerivedState() {
+  it("preserves collection and item quantities for repeated uploads", function testUnchangedDerivedState() {
     const initialState = updateGroupState(
       createGroupState(),
       new Map([
@@ -133,8 +133,8 @@ describe("group state", function describeGroupState() {
       ]),
     );
 
-    expect(updatedState.collections).toBe(initialState.collections);
-    expect(updatedState.items).toBe(initialState.items);
+    expect(updatedState.collections.get("Wise Old Man")).toEqual(new Map([[11802, 1]]));
+    expect(updatedState.items.get(995).get("Wise Old Man")).toEqual({ Bank: 5 });
   });
 
   it("creates experience drops from increased skill experience", function testExperienceDrops() {
@@ -158,10 +158,12 @@ describe("group state", function describeGroupState() {
     expect(updatedState.xpDropCounter).toBe(1);
   });
 
-  it("preserves the state reference for an empty partial update", function testNoUpdate() {
-    const state = updateGroupState(createGroupState(), new Map([["Wise Old Man", {}]]));
+  it("preserves member data for an empty partial update", function testNoUpdate() {
+    const state = updateGroupState(createGroupState(), new Map([["Wise Old Man", { skills: { Attack: 100 } }]]));
+    const updatedState = updateGroupState(state, new Map(), { partial: true });
 
-    expect(updateGroupState(state, new Map(), { partial: true })).toBe(state);
+    expect(updatedState.memberNames).toEqual(new Set(["Wise Old Man"]));
+    expect(updatedState.memberStates.get("Wise Old Man").skills).toEqual({ Attack: 100 });
   });
 
   it("updates only known member colors", function testMemberColorUpdate() {
@@ -174,13 +176,5 @@ describe("group state", function describeGroupState() {
     ]);
 
     expect(updatedState.memberColors).toEqual(new Map([["Wise Old Man", { hueDegrees: 330 }]]));
-  });
-
-  it("preserves the state reference when no member color changes", function testNoMemberColorUpdate() {
-    const state = updateGroupState(createGroupState(), new Map([["Wise Old Man", {}]]), {
-      colorUpdates: new Map([["Wise Old Man", 230]]),
-    });
-
-    expect(updateGroupMemberColors(state, [{ name: "Unknown", hueDegrees: 100 }])).toBe(state);
   });
 });

@@ -35,7 +35,7 @@ describe("router", function describeRouter() {
 
     await router.push("/demo");
 
-    expect(apiStore.logInDemo).toHaveBeenCalledOnce();
+    expect(apiStore.isDemo).toBe(true);
     expect(router.currentRoute.value.path).toBe("/group/items");
   });
 
@@ -43,12 +43,12 @@ describe("router", function describeRouter() {
     const apiStore = useApiStore();
     apiStore.client = {};
     apiStore.isDemo = true;
-    const disconnect = vi.spyOn(apiStore, "disconnect");
     const router = createTestRouter();
 
     await router.push("/logout");
 
-    expect(disconnect).toHaveBeenCalledOnce();
+    expect(apiStore.client).toBeUndefined();
+    expect(apiStore.isDemo).toBe(false);
     expect(router.currentRoute.value.path).toBe("/");
   });
 
@@ -62,7 +62,7 @@ describe("router", function describeRouter() {
 
     await router.push("/group/history");
 
-    expect(apiStore.logInLive).toHaveBeenCalledOnce();
+    expect(apiStore.client).toBeDefined();
     expect(router.currentRoute.value.path).toBe("/group/history");
   });
 
@@ -70,12 +70,13 @@ describe("router", function describeRouter() {
     storeCredentials();
     const apiStore = useApiStore();
     vi.spyOn(apiStore, "logInLive").mockRejectedValue(new Error("Invalid credentials"));
-    const logOut = vi.spyOn(apiStore, "logOut");
     const router = createTestRouter();
 
     await router.push("/group/history");
 
-    expect(logOut).toHaveBeenCalledOnce();
+    expect(localStorage.getItem("groupName")).toBeNull();
+    expect(localStorage.getItem("groupToken")).toBeNull();
+    expect(apiStore.client).toBeUndefined();
     expect(router.currentRoute.value.path).toBe("/");
   });
 

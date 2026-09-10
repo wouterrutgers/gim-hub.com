@@ -19,10 +19,6 @@ class MemberUpdates
             static::properties($sharedMember, ['bank' => $data['shared_bank']]);
         }
 
-        if (! empty($data['collection_log_v2'])) {
-            CollectionLogUpdates::applyLegacy($member, $data['collection_log_v2']);
-        }
-
         if (! empty($data['collection_log_updates'])) {
             CollectionLogUpdates::apply($member, $data['collection_log_updates']);
         }

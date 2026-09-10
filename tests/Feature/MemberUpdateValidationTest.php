@@ -10,20 +10,7 @@ function validationMember(): Member
     return Member::create(['group_id' => $group->id, 'name' => 'Alice']);
 }
 
-it('accepts legacy inventories at their length limits with empty slots', function (string $key, array $items): void {
-    $member = validationMember();
-
-    $this->withHeader('Authorization', 'validation-token')
-        ->postJson('/api/group/validation-group/update-group-member', ['name' => 'Alice', $key => $items])
-        ->assertSuccessful();
-
-    expect($member->load('properties')->getProperty($key)->value)->toBe($items);
-})->with([
-    'fixed inventory length' => ['inventory', [995, 100, ...array_fill(0, 54, 0)]],
-    'maximum bank length' => ['bank', [995, 100, ...array_fill(0, 2998, 0)]],
-]);
-
-it('returns 422 for invalid legacy arrays without applying other storage updates', function (array $payload, string $attribute): void {
+it('returns 422 for invalid storage arrays without applying other storage updates', function (array $payload, string $attribute): void {
     $member = validationMember();
     $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);
 
@@ -40,9 +27,12 @@ it('returns 422 for invalid legacy arrays without applying other storage updates
     'empty fixed inventory' => [['inventory' => []], 'inventory'],
     'oversized bank' => [['bank' => array_fill(0, 3001, 0)], 'bank'],
     'non-array bank' => [['bank' => 995], 'bank'],
+    'three rune pouch slots' => [['rune_pouch' => array_fill(0, 6, 0)], 'rune_pouch'],
+    'incomplete rune pouch slot' => [['rune_pouch' => array_fill(0, 7, 0)], 'rune_pouch'],
+    'oversized rune pouch' => [['rune_pouch' => array_fill(0, 9, 0)], 'rune_pouch'],
 ]);
 
-it('reports legacy and portable validation errors together without updating the member', function (): void {
+it('reports inventory and portable storage validation errors together without updating the member', function (): void {
     $member = validationMember();
     $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);
 
@@ -59,7 +49,7 @@ it('reports legacy and portable validation errors together without updating the 
     expect($member->load('properties')->getProperty('bank')->value)->toBe([995, 100]);
 });
 
-it('preserves legacy bank contents for omitted or null snapshots and clears an explicit empty snapshot', function (): void {
+it('preserves bank contents for omitted or null snapshots and clears an explicit empty snapshot', function (): void {
     $member = validationMember();
     $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);
 
@@ -73,7 +63,7 @@ it('preserves legacy bank contents for omitted or null snapshots and clears an e
     expect($member->fresh()->load('properties')->getProperty('bank')->value)->toBe([]);
 });
 
-it('continues applying negative legacy bank deltas', function (): void {
+it('applies negative bank deltas', function (): void {
     $member = validationMember();
     $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);
 

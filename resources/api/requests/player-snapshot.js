@@ -34,26 +34,17 @@ const playerSnapshotSchema = z.object({
   timestamp: z.number(),
   skills: z.record(z.string(), z.number()),
   quests: z.record(z.string(), z.string()),
-  diaries: z.record(z.string(), z.record(z.string(), z.array(z.boolean()))).or(diariesSchema),
+  diaries: diariesSchema,
   collection: collectionSchema,
-  bossKc: bossKillCountSchema.optional(),
+  bossKc: bossKillCountSchema,
 });
 const playerSnapshotsSchema = z
-  .preprocess(
-    function normalizeSnapshots(value) {
-      if (Array.isArray(value) && value.length === 0) {
-        return {};
-      }
-
-      return value;
-    },
-    z.record(
-      z.string(),
-      z.object({
-        lastVisit: playerSnapshotSchema,
-        lastWeek: playerSnapshotSchema,
-      }),
-    ),
+  .record(
+    z.string(),
+    z.object({
+      lastVisit: playerSnapshotSchema,
+      lastWeek: playerSnapshotSchema,
+    }),
   )
   .transform(function mapSnapshots(snapshots) {
     return new Map(Object.entries(snapshots));

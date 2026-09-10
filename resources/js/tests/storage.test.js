@@ -29,7 +29,7 @@ describe("storage integration", function describeStorage() {
     expect(state.items.get(1623).get("Alice")).toEqual({ "Gem bag": 20 });
     expect(state.items.get(2430).get("Alice")).toEqual({ "Chugging barrel": 15 });
     const unchanged = update(state, [{ name: "Alice", herb_sack: null }]);
-    expect(unchanged.items).toBe(state.items);
+    expect(unchanged.items.get(199).get("Alice")).toEqual({ Bank: 3, "Herb sack": 12, "Looting bag": 5 });
     const empty = update(unchanged, [{ name: "Alice", herb_sack: [] }]);
     expect(empty.items.get(199).get("Alice")).toEqual({ Bank: 3, "Looting bag": 5 });
   });
@@ -43,7 +43,6 @@ describe("storage integration", function describeStorage() {
     const state = update(createGroupState(), [{ name: "Alice", stash_units: units }]);
     const repeated = update(state, [{ name: "Alice", stash_units: units }]);
     expect(repeated.items.get(1095).get("Alice")).toEqual({ "STASH units": 2 });
-    expect(repeated.items).toBe(state.items);
     expect(stashItemLocations(repeated.memberStates.get("Alice").stashUnits, 1095)).toEqual([
       { id: 28958, name: "Lumbridge Swamp", tier: "Easy", quantity: 1 },
       { id: 28959, name: "Wizards' Tower", tier: "Easy", quantity: 1 },

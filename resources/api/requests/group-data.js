@@ -1,5 +1,4 @@
 import * as z from "zod/v4";
-import { skills } from "../../game/skill";
 import { dateSchema } from "./shared";
 
 export async function fetchGroupData({ baseURL, credentials, fromTime }) {
@@ -21,8 +20,7 @@ export async function fetchGroupData({ baseURL, credentials, fromTime }) {
 
 const statsSchema = z
   .array(z.uint32())
-  .min(7)
-  .max(8)
+  .length(8)
   .refine(function hasValidRunMaximum(stats) {
     return stats[5] === 100;
   })
@@ -32,7 +30,7 @@ const statsSchema = z
       prayer: { current: stats[2], max: stats[3] },
       run: { current: Math.floor(stats[4] / 100), max: stats[5] },
       world: stats[6],
-      specialAttack: { current: stats[7] ?? 100, max: 100 },
+      specialAttack: { current: stats[7], max: 100 },
     };
   });
 
@@ -163,10 +161,6 @@ const skillsSchema = z
     skillsInBackendOrder.forEach(function mapSkill(skill, index) {
       skillExperience[skill] = experience.at(index);
     });
-
-    for (const skill of skills) {
-      skillExperience[skill] ??= 0;
-    }
 
     return skillExperience;
   });

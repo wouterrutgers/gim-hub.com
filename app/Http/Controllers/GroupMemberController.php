@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Validation\Rule;
 use Throwable;
 
 class GroupMemberController extends Controller
@@ -227,11 +226,16 @@ class GroupMemberController extends Controller
             'collection_log_updates.*.items' => ['required', 'array', 'list', ['min', 1]],
             'collection_log_updates.*.items.*' => ['required', ['array', 'item_id', 'quantity']],
             'collection_log_updates.*.items.*.item_id' => ['required', 'integer', ['min', 1]],
-            'collection_log_updates.*.items.*.quantity' => Rule::forEach(function (mixed $value, string $attribute) use ($request): array {
-                $index = explode('.', $attribute)[1];
+            'collection_log_updates.*.items.*.quantity' => [
+                'bail', 'required', 'integer', ['min', 0], ['max', 2147483647],
+                function (string $attribute, mixed $value, Closure $fail) use ($request): void {
+                    $index = explode('.', $attribute)[1];
 
-                return ['required', 'integer', ['min', $request->input("collection_log_updates.{$index}.type") === 'scan' ? 0 : 1], ['max', 2147483647]];
-            }),
+                    if ($value < 1 && $request->input("collection_log_updates.{$index}.type") !== 'scan') {
+                        $fail('Collection log drop and unlock quantities must be positive.');
+                    }
+                },
+            ],
             'interacting' => ['nullable'],
             'timezone' => ['nullable', 'string', 'timezone'],
         ]);

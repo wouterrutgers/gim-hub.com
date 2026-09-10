@@ -77,6 +77,23 @@ it('accepts a scan correcting a count to zero', function (): void {
     expect($member->collectionLogs()->sole()->item_count)->toBe(0);
 });
 
+it('processes a full collection scan with subsequent drops', function (): void {
+    $member = collectionMember();
+    $aliases = json_decode(file_get_contents(resource_path('game/collection-log-item-aliases.json')), associative: true, flags: JSON_THROW_ON_ERROR);
+    $items = collect(json_decode(file_get_contents(resource_path('assets/data/collection_log_info.json')), associative: true, flags: JSON_THROW_ON_ERROR))
+        ->pluck('pages')->flatten(1)->pluck('items')->flatten(1)->pluck('id')
+        ->diff(array_keys($aliases))->unique()->mapWithKeys(fn (int $identifier): array => [$identifier => 2])->all();
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name,
+        'collection_log_updates' => [collectionUpdate('scan', $items), collectionUpdate('drop', [6739 => 1])],
+    ])->assertSuccessful();
+
+    expect($member->collectionLogs()->count())->toBe(count($items));
+    expect($member->collectionLogs()->where('item_id', '=', 6739)->sole()->item_count)->toBe(3);
+    expect($member->collectionLogs()->where('item_id', '=', 4151)->sole()->item_count)->toBe(2);
+});
+
 it('does not allow a different group to update a member', function (): void {
     $member = collectionMember();
     Group::create(['name' => 'other-group', 'hash' => 'other-token']);
@@ -118,3 +135,26 @@ it('requires quantities and rejects mixed legacy and ordered collection uploads'
 
     expect($member->collectionLogs()->count())->toBe(0);
 });
+
+it('returns 422 for invalid quantities without applying earlier collection updates', function (string $type, mixed $quantity): void {
+    $member = collectionMember();
+    $member->collectionLogs()->create(['item_id' => 6739, 'item_count' => 2]);
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name,
+        'collection_log_updates' => [
+            collectionUpdate('scan', [6739 => 0]),
+            ['type' => $type, 'items' => [['item_id' => 6739, 'quantity' => $quantity]]],
+        ],
+    ])->assertUnprocessable()->assertJsonValidationErrors('collection_log_updates.1.items.0.quantity');
+
+    expect($member->collectionLogs()->sole()->item_count)->toBe(2);
+})->with([
+    'zero drop' => ['drop', 0],
+    'zero unlock' => ['unlock', 0],
+    'negative scan' => ['scan', -1],
+    'fractional quantity' => ['drop', 1.5],
+    'nonnumeric quantity' => ['drop', 'invalid'],
+    'null quantity' => ['scan', null],
+    'overflow quantity' => ['scan', 2147483648],
+]);

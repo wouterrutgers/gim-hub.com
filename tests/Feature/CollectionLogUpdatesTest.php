@@ -54,7 +54,7 @@ it('does not reduce existing counts when an unlock is reported', function (): vo
         'name' => $member->name, 'collection_log_updates' => [collectionUpdate('unlock', [6739 => 1, 4151 => 1])],
     ])->assertSuccessful();
 
-    expect($member->collectionLogs()->pluck('item_count', 'item_id')->all())->toBe([6739 => 3, 4151 => 1]);
+    expect($member->collectionLogs()->pluck('item_count', 'item_id')->all())->toEqual([6739 => 3, 4151 => 1]);
 });
 
 it('increments the canonical count when an older scan stored an alias', function (): void {
@@ -158,3 +158,70 @@ it('returns 422 for invalid quantities without applying earlier collection updat
     'null quantity' => ['scan', null],
     'overflow quantity' => ['scan', 2147483648],
 ]);
+
+it('returns 422 for malformed collection batches without writing other posted properties', function (mixed $updates, string $attribute): void {
+    $member = collectionMember();
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name, 'bank' => [995, 100], 'collection_log_updates' => $updates,
+    ])->assertUnprocessable()->assertJsonValidationErrors($attribute);
+
+    expect($member->properties()->count())->toBe(0);
+    expect($member->collectionLogs()->count())->toBe(0);
+    expect($member->fresh()->last_online_at)->toBeNull();
+})->with([
+    'non-array updates' => ['invalid', 'collection_log_updates'],
+    'non-array update' => [['invalid'], 'collection_log_updates.0'],
+    'unknown update type' => [[['type' => 'invalid', 'items' => [['item_id' => 6739, 'quantity' => 1]]]], 'collection_log_updates.0.type'],
+    'missing items' => [[['type' => 'scan']], 'collection_log_updates.0.items'],
+    'non-array items' => [[['type' => 'scan', 'items' => 1]], 'collection_log_updates.0.items'],
+    'empty items' => [[['type' => 'scan', 'items' => []]], 'collection_log_updates.0.items'],
+    'keyed items' => [[['type' => 'scan', 'items' => [6739 => ['item_id' => 6739, 'quantity' => 1]]]], 'collection_log_updates.0.items'],
+    'non-array item' => [[['type' => 'scan', 'items' => [6739]]], 'collection_log_updates.0.items.0'],
+    'unknown item field' => [[['type' => 'scan', 'items' => [['item_id' => 6739, 'quantity' => 1, 'unexpected' => 1]]]], 'collection_log_updates.0.items.0'],
+    'missing item identifier' => [[['type' => 'scan', 'items' => [['quantity' => 1]]]], 'collection_log_updates.0.items.0.item_id'],
+    'invalid item identifier' => [[['type' => 'scan', 'items' => [['item_id' => -1, 'quantity' => 1]]]], 'collection_log_updates.0.items.0.item_id'],
+    'missing quantity' => [[['type' => 'scan', 'items' => [['item_id' => 6739]]]], 'collection_log_updates.0.items.0.quantity'],
+]);
+
+it('preserves unreported collection items and unchanged count timestamps', function (): void {
+    $this->freezeTime();
+    $member = collectionMember();
+    $log = $member->collectionLogs()->create(['item_id' => 6739, 'item_count' => 3]);
+    $member->collectionLogs()->create(['item_id' => 4151, 'item_count' => 2]);
+    $this->travel(10)->seconds();
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name, 'collection_log_updates' => [collectionUpdate('scan', [6739 => 3])],
+    ])->assertSuccessful();
+
+    expect($member->collectionLogs()->pluck('item_count', 'item_id')->all())->toEqual([6739 => 3, 4151 => 2]);
+    expect($log->fresh()->updated_at)->toEqual($log->updated_at);
+});
+
+it('does not share collection counts between members processed by the same worker', function (): void {
+    $member = collectionMember();
+    $other = Member::create(['group_id' => $member->group_id, 'name' => 'Bob']);
+    $member->collectionLogs()->create(['item_id' => 6739, 'item_count' => 10]);
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name, 'collection_log_updates' => [collectionUpdate('drop', [6739 => 2])],
+    ])->assertSuccessful();
+    $this->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $other->name, 'collection_log_updates' => [collectionUpdate('drop', [6739 => 1])],
+    ])->assertSuccessful();
+
+    expect($member->collectionLogs()->sole()->item_count)->toBe(12);
+    expect($other->collectionLogs()->sole()->item_count)->toBe(1);
+});
+
+it('stores legacy counts with the last supplied count winning', function (): void {
+    $member = collectionMember();
+    $member->collectionLogs()->create(['item_id' => 4151, 'item_count' => 2]);
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name, 'collection_log_v2' => [6739, 7, 6739, 3, 25629, 1],
+    ])->assertSuccessful();
+
+    expect($member->collectionLogs()->pluck('item_count', 'item_id')->all())->toEqual([4151 => 2, 6739 => 3, 25629 => 1]);
+});

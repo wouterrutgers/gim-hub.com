@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\CollectionLogUpdates;
 use App\Domain\MemberSnapshotCreator;
+use App\Domain\MemberUpdates;
+use App\Domain\MemberUpdateValidation;
 use App\Domain\SkillHistory;
 use App\Domain\Validators;
 use App\Models\CollectionLog;
@@ -11,7 +12,6 @@ use App\Models\Member;
 use App\Models\SkillStat;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use Closure;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -162,248 +162,24 @@ class GroupMemberController extends Controller
 
     public function updateGroupMember(): JsonResponse
     {
-        $request = request();
-        $itemQuantityPairs = function (string $attribute, mixed $value, Closure $fail): void {
-            if (count($value) % 2 !== 0) {
-                $fail('Storage contents must contain item and quantity pairs.');
+        $validated = MemberUpdateValidation::validate(request()->all());
+        $groupId = request()->attributes->get('group')->id;
 
-                return;
+        return DB::transaction(function () use ($groupId, $validated): JsonResponse {
+            $member = Member::where('group_id', '=', $groupId)
+                ->where('name', '=', $validated['name'])
+                ->lockForUpdate()
+                ->first();
+
+            if (is_null($member)) {
+                return response()->json(['error' => 'Player is not a member of this group'], 401);
             }
 
-            foreach ($value as $itemValue) {
-                if (! is_int($itemValue) || $itemValue < 1 || $itemValue > 2147483647) {
-                    $fail('Storage items and quantities must be positive integers.');
+            $member->update(['last_online_at' => now()->toDateTimeString()]);
+            MemberUpdates::apply($member, $validated);
 
-                    return;
-                }
-            }
-        };
-
-        $validator = validator($request->all(), [
-            'name' => ['required', 'string'],
-            'stats' => ['nullable', 'array', ['min', 7], ['max', 8]],
-            'coordinates' => ['nullable', 'array', ['size', 4]],
-            'skills' => ['nullable', 'array', ['size', 24]],
-            'quests' => ['nullable', 'array', ['max', 250]],
-            'inventory' => ['nullable', 'array', ['size', 56]],
-            'equipment' => ['nullable', 'array', ['size', 28]],
-            'bank' => ['nullable', 'array', ['max', 3000]],
-            'bank_partial' => ['nullable', 'array', ['max', 3000]],
-            'shared_bank' => ['nullable', 'array', ['max', 1000]],
-            'rune_pouch' => ['nullable', 'array', ['min', 6], ['max', 8]],
-            'seed_vault' => ['nullable', 'array', ['max', 500]],
-            'potion_storage' => ['nullable', 'array', ['max', 2000]],
-            'poh_costume_room' => ['nullable', 'array', ['max', 2500]],
-            'plank_sack' => ['nullable', 'array', ['max', 14]],
-            'master_scroll_book' => ['nullable', 'array', ['max', 40]],
-            'essence_pouches' => ['nullable', 'array', ['max', 16]],
-            'tackle_box' => ['nullable', 'array', ['max', 100]],
-            'tackle_box_partial' => ['nullable', 'array', ['max', 100]],
-            'tool_leprechaun' => ['nullable', 'array', ['max', 24]],
-            'elnock_inquisitor' => ['nullable', 'array', ['max', 6]],
-            'coal_bag' => ['nullable', 'array', ['max', 2]],
-            'fish_barrel' => ['nullable', 'array', ['max', 100]],
-            'herb_sack' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 30], $itemQuantityPairs],
-            'looting_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 56], $itemQuantityPairs],
-            'seed_box' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 12], $itemQuantityPairs],
-            'gem_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 10], $itemQuantityPairs],
-            'chugging_barrel' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 100], $itemQuantityPairs],
-            'stash_units' => ['sometimes', 'nullable', 'array', 'list', ['max', 200]],
-            'stash_units.*' => ['required', ['array', 'id', 'name', 'tier', 'state', 'items', 'alternatives']],
-            'stash_units.*.id' => ['required', 'integer', 'distinct', ['min', 1]],
-            'stash_units.*.name' => ['required', 'string', ['max', 200]],
-            'stash_units.*.tier' => ['required', ['in', 'Beginner', 'Easy', 'Medium', 'Hard', 'Elite', 'Master']],
-            'stash_units.*.state' => ['required', ['in', 'unbuilt', 'empty', 'filled']],
-            'stash_units.*.items' => ['bail', 'present', 'array', 'list', ['max', 40], $itemQuantityPairs],
-            'stash_units.*.alternatives' => ['present', 'array', 'list', ['max', 10]],
-            'stash_units.*.alternatives.*' => ['required', 'string', ['max', 200]],
-            'quiver' => ['nullable', 'array', ['size', 2]],
-            'diary_vars' => ['nullable', 'array', ['max', 62]],
-            'collection_log_v2' => ['nullable', 'array'],
-            'collection_log_updates' => ['sometimes', 'array', 'list', ['prohibits', 'collection_log_v2']],
-            'collection_log_updates.*' => ['required', ['array', 'type', 'items']],
-            'collection_log_updates.*.type' => ['required', ['in', 'drop', 'unlock', 'scan']],
-            'collection_log_updates.*.items' => ['required', 'array', 'list', ['min', 1]],
-            'collection_log_updates.*.items.*' => ['required', ['array', 'item_id', 'quantity']],
-            'collection_log_updates.*.items.*.item_id' => ['required', 'integer', ['min', 1]],
-            'collection_log_updates.*.items.*.quantity' => [
-                'bail', 'required', 'integer', ['min', 0], ['max', 2147483647],
-                function (string $attribute, mixed $value, Closure $fail) use ($request): void {
-                    $index = explode('.', $attribute)[1];
-
-                    if ($value < 1 && $request->input("collection_log_updates.{$index}.type") !== 'scan') {
-                        $fail('Collection log drop and unlock quantities must be positive.');
-                    }
-                },
-            ],
-            'interacting' => ['nullable'],
-            'timezone' => ['nullable', 'string', 'timezone'],
-        ]);
-
-        $validated = $validator->validate();
-
-        $name = $validated['name'];
-        $groupId = $request->attributes->get('group')->id;
-
-        $isMember = Member::where('group_id', '=', $groupId)
-            ->where('name', '=', $name)
-            ->exists();
-
-        if (! $isMember) {
-            return response()->json([
-                'error' => 'Player is not a member of this group',
-            ], 401);
-        }
-
-        $member = Member::firstOrCreate([
-            'group_id' => $groupId,
-            'name' => $name,
-        ]);
-
-        $collectionLogData = $validated['collection_log_v2'] ?? null;
-
-        DB::transaction(function () use ($member, $groupId, $validated, $collectionLogData): void {
-            Member::where('id', '=', $member->id)->lockForUpdate()->firstOrFail();
-            $member->update(['last_online_at' => now()]);
-
-            foreach (Member::PROPERTY_KEYS as $propertyKey) {
-                $partialKey = Member::PARTIAL_PROPERTY_KEYS[$propertyKey] ?? null;
-
-                if ($propertyKey === 'stash_units' && isset($validated[$propertyKey])) {
-                    $units = collect($member->getProperty($propertyKey)?->value ?? [])->keyBy('id');
-                    foreach ($validated[$propertyKey] as $unit) {
-                        $units->put($unit['id'], $unit);
-                    }
-                    $member->properties()->updateOrCreate(
-                        ['key' => $propertyKey],
-                        ['value' => $units->values()->all()]
-                    );
-                } elseif (isset($validated[$propertyKey])) {
-                    $member->properties()->updateOrCreate(
-                        ['key' => $propertyKey],
-                        ['value' => $validated[$propertyKey]]
-                    );
-                } elseif (isset($partialKey) && isset($validated[$partialKey])) {
-                    $fullFlat = [];
-                    $fullFlatProperty = $member->getProperty($propertyKey);
-                    if (isset($fullFlatProperty)) {
-                        $fullFlat = $fullFlatProperty->value;
-                    }
-
-                    $partialFlat = $validated[$partialKey];
-
-                    $partialReshaped = [];
-
-                    for ($i = 0; $i < count($partialFlat) - 1; $i += 2) {
-                        $itemID = $partialFlat[$i];
-                        $quantity = $partialFlat[$i + 1];
-                        $partialReshaped[$itemID] = $quantity;
-                    }
-
-                    for ($i = 0; $i < count($fullFlat) - 1; $i += 2) {
-                        $itemID = $fullFlat[$i];
-                        $quantity = $fullFlat[$i + 1];
-
-                        $fullFlat[$i + 1] = max(0, $quantity + ($partialReshaped[$itemID] ?? 0));
-
-                        unset($partialReshaped[$itemID]);
-                    }
-
-                    foreach ($partialReshaped as $itemID => $quantity) {
-                        $fullFlat[] = $itemID;
-                        $fullFlat[] = max(0, $quantity);
-                    }
-
-                    $member->properties()->updateOrCreate(
-                        ['key' => $propertyKey],
-                        ['value' => $fullFlat]
-                    );
-                }
-            }
-
-            if (isset($validated['interacting'])) {
-                $member->properties()->updateOrCreate(
-                    ['key' => 'interacting'],
-                    ['value' => $validated['interacting']]
-                );
-            }
-
-            if (! empty($validated['deposited'] ?? [])) {
-                $this->depositItems($member, $validated['deposited']);
-            }
-
-            if (! empty($validated['shared_bank'] ?? [])) {
-                $sharedMember = Member::firstOrCreate([
-                    'group_id' => $groupId,
-                    'name' => Member::SHARED_MEMBER,
-                ]);
-
-                $sharedMember?->properties()->updateOrCreate(
-                    ['key' => 'bank'],
-                    ['value' => $validated['shared_bank']]
-                );
-            }
-
-            if (! is_null($collectionLogData)) {
-                $this->updateCollectionLog($member, $collectionLogData);
-            }
-
-            if (! empty($validated['collection_log_updates'])) {
-                CollectionLogUpdates::apply($member, $validated['collection_log_updates']);
-            }
+            return response()->json(null);
         });
-
-        return response()->json(null);
-    }
-
-    protected function updateCollectionLog(Member $member, array $collectionLogData): void
-    {
-        foreach (array_chunk($collectionLogData, 2) as [$itemId, $count]) {
-            $member->collectionLogs()->updateOrCreate([
-                'item_id' => $itemId,
-            ], [
-                'item_count' => $count,
-            ]);
-        }
-    }
-
-    protected function depositItems(Member $member, array $deposited): void
-    {
-        if (empty($deposited)) {
-            return;
-        }
-
-        $member->loadMissing('properties');
-        $bankProperty = $member->getProperty('bank');
-        $bankItems = $bankProperty?->value ?? [];
-
-        $depositedMap = [];
-        for ($i = 0; $i < count($deposited); $i += 2) {
-            $itemId = $deposited[$i];
-            $quantity = $deposited[$i + 1];
-            $depositedMap[$itemId] = $quantity;
-        }
-
-        for ($i = 0; $i < count($bankItems); $i += 2) {
-            $itemId = $bankItems[$i];
-            if (isset($depositedMap[$itemId])) {
-                $bankItems[$i + 1] += $depositedMap[$itemId];
-                unset($depositedMap[$itemId]);
-            }
-        }
-
-        foreach ($depositedMap as $itemId => $quantity) {
-            if ($itemId === 0 || $quantity <= 0) {
-                continue;
-            }
-            $bankItems[] = $itemId;
-            $bankItems[] = $quantity;
-        }
-
-        $member->properties()->updateOrCreate(
-            ['key' => 'bank'],
-            ['value' => $bankItems]
-        );
     }
 
     public function getGroupData(Request $request): JsonResponse

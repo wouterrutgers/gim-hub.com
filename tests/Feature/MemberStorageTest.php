@@ -44,11 +44,11 @@ it('reconciles individual STASH records without erasing unobserved units or dupl
     $this->postJson('/api/group/storage-group/update-group-member', ['name' => 'Alice'])->assertSuccessful();
 
     $expected = [stashUnit(28958, 'empty', []), stashUnit(28959), stashUnit(34736, 'unbuilt', [])];
-    expect($member->load('properties')->getProperty('stash_units')->value)->toBe($expected);
-    $this->getJson('/api/group/storage-group/get-group-data?from_time=2000-01-01')->assertJsonPath('0.stash_units', $expected);
+    expect($member->load('properties')->getProperty('stash_units')->value)->toEqual($expected);
+    $this->getJson('/api/group/storage-group/get-group-data?from_time=2000-01-01')->assertJsonFragment(['stash_units' => $expected]);
 
     $this->postJson('/api/group/storage-group/update-group-member', ['name' => 'Alice', 'stash_units' => null])->assertSuccessful();
-    expect($member->fresh()->load('properties')->getProperty('stash_units')->value)->toBe($expected);
+    expect($member->fresh()->load('properties')->getProperty('stash_units')->value)->toEqual($expected);
 });
 
 it('retains unresolved alternatives without inventing items', function (): void {
@@ -56,7 +56,7 @@ it('retains unresolved alternatives without inventing items', function (): void 
     $unit = [...stashUnit(29019, items: []), 'alternatives' => ['Any stole', 'Any heraldic rune shield']];
     $this->withHeader('Authorization', 'storage-token')->postJson('/api/group/storage-group/update-group-member', ['name' => 'Alice', 'stash_units' => [$unit]])->assertSuccessful();
 
-    expect($member->load('properties')->getProperty('stash_units')->value)->toBe([$unit]);
+    expect($member->load('properties')->getProperty('stash_units')->value)->toEqual([$unit]);
 });
 
 it('rejects malformed storage snapshots without replacing saved contents', function (array $payload, string $attribute): void {
@@ -80,6 +80,9 @@ it('rejects malformed storage snapshots without replacing saved contents', funct
     'duplicate units' => [['stash_units' => [stashUnit(28958), stashUnit(28958)]], 'stash_units.0.id'],
     'unreadable state' => [['stash_units' => [stashUnit(28958, 'unknown')]], 'stash_units.0.state'],
     'missing contents' => [['stash_units' => [array_diff_key(stashUnit(28958), ['items' => true])]], 'stash_units.0.items'],
+    'missing identifier' => [['stash_units' => [array_diff_key(stashUnit(28958), ['id' => true])]], 'stash_units.0.id'],
+    'non-array alternatives' => [['stash_units' => [[...stashUnit(28958), 'alternatives' => 1]]], 'stash_units.0.alternatives'],
+    'invalid alternative' => [['stash_units' => [[...stashUnit(28958), 'alternatives' => [1]]]], 'stash_units.0.alternatives.0'],
 ]);
 
 it('isolates storage updates by group and member', function (): void {
@@ -92,4 +95,36 @@ it('isolates storage updates by group and member', function (): void {
 
     expect($otherMember->properties()->count())->toBe(0);
     expect($member->load('properties')->getProperty('herb_sack')->value)->toBe([199, 10]);
+});
+
+it('merges portable deltas while giving full snapshots precedence', function (): void {
+    $member = storageMember();
+    $member->properties()->createMany([
+        ['key' => 'bank', 'value' => [995, 100]],
+        ['key' => 'tackle_box', 'value' => [313, 10, 314, 20]],
+    ]);
+
+    $this->withHeader('Authorization', 'storage-token')->postJson('/api/group/storage-group/update-group-member', [
+        'name' => $member->name,
+        'bank' => [995, 50], 'bank_partial' => [995, -100],
+        'tackle_box_partial' => [313, -15, 314, 3, 307, 1],
+    ])->assertSuccessful();
+
+    expect($member->load('properties')->getProperty('bank')->value)->toBe([995, 50]);
+    expect($member->getProperty('tackle_box')->value)->toBe([313, 0, 314, 23, 307, 1]);
+});
+
+it('writes shared bank contents separately and preserves them for empty snapshots', function (): void {
+    $member = storageMember();
+
+    $this->withHeader('Authorization', 'storage-token')->postJson('/api/group/storage-group/update-group-member', [
+        'name' => $member->name, 'bank' => [995, 100], 'shared_bank' => [4151, 2],
+    ])->assertSuccessful();
+    $this->postJson('/api/group/storage-group/update-group-member', [
+        'name' => $member->name, 'shared_bank' => [],
+    ])->assertSuccessful();
+
+    $shared = Member::where('group_id', '=', $member->group_id)->where('name', '=', Member::SHARED_MEMBER)->sole();
+    expect($member->load('properties')->getProperty('bank')->value)->toBe([995, 100]);
+    expect($shared->getProperty('bank')->value)->toBe([4151, 2]);
 });

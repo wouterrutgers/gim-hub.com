@@ -121,12 +121,16 @@ class ImportGroupironData extends Command
 
     protected function normalizePropertyValue(string $propertyKey, mixed $value): mixed
     {
+        if ($propertyKey === 'stats' && is_array($value) && count($value) === 7) {
+            $value[] = 100;
+        }
+
         if ($propertyKey === 'coordinates' && is_array($value) && count($value) === 3) {
             $value[] = 0;
         }
 
         if ($propertyKey === 'skills' && is_array($value) && count($value) === 23) {
-            $value[] = 1;
+            $value[] = 0;
         }
 
         return $value;

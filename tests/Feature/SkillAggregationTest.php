@@ -73,10 +73,12 @@ it('does not prune history before the first successful aggregation', function ()
     $this->assertDatabaseCount('skill_stats', 2);
 });
 
-it('imports external history into integer columns and the correct retention tiers', function (): void {
+it('imports external stats and skill history using current storage formats', function (array $skills, array $expectedSkills): void {
     Http::fake([
-        'https://groupiron.men/api/group/imported/get-group-data*' => Http::response([['name' => 'Alice']]),
-        'https://groupiron.men/api/group/imported/get-skill-data*' => function (Request $request): PromiseInterface {
+        'https://groupiron.men/api/group/imported/get-group-data*' => Http::response([
+            ['name' => 'Alice', 'stats' => [90, 99, 80, 85, 7000, 100, 301], 'skills' => $skills],
+        ]),
+        'https://groupiron.men/api/group/imported/get-skill-data*' => function (Request $request) use ($skills): PromiseInterface {
             $time = match ($request['period']) {
                 'Day' => '2026-09-07T12:00:00Z',
                 'Week' => '2026-09-06T00:00:00Z',
@@ -85,13 +87,23 @@ it('imports external history into integer columns and the correct retention tier
             };
 
             return Http::response([
-                ['name' => 'Alice', 'skill_data' => [['time' => $time, 'data' => range(1, 24)]]],
+                ['name' => 'Alice', 'skill_data' => [['time' => $time, 'data' => $skills]]],
             ]);
         },
     ]);
 
     $this->artisan('groupiron:import', ['--name' => 'imported', '--token' => 'import-token'])->assertSuccessful();
 
+    $this->withHeader('Authorization', 'import-token')
+        ->getJson('/api/group/imported/get-group-data?from_time=2000-01-01')
+        ->assertSuccessful()
+        ->assertJsonFragment([
+            'name' => 'Alice', 'stats' => [90, 99, 80, 85, 7000, 100, 301, 100], 'skills' => $expectedSkills,
+        ]);
+
     expect(SkillStat::oldest()->get()->pluck('type')->all())->toBe(['monthly', 'daily', 'daily', 'hourly']);
-    expect(SkillStat::oldest()->first()->skills)->toBe(range(1, 24));
-});
+    expect(SkillStat::oldest()->first()->skills)->toBe($expectedSkills);
+})->with([
+    'without sailing' => [range(1, 23), [...range(1, 23), 0]],
+    'with sailing' => [range(1, 24), range(1, 24)],
+]);

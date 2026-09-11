@@ -75,6 +75,37 @@ describe("skill history calculations", function describeCalculations() {
     expect(buildTableRowsFromMemberSkillData(data, range, options)).toEqual([]);
   });
 
+  it("keys table rows by member and skill so two members gaining the same skill never share a key", function testUniqueRowKeys() {
+    function memberEntry(name, samples) {
+      return {
+        member: name,
+        skillSamples: samples,
+        style: { lineBorder: "red", lineBackground: "red", barBackground: "red" },
+      };
+    }
+    // Alice and Bob both gain Attack experience during the visible hour.
+    const data = [
+      memberEntry("Alice", [sample("11:55", 100), sample("12:30", 400)]),
+      memberEntry("Bob", [sample("11:55", 50), sample("12:30", 150)]),
+    ];
+    const rows = buildTableRowsFromMemberSkillData(data, range, {
+      skillFilter: "Overall",
+      yAxisUnit: "Cumulative experience gained",
+    });
+    // The two Attack rows share their visible name, so the keys (used by the
+    // table's keyed v-for) must differ by member or Vue's list diff corrupts.
+    expect(
+      rows.map(function getNameAndKey({ name, key }) {
+        return { name, key };
+      }),
+    ).toEqual([
+      { name: "Alice", key: "member Alice" },
+      { name: "Attack", key: "skill Attack Alice" },
+      { name: "Bob", key: "member Bob" },
+      { name: "Attack", key: "skill Attack Bob" },
+    ]);
+  });
+
   it("uses calendar periods in UTC including across daylight saving changes", function testPresets() {
     const end = new Date("2026-03-30T12:00:00Z");
     expect(rangeForPeriod("Day", end).start.toISOString()).toBe("2026-03-29T12:00:00.000Z");

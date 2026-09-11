@@ -100,7 +100,6 @@
       const fillPercent = Math.max(0.1, 100 * row.fillFraction);
       return {
         ...row,
-        key: `${row.name} ${row.iconSource} ${row.isMemberHeader}`,
         background: `linear-gradient(90deg, ${row.colorCSS} ${fillPercent}%, transparent ${fillPercent}%)`,
       };
     });

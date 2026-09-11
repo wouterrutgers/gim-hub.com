@@ -154,6 +154,7 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
   for (const { name, total, perSkill, colorCSS } of groupMetrics) {
     if (options.skillFilter !== "Overall") {
       rows.push({
+        key: `member ${name}`,
         name,
         colorCSS: "hsl(69deg, 60%, 60%)",
         fillFraction: total / safeDenominator,
@@ -166,6 +167,7 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
 
     const overallFraction = total / safeDenominator;
     rows.push({
+      key: `member ${name}`,
       name,
       colorCSS,
       fillFraction: overallFraction,
@@ -184,6 +186,7 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
       }
 
       skillRows.push({
+        key: `skill ${skill} ${name}`,
         name: skill,
         colorCSS,
         fillFraction: (metricValue / total) * overallFraction,

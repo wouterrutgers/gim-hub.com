@@ -42,10 +42,10 @@ class MemberUpdates
             return;
         }
 
-        $current = $member->properties()->whereIn('key', $keys)->get(['key', 'value'])->pluck('value', 'key')->all();
+        $current = $member->properties()->whereIn('key', $keys)->get(['id', 'key', 'value'])->keyBy('key')->all();
 
         if (isset($properties['stash_units'])) {
-            $units = array_column($current['stash_units'] ?? [], null, 'id');
+            $units = array_column($current['stash_units']->value ?? [], null, 'id');
 
             foreach ($properties['stash_units'] as $unit) {
                 $units[$unit['id']] = $unit;
@@ -56,18 +56,18 @@ class MemberUpdates
 
         foreach (Member::PARTIAL_PROPERTY_KEYS as $key => $partialKey) {
             if (isset($data[$partialKey]) && ! isset($properties[$key])) {
-                $properties[$key] = static::applyPartial($current[$key] ?? [], $data[$partialKey]);
+                $properties[$key] = static::applyPartial($current[$key]->value ?? [], $data[$partialKey]);
             }
         }
 
         $rows = [];
 
         foreach ($properties as $key => $value) {
-            if (array_key_exists($key, $current) && static::samePropertyValue($current[$key], $value)) {
+            if (array_key_exists($key, $current) && static::samePropertyValue($current[$key]->value, $value)) {
                 continue;
             }
 
-            $rows[] = ['key' => $key, 'value' => json_encode($value, JSON_THROW_ON_ERROR)];
+            $rows[] = ['id' => $current[$key]->id ?? null, 'key' => $key, 'value' => json_encode($value, JSON_THROW_ON_ERROR)];
         }
 
         if ($rows !== []) {

@@ -98,7 +98,7 @@ it('creates an exact clear baseline for a group member', function () {
 
     $snapshot = MemberSnapshot::where('member_id', '=', $member->id)->sole();
     $this->assertModelExists($snapshot);
-    expect($response->json())->toBe($snapshot->snapshot);
+    $response->assertExactJson($snapshot->snapshot);
 });
 
 it('does not create a clear baseline for a member outside the group', function () {

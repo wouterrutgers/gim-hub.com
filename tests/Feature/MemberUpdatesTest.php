@@ -2,6 +2,9 @@
 
 use App\Models\Group;
 use App\Models\Member;
+use Illuminate\Foundation\Testing\RefreshDatabaseState;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Exceptions;
 
 it('stores and returns member properties from supported plugin versions', function (array $additionalProperties): void {
     $group = Group::create(['name' => 'updates-group', 'hash' => 'updates-token']);
@@ -112,3 +115,55 @@ it('persists changed list positions and JSON value types', function (array $stor
     'changed value types' => [['995', '100'], [995, 100]],
     'removed item' => [[995, 100, 4151, 1], [995, 100]],
 ]);
+
+it('updates existing properties and inserts new properties in the same upload', function (): void {
+    $group = Group::create(['name' => 'mixed-group', 'hash' => 'mixed-token']);
+    $member = Member::create(['group_id' => $group->id, 'name' => 'Alice']);
+    $bank = $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);
+
+    $this->withHeader('Authorization', 'mixed-token')->postJson('/api/group/mixed-group/update-group-member', [
+        'name' => $member->name, 'bank' => [995, 75], 'herb_sack' => [199, 10],
+    ])->assertSuccessful();
+
+    expect($bank->fresh()->value)->toBe([995, 75]);
+    expect($member->properties()->where('key', '=', 'herb_sack')->sole()->value)->toBe([199, 10]);
+});
+
+it('updates existing properties while another transaction locks the insertion gap', function (): void {
+    config([
+        'database.default' => 'mysql',
+        'database.connections.mysql.database' => 'gim_hub_test',
+    ]);
+    RefreshDatabaseState::$migrated = false;
+    $this->refreshDatabase();
+
+    $group = Group::create(['name' => 'locking-group', 'hash' => 'locking-token']);
+    $member = Member::create(['group_id' => $group->id, 'name' => 'Alice']);
+    $member->properties()->createMany([
+        ['key' => 'bank', 'value' => [995, 100]],
+        ['key' => 'herb_sack', 'value' => [199, 5]],
+    ]);
+    $otherMember = Member::create(['group_id' => $group->id, 'name' => 'Bob']);
+    $otherMember->properties()->create(['key' => 'bank', 'value' => [995, 200]]);
+    DB::commit();
+    Exceptions::fake();
+    DB::statement('set session innodb_lock_wait_timeout = 1');
+    $blockingConnection = DB::build(config('database.connections.'.config('database.default')));
+    $blockingConnection->beginTransaction();
+
+    try {
+        $blockingConnection->table('member_properties')->orderByDesc('id')->limit(1)->lockForUpdate()->get();
+
+        $this->withHeader('Authorization', 'locking-token')->postJson('/api/group/locking-group/update-group-member', [
+            'name' => $member->name, 'bank' => [995, 75], 'herb_sack' => [199, 10],
+        ])->assertSuccessful();
+
+        expect($member->properties()->where('key', '=', 'bank')->sole()->value)->toBe([995, 75]);
+        expect($member->properties()->where('key', '=', 'herb_sack')->sole()->value)->toBe([199, 10]);
+        expect($otherMember->properties()->sole()->value)->toBe([995, 200]);
+        Exceptions::assertNothingReported();
+    } finally {
+        $blockingConnection->rollBack();
+        $blockingConnection->disconnect();
+    }
+});

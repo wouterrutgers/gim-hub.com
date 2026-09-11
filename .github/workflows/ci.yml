@@ -48,6 +48,19 @@ jobs:
   php:
     name: PHP
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: gim_hub_test
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --host=127.0.0.1 --user=root --password=root"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -56,7 +69,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.5
-          extensions: pdo_sqlite
+          extensions: pdo_sqlite, pdo_mysql
           coverage: none
 
       - name: Get Composer cache directory
@@ -79,3 +92,5 @@ jobs:
 
       - name: Run PHP tests
         run: php artisan test --compact
+        env:
+          DB_PASSWORD: root

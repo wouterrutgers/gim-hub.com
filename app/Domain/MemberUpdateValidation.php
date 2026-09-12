@@ -58,7 +58,7 @@ class MemberUpdateValidation
             'diary_vars' => ['nullable', 'array', ['max', 62]],
             'collection_log_updates' => ['sometimes', 'array', 'list'],
             'interacting' => ['nullable'],
-            'timezone' => ['nullable', 'string', 'timezone'],
+            'timezone' => ['nullable', 'string', ['timezone', 'all_with_bc']],
         ];
 
         if (is_array($input['stash_units'] ?? null)) {

@@ -52,6 +52,7 @@ it('stores and returns member properties from supported plugin versions', functi
         ->assertJsonMissingPath('0.collection_log');
 })->with([
     'current plugin 27c7ce2' => [[]],
+    'system timezone alias' => [['timezone' => 'America/Indianapolis']],
     'pending plugin e432a79' => [[
         'herb_sack' => [199, 12],
         'looting_bag' => [995, 1000],

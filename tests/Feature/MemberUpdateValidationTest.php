@@ -2,6 +2,8 @@
 
 use App\Models\Group;
 use App\Models\Member;
+use Illuminate\Support\Facades\Exceptions;
+use Illuminate\Validation\ValidationException;
 
 function validationMember(): Member
 {
@@ -33,6 +35,7 @@ it('returns 422 for invalid storage arrays without applying other storage update
 ]);
 
 it('reports inventory and portable storage validation errors together without updating the member', function (): void {
+    Exceptions::fake();
     $member = validationMember();
     $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);
 
@@ -46,7 +49,18 @@ it('reports inventory and portable storage validation errors together without up
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['inventory', 'herb_sack']);
 
+    Exceptions::assertReported(ValidationException::class);
     expect($member->load('properties')->getProperty('bank')->value)->toBe([995, 100]);
+});
+
+it('does not report validation failures outside member uploads', function (): void {
+    Exceptions::fake();
+
+    $this->postJson('/api/create-group', [])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['name', 'member_names']);
+
+    Exceptions::assertNotReported(ValidationException::class);
 });
 
 it('preserves bank contents for omitted or null snapshots and clears an explicit empty snapshot', function (): void {

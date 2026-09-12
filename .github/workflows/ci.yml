@@ -90,7 +90,10 @@ jobs:
       - name: Check PHP coding style
         run: ./vendor/bin/pint --test -v
 
+      - name: Prepare test environment
+        run: cp .env.example .env
+
       - name: Run PHP tests
-        run: php artisan test --compact
+        run: php artisan test --compact --display-warnings
         env:
           DB_PASSWORD: root

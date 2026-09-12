@@ -1,23 +1,12 @@
 // @vitest-environment jsdom
 
-import { createPinia } from "pinia";
-import { createApp, nextTick } from "vue";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { nextTick } from "vue";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import PlayerStats from "../../components/player-panel/PlayerStats.vue";
 import { useApiStore } from "../../stores/api";
 
 describe("player stats", function describePlayerStats() {
-  let app;
-
-  afterEach(function cleanup() {
-    app?.unmount();
-    document.body.innerHTML = "";
-    localStorage.clear();
-    vi.useRealTimers();
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-  });
-
   it("expires stale interactions and online status as time passes", async function testTimeBasedStatuses() {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-08-16T12:00:00.000Z"));
@@ -66,12 +55,12 @@ describe("player stats", function describePlayerStats() {
         return [member];
       }),
     };
-    const pinia = createPinia();
+    const pinia = createTestPinia();
     const apiStore = useApiStore(pinia);
     apiStore.client = client;
     const container = document.createElement("div");
     document.body.append(container);
-    app = createApp(PlayerStats, { member: "Test player" });
+    const app = createTestApplication(PlayerStats, { member: "Test player" });
     app.use(pinia);
     app.mount(container);
 

@@ -1,11 +1,7 @@
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { describe, expect, it, vi } from "vite-plus/test";
 import { fetchMemberSnapshots } from "../../api/requests/player-snapshot";
 
 describe("fetchMemberSnapshots", function describeMemberSnapshots() {
-  afterEach(function cleanup() {
-    vi.restoreAllMocks();
-  });
-
   it("maps server snapshots with raw diaries and empty collection and boss counts", async function testServerSnapshot() {
     const snapshot = {
       timestamp: 1789056000000,

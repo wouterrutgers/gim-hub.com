@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 
-import { createPinia, setActivePinia } from "pinia";
+import { setActivePinia } from "pinia";
 import { createMemoryHistory } from "vue-router";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
+import { createTestPinia } from "./vue-test-helpers";
 import { createApplicationRouter } from "../../router";
 import { useApiStore } from "../../stores/api";
 
@@ -17,12 +18,7 @@ function storeCredentials() {
 
 describe("router", function describeRouter() {
   beforeEach(function setup() {
-    setActivePinia(createPinia());
-  });
-
-  afterEach(function cleanup() {
-    localStorage.clear();
-    vi.restoreAllMocks();
+    setActivePinia(createTestPinia());
   });
 
   it("opens the demo before redirecting to group items", async function testDemoRoute() {

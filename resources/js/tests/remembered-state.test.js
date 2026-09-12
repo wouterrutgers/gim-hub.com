@@ -1,19 +1,11 @@
 // @vitest-environment jsdom
 
-import { createApp, defineComponent, h, nextTick } from "vue";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { defineComponent, h, nextTick } from "vue";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { createTestApplication } from "./vue-test-helpers";
 import { useRememberedState } from "../../composables/remembered-state";
 
 describe("useRememberedState", function describeRememberedState() {
-  let app;
-
-  afterEach(function cleanup() {
-    app?.unmount();
-    document.body.innerHTML = "";
-    localStorage.clear();
-    vi.restoreAllMocks();
-  });
-
   it("remembers state across component remounts without using local storage", async function testRememberedState() {
     const key = "remembered-state-test";
     localStorage.setItem(key, "persisted value");
@@ -33,7 +25,7 @@ describe("useRememberedState", function describeRememberedState() {
 
     const container = document.createElement("div");
     document.body.append(container);
-    app = createApp(Consumer);
+    let app = createTestApplication(Consumer);
     app.mount(container);
     expect(container.textContent).toBe("default value");
 
@@ -42,7 +34,7 @@ describe("useRememberedState", function describeRememberedState() {
     expect(container.textContent).toBe("remembered value");
 
     app.unmount();
-    app = createApp(Consumer);
+    app = createTestApplication(Consumer);
     app.mount(container);
     expect(container.textContent).toBe("remembered value");
 

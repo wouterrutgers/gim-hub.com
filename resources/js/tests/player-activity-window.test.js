@@ -1,26 +1,12 @@
 // @vitest-environment jsdom
 
-import { createPinia } from "pinia";
-import { createApp, nextTick } from "vue";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import PlayerActivityWindow from "../../components/player-activity/PlayerActivityWindow.vue";
 import { useApiStore } from "../../stores/api";
 import { useGroupStore } from "../../stores/group";
 
 describe("player activity window", function describePlayerActivityWindow() {
-  let app;
-  let apiStore;
-
-  afterEach(async function cleanup() {
-    app?.unmount();
-    apiStore?.disconnect();
-    await nextTick();
-    document.body.innerHTML = "";
-    localStorage.clear();
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-  });
-
   it.each([
     { description: "new unlock", quantityBefore: 0, quantityAfter: 1 },
     { description: "repeat drop", quantityBefore: 2, quantityAfter: 3 },
@@ -74,8 +60,8 @@ describe("player activity window", function describePlayerActivityWindow() {
           return new Map([[player, { lastVisit: snapshot, lastWeek: snapshot }]]);
         }),
       };
-      const pinia = createPinia();
-      apiStore = useApiStore(pinia);
+      const pinia = createTestPinia();
+      const apiStore = useApiStore(pinia);
       apiStore.client = client;
       const groupStore = useGroupStore(pinia);
 
@@ -87,7 +73,7 @@ describe("player activity window", function describePlayerActivityWindow() {
       collectionLogs = new Map([[player, new Map([[227, quantityAfter]])]]);
       const container = document.createElement("div");
       document.body.append(container);
-      app = createApp(PlayerActivityWindow, { player });
+      const app = createTestApplication(PlayerActivityWindow, { player });
       app.use(pinia);
       app.mount(container);
 

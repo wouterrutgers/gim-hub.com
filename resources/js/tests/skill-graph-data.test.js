@@ -1,4 +1,11 @@
+// @vitest-environment jsdom
+
+import { nextTick } from "vue";
 import { describe, expect, it } from "vite-plus/test";
+import { createTestApplication, createTestPinia } from "./vue-test-helpers";
+import SkillGraph from "../../components/skill-graph/SkillGraph.vue";
+import { useApiStore } from "../../stores/api";
+import { useImageStore } from "../../stores/images";
 import {
   buildDatasetsFromMemberSkillData,
   buildTableRowsFromMemberSkillData,
@@ -7,6 +14,10 @@ import {
 import { fetchSkillData } from "../../api/requests/skill-data";
 import DemoClient from "../../api/demo-client";
 import { vi } from "vite-plus/test";
+
+vi.mock("vue-chartjs", function stubChart() {
+  return { Line: { render() {} } };
+});
 
 function sample(time, experience) {
   return { time: new Date(`2026-09-07T${time}:00Z`), data: [0, experience, ...new Array(22).fill(0)] };
@@ -75,34 +86,77 @@ describe("skill history calculations", function describeCalculations() {
     expect(buildTableRowsFromMemberSkillData(data, range, options)).toEqual([]);
   });
 
-  it("keys table rows by member and skill so two members gaining the same skill never share a key", function testUniqueRowKeys() {
-    function memberEntry(name, samples) {
+  it("keeps shared skills under the correct member when changing periods reorders rows", async function testRowOwnership() {
+    function historySample(date, attack, cooking) {
       return {
-        member: name,
-        skillSamples: samples,
-        style: { lineBorder: "red", lineBackground: "red", barBackground: "red" },
+        time: new Date(`${date}T13:00:00Z`),
+        data: [0, attack, 0, cooking, ...new Array(20).fill(0)],
       };
     }
-    // Alice and Bob both gain Attack experience during the visible hour.
-    const data = [
-      memberEntry("Alice", [sample("11:55", 100), sample("12:30", 400)]),
-      memberEntry("Bob", [sample("11:55", 50), sample("12:30", 150)]),
-    ];
-    const rows = buildTableRowsFromMemberSkillData(data, range, {
-      skillFilter: "Overall",
-      yAxisUnit: "Cumulative experience gained",
-    });
-    // The two Attack rows share their visible name, so the keys (used by the
-    // table's keyed v-for) must differ by member or Vue's list diff corrupts.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-09-07T13:00:00Z"));
+    const pinia = createTestPinia();
+    vi.spyOn(useImageStore(pinia), "getImageUrl").mockResolvedValue("");
+    useApiStore(pinia).client = {
+      async fetchGameData() {
+        return { quests: new Map() };
+      },
+      async fetchGroupCollectionLogs() {
+        return new Map();
+      },
+      async fetchGroupData() {
+        return [{ name: "Alice" }, { name: "Bob" }];
+      },
+      async fetchSkillData(requestedRange) {
+        return {
+          ...requestedRange,
+          members: new Map([
+            [
+              "Alice",
+              [
+                historySample("2026-08-31", 0, 0),
+                historySample("2026-09-06", 100, 300),
+                historySample("2026-09-07", 400, 400),
+              ],
+            ],
+            [
+              "Bob",
+              [
+                historySample("2026-08-31", 0, 0),
+                historySample("2026-09-06", 500, 100),
+                historySample("2026-09-07", 600, 300),
+              ],
+            ],
+          ]),
+        };
+      },
+    };
+    const container = document.createElement("div");
+    const app = createTestApplication(SkillGraph).use(pinia);
+
+    app.mount(container);
+    await vi.advanceTimersByTimeAsync(0);
+    await nextTick();
+
+    [...container.querySelectorAll("#skill-graph-presets button")]
+      .find(function isWeek(button) {
+        return button.textContent === "Week";
+      })
+      .click();
+    await vi.advanceTimersByTimeAsync(0);
+    await nextTick();
+
     expect(
-      rows.map(function getNameAndKey({ name, key }) {
-        return { name, key };
+      [...container.querySelectorAll("tbody tr")].map(function readRow(row) {
+        return [row.cells[0].textContent.trim(), Number(row.cells[1].textContent)];
       }),
     ).toEqual([
-      { name: "Alice", key: "member Alice" },
-      { name: "Attack", key: "skill Attack Alice" },
-      { name: "Bob", key: "member Bob" },
-      { name: "Attack", key: "skill Attack Bob" },
+      ["Bob", 900],
+      ["Attack", 600],
+      ["Cooking", 300],
+      ["Alice", 800],
+      ["Attack", 400],
+      ["Cooking", 400],
     ]);
   });
 
@@ -125,16 +179,12 @@ it("sends explicit dates and decodes skill history from the live response", asyn
       }),
     ),
   );
-  try {
-    const result = await fetchSkillData({ baseURL: "/api", credentials: { name: "group", token: "token" }, ...range });
-    const query = new URL(fetch.mock.calls[0][0], "https://example.test").searchParams;
-    expect(query.get("start")).toBe(range.start.toISOString());
-    expect(query.get("end")).toBe(range.end.toISOString());
-    expect(result.members.get("Alice")[0].time).toEqual(range.start);
-    expect(result.start).toEqual(range.start);
-  } finally {
-    fetch.mockRestore();
-  }
+  const result = await fetchSkillData({ baseURL: "/api", credentials: { name: "group", token: "token" }, ...range });
+  const query = new URL(fetch.mock.calls[0][0], "https://example.test").searchParams;
+  expect(query.get("start")).toBe(range.start.toISOString());
+  expect(query.get("end")).toBe(range.end.toISOString());
+  expect(result.members.get("Alice")[0].time).toEqual(range.start);
+  expect(result.start).toEqual(range.start);
 });
 
 it("keeps demo history consistent when zooming into a larger period", async function testDemoNavigation() {

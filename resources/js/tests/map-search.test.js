@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
 
 import { createRequire } from "node:module";
-import { createPinia, disposePinia, setActivePinia } from "pinia";
-import { createApp, nextTick } from "vue";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { setActivePinia } from "pinia";
+import { nextTick } from "vue";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import MapSearch from "../../components/canvas-map/MapSearch.vue";
 import { CanvasMapRenderer } from "../../components/canvas-map/canvas-map-renderer";
 import { Context2DScaledWrapper } from "../../components/canvas-map/canvas-wrapper";
@@ -12,14 +13,11 @@ import { useMapStore } from "../../stores/map";
 
 const { buildMapLabels } = createRequire(import.meta.url)("../../../cache/map-labels.js");
 
-let application;
-let pinia;
-
 function mountSearch() {
-  pinia = createPinia();
+  const pinia = createTestPinia();
   setActivePinia(pinia);
   document.body.innerHTML = '<div id="test-map-search"></div><button id="outside">Outside</button>';
-  application = createApp(MapSearch);
+  const application = createTestApplication(MapSearch);
   application.use(pinia);
   application.mount("#test-map-search");
   return useMapStore();
@@ -73,14 +71,6 @@ function createMapContext() {
 }
 
 describe("map search", function describeMapSearch() {
-  afterEach(function cleanup() {
-    application.unmount();
-    disposePinia(pinia);
-    document.body.innerHTML = "";
-    vi.restoreAllMocks();
-    vi.unstubAllGlobals();
-  });
-
   it("waits for map data before offering searchable, ranked labels", async function testRankedSuggestions() {
     mountSearch();
     expect(document.querySelector('[role="combobox"]').disabled).toBe(true);

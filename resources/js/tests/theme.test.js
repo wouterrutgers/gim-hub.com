@@ -1,13 +1,9 @@
 // @vitest-environment jsdom
 
-import { afterEach, describe, expect, it } from "vite-plus/test";
+import { describe, expect, it } from "vite-plus/test";
 import { applySiteTheme } from "../../game/theme";
 
 describe("site theme", function describeSiteTheme() {
-  afterEach(function cleanup() {
-    document.documentElement.classList.remove("dark-mode");
-  });
-
   it("applies the dark theme", function testDarkTheme() {
     applySiteTheme("dark");
 

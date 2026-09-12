@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 
-import { createPinia } from "pinia";
-import { createApp, h, nextTick } from "vue";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { h, nextTick } from "vue";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import PlayerInventory from "../../components/player-panel/PlayerInventory.vue";
 import ItemsPage from "../../components/items-page/ItemsPage.vue";
 import Tooltip from "../../components/tooltip/Tooltip.vue";
@@ -19,17 +19,8 @@ const items = new Map([
 ]);
 
 describe("storage UI", function storageInterface() {
-  let app;
   let container;
   let payload;
-
-  afterEach(function cleanup() {
-    app?.unmount();
-    document.body.innerHTML = "";
-    vi.useRealTimers();
-    vi.restoreAllMocks();
-    vi.unstubAllGlobals();
-  });
 
   async function mount(component) {
     vi.useFakeTimers();
@@ -44,7 +35,7 @@ describe("storage UI", function storageInterface() {
         };
       }),
     );
-    const pinia = createPinia();
+    const pinia = createTestPinia();
     useApiStore(pinia).client = {
       async fetchGameData() {
         return { items, quests: new Map(), gePrices: new Map() };
@@ -58,7 +49,7 @@ describe("storage UI", function storageInterface() {
     };
     container = document.createElement("div");
     document.body.append(container);
-    app = createApp(component);
+    const app = createTestApplication(component);
     app.use(pinia);
     app.component("RouterLink", {
       render() {

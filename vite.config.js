@@ -260,6 +260,11 @@ export default defineConfig({
     sortPackageJson: true,
     vueIndentScriptAndStyle: true,
   },
+  test: {
+    restoreMocks: true,
+    unstubGlobals: true,
+    setupFiles: ["./resources/js/tests/setup.js"],
+  },
   plugins: lazyPlugins(() => [
     assetsPlugin(["data", "image-chunks"]),
     vue({

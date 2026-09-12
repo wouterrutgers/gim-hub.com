@@ -1,16 +1,13 @@
 // @vitest-environment jsdom
 
-import { createPinia, setActivePinia } from "pinia";
-import { afterEach, describe, expect, it } from "vite-plus/test";
+import { setActivePinia } from "pinia";
+import { describe, expect, it } from "vite-plus/test";
+import { createTestPinia } from "./vue-test-helpers";
 import { useSettingsStore } from "../../stores/settings";
 
 describe("settings store", function describeSettingsStore() {
-  afterEach(function cleanup() {
-    localStorage.clear();
-  });
-
   it("uses the default settings when storage is empty", function testDefaultSettings() {
-    setActivePinia(createPinia());
+    setActivePinia(createTestPinia());
     const settingsStore = useSettingsStore();
 
     expect(settingsStore.siteTheme).toBe("light");
@@ -23,7 +20,7 @@ describe("settings store", function describeSettingsStore() {
     localStorage.setItem("settings-site-theme", "dark");
     localStorage.setItem("settings-sidebar-position", "right");
     localStorage.setItem("settings-recent-activity", "false");
-    setActivePinia(createPinia());
+    setActivePinia(createTestPinia());
     const settingsStore = useSettingsStore();
 
     expect(settingsStore.siteTheme).toBe("dark");
@@ -34,7 +31,7 @@ describe("settings store", function describeSettingsStore() {
   it("ignores invalid persisted settings", function testInvalidSettings() {
     localStorage.setItem("settings-site-theme", "system");
     localStorage.setItem("settings-recent-activity", "yes");
-    setActivePinia(createPinia());
+    setActivePinia(createTestPinia());
     const settingsStore = useSettingsStore();
 
     expect(settingsStore.siteTheme).toBe("light");

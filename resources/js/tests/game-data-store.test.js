@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
 
-import { createPinia, setActivePinia } from "pinia";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { setActivePinia } from "pinia";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { createTestPinia } from "./vue-test-helpers";
 import { useApiStore } from "../../stores/api";
 import { useGameDataStore } from "../../stores/game-data";
 
@@ -17,13 +18,8 @@ function createDeferredPromise() {
 }
 
 describe("game data store", function describeGameDataStore() {
-  afterEach(function cleanup() {
-    localStorage.clear();
-    vi.restoreAllMocks();
-  });
-
   it("shares concurrent loads and caches successful active-client data", async function testSharedLoad() {
-    setActivePinia(createPinia());
+    setActivePinia(createTestPinia());
     const apiStore = useApiStore();
     const gameDataStore = useGameDataStore();
     const request = createDeferredPromise();
@@ -45,7 +41,7 @@ describe("game data store", function describeGameDataStore() {
   });
 
   it("retries after a failed load", async function testRetry() {
-    setActivePinia(createPinia());
+    setActivePinia(createTestPinia());
     const gameDataStore = useGameDataStore();
     const client = {
       fetchGameData: vi
@@ -60,7 +56,7 @@ describe("game data store", function describeGameDataStore() {
   });
 
   it("does not let a stale client replace current game data", async function testStaleClient() {
-    setActivePinia(createPinia());
+    setActivePinia(createTestPinia());
     const apiStore = useApiStore();
     const gameDataStore = useGameDataStore();
     const firstRequest = createDeferredPromise();

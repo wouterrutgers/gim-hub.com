@@ -1,12 +1,9 @@
-import { createPinia, setActivePinia } from "pinia";
-import { afterEach, describe, expect, it, vi } from "vite-plus/test";
+import { setActivePinia } from "pinia";
+import { describe, expect, it, vi } from "vite-plus/test";
+import { createTestPinia } from "./vue-test-helpers";
 import { useImageStore } from "../../stores/images";
 
 describe("image store", function describeImageStore() {
-  afterEach(function cleanup() {
-    vi.unstubAllGlobals();
-  });
-
   it("shares a chunk request between concurrent image lookups", async function testRequestDeduplication() {
     const fetchChunk = vi.fn(async function fetchChunk() {
       return {
@@ -20,7 +17,7 @@ describe("image store", function describeImageStore() {
       };
     });
     vi.stubGlobal("fetch", fetchChunk);
-    setActivePinia(createPinia());
+    setActivePinia(createTestPinia());
 
     const imageStore = useImageStore();
     const [firstUrl, secondUrl] = await Promise.all([

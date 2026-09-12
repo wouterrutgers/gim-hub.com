@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@date-fns/utc": "^2.1.1",
-    "@tanstack/vue-virtual": "^3.13.36",
+    "@tanstack/vue-virtual": "^3.13.37",
     "@vitejs/plugin-vue": "^6.0.8",
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
@@ -22,12 +22,12 @@
     "pinia": "^4.0.3",
     "stylelint": "^17.15.0",
     "stylelint-config-standard": "^40.0.0",
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.0",
-    "vite-plus": "0.3.0",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.3.1",
+    "vite-plus": "0.3.1",
     "vue": "^3.5.42",
     "vue-chartjs": "^5.3.4",
     "vue-router": "^5.3.1",
-    "zod": "^4.5.4"
+    "zod": "^4.6.2"
   },
   "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
 }

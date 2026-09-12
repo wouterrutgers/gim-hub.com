@@ -38,7 +38,7 @@ class MemberUpdateValidation
             'rune_pouch' => ['nullable', 'array', ['size', 8]],
             'seed_vault' => ['nullable', 'array', ['max', 500]],
             'potion_storage' => ['nullable', 'array', ['max', 2000]],
-            'poh_costume_room' => ['nullable', 'array', ['max', 2500]],
+            'poh_costume_room' => ['nullable', 'array', ['max', 4000]],
             'plank_sack' => ['nullable', 'array', ['max', 14]],
             'master_scroll_book' => ['nullable', 'array', ['max', 40]],
             'essence_pouches' => ['nullable', 'array', ['max', 16]],

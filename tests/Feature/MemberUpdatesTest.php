@@ -20,7 +20,7 @@ it('stores and returns member properties from supported plugin versions', functi
         'rune_pouch' => array_fill(0, 8, 0),
         'seed_vault' => array_fill(0, 500, 0),
         'potion_storage' => array_fill(0, 2000, 0),
-        'poh_costume_room' => array_fill(0, 2500, 0),
+        'poh_costume_room' => array_fill(0, 4000, 0),
         'plank_sack' => [960, 28],
         'master_scroll_book' => array_fill(0, 40, 0),
         'essence_pouches' => array_fill(0, 16, 0),

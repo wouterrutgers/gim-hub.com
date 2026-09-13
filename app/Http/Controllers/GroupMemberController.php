@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\MemberPlugin;
 use App\Domain\MemberSnapshotCreator;
 use App\Domain\MemberUpdates;
 use App\Domain\MemberUpdateValidation;
@@ -162,6 +163,8 @@ class GroupMemberController extends Controller
 
     public function updateGroupMember(): JsonResponse
     {
+        MemberPlugin::observe();
+
         $validated = MemberUpdateValidation::validate(request()->all());
         $groupId = request()->attributes->get('group')->id;
 
@@ -195,12 +198,13 @@ class GroupMemberController extends Controller
             ->with('properties')
             ->get();
 
-        return response()->json($members->map(function ($member) use ($fromTime) {
+        return response()->json($members->map(function (Member $member) use ($fromTime): array {
             $properties = $member->properties->keyBy('key');
             $lastUpdated = $properties->max('updated_at');
 
             $data = [
                 'name' => $member->name,
+                'plugin_status' => MemberPlugin::status($member, cache('plugin.latest_version')),
                 'color_hue_degrees' => $member->color_hue_degrees,
                 'last_updated' => is_null($lastUpdated) ? null : Carbon::make($lastUpdated)->toIso8601ZuluString(),
                 'last_online_at' => is_null($member->last_online_at) ? null : Carbon::make($member->last_online_at)->toIso8601ZuluString(),
@@ -338,7 +342,7 @@ class GroupMemberController extends Controller
             ->first();
 
         try {
-            $response = Http::timeout(10)->withUserAgent('GIM hub (https://gim-hub.com)')->get(
+            $response = Http::withUserAgent('GIM hub (https://gim-hub.com)')->get(
                 'https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name)
             );
         } catch (Throwable) {

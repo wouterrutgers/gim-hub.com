@@ -835,6 +835,13 @@ const groupDataSchema = z
       coordinates: coordinatesSchema.nullish().transform(function omitNull(value) {
         return value ?? undefined;
       }),
+      plugin_status: z
+        .object({
+          reason: z.enum(["wrong_plugin", "update_available"]),
+          installed_version: z.string().nullable(),
+          latest_version: z.string().nullable(),
+        })
+        .nullish(),
       last_updated: dateSchema.nullish().transform(function omitNull(value) {
         return value ?? undefined;
       }),
@@ -927,6 +934,7 @@ const groupDataSchema = z
 function mapMember({
   last_updated,
   last_online_at,
+  plugin_status,
   rune_pouch,
   seed_vault,
   potion_storage,
@@ -953,6 +961,7 @@ function mapMember({
     ...member,
     lastUpdated: last_updated,
     lastOnlineAt: last_online_at,
+    pluginStatus: plugin_status,
     runePouch: rune_pouch,
     seedVault: seed_vault,
     potionStorage: potion_storage,

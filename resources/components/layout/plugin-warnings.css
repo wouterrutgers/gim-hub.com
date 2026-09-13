@@ -1,0 +1,86 @@
+.plugin-warnings {
+  flex-shrink: 0;
+  margin: 0 8px;
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--orange) 45%, transparent);
+  border-left: 3px solid var(--orange);
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+  color: var(--white);
+  pointer-events: auto;
+}
+
+.plugin-warnings-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: var(--orange-light);
+}
+
+.plugin-warnings-heading svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--orange);
+}
+
+.plugin-warnings-heading h2 {
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.plugin-warnings ul {
+  max-height: 40vh;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  border: 1px solid var(--light-border);
+  border-radius: 3px;
+  background: var(--darken);
+  list-style: none;
+}
+
+.plugin-warnings li {
+  display: grid;
+  grid-template-columns: minmax(7rem, 10rem) minmax(0, 1fr);
+  gap: 4px 16px;
+  padding: 10px 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.plugin-warnings li + li {
+  border-top: 1px solid var(--light-border);
+}
+
+.plugin-warnings-instructions strong {
+  color: var(--white);
+}
+
+.plugin-warnings li strong {
+  color: var(--orange-light);
+}
+
+.plugin-warnings li span,
+.plugin-warnings-instructions {
+  color: color-mix(in srgb, var(--white) 85%, transparent);
+}
+
+.plugin-warnings-instructions {
+  margin: 12px 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+@media only screen and (width <= 600px) {
+  .plugin-warnings {
+    margin-inline: 0;
+    padding: 12px;
+  }
+
+  .plugin-warnings li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}

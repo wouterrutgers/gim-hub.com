@@ -4,6 +4,7 @@
   import { useSettingsStore } from "../../stores/settings";
   import AppNavigation from "../app-navigation/AppNavigation.vue";
   import SidePanels from "./SidePanels.vue";
+  import PluginWarnings from "./PluginWarnings.vue";
   import "./layout.css";
 
   const props = defineProps({
@@ -22,6 +23,7 @@
   <template v-if="settingsStore.sidebarPosition === 'right'">
     <div id="main-content" class="pointer-passthrough">
       <AppNavigation v-if="!props.hideHeader" :group-name="groupName" />
+      <PluginWarnings />
       <slot />
     </div>
     <SidePanels v-if="props.showPanels" />
@@ -31,6 +33,7 @@
     <SidePanels v-if="props.showPanels" />
     <div id="main-content" class="pointer-passthrough">
       <AppNavigation v-if="!props.hideHeader" :group-name="groupName" />
+      <PluginWarnings />
       <slot />
     </div>
   </template>

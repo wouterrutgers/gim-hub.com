@@ -6,3 +6,4 @@ Schedule::command('skills:aggregate')->everyFiveMinutes()->withoutOverlapping();
 Schedule::command('skills:retention')->daily();
 Schedule::command('member-snapshots:create')->everyFourHours();
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
+Schedule::command('plugin:refresh-release')->hourly();

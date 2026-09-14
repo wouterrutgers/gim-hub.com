@@ -90,7 +90,7 @@ export const useApiStore = defineStore("api", function createApiStore() {
 
     if (!response.ok) {
       if (response.status === 401) {
-        throw new Error("Name or token is invalid.");
+        throw new Error("Name or token is invalid.", { cause: response });
       }
 
       throw new Error(`Unexpected status code: ${response.status}`);

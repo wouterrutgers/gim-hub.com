@@ -62,10 +62,10 @@ describe("router", function describeRouter() {
     expect(router.currentRoute.value.path).toBe("/group/history");
   });
 
-  it("returns home when a stored session cannot be restored", async function testFailedSessionRestore() {
+  it("returns home and clears credentials when the server rejects them", async function testFailedSessionRestore() {
     storeCredentials();
     const apiStore = useApiStore();
-    vi.spyOn(apiStore, "logInLive").mockRejectedValue(new Error("Invalid credentials"));
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(null, { status: 401 })));
     const router = createTestRouter();
 
     await router.push("/group/history");

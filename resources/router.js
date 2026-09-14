@@ -120,8 +120,10 @@ async function restoreStoredSession(apiStore) {
     await apiStore.logInLive();
 
     return true;
-  } catch {
-    apiStore.logOut();
+  } catch (error) {
+    if (error.cause?.status === 401) {
+      apiStore.logOut();
+    }
 
     return false;
   }

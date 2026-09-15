@@ -1,6 +1,7 @@
 import * as DateFNS from "date-fns";
 import { utc } from "@date-fns/utc";
 import { skillsInBackendOrder } from "../requests/group-data";
+import { rangeForPeriod } from "../requests/skill-data";
 
 export function populateSkillDataFromRoster(state) {
   const now = new Date();
@@ -28,7 +29,10 @@ export function populateSkillDataFromRoster(state) {
   }
 }
 
-export function getDemoSkillHistory(state, { start, end }) {
+export function getDemoSkillHistory(state, { period, start, end }) {
+  if (period) {
+    ({ start, end } = rangeForPeriod(period));
+  }
   const earliest = state.skillData.values().next().value?.[0].time ?? null;
   start ??= earliest ?? DateFNS.subDays(end, 1);
   const bucketMilliseconds = Math.max(1000, Math.ceil((end - start) / 1500 / 1000) * 1000);

@@ -9,9 +9,8 @@ import { useImageStore } from "../../stores/images";
 import {
   buildDatasetsFromMemberSkillData,
   buildTableRowsFromMemberSkillData,
-  rangeForPeriod,
 } from "../../components/skill-graph/skill-graph-data";
-import { fetchSkillData } from "../../api/requests/skill-data";
+import { fetchSkillData, rangeForPeriod } from "../../api/requests/skill-data";
 import DemoClient from "../../api/demo-client";
 import { vi } from "vite-plus/test";
 
@@ -109,7 +108,7 @@ describe("skill history calculations", function describeCalculations() {
       },
       async fetchSkillData(requestedRange) {
         return {
-          ...requestedRange,
+          ...rangeForPeriod(requestedRange.period),
           members: new Map([
             [
               "Alice",
@@ -187,11 +186,68 @@ it("sends explicit dates and decodes skill history from the live response", asyn
   expect(result.start).toEqual(range.start);
 });
 
+it("loads and switches presets using server ranges when the browser clock is ahead", async function testServerClock() {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date("2026-09-07T13:00:02Z"));
+  const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(async function fetchHistory(url) {
+    const period = new URL(url, "https://example.test").searchParams.get("period");
+    return new Response(
+      JSON.stringify({
+        start: period === "Day" ? "2026-09-06T13:00:00Z" : "2026-08-31T13:00:00Z",
+        end: "2026-09-07T13:00:00Z",
+        earliest: "2026-08-31T13:00:00Z",
+        members: [],
+      }),
+    );
+  });
+  const pinia = createTestPinia();
+  vi.spyOn(useImageStore(pinia), "getImageUrl").mockResolvedValue("");
+  useApiStore(pinia).client = {
+    async fetchGameData() {
+      return { quests: new Map() };
+    },
+    async fetchGroupCollectionLogs() {
+      return new Map();
+    },
+    async fetchGroupData() {
+      return [];
+    },
+    fetchSkillData(requestedRange) {
+      return fetchSkillData({ baseURL: "/api", credentials: { name: "group", token: "token" }, ...requestedRange });
+    },
+  };
+  const container = document.createElement("div");
+  createTestApplication(SkillGraph).use(pinia).mount(container);
+  await vi.advanceTimersByTimeAsync(0);
+  await nextTick();
+
+  expect(new URL(fetch.mock.calls[0][0], "https://example.test").search).toBe("?period=Day");
+  expect(container.querySelector("#skill-graph-range").textContent).toContain(
+    new Date("2026-09-07T13:00:00Z").toLocaleString(),
+  );
+
+  [...container.querySelectorAll("#skill-graph-presets button")]
+    .find(function isWeek(button) {
+      return button.textContent === "Week";
+    })
+    .click();
+  await vi.advanceTimersByTimeAsync(0);
+  await nextTick();
+
+  expect(new URL(fetch.mock.calls.at(-1)[0], "https://example.test").search).toBe("?period=Week");
+  expect(container.querySelector("#skill-graph-range").textContent).toBe(
+    `${new Date("2026-08-31T13:00:00Z").toLocaleString()} – ${new Date("2026-09-07T13:00:00Z").toLocaleString()}`,
+  );
+  expect(container.querySelector("#skill-graph-error")).toBeNull();
+});
+
 it("keeps demo history consistent when zooming into a larger period", async function testDemoNavigation() {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date("2026-09-07T13:00:00Z"));
   const client = new DemoClient();
   const end = new Date();
-  const day = await client.fetchSkillData(rangeForPeriod("Day", end));
-  const all = await client.fetchSkillData(rangeForPeriod("All", end));
+  const day = await client.fetchSkillData({ period: "Day" });
+  const all = await client.fetchSkillData({ period: "All" });
   expect(all.earliest < day.start).toBe(true);
   expect(all.members.get("Thurgo").length).toBeLessThanOrEqual(1502);
   expect(day.members.get("Thurgo").at(-1)).toEqual(all.members.get("Thurgo").at(-1));

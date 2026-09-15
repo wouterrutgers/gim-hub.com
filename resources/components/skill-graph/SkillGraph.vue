@@ -5,6 +5,7 @@
   import zoomPlugin from "chartjs-plugin-zoom";
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
+  import { rangeForPeriod } from "../../api/requests/skill-data";
   import { skills, skillIcons } from "../../game/skill";
   import CachedImage from "../cached-image/CachedImage.vue";
   import LoadingScreen from "../loading-screen/LoadingScreen.vue";
@@ -12,7 +13,6 @@
     buildDatasetsFromMemberSkillData,
     buildLineChartOptions,
     buildTableRowsFromMemberSkillData,
-    rangeForPeriod,
     lineChartYAxisOptions,
   } from "./skill-graph-data";
   import "chartjs-adapter-date-fns";
@@ -116,6 +116,9 @@
       if (sequence !== requestSequence) {
         return;
       }
+      if (requestedRange.period) {
+        latest.value = result.end;
+      }
       history.value = result;
       range.value = { start: result.start, end: result.end };
     } catch (reason) {
@@ -138,7 +141,9 @@
     const sequence = requestSequence;
     loading.value = true;
     error.value = false;
-    range.value = requestedRange;
+    if (!requestedRange.period) {
+      range.value = requestedRange;
+    }
     if (delay) {
       navigationTimer = setTimeout(function fetchVisibleRange() {
         loadRange(requestedRange, sequence);
@@ -166,13 +171,12 @@
   }
 
   function resetZoom() {
-    latest.value = new Date();
     activePreset.value = lastPreset.value;
-    requestRange(rangeForPeriod(lastPreset.value, latest.value));
+    requestRange({ period: lastPreset.value });
   }
 
   function retry() {
-    requestRange(range.value);
+    requestRange(activePreset.value ? { period: activePreset.value } : range.value);
   }
 
   const style = getComputedStyle(document.body);

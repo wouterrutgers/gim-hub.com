@@ -2,6 +2,27 @@
 
 use Carbon\CarbonImmutable;
 
+it('uses server time for preset ranges without requiring browser timestamps', function (): void {
+    $this->travelTo(CarbonImmutable::parse('2026-09-07T13:00:00Z'));
+    $group = $this->createSnapshotGroup();
+    $member = $this->createCompleteSnapshotMember($group);
+    foreach (['2026-09-06 12:55:00', '2026-09-07 12:55:00', '2026-09-07 13:05:00'] as $time) {
+        $member->skillStats()->create([
+            'type' => 'five_minutes',
+            'skills' => array_fill(0, 24, 100),
+            'created_at' => $time,
+        ]);
+    }
+
+    $this->withHeader('Authorization', $group->hash)
+        ->getJson("/api/group/{$group->name}/get-skill-data?period=Day")
+        ->assertOk()
+        ->assertJsonPath('start', '2026-09-06T13:00:00Z')
+        ->assertJsonPath('end', '2026-09-07T13:00:00Z')
+        ->assertJsonCount(2, 'members.0.skill_data')
+        ->assertJsonPath('members.0.skill_data.1.time', '2026-09-07T12:55:00Z');
+});
+
 it('returns scoped range samples with an exact preceding baseline and all skills', function (): void {
     $this->travelTo(CarbonImmutable::parse('2026-09-07 13:00:00'));
     $group = $this->createSnapshotGroup();
@@ -44,7 +65,7 @@ it('merges older tiers without letting coarse bucket totals overwrite finer obse
     }
 
     $response = $this->withHeader('Authorization', $group->hash)
-        ->getJson("/api/group/{$group->name}/get-skill-data?end=2026-09-07T13:00:00Z")
+        ->getJson("/api/group/{$group->name}/get-skill-data?period=All")
         ->assertOk()
         ->assertJsonPath('start', '2024-01-01T00:00:00Z');
 
@@ -92,7 +113,8 @@ it('rejects invalid date ranges', function (string $query, string $field): void 
         ->assertUnprocessable()
         ->assertJsonValidationErrors($field);
 })->with([
-    ['period=Day', 'end'],
+    ['', 'end'],
+    ['period=invalid', 'period'],
     ['start=invalid&end=2026-01-01', 'start'],
     ['start=2026-02-01&end=2026-01-01', 'start'],
     ['start=2026-01-01&end=2026-01-01', 'start'],

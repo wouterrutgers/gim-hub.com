@@ -1,14 +1,8 @@
 import * as DateFNS from "date-fns";
-import { utc } from "@date-fns/utc";
 import { skillsInBackendOrder } from "../../api/requests/group-data";
 import { skillIcons } from "../../game/skill";
 
 export const lineChartYAxisOptions = ["Cumulative experience gained", "Total experience", "Experience per hour"];
-
-export function rangeForPeriod(period, end = new Date()) {
-  const durations = { Day: { days: 1 }, Week: { weeks: 1 }, Month: { months: 1 }, Year: { years: 1 } };
-  return { start: period === "All" ? undefined : DateFNS.sub(end, durations[period], { in: utc }), end };
-}
 
 export function buildLineChartOptions({ range, earliest, latest, yAxisUnit, onNavigate, onNavigateStart }) {
   return {

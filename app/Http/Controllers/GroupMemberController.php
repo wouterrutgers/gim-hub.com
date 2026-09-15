@@ -244,14 +244,29 @@ class GroupMemberController extends Controller
     {
         $request = request();
         $validated = $request->validate([
+            'period' => ['sometimes', 'required', ['in', 'Day', 'Week', 'Month', 'Year', 'All']],
             'start' => ['sometimes', 'required', 'date', ['before', 'end']],
-            'end' => ['required', 'date', ['before_or_equal', 'now']],
+            'end' => [['required_without', 'period'], 'date', ['before_or_equal', 'now']],
         ]);
+
+        if (isset($validated['period'])) {
+            $end = CarbonImmutable::now('UTC');
+            $start = match ($validated['period']) {
+                'Day' => $end->subDay(),
+                'Week' => $end->subWeek(),
+                'Month' => $end->subMonthNoOverflow(),
+                'Year' => $end->subYearNoOverflow(),
+                'All' => null,
+            };
+        } else {
+            $start = isset($validated['start']) ? CarbonImmutable::parse($validated['start'])->utc() : null;
+            $end = CarbonImmutable::parse($validated['end'])->utc();
+        }
 
         return response()->json(app(SkillHistory::class)->get(
             $request->attributes->get('group'),
-            isset($validated['start']) ? CarbonImmutable::parse($validated['start'])->utc() : null,
-            CarbonImmutable::parse($validated['end'])->utc(),
+            $start,
+            $end,
         ));
     }
 

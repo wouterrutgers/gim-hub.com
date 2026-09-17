@@ -4466,7 +4466,7 @@
     "mapping": null
   },
   "1052": {
-    "name": "Cape of legends",
+    "name": "Cape of Legends",
     "highalch": 270,
     "alchable": true,
     "mapping": null
@@ -9922,7 +9922,7 @@
     "mapping": null
   },
   "2581": {
-    "name": "Robin hood hat",
+    "name": "Robin Hood hat",
     "highalch": 270,
     "alchable": true,
     "mapping": null
@@ -12580,7 +12580,7 @@
     "mapping": null
   },
   "3230": {
-    "name": "Big book of bangs",
+    "name": "Big Book of Bangs",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -34405,13 +34405,13 @@
     "mapping": null
   },
   "8284": {
-    "name": "Cape of legends",
+    "name": "Cape of Legends",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "8285": {
-    "name": "King arthur",
+    "name": "King Arthur",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -34423,7 +34423,7 @@
     "mapping": null
   },
   "8287": {
-    "name": "Giant dwarf",
+    "name": "Giant Dwarf",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -34441,7 +34441,7 @@
     "mapping": null
   },
   "8290": {
-    "name": "The desert",
+    "name": "The Desert",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -37579,7 +37579,7 @@
     "mapping": null
   },
   "9083": {
-    "name": "Seal of passage",
+    "name": "Seal of Passage",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -39469,7 +39469,7 @@
     "mapping": null
   },
   "9477": {
-    "name": "Aluft aloft box",
+    "name": "Aluft Aloft box",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -40183,19 +40183,19 @@
     "mapping": null
   },
   "9656": {
-    "name": "Tome of experience (3)",
+    "name": "Tome of Experience (3)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "9657": {
-    "name": "Tome of experience (2)",
+    "name": "Tome of Experience (2)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "9658": {
-    "name": "Tome of experience (1)",
+    "name": "Tome of Experience (1)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -47148,7 +47148,7 @@
     "mapping": null
   },
   "11527": {
-    "name": "Mausoleum bridge repair",
+    "name": "Mausoleum bridge reinforcement",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -49119,7 +49119,7 @@
     ]
   },
   "11995": {
-    "name": "Pet Chaos Elemental",
+    "name": "Pet chaos elemental",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -53400,7 +53400,7 @@
     "mapping": null
   },
   "12904": {
-    "name": "Toxic staff of the dead",
+    "name": "Toxic Staff of the Dead",
     "highalch": 600003,
     "alchable": true,
     "mapping": [
@@ -56211,7 +56211,7 @@
     "mapping": null
   },
   "13513": {
-    "name": "Book of arcane knowledge",
+    "name": "Book of Arcane Knowledge",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -65460,7 +65460,7 @@
     "mapping": null
   },
   "21531": {
-    "name": "Potion of sealegs",
+    "name": "Potion of Sealegs",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -66182,13 +66182,13 @@
     "mapping": null
   },
   "21756": {
-    "name": "Varlamore envoy",
+    "name": "Varlamore Envoy",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "21758": {
-    "name": "Royal accord of twill",
+    "name": "Royal Accord of Twill",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -68916,7 +68916,7 @@
     "mapping": null
   },
   "22415": {
-    "name": "Tome of experience",
+    "name": "Tome of Experience",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -69357,7 +69357,7 @@
     "mapping": null
   },
   "22588": {
-    "name": "Old man's coffin",
+    "name": "Old Man's coffin",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -76220,7 +76220,7 @@
     "mapping": null
   },
   "24523": {
-    "name": "Death's coffer",
+    "name": "Death's Coffer",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -76764,7 +76764,7 @@
     "mapping": null
   },
   "24690": {
-    "name": "Tome of experience",
+    "name": "Tome of Experience",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -80862,7 +80862,7 @@
     ]
   },
   "25736": {
-    "name": "Holy scythe of vitur",
+    "name": "Holy Scythe of Vitur",
     "highalch": 2400000,
     "alchable": true,
     "mapping": [
@@ -80873,7 +80873,7 @@
     ]
   },
   "25738": {
-    "name": "Holy scythe of vitur (uncharged)",
+    "name": "Holy Scythe of Vitur (uncharged)",
     "highalch": 2400000,
     "alchable": true,
     "mapping": [
@@ -80884,7 +80884,7 @@
     ]
   },
   "25739": {
-    "name": "Sanguine scythe of vitur",
+    "name": "Sanguine Scythe of Vitur",
     "highalch": 2400000,
     "alchable": true,
     "mapping": [
@@ -80895,7 +80895,7 @@
     ]
   },
   "25741": {
-    "name": "Sanguine scythe of vitur (uncharged)",
+    "name": "Sanguine Scythe of Vitur (uncharged)",
     "highalch": 2400000,
     "alchable": true,
     "mapping": [
@@ -81272,7 +81272,7 @@
     "mapping": null
   },
   "25817": {
-    "name": "Royal accord of twill",
+    "name": "Royal Accord of Twill",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -81922,25 +81922,25 @@
     "mapping": null
   },
   "25990": {
-    "name": "Sigil of resilience",
+    "name": "Sigil of Resilience",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "25991": {
-    "name": "Sigil of resilience",
+    "name": "Sigil of Resilience",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "25993": {
-    "name": "Sigil of consistency",
+    "name": "Sigil of Consistency",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "25994": {
-    "name": "Sigil of consistency",
+    "name": "Sigil of Consistency",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -81948,539 +81948,539 @@
   "25996": {
     "name": "Sigil of the formidable fighter",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "25997": {
-    "name": "Sigil of the formidable fighter",
+    "name": "Sigil of the Formidable Fighter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "25999": {
-    "name": "Sigil of the rigorous ranger",
+    "name": "Sigil of the Rigorous Ranger",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26000": {
-    "name": "Sigil of the rigorous ranger",
+    "name": "Sigil of the Rigorous Ranger",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26002": {
-    "name": "Sigil of the meticulous mage",
+    "name": "Sigil of the Meticulous Mage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26003": {
-    "name": "Sigil of the meticulous mage",
+    "name": "Sigil of the Meticulous Mage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26005": {
-    "name": "Sigil of fortification",
+    "name": "Sigil of Fortification",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26006": {
-    "name": "Sigil of fortification",
+    "name": "Sigil of Fortification",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26008": {
-    "name": "Sigil of barrows",
+    "name": "Sigil of Barrows",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26009": {
-    "name": "Sigil of barrows",
+    "name": "Sigil of Barrows",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26011": {
-    "name": "Sigil of deft strikes",
+    "name": "Sigil of Deft Strikes",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26012": {
-    "name": "Sigil of deft strikes",
+    "name": "Sigil of Deft Strikes",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26014": {
-    "name": "Sigil of freedom",
+    "name": "Sigil of Freedom",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26015": {
-    "name": "Sigil of freedom",
+    "name": "Sigil of Freedom",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26017": {
-    "name": "Sigil of enhanced harvest",
+    "name": "Sigil of Enhanced Harvest",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26018": {
-    "name": "Sigil of enhanced harvest",
+    "name": "Sigil of Enhanced Harvest",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26020": {
-    "name": "Sigil of storage",
+    "name": "Sigil of Storage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26021": {
-    "name": "Sigil of storage",
+    "name": "Sigil of Storage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26023": {
-    "name": "Sigil of the smith",
+    "name": "Sigil of the Smith",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26024": {
-    "name": "Sigil of the smith",
+    "name": "Sigil of the Smith",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26026": {
-    "name": "Sigil of the alchemist",
+    "name": "Sigil of the Alchemist",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26027": {
-    "name": "Sigil of the alchemist",
+    "name": "Sigil of the Alchemist",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26029": {
-    "name": "Sigil of the fletcher",
+    "name": "Sigil of the Fletcher",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26030": {
-    "name": "Sigil of the fletcher",
+    "name": "Sigil of the Fletcher",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26032": {
-    "name": "Sigil of the chef",
+    "name": "Sigil of the Chef",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26033": {
-    "name": "Sigil of the chef",
+    "name": "Sigil of the Chef",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26035": {
-    "name": "Sigil of the craftsman",
+    "name": "Sigil of the Craftsman",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26036": {
-    "name": "Sigil of the craftsman",
+    "name": "Sigil of the Craftsman",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26038": {
-    "name": "Sigil of the abyss",
+    "name": "Sigil of the Abyss",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26039": {
-    "name": "Sigil of the abyss",
+    "name": "Sigil of the Abyss",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26041": {
-    "name": "Sigil of stamina",
+    "name": "Sigil of Stamina",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26042": {
-    "name": "Sigil of stamina",
+    "name": "Sigil of Stamina",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26044": {
-    "name": "Sigil of the potion master",
+    "name": "Sigil of the Potion Master",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26045": {
-    "name": "Sigil of the potion master",
+    "name": "Sigil of the Potion Master",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26047": {
-    "name": "Sigil of the eternal jeweller",
+    "name": "Sigil of the Eternal Jeweller",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26048": {
-    "name": "Sigil of the eternal jeweller",
+    "name": "Sigil of the Eternal Jeweller",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26050": {
-    "name": "Sigil of the treasure hunter",
+    "name": "Sigil of the Treasure Hunter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26051": {
-    "name": "Sigil of the treasure hunter",
+    "name": "Sigil of the Treasure Hunter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26053": {
-    "name": "Sigil of mobility",
+    "name": "Sigil of Mobility",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26054": {
-    "name": "Sigil of mobility",
+    "name": "Sigil of Mobility",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26056": {
-    "name": "Sigil of exaggeration",
+    "name": "Sigil of Exaggeration",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26057": {
-    "name": "Sigil of exaggeration",
+    "name": "Sigil of Exaggeration",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26059": {
-    "name": "Sigil of specialised strikes",
+    "name": "Sigil of Specialised Strikes",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26060": {
-    "name": "Sigil of specialised strikes",
+    "name": "Sigil of Specialised Strikes",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26062": {
-    "name": "Sigil of the porcupine",
+    "name": "Sigil of the Porcupine",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26063": {
-    "name": "Sigil of the porcupine",
+    "name": "Sigil of the Porcupine",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26065": {
-    "name": "Sigil of binding",
+    "name": "Sigil of Binding",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26066": {
-    "name": "Sigil of binding",
+    "name": "Sigil of Binding",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26068": {
-    "name": "Sigil of escaping",
+    "name": "Sigil of Escaping",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26069": {
-    "name": "Sigil of escaping",
+    "name": "Sigil of Escaping",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26071": {
-    "name": "Sigil of the ruthless ranger",
+    "name": "Sigil of the Ruthless Ranger",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26072": {
-    "name": "Sigil of the ruthless ranger",
+    "name": "Sigil of the Ruthless Ranger",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26074": {
-    "name": "Sigil of the feral fighter",
+    "name": "Sigil of the Feral Fighter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26075": {
-    "name": "Sigil of the feral fighter",
+    "name": "Sigil of the Feral Fighter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26077": {
-    "name": "Sigil of the menacing mage",
+    "name": "Sigil of the Menacing Mage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26078": {
-    "name": "Sigil of the menacing mage",
+    "name": "Sigil of the Menacing Mage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26080": {
-    "name": "Sigil of prosperity",
+    "name": "Sigil of Prosperity",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26081": {
-    "name": "Sigil of prosperity",
+    "name": "Sigil of Prosperity",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26083": {
-    "name": "Sigil of the dwarves",
+    "name": "Sigil of the Dwarves",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26084": {
-    "name": "Sigil of the dwarves",
+    "name": "Sigil of the Dwarves",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26086": {
-    "name": "Sigil of the elves",
+    "name": "Sigil of the Elves",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26087": {
-    "name": "Sigil of the elves",
+    "name": "Sigil of the Elves",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26089": {
-    "name": "Sigil of the barbarians",
+    "name": "Sigil of the Barbarians",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26090": {
-    "name": "Sigil of the barbarians",
+    "name": "Sigil of the Barbarians",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26092": {
-    "name": "Sigil of the gnomes",
+    "name": "Sigil of the Gnomes",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26093": {
-    "name": "Sigil of the gnomes",
+    "name": "Sigil of the Gnomes",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26095": {
-    "name": "Sigil of nature",
+    "name": "Sigil of Nature",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26096": {
-    "name": "Sigil of nature",
+    "name": "Sigil of Nature",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26098": {
-    "name": "Sigil of devotion",
+    "name": "Sigil of Devotion",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26099": {
-    "name": "Sigil of devotion",
+    "name": "Sigil of Devotion",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26101": {
-    "name": "Sigil of the forager",
+    "name": "Sigil of the Forager",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26102": {
-    "name": "Sigil of the forager",
+    "name": "Sigil of the Forager",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26104": {
-    "name": "Sigil of garments",
+    "name": "Sigil of Garments",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26105": {
-    "name": "Sigil of garments",
+    "name": "Sigil of Garments",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26107": {
-    "name": "Sigil of slaughter",
+    "name": "Sigil of Slaughter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26108": {
-    "name": "Sigil of slaughter",
+    "name": "Sigil of Slaughter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26110": {
-    "name": "Sigil of the fortune farmer",
+    "name": "Sigil of the Fortune Farmer",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26111": {
-    "name": "Sigil of the fortune farmer",
+    "name": "Sigil of the Fortune Farmer",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26113": {
-    "name": "Sigil of versatility",
+    "name": "Sigil of Versatility",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26114": {
-    "name": "Sigil of versatility",
+    "name": "Sigil of Versatility",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26116": {
-    "name": "Sigil of the serpent",
+    "name": "Sigil of the Serpent",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26117": {
-    "name": "Sigil of the serpent",
+    "name": "Sigil of the Serpent",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26119": {
-    "name": "Sigil of supreme stamina",
+    "name": "Sigil of Supreme Stamina",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26120": {
-    "name": "Sigil of supreme stamina",
+    "name": "Sigil of Supreme Stamina",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26122": {
-    "name": "Sigil of preservation",
+    "name": "Sigil of Preservation",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26123": {
-    "name": "Sigil of preservation",
+    "name": "Sigil of Preservation",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26125": {
-    "name": "Sigil of finality",
+    "name": "Sigil of Finality",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26126": {
-    "name": "Sigil of finality",
+    "name": "Sigil of Finality",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26128": {
-    "name": "Sigil of pious protection",
+    "name": "Sigil of Pious Protection",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26129": {
-    "name": "Sigil of pious protection",
+    "name": "Sigil of Pious Protection",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -82488,71 +82488,71 @@
   "26131": {
     "name": "Sigil of aggression",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "26132": {
-    "name": "Sigil of aggression",
+    "name": "Sigil of Aggression",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26134": {
-    "name": "Sigil of rampage",
+    "name": "Sigil of Rampage",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "26135": {
-    "name": "Sigil of rampage",
+    "name": "Sigil of Rampage",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "26137": {
-    "name": "Sigil of the skiller",
+    "name": "Sigil of the Skiller",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26138": {
-    "name": "Sigil of the skiller",
+    "name": "Sigil of the Skiller",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26140": {
-    "name": "Sigil of remote storage",
+    "name": "Sigil of Remote Storage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26141": {
-    "name": "Sigil of remote storage",
+    "name": "Sigil of Remote Storage",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26143": {
-    "name": "Sigil of last recall",
+    "name": "Sigil of Last Recall",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26144": {
-    "name": "Sigil of last recall",
+    "name": "Sigil of Last Recall",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26146": {
-    "name": "Sigil of the guardian angel",
+    "name": "Sigil of the Guardian Angel",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "26147": {
-    "name": "Sigil of the guardian angel",
+    "name": "Sigil of the Guardian Angel",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -84636,7 +84636,7 @@
     "mapping": null
   },
   "26706": {
-    "name": "Scroll of imbuing",
+    "name": "Scroll of Imbuing",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -87539,37 +87539,37 @@
     "mapping": null
   },
   "27428": {
-    "name": "Hood of ruin",
+    "name": "Hood of Ruin",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "27430": {
-    "name": "Robe top of ruin",
+    "name": "Robe top of Ruin",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "27432": {
-    "name": "Robe bottom of ruin",
+    "name": "Robe bottom of Ruin",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "27434": {
-    "name": "Gloves of ruin",
+    "name": "Gloves of Ruin",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "27436": {
-    "name": "Socks of ruin",
+    "name": "Socks of Ruin",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "27438": {
-    "name": "Cloak of ruin",
+    "name": "Cloak of Ruin",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -91628,217 +91628,217 @@
     "mapping": null
   },
   "28477": {
-    "name": "Sigil of sustenance",
+    "name": "Sigil of Sustenance",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28478": {
-    "name": "Sigil of sustenance",
+    "name": "Sigil of Sustenance",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28480": {
-    "name": "Sigil of hoarding",
+    "name": "Sigil of Hoarding",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28481": {
-    "name": "Sigil of hoarding",
+    "name": "Sigil of Hoarding",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28483": {
-    "name": "Sigil of the alchemaniac",
+    "name": "Sigil of the Alchemaniac",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28484": {
-    "name": "Sigil of the alchemaniac",
+    "name": "Sigil of the Alchemaniac",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28486": {
-    "name": "Sigil of the hunter",
+    "name": "Sigil of the Hunter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28487": {
-    "name": "Sigil of the hunter",
+    "name": "Sigil of the Hunter",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28489": {
-    "name": "Sigil of resistance",
+    "name": "Sigil of Resistance",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28490": {
-    "name": "Sigil of resistance",
+    "name": "Sigil of Resistance",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28492": {
-    "name": "Sigil of agile fortune",
+    "name": "Sigil of Agile Fortune",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28493": {
-    "name": "Sigil of agile fortune",
+    "name": "Sigil of Agile Fortune",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28495": {
-    "name": "Sigil of the food master",
+    "name": "Sigil of the Food Master",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28496": {
-    "name": "Sigil of the food master",
+    "name": "Sigil of the Food Master",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28498": {
-    "name": "Sigil of the well fed",
+    "name": "Sigil of the Well Fed",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "28499": {
-    "name": "Sigil of the well fed",
+    "name": "Sigil of The Well Fed",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28501": {
-    "name": "Sigil of the infernal chef",
+    "name": "Sigil of the Infernal Chef",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28502": {
-    "name": "Sigil of the infernal chef",
+    "name": "Sigil of the Infernal Chef",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28504": {
-    "name": "Sigil of the infernal smith",
+    "name": "Sigil of the Infernal Smith",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28505": {
-    "name": "Sigil of the infernal smith",
+    "name": "Sigil of the Infernal Smith",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28507": {
-    "name": "Sigil of the lightbearer",
+    "name": "Sigil of the Lightbearer",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28508": {
-    "name": "Sigil of the lightbearer",
+    "name": "Sigil of the Lightbearer",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28510": {
-    "name": "Sigil of the bloodhound",
+    "name": "Sigil of the Bloodhound",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28511": {
-    "name": "Sigil of the bloodhound",
+    "name": "Sigil of the Bloodhound",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28513": {
-    "name": "Sigil of precision",
+    "name": "Sigil of Precision",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28514": {
-    "name": "Sigil of precision",
+    "name": "Sigil of Precision",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28516": {
-    "name": "Sigil of the augmented thrall",
+    "name": "Sigil of the Augmented Thrall",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28517": {
-    "name": "Sigil of the augmented thrall",
+    "name": "Sigil of the Augmented Thrall",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28519": {
-    "name": "Sigil of faith",
+    "name": "Sigil of Faith",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28520": {
-    "name": "Sigil of faith",
+    "name": "Sigil of Faith",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28522": {
-    "name": "Sigil of titanium",
+    "name": "Sigil of Titanium",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28523": {
-    "name": "Sigil of titanium",
+    "name": "Sigil of Titanium",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28525": {
-    "name": "Sigil of the ninja",
+    "name": "Sigil of the Ninja",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28526": {
-    "name": "Sigil of the ninja",
+    "name": "Sigil of the Ninja",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28528": {
-    "name": "Sigil of woodcraft",
+    "name": "Sigil of Woodcraft",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "28529": {
-    "name": "Sigil of woodcraft",
+    "name": "Sigil of Woodcraft",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -91868,13 +91868,13 @@
     "mapping": null
   },
   "28543": {
-    "name": "Corrupted scythe of vitur",
+    "name": "Corrupted Scythe of Vitur",
     "highalch": 150000,
     "alchable": true,
     "mapping": null
   },
   "28545": {
-    "name": "Corrupted scythe of vitur (uncharged)",
+    "name": "Corrupted Scythe of Vitur (uncharged)",
     "highalch": 150000,
     "alchable": true,
     "mapping": null
@@ -93287,7 +93287,7 @@
     "mapping": null
   },
   "28988": {
-    "name": "Blue moon spear",
+    "name": "Blue Moon spear",
     "highalch": 60000,
     "alchable": true,
     "mapping": null
@@ -93329,61 +93329,61 @@
     "mapping": null
   },
   "29004": {
-    "name": "Eclipse moon chestplate",
+    "name": "Eclipse Moon chestplate",
     "highalch": 174006,
     "alchable": true,
     "mapping": null
   },
   "29007": {
-    "name": "Eclipse moon tassets",
+    "name": "Eclipse Moon tassets",
     "highalch": 173946,
     "alchable": true,
     "mapping": null
   },
   "29010": {
-    "name": "Eclipse moon helm",
+    "name": "Eclipse Moon helm",
     "highalch": 61800,
     "alchable": true,
     "mapping": null
   },
   "29013": {
-    "name": "Blue moon chestplate",
+    "name": "Blue Moon chestplate",
     "highalch": 174006,
     "alchable": true,
     "mapping": null
   },
   "29016": {
-    "name": "Blue moon tassets",
+    "name": "Blue Moon tassets",
     "highalch": 173946,
     "alchable": true,
     "mapping": null
   },
   "29019": {
-    "name": "Blue moon helm",
+    "name": "Blue Moon helm",
     "highalch": 61800,
     "alchable": true,
     "mapping": null
   },
   "29022": {
-    "name": "Blood moon chestplate",
+    "name": "Blood Moon chestplate",
     "highalch": 174006,
     "alchable": true,
     "mapping": null
   },
   "29025": {
-    "name": "Blood moon tassets",
+    "name": "Blood Moon tassets",
     "highalch": 173946,
     "alchable": true,
     "mapping": null
   },
   "29028": {
-    "name": "Blood moon helm",
+    "name": "Blood Moon helm",
     "highalch": 61800,
     "alchable": true,
     "mapping": null
   },
   "29031": {
-    "name": "Eclipse moon chestplate",
+    "name": "Eclipse Moon chestplate",
     "highalch": 174006,
     "alchable": true,
     "mapping": [
@@ -93394,7 +93394,7 @@
     ]
   },
   "29033": {
-    "name": "Eclipse moon tassets",
+    "name": "Eclipse Moon tassets",
     "highalch": 173946,
     "alchable": true,
     "mapping": [
@@ -93405,7 +93405,7 @@
     ]
   },
   "29035": {
-    "name": "Eclipse moon helm",
+    "name": "Eclipse Moon helm",
     "highalch": 61800,
     "alchable": true,
     "mapping": [
@@ -93416,7 +93416,7 @@
     ]
   },
   "29037": {
-    "name": "Blue moon chestplate",
+    "name": "Blue Moon chestplate",
     "highalch": 174006,
     "alchable": true,
     "mapping": [
@@ -93427,7 +93427,7 @@
     ]
   },
   "29039": {
-    "name": "Blue moon tassets",
+    "name": "Blue Moon tassets",
     "highalch": 173946,
     "alchable": true,
     "mapping": [
@@ -93438,7 +93438,7 @@
     ]
   },
   "29041": {
-    "name": "Blue moon helm",
+    "name": "Blue Moon helm",
     "highalch": 61800,
     "alchable": true,
     "mapping": [
@@ -93449,7 +93449,7 @@
     ]
   },
   "29043": {
-    "name": "Blood moon chestplate",
+    "name": "Blood Moon chestplate",
     "highalch": 174006,
     "alchable": true,
     "mapping": [
@@ -93460,7 +93460,7 @@
     ]
   },
   "29045": {
-    "name": "Blood moon tassets",
+    "name": "Blood Moon tassets",
     "highalch": 173946,
     "alchable": true,
     "mapping": [
@@ -93471,7 +93471,7 @@
     ]
   },
   "29047": {
-    "name": "Blood moon helm",
+    "name": "Blood Moon helm",
     "highalch": 61800,
     "alchable": true,
     "mapping": [
@@ -93482,55 +93482,55 @@
     ]
   },
   "29049": {
-    "name": "Eclipse moon chestplate (broken)",
+    "name": "Eclipse Moon chestplate (broken)",
     "highalch": 174006,
     "alchable": true,
     "mapping": null
   },
   "29052": {
-    "name": "Eclipse moon tassets (broken)",
+    "name": "Eclipse Moon tassets (broken)",
     "highalch": 173946,
     "alchable": true,
     "mapping": null
   },
   "29055": {
-    "name": "Eclipse moon helm (broken)",
+    "name": "Eclipse Moon helm (broken)",
     "highalch": 61800,
     "alchable": true,
     "mapping": null
   },
   "29058": {
-    "name": "Blue moon chestplate (broken)",
+    "name": "Blue Moon chestplate (broken)",
     "highalch": 174006,
     "alchable": true,
     "mapping": null
   },
   "29061": {
-    "name": "Blue moon tassets (broken)",
+    "name": "Blue Moon tassets (broken)",
     "highalch": 173946,
     "alchable": true,
     "mapping": null
   },
   "29064": {
-    "name": "Blue moon helm (broken)",
+    "name": "Blue Moon helm (broken)",
     "highalch": 61800,
     "alchable": true,
     "mapping": null
   },
   "29067": {
-    "name": "Blood moon chestplate (broken)",
+    "name": "Blood Moon chestplate (broken)",
     "highalch": 174006,
     "alchable": true,
     "mapping": null
   },
   "29070": {
-    "name": "Blood moon tassets (broken)",
+    "name": "Blood Moon tassets (broken)",
     "highalch": 173946,
     "alchable": true,
     "mapping": null
   },
   "29073": {
-    "name": "Blood moon helm (broken)",
+    "name": "Blood Moon helm (broken)",
     "highalch": 61800,
     "alchable": true,
     "mapping": null
@@ -95429,133 +95429,133 @@
     "mapping": null
   },
   "29648": {
-    "name": "Sigil of meticulousness",
+    "name": "Sigil of Meticulousness",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29649": {
-    "name": "Sigil of meticulousness",
+    "name": "Sigil of Meticulousness",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29651": {
-    "name": "Sigil of revoked limitation",
+    "name": "Sigil of Revoked Limitation",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29652": {
-    "name": "Sigil of revoked limitation",
+    "name": "Sigil of Revoked Limitation",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29654": {
-    "name": "Sigil of the rampart",
+    "name": "Sigil of the Rampart",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29655": {
-    "name": "Sigil of the rampart",
+    "name": "Sigil of the Rampart",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29657": {
-    "name": "Sigil of deception",
+    "name": "Sigil of Deception",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29658": {
-    "name": "Sigil of deception",
+    "name": "Sigil of Deception",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29660": {
-    "name": "Sigil of litheness",
+    "name": "Sigil of Litheness",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29661": {
-    "name": "Sigil of litheness",
+    "name": "Sigil of Litheness",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29663": {
-    "name": "Sigil of the adroit",
+    "name": "Sigil of the Adroit",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29664": {
-    "name": "Sigil of the adroit",
+    "name": "Sigil of the Adroit",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29666": {
-    "name": "Sigil of onslaught",
+    "name": "Sigil of Onslaught",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29667": {
-    "name": "Sigil of onslaught",
+    "name": "Sigil of Onslaught",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29669": {
-    "name": "Sigil of restoration",
+    "name": "Sigil of Restoration",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29670": {
-    "name": "Sigil of restoration",
+    "name": "Sigil of Restoration",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29672": {
-    "name": "Sigil of the swashbuckler",
+    "name": "Sigil of the Swashbuckler",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29673": {
-    "name": "Sigil of the swashbuckler",
+    "name": "Sigil of the Swashbuckler",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29675": {
-    "name": "Sigil of the gunslinger",
+    "name": "Sigil of the Gunslinger",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29676": {
-    "name": "Sigil of the gunslinger",
+    "name": "Sigil of the Gunslinger",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29678": {
-    "name": "Sigil of arcane swiftness",
+    "name": "Sigil of Arcane Swiftness",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "29679": {
-    "name": "Sigil of arcane swiftness",
+    "name": "Sigil of Arcane Swiftness",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -96023,61 +96023,61 @@
     "mapping": null
   },
   "29840": {
-    "name": "Eclipse moon chestplate",
+    "name": "Eclipse Moon chestplate",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29841": {
-    "name": "Eclipse moon tassets",
+    "name": "Eclipse Moon tassets",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29842": {
-    "name": "Eclipse moon helm",
+    "name": "Eclipse Moon helm",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29843": {
-    "name": "Blue moon chestplate",
+    "name": "Blue Moon chestplate",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29844": {
-    "name": "Blue moon tassets",
+    "name": "Blue Moon tassets",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29845": {
-    "name": "Blue moon helm",
+    "name": "Blue Moon helm",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29846": {
-    "name": "Blood moon chestplate",
+    "name": "Blood Moon chestplate",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29847": {
-    "name": "Blood moon tassets",
+    "name": "Blood Moon tassets",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29848": {
-    "name": "Blood moon helm",
+    "name": "Blood Moon helm",
     "highalch": 60,
     "alchable": true,
     "mapping": null
   },
   "29849": {
-    "name": "Blue moon spear",
+    "name": "Blue Moon spear",
     "highalch": 60,
     "alchable": true,
     "mapping": null
@@ -100803,19 +100803,19 @@
     "mapping": null
   },
   "31136": {
-    "name": "Blood moon armour set",
+    "name": "Blood Moon armour set",
     "highalch": 87000,
     "alchable": true,
     "mapping": null
   },
   "31139": {
-    "name": "Blue moon armour set",
+    "name": "Blue Moon armour set",
     "highalch": 87000,
     "alchable": true,
     "mapping": null
   },
   "31142": {
-    "name": "Eclipse moon armour set",
+    "name": "Eclipse Moon armour set",
     "highalch": 87000,
     "alchable": true,
     "mapping": null
@@ -104997,121 +104997,121 @@
     "mapping": null
   },
   "32411": {
-    "name": "Small key (the pandemonium)",
+    "name": "Small key (The Pandemonium)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32412": {
-    "name": "Small key (the onyx crest)",
+    "name": "Small key (The Onyx Crest)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32413": {
-    "name": "Small key (tear of the soul)",
+    "name": "Small key (Tear of the Soul)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32414": {
-    "name": "Small key (ynysdail)",
+    "name": "Small key (Ynysdail)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32415": {
-    "name": "Small key (minotaurs' rest)",
+    "name": "Small key (Minotaurs' Rest)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32416": {
-    "name": "Small key (buccaneers' haven)",
+    "name": "Small key (Buccaneers' Haven)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32417": {
-    "name": "Small key (isle of bones)",
+    "name": "Small key (Isle of Bones)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32418": {
-    "name": "Small key (charred island)",
+    "name": "Small key (Charred Island)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32419": {
-    "name": "Small key (laguna aurorae)",
+    "name": "Small key (Laguna Aurorae)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32420": {
-    "name": "Small key (drumstick isle)",
+    "name": "Small key (Drumstick Isle)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32421": {
-    "name": "Lockbox directions (chinchompa island)",
+    "name": "Lockbox directions (Chinchompa Island)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32422": {
-    "name": "Lockbox directions (anglers' retreat)",
+    "name": "Lockbox directions (Anglers' Retreat)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32423": {
-    "name": "Lockbox directions (buccaneers' haven)",
+    "name": "Lockbox directions (Buccaneers' Haven)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32424": {
-    "name": "Lockbox directions (lledrith island)",
+    "name": "Lockbox directions (Lledrith Island)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32425": {
-    "name": "Lockbox directions (the crown jewel)",
+    "name": "Lockbox directions (The Crown Jewel)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32426": {
-    "name": "Lockbox directions (deepfin point)",
+    "name": "Lockbox directions (Deepfin Point)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32427": {
-    "name": "Lockbox directions (shimmering atoll)",
+    "name": "Lockbox directions (Shimmering Atoll)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32428": {
-    "name": "Lockbox directions (brittle isle)",
+    "name": "Lockbox directions (Brittle Isle)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32429": {
-    "name": "Lockbox directions (sunbleak island)",
+    "name": "Lockbox directions (Sunbleak Island)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
   },
   "32430": {
-    "name": "Lockbox directions (grimstone)",
+    "name": "Lockbox directions (Grimstone)",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -108446,61 +108446,61 @@
     "mapping": null
   },
   "33053": {
-    "name": "Sigil of the gods",
+    "name": "Sigil of the Gods",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33054": {
-    "name": "Sigil of the gods",
+    "name": "Sigil of the Gods",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33055": {
-    "name": "Sigil of conclusion",
+    "name": "Sigil of Conclusion",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33056": {
-    "name": "Sigil of conclusion",
+    "name": "Sigil of Conclusion",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33057": {
-    "name": "Sigil of automation",
+    "name": "Sigil of Automation",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33058": {
-    "name": "Sigil of automation",
+    "name": "Sigil of Automation",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33059": {
-    "name": "Sigil of eternal belief",
+    "name": "Sigil of Eternal Belief",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33060": {
-    "name": "Sigil of eternal belief",
+    "name": "Sigil of Eternal Belief",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33061": {
-    "name": "Sigil of efficiency",
+    "name": "Sigil of Efficiency",
     "highalch": 0,
     "alchable": false,
     "mapping": null
   },
   "33062": {
-    "name": "Sigil of efficiency",
+    "name": "Sigil of Efficiency",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -110594,7 +110594,7 @@
     "mapping": null
   },
   "33705": {
-    "name": "Pious proceedings",
+    "name": "Pious Proceedings",
     "highalch": 0,
     "alchable": false,
     "mapping": null
@@ -112852,7 +112852,7 @@
     ]
   },
   "34401": {
-    "name": "Necklace of fangs",
+    "name": "Necklace of Fangs",
     "highalch": 30000,
     "alchable": true,
     "mapping": null

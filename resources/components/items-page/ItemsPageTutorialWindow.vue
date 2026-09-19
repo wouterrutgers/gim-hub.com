@@ -45,9 +45,10 @@
         <span class="items-page-tutorial-inline-search">-</span> before a search to exclude its matches. For example,
         <span class="items-page-tutorial-inline-search">coal &amp; -bag</span> finds Coal but not Coal bag. You can also
         exclude exact names or tags, such as <span class="items-page-tutorial-inline-search">-"coal bag"</span> or
-        <span class="items-page-tutorial-inline-search">-tag:food</span>. AND applies before OR: in
-        <span class="items-page-tutorial-inline-search">coal | rune &amp; -plate</span>, the exclusion applies to the
-        rune search.
+        <span class="items-page-tutorial-inline-search">-tag:food</span>. AND applies before OR. Use square brackets to
+        group alternatives:
+        <span class="items-page-tutorial-inline-search">tag:potions &amp; [(4) | (3) | (2) | (1)]</span>
+        shows only potions with one to four doses.
       </p>
       <p>
         Type <span class="items-page-tutorial-inline-search">tag:</span> followed by an exact tag to search by category

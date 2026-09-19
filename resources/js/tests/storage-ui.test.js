@@ -18,8 +18,10 @@ const items = new Map([
   [1095, { name: "Leather chaps", highalch: 12, alchable: true }],
   [199, { name: "Grimy guam leaf", highalch: 3 }],
   [2430, { name: "Restore potion(4)", highalch: 3 }],
+  [2432, { name: "Restore potion(3)", highalch: 3 }],
   [1623, { name: "Uncut sapphire", highalch: 3 }],
   [5295, { name: "Ranarr seed", highalch: 3 }],
+  [30001, { name: "Unrelated (3)", highalch: 3 }],
 ]);
 
 describe("storage UI", function storageInterface() {
@@ -261,5 +263,24 @@ describe("storage UI", function storageInterface() {
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
     expect(visibleNames()).toEqual(["Leather chaps", "Ranarr seed"]);
+  });
+
+  it("applies a tag to every alternative in a bracketed item search", async function bracketedItemSearch() {
+    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(600);
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
+    payload = [{ name: "Alice", bank: [2430, 1, 2432, 1, 30001, 1] }];
+    await mount(ItemsPage, { tags: [["potions", 0]], items: { 2430: 1n, 2432: 1n } });
+
+    const search = container.querySelector("#items-page-search input");
+    search.value = "tag:potions & [(4) | (3) | (2) | (1)]";
+    search.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+    expect(
+      [...container.querySelectorAll(".items-page-panel-name")]
+        .map(function itemName(element) {
+          return element.textContent;
+        })
+        .sort(),
+    ).toEqual(["Restore potion(3)", "Restore potion(4)"]);
   });
 });

@@ -33,6 +33,7 @@ export const itemContainers = [
   {
     name: "Quiver",
     key: "quiver",
+    itemIds: [28947, 28949, 28951, 28953, 28955, 28957],
     getItems: mapToItems,
   },
   {
@@ -63,21 +64,25 @@ export const itemContainers = [
   {
     name: "Plank Sack",
     key: "plankSack",
+    itemIds: [24882, 25629],
     getItems: mapToItems,
   },
   {
     name: "Master Scroll Book",
     key: "masterScrollBook",
+    itemIds: [21387, 21389],
     getItems: mapToItems,
   },
   {
     name: "Essence Pouches",
     key: "essencePouches",
+    itemIds: [5509, 5510, 5511, 5512, 5513, 5514, 5515, 6819, 26784, 26786, 26906],
     getItems: mapToItems,
   },
   {
     name: "Tackle Box",
     key: "tackleBox",
+    itemIds: [25580],
     getItems: mapToItems,
   },
   {
@@ -93,24 +98,25 @@ export const itemContainers = [
   {
     name: "Coal Bag",
     key: "coalBag",
+    itemIds: [12019, 24480, 25627],
     getItems: mapToItems,
   },
   {
     name: "Fish Barrel",
     key: "fishBarrel",
+    itemIds: [25582, 25584, 25585, 25587],
     getItems: mapToItems,
   },
   {
     name: "Herb sack",
     key: "herbSack",
     itemIds: [13226, 24478, 33135, 33137],
-    initiallyUnknown: true,
     getItems: mapToItems,
   },
-  { name: "Looting bag", key: "lootingBag", itemIds: [11941, 22586], initiallyUnknown: true, getItems: mapToItems },
-  { name: "Seed box", key: "seedBox", itemIds: [13639, 24482], initiallyUnknown: true, getItems: mapToItems },
-  { name: "Gem bag", key: "gemBag", itemIds: [12020, 24481], initiallyUnknown: true, getItems: mapToItems },
-  { name: "Chugging barrel", key: "chuggingBarrel", itemIds: [30000], initiallyUnknown: true, getItems: mapToItems },
+  { name: "Looting bag", key: "lootingBag", itemIds: [11941, 22586], getItems: mapToItems },
+  { name: "Seed box", key: "seedBox", itemIds: [13639, 24482], getItems: mapToItems },
+  { name: "Gem bag", key: "gemBag", itemIds: [12020, 24481], getItems: mapToItems },
+  { name: "Chugging barrel", key: "chuggingBarrel", itemIds: [30000], getItems: mapToItems },
   { name: "STASH units", key: "stashUnits", getItems: stashToItems },
 ];
 export const itemContainerNames = itemContainers.map(function getContainerName({ name }) {

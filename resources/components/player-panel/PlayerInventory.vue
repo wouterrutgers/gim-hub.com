@@ -38,7 +38,7 @@
         return { key: `empty ${index}` };
       }
 
-      const runes = [];
+      let storedItems = [];
       let tooltipData = {
         type: "item",
         name: itemData.name,
@@ -50,14 +50,22 @@
       const storageKey = portableStorageKey(item.itemID);
       if (storageKey) {
         const contents = groupStore.memberStates.get(props.member)?.[storageKey];
-        tooltipData.storageItems = contents
-          ? [...contents.values()].map(function describeStoredItem(storedItem) {
-              return {
-                name: gameDataStore.gameData.items?.get(storedItem.itemID)?.name ?? `Item ${storedItem.itemID}`,
-                quantity: storedItem.quantity,
-              };
-            })
-          : null;
+        if (contents?.size) {
+          storedItems = [...contents.values()].map(function describeStoredItem(storedItem) {
+            const storedItemData = gameDataStore.gameData.items?.get(storedItem.itemID);
+            return {
+              id: storedItem.itemID,
+              name: storedItemData?.name ?? `Item ${storedItem.itemID}`,
+              quantity: storedItem.quantity,
+              icon: composeItemIconHref(storedItem, storedItemData),
+            };
+          });
+          tooltipData.storageItems = storedItems;
+          if (storageKey === "essencePouches") {
+            tooltipData.storageNotice =
+              "Combined contents of all essence pouches; individual pouch contents are unavailable.";
+          }
+        }
       }
 
       if (isRunePouch(item.itemID) && runePouch.value) {
@@ -74,7 +82,7 @@
           totalGePrice +=
             mappedGEPrice(runeId, gameDataStore.gameData.gePrices, gameDataStore.gameData.items) * quantity;
           totalHighAlch += runeData.highalch * quantity;
-          runes.push({
+          storedItems.push({
             id: runeId,
             name: runeData.name,
             quantity,
@@ -87,23 +95,25 @@
           name: itemData.name,
           totalHighAlch,
           totalGePrice,
-          runes: runes.map(function getRuneTooltip(rune) {
+          runes: storedItems.map(function getRuneTooltip(rune) {
             return { name: rune.name, quantity: rune.quantity };
           }),
         };
       }
 
+      const previewItems = isRunePouch(item.itemID) ? storedItems : [];
       return {
-        key: `${item.itemID} ${item.quantity} ${index} ${runes
-          .map(function getRuneKey(rune) {
-            return `${rune.id} ${rune.quantity}`;
+        key: `${item.itemID} ${item.quantity} ${index} ${previewItems
+          .map(function getStoredItemKey(storedItem) {
+            return `${storedItem.id} ${storedItem.quantity}`;
           })
           .join(" ")}`,
         item,
         icon: composeItemIconHref(item, itemData),
         link: `https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=${item.itemID}`,
-        tooltip: serializeTooltip(tooltipData),
-        runes,
+        tooltip: storageKey && storedItems.length === 0 ? undefined : serializeTooltip(tooltipData),
+        previewItems,
+        hasStoredItems: Boolean(storageKey && storedItems.length > 0),
       };
     });
   });
@@ -129,14 +139,28 @@
           >
             {{ formatShortQuantity(slot.item.quantity) }}
           </span>
+          <span v-if="slot.hasStoredItems" class="player-inventory-contents-indicator" aria-label="Contains items">
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path fill="#211409" d="M2 3h12v11H2z" />
+              <path fill="#9a6530" d="M3 4h10v3H3z" />
+              <path fill="#d5aa56" d="M4 4h8v1H4z" />
+              <path fill="#71401c" d="M3 8h10v5H3z" />
+              <path fill="#a66b2f" d="M4 9h8v1H4z" />
+              <path fill="#c18a42" d="M4 5h1v2H4zm7 0h1v2h-1zM4 10h1v3H4zm7 0h1v3h-1z" />
+              <path fill="#f5d67a" d="M7 8h2v3H7z" />
+            </svg>
+          </span>
           <div
-            v-if="slot.runes.length > 0"
-            :class="['player-inventory-pouch-container', { 'player-inventory-pouch-vertical': slot.runes.length <= 3 }]"
+            v-if="slot.previewItems.length > 0"
+            :class="[
+              'player-inventory-pouch-container',
+              { 'player-inventory-pouch-vertical': slot.previewItems.length <= 3 },
+            ]"
           >
-            <div v-for="rune in slot.runes" :key="rune.id" class="player-inventory-pouch-item-box">
-              <CachedImage :alt="rune.name" :src="rune.icon" />
-              <span class="player-inventory-item-quantity" :style="{ color: quantityColor(rune.quantity) }">
-                {{ formatVeryShortQuantity(rune.quantity) }}
+            <div v-for="storedItem in slot.previewItems" :key="storedItem.id" class="player-inventory-pouch-item-box">
+              <CachedImage :alt="storedItem.name" :src="storedItem.icon" />
+              <span class="player-inventory-item-quantity" :style="{ color: quantityColor(storedItem.quantity) }">
+                {{ formatVeryShortQuantity(storedItem.quantity) }}
               </span>
             </div>
           </div>

@@ -32,6 +32,22 @@
   min-width: 0;
 }
 
+.player-inventory-contents-indicator {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+}
+
+.player-inventory-contents-indicator svg {
+  width: 16px;
+  height: 16px;
+  shape-rendering: crispedges;
+}
+
 .player-inventory-pouch-vertical {
   grid-template-columns: 1fr;
   grid-template-rows: repeat(3, 1fr);

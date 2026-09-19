@@ -77,16 +77,13 @@
       }
     }
 
-    if (data.storageItems !== undefined) {
+    if (data.storageItems) {
       lines.push({ key: "storage-separator", type: "separator" });
-      if (data.storageItems === null) {
-        lines.push({ key: "storage-unknown", value: "Contents unknown. Check this container in game." });
-      } else if (data.storageItems.length === 0) {
-        lines.push({ key: "storage-empty", value: "Empty" });
-      } else {
-        for (const { name, quantity } of data.storageItems) {
-          lines.push({ key: `stored-${name}`, value: `${quantity.toLocaleString()} ${name}` });
-        }
+      if (data.storageNotice) {
+        lines.push({ key: "storage-notice", value: data.storageNotice });
+      }
+      for (const { name, quantity } of data.storageItems) {
+        lines.push({ key: `stored-${name}`, value: `${quantity.toLocaleString()} ${name}` });
       }
     }
 

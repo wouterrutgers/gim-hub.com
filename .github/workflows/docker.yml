@@ -65,8 +65,8 @@ jobs:
           platforms: ${{ matrix.platform }}
           target: production
           outputs: type=image,name=wouterrutgers/gim-hub.com,push-by-digest=true,name-canonical=true,push=${{ env.PUBLISH_IMAGE }}
-          cache-from: type=gha,scope=${{ matrix.platform_name }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.platform_name }}
+          cache-from: type=registry,ref=wouterrutgers/gim-hub.com:buildcache-${{ matrix.platform_name }}
+          cache-to: ${{ env.PUBLISH_IMAGE == 'true' && format('type=registry,ref=wouterrutgers/gim-hub.com:buildcache-{0},mode=max', matrix.platform_name) || '' }}
           provenance: false
 
       - name: Export digest

@@ -26,7 +26,7 @@ describe("storage UI", function storageInterface() {
   let container;
   let payload;
 
-  async function mount(component) {
+  async function mount(component, itemTags) {
     vi.useFakeTimers();
     vi.stubGlobal(
       "fetch",
@@ -42,7 +42,7 @@ describe("storage UI", function storageInterface() {
     const pinia = createTestPinia();
     useApiStore(pinia).client = {
       async fetchGameData() {
-        return { items, quests: new Map(), gePrices: new Map() };
+        return { items, quests: new Map(), gePrices: new Map(), itemTags };
       },
       async fetchGroupCollectionLogs() {
         return new Map();
@@ -230,5 +230,36 @@ describe("storage UI", function storageInterface() {
     container.querySelector("#items-page-reset-filters-button").click();
     await nextTick();
     expect(container.querySelectorAll(".items-page-panel").length).toBe(2);
+  });
+
+  it("combines excluded names and tags with AND before OR in item search", async function combinedItemSearch() {
+    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(600);
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
+    payload = [{ name: "Alice", bank: [199, 1, 1095, 1, 5295, 1] }];
+    await mount(ItemsPage, { tags: [["herb", 0]], items: { 199: 1n, 5295: 1n } });
+
+    const search = container.querySelector("#items-page-search input");
+    function visibleNames() {
+      return [...container.querySelectorAll(".items-page-panel-name")]
+        .map(function itemName(element) {
+          return element.textContent;
+        })
+        .sort();
+    }
+
+    search.value = "-guam";
+    search.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+    expect(visibleNames()).toEqual(["Leather chaps", "Ranarr seed"]);
+
+    search.value = "guam | leather & -guam";
+    search.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+    expect(visibleNames()).toEqual(["Grimy guam leaf", "Leather chaps"]);
+
+    search.value = 'tag:herb & -"Grimy guam leaf" | leather';
+    search.dispatchEvent(new Event("input", { bubbles: true }));
+    await nextTick();
+    expect(visibleNames()).toEqual(["Leather chaps", "Ranarr seed"]);
   });
 });

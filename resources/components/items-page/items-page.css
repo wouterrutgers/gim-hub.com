@@ -90,7 +90,7 @@
   flex-direction: column;
   position: relative;
   color: var(--white);
-  margin: 8px;
+  margin: 8px 0;
 }
 
 .items-page-panel-top {
@@ -192,7 +192,6 @@
 #items-page-search {
   display: flex;
   position: relative;
-  margin: 4px;
   border: 1px solid var(--light-border);
   border-radius: 4px;
 }

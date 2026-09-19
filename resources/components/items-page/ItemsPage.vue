@@ -73,39 +73,47 @@
     );
   });
 
-  const searchParts = computed(function getSearchParts() {
+  const searchGroups = computed(function getSearchGroups() {
     return (searchFilterUserString.value ?? "")
       .split("|")
-      .map(function normalizeSearchPart(searchPart) {
-        return searchPart.trim().toLocaleLowerCase();
+      .map(function parseSearchGroup(searchGroup) {
+        return searchGroup
+          .split("&")
+          .map(function normalizeSearchPart(searchPart) {
+            return searchPart.trim().toLocaleLowerCase();
+          })
+          .filter(function hasSearchValue(searchPart) {
+            return searchPart.length > 0 && searchPart !== "-";
+          })
+          .map(function parseSearchPart(searchPart) {
+            const excluded = searchPart.startsWith("-");
+            const value = excluded ? searchPart.slice(1) : searchPart;
+            const exact = value.startsWith('"') && value.endsWith('"');
+            if (exact) {
+              return { type: "Name", lowercase: value.slice(1, -1), exact: true, excluded };
+            }
+
+            const splitForTag = value.split(":");
+            if (splitForTag.length === 1 || splitForTag[0] !== "tag") {
+              return { type: "Name", lowercase: value, exact: false, excluded };
+            }
+
+            const suffix = splitForTag.slice(1).join(":");
+            let bitmask = 0n;
+            for (const [tag, bitIndex] of gameDataStore.gameData.itemTags?.tags ?? []) {
+              if (tag.toLocaleLowerCase() === suffix) {
+                bitmask += 1n << BigInt(bitIndex);
+              }
+            }
+
+            return { type: "Tag", bitmask, excluded };
+          })
+          .filter(function hasParsedSearchValue(searchPart) {
+            return searchPart.type !== "Name" || searchPart.lowercase.length > 0;
+          });
       })
-      .map(function parseSearchPart(searchPart) {
-        if (searchPart.length === 0) {
-          return { type: "Name", lowercase: "", exact: false };
-        }
-
-        const exact = searchPart.startsWith('"') && searchPart.endsWith('"');
-        if (exact) {
-          return { type: "Name", lowercase: searchPart.slice(1, -1), exact: true };
-        }
-
-        const splitForTag = searchPart.split(":");
-        if (splitForTag.length === 1 || splitForTag[0] !== "tag") {
-          return { type: "Name", lowercase: searchPart, exact: false };
-        }
-
-        const suffix = splitForTag.slice(1).join(":").toLocaleLowerCase();
-        let bitmask = 0n;
-        for (const [tag, bitIndex] of gameDataStore.gameData.itemTags?.tags ?? []) {
-          if (tag.toLocaleLowerCase() === suffix) {
-            bitmask += 1n << BigInt(bitIndex);
-          }
-        }
-
-        return { type: "Tag", bitmask };
-      })
-      .filter(function hasSearchValue(searchPart) {
-        return searchPart.type !== "Name" || searchPart.lowercase.length > 0;
+      .filter(function hasSearchParts(searchGroup) {
+        return searchGroup.length > 0;
       });
   });
 
@@ -182,7 +190,7 @@
 
   const hasActiveFilters = computed(function filtersAreActive() {
     return (
-      searchParts.value.length > 0 ||
+      searchGroups.value.length > 0 ||
       memberFilter.value.size > 0 ||
       sortCategory.value !== DEFAULT_SORT_CATEGORY ||
       containerFilter.value !== DEFAULT_CONTAINER_FILTER
@@ -206,18 +214,25 @@
   }
 
   function itemMatchesSearch(itemID, itemDatum, itemTags) {
-    if (searchParts.value.length === 0) {
+    if (searchGroups.value.length === 0) {
       return true;
     }
 
     const itemLowercase = itemDatum.name.toLocaleLowerCase();
 
-    return searchParts.value.some(function matchesSearchPart(searchPart) {
-      if (searchPart.type === "Name") {
-        return searchPart.exact ? searchPart.lowercase === itemLowercase : itemLowercase.includes(searchPart.lowercase);
-      }
+    return searchGroups.value.some(function matchesSearchGroup(searchGroup) {
+      return searchGroup.every(function matchesSearchPart(searchPart) {
+        let matches;
+        if (searchPart.type === "Name") {
+          matches = searchPart.exact
+            ? searchPart.lowercase === itemLowercase
+            : itemLowercase.includes(searchPart.lowercase);
+        } else {
+          matches = (searchPart.bitmask & (itemTags?.items[itemID] ?? 0n)) !== 0n;
+        }
 
-      return (searchPart.bitmask & (itemTags?.items[itemID] ?? 0n)) !== 0n;
+        return searchPart.excluded ? !matches : matches;
+      });
     });
   }
 

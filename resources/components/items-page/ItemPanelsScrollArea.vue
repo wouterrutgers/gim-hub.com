@@ -63,7 +63,8 @@
       right: 0,
       transform: `translateY(${row.start - itemsVirtualizer.value.options.scrollMargin}px)`,
       display: "grid",
-      gridTemplateColumns: `repeat(${columns.value}, 1fr)`,
+      gridTemplateColumns: `repeat(${columns.value}, minmax(0, 1fr))`,
+      columnGap: "16px",
     };
   }
 

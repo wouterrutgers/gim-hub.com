@@ -75,6 +75,25 @@ describe("group state", function describeGroupState() {
     expect(updatedState.memberStates.has("Wise Old Man")).toBe(false);
   });
 
+  it("updates the displayed member order when the server reorders the same members", function testMemberOrder() {
+    const initialState = updateGroupState(
+      createGroupState(),
+      new Map([
+        ["Alice", {}],
+        ["Bob", {}],
+      ]),
+    );
+    const updatedState = updateGroupState(
+      initialState,
+      new Map([
+        ["Bob", {}],
+        ["Alice", {}],
+      ]),
+    );
+
+    expect([...updatedState.memberNames]).toEqual(["Bob", "Alice"]);
+  });
+
   it("rebuilds derived collections and items", function testDerivedState() {
     const initialCollection = new Map([[11802, 1]]);
     const initialState = updateGroupState(

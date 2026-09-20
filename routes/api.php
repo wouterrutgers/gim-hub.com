@@ -15,6 +15,7 @@ Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(func
     Route::post('/add-group-member', [GroupMemberController::class, 'addGroupMember']);
     Route::delete('/delete-group-member', [GroupMemberController::class, 'deleteGroupMember']);
     Route::put('/rename-group-member', [GroupMemberController::class, 'renameGroupMember']);
+    Route::put('/reorder-group-members', [GroupMemberController::class, 'reorderGroupMembers']);
     Route::post('/update-group-member', [GroupMemberController::class, 'updateGroupMember']);
     Route::put('/update-member-color', [GroupMemberController::class, 'updateMemberColor']);
     Route::get('/get-group-data', [GroupMemberController::class, 'getGroupData']);

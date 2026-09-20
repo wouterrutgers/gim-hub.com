@@ -7,13 +7,9 @@
   const groupStore = useGroupStore();
 
   const groupMembers = computed(function getGroupMembers() {
-    return [...groupStore.memberNames]
-      .filter(function excludeSharedMember(member) {
-        return member !== "@SHARED";
-      })
-      .sort(function sortMembers(left, right) {
-        return left.localeCompare(right);
-      });
+    return [...groupStore.memberNames].filter(function excludeSharedMember(member) {
+      return member !== "@SHARED";
+    });
   });
 </script>
 

@@ -593,10 +593,12 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       lastOnlineAt,
     });
   }
-  results.push({
-    ...DEFAULT_MEMBER,
-    name: "@SHARED",
-    bank: sharedBank,
-  });
-  return results;
+  return [
+    ...roster.map(function getMember({ displayName }) {
+      return results.find(function matchesMember(member) {
+        return member.name === displayName;
+      });
+    }),
+    { ...DEFAULT_MEMBER, name: "@SHARED", bank: sharedBank },
+  ];
 }

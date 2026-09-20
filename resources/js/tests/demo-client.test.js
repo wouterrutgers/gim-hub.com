@@ -55,6 +55,22 @@ describe("demo client", function describeDemoClient() {
     ).toBe(true);
   });
 
+  it("keeps reordered members in subsequent demo group responses", async function testReorderedGroupResponse() {
+    const client = new DemoClient();
+    client.demoData = demoData;
+    vi.spyOn(client, "fetchGameData").mockResolvedValue({});
+
+    await client.reorderGroupMembers(["Gary", "Thurgo", "Cow31337Killer", "xXgamerXx"]);
+
+    expect((await client.fetchGroupData()).map(({ name }) => name)).toEqual([
+      "Gary",
+      "Thurgo",
+      "Cow31337Killer",
+      "xXgamerXx",
+      "@SHARED",
+    ]);
+  });
+
   it("retries initialization after a failure", async function testInitializationRetry() {
     const client = new DemoClient();
     vi.spyOn(client, "initialize").mockRejectedValueOnce(new Error("Unavailable")).mockResolvedValueOnce({});

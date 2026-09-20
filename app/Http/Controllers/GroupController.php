@@ -51,11 +51,12 @@ class GroupController extends Controller
                 'name' => Member::SHARED_MEMBER,
             ]);
 
-            foreach ($memberNames as $memberName) {
+            foreach ($memberNames as $index => $memberName) {
                 Member::create([
                     'group_id' => $group->id,
                     'name' => $memberName,
                     'color_hue_degrees' => $memberColorHues[$memberName],
+                    'sort_order' => $index + 1,
                 ]);
             }
         });

@@ -11,8 +11,9 @@ function setsAreEqual(left, right) {
     return false;
   }
 
+  const rightValues = right.values();
   for (const value of left) {
-    if (!right.has(value)) {
+    if (rightValues.next().value !== value) {
       return false;
     }
   }
@@ -37,11 +38,7 @@ function mapsAreEqual(left, right) {
 function getUpdatedMemberNames(oldState, update, partial) {
   const names = partial ? [...oldState.memberNames, ...update.keys()] : [...update.keys()];
 
-  return new Set(
-    names.sort(function sortMemberNames(left, right) {
-      return left.localeCompare(right);
-    }),
-  );
+  return new Set(names);
 }
 
 function createMemberColors(oldState, memberNames, colorUpdates, partial) {
@@ -350,6 +347,10 @@ export function updateGroupMemberColors(state, updates) {
   }
 
   return { ...state, memberColors };
+}
+
+export function updateGroupMemberOrder(state, memberNames) {
+  return { ...state, memberNames: new Set(["@SHARED", ...memberNames]) };
 }
 
 export function mapGroupResponse(response, quests) {

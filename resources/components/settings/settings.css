@@ -40,6 +40,23 @@
   position: relative;
 }
 
+.group-settings-member-row {
+  display: flex;
+  align-items: start;
+  gap: 0.5rem;
+}
+
+.group-settings-member-row .group-settings-member-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.group-settings-member-order {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .group-settings-member-color-option img {
   width: 12px;
   height: 15px;

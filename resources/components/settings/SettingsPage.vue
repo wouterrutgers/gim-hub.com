@@ -25,6 +25,8 @@
   const addMemberInput = ref();
   const addMemberErrors = ref();
   const pendingAddMember = ref(false);
+  const pendingReorder = ref(false);
+  const reorderError = ref();
 
   const members = computed(function getMembers() {
     return [...groupStore.memberNames].filter(function excludeSharedMember(member) {
@@ -63,6 +65,29 @@
       pendingAddMember.value = false;
     }
   }
+
+  async function moveMember(index, direction) {
+    if (pendingReorder.value || !apiStore.client) {
+      return;
+    }
+
+    const memberNames = [...members.value];
+    [memberNames[index], memberNames[index + direction]] = [memberNames[index + direction], memberNames[index]];
+    pendingReorder.value = true;
+
+    try {
+      const response = await apiStore.client.reorderGroupMembers(memberNames);
+      reorderError.value = response.status === "error" ? response.text : undefined;
+      if (response.status === "ok") {
+        groupStore.updateMemberOrder(memberNames);
+      }
+    } catch (reason) {
+      console.error("Reorder Members Failed:", reason);
+      reorderError.value = "Failed to reorder members.";
+    } finally {
+      pendingReorder.value = false;
+    }
+  }
 </script>
 
 <template>
@@ -70,7 +95,28 @@
     <div class="group-settings-container rsborder rsbackground">
       <h2>Member settings</h2>
       <div>These <span class="emphasize">do</span> need to match the in-game names.</div>
-      <EditMemberInput v-for="member in members" :key="`edit-member-${member}`" :member="member" />
+      <div v-for="(member, index) in members" :key="`edit-member-${member}`" class="group-settings-member-row">
+        <EditMemberInput :member="member" />
+        <div class="group-settings-member-order" role="group" :aria-label="`Order ${member}`">
+          <button
+            class="men-button small"
+            :disabled="index === 0 || pendingReorder"
+            :aria-label="`Move ${member} up`"
+            @click="moveMember(index, -1)"
+          >
+            ▲
+          </button>
+          <button
+            class="men-button small"
+            :disabled="index === members.length - 1 || pendingReorder"
+            :aria-label="`Move ${member} down`"
+            @click="moveMember(index, 1)"
+          >
+            ▼
+          </button>
+        </div>
+      </div>
+      <div v-if="reorderError" role="alert" class="validation-error">{{ reorderError }}</div>
 
       <div v-if="members.length < MEMBER_COUNT_MAX" class="group-settings-member-section rsborder-tiny">
         <div class="group-settings-member-name">

@@ -2,7 +2,13 @@ import { computed, ref, shallowRef, watch } from "vue";
 import { defineStore } from "pinia";
 import { useApiStore } from "./api";
 import { useGameDataStore } from "./game-data";
-import { createGroupState, mapGroupResponse, updateGroupMemberColors, updateGroupState } from "./group-state";
+import {
+  createGroupState,
+  mapGroupResponse,
+  updateGroupMemberColors,
+  updateGroupMemberOrder,
+  updateGroupState,
+} from "./group-state";
 
 const FETCH_INTERVAL_MILLISECONDS = 1000;
 
@@ -33,6 +39,10 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
 
   function updateMemberColors(updates) {
     state.value = updateGroupMemberColors(state.value, updates);
+  }
+
+  function updateMemberOrder(memberNames) {
+    state.value = updateGroupMemberOrder(state.value, memberNames);
   }
 
   async function refreshCollectionLogs(client = apiStore.client) {
@@ -124,6 +134,7 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
     experienceDrops,
     collectionLogsLoaded,
     updateMemberColors,
+    updateMemberOrder,
     refreshCollectionLogs,
   };
 });

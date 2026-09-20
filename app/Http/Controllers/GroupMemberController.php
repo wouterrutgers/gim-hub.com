@@ -78,6 +78,7 @@ class GroupMemberController extends Controller
             'group_id' => $group->id,
             'name' => $name,
             'color_hue_degrees' => $colorHueDegrees,
+            'sort_order' => Member::where('group_id', '=', $group->id)->max('sort_order') + 1,
         ]);
 
         return response()->json(null, 201);
@@ -185,6 +186,34 @@ class GroupMemberController extends Controller
         });
     }
 
+    public function reorderGroupMembers(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'member_names' => ['required', 'array'],
+            'member_names.*' => ['required', 'string', 'distinct'],
+        ]);
+
+        $groupId = $request->attributes->get('group')->id;
+
+        return DB::transaction(function () use ($groupId, $validated): JsonResponse {
+            $members = Member::where('group_id', '=', $groupId)
+                ->where('name', '!=', Member::SHARED_MEMBER)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('name');
+
+            if ($members->keys()->sort()->values()->all() !== collect($validated['member_names'])->sort()->values()->all()) {
+                return response()->json(['error' => 'Member list does not match the group'], 400);
+            }
+
+            foreach ($validated['member_names'] as $index => $name) {
+                $members[$name]->update(['sort_order' => $index + 1]);
+            }
+
+            return response()->json(null);
+        });
+    }
+
     public function getGroupData(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -196,6 +225,8 @@ class GroupMemberController extends Controller
 
         $members = Member::where('group_id', '=', $groupId)
             ->with('properties')
+            ->orderBy('sort_order')
+            ->orderBy('name')
             ->get();
 
         return response()->json($members->map(function (Member $member) use ($fromTime): array {

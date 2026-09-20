@@ -51,6 +51,16 @@ export async function renameGroupMember({ baseURL, credentials, oldName, newName
   return parseMutationResponse(response, "renameGroupMember");
 }
 
+export async function reorderGroupMembers({ baseURL, credentials, memberNames }) {
+  const response = await request(`${baseURL}/group/${credentials.name}/reorder-group-members`, {
+    body: JSON.stringify({ member_names: memberNames }),
+    headers: { "Content-Type": "application/json", Authorization: credentials.token },
+    method: "PUT",
+  });
+
+  return parseMutationResponse(response, "reorderGroupMembers");
+}
+
 export async function updateMemberColor({ baseURL, credentials, memberName, colorHueDegrees }) {
   const response = await request(`${baseURL}/group/${credentials.name}/update-member-color`, {
     body: JSON.stringify({ name: memberName, color_hue_degrees: colorHueDegrees }),

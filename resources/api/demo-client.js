@@ -6,7 +6,6 @@ import { EXPERIENCE_99, createInitialState } from "./demo/fixtures";
 import { mockGroupDataResponse } from "./demo/group-simulation";
 import { getDemoSkillHistory, populateSkillDataFromRoster } from "./demo/skill-history";
 import {
-  createBossKillCountSnapshot,
   createCollectionSnapshot,
   createDiarySnapshot,
   createQuestSnapshot,
@@ -27,7 +26,7 @@ export default class DemoClient {
   gameDataPromise;
 
   constructor() {
-    this.populateSkillDataFromRoster();
+    populateSkillDataFromRoster(this.state);
   }
 
   async fetchGameData() {
@@ -115,7 +114,7 @@ export default class DemoClient {
       diaryRegion.Elite = diaryRegion.Elite.map(() => Math.random() < 0.3);
     }
     this.state.sharedBank = sharedBank;
-    this.populateSnapshotHistory();
+    populateSnapshotHistory(this.state, this.gameData);
 
     return gameData;
   }
@@ -126,33 +125,6 @@ export default class DemoClient {
     return mockGroupDataResponse(this.state, this.startMS, this.demoData);
   }
 
-  populateSnapshotHistory() {
-    populateSnapshotHistory(this.state, this.gameData);
-  }
-
-  skillsSnapshot(skillExperience, reductions) {
-    return createSkillsSnapshot(skillExperience, reductions);
-  }
-
-  questSnapshot(statuses, unfinishedQuestCount = 0) {
-    return createQuestSnapshot(statuses, this.gameData.quests, unfinishedQuestCount);
-  }
-
-  diarySnapshot(diaries, removals) {
-    return createDiarySnapshot(diaries, removals);
-  }
-
-  collectionSnapshot(collection, reductions) {
-    return createCollectionSnapshot(collection, reductions);
-  }
-
-  bossKcSnapshot(hiscores, reductions) {
-    return createBossKillCountSnapshot(hiscores, reductions);
-  }
-
-  populateSkillDataFromRoster() {
-    populateSkillDataFromRoster(this.state);
-  }
   async fetchSkillData(range) {
     return getDemoSkillHistory(this.state, range);
   }
@@ -177,10 +149,18 @@ export default class DemoClient {
       displayName: member,
       colorHueDegrees,
     });
-    this.populateSkillDataFromRoster();
+    populateSkillDataFromRoster(this.state);
     return {
       status: "ok",
     };
+  }
+
+  async reorderGroupMembers(memberNames) {
+    this.state.roster.sort(function sortMembers(left, right) {
+      return memberNames.indexOf(left.displayName) - memberNames.indexOf(right.displayName);
+    });
+
+    return { status: "ok" };
   }
 
   async renameGroupMember({ oldName, newName }) {
@@ -199,7 +179,7 @@ export default class DemoClient {
       };
     }
     oldMember.displayName = newName;
-    this.populateSkillDataFromRoster();
+    populateSkillDataFromRoster(this.state);
     return {
       status: "ok",
     };
@@ -216,7 +196,7 @@ export default class DemoClient {
     }
 
     this.state.roster = [...this.state.roster.slice(0, memberInRoster), ...this.state.roster.slice(memberInRoster + 1)];
-    this.populateSkillDataFromRoster();
+    populateSkillDataFromRoster(this.state);
 
     return {
       status: "ok",
@@ -262,10 +242,10 @@ export default class DemoClient {
     }
     const snapshot = {
       timestamp: Date.now(),
-      skills: this.skillsSnapshot(currentMember.skills, {}),
-      quests: this.questSnapshot(currentMember.quests),
-      diaries: this.diarySnapshot(currentMember.diaries, []),
-      collection: this.collectionSnapshot(this.state.collections.get(member), {}),
+      skills: createSkillsSnapshot(currentMember.skills, {}),
+      quests: createQuestSnapshot(currentMember.quests, this.gameData.quests),
+      diaries: createDiarySnapshot(currentMember.diaries, []),
+      collection: createCollectionSnapshot(this.state.collections.get(member), {}),
       bossKc: Object.fromEntries(this.state.hiscores.get(member) ?? []),
     };
     const snapshots = this.state.snapshots.get(member) ?? [];

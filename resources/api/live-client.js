@@ -2,7 +2,13 @@ import { fetchGameData } from "./game-data";
 import { fetchGroupCollectionLogs } from "./requests/collection-log";
 import { fetchGroupData } from "./requests/group-data";
 import { fetchMemberHiscores } from "./requests/hiscores";
-import { addGroupMember, deleteGroupMember, renameGroupMember, updateMemberColor } from "./requests/group-members";
+import {
+  addGroupMember,
+  deleteGroupMember,
+  renameGroupMember,
+  reorderGroupMembers,
+  updateMemberColor,
+} from "./requests/group-members";
 import { createMemberSnapshot, fetchMemberSnapshots } from "./requests/player-snapshot";
 import { fetchSkillData } from "./requests/skill-data";
 
@@ -31,6 +37,10 @@ export default class LiveClient {
 
   renameGroupMember({ oldName, newName }) {
     return renameGroupMember({ baseURL: this.baseURL, credentials: this.credentials, oldName, newName });
+  }
+
+  reorderGroupMembers(memberNames) {
+    return reorderGroupMembers({ baseURL: this.baseURL, credentials: this.credentials, memberNames });
   }
 
   deleteGroupMember(member) {

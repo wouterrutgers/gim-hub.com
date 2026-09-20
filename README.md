@@ -1,75 +1,35 @@
-# 🏆 GIM Hub
+# GIM Hub
 
-<div align="center">
-  <img alt="GIM Hub Logo" src="resources/assets/images/logo-full.webp" width="400"/>
+GIM Hub is a live dashboard for Old School RuneScape Group Ironman teams. The RuneLite plugin sends member activity and progress to the website, where the group can view it together.
 
-**A real-time dashboard for Old School RuneScape Group Ironman teams**
+[Website](https://gim-hub.com) · [Discord](https://discord.gg/ZwzW6yYD8V)
 
-Track your team's progress and view member locations with live data streaming from RuneLite.
+## Features
 
-**🌐 [Visit GIM Hub](https://gim-hub.com)**
+- **Live group overview:** See who is online, their worlds, current activities and interactions, health, prayer, and run energy.
+- **World map:** Follow member locations on an interactive map.
+- **Items:** Browse and search items across group members, with quantities by member and storage location, plus Grand Exchange and high alchemy values.
+- **Storage:** View bank, shared bank, inventory, equipment, quiver, rune pouch, seed vault, potion storage, POH costume room, STASH units, and items held by the tool leprechaun and Elnock Inquisitor.
+- **Portable containers:** Track plank sacks, master scroll books, essence pouches, tackle boxes, coal bags, fish barrels, herb sacks, looting bags, seed boxes, gem bags, and chugging barrels.
+- **Skills:** Compare levels and experience, review experience history, and see live XP drops.
+- **Progress:** Follow quests, achievement diaries, and up to date collection logs.
 
-**💬 [Join our Discord](https://discord.gg/ZwzW6yYD8V)**
-</div>
+## Getting started
 
-## ✨ Features
+1. Install **GIM Hub** from the RuneLite Plugin Hub.
+2. Create a group on the [GIM Hub website](https://gim-hub.com) and copy its group token.
+3. Enter the group name and token in the plugin settings in RuneLite.
+4. Share the token with your teammates so they can join the same group.
 
-### 📊 **Live team overview**
+The plugin updates the dashboard as members play. Storage contents are recorded when the plugin can observe them in game.
 
-- Real-time online status and world tracking
-- Current player interactions and activities
-- Live health, prayer, and run energy bars
-- Team member locations on interactive world map
+![GIM Hub plugin settings in RuneLite](resources/assets/images/plugin-screenshot.png)
 
-### 🎒 **Inventory & equipment tracking**
+## Self-hosting
 
-- Complete inventory and equipment views
-- Rune pouch, herb sack, looting bag, seed box, gem bag and chugging barrel contents
-- STASH contents
-- High alchemy and Grand Exchange values
+See the [self-hosting guide](self-host.md) to run your own instance.
 
-### 📈 **Skills & progress**
+## Links
 
-- Individual skill levels and experience tracking
-- Total level and experience summaries
-- Live XP drops feed for current gains
-- Progress comparison between team members
-
-### 🗺️ **Quest & achievement progress**
-
-- Quest completion tracking
-- Achievement diary progress monitoring
-- Collection log browser with item counts
-
-## 🚀 Getting started
-
-### Prerequisites
-
-- Old School RuneScape GIM account
-- RuneLite client installed
-- Group Ironman team setup
-
-### Setup instructions
-
-1. **Install the RuneLite plugin**
-   - Open RuneLite
-   - Go to the plugin hub
-   - Search for "GIM hub" and install
-
-2. **Configure your team**
-   - Create your group on the GIM Hub website
-   - Copy your unique group token
-   - In RuneLite, open the "GIM hub" plugin settings
-   - Enter your group name and group token
-
-3. **Start tracking**
-   - The plugin automatically streams your data
-   - View your team's progress on the GIM hub dashboard
-   - Invite teammates using your group token
-
-<img alt="RuneLite Plugin Configuration" src="resources/assets/images/plugin-screenshot.png" width="300"/>
-<em>Plugin configuration in RuneLite</em>
-
-## 🏠 Self-hosting
-
-Prefer to run your own instance? See the self-hosting guide: [self-host.md](self-host.md).
+- [GIM Hub repository](https://github.com/wouterrutgers/gim-hub.com)
+- [GIM Hub RuneLite plugin repository](https://github.com/wouterrutgers/gim-hub-plugin)

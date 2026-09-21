@@ -12,6 +12,33 @@ function unit(id, name, state, items, alternatives = []) {
 }
 
 describe("storage integration", function describeStorage() {
+  it("updates item totals when POH storage contents change", function houseQuantities() {
+    const state = update(createGroupState(), [
+      {
+        name: "Alice",
+        bank: [995, 100, 7484, 1],
+        poh_spice_rack: [7484, 2, 7485, 1],
+        poh_pet_house: [1555, 1, 12650, 1],
+        poh_servants_moneybag: [995, 1234567],
+      },
+    ]);
+    expect(state.items.get(7484).get("Alice")).toEqual({ Bank: 1, "Spice rack": 2 });
+    expect(state.items.get(7485).get("Alice")).toEqual({ "Spice rack": 1 });
+    expect(state.items.get(1555).get("Alice")).toEqual({ "Pet house": 1 });
+    expect(state.items.get(12650).get("Alice")).toEqual({ "Pet house": 1 });
+    expect(state.items.get(995).get("Alice")).toEqual({ Bank: 100, "Servant’s moneybag": 1234567 });
+
+    const unchanged = update(state, [{ name: "Alice", poh_spice_rack: null }]);
+    expect(unchanged.items.get(7485).get("Alice")).toEqual({ "Spice rack": 1 });
+    const emptied = update(unchanged, [
+      { name: "Alice", poh_spice_rack: [], poh_pet_house: [], poh_servants_moneybag: [] },
+    ]);
+    expect(emptied.items.get(7484).get("Alice")).toEqual({ Bank: 1 });
+    expect(emptied.items.get(995).get("Alice")).toEqual({ Bank: 100 });
+    expect(emptied.items.has(1555)).toBe(false);
+    expect(emptied.items.has(7485)).toBe(false);
+  });
+
   it("includes every portable container in quantities and preserves missing fields", function portableQuantities() {
     const state = update(createGroupState(), [
       {

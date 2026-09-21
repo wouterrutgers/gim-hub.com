@@ -17,6 +17,7 @@ class Member extends Model
     public const PROPERTY_KEYS = [
         'stats', 'coordinates', 'skills', 'quests', 'inventory', 'equipment',
         'bank', 'rune_pouch', 'seed_vault', 'potion_storage', 'poh_costume_room',
+        'poh_spice_rack', 'poh_pet_house', 'poh_servants_moneybag',
         'plank_sack', 'master_scroll_book', 'essence_pouches', 'tackle_box',
         'tool_leprechaun', 'elnock_inquisitor',
         'coal_bag', 'fish_barrel', 'herb_sack', 'looting_bag', 'seed_box', 'gem_bag', 'chugging_barrel', 'stash_units',

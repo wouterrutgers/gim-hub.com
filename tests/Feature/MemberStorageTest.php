@@ -15,7 +15,7 @@ function stashUnit(int $identifier, string $state = 'filled', array $items = [10
     return ['id' => $identifier, 'name' => 'Lumbridge Swamp', 'tier' => 'Easy', 'state' => $state, 'items' => $items, 'alternatives' => []];
 }
 
-it('stores and retrieves portable contents, preserves omitted data and clears confirmed empty containers', function (string $key, array $items): void {
+it('stores and retrieves storage contents, preserves omitted data and clears confirmed empty containers', function (string $key, array $items): void {
     $member = storageMember();
     $this->withHeader('Authorization', 'storage-token')->postJson('/api/group/storage-group/update-group-member', ['name' => 'Alice', $key => $items])->assertSuccessful();
     $this->postJson('/api/group/storage-group/update-group-member', ['name' => 'Alice'])->assertSuccessful();
@@ -33,6 +33,9 @@ it('stores and retrieves portable contents, preserves omitted data and clears co
     'seed box' => ['seed_box', [5295, 40]],
     'gem bag' => ['gem_bag', [1623, 20]],
     'chugging barrel' => ['chugging_barrel', [2430, 15]],
+    'spice rack' => ['poh_spice_rack', [7480, 2, 7481, 1, 7484, 2, 7485, 1, 7488, 2, 7489, 1, 7492, 2, 7493, 1]],
+    'pet house' => ['poh_pet_house', [1555, 1, 12650, 1]],
+    'servants moneybag' => ['poh_servants_moneybag', [995, 1234567]],
 ]);
 
 it('reconciles individual STASH records without erasing unobserved units or duplicating repeated snapshots', function (): void {

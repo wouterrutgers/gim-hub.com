@@ -61,6 +61,9 @@ export const itemContainers = [
     key: "pohCostumeRoom",
     getItems: mapToItems,
   },
+  { name: "Spice rack", key: "pohSpiceRack", getItems: mapToItems },
+  { name: "Pet house", key: "pohPetHouse", getItems: mapToItems },
+  { name: "Servant’s moneybag", key: "pohServantsMoneybag", getItems: mapToItems },
   {
     name: "Plank Sack",
     key: "plankSack",

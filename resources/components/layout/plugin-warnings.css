@@ -1,6 +1,5 @@
 .plugin-warnings {
   flex-shrink: 0;
-  margin: 0 8px;
   padding: 14px 16px;
   border: 1px solid color-mix(in srgb, var(--orange) 45%, transparent);
   border-left: 3px solid var(--orange);
@@ -75,7 +74,6 @@
 
 @media only screen and (width <= 600px) {
   .plugin-warnings {
-    margin-inline: 0;
     padding: 12px;
   }
 

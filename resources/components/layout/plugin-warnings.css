@@ -29,6 +29,11 @@
   line-height: 1.3;
 }
 
+.plugin-warnings-close {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
 .plugin-warnings ul {
   max-height: 40vh;
   margin: 0;

@@ -5,7 +5,55 @@ import { expect, it, vi } from "vite-plus/test";
 import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import PluginWarnings from "../../components/layout/PluginWarnings.vue";
 import { useApiStore } from "../../stores/api";
+import { useImageStore } from "../../stores/images";
 import { parseGroupData } from "../../api/requests/group-data";
+
+it("keeps a dismissed warning closed after remounting until the latest plugin version changes", async function testWarningDismissal() {
+  vi.useFakeTimers();
+  let latestVersion = "1.9.1";
+  const pinia = createTestPinia();
+  vi.spyOn(useImageStore(pinia), "getImageUrl").mockResolvedValue("");
+  useApiStore(pinia).client = {
+    async fetchGameData() {
+      return { quests: new Map() };
+    },
+    async fetchGroupCollectionLogs() {
+      return new Map();
+    },
+    async fetchGroupData() {
+      return parseGroupData([
+        {
+          name: "Alice",
+          plugin_status: { reason: "update_available", installed_version: "1.9.0", latest_version: latestVersion },
+        },
+      ]);
+    },
+  };
+  const container = document.createElement("div");
+  document.body.append(container);
+  let application = createTestApplication(PluginWarnings);
+  application.use(pinia);
+  application.mount(container);
+  await vi.advanceTimersByTimeAsync(0);
+  await nextTick();
+
+  container.querySelector('button[aria-label="Close plugin warning"]').click();
+  await nextTick();
+  expect(container.querySelector('[role="status"]')).toBeNull();
+
+  application.unmount();
+  application = createTestApplication(PluginWarnings);
+  application.use(pinia);
+  application.mount(container);
+  await vi.advanceTimersByTimeAsync(1000);
+  await nextTick();
+  expect(container.querySelector('[role="status"]')).toBeNull();
+
+  latestVersion = "1.9.2";
+  await vi.advanceTimersByTimeAsync(1000);
+  await nextTick();
+  expect(container.querySelector('[role="status"]').textContent).toContain("1.9.2");
+});
 
 it("updates member warnings through polling and clears them on recovery or group switch", async function testPluginWarnings() {
   vi.useFakeTimers();
@@ -31,6 +79,7 @@ it("updates member warnings through polling and clears them on recovery or group
     },
   };
   const pinia = createTestPinia();
+  vi.spyOn(useImageStore(pinia), "getImageUrl").mockResolvedValue("");
   const apiStore = useApiStore(pinia);
   apiStore.client = client;
   const container = document.createElement("div");

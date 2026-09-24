@@ -25,7 +25,7 @@ jobs:
           repository: runelite/runelite
           path: cache/runelite
 
-      - uses: pnpm/setup@v2
+      - uses: pnpm/setup@v3
         with:
           runtime: node@22
           cache: true

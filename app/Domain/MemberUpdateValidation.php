@@ -103,11 +103,12 @@ class MemberUpdateValidation
         if (is_array($input['collection_log_updates'] ?? null)) {
             foreach ($input['collection_log_updates'] as $updateIndex => $update) {
                 $attribute = "collection_log_updates.{$updateIndex}";
-                $rules[$attribute] = ['required', ['array', 'type', 'items']];
+                $rules[$attribute] = ['required', ['array', 'type', 'items', 'total_obtained']];
                 $rules["{$attribute}.type"] = ['required', ['in', 'drop', 'unlock', 'scan']];
+                $rules["{$attribute}.total_obtained"] = ['sometimes', 'required', 'integer', ['min', 0], ['max', 2147483647], ['prohibited_unless', "{$attribute}.type", 'scan']];
                 $minimum = ($update['type'] ?? null) === 'scan' ? 0 : 1;
                 $rules["{$attribute}.items"] = [
-                    'bail', 'required', 'array', 'list', ['min', 1],
+                    'bail', 'present', 'array', 'list', ['min', isset($update['total_obtained']) ? 0 : 1],
                     function (string $attribute, array $items, Closure $fail) use ($minimum): void {
                         foreach ($items as $index => $item) {
                             if (! is_array($item)) {

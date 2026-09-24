@@ -155,6 +155,8 @@ it('returns 422 for malformed collection batches without writing other posted pr
     'non-array updates' => ['invalid', 'collection_log_updates'],
     'non-array update' => [['invalid'], 'collection_log_updates.0'],
     'unknown update type' => [[['type' => 'invalid', 'items' => [['item_id' => 6739, 'quantity' => 1]]]], 'collection_log_updates.0.type'],
+    'complete drop' => [[['type' => 'drop', 'items' => [['item_id' => 6739, 'quantity' => 1]], 'total_obtained' => 1]], 'collection_log_updates.0.total_obtained'],
+    'negative obtained total' => [[['type' => 'scan', 'items' => [], 'total_obtained' => -1]], 'collection_log_updates.0.total_obtained'],
     'missing items' => [[['type' => 'scan']], 'collection_log_updates.0.items'],
     'non-array items' => [[['type' => 'scan', 'items' => 1]], 'collection_log_updates.0.items'],
     'empty items' => [[['type' => 'scan', 'items' => []]], 'collection_log_updates.0.items'],
@@ -179,6 +181,63 @@ it('preserves unreported collection items and unchanged count timestamps', funct
 
     expect($member->collectionLogs()->pluck('item_count', 'item_id')->all())->toEqual([6739 => 3, 4151 => 2]);
     expect($log->fresh()->updated_at)->toEqual($log->updated_at);
+});
+
+it('replaces a complete collection scan while preserving member identity and later drops', function (): void {
+    $this->freezeTime();
+    $member = collectionMember();
+    $other = Member::create(['group_id' => $member->group_id, 'name' => 'Bob']);
+    $other->collectionLogs()->create(['item_id' => 4151, 'item_count' => 5]);
+    $member->collectionLogs()->create(['item_id' => 4151, 'item_count' => 5]);
+    $member->collectionLogs()->create(['item_id' => 4153, 'item_count' => 1]);
+    $member->collectionLogs()->create(['item_id' => 25629, 'item_count' => 10]);
+    $unchanged = $member->collectionLogs()->create(['item_id' => 6739, 'item_count' => 3]);
+    $this->travel(10)->seconds();
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name,
+        'collection_log_updates' => [
+            collectionUpdate('drop', [4151 => 1]),
+            [...collectionUpdate('scan', [6739 => 3, 25629 => 1, 24882 => 1]), 'total_obtained' => 2],
+            collectionUpdate('drop', [4151 => 1]),
+        ],
+    ])->assertSuccessful();
+
+    $this->getJson('/api/group/collection-group/collection-log')->assertExactJson([
+        'Alice' => [6739 => 3, 24882 => 1, 4151 => 1, 4153 => 0],
+        'Bob' => [4151 => 5],
+    ]);
+    expect($unchanged->fresh()->updated_at)->toEqual($unchanged->updated_at);
+});
+
+it('rejects incomplete collection replacements without applying other updates', function (): void {
+    $member = collectionMember();
+    $member->collectionLogs()->create(['item_id' => 4151, 'item_count' => 5]);
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name,
+        'bank' => [995, 100],
+        'collection_log_updates' => [
+            collectionUpdate('drop', [4151 => 1]),
+            [...collectionUpdate('scan', [25629 => 1, 24882 => 1]), 'total_obtained' => 2],
+        ],
+    ])->assertUnprocessable()->assertJsonValidationErrors('collection_log_updates.1.total_obtained');
+
+    $this->getJson('/api/group/collection-group/collection-log')->assertExactJson(['Alice' => [4151 => 5]]);
+    expect($member->properties()->count())->toBe(0);
+    expect($member->fresh()->last_online_at)->toBeNull();
+});
+
+it('clears stale items when a complete scan confirms no obtained items', function (): void {
+    $member = collectionMember();
+    $member->collectionLogs()->create(['item_id' => 4151, 'item_count' => 5]);
+
+    $this->withHeader('Authorization', 'collection-token')->postJson('/api/group/collection-group/update-group-member', [
+        'name' => $member->name,
+        'collection_log_updates' => [[...collectionUpdate('scan', []), 'total_obtained' => 0]],
+    ])->assertSuccessful();
+
+    $this->getJson('/api/group/collection-group/collection-log')->assertExactJson(['Alice' => [4151 => 0]]);
 });
 
 it('does not share collection counts between members processed by the same worker', function (): void {

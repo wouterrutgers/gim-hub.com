@@ -29,6 +29,11 @@
   const collection = computed(function getCollection() {
     return groupStore.collections.get(props.player);
   });
+  const totalCollected = computed(function getTotalCollected() {
+    return [...(collection.value?.values() ?? [])].filter(function isObtained(quantity) {
+      return quantity > 0;
+    }).length;
+  });
   const totalGroupCollected = computed(function getTotalGroupCollected() {
     const unlockedItems = new Set();
 
@@ -204,7 +209,7 @@
   <div class="collection-log-container dialog-container metal-border rsbackground">
     <div class="collection-log-header">
       <h1 class="collection-log-title">
-        {{ `${props.player}'s collection log` }} - {{ collection?.size ?? 0 }} /
+        {{ `${props.player}'s collection log` }} - {{ totalCollected }} /
         {{ gameDataStore.gameData.collectionLogInfo?.uniqueSlots ?? 0 }} (Group: {{ totalGroupCollected }} /
         {{ gameDataStore.gameData.collectionLogInfo?.uniqueSlots ?? 0 }})
       </h1>

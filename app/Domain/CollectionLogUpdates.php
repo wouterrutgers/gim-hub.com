@@ -3,6 +3,8 @@
 namespace App\Domain;
 
 use App\Models\Member;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\ValidationException;
 
 class CollectionLogUpdates
 {
@@ -15,8 +17,9 @@ class CollectionLogUpdates
         $aliases = static::aliases();
         $normalized = [];
         $identifiers = [];
+        $hasCompleteScan = false;
 
-        foreach ($updates as $update) {
+        foreach ($updates as $index => $update) {
             $quantities = [];
 
             foreach ($update['items'] as $item) {
@@ -32,10 +35,19 @@ class CollectionLogUpdates
                 $identifiers[$identifier] = true;
             }
 
-            $normalized[] = ['type' => $update['type'], 'quantities' => $quantities];
+            $complete = isset($update['total_obtained']);
+
+            if ($complete && count(array_filter($quantities, fn (int $quantity): bool => $quantity > 0)) !== filter_var($update['total_obtained'], FILTER_VALIDATE_INT)) {
+                throw ValidationException::withMessages([
+                    "collection_log_updates.{$index}.total_obtained" => 'The complete collection scan must match the obtained total from the game.',
+                ]);
+            }
+
+            $hasCompleteScan = $hasCompleteScan || $complete;
+            $normalized[] = ['type' => $update['type'], 'quantities' => $quantities, 'complete' => $complete];
         }
 
-        if ($identifiers === []) {
+        if ($identifiers === [] && ! $hasCompleteScan) {
             return;
         }
 
@@ -44,7 +56,9 @@ class CollectionLogUpdates
                 |> (fn ($x) => array_intersect($aliases, $x))
                 |> array_keys(...);
         $stored = $member->collectionLogs()
-            ->whereIn('item_id', [...array_keys($identifiers), ...$aliasIdentifiers])
+            ->when(! $hasCompleteScan, function (Builder $query) use ($identifiers, $aliasIdentifiers): void {
+                $query->whereIn('item_id', [...array_keys($identifiers), ...$aliasIdentifiers]);
+            })
             ->pluck('item_count', 'item_id')->all();
         $counts = [];
 
@@ -54,6 +68,10 @@ class CollectionLogUpdates
         }
 
         foreach ($normalized as $update) {
+            if ($update['complete']) {
+                $counts = array_fill_keys(array_keys($counts), 0);
+            }
+
             foreach ($update['quantities'] as $identifier => $quantity) {
                 $counts[$identifier] = match ($update['type']) {
                     'drop' => ($counts[$identifier] ?? 0) + $quantity,
@@ -63,7 +81,7 @@ class CollectionLogUpdates
             }
         }
 
-        $obsolete = array_intersect($aliasIdentifiers, array_keys($stored));
+        $obsolete = array_diff(array_keys($stored), array_keys($counts));
 
         if ($obsolete !== []) {
             $member->collectionLogs()->whereIn('item_id', $obsolete)->delete();

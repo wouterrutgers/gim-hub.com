@@ -113498,5 +113498,21 @@
     "highalch": 180,
     "alchable": true,
     "mapping": null
+  },
+  "34604": {
+    "name": "Coins and platinum",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        1000,
+        34605
+      ],
+      [
+        25000,
+        34606
+      ]
+    ]
   }
 }

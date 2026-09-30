@@ -1,11 +1,25 @@
 <script setup>
-  import { computed } from "vue";
+  import { computed, onBeforeUnmount, onMounted, ref } from "vue";
   import { useLocalStorage } from "../../composables/local-storage";
   import { useGroupStore } from "../../stores/group";
   import CachedImage from "../cached-image/CachedImage.vue";
   import "./plugin-warnings.css";
 
+  const RECENT_ACTIVITY_MILLISECONDS = 30 * 60 * 1000;
+
   const groupStore = useGroupStore();
+  const currentTimeMilliseconds = ref(Date.now());
+  let currentTimeInterval;
+
+  onMounted(function startCurrentTimeInterval() {
+    currentTimeInterval = window.setInterval(function updateCurrentTime() {
+      currentTimeMilliseconds.value = Date.now();
+    }, 1000);
+  });
+  onBeforeUnmount(function clearCurrentTimeInterval() {
+    window.clearInterval(currentTimeInterval);
+  });
+
   const [dismissedVersions, setDismissedVersions] = useLocalStorage({
     key: "dismissed-plugin-warning-versions",
     defaultValue: "",
@@ -16,7 +30,10 @@
   const warnings = computed(function getPluginWarnings() {
     return [...groupStore.memberStates]
       .filter(function hasWarning([, member]) {
-        return member.pluginStatus;
+        return (
+          member.pluginStatus &&
+          member.lastOnlineAt?.getTime() > currentTimeMilliseconds.value - RECENT_ACTIVITY_MILLISECONDS
+        );
       })
       .map(function memberWarning([name, member]) {
         return { name, ...member.pluginStatus };

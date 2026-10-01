@@ -1,8 +1,10 @@
 import * as z from "zod/v4";
 
-const grandExchangePricesSchema = z.record(z.string().regex(/^\d+$/), z.uint32()).transform(function mapPrices(prices) {
-  return new Map(Object.entries(prices).map(([itemId, price]) => [Number.parseInt(itemId), price]));
-});
+const grandExchangePricesSchema = z
+  .record(z.string().regex(/^\d+$/), z.int().nonnegative())
+  .transform(function mapPrices(prices) {
+    return new Map(Object.entries(prices).map(([itemId, price]) => [Number.parseInt(itemId), price]));
+  });
 
 export async function fetchGEPrices({ baseURL }) {
   const FOUR_HOURS_MS = 4 * 60 * 60 * 1000;

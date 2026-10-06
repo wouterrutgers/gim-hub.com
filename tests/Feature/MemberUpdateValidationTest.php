@@ -36,10 +36,11 @@ it('returns 422 for invalid storage arrays without applying other storage update
 
 it('reports inventory and portable storage validation errors together without updating the member', function (): void {
     Exceptions::fake();
+    cache()->forever('plugin.latest_version', '1.9.1');
     $member = validationMember();
     $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);
 
-    $this->withHeader('Authorization', 'validation-token')
+    $this->withHeaders(['Authorization' => 'validation-token', 'User-Agent' => 'GIM hub/1.9.1 RuneLite/1.12.38'])
         ->postJson('/api/group/validation-group/update-group-member', [
             'name' => 'Alice',
             'inventory' => array_fill(0, 55, 0),
@@ -52,6 +53,26 @@ it('reports inventory and portable storage validation errors together without up
     Exceptions::assertReported(ValidationException::class);
     expect($member->load('properties')->getProperty('bank')->value)->toBe([995, 100]);
 });
+
+it('does not report validation failures without the current GIM hub client', function (string $userAgent, ?string $latestVersion): void {
+    Exceptions::fake();
+    validationMember();
+    cache()->forever('plugin.latest_version', $latestVersion);
+
+    $this->withHeaders(['Authorization' => 'validation-token', 'User-Agent' => $userAgent])
+        ->postJson('/api/group/validation-group/update-group-member', [
+            'name' => 'Alice', 'stats' => [90, 99, 50, 70, 8750, 100, 301],
+        ])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('stats');
+
+    Exceptions::assertNotReported(ValidationException::class);
+})->with([
+    'other plugin at the same version' => ['GroupIronmenTracker/1.7.0', '1.7.0'],
+    'older GIM hub' => ['GIM hub/1.9.0 RuneLite/1.12.38', '1.9.1'],
+    'unversioned GIM hub' => ['GIM hub/RuneLite/1.12.38', '1.9.1'],
+    'unknown approved version' => ['GIM hub/1.9.1 RuneLite/1.12.38', null],
+]);
 
 it('does not report validation failures outside member uploads', function (): void {
     Exceptions::fake();

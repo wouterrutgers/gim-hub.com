@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -23,6 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->stopIgnoring(ValidationException::class);
         $exceptions->dontReportWhen(fn (Throwable $exception): bool => $exception instanceof ValidationException
             && ! request()->is('api/group/*/update-group-member'));
+        $exceptions->throttle(fn (ValidationException $exception): Limit => Limit::perDay(1)
+            ->by(serialize([request()->userAgent(), $exception->errors()])));
 
         Integration::handles($exceptions);
     })->create();

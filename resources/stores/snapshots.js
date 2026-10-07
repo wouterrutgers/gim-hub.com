@@ -3,6 +3,9 @@ import { defineStore } from "pinia";
 import { useApiStore } from "./api";
 import { useGroupStore } from "./group";
 
+const RETRY_INTERVAL_MILLISECONDS = 60_000;
+const RECENT_MEMBER_ACTIVITY_MILLISECONDS = 14 * 24 * 60 * 60 * 1000;
+
 function snapshotSeenStorageKey(groupName) {
   return `recent-activity-seen-${groupName}`;
 }
@@ -51,6 +54,20 @@ export const useSnapshotStore = defineStore("snapshots", function createSnapshot
 
   const groupName = computed(function getGroupName() {
     return apiStore.credentials?.name;
+  });
+  const snapshotMemberNames = computed(function getSnapshotMemberNames() {
+    return [...groupStore.memberStates]
+      .filter(function hasRecentSkills([name, member]) {
+        return (
+          name !== "@SHARED" &&
+          member.skills !== undefined &&
+          member.lastUpdated.getTime() >= Date.now() - RECENT_MEMBER_ACTIVITY_MILLISECONDS
+        );
+      })
+      .map(function getMemberName([name]) {
+        return name;
+      })
+      .sort();
   });
 
   function getBaselineSnapshot(playerName, view = "lastVisit") {
@@ -147,6 +164,9 @@ export const useSnapshotStore = defineStore("snapshots", function createSnapshot
       },
       groupName,
       seenSnapshotState,
+      function getSnapshotMembers() {
+        return snapshotMemberNames.value.join(",");
+      },
     ],
     function fetchSnapshots([client, currentGroupName, currentSeenSnapshotState], _previousValues, onCleanup) {
       if (!client || !currentGroupName || currentSeenSnapshotState.groupName !== currentGroupName) {
@@ -154,24 +174,40 @@ export const useSnapshotStore = defineStore("snapshots", function createSnapshot
       }
 
       let cancelled = false;
-      onCleanup(function cancelSnapshotRequest() {
-        cancelled = true;
-      });
+      let timeout;
 
-      client
-        .fetchMemberSnapshots(currentSeenSnapshotState.markers)
-        .then(function storeSnapshots(snapshots) {
+      async function pollSnapshots() {
+        let needsRetry = true;
+
+        try {
+          const snapshots = await client.fetchMemberSnapshots(currentSeenSnapshotState.markers);
+
           if (!cancelled) {
             serverSnapshots.value = snapshots;
           }
-        })
-        .catch(function reportSnapshotError(reason) {
+
+          needsRetry = snapshotMemberNames.value.some(function hasMissingSnapshot(name) {
+            return !snapshots.has(name);
+          });
+        } catch (reason) {
           console.error("Failed to fetch member snapshots", reason);
 
           if (!cancelled) {
             serverSnapshots.value ??= new Map();
           }
-        });
+        }
+
+        if (!cancelled && needsRetry) {
+          timeout = window.setTimeout(pollSnapshots, RETRY_INTERVAL_MILLISECONDS);
+        }
+      }
+
+      void pollSnapshots();
+
+      onCleanup(function cancelSnapshotRequest() {
+        cancelled = true;
+        window.clearTimeout(timeout);
+      });
     },
     { immediate: true },
   );

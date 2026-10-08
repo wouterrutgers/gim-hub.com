@@ -113514,5 +113514,125 @@
         34606
       ]
     ]
+  },
+  "34607": {
+    "name": "Imbued ancient cape (Deadman)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34609": {
+    "name": "Karil's leatherskirt",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34611": {
+    "name": "Bandos chestplate",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34613": {
+    "name": "Fighter torso",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34615": {
+    "name": "Black d'hide shield",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "34617": {
+    "name": "Torva full helm",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "34619": {
+    "name": "Abyssal tentacle",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "34621": {
+    "name": "Dragon boots",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "34623": {
+    "name": "Anglerfish",
+    "highalch": 1,
+    "alchable": true,
+    "mapping": null
+  },
+  "34625": {
+    "name": "Imbued ancient max cape",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34627": {
+    "name": "Imbued ancient max hood",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34629": {
+    "name": "Imbued ancient max cape (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34631": {
+    "name": "Net trap",
+    "highalch": 19,
+    "alchable": true,
+    "mapping": null
+  },
+  "34633": {
+    "name": "Imbued ancient cape",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34635": {
+    "name": "Imbued ancient cape (broken)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34637": {
+    "name": "Imbued ancient cape (l)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34639": {
+    "name": "Imbued ancient cape",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34641": {
+    "name": "Ancient fabric",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34643": {
+    "name": "Supply crate",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34644": {
+    "name": "Pete's vouchers",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
   }
 }

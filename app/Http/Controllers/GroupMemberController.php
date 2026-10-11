@@ -13,12 +13,12 @@ use App\Models\Member;
 use App\Models\SkillStat;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Throwable;
 
 class GroupMemberController extends Controller
 {
@@ -375,11 +375,11 @@ class GroupMemberController extends Controller
         return response()->json($snapshot->snapshot, 201);
     }
 
-    public function getHiscores(Request $request): JsonResponse
+    public function getHiscores(): JsonResponse
     {
-        $groupId = $request->attributes->get('group')->id;
+        $groupId = request()->attributes->get('group')->id;
 
-        $validated = $request->validate([
+        $validated = request()->validate([
             'name' => 'required|string',
         ]);
 
@@ -388,10 +388,11 @@ class GroupMemberController extends Controller
             ->first();
 
         try {
-            $response = Http::withUserAgent('GIM hub (https://gim-hub.com)')->get(
-                'https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name)
-            );
-        } catch (Throwable) {
+            $response = Http::timeout(10)
+                ->connectTimeout(5)
+                ->withUserAgent('GIM hub (https://gim-hub.com)')
+                ->get('https://secure.runescape.com/m=hiscore_oldschool/index_lite.json?player='.urlencode($member->name));
+        } catch (ConnectionException) {
             return response()->json([
                 'error' => 'Failed to fetch hiscores',
             ], 502);

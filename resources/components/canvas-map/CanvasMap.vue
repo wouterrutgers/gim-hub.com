@@ -27,6 +27,10 @@
     canvas.value.addEventListener("wheel", handleWheel, { passive: false });
     CanvasMapRenderer.load(imageStore.getImageUrl).then(
       function storeRenderer(mapRenderer) {
+        if (!canvas.value) {
+          mapRenderer.dispose();
+          return;
+        }
         mapStore.setRenderer(mapRenderer);
       },
       function reportRendererError(reason) {
@@ -39,6 +43,7 @@
     window.removeEventListener("resize", resizeCanvas);
     canvas.value?.removeEventListener("wheel", handleWheel);
     window.cancelAnimationFrame(animationFrameHandle);
+    mapStore.renderer?.dispose();
     mapStore.setRenderer(undefined);
   });
 

@@ -18,6 +18,7 @@ const REGION_X_MAX = 68;
 const REGION_Y_MIN = 19;
 const REGION_Y_MAX = 160;
 const OUTBOUND_IMAGE_FETCHES_CAP = 24;
+const REGION_CACHE_CAPACITY = 256;
 function* makeInsideOutIterator1D(minInclusive, maxExclusive) {
   if (!Number.isInteger(minInclusive) || !Number.isInteger(maxExclusive) || minInclusive > maxExclusive) {
     throw new Error("min and max must be a well defined interval of integers.");
@@ -155,6 +156,7 @@ export class CanvasMapRenderer {
   iconsByRegion;
   labelsByRegion;
   selectedLocation;
+  disposed = false;
   playerPositions = new Map();
   getImageUrl;
   interactive = false;
@@ -283,6 +285,20 @@ export class CanvasMapRenderer {
     renderer.processMapData(mapData);
     renderer.iconsAtlas = iconAtlas_1;
     return renderer;
+  }
+  dispose() {
+    this.disposed = true;
+    for (const region of this.regions.values()) {
+      region.image?.close();
+    }
+    this.regions.clear();
+    this.iconsAtlas?.close();
+    for (const labels of this.labelsByRegion.values()) {
+      for (const label of labels) {
+        label.imageFetch?.asset?.close();
+      }
+    }
+    this.labelsByRegion.clear();
   }
   handlePointerDown() {
     if (this.cursor.isDragging) return;
@@ -565,18 +581,28 @@ export class CanvasMapRenderer {
       const hash3D = hashMapRegionCoordinate3Ds(regionPosition, this.plane);
       const hash2D = hashMapRegionCoordinate2Ds(regionPosition);
       const rateLimited = this.outboundImageFetchesCount > OUTBOUND_IMAGE_FETCHES_CAP;
-      if (!this.regions.has(hash3D) && !rateLimited) {
+      const cachedRegion = this.regions.get(hash3D);
+      if (cachedRegion) {
+        this.regions.delete(hash3D);
+        this.regions.set(hash3D, cachedRegion);
+      }
+      if (!cachedRegion && !rateLimited) {
         const image = new Image(REGION_IMAGE_PIXEL_EXTENT.x, REGION_IMAGE_PIXEL_EXTENT.y);
         const regionFileBaseName = `${this.plane}_${regionX}_${regionY}`;
         this.outboundImageFetchesCount += 1;
         const region = {
           alpha: 0,
           position: Vec2D.create(regionPosition),
+          plane: this.plane,
         };
         image.onload = () => {
           this.outboundImageFetchesCount -= 1;
           createImageBitmap(image)
             .then((bitmap) => {
+              if (this.regions.get(hash3D) !== region) {
+                bitmap.close();
+                return;
+              }
               region.image = bitmap;
             })
             .catch((reason) => {
@@ -614,6 +640,10 @@ export class CanvasMapRenderer {
             this.outboundImageFetchesCount -= 1;
             createImageBitmap(image)
               .then((bitmap) => {
+                if (this.disposed) {
+                  bitmap.close();
+                  return;
+                }
                 label.imageFetch.asset = bitmap;
                 label.imageFetch.loaded = true;
               })
@@ -624,6 +654,25 @@ export class CanvasMapRenderer {
           };
         }
       });
+    }
+    this.trimRegionCache(probablyVisibleRegions);
+  }
+  trimRegionCache({ min, max }) {
+    for (const [key, region] of this.regions) {
+      if (this.regions.size <= REGION_CACHE_CAPACITY) {
+        return;
+      }
+      if (
+        region.plane === this.plane &&
+        region.position.x >= min.x - 1 &&
+        region.position.x <= max.x &&
+        region.position.y >= min.y - 1 &&
+        region.position.y <= max.y
+      ) {
+        continue;
+      }
+      region.image?.close();
+      this.regions.delete(key);
     }
   }
   drawVisibleIcons(context) {

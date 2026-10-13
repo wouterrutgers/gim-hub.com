@@ -10,6 +10,7 @@
   const tooltipElement = ref(null);
   const pointerPosition = ref({ x: 0, y: 0 });
   const tooltip = ref();
+  let touchTooltipElement;
 
   const itemLines = computed(function getItemLines() {
     if (!tooltip.value || typeof tooltip.value === "string") {
@@ -24,6 +25,9 @@
     window.addEventListener("pointerover", handlePointerOver);
     window.addEventListener("pointerout", handlePointerOut);
     window.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointercancel", hideTooltip);
+    window.addEventListener("click", handleClick);
+    window.addEventListener("scroll", hideTooltip, { capture: true });
   });
 
   onBeforeUnmount(function removeTooltipListeners() {
@@ -31,6 +35,9 @@
     window.removeEventListener("pointerover", handlePointerOver);
     window.removeEventListener("pointerout", handlePointerOut);
     window.removeEventListener("pointerdown", handlePointerDown);
+    window.removeEventListener("pointercancel", hideTooltip);
+    window.removeEventListener("click", handleClick);
+    window.removeEventListener("scroll", hideTooltip, { capture: true });
   });
 
   function buildItemLines(data) {
@@ -106,7 +113,7 @@
     container.value.style.transform = `translate(${x}px, ${y}px)`;
 
     const rectangle = tooltipElement.value.getBoundingClientRect();
-    const offsetX = x + 5 + rectangle.width > window.innerWidth ? -(rectangle.width + 5) : 5;
+    const offsetX = x + 5 + rectangle.width > window.innerWidth ? Math.max(5 - x, -(rectangle.width + 5)) : 5;
     const offsetY = y - rectangle.height - 5 < 0 ? 5 : -(rectangle.height + 5);
     tooltipElement.value.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
   }
@@ -115,29 +122,73 @@
     return target instanceof Element ? target.closest("[data-tooltip]") : null;
   }
 
-  function handlePointerMove({ clientX: x, clientY: y }) {
+  function handlePointerMove({ clientX: x, clientY: y, pointerType }) {
+    if (pointerType === "touch") {
+      return;
+    }
+
     pointerPosition.value = { x, y };
     positionTooltip();
   }
 
   function handlePointerOver(event) {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
     const hoveredElement = getDataTooltipElement(event.target);
 
     if (!hoveredElement) {
       return;
     }
 
+    touchTooltipElement = undefined;
     pointerPosition.value = { x: event.clientX, y: event.clientY };
     tooltip.value = deserializeTooltip(hoveredElement.dataset.tooltip ?? "");
   }
 
   function handlePointerOut(event) {
+    if (event.pointerType === "touch") {
+      return;
+    }
+
     if (getDataTooltipElement(event.target) !== getDataTooltipElement(event.relatedTarget)) {
-      tooltip.value = undefined;
+      hideTooltip();
     }
   }
 
-  function handlePointerDown() {
+  function handlePointerDown(event) {
+    const touchedElement = getDataTooltipElement(event.target);
+
+    if (event.pointerType === "touch" && touchedElement && touchedElement !== touchTooltipElement) {
+      touchTooltipElement = touchedElement;
+      pointerPosition.value = { x: event.clientX, y: event.clientY };
+      tooltip.value = deserializeTooltip(touchedElement.dataset.tooltip);
+
+      return;
+    }
+
+    hideTooltip();
+  }
+
+  function handleClick(event) {
+    if (!touchTooltipElement || event.detail === 0 || getDataTooltipElement(event.target) !== touchTooltipElement) {
+      return;
+    }
+
+    if (touchTooltipElement.tagName === "A") {
+      event.preventDefault();
+
+      return;
+    }
+
+    if (touchTooltipElement.tagName === "BUTTON") {
+      hideTooltip();
+    }
+  }
+
+  function hideTooltip() {
+    touchTooltipElement = undefined;
     tooltip.value = undefined;
   }
 

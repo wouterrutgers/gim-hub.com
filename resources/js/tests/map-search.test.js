@@ -20,6 +20,7 @@ function mountSearch() {
   const application = createTestApplication(MapSearch);
   application.use(pinia);
   application.mount("#test-map-search");
+
   return useMapStore();
 }
 
@@ -39,6 +40,7 @@ async function loadLabels(labels) {
   renderer.setInteractive(true);
   useMapStore().setRenderer(renderer);
   await nextTick();
+
   return renderer;
 }
 
@@ -48,6 +50,7 @@ async function searchFor(value) {
   input.value = value;
   input.dispatchEvent(new Event("input", { bubbles: true }));
   await nextTick();
+
   return input;
 }
 
@@ -180,6 +183,7 @@ describe("map search", function describeMapSearch() {
       [3210, 3420, 0, "Varrock palace"],
     ]);
     const input = await searchFor("var");
+
     for (const option of document.querySelectorAll('[role="option"]')) {
       option.parentElement.scrollIntoView = vi.fn();
     }

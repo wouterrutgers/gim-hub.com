@@ -22,12 +22,15 @@ export async function fetchMemberHiscores({ baseURL, credentials, memberName }) 
     },
   });
   const json = await res.json().catch(() => undefined);
+
   if (!res.ok) {
     const errorField = json && typeof json === "object" ? json.error : undefined;
     const message = typeof errorField === "string" ? errorField : `Failed to fetch hiscores (HTTP ${res.status})`;
     const err = new Error(message);
     err.status = res.status;
+
     throw err;
   }
+
   return hiscoresSchema.parseAsync(json);
 }

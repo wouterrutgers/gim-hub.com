@@ -57,17 +57,35 @@
   function dateLabel(entry) {
     const date = new Date(entry.started_at);
     const today = new Date(timestamp.value);
-    if (date.toDateString() === today.toDateString()) return "Today";
+
+    if (date.toDateString() === today.toDateString()) {
+      return "Today";
+    }
+
     today.setDate(today.getDate() - 1);
-    if (date.toDateString() === today.toDateString()) return "Yesterday";
+
+    if (date.toDateString() === today.toDateString()) {
+      return "Yesterday";
+    }
+
     return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
   }
 
   function relativeTime(entry) {
     const minutes = Math.max(0, Math.floor((timestamp.value - entry.started_at) / 60_000));
-    if (minutes < 1) return "Just now";
-    if (minutes < 60) return `${minutes}m ago`;
-    if (minutes < 1440) return `${Math.floor(minutes / 60)}h ago`;
+
+    if (minutes < 1) {
+      return "Just now";
+    }
+
+    if (minutes < 60) {
+      return `${minutes}m ago`;
+    }
+
+    if (minutes < 1440) {
+      return `${Math.floor(minutes / 60)}h ago`;
+    }
+
     return `${Math.floor(minutes / 1440)}d ago`;
   }
 
@@ -76,6 +94,7 @@
     const end = activityIsLive(entry, timestamp.value)
       ? "now"
       : new Date(entry.occurred_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+
     return entry.started_at === entry.occurred_at && !activityIsLive(entry, timestamp.value)
       ? start
       : `${start} to ${end}`;
@@ -87,14 +106,20 @@
   }
 
   function onScroll() {
-    if (scroller.value.scrollTop <= 24) newEntries.value = 0;
+    if (scroller.value.scrollTop <= 24) {
+      newEntries.value = 0;
+    }
+
     if (scroller.value.scrollHeight - scroller.value.scrollTop - scroller.value.clientHeight <= 200) {
       void activityStore.loadOlder();
     }
   }
 
   watch(filteredEntries, async function preserveReadingPosition(entries, previous) {
-    if (!scroller.value || previous.length === 0) return;
+    if (!scroller.value || previous.length === 0) {
+      return;
+    }
+
     const known = new Set(
       previous.map(function identifier(entry) {
         return entry.id;
@@ -104,22 +129,32 @@
       return !known.has(entry.id) && entry.started_at >= previous[0].started_at;
     }).length;
     const following = scroller.value.scrollTop <= 24;
+
     if (following) {
       await nextTick();
       scroller.value.scrollTop = 0;
+
       return;
     }
+
     const top = scroller.value.getBoundingClientRect().top;
     const anchor = [...scroller.value.querySelectorAll("[data-entry-id]")].find(function visible(element) {
       return element.getBoundingClientRect().bottom >= top;
     });
-    if (!anchor) return;
+
+    if (!anchor) {
+      return;
+    }
+
     const identifier = anchor.dataset.entryId;
     const offset = anchor.getBoundingClientRect().top - top;
     newEntries.value += added;
     await nextTick();
     const moved = scroller.value.querySelector(`[data-entry-id="${identifier}"]`);
-    if (moved) scroller.value.scrollTop += moved.getBoundingClientRect().top - top - offset;
+
+    if (moved) {
+      scroller.value.scrollTop += moved.getBoundingClientRect().top - top - offset;
+    }
   });
 
   watch([memberFilter, typeFilter], function resetFilters() {

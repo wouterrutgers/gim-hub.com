@@ -84,6 +84,7 @@ describe("storage UI", function storageInterface() {
     });
     const links = container.querySelectorAll(".player-inventory-item-box");
     expect(links.length).toBe(6);
+
     for (const link of links) {
       expect(link.querySelector(".player-inventory-contents-indicator")).toBeNull();
       expect(link.hasAttribute("data-tooltip")).toBe(false);
@@ -106,6 +107,7 @@ describe("storage UI", function storageInterface() {
     await nextTick();
     expect(container.querySelector('[role="tooltip"]').textContent).toContain("2 Grimy guam leaf");
     expect(links[0].querySelector(".player-inventory-contents-indicator")).not.toBeNull();
+
     for (const link of [...links].slice(1)) {
       expect(link.querySelector(".player-inventory-contents-indicator")).toBeNull();
       expect(link.hasAttribute("data-tooltip")).toBe(false);
@@ -141,10 +143,12 @@ describe("storage UI", function storageInterface() {
 
     const links = container.querySelectorAll(".player-inventory-item-box");
     expect(links.length).toBe(9);
+
     for (const link of [...links].slice(0, 8)) {
       expect(link.querySelector(".player-inventory-contents-indicator")).not.toBeNull();
       expect(link.querySelector(".player-inventory-pouch-container")).toBeNull();
     }
+
     expect(links[8].querySelector(".player-inventory-contents-indicator")).toBeNull();
     expect(links[8].querySelectorAll(".player-inventory-pouch-item-box").length).toBe(1);
     links[7].dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));

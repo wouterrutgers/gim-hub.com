@@ -5,11 +5,13 @@ import { dateSchema } from "./shared";
 
 export function rangeForPeriod(period, end = new Date()) {
   const durations = { Day: { days: 1 }, Week: { weeks: 1 }, Month: { months: 1 }, Year: { years: 1 } };
+
   return { start: period === "All" ? undefined : DateFNS.sub(end, durations[period], { in: utc }), end };
 }
 
 export async function fetchSkillData({ baseURL, credentials, period, start, end }) {
   const query = new URLSearchParams();
+
   if (period) {
     query.set("period", period);
   } else {
@@ -19,6 +21,7 @@ export async function fetchSkillData({ baseURL, credentials, period, start, end 
       query.set("start", start.toISOString());
     }
   }
+
   const response = await fetch(`${baseURL}/group/${credentials.name}/get-skill-data?${query}`, {
     headers: { Authorization: credentials.token },
   });

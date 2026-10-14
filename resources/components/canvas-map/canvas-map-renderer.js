@@ -1,5 +1,5 @@
 import { fetchMapData } from "../../game/map-data";
-import { Pos2D, Vec2D, REGION_IMAGE_PIXEL_EXTENT, ICON_IMAGE_PIXEL_EXTENT, Disp2D, Rect2D } from "./coordinates";
+import { Disp2D, ICON_IMAGE_PIXEL_EXTENT, Pos2D, Rect2D, REGION_IMAGE_PIXEL_EXTENT, Vec2D } from "./coordinates";
 
 const FOLLOW_ANIMATION_TIME_MS = 300;
 const LOCATION_ANIMATION_DISTANCE_PIXELS = 6000;
@@ -23,11 +23,14 @@ function* makeInsideOutIterator1D(minInclusive, maxExclusive) {
   if (!Number.isInteger(minInclusive) || !Number.isInteger(maxExclusive) || minInclusive > maxExclusive) {
     throw new Error("min and max must be a well defined interval of integers.");
   }
+
   const n = Math.abs(maxExclusive - minInclusive);
   const isEven = n % 2 === 0;
+
   if (isEven) {
     const higher = n / 2 + minInclusive;
     const lower = higher - 1;
+
     for (let i = 0; i < n / 2; i++) {
       yield {
         lower: lower - i,
@@ -36,14 +39,15 @@ function* makeInsideOutIterator1D(minInclusive, maxExclusive) {
     }
   } else {
     const higher = Math.floor(n / 2) + minInclusive;
-    const lower = higher;
+
     for (let i = 0; i < n / 2; i++) {
       yield {
-        lower: lower - i,
+        lower: higher - i,
         higher: higher + i,
       };
     }
   }
+
   return undefined;
 }
 function* makeInsideOutRegionIterator(minInclusive, maxExclusive) {
@@ -54,78 +58,93 @@ function* makeInsideOutRegionIterator(minInclusive, maxExclusive) {
   const ySteps = Math.ceil(extent.y / 2);
   let xCurrentPair = xGenerator.next();
   let yCurrentPair = yGenerator.next();
+
   if (ySteps > xSteps) {
     const { lower: lowerX, higher: higherX } = xCurrentPair.value;
+
     for (let i = 0; i < ySteps - xSteps; i++) {
       const { lower: lowerY, higher: higherY } = yCurrentPair.value;
       yield Vec2D.create({
         x: lowerX,
         y: lowerY,
       });
+
       if (lowerX !== higherX) {
         yield Vec2D.create({
           x: higherX,
           y: lowerY,
         });
       }
+
       if (lowerY !== higherY) {
         yield Vec2D.create({
           x: lowerX,
           y: higherY,
         });
       }
+
       if (lowerX !== higherX && lowerY !== higherY) {
         yield Vec2D.create({
           x: higherX,
           y: higherY,
         });
       }
+
       yCurrentPair = yGenerator.next();
     }
   } else if (xSteps > ySteps) {
     const { lower: lowerY, higher: higherY } = yCurrentPair.value;
+
     for (let i = 0; i < xSteps - ySteps; i++) {
       const { lower: lowerX, higher: higherX } = xCurrentPair.value;
       yield Vec2D.create({
         x: lowerX,
         y: lowerY,
       });
+
       if (lowerX !== higherX) {
         yield Vec2D.create({
           x: higherX,
           y: lowerY,
         });
       }
+
       if (lowerY !== higherY) {
         yield Vec2D.create({
           x: lowerX,
           y: higherY,
         });
       }
+
       if (lowerX !== higherX && lowerY !== higherY) {
         yield Vec2D.create({
           x: higherX,
           y: higherY,
         });
       }
+
       xCurrentPair = xGenerator.next();
     }
   }
+
   while (!xCurrentPair.done && !yCurrentPair.done) {
     const { lower: lowerX, higher: higherX } = xCurrentPair.value;
     const { lower: lowerY, higher: higherY } = yCurrentPair.value;
+
     for (let x = lowerX; x <= higherX; x++) {
       yield Vec2D.create({
         x,
         y: higherY,
       });
     }
+
     for (let y = higherY - 1; y > lowerY; y--) {
       yield Vec2D.create({
         x: higherX,
         y,
       });
     }
+
     if (lowerY !== higherY) {
       for (let x = higherX; x >= lowerX; x--) {
         yield Vec2D.create({
@@ -134,6 +153,7 @@ function* makeInsideOutRegionIterator(minInclusive, maxExclusive) {
         });
       }
     }
+
     if (lowerX !== higherX) {
       for (let y = lowerY + 1; y < higherY; y++) {
         yield Vec2D.create({
@@ -142,6 +162,7 @@ function* makeInsideOutRegionIterator(minInclusive, maxExclusive) {
         });
       }
     }
+
     yCurrentPair = yGenerator.next();
     xCurrentPair = xGenerator.next();
   }
@@ -161,7 +182,10 @@ export class CanvasMapRenderer {
   getImageUrl;
   interactive = false;
   setInteractive(interactive) {
-    if (this.interactive === interactive) return;
+    if (this.interactive === interactive) {
+      return;
+    }
+
     this.interactive = interactive;
     this.forceRenderNextFrame = true;
   }
@@ -169,6 +193,7 @@ export class CanvasMapRenderer {
   plane;
   processMapData(mapData) {
     this.iconsByRegion = new Map();
+
     for (const regionXString of Object.keys(mapData.icons)) {
       for (const regionYString of Object.keys(mapData.icons[regionXString])) {
         const regionPosition = Vec2D.create({
@@ -182,6 +207,7 @@ export class CanvasMapRenderer {
                 if (index % 2 === 0) {
                   pairs.push([coordinates[index], coordinates[index + 1]]);
                 }
+
                 return pairs;
               }, [])
               .map((position) => ({
@@ -196,7 +222,9 @@ export class CanvasMapRenderer {
         this.iconsByRegion.set(hashMapRegionCoordinate2Ds(regionPosition), icons);
       }
     }
+
     this.labelsByRegion = new Map();
+
     for (const regionXString of Object.keys(mapData.labels)) {
       for (const regionYString of Object.keys(mapData.labels[regionXString])) {
         const regionPosition = Vec2D.create({
@@ -206,6 +234,7 @@ export class CanvasMapRenderer {
         const labels = Object.entries(mapData.labels[regionXString][regionYString])
           .map(([planeString, XYLabelIDFlat]) => {
             const plane = parseInt(planeString);
+
             return XYLabelIDFlat.reduce((labels, _, index, labelFlat) => {
               if (index % 3 === 0) {
                 const position = Vec2D.create({
@@ -219,6 +248,7 @@ export class CanvasMapRenderer {
                   worldPosition: position,
                 });
               }
+
               return labels;
             }, []);
           })
@@ -284,30 +314,41 @@ export class CanvasMapRenderer {
     const [mapData, iconAtlas_1] = await Promise.all([fetchMapData(), iconAtlasPromise]);
     renderer.processMapData(mapData);
     renderer.iconsAtlas = iconAtlas_1;
+
     return renderer;
   }
   dispose() {
     this.disposed = true;
+
     for (const region of this.regions.values()) {
       region.image?.close();
     }
+
     this.regions.clear();
     this.iconsAtlas?.close();
+
     for (const labels of this.labelsByRegion.values()) {
       for (const label of labels) {
         label.imageFetch?.asset?.close();
       }
     }
+
     this.labelsByRegion.clear();
   }
   handlePointerDown() {
-    if (this.cursor.isDragging) return;
+    if (this.cursor.isDragging) {
+      return;
+    }
+
     this.cursor.rateSamples = [];
     this.cursor.isDragging = true;
     this.onDraggingUpdate?.(this.cursor.isDragging);
   }
   handlePointerUp() {
-    if (!this.cursor.isDragging) return;
+    if (!this.cursor.isDragging) {
+      return;
+    }
+
     this.cursor.isDragging = false;
     this.onDraggingUpdate?.(this.cursor.isDragging);
   }
@@ -315,6 +356,7 @@ export class CanvasMapRenderer {
     if (!Vec2D.equals(this.cursor.position, position)) {
       this.forceRenderNextFrame = true;
     }
+
     this.cursor.isVisible = true;
     this.cursor.position = position;
   }
@@ -328,10 +370,14 @@ export class CanvasMapRenderer {
     if (!this.camera.followPlayer) {
       this.camera.followingAnimation = undefined;
     }
+
     this.cursor.accumulatedScroll += amount;
   }
   setPlane(plane) {
-    if (plane !== 0 && plane !== 1 && plane !== 2 && plane !== 3) return;
+    if (plane !== 0 && plane !== 1 && plane !== 2 && plane !== 3) {
+      return;
+    }
+
     this.plane = plane;
     this.onVisiblePlaneUpdate?.(this.plane);
     this.forceRenderNextFrame = true;
@@ -345,6 +391,7 @@ export class CanvasMapRenderer {
     this.handlePointerLeave();
     this.cursor.rateSamples = [];
     this.cursor.accumulatedScroll = 0;
+
     if (
       this.plane === location.plane &&
       Vec2D.lengthSquared(Vec2D.sub(location.worldPosition, this.camera.position)) <=
@@ -360,6 +407,7 @@ export class CanvasMapRenderer {
       this.camera.position = Vec2D.create(location.worldPosition);
       this.camera.zoom = LOCATION_ZOOM;
     }
+
     this.selectedLocation = location;
     this.setPlane(location.plane);
   }
@@ -372,8 +420,10 @@ export class CanvasMapRenderer {
       this.camera.followPlayer = undefined;
       this.camera.followingAnimation = undefined;
       this.onFollowPlayerUpdate?.(undefined);
+
       return;
     }
+
     this.clearSelectedLocation();
     const { coords, plane } = this.playerPositions.get(player);
     this.camera.followPlayer = player;
@@ -389,8 +439,11 @@ export class CanvasMapRenderer {
     for (const { label, coords: coordsWiki, plane, isOnBoat } of positions) {
       const current = this.playerPositions.get(label);
       const coords = Pos2D.wikiToWorld(coordsWiki);
-      if (current && Vec2D.equals(coords, current.coords) && plane === current.plane && isOnBoat === current.isOnBoat)
+
+      if (current && Vec2D.equals(coords, current.coords) && plane === current.plane && isOnBoat === current.isOnBoat) {
         continue;
+      }
+
       const previousCoords = current?.coords;
       this.playerPositions.set(label, {
         coords,
@@ -399,7 +452,11 @@ export class CanvasMapRenderer {
         previousCoords,
       });
       this.forceRenderNextFrame = true;
-      if (this.camera.followPlayer !== label) continue;
+
+      if (this.camera.followPlayer !== label) {
+        continue;
+      }
+
       this.camera.followingAnimation = {
         timeRemainingMS: FOLLOW_ANIMATION_TIME_MS,
         from: this.camera.position,
@@ -407,21 +464,31 @@ export class CanvasMapRenderer {
       };
       this.setPlane(plane);
     }
+
     for (const [label] of this.playerPositions) {
-      if (roster.has(label)) continue;
+      if (roster.has(label)) {
+        continue;
+      }
+
       const deleted = this.playerPositions.delete(label);
       this.forceRenderNextFrame = deleted;
     }
   }
   updateCursorVelocity(elapsed) {
-    if (elapsed < 0.001) return;
+    if (elapsed < 0.001) {
+      return;
+    }
+
     const displacement = Vec2D.sub(this.cursor.position, this.cursor.positionPrevious);
+
     if (this.cursor.isDragging) {
       const EVENTS_TO_KEEP = 10;
       this.cursor.rateSamples.push(Vec2D.mul(1 / elapsed, displacement));
+
       if (this.cursor.rateSamples.length > EVENTS_TO_KEEP) {
         this.cursor.rateSamples = this.cursor.rateSamples.slice(this.cursor.rateSamples.length - EVENTS_TO_KEEP);
       }
+
       this.cursor.accumulatedFrictionMS = 0;
     } else {
       this.cursor.accumulatedFrictionMS += elapsed;
@@ -430,9 +497,11 @@ export class CanvasMapRenderer {
   updateCamera({ context, elapsed }) {
     const previousZoom = this.camera.zoom;
     const ZOOM_SENSITIVITY = 1 / 3000;
+
     if (this.cursor.accumulatedScroll !== 0) {
       this.camera.zoom += ZOOM_SENSITIVITY * this.cursor.accumulatedScroll;
     }
+
     this.cursor.accumulatedScroll = 0;
     this.camera.zoom = Math.max(Math.min(this.camera.zoom, this.camera.maxZoom), this.camera.minZoom);
     const cursorWorldPosition = Pos2D.cursorToWorld({
@@ -444,16 +513,19 @@ export class CanvasMapRenderer {
       cursor: Vec2D.sub(this.cursor.position, this.cursor.positionPrevious),
       camera: context.getCamera(),
     });
+
     if (this.camera.zoom !== previousZoom && !this.camera.followingAnimation) {
       const cameraToCursorDisplacement = Vec2D.sub(this.camera.position, cursorWorldPosition);
       const zoomRatio = this.camera.zoom / previousZoom;
       this.camera.position = Vec2D.add(cursorWorldPosition, Vec2D.mul(zoomRatio, cameraToCursorDisplacement));
     }
+
     if (this.camera.followPlayer && !this.playerPositions.has(this.camera.followPlayer)) {
       this.startFollowingPlayer({
         player: undefined,
       });
     }
+
     if (this.cursor.isDragging) {
       this.camera.position = Vec2D.add(this.camera.position, Vec2D.mul(-1.0, cursorWorldDelta));
       this.startFollowingPlayer({
@@ -468,9 +540,11 @@ export class CanvasMapRenderer {
         from,
         to,
       });
+
       if (!this.camera.followPlayer) {
         this.camera.zoom = (1 - progress) * fromZoom + progress * LOCATION_ZOOM;
       }
+
       if (!this.camera.followPlayer && timeRemainingMS === 0) {
         this.camera.followingAnimation = undefined;
       }
@@ -480,6 +554,7 @@ export class CanvasMapRenderer {
       const velocityAverage = Vec2D.average(this.cursor.rateSamples);
       const speed = Math.sqrt(Vec2D.lengthSquared(velocityAverage));
       const speedAfterFriction = speed - FRICTION_PER_MS * this.cursor.accumulatedFrictionMS;
+
       if (speedAfterFriction > SPEED_THRESHOLD) {
         const velocityAfterFriction = Vec2D.mul(speedAfterFriction / speed, velocityAverage);
         const displacement = Disp2D.cursorToWorld({
@@ -496,8 +571,10 @@ export class CanvasMapRenderer {
     this.regions.forEach((region) => {
       if (region.image === undefined) {
         region.alpha = 0;
+
         return;
       }
+
       const previousAlpha = region.alpha;
       region.alpha = Math.min(1, region.alpha + elapsed * REGION_FADE_IN_ALPHA_PER_MS);
       const alphaChanged = previousAlpha !== region.alpha;
@@ -505,6 +582,7 @@ export class CanvasMapRenderer {
         Vec2D.greaterOrEqualThan(region.position, regionMin) && Vec2D.lessOrEqualThan(region.position, regionMax);
       anyVisibleTileUpdatedAlpha ||= alphaChanged && regionIsProbablyVisible;
     });
+
     return anyVisibleTileUpdatedAlpha;
   }
   update(context) {
@@ -514,13 +592,18 @@ export class CanvasMapRenderer {
     };
     const currentUpdateTime = performance.now();
     const elapsed = currentUpdateTime - this.lastUpdateTime;
-    if (!this.forceRenderNextFrame && elapsed < 0.001) return;
+
+    if (!this.forceRenderNextFrame && elapsed < 0.001) {
+      return;
+    }
+
     if (this.camera.followingAnimation) {
       this.camera.followingAnimation.timeRemainingMS = Math.max(
         this.camera.followingAnimation.timeRemainingMS - elapsed,
         0,
       );
     }
+
     this.updateCursorVelocity(elapsed);
     context.setTransform({
       translation: this.camera.position,
@@ -544,13 +627,16 @@ export class CanvasMapRenderer {
       currentTransform.translation.y !== previousTransform.translation.y;
     const anyVisibleRegionUpdatedAlpha = this.updateRegionsAlpha(context, elapsed);
     this.loadVisibleAll(context);
+
     if (anyVisibleRegionUpdatedAlpha || transformHasChanged || this.forceRenderNextFrame) {
       this.forceRenderNextFrame = false;
       this.drawAll(context);
     }
+
     const cursorHasMoved =
       this.cursor.position.x !== this.cursor.positionPrevious.x ||
       this.cursor.position.y !== this.cursor.positionPrevious.y;
+
     if (cursorHasMoved) {
       const view = Pos2D.cursorToView({
         cursor: this.cursor.position,
@@ -563,17 +649,21 @@ export class CanvasMapRenderer {
       const wiki = Pos2D.worldToWiki(world);
       this.onHoveredCoordinatesUpdate?.(wiki);
     }
+
     this.cursor.positionPrevious = this.cursor.position;
     this.lastUpdateTime = currentUpdateTime;
   }
   loadVisibleAll(context) {
     const probablyVisibleRegions = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));
+
     for (const region of makeInsideOutRegionIterator(probablyVisibleRegions.min, probablyVisibleRegions.max)) {
       const regionX = region.x;
       const regionY = region.y;
+
       if (regionX < REGION_X_MIN || regionX > REGION_X_MAX || regionY < REGION_Y_MIN || regionY > REGION_Y_MAX) {
         continue;
       }
+
       const regionPosition = Vec2D.create({
         x: regionX,
         y: regionY,
@@ -582,10 +672,12 @@ export class CanvasMapRenderer {
       const hash2D = hashMapRegionCoordinate2Ds(regionPosition);
       const rateLimited = this.outboundImageFetchesCount > OUTBOUND_IMAGE_FETCHES_CAP;
       const cachedRegion = this.regions.get(hash3D);
+
       if (cachedRegion) {
         this.regions.delete(hash3D);
         this.regions.set(hash3D, cachedRegion);
       }
+
       if (!cachedRegion && !rateLimited) {
         const image = new Image(REGION_IMAGE_PIXEL_EXTENT.x, REGION_IMAGE_PIXEL_EXTENT.y);
         const regionFileBaseName = `${this.plane}_${regionX}_${regionY}`;
@@ -601,8 +693,10 @@ export class CanvasMapRenderer {
             .then((bitmap) => {
               if (this.regions.get(hash3D) !== region) {
                 bitmap.close();
+
                 return;
               }
+
               region.image = bitmap;
             })
             .catch((reason) => {
@@ -615,17 +709,28 @@ export class CanvasMapRenderer {
         void this.getImageUrl(`/map-tiles/${regionFileBaseName}.webp`).then((url) => {
           if (url) {
             image.src = url;
+
             return;
           }
+
           this.outboundImageFetchesCount -= 1;
         });
         this.regions.set(hash3D, region);
       }
+
       const labels = this.labelsByRegion?.get(hash2D);
-      if (labels === undefined) continue;
+
+      if (labels === undefined) {
+        continue;
+      }
+
       labels.forEach((label) => {
         const { labelID, plane } = label;
-        if (plane !== this.plane) return;
+
+        if (plane !== this.plane) {
+          return;
+        }
+
         if (!label.imageFetch && !rateLimited) {
           label.imageFetch = {
             loaded: false,
@@ -642,8 +747,10 @@ export class CanvasMapRenderer {
               .then((bitmap) => {
                 if (this.disposed) {
                   bitmap.close();
+
                   return;
                 }
+
                 label.imageFetch.asset = bitmap;
                 label.imageFetch.loaded = true;
               })
@@ -655,6 +762,7 @@ export class CanvasMapRenderer {
         }
       });
     }
+
     this.trimRegionCache(probablyVisibleRegions);
   }
   trimRegionCache({ min, max }) {
@@ -662,6 +770,7 @@ export class CanvasMapRenderer {
       if (this.regions.size <= REGION_CACHE_CAPACITY) {
         return;
       }
+
       if (
         region.plane === this.plane &&
         region.position.x >= min.x - 1 &&
@@ -671,15 +780,21 @@ export class CanvasMapRenderer {
       ) {
         continue;
       }
+
       region.image?.close();
       this.regions.delete(key);
     }
   }
   drawVisibleIcons(context) {
     const ICON_HIDE_THRESHOLD = 0.55;
-    if (context.getCamera().scale > ICON_HIDE_THRESHOLD) return;
+
+    if (context.getCamera().scale > ICON_HIDE_THRESHOLD) {
+      return;
+    }
+
     const iconScale = 16 * Math.max(context.getCamera().scale, 1 / 8);
     const visibleRect = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));
+
     for (let regionX = visibleRect.min.x - 1; regionX <= visibleRect.max.x; regionX++) {
       for (let regionY = visibleRect.min.y - 1; regionY <= visibleRect.max.y; regionY++) {
         const mapIcons = this.iconsByRegion?.get(
@@ -690,7 +805,11 @@ export class CanvasMapRenderer {
             }),
           ),
         );
-        if (!mapIcons || !this.iconsAtlas) continue;
+
+        if (!mapIcons || !this.iconsAtlas) {
+          continue;
+        }
+
         const offset = Vec2D.create({
           x: -iconScale / 2,
           y: -iconScale / 2,
@@ -720,6 +839,7 @@ export class CanvasMapRenderer {
   }
   drawVisibleRegions(context) {
     const visibleRect = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));
+
     for (let regionX = visibleRect.min.x - 1; regionX <= visibleRect.max.x; regionX++) {
       for (let regionY = visibleRect.min.y - 1; regionY <= visibleRect.max.y; regionY++) {
         const coordinateHash = hashMapRegionCoordinate3Ds(
@@ -744,14 +864,20 @@ export class CanvasMapRenderer {
           ),
         });
         const region = this.regions.get(coordinateHash);
-        if (region === undefined) continue;
+
+        if (region === undefined) {
+          continue;
+        }
+
         if (region.image === undefined) {
           context.drawRect({
             fillStyle: "black",
             rect,
           });
+
           continue;
         }
+
         context.drawImageSnappedToGrid({
           image: region.image,
           rect,
@@ -762,9 +888,14 @@ export class CanvasMapRenderer {
   }
   drawVisibleAreaLabels(context) {
     const LABEL_HIDE_THRESHOLD = 0.55;
-    if (context.getCamera().scale > LABEL_HIDE_THRESHOLD) return;
+
+    if (context.getCamera().scale > LABEL_HIDE_THRESHOLD) {
+      return;
+    }
+
     const labelScale = Math.max(context.getCamera().scale, 1 / 12);
     const visibleRect = Rect2D.ceilFloor(Rect2D.worldToRegion(context.getVisibleWorldBox()));
+
     for (let regionX = visibleRect.min.x - 1; regionX <= visibleRect.max.x; regionX++) {
       for (let regionY = visibleRect.min.y - 1; regionY <= visibleRect.max.y; regionY++) {
         const labels = this.labelsByRegion?.get(
@@ -775,11 +906,19 @@ export class CanvasMapRenderer {
             }),
           ),
         );
-        if (!labels) continue;
+
+        if (!labels) {
+          continue;
+        }
+
         labels.forEach((label) => {
           const { worldPosition, plane } = label;
           const image = label.imageFetch?.asset;
-          if (plane !== this.plane || !image) return;
+
+          if (plane !== this.plane || !image) {
+            return;
+          }
+
           const extent = Vec2D.create({
             x: labelScale * image.width,
             y: labelScale * image.height,
@@ -809,7 +948,10 @@ export class CanvasMapRenderer {
     }
   }
   drawSelectedLocation(context) {
-    if (!this.selectedLocation || this.selectedLocation.plane !== this.plane || !this.interactive) return;
+    if (!this.selectedLocation || this.selectedLocation.plane !== this.plane || !this.interactive) {
+      return;
+    }
+
     const size = 16 * context.getCamera().scale;
     context.drawRect({
       fillStyle: "rgb(255 215 0 / 20%)",
@@ -823,6 +965,7 @@ export class CanvasMapRenderer {
   drawPlayerPositionMarkers(context) {
     const zoom = context.getCamera().scale;
     const labelOffsetBoat = -1 - 8.5 * zoom;
+
     for (const [player, { coords, isOnBoat, previousCoords }] of this.playerPositions) {
       const rect = Rect2D.create({
         position: coords,
@@ -831,13 +974,16 @@ export class CanvasMapRenderer {
           y: -1,
         }),
       });
+
       if (isOnBoat) {
         let rotation = Math.PI / 2;
+
         if (previousCoords && !Vec2D.equals(coords, previousCoords)) {
           const dx = coords.x - previousCoords.x;
           const dy = coords.y - previousCoords.y;
           rotation = Math.atan2(dy, dx) + Math.PI / 2;
         }
+
         context.drawBoatIcon({
           position: Vec2D.add(
             coords,
@@ -912,6 +1058,7 @@ export class CanvasMapRenderer {
     this.drawVisibleAreaLabels(context);
     this.drawSelectedLocation(context);
     this.drawPlayerPositionMarkers(context);
+
     if (this.cursor.isVisible && this.interactive) {
       this.drawCursor(context);
     }

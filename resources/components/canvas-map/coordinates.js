@@ -47,6 +47,7 @@ export const Pos2D = Object.freeze({
       view,
       camera,
     });
+
     return world;
   },
   regionToWorld({ x, y }) {
@@ -87,6 +88,7 @@ export const Disp2D = Object.freeze({
       view,
       camera,
     });
+
     return world;
   },
 });
@@ -141,13 +143,19 @@ export const Vec2D = Object.freeze({
       x: 0,
       y: 0,
     };
-    if (arr.length < 1) return result;
+
+    if (arr.length < 1) {
+      return result;
+    }
+
     for (const { x, y } of arr) {
       result.x += x;
       result.y += y;
     }
+
     result.x /= arr.length;
     result.y /= arr.length;
+
     return result;
   },
   lerp({ t, from, to }) {
@@ -164,6 +172,7 @@ export const Rect2D = Object.freeze({
   create({ position, extent }) {
     const first = position;
     const second = Vec2D.add(position, extent);
+
     return {
       min: Vec2D.create({
         x: Math.min(first.x, second.x),
@@ -184,6 +193,7 @@ export const Rect2D = Object.freeze({
   worldToRegion({ min, max }) {
     const first = Pos2D.worldToRegion(min);
     const second = Pos2D.worldToRegion(max);
+
     return {
       min: Vec2D.create({
         x: Math.min(first.x, second.x),
@@ -198,6 +208,7 @@ export const Rect2D = Object.freeze({
   regionToWorld({ min, max }) {
     const first = Pos2D.regionToWorld(min);
     const second = Pos2D.regionToWorld(max);
+
     return {
       min: Vec2D.create({
         x: Math.min(first.x, second.x),
@@ -218,6 +229,7 @@ export const Rect2D = Object.freeze({
       world: max,
       camera,
     });
+
     return {
       min: Vec2D.create({
         x: Math.min(first.x, second.x),

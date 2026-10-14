@@ -71,6 +71,7 @@ describe("demo client", function describeDemoClient() {
 
     const members = await client.fetchGroupData();
     expect(members.map(({ name }) => name)).toEqual(["Gary", "Thurgo", "Cow31337Killer", "xXgamerXx", "@SHARED"]);
+
     for (const member of members) {
       expect(member.id).toBe(initialMembers.find(({ name }) => name === member.name).id);
     }

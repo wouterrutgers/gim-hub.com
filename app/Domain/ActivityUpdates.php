@@ -39,37 +39,45 @@ class ActivityUpdates
                 default => [],
             };
             $rules[$attribute] = ['required', ['array', ...$fields]];
+
             foreach ($fields as $field) {
                 $rules["{$attribute}.{$field}"] = ['required'];
             }
+
             foreach (['skill', 'boss', 'quest_name', 'source'] as $field) {
                 if (in_array($field, $fields)) {
                     $rules["{$attribute}.{$field}"] = ['required', 'string', ['max', 200]];
                 }
             }
+
             foreach (['item_id', 'quest_id', 'quantity', 'count', 'total_count'] as $field) {
                 if (in_array($field, $fields)) {
                     $rules["{$attribute}.{$field}"] = ['required', 'integer', ['min', $field === 'quest_id' ? 0 : 1], ['max', 2147483647]];
                 }
             }
+
             if (($update['type'] ?? '') === 'xp') {
                 $rules["{$attribute}.skills"] = ['required', ['array', ...static::SKILLS], ['min', 1]];
                 $rules["{$attribute}.skills.*"] = ['required', 'integer', ['min', 1], ['max', 200000000]];
             }
+
             if (($update['type'] ?? '') === 'boss') {
                 $rules["{$attribute}.count_type"] = ['required', ['in', 'kill', 'chest', 'completion']];
             }
+
             if (($update['type'] ?? '') === 'level') {
                 $rules["{$attribute}.skill"] = ['required', ['in', ...static::SKILLS]];
                 $rules["{$attribute}.before"] = ['required', 'integer', ['min', 1], ['max', 98]];
                 $rules["{$attribute}.after"] = ['required', 'integer', ['min', 2], ['max', 99], ['gt', "{$attribute}.before"]];
             }
+
             if (($update['type'] ?? '') === 'diary') {
                 foreach (['before', 'after'] as $field) {
                     $rules["{$attribute}.{$field}"] = ['required', 'array', 'list', ['size', 62]];
                     $rules["{$attribute}.{$field}.*"] = ['integer', ['min', -2147483648], ['max', 2147483647]];
                 }
             }
+
             if (($update['type'] ?? '') === 'loot') {
                 $rules["{$attribute}.value"] = ['required', 'integer', ['min', 0], ['max', 9007199254740991]];
                 $rules["{$attribute}.new_collection_item"] = ['required', 'boolean'];
@@ -86,11 +94,13 @@ class ActivityUpdates
             if ($update['occurred_at'] < now()->subDays(30)->getTimestampMs()) {
                 continue;
             }
+
             if ($update['type'] === 'diary') {
                 static::diaries($member, $update);
 
                 continue;
             }
+
             if ($update['type'] === 'loot') {
                 static::loot($member, $update);
 
@@ -103,12 +113,15 @@ class ActivityUpdates
     protected static function store(Member $member, array $update, string $subject = ''): void
     {
         $entry = ActivityEntry::firstOrNew(['member_id' => $member->id, 'source_id' => $update['id'], 'subject' => $subject]);
+
         if ($entry->exists && $entry->revision >= $update['revision']) {
             return;
         }
+
         if ($entry->exists && ($entry->type !== $update['type'] || $entry->started_at !== $update['started_at'] || $entry->occurred_at > $update['occurred_at'])) {
             throw ValidationException::withMessages(['activity_updates' => 'Activity updates must preserve their original type and start time.']);
         }
+
         if ($entry->exists && $update['type'] === 'xp' && array_any($entry->data['skills'], fn (int $quantity, string $skill): bool => ($update['data']['skills'][$skill] ?? 0) < $quantity)) {
             throw ValidationException::withMessages(['activity_updates' => 'Cumulative experience cannot decrease.']);
         }
@@ -127,16 +140,19 @@ class ActivityUpdates
         if (ActivityReceipt::where('member_id', '=', $member->id)->where('source_id', '=', $update['id'])->exists()) {
             return;
         }
+
         if (ActivityEntry::where('member_id', '=', $member->id)->where('source_id', '=', $update['id'])->exists()) {
             static::store($member, $update);
 
             return;
         }
+
         if ($update['data']['new_collection_item'] || $update['data']['value'] >= 1_000_000) {
             static::store($member, $update);
 
             return;
         }
+
         if (! CollectionLogUpdates::contains($update['data']['item_id'])) {
             return;
         }
@@ -146,6 +162,7 @@ class ActivityUpdates
             ->where('occurred_at', '>=', $update['occurred_at'] - 15 * 60 * 1000)
             ->where('occurred_at', '<=', $update['occurred_at'])
             ->orderByDesc('occurred_at')->first();
+
         if (is_null($entry)) {
             $entry = ActivityEntry::create([
                 'group_id' => $member->group_id, 'member_id' => $member->id,
@@ -167,18 +184,22 @@ class ActivityUpdates
                 |> resource_path(...)
                 |> file_get_contents(...)
                 |> (fn ($x) => json_decode($x, associative: true, flags: JSON_THROW_ON_ERROR));
+
         foreach (static::$diaryTasks as $region => $tiers) {
             foreach ($tiers as $tier => $tasks) {
                 $gained = [];
                 $complete = true;
+
                 foreach ($tasks as $index => $bits) {
                     $before = static::diaryTaskComplete($update['data']['before'], $bits);
                     $after = static::diaryTaskComplete($update['data']['after'], $bits);
+
                     if ($after && ! $before) {
                         $gained[] = $index;
                     }
                     $complete = $complete && $after;
                 }
+
                 if ($gained === []) {
                     continue;
                 }

@@ -19,6 +19,7 @@ describe("persistent activity layout", function activityLayout() {
     filter.value = "xp";
     filter.dispatchEvent(new Event("change"));
     await nextTick();
+
     for (const path of ["/group/map", "/group/panels"]) {
       await router.push(path);
       await nextTick();
@@ -80,6 +81,7 @@ async function mountLayout() {
   const wrapper = {
     setup() {
       const route = useRoute();
+
       return function renderPage() {
         return h(
           AuthedLayout,

@@ -9,6 +9,7 @@ it('paginates group history and returns updates to older cards without leaking a
     $member = $this->createCompleteSnapshotMember($group, '0');
     $otherGroup = $this->createSnapshotGroup('other-group');
     $otherMember = $this->createCompleteSnapshotMember($otherGroup);
+
     for ($index = 0; $index < 51; $index++) {
         ActivityEntry::create(['member_id' => $member->id, 'group_id' => $group->id, 'source_id' => Str::uuid()->toString(), 'revision' => 1, 'type' => 'boss', 'started_at' => now()->subMinutes(51 - $index)->getTimestampMs(), 'occurred_at' => now()->getTimestampMs(), 'data' => ['boss' => 'Vorkath', 'count_type' => 'kill', 'count' => 1, 'total_count' => 100 + $index]]);
     }

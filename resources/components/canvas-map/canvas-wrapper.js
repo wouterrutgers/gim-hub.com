@@ -47,6 +47,7 @@ export class Context2DScaledWrapper {
       }),
       camera: this.camera,
     });
+
     return {
       min: Vec2D.add(this.camera.translation, Vec2D.mul(-0.5, extent)),
       max: Vec2D.add(this.camera.translation, Vec2D.mul(0.5, extent)),
@@ -65,6 +66,7 @@ export class Context2DScaledWrapper {
     const position = min;
     const extent = Vec2D.sub(max, min);
     this.context.fillRect(position.x, position.y, extent.x, extent.y);
+
     if (insetBorder) {
       this.context.strokeStyle = insetBorder.style;
       this.context.lineWidth = insetBorder.widthPixels;

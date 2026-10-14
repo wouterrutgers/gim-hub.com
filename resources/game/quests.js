@@ -31,5 +31,6 @@ const questDataSchema = z
 
 export async function fetchQuestData() {
   const data = await fetchVersionedData("/data/quest_data.json");
+
   return questDataSchema.parseAsync(data);
 }

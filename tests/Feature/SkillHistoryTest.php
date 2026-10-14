@@ -6,6 +6,7 @@ it('uses server time for preset ranges without requiring browser timestamps', fu
     $this->travelTo(CarbonImmutable::parse('2026-09-07T13:00:00Z'));
     $group = $this->createSnapshotGroup();
     $member = $this->createCompleteSnapshotMember($group);
+
     foreach (['2026-09-06 12:55:00', '2026-09-07 12:55:00', '2026-09-07 13:05:00'] as $time) {
         $member->skillStats()->create([
             'type' => 'five_minutes',
@@ -29,6 +30,7 @@ it('returns scoped range samples with an exact preceding baseline and all skills
     $member = $this->createCompleteSnapshotMember($group);
     $otherMember = $this->createCompleteSnapshotMember($this->createSnapshotGroup('other'));
     $skills = [...range(0, 22), 4294967295];
+
     foreach (['11:00:00', '12:00:00', '12:05:00', '12:10:00', '12:15:00'] as $time) {
         $member->skillStats()->create(['type' => 'five_minutes', 'skills' => $skills, 'created_at' => "2026-09-07 {$time}"]);
     }
@@ -51,6 +53,7 @@ it('merges older tiers without letting coarse bucket totals overwrite finer obse
     $this->travelTo(CarbonImmutable::parse('2026-09-07 13:00:00'));
     $group = $this->createSnapshotGroup();
     $member = $this->createCompleteSnapshotMember($group);
+
     foreach ([
         ['monthly', '2024-01-01', 1],
         ['monthly', '2025-01-01', 10],
@@ -76,6 +79,7 @@ it('bounds display samples while retaining the first observation baseline and fi
     $this->travelTo(CarbonImmutable::parse('2026-09-07 12:00:00'));
     $group = $this->createSnapshotGroup();
     $member = $this->createCompleteSnapshotMember($group);
+
     for ($index = 0; $index <= 1800; $index++) {
         $member->skillStats()->create([
             'type' => 'five_minutes',

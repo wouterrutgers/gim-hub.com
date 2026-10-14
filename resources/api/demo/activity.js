@@ -14,6 +14,7 @@ export function populateActivity(state) {
     ["Cow31337Killer", "quest", 80, { quest_id: 17, quest_name: "Druidic Ritual" }],
     ["Thurgo", "xp", 25 * 60, { skills: { Cooking: 28_560 } }],
   ];
+
   for (const [index, [member, type, minutes, data]] of samples.entries()) {
     const rosterMember = state.roster.find(function matches(player) {
       return player.displayName === member;
@@ -29,23 +30,37 @@ export function populateActivity(state) {
       updated_at: now,
     });
   }
+
   state.nextActivityIdentifier = samples.length + 1;
 }
 
 export function advanceActivity(state, members) {
   const now = Date.now();
+
   for (const member of members) {
-    if (!member.skills) continue;
+    if (!member.skills) {
+      continue;
+    }
+
     const previous = state.activitySkills.get(member.id);
     state.activitySkills.set(member.id, { ...member.skills });
-    if (!previous) continue;
+
+    if (!previous) {
+      continue;
+    }
+
     const gains = Object.entries(member.skills).filter(function increased([skill, experience]) {
       return experience > previous[skill];
     });
-    if (gains.length === 0) continue;
+
+    if (gains.length === 0) {
+      continue;
+    }
+
     let entry = [...state.activities.values()].find(function activeTraining(activity) {
       return activity.type === "xp" && activity.member_id === member.id && now - activity.occurred_at < 15 * 60_000;
     });
+
     if (!entry) {
       entry = {
         id: state.nextActivityIdentifier++,
@@ -58,8 +73,11 @@ export function advanceActivity(state, members) {
       };
       state.activities.set(entry.id, entry);
     }
-    for (const [skill, experience] of gains)
+
+    for (const [skill, experience] of gains) {
       entry.data.skills[skill] = (entry.data.skills[skill] ?? 0) + experience - previous[skill];
+    }
+
     entry.revision++;
     entry.occurred_at = now;
     entry.updated_at = now;

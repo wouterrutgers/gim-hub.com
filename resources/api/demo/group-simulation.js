@@ -15,6 +15,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
   const elapsedMS = performance.now() - startMS;
   const lastOnlineAt = new Date(Date.now());
   const thurgoRoster = roster.find(({ originalName }) => originalName === "Thurgo");
+
   if (thurgoRoster) {
     const member = {
       ...DEFAULT_MEMBER,
@@ -48,16 +49,20 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       },
     };
     member.lastUpdated = new Date(Date.now());
+
     while (thurgo.lastTick < Math.floor(elapsedMS / 600)) {
       const banking = thurgo.bankingCooldown > 0;
+
       if (banking) {
         thurgo.bankingCooldown -= 1;
+
         if (thurgo.bankingCooldown <= 4) {
           thurgo.piesCookedInBank += thurgo.piesCookedInInventory;
           thurgo.piesUncookedInBank += thurgo.piesUncookedInInventory;
           thurgo.piesCookedInInventory = 0;
           thurgo.piesUncookedInInventory = 0;
         }
+
         if (thurgo.bankingCooldown <= 0) {
           thurgo.piesUncookedInBank -= 28;
           thurgo.piesUncookedInInventory = 28;
@@ -66,14 +71,17 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       } else {
         thurgo.piesCookedInInventory += 1;
         thurgo.piesUncookedInInventory -= 1;
+
         if (thurgo.piesCookedInInventory >= 28) {
           thurgo.piesCookedInInventory = 28;
           thurgo.piesUncookedInInventory = 0;
           thurgo.bankingCooldown = 8;
         }
       }
+
       thurgo.lastTick += 1;
     }
+
     const REDBERRY_PIE_COOKED = 2325;
     const REDBERRY_PIE_UNCOOKED = 2321;
     member.bank = new Map([
@@ -98,21 +106,26 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     };
     member.inventory = new Map();
     let slot = 0;
+
     for (let i = 0; i < thurgo.piesCookedInInventory; i++) {
       member.inventory.set(slot++, {
         itemID: REDBERRY_PIE_COOKED,
         quantity: 1,
       });
     }
+
     for (let i = 0; i < thurgo.piesUncookedInInventory; i++) {
       member.inventory.set(slot++, {
         itemID: REDBERRY_PIE_UNCOOKED,
         quantity: 1,
       });
     }
+
     results.push(member);
   }
+
   const cow31337KillerRoster = roster.find(({ originalName }) => originalName === "Cow31337Killer");
+
   if (cow31337KillerRoster) {
     const member = {
       ...DEFAULT_MEMBER,
@@ -204,24 +217,32 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       },
       lastUpdated: new Date(Date.now()),
     };
+
     while (cowKiller.lastTick < elapsedMS / 600) {
       cowKiller.attackCooldown -= 1;
+
       if (cowKiller.attackCooldown <= 0) {
         const damage = Math.max(Math.min(cowKiller.cowHP, Math.floor(Math.random() * (cowKiller.MAX_HIT + 1))), 1);
         cowKiller.cowHP -= damage;
         cowKiller.damageDone += damage;
+
         if (cowKiller.cowHP <= 0) {
           cowKiller.deathCooldown = 5;
         }
+
         cowKiller.attackCooldown = 7;
       }
+
       cowKiller.deathCooldown -= 1;
+
       if (cowKiller.deathCooldown == 0) {
         cowKiller.cowHP = cowKiller.COW_MAX_HP;
       }
+
       cowKiller.deathCooldown = Math.max(0, cowKiller.deathCooldown);
       cowKiller.lastTick += 1;
     }
+
     member.skills = {
       ...member.skills,
       Attack: EXPERIENCE_99,
@@ -242,7 +263,9 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     };
     results.push(member);
   }
+
   const garyRoster = roster.find(({ originalName }) => originalName === "Gary");
+
   if (garyRoster) {
     const member = {
       ...DEFAULT_MEMBER,
@@ -300,12 +323,15 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     const index = Math.max(Math.floor(elapsedMS / 600), 0) % timeline.length;
     const WIZARD_ENCOUNTER_TICK = timeline.length - 28;
     const WIZARD_DAMAGE_TICK = timeline.length - 26;
+
     if (index > WIZARD_ENCOUNTER_TICK) {
       member.interacting.lastUpdated = new Date(Date.now());
     }
+
     if (index > WIZARD_DAMAGE_TICK) {
       member.stats.health.current = Math.max(0, 10 - Math.floor((index - WIZARD_DAMAGE_TICK) / 4) * 2);
     }
+
     const [x, y] = timeline.at(index) ?? [0, 0];
     member.coordinates = {
       x,
@@ -315,7 +341,9 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     };
     results.push(member);
   }
+
   const xXgamerXxRoster = roster.find(({ originalName }) => originalName === "xXgamerXx");
+
   if (xXgamerXxRoster) {
     const member = {
       ...DEFAULT_MEMBER,
@@ -581,11 +609,14 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
         ].map((item, index) => [index, item]),
       ),
     };
+
     for (const skill of skills) {
       member.skills[skill] = EXPERIENCE_99;
     }
+
     results.push(member);
   }
+
   for (const { displayName } of roster.filter(({ originalName }) => originalName === undefined)) {
     results.push({
       ...DEFAULT_MEMBER,
@@ -593,6 +624,7 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       lastOnlineAt,
     });
   }
+
   return [
     ...roster.map(function getMember({ id, displayName, colorHueDegrees }) {
       return {

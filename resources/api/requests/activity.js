@@ -17,11 +17,22 @@ const responseSchema = z.object({
 
 export async function fetchActivity({ baseURL, credentials, fromTime, cursor }) {
   const parameters = new URLSearchParams();
-  if (fromTime) parameters.set("from_time", fromTime);
-  if (cursor) parameters.set("cursor", cursor);
+
+  if (fromTime) {
+    parameters.set("from_time", fromTime);
+  }
+
+  if (cursor) {
+    parameters.set("cursor", cursor);
+  }
+
   const response = await fetch(`${baseURL}/group/${credentials.name}/activity?${parameters}`, {
     headers: { Authorization: credentials.token },
   });
-  if (!response.ok) throw new Error("Could not load group activity.");
+
+  if (!response.ok) {
+    throw new Error("Could not load group activity.");
+  }
+
   return responseSchema.parse(await response.json());
 }

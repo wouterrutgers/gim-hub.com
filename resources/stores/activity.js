@@ -19,30 +19,50 @@ export const useActivityStore = defineStore("activity", function createActivityS
 
   function mergeEntries(updates) {
     const next = new Map(records.value);
+
     for (const entry of updates) {
       const previous = next.get(entry.id);
-      if (!previous || entry.revision >= previous.revision) next.set(entry.id, entry);
+
+      if (!previous || entry.revision >= previous.revision) {
+        next.set(entry.id, entry);
+      }
     }
+
     for (const [identifier, entry] of next) {
-      if (entry.occurred_at < Date.now() - RETENTION_MILLISECONDS) next.delete(identifier);
+      if (entry.occurred_at < Date.now() - RETENTION_MILLISECONDS) {
+        next.delete(identifier);
+      }
     }
+
     records.value = next;
   }
 
   async function loadOlder() {
-    if (!olderCursor.value || loadingOlder.value) return;
+    if (!olderCursor.value || loadingOlder.value) {
+      return;
+    }
+
     const client = apiStore.client;
     loadingOlder.value = true;
+
     try {
       const response = await client.fetchActivity({ cursor: olderCursor.value });
-      if (apiStore.client !== client) return;
+
+      if (apiStore.client !== client) {
+        return;
+      }
+
       mergeEntries(response.entries);
       olderCursor.value = response.older_cursor;
       error.value = undefined;
     } catch (reason) {
-      if (apiStore.client === client) error.value = reason.message;
+      if (apiStore.client === client) {
+        error.value = reason.message;
+      }
     } finally {
-      if (apiStore.client === client) loadingOlder.value = false;
+      if (apiStore.client === client) {
+        loadingOlder.value = false;
+      }
     }
   }
 
@@ -56,23 +76,40 @@ export const useActivityStore = defineStore("activity", function createActivityS
       error.value = undefined;
       olderCursor.value = undefined;
       loadingOlder.value = false;
-      if (!client) return;
+
+      if (!client) {
+        return;
+      }
+
       let cancelled = false;
       let timeout;
       let fromTime;
       async function poll() {
         try {
           const response = await client.fetchActivity({ fromTime });
-          if (cancelled) return;
+
+          if (cancelled) {
+            return;
+          }
+
           mergeEntries(response.entries);
-          if (!fromTime) olderCursor.value = response.older_cursor;
+
+          if (!fromTime) {
+            olderCursor.value = response.older_cursor;
+          }
+
           fromTime = response.from_time;
           loaded.value = true;
           error.value = undefined;
         } catch (reason) {
-          if (!cancelled) error.value = reason.message;
+          if (!cancelled) {
+            error.value = reason.message;
+          }
         }
-        if (!cancelled) timeout = window.setTimeout(poll, 5000);
+
+        if (!cancelled) {
+          timeout = window.setTimeout(poll, 5000);
+        }
       }
       void poll();
       onCleanup(function disconnect() {

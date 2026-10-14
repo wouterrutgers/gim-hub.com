@@ -76,6 +76,7 @@
     try {
       const response = await apiStore.client.reorderGroupMembers(memberNames);
       reorderError.value = response.status === "error" ? response.text : undefined;
+
       if (response.status === "ok") {
         groupStore.updateMemberOrder(memberNames);
       }

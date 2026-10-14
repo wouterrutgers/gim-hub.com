@@ -26,6 +26,7 @@ class GePrices
         }
 
         $gePrices = [];
+
         foreach ($wikiGEPrices as $itemId => $wikiGEPrice) {
             $avgGEPrice = 0;
 

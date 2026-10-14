@@ -26,6 +26,7 @@ class ChangelogNew extends Command
         $slug = Str::slug($title);
 
         $dir = resource_path('changelog');
+
         if (! File::isDirectory($dir)) {
             File::makeDirectory($dir, 0755, true);
         }

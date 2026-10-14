@@ -37,13 +37,16 @@ const statsSchema = z
 
 function reshapeFlattenedItemArray(flat, keepInvalid) {
   const squeezed = [];
+
   for (let index = 0; index < Math.floor(flat.length / 2); index++) {
     const itemID = flat[2 * index];
     const quantity = flat[2 * index + 1];
+
     if (itemID <= 0 || quantity <= 0) {
       if (keepInvalid) {
         squeezed.push(undefined);
       }
+
       continue;
     } else {
       squeezed.push({
@@ -52,6 +55,7 @@ function reshapeFlattenedItemArray(flat, keepInvalid) {
       });
     }
   }
+
   return squeezed;
 }
 const EquipmentSlotInBackendOrder = [
@@ -211,6 +215,7 @@ function parseDiaries(diaryVars) {
                 if (task.value) {
                   return diaryVars[task.value[0]] === task.value[1];
                 }
+
                 return task.bits.some(function bitComplete([variable, bit]) {
                   return (diaryVars[variable] & (1 << bit)) !== 0;
                 });

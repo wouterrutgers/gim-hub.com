@@ -8,6 +8,7 @@ it('keeps cumulative activity totals through repeated and stale uploads', functi
     $member = $this->createCompleteSnapshotMember($group);
     $first = $this->activityUpdate('xp', ['skills' => ['Attack' => 100, 'Hitpoints' => 30]]);
     $second = [...$first, 'revision' => 2, 'data' => ['skills' => ['Attack' => 200, 'Hitpoints' => 60]]];
+
     foreach ([$first, $second, $second, $first] as $update) {
         $this->withHeader('Authorization', $group->hash)
             ->postJson("/api/group/{$group->name}/update-group-member", ['name' => $member->name, 'activity_updates' => [$update]])
@@ -37,6 +38,7 @@ it('announces valuable loot and new unlocks while grouping repeat collection acq
     $repeat = $this->activityUpdate('loot', ['item_id' => 4151, 'quantity' => 1, 'value' => 100, 'source' => 'Abyssal Sire', 'new_collection_item' => false]);
     $another = [...$repeat, 'id' => Str::uuid()->toString()];
     $ordinary = $this->activityUpdate('loot', ['item_id' => 314, 'quantity' => 10, 'value' => 20, 'source' => 'Chicken', 'new_collection_item' => false]);
+
     foreach ([$valuable, $repeat, $another, $repeat, $another, $ordinary] as $update) {
         $this->withHeader('Authorization', $group->hash)
             ->postJson("/api/group/{$group->name}/update-group-member", ['name' => $member->name, 'activity_updates' => [$update]])->assertSuccessful();

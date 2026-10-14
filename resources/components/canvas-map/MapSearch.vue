@@ -12,21 +12,25 @@
 
   const nameCounts = computed(function countLocationNames() {
     const counts = new Map();
+
     for (const location of mapStore.locations) {
       const name = location.name.toLowerCase();
       counts.set(name, (counts.get(name) ?? 0) + 1);
     }
+
     return counts;
   });
 
   const suggestions = computed(function getSuggestions() {
     const searchText = query.value.trim().toLowerCase();
+
     if (!searchText) {
       return [];
     }
 
     function matchRank(location) {
       const name = location.name.toLowerCase();
+
       return name === searchText ? 0 : name.startsWith(searchText) ? 1 : 2;
     }
 
@@ -61,12 +65,14 @@
   async function handleKeydown(event) {
     if (event.key === "Escape") {
       isOpen.value = false;
+
       return;
     }
 
     if (event.key === "Enter" && showSuggestions.value && suggestions.value.length > 0) {
       event.preventDefault();
       selectLocation(suggestions.value[activeIndex.value]);
+
       return;
     }
 

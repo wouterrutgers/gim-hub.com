@@ -12,6 +12,7 @@ function setsAreEqual(left, right) {
   }
 
   const rightValues = right.values();
+
   for (const value of left) {
     if (rightValues.next().value !== value) {
       return false;
@@ -48,6 +49,7 @@ function createMemberColors(oldState, memberNames, colorUpdates, partial) {
     for (const name of memberNames) {
       if (name === SHARED_MEMBER_NAME) {
         memberColors.set(name, { hueDegrees: 0 });
+
         continue;
       }
 

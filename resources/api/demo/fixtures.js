@@ -6,6 +6,7 @@ export const EXPERIENCE_80 = 1986068;
 export const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 export const DEFAULT_MEMBER = parseGroupData([
   {
+    id: 1,
     name: "",
   },
 ])[0];
@@ -37,6 +38,7 @@ export const DEFAULT_SKILLS = {
 };
 export const MAX_QUEST = parseGroupData([
   {
+    id: 1,
     name: "",
     quests: new Array(400).fill(2),
   },
@@ -85,21 +87,25 @@ const INITIAL_STATE = {
   },
   roster: [
     {
+      id: 1,
       displayName: "Thurgo",
       originalName: "Thurgo",
       colorHueDegrees: 230,
     },
     {
+      id: 2,
       displayName: "Cow31337Killer",
       originalName: "Cow31337Killer",
       colorHueDegrees: 330,
     },
     {
+      id: 3,
       displayName: "Gary",
       originalName: "Gary",
       colorHueDegrees: 100,
     },
     {
+      id: 4,
       displayName: "xXgamerXx",
       originalName: "xXgamerXx",
       colorHueDegrees: 170,
@@ -108,7 +114,10 @@ const INITIAL_STATE = {
   skillData: new Map(),
   hiscores: new Map(),
   collections: new Map(),
-  snapshots: new Map(),
+  activities: new Map(),
+  activitySkills: new Map(),
+  nextActivityIdentifier: 1,
+  nextMemberIdentifier: 6,
   banks: new Map(),
   sharedBank: new Map(),
 };

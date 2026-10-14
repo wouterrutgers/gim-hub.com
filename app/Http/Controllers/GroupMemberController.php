@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Domain\MemberPlugin;
-use App\Domain\MemberSnapshotCreator;
 use App\Domain\MemberUpdates;
 use App\Domain\MemberUpdateValidation;
 use App\Domain\SkillHistory;
@@ -234,6 +233,7 @@ class GroupMemberController extends Controller
             $lastUpdated = $properties->max('updated_at');
 
             $data = [
+                'id' => $member->id,
                 'name' => $member->name,
                 'plugin_status' => MemberPlugin::status($member, cache('plugin.latest_version')),
                 'color_hue_degrees' => $member->color_hue_degrees,
@@ -310,69 +310,6 @@ class GroupMemberController extends Controller
                 $query->where('group_id', '=', $groupId);
             })
             ->get()->groupBy('member.name')->map->pluck('item_count', 'item_id');
-    }
-
-    public function getSnapshots(Request $request): JsonResponse
-    {
-        $groupId = $request->attributes->get('group')->id;
-        $validated = $request->validate([
-            'markers' => [
-                'sometimes',
-                'array',
-            ],
-            'markers.*' => ['numeric'],
-        ]);
-        $markers = $validated['markers'] ?? [];
-
-        $snapshots = Member::where('group_id', '=', $groupId)
-            ->whereHas('snapshots')
-            ->select(['id', 'name'])
-            ->get()
-            ->mapWithKeys(function (Member $member) use ($markers): array {
-                $lastWeek = $member->snapshots()
-                    ->orderBy('created_at')
-                    ->orderBy('id')
-                    ->first();
-                $lastVisit = $lastWeek;
-
-                if (isset($markers[$member->name])) {
-                    $lastVisit = $member->snapshots()
-                        ->where('snapshot->timestamp', '<=', (int) $markers[$member->name])
-                        ->orderByDesc('snapshot->timestamp')
-                        ->orderByDesc('id')
-                        ->first() ?? $lastWeek;
-                }
-
-                return [$member->name => [
-                    'lastVisit' => $lastVisit->snapshot,
-                    'lastWeek' => $lastWeek->snapshot,
-                ]];
-            });
-
-        return response()->json((object) $snapshots->all());
-    }
-
-    public function createSnapshot(Request $request, MemberSnapshotCreator $creator): JsonResponse
-    {
-        $groupId = $request->attributes->get('group')->id;
-        $validated = $request->validate([
-            'name' => ['required', 'string'],
-        ]);
-        $member = Member::where('group_id', '=', $groupId)
-            ->where('name', '=', $validated['name'])
-            ->first();
-
-        if (! $member) {
-            return response()->json(['error' => 'Member not found'], 404);
-        }
-
-        $snapshot = $creator->create($member);
-
-        if (! $snapshot) {
-            return response()->json(['error' => 'Member skills are unavailable'], 409);
-        }
-
-        return response()->json($snapshot->snapshot, 201);
     }
 
     public function getHiscores(): JsonResponse

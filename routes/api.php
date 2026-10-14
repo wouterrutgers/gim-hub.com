@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GroupActivityController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\UnauthedController;
@@ -17,12 +18,11 @@ Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(func
     Route::put('/rename-group-member', [GroupMemberController::class, 'renameGroupMember']);
     Route::put('/reorder-group-members', [GroupMemberController::class, 'reorderGroupMembers']);
     Route::post('/update-group-member', [GroupMemberController::class, 'updateGroupMember']);
+    Route::get('/activity', [GroupActivityController::class, 'index']);
     Route::put('/update-member-color', [GroupMemberController::class, 'updateMemberColor']);
     Route::get('/get-group-data', [GroupMemberController::class, 'getGroupData']);
     Route::get('/get-skill-data', [GroupMemberController::class, 'getSkillData']);
     Route::get('/collection-log', [GroupMemberController::class, 'getCollectionLog']);
-    Route::get('/snapshots', [GroupMemberController::class, 'getSnapshots']);
-    Route::post('/snapshots', [GroupMemberController::class, 'createSnapshot']);
     Route::get('/am-i-logged-in', [GroupMemberController::class, 'amILoggedIn']);
     Route::get('/am-i-in-group', [GroupMemberController::class, 'amIInGroup']);
     Route::get('/hiscores', [GroupMemberController::class, 'getHiscores']);

@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\Member;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -14,58 +15,6 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         Http::preventStrayRequests();
-    }
-
-    /**
-     * @return list<string>
-     */
-    protected function snapshotSkillNames(): array
-    {
-        return [
-            'Agility',
-            'Attack',
-            'Construction',
-            'Cooking',
-            'Crafting',
-            'Defence',
-            'Farming',
-            'Firemaking',
-            'Fishing',
-            'Fletching',
-            'Herblore',
-            'Hitpoints',
-            'Hunter',
-            'Magic',
-            'Mining',
-            'Prayer',
-            'Ranged',
-            'Runecraft',
-            'Slayer',
-            'Smithing',
-            'Strength',
-            'Thieving',
-            'Woodcutting',
-            'Sailing',
-        ];
-    }
-
-    /**
-     * @param  array<string, int>  $skillExperience
-     * @param  list<array{name: string, score: int}>  $activities
-     * @return array{skills: list<array{name: string, xp: int}>, activities: list<array{name: string, score: int}>}
-     */
-    protected function snapshotHiscoresResponse(array $skillExperience = [], array $activities = []): array
-    {
-        return [
-            'skills' => array_map(
-                fn (string $skill): array => [
-                    'name' => $skill,
-                    'xp' => $skillExperience[$skill] ?? 100,
-                ],
-                $this->snapshotSkillNames(),
-            ),
-            'activities' => $activities,
-        ];
     }
 
     protected function createSnapshotGroup(string $name = 'test-group'): Group
@@ -92,28 +41,15 @@ abstract class TestCase extends BaseTestCase
         return $member->load('properties');
     }
 
-    /**
-     * @return array{
-     *     timestamp: int,
-     *     skills: array<string, int>,
-     *     quests: array<string, string>,
-     *     diaries: array<int, int>,
-     *     collection: array<string, int>,
-     *     bossKc: array<string, int>
-     * }
-     */
-    protected function snapshotPayload(int $timestamp, int $attackExperience = 100): array
+    protected function activityUpdate(string $type, array $data, ?string $identifier = null, int $revision = 1): array
     {
-        $skills = array_fill_keys($this->snapshotSkillNames(), 100);
-        $skills['Attack'] = $attackExperience;
-
         return [
-            'timestamp' => $timestamp,
-            'skills' => $skills,
-            'quests' => ['0' => 'FINISHED'],
-            'diaries' => array_fill(0, 62, 0),
-            'collection' => ['4151' => 1],
-            'bossKc' => [],
+            'id' => $identifier ?? Str::uuid()->toString(),
+            'type' => $type,
+            'revision' => $revision,
+            'started_at' => now()->getTimestampMs(),
+            'occurred_at' => now()->getTimestampMs(),
+            'data' => $data,
         ];
     }
 }

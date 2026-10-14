@@ -1,0 +1,95 @@
+import { computed, ref, shallowRef, watch } from "vue";
+import { defineStore } from "pinia";
+import { useApiStore } from "./api";
+
+const RETENTION_MILLISECONDS = 30 * 24 * 60 * 60 * 1000;
+
+export const useActivityStore = defineStore("activity", function createActivityStore() {
+  const apiStore = useApiStore();
+  const records = shallowRef(new Map());
+  const loaded = ref(false);
+  const error = ref();
+  const olderCursor = ref();
+  const loadingOlder = ref(false);
+  const entries = computed(function sortedEntries() {
+    return [...records.value.values()].sort(function chronologicalOrder(left, right) {
+      return right.started_at - left.started_at || right.id - left.id;
+    });
+  });
+
+  function mergeEntries(updates) {
+    const next = new Map(records.value);
+    for (const entry of updates) {
+      const previous = next.get(entry.id);
+      if (!previous || entry.revision >= previous.revision) next.set(entry.id, entry);
+    }
+    for (const [identifier, entry] of next) {
+      if (entry.occurred_at < Date.now() - RETENTION_MILLISECONDS) next.delete(identifier);
+    }
+    records.value = next;
+  }
+
+  async function loadOlder() {
+    if (!olderCursor.value || loadingOlder.value) return;
+    const client = apiStore.client;
+    loadingOlder.value = true;
+    try {
+      const response = await client.fetchActivity({ cursor: olderCursor.value });
+      if (apiStore.client !== client) return;
+      mergeEntries(response.entries);
+      olderCursor.value = response.older_cursor;
+      error.value = undefined;
+    } catch (reason) {
+      if (apiStore.client === client) error.value = reason.message;
+    } finally {
+      if (apiStore.client === client) loadingOlder.value = false;
+    }
+  }
+
+  watch(
+    function getClient() {
+      return apiStore.client;
+    },
+    function connect(client, _previous, onCleanup) {
+      records.value = new Map();
+      loaded.value = false;
+      error.value = undefined;
+      olderCursor.value = undefined;
+      loadingOlder.value = false;
+      if (!client) return;
+      let cancelled = false;
+      let timeout;
+      let fromTime;
+      async function poll() {
+        try {
+          const response = await client.fetchActivity({ fromTime });
+          if (cancelled) return;
+          mergeEntries(response.entries);
+          if (!fromTime) olderCursor.value = response.older_cursor;
+          fromTime = response.from_time;
+          loaded.value = true;
+          error.value = undefined;
+        } catch (reason) {
+          if (!cancelled) error.value = reason.message;
+        }
+        if (!cancelled) timeout = window.setTimeout(poll, 5000);
+      }
+      void poll();
+      onCleanup(function disconnect() {
+        cancelled = true;
+        window.clearTimeout(timeout);
+      });
+    },
+    { immediate: true },
+  );
+
+  return {
+    entries,
+    loaded,
+    error,
+    olderCursor,
+    loadingOlder,
+    mergeEntries,
+    loadOlder,
+  };
+});

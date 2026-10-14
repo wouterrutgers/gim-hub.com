@@ -594,11 +594,15 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
     });
   }
   return [
-    ...roster.map(function getMember({ displayName }) {
-      return results.find(function matchesMember(member) {
-        return member.name === displayName;
-      });
+    ...roster.map(function getMember({ id, displayName, colorHueDegrees }) {
+      return {
+        ...results.find(function matchesMember(member) {
+          return member.name === displayName;
+        }),
+        id,
+        colorHueDegrees,
+      };
     }),
-    { ...DEFAULT_MEMBER, name: "@SHARED", bank: sharedBank },
+    { ...DEFAULT_MEMBER, id: 5, name: "@SHARED", bank: sharedBank },
   ];
 }

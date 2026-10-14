@@ -110,6 +110,11 @@ class CollectionLogUpdates
                 |> (fn ($x) => json_decode($x, associative: true, flags: JSON_THROW_ON_ERROR));
     }
 
+    public static function contains(int $identifier): bool
+    {
+        return isset(static::items()[static::aliases()[$identifier] ?? $identifier]);
+    }
+
     protected static function items(): array
     {
         return static::$items ??= ('assets/data/collection_log_info.json'

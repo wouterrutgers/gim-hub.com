@@ -8,6 +8,7 @@
   overflow-y: auto;
   box-sizing: border-box;
   height: 100%;
+  pointer-events: auto;
 }
 
 @media only screen and (width <= 800px) {
@@ -21,6 +22,7 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  min-height: 0;
   gap: 8px;
   z-index: 1;
 }
@@ -29,4 +31,48 @@
   position: absolute;
   inset: 0;
   overflow-y: scroll;
+}
+
+.authed-layout {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.authed-workspace {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+}
+
+.activity-dock {
+  width: 320px;
+  flex: none;
+  pointer-events: auto;
+}
+
+@media (width <= 1439px) {
+  .authed-layout {
+    flex-direction: column;
+  }
+
+  .activity-dock {
+    width: auto;
+    height: 200px;
+  }
+
+  .activity-collapse .activity-toggle-chevron {
+    transform: rotate(45deg);
+  }
+}
+
+@media (width <= 800px) {
+  .activity-dock {
+    height: min(55svh, 440px);
+  }
 }

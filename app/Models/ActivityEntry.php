@@ -5,12 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class MemberSnapshot extends Model
+class ActivityEntry extends Model
 {
     protected $guarded = [];
 
+    protected $dateFormat = 'Y-m-d H:i:s.v';
+
     protected $casts = [
-        'snapshot' => 'array',
+        'data' => 'array',
+        'revision' => 'integer',
+        'started_at' => 'integer',
+        'occurred_at' => 'integer',
     ];
 
     public function member(): BelongsTo

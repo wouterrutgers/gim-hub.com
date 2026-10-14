@@ -3,20 +3,26 @@ import DemoClient from "../../api/demo-client";
 import demoData from "../../api/demo-data.json";
 import { createInitialState } from "../../api/demo/fixtures";
 import { mockGroupDataResponse } from "../../api/demo/group-simulation";
-import { createSkillsSnapshot } from "../../api/demo/snapshot-history";
-import { skills } from "../../game/skill";
+import { populateActivity } from "../../api/demo/activity";
 
 describe("demo client", function describeDemoClient() {
-  it("creates skill snapshots in domain order", function testSkillSnapshot() {
-    const skillExperience = Object.fromEntries(
-      skills.map(function createSkillExperience(skill) {
-        return [skill, 100];
-      }),
-    );
-    const snapshot = createSkillsSnapshot(skillExperience, { Attack: 25 });
-
-    expect(snapshot.Attack).toBe(75);
-    expect(snapshot.Defence).toBe(100);
+  it("keeps demo activity attached to renamed members", async function testDemoActivity() {
+    const client = new DemoClient();
+    client.demoData = demoData;
+    vi.spyOn(client, "fetchGameData").mockResolvedValue({});
+    populateActivity(client.state);
+    const original = await client.fetchActivity();
+    await client.renameGroupMember({ oldName: "Cow31337Killer", newName: "Test player" });
+    const renamed = (await client.fetchGroupData()).find(function renamedMember(member) {
+      return member.name === "Test player";
+    });
+    const response = await client.fetchActivity();
+    expect(
+      response.entries.filter(function member(entry) {
+        return entry.member_id === renamed.id;
+      }).length,
+    ).toBe(2);
+    expect(response.entries).toEqual(original.entries);
   });
 
   it("creates isolated initial simulation state", function testInitialState() {
@@ -59,16 +65,15 @@ describe("demo client", function describeDemoClient() {
     const client = new DemoClient();
     client.demoData = demoData;
     vi.spyOn(client, "fetchGameData").mockResolvedValue({});
+    const initialMembers = await client.fetchGroupData();
 
     await client.reorderGroupMembers(["Gary", "Thurgo", "Cow31337Killer", "xXgamerXx"]);
 
-    expect((await client.fetchGroupData()).map(({ name }) => name)).toEqual([
-      "Gary",
-      "Thurgo",
-      "Cow31337Killer",
-      "xXgamerXx",
-      "@SHARED",
-    ]);
+    const members = await client.fetchGroupData();
+    expect(members.map(({ name }) => name)).toEqual(["Gary", "Thurgo", "Cow31337Killer", "xXgamerXx", "@SHARED"]);
+    for (const member of members) {
+      expect(member.id).toBe(initialMembers.find(({ name }) => name === member.name).id);
+    }
   });
 
   it("retries initialization after a failure", async function testInitializationRetry() {

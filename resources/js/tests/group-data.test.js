@@ -5,6 +5,7 @@ describe("parseGroupData", function describeParseGroupData() {
   it("validates and maps API payloads to domain values", function testGroupDataMapping() {
     const [member] = parseGroupData([
       {
+        id: 1,
         name: "Wise Old Man",
         coordinates: [3200, 3201, 1, 1],
         last_updated: "2026-08-13T10:00:00.000Z",
@@ -32,7 +33,7 @@ describe("parseGroupData", function describeParseGroupData() {
     ["invalid run maximum", [90, 99, 50, 70, 8750, 99, 301, 42]],
   ])("rejects stats with %s", function testMalformedGroupData(reason, stats) {
     expect(function parseMalformedPayload() {
-      parseGroupData([{ name: "Wise Old Man", stats }]);
+      parseGroupData([{ id: 1, name: "Wise Old Man", stats }]);
     }).toThrow("GetGroupData response payload was malformed.");
   });
 });

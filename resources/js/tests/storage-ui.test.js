@@ -70,6 +70,7 @@ describe("storage UI", function storageInterface() {
   it("shows contents only for filled portable containers", async function portableTooltips() {
     payload = [
       {
+        id: 1,
         name: "Alice",
         inventory: Array.from({ length: 28 }, function slot(_value, index) {
           return [portableItems[index] ?? 0, portableItems[index] ? 1 : 0];
@@ -114,6 +115,7 @@ describe("storage UI", function storageInterface() {
   it("marks tracked containers with contents and shows combined essence details", async function containerPreviews() {
     payload = [
       {
+        id: 1,
         name: "Alice",
         inventory: [...otherContainers, 30000, 12791]
           .flatMap(function inventoryItem(id) {
@@ -159,6 +161,7 @@ describe("storage UI", function storageInterface() {
   it("uses the usual empty inventory view when STASH units have no known items", async function statusOnlyUnits() {
     payload = [
       {
+        id: 1,
         name: "Alice",
         stash_units: [
           { id: 29019, name: "Kharazi Jungle", tier: "Hard", state: "filled", items: [], alternatives: ["Any stole"] },
@@ -177,6 +180,7 @@ describe("storage UI", function storageInterface() {
     vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
     payload = [
       {
+        id: 1,
         name: "Alice",
         bank: [199, 3],
         stash_units: [
@@ -237,7 +241,7 @@ describe("storage UI", function storageInterface() {
   it("combines excluded names and tags with AND before OR in item search", async function combinedItemSearch() {
     vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(600);
     vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
-    payload = [{ name: "Alice", bank: [199, 1, 1095, 1, 5295, 1] }];
+    payload = [{ id: 1, name: "Alice", bank: [199, 1, 1095, 1, 5295, 1] }];
     await mount(ItemsPage, { tags: [["herb", 0]], items: { 199: 1n, 5295: 1n } });
 
     const search = container.querySelector("#items-page-search input");
@@ -268,7 +272,7 @@ describe("storage UI", function storageInterface() {
   it("applies a tag to every alternative in a bracketed item search", async function bracketedItemSearch() {
     vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(600);
     vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
-    payload = [{ name: "Alice", bank: [2430, 1, 2432, 1, 30001, 1] }];
+    payload = [{ id: 1, name: "Alice", bank: [2430, 1, 2432, 1, 30001, 1] }];
     await mount(ItemsPage, { tags: [["potions", 0]], items: { 2430: 1n, 2432: 1n } });
 
     const search = container.querySelector("#items-page-search input");

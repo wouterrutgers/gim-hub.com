@@ -22,6 +22,10 @@ class MemberUpdates
         if (! empty($data['collection_log_updates'])) {
             CollectionLogUpdates::apply($member, $data['collection_log_updates']);
         }
+
+        if (! empty($data['activity_updates'])) {
+            ActivityUpdates::apply($member, $data['activity_updates']);
+        }
     }
 
     protected static function properties(Member $member, array $data): void

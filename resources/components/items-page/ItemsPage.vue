@@ -93,11 +93,13 @@
 
     for (const [itemID, breakdownByMember] of groupStore.items) {
       const itemDatum = itemData?.get(itemID);
+
       if (!itemDatum || !itemMatchesSearch(itemID, itemDatum, itemTags)) {
         continue;
       }
 
       const totalQuantity = getFilteredQuantity(breakdownByMember);
+
       if (totalQuantity <= 0) {
         continue;
       }
@@ -181,6 +183,7 @@
 
     for (let index = 0; index < value.length; index++) {
       const character = value[index];
+
       if (character === '"') {
         quoted = !quoted;
       } else if (!quoted && character === "[") {
@@ -194,29 +197,36 @@
     }
 
     parts.push(value.slice(start));
+
     return parts;
   }
 
   function parseSearchExpression(value) {
     const searchValue = value.trim().toLocaleLowerCase();
+
     if (searchValue.length === 0 || searchValue === "-") {
       return undefined;
     }
 
     const alternatives = splitSearchExpression(searchValue, "|");
+
     if (alternatives.length > 1) {
       const expressions = alternatives.map(parseSearchExpression).filter(Boolean);
+
       return expressions.length > 1 ? { type: "Or", expressions } : expressions[0];
     }
 
     const requirements = splitSearchExpression(searchValue, "&");
+
     if (requirements.length > 1) {
       const expressions = requirements.map(parseSearchExpression).filter(Boolean);
+
       return expressions.length > 1 ? { type: "And", expressions } : expressions[0];
     }
 
     if (searchValue.startsWith("-[") && searchValue.endsWith("]")) {
       const expression = parseSearchExpression(searchValue.slice(2, -1));
+
       return expression ? { type: "Not", expression } : undefined;
     }
 
@@ -227,17 +237,20 @@
     const excluded = searchValue.startsWith("-");
     const term = excluded ? searchValue.slice(1) : searchValue;
     const exact = term.startsWith('"') && term.endsWith('"');
+
     if (exact) {
       return term.length > 2 ? { type: "Name", lowercase: term.slice(1, -1), exact: true, excluded } : undefined;
     }
 
     const splitForTag = term.split(":");
+
     if (splitForTag.length === 1 || splitForTag[0] !== "tag") {
       return { type: "Name", lowercase: term, exact: false, excluded };
     }
 
     const suffix = splitForTag.slice(1).join(":");
     let bitmask = 0n;
+
     for (const [tag, bitIndex] of gameDataStore.gameData.itemTags?.tags ?? []) {
       if (tag.toLocaleLowerCase() === suffix) {
         bitmask += 1n << BigInt(bitIndex);
@@ -265,6 +278,7 @@
     }
 
     let matches;
+
     if (expression.type === "Name") {
       matches = expression.exact
         ? expression.lowercase === itemLowercase
@@ -352,6 +366,7 @@
     ],
     function removeMissingMembers() {
       const normalizedFilter = [...memberFilter.value].join(",");
+
       if ((memberFilterUserString.value ?? "") !== normalizedFilter) {
         setMemberFilterUserString(normalizedFilter || undefined);
       }

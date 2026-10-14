@@ -47,6 +47,7 @@ it('accepts uploads and derives version warnings from the latest approved releas
     $status = $this->getJson('/api/group/plugin-group/get-group-data?from_time=2099-01-01')->json('0.plugin_status');
 
     expect($status['reason'] ?? null)->toBe($expectedReason);
+
     if (! is_null($expectedReason)) {
         expect($status['installed_version'])->toBe($version);
         expect($status['latest_version'])->toBe('1.9.1');

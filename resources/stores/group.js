@@ -57,6 +57,7 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
     }
 
     const updates = new Map();
+
     for (const [name, collection] of collections) {
       updates.set(name, { collection });
     }

@@ -48,6 +48,7 @@ it('retains each tier and its preceding baseline without expiring monthly histor
             }
         }
     }
+
     foreach (['2020-01-01', '2021-01-01'] as $time) {
         $member->skillStats()->create(['type' => 'monthly', 'skills' => array_fill(0, 24, 1), 'created_at' => $time]);
     }
@@ -55,6 +56,7 @@ it('retains each tier and its preceding baseline without expiring monthly histor
     $this->artisan('skills:retention')->assertSuccessful();
 
     expect(SkillStat::where('type', '=', 'monthly')->count())->toBe(2);
+
     foreach ([$member, $otherMember] as $currentMember) {
         foreach (['five_minutes', 'hourly', 'daily'] as $type) {
             expect($currentMember->skillStats()->where('type', '=', $type)->orderBy('created_at')->get()->pluck('attack')->all())->toBe([99, 100, 101]);
@@ -64,6 +66,7 @@ it('retains each tier and its preceding baseline without expiring monthly histor
 
 it('does not prune history before the first successful aggregation', function (): void {
     $member = $this->createCompleteSnapshotMember($this->createSnapshotGroup());
+
     foreach (['2020-01-01', '2020-02-01'] as $time) {
         $member->skillStats()->create(['type' => 'hourly', 'skills' => array_fill(0, 24, 1), 'created_at' => $time]);
     }

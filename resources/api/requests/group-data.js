@@ -36,13 +36,16 @@ const statsSchema = z
 
 function reshapeFlattenedItemArray(flat, keepInvalid) {
   const squeezed = [];
+
   for (let index = 0; index < Math.floor(flat.length / 2); index++) {
     const itemID = flat[2 * index];
     const quantity = flat[2 * index + 1];
+
     if (itemID <= 0 || quantity <= 0) {
       if (keepInvalid) {
         squeezed.push(undefined);
       }
+
       continue;
     } else {
       squeezed.push({
@@ -51,6 +54,7 @@ function reshapeFlattenedItemArray(flat, keepInvalid) {
       });
     }
   }
+
   return squeezed;
 }
 const EquipmentSlotInBackendOrder = [

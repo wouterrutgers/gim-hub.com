@@ -81,6 +81,7 @@ class ImportGroupironData extends Command
                     }
 
                     $collectionLog = $memberData['collection_log_v2'] ?? null;
+
                     if (is_array($collectionLog)) {
                         $importedCollectionItems += $this->syncCollectionLog($member, $collectionLog);
                     }
@@ -141,6 +142,7 @@ class ImportGroupironData extends Command
         $member->collectionLogs()->delete();
 
         $itemCounts = [];
+
         for ($i = 0; $i + 1 < count($collectionLog); $i += 2) {
             $itemId = $collectionLog[$i];
             $itemCount = max(0, (int) $collectionLog[$i + 1]);
@@ -157,6 +159,7 @@ class ImportGroupironData extends Command
         }
 
         $insertRows = [];
+
         foreach ($itemCounts as $itemId => $itemCount) {
             $insertRows[] = [
                 'member_id' => $member->id,

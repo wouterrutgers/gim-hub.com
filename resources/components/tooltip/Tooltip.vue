@@ -86,9 +86,11 @@
 
     if (data.storageItems) {
       lines.push({ key: "storage-separator", type: "separator" });
+
       if (data.storageNotice) {
         lines.push({ key: "storage-notice", value: data.storageNotice });
       }
+
       for (const { name, quantity } of data.storageItems) {
         lines.push({ key: `stored-${name}`, value: `${quantity.toLocaleString()} ${name}` });
       }

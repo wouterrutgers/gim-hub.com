@@ -81,6 +81,7 @@ describe("player activity window", function describePlayerActivityWindow() {
         expect(client.fetchMemberHiscores).toHaveBeenCalledWith(player);
         expect(container.querySelector(".player-activity-collection-name")?.textContent).toBe("Fresh drop");
         expect(container.querySelector(".player-activity-bosskc-change")?.textContent).toBe("10→12");
+
         if (quantityBefore > 0) {
           expect(container.querySelector(".player-activity-collection-qty")?.textContent).toBe("2→3");
           expect(container.querySelector(".player-activity-collection-new")).toBeNull();

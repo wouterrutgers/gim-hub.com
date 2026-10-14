@@ -26,9 +26,11 @@ function fakeImageLoading() {
   const createBitmap = vi.fn(async function decodeImage(image) {
     const bitmap = { source: image.src, close: vi.fn() };
     bitmaps.push(bitmap);
+
     return bitmap;
   });
   vi.stubGlobal("createImageBitmap", createBitmap);
+
   return { bitmaps, createBitmap };
 }
 
@@ -37,6 +39,7 @@ function createRenderer() {
     return path;
   });
   renderer.processMapData({ icons: {}, labels: {}, labelNames: {} });
+
   return renderer;
 }
 
@@ -63,6 +66,7 @@ async function loadRegion(renderer, x, y) {
   const context = createRegionContext({ x, y }, { x: x + 1, y: y + 1 });
   renderer.loadVisibleAll(context);
   await settleImageLoads();
+
   return context;
 }
 
@@ -79,6 +83,7 @@ function mountMap() {
   const application = createTestApplication(CanvasMap, { interactive: true });
   application.use(pinia);
   application.mount("#test-canvas-map");
+
   return application;
 }
 
@@ -89,10 +94,12 @@ describe("map bitmap lifetime", function describeBitmapLifetime() {
 
     for (let index = 0; index < 300; index++) {
       await loadRegion(renderer, 18 + (index % 30), 19 + Math.floor(index / 30));
+
       if (index === 150) {
         await loadRegion(renderer, 18, 19);
       }
     }
+
     await loadRegion(renderer, 18, 19);
 
     expect(createBitmap).toHaveBeenCalledTimes(300);
@@ -121,19 +128,23 @@ describe("map bitmap lifetime", function describeBitmapLifetime() {
       renderer.loadVisibleAll(context);
       await settleImageLoads();
     }
+
     renderer.drawVisibleRegions(context);
 
     expect(context.drawImageSnappedToGrid).toHaveBeenCalledTimes(272);
+
     for (const bitmap of bitmaps) {
       expect(bitmap.close).not.toHaveBeenCalled();
     }
 
     const previousPlaneBitmaps = [...bitmaps];
     renderer.setPlane(1);
+
     for (let frame = 0; frame < 12; frame++) {
       renderer.loadVisibleAll(context);
       await settleImageLoads();
     }
+
     for (const bitmap of previousPlaneBitmaps) {
       expect(bitmap.close).toHaveBeenCalledOnce();
     }
@@ -179,6 +190,7 @@ describe("map bitmap lifetime", function describeBitmapLifetime() {
           finishLabelDecode = resolve;
         });
       }
+
       return decodeImage(image);
     });
     renderer.iconsAtlas = { close: vi.fn() };
@@ -196,9 +208,11 @@ describe("map bitmap lifetime", function describeBitmapLifetime() {
     await settleImageLoads();
 
     expect(bitmaps).toHaveLength(2);
+
     for (const bitmap of bitmaps) {
       expect(bitmap.close).toHaveBeenCalledOnce();
     }
+
     expect(renderer.iconsAtlas.close).toHaveBeenCalledOnce();
     expect(lateLabelBitmap.close).toHaveBeenCalledOnce();
   });

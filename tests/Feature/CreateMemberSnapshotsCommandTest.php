@@ -27,6 +27,7 @@ it('queues recently updated members and globally prunes expired snapshots', func
         'name' => 'No data',
     ]);
     $staleMember = $this->createCompleteSnapshotMember($group, 'Stale');
+
     foreach ($staleMember->properties as $property) {
         $property->update(['updated_at' => $staleUpdatedAt]);
     }

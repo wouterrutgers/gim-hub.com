@@ -32,6 +32,7 @@ class UnauthedController extends Controller
                 $markdown = File::get($file->getPathname());
 
                 $title = null;
+
                 if (preg_match('/^\s*#\s+(.+)\s*$/m', $markdown, $titleMatch)) {
                     $title = trim($titleMatch[1]);
                     $markdown = preg_replace('/^\s*#\s+.*\R/', '', $markdown, 1) ?? $markdown;

@@ -243,8 +243,10 @@ class GroupMemberController extends Controller
 
             foreach (Member::PROPERTY_KEYS as $key) {
                 $property = $properties->get($key);
+
                 if ($property && $property->updated_at >= $fromTime) {
                     $value = $property->value;
+
                     if ($key === 'interacting') {
                         $value = $this->withInteractingTimestamp($value, $property->updated_at);
                     }

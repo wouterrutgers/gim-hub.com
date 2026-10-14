@@ -191,6 +191,7 @@ it("loads and switches presets using server ranges when the browser clock is ahe
   vi.setSystemTime(new Date("2026-09-07T13:00:02Z"));
   const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(async function fetchHistory(url) {
     const period = new URL(url, "https://example.test").searchParams.get("period");
+
     return new Response(
       JSON.stringify({
         start: period === "Day" ? "2026-09-06T13:00:00Z" : "2026-08-31T13:00:00Z",

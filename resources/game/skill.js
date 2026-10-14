@@ -54,6 +54,7 @@ export const skillIcons = {
 const levelLookup = new Map();
 {
   let xp = 0;
+
   for (let L = 1; L <= 126; L++) {
     levelLookup.set(L, Math.floor(xp));
     xp += 0.25 * Math.floor(L + 300 * 2 ** (L / 7));
@@ -61,7 +62,11 @@ const levelLookup = new Map();
 }
 export function computeVirtualLevelFromXP(xp) {
   let virtualLevel = 1;
-  while (xp >= (levelLookup.get(virtualLevel + 1) ?? Infinity)) virtualLevel += 1;
+
+  while (xp >= (levelLookup.get(virtualLevel + 1) ?? Infinity)) {
+    virtualLevel += 1;
+  }
+
   return virtualLevel;
 }
 const LEVEL_MAX = 99;
@@ -70,6 +75,7 @@ export function decomposeExperience(xp) {
   const levelReal = Math.min(levelVirtual, LEVEL_MAX);
   const xpMilestoneOfCurrent = levelLookup.get(levelVirtual) ?? 0;
   const xpMilestoneOfNext = levelLookup.get(levelVirtual + 1) ?? 0;
+
   return {
     levelVirtual: levelVirtual,
     levelReal: levelReal,

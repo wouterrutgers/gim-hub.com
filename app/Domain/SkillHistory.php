@@ -64,6 +64,7 @@ class SkillHistory
             }
 
             $previous = (clone $query)->where('created_at', '<=', $start)->orderByDesc('created_at')->orderByDesc('id')->first();
+
             if (! is_null($previous) && (is_null($baseline) || $previous->created_at > $baseline->created_at)) {
                 $baseline = $previous;
             }
@@ -74,6 +75,7 @@ class SkillHistory
                 }
 
                 $bucket = intdiv($sample->created_at->getTimestamp() - $start->getTimestamp() - 1, $bucketSeconds);
+
                 if (! isset($buckets[$bucket]) || $sample->created_at >= $buckets[$bucket]->created_at) {
                     $buckets[$bucket] = $sample;
                 }

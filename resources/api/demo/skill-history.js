@@ -14,10 +14,12 @@ export function populateSkillDataFromRoster(state) {
     ...DateFNS.eachMinuteOfInterval({ start: recentStart, end: now }, { step: 5, in: utc }),
   ];
   state.skillData = new Map();
+
   for (const [memberIndex, { displayName }] of state.roster.entries()) {
     const samples = dates.map(function createSample(time) {
       const hours = (time - earliest) / 3_600_000;
       const activeHours = Math.floor(hours / 24) * 6 + Math.min(6, Math.max(0, (hours % 24) - 12));
+
       return {
         time,
         data: skillsInBackendOrder.map(function createExperience(_, skillIndex) {
@@ -33,10 +35,12 @@ export function getDemoSkillHistory(state, { period, start, end }) {
   if (period) {
     ({ start, end } = rangeForPeriod(period));
   }
+
   const earliest = state.skillData.values().next().value?.[0].time ?? null;
   start ??= earliest ?? DateFNS.subDays(end, 1);
   const bucketMilliseconds = Math.max(1000, Math.ceil((end - start) / 1500 / 1000) * 1000);
   const members = new Map();
+
   for (const [member, samples] of state.skillData) {
     const baseline = samples.findLast(function isBaseline(sample) {
       return sample.time <= start;
@@ -45,10 +49,13 @@ export function getDemoSkillHistory(state, { period, start, end }) {
       return sample.time > start && sample.time <= end;
     });
     const buckets = new Map();
+
     for (const sample of visible) {
       buckets.set(Math.floor((sample.time - start - 1) / bucketMilliseconds), sample);
     }
+
     members.set(member, [...new Set([baseline, visible[0], ...buckets.values()].filter(Boolean))]);
   }
+
   return structuredClone({ start, end, earliest, members });
 }

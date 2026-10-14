@@ -171,10 +171,14 @@
       });
       apiStore.client.fetchMemberHiscores(player).then(
         function storeHiscores(result) {
-          if (!cancelled) hiscores.value = result;
+          if (!cancelled) {
+            hiscores.value = result;
+          }
         },
         function storeEmptyHiscores() {
-          if (!cancelled) hiscores.value = new Map();
+          if (!cancelled) {
+            hiscores.value = new Map();
+          }
         },
       );
     },

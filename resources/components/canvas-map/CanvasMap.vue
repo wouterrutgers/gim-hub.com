@@ -29,8 +29,10 @@
       function storeRenderer(mapRenderer) {
         if (!canvas.value) {
           mapRenderer.dispose();
+
           return;
         }
+
         mapStore.setRenderer(mapRenderer);
       },
       function reportRendererError(reason) {

@@ -91,9 +91,11 @@ export function populateSnapshotHistory(state, gameData) {
   const gamerSkills = {
     ...DEFAULT_SKILLS,
   };
+
   for (const skill of skills) {
     gamerSkills[skill] = EXPERIENCE_99;
   }
+
   state.collections.get(cowName)?.set(12932, 1);
   state.collections.get(cowName)?.set(12922, 2);
   state.collections.get(cowName)?.set(4716, 1);

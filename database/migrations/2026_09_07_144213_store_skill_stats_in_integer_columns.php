@@ -45,6 +45,7 @@ return new class extends Migration
 
         DB::table('skill_stats')->chunkById(500, function (Collection $stats): void {
             $rows = [];
+
             foreach ($stats as $stat) {
                 $rows[] = json_decode($stat->skills, associative: true, flags: JSON_THROW_ON_ERROR)
                         |> (fn ($x) => array_combine($this->skills, $x))

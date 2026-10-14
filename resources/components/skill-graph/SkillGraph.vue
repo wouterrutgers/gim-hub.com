@@ -38,10 +38,12 @@
 
   const memberChartData = computed(function buildMemberChartData() {
     const members = [];
+
     for (const [member, skillSamples] of history.value?.members ?? []) {
       if (!groupStore.memberColors.has(member) || !skillSamples.length) {
         continue;
       }
+
       const { hueDegrees } = groupStore.memberColors.get(member);
       members.push({
         member,
@@ -53,6 +55,7 @@
         },
       });
     }
+
     return members;
   });
 
@@ -83,6 +86,7 @@
     if (!range.value.start) {
       return "All recorded history";
     }
+
     return `${range.value.start.toLocaleString()} – ${range.value.end.toLocaleString()}`;
   });
   const tableTitle = computed(function describeMetric() {
@@ -98,6 +102,7 @@
       skillFilter: skillFilter.value,
     }).map(function prepareRow(row) {
       const fillPercent = Math.max(0.1, 100 * row.fillFraction);
+
       return {
         ...row,
         background: `linear-gradient(90deg, ${row.colorCSS} ${fillPercent}%, transparent ${fillPercent}%)`,
@@ -113,12 +118,15 @@
   async function loadRange(requestedRange, sequence) {
     try {
       const result = await apiStore.client.fetchSkillData(requestedRange);
+
       if (sequence !== requestSequence) {
         return;
       }
+
       if (requestedRange.period) {
         latest.value = result.end;
       }
+
       history.value = result;
       range.value = { start: result.start, end: result.end };
     } catch (reason) {
@@ -135,15 +143,19 @@
 
   function requestRange(requestedRange, delay = 0) {
     invalidateRequest();
+
     if (!apiStore.client) {
       return;
     }
+
     const sequence = requestSequence;
     loading.value = true;
     error.value = false;
+
     if (!requestedRange.period) {
       range.value = requestedRange;
     }
+
     if (delay) {
       navigationTimer = setTimeout(function fetchVisibleRange() {
         loadRange(requestedRange, sequence);
@@ -156,12 +168,14 @@
   function navigate({ chart: chartInstance }) {
     chartInstance.setActiveElements([]);
     chartInstance.tooltip.setActiveElements([], { x: 0, y: 0 });
+
     if (
       chartInstance.scales.x.min !== range.value.start?.getTime() ||
       chartInstance.scales.x.max !== range.value.end.getTime()
     ) {
       activePreset.value = undefined;
     }
+
     requestRange({ start: new Date(chartInstance.scales.x.min), end: new Date(chartInstance.scales.x.max) }, 300);
   }
 

@@ -48,11 +48,14 @@
       };
 
       const storageKey = portableStorageKey(item.itemID);
+
       if (storageKey) {
         const contents = groupStore.memberStates.get(props.member)?.[storageKey];
+
         if (contents?.size) {
           storedItems = [...contents.values()].map(function describeStoredItem(storedItem) {
             const storedItemData = gameDataStore.gameData.items?.get(storedItem.itemID);
+
             return {
               id: storedItem.itemID,
               name: storedItemData?.name ?? `Item ${storedItem.itemID}`,
@@ -61,6 +64,7 @@
             };
           });
           tooltipData.storageItems = storedItems;
+
           if (storageKey === "essencePouches") {
             tooltipData.storageNotice =
               "Combined contents of all essence pouches; individual pouch contents are unavailable.";
@@ -102,6 +106,7 @@
       }
 
       const previewItems = isRunePouch(item.itemID) ? storedItems : [];
+
       return {
         key: `${item.itemID} ${item.quantity} ${index} ${previewItems
           .map(function getStoredItemKey(storedItem) {

@@ -127,6 +127,7 @@
     } catch (reason) {
       console.error("Failed to clear recent activity", reason);
       clearActivityError.value = "Could not clear activity. Please try again.";
+
       throw reason;
     } finally {
       clearingActivity.value = false;
@@ -176,10 +177,14 @@
       });
       apiStore.client.fetchMemberHiscores(props.member).then(
         function storeHiscores(result) {
-          if (!cancelled) hiscores.value = result;
+          if (!cancelled) {
+            hiscores.value = result;
+          }
         },
         function storeEmptyHiscores() {
-          if (!cancelled) hiscores.value = new Map();
+          if (!cancelled) {
+            hiscores.value = new Map();
+          }
         },
       );
     },

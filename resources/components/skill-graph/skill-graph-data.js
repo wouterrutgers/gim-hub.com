@@ -42,6 +42,7 @@ export function buildDatasetsFromMemberSkillData(members, range, options) {
       const data = samples.map(function buildPoint(sample, index) {
         const experience = sumFilteredExperience(sample.data, options.skillFilter);
         let value = experience;
+
         if (options.yAxisUnit === "Cumulative experience gained") {
           value = Math.max(0, experience - startingExperience);
         } else if (options.yAxisUnit === "Experience per hour") {
@@ -57,8 +58,10 @@ export function buildDatasetsFromMemberSkillData(members, range, options) {
               )
             : null;
         }
+
         return { x: sample.time.getTime(), y: value };
       });
+
       return {
         label: member,
         data,
@@ -83,12 +86,15 @@ export function samplesForRange(skillSamples, range) {
   const samples = skillSamples.filter(function isVisible(sample) {
     return sample.time > range.start && sample.time <= range.end;
   });
+
   if (previous) {
     samples.unshift({ time: range.start, observationTime: previous.time, data: previous.data });
   }
+
   if (samples.length && samples.at(-1).time < range.end) {
     samples.push({ time: range.end, data: samples.at(-1).data });
   }
+
   return samples;
 }
 
@@ -101,8 +107,10 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
   }
 
   const elapsedHours = differenceInHoursPrecise({ laterDate: endTime, earlierDate: startTime });
+
   if (elapsedHours <= 0) {
     console.error("Skill table end time is before or equal to start time.");
+
     return [];
   }
 
@@ -111,15 +119,18 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
 
   for (const { member, skillSamples, style } of members) {
     const samples = samplesForRange(skillSamples, range);
+
     if (!samples.length) {
       continue;
     }
+
     const startSkills = samples[0].data;
     const endSkills = samples.at(-1).data;
     const memberMetrics = { name: member, total: 0, perSkill: [], colorCSS: style.barBackground };
 
     for (let skillIndex = 0; skillIndex < skillsInBackendOrder.length; skillIndex++) {
       const skill = skillsInBackendOrder[skillIndex];
+
       if (!skill || (options.skillFilter !== "Overall" && skill !== options.skillFilter)) {
         continue;
       }
@@ -156,6 +167,7 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
         quantity: total,
         isMemberHeader: true,
       });
+
       continue;
     }
 
@@ -171,6 +183,7 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
     });
 
     const skillRows = [];
+
     for (let skillIndex = 0; skillIndex < perSkill.length; skillIndex++) {
       const metricValue = perSkill.at(skillIndex);
       const skill = skillsInBackendOrder[skillIndex];

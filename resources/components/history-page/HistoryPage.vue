@@ -40,6 +40,7 @@
         await snapshotStore.clearBaselineSnapshot(member);
       } catch (reason) {
         console.error("Failed to clear recent activity", reason);
+
         throw reason;
       }
     }

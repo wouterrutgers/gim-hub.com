@@ -8,7 +8,6 @@ export const useActivityStore = defineStore("activity", function createActivityS
   const apiStore = useApiStore();
   const records = shallowRef(new Map());
   const loaded = ref(false);
-  const error = ref();
   const olderCursor = ref();
   const loadingOlder = ref(false);
   const entries = computed(function sortedEntries() {
@@ -54,11 +53,8 @@ export const useActivityStore = defineStore("activity", function createActivityS
 
       mergeEntries(response.entries);
       olderCursor.value = response.older_cursor;
-      error.value = undefined;
     } catch (reason) {
-      if (apiStore.client === client) {
-        error.value = reason.message;
-      }
+      console.error("Failed to fetch earlier group activity", reason);
     } finally {
       if (apiStore.client === client) {
         loadingOlder.value = false;
@@ -73,7 +69,6 @@ export const useActivityStore = defineStore("activity", function createActivityS
     function connect(client, _previous, onCleanup) {
       records.value = new Map();
       loaded.value = false;
-      error.value = undefined;
       olderCursor.value = undefined;
       loadingOlder.value = false;
 
@@ -100,11 +95,8 @@ export const useActivityStore = defineStore("activity", function createActivityS
 
           fromTime = response.from_time;
           loaded.value = true;
-          error.value = undefined;
         } catch (reason) {
-          if (!cancelled) {
-            error.value = reason.message;
-          }
+          console.error("Failed to fetch group activity", reason);
         }
 
         if (!cancelled) {
@@ -123,7 +115,6 @@ export const useActivityStore = defineStore("activity", function createActivityS
   return {
     entries,
     loaded,
-    error,
     olderCursor,
     loadingOlder,
     mergeEntries,

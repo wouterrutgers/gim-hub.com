@@ -3,6 +3,8 @@
   flex-direction: column;
   min-height: 0;
   color: var(--white);
+  font-size: 1rem;
+  line-height: 1.25;
   overflow: hidden;
   isolation: isolate;
 }
@@ -15,32 +17,13 @@
   flex-wrap: wrap;
 }
 
-.activity-feed-title {
-  display: flex;
-  align-items: center;
-  gap: 7px;
+.activity-feed-header h2 {
+  font-size: 1.125rem;
 }
 
-.activity-feed-title h2 {
-  font-size: 1.15rem;
-}
-
-.activity-status-light {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-}
-
-.activity-status-offline {
-  background: var(--orange);
-  box-shadow: none;
-}
-
-.activity-feed-status {
-  font-size: 0.75rem;
-  opacity: 0.6;
+.activity-feed-period {
+  font-size: 0.875rem;
+  opacity: 0.65;
 }
 
 .activity-collapse {
@@ -78,7 +61,7 @@
 .activity-feed-filters select {
   min-width: 0;
   max-width: 50%;
-  font-size: 0.85rem;
+  font-size: 1rem;
   border: 1px solid var(--light-border);
   border-radius: 3px;
   padding: 3px;
@@ -99,42 +82,34 @@
 }
 
 .activity-date {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  margin: 12px 0 8px;
+  font-size: 0.875rem;
+  opacity: 0.65;
+  margin: 12px 0 0;
 }
 
 .activity-card {
-  position: relative;
-  border-left: 2px solid hsl(var(--member-hue) 60% 58%);
-  background: var(--darken);
-  padding: 10px 10px 8px;
-  margin: 0 0 8px 4px;
-  border-radius: 0 4px 4px 0;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--light-border);
 }
 
-.activity-card::before {
-  content: "";
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  top: 14px;
-  left: -4px;
-  border-radius: 50%;
-  background: hsl(var(--member-hue) 60% 58%);
+.activity-icon {
+  margin-top: 2px;
+  object-fit: contain;
+  image-rendering: pixelated;
 }
 
-.activity-milestone {
-  background: linear-gradient(110deg, rgb(255 170 40 / 12%), var(--darken));
-  box-shadow: inset 0 0 0 1px rgb(255 170 40 / 15%);
+.activity-card-content {
+  min-width: 0;
 }
 
 .activity-card-player {
   display: flex;
   gap: 6px;
   align-items: center;
-  margin-bottom: 5px;
-  font-size: 0.8rem;
+  margin-bottom: 2px;
 }
 
 .activity-card-player strong {
@@ -146,48 +121,32 @@
 
 .activity-card-player time {
   margin-left: auto;
-  opacity: 0.55;
+  flex: none;
+  opacity: 0.65;
   white-space: nowrap;
-  font-size: 0.7rem;
+  font-size: 0.875rem;
 }
 
 .activity-live {
-  color: var(--green-light);
-  font-size: 0.65rem;
-  background: rgb(40 180 40 / 12%);
-  border-radius: 3px;
-  padding: 1px 4px;
+  font-size: 0.875rem;
+  opacity: 0.65;
 }
 
-.activity-card-event {
-  display: flex;
-  gap: 7px;
-  align-items: center;
-  font-size: 0.95rem;
-  line-height: 1.25;
-}
-
-.activity-card-event img {
-  flex: none;
-  object-fit: contain;
-  image-rendering: pixelated;
-}
-
-.activity-counter {
-  animation: activity-counter-highlight 400ms ease-out;
+.activity-milestone .activity-card-event {
+  color: var(--orange);
 }
 
 .activity-unlock {
-  display: inline-block;
-  margin: 5px 0 0 35px;
-  font-size: 0.7rem;
-  color: var(--orange);
+  display: block;
+  margin-top: 4px;
+  font-size: 0.875rem;
+  opacity: 0.65;
 }
 
 .activity-skill-icons {
   display: flex;
   gap: 5px;
-  padding: 5px 0 0 35px;
+  margin-top: 4px;
 }
 
 .activity-skill-icons img {
@@ -195,7 +154,7 @@
 }
 
 .activity-card-details {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   line-height: 1.4;
   margin-top: 6px;
 }
@@ -266,50 +225,25 @@
 }
 
 .activity-empty {
-  padding: 14px 4px;
+  padding: 14px 0;
   opacity: 0.65;
-  font-size: 0.9rem;
   line-height: 1.4;
 }
 
 .activity-new-button {
   align-self: center;
   margin: 0 8px 6px;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
 }
 
 .activity-older {
   margin: 8px auto;
-  font-size: 0.9rem;
-}
-
-@keyframes activity-counter-highlight {
-  from {
-    color: var(--orange-light);
-  }
-
-  to {
-    color: inherit;
-  }
+  font-size: 1rem;
 }
 
 @media (width <= 800px) {
-  .activity-feed .activity-feed-header {
+  .activity-feed-header {
     padding: 8px 12px 3px;
     flex-wrap: nowrap;
-  }
-
-  .activity-feed .activity-feed-title h2 {
-    font-size: 0.85rem;
-  }
-
-  .activity-feed .activity-feed-status {
-    display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .activity-counter {
-    animation: none;
   }
 }

@@ -39,7 +39,7 @@ describe("activity store", function activityStore() {
     expect(store.entries[0].data.skills.Attack).toBe(200);
     await vi.advanceTimersByTimeAsync(5000);
     expect(store.entries[0].data.skills.Attack).toBe(200);
-    expect(store.error).toBeUndefined();
+    expect(store.loaded).toBe(true);
   });
 
   it("ignores late responses after switching groups", async function switchGroups() {

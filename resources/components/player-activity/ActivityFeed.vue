@@ -7,7 +7,6 @@
   import { activityIsLive, activityPresentation } from "../../game/activity";
   import { skillIcons } from "../../game/skill";
   import CachedImage from "../cached-image/CachedImage.vue";
-  import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import "./activity-feed.css";
 
   const activityStore = useActivityStore();
@@ -171,11 +170,8 @@
 <template>
   <section class="activity-feed rsborder rsbackground" aria-label="Group activity timeline">
     <header class="activity-feed-header">
-      <div class="activity-feed-title">
-        <span class="activity-status-light" :class="{ 'activity-status-offline': activityStore.error }" />
-        <h2>Group activity</h2>
-      </div>
-      <span class="activity-feed-status">{{ activityStore.error ? "Reconnecting" : "30 days of adventures" }}</span>
+      <h2>Group activity</h2>
+      <span class="activity-feed-period">Last 30 days</span>
       <button
         class="activity-collapse"
         type="button"
@@ -208,15 +204,9 @@
       {{ newEntries }} new {{ newEntries === 1 ? "entry" : "entries" }} · Jump to latest
     </button>
     <div ref="scroller" class="activity-feed-scroll" @scroll="onScroll">
-      <p v-if="!activityStore.loaded || !groupStore.loaded" class="activity-empty">
-        {{ activityStore.error ?? "Loading your group’s adventures…" }}
-      </p>
+      <p v-if="!activityStore.loaded || !groupStore.loaded" class="activity-empty">Loading activity…</p>
       <p v-else-if="filteredEntries.length === 0" class="activity-empty">
-        {{
-          activityStore.entries.length
-            ? "No activity matches these filters."
-            : "Your group’s story starts here. Activity appears as members play with the updated GIM Hub plugin."
-        }}
+        {{ activityStore.entries.length ? "No activity matches these filters." : "No activity yet." }}
       </p>
       <ol class="activity-timeline">
         <li v-for="(entry, index) in filteredEntries" :key="entry.id" :data-entry-id="entry.id">
@@ -229,54 +219,53 @@
               '--member-hue': `${groupStore.memberColors.get(members.get(entry.member_id)).hueDegrees}deg`,
             }"
           >
-            <div class="activity-card-player">
-              <PlayerIcon :name="members.get(entry.member_id)" /><strong>{{ members.get(entry.member_id) }}</strong
-              ><span v-if="activityIsLive(entry, timestamp)" class="activity-live">Live</span
-              ><time
-                :datetime="new Date(entry.started_at).toISOString()"
-                :title="new Date(entry.started_at).toLocaleString()"
-                >{{ relativeTime(entry) }}</time
+            <CachedImage class="activity-icon" :src="presentations.get(entry.id).icon" alt="" width="24" height="24" />
+            <div class="activity-card-content">
+              <div class="activity-card-player">
+                <strong>{{ members.get(entry.member_id) }}</strong
+                ><span v-if="activityIsLive(entry, timestamp)" class="activity-live">Live</span
+                ><time
+                  :datetime="new Date(entry.started_at).toISOString()"
+                  :title="new Date(entry.started_at).toLocaleString()"
+                  >{{ relativeTime(entry) }}</time
+                >
+              </div>
+              <div class="activity-card-event">{{ presentations.get(entry.id).text }}</div>
+              <span v-if="presentations.get(entry.id).collectionUnlock" class="activity-unlock"
+                >New collection item</span
               >
+              <div v-if="presentations.get(entry.id).skills?.length > 1" class="activity-skill-icons">
+                <CachedImage
+                  v-for="skill in presentations.get(entry.id).skills"
+                  :key="skill"
+                  :src="skillIcons[skill]"
+                  :alt="skill"
+                  :title="skill"
+                  width="16"
+                  height="16"
+                />
+              </div>
+              <details v-if="presentations.get(entry.id).details.length" class="activity-card-details">
+                <summary>
+                  <span>{{ timeRange(entry) }}</span
+                  ><span>Details</span>
+                </summary>
+                <ul>
+                  <li v-for="detail in presentations.get(entry.id).details" :key="detail">
+                    <span class="activity-detail-content">
+                      <template v-if="entry.type === 'level'">
+                        <span>Level {{ entry.data.before }}</span>
+                        <svg width="10" height="8" viewBox="0 0 10 8" role="img" aria-label="to">
+                          <path d="M0 4h8M5 1l3 3-3 3" fill="none" stroke="currentColor" />
+                        </svg>
+                        <span>{{ entry.data.after }}</span>
+                      </template>
+                      <span v-else>{{ detail }}</span>
+                    </span>
+                  </li>
+                </ul>
+              </details>
             </div>
-            <div class="activity-card-event">
-              <CachedImage :src="presentations.get(entry.id).icon" alt="" width="28" height="28" /><span
-                :key="entry.revision"
-                class="activity-counter"
-                >{{ presentations.get(entry.id).text }}</span
-              >
-            </div>
-            <span v-if="presentations.get(entry.id).collectionUnlock" class="activity-unlock">New collection item</span>
-            <div v-if="presentations.get(entry.id).skills?.length > 1" class="activity-skill-icons">
-              <CachedImage
-                v-for="skill in presentations.get(entry.id).skills"
-                :key="skill"
-                :src="skillIcons[skill]"
-                :alt="skill"
-                :title="skill"
-                width="16"
-                height="16"
-              />
-            </div>
-            <details v-if="presentations.get(entry.id).details.length" class="activity-card-details">
-              <summary>
-                <span>{{ timeRange(entry) }}</span
-                ><span>Details</span>
-              </summary>
-              <ul>
-                <li v-for="detail in presentations.get(entry.id).details" :key="detail">
-                  <span class="activity-detail-content">
-                    <template v-if="entry.type === 'level'">
-                      <span>Level {{ entry.data.before }}</span>
-                      <svg width="10" height="8" viewBox="0 0 10 8" role="img" aria-label="to">
-                        <path d="M0 4h8M5 1l3 3-3 3" fill="none" stroke="currentColor" />
-                      </svg>
-                      <span>{{ entry.data.after }}</span>
-                    </template>
-                    <span v-else>{{ detail }}</span>
-                  </span>
-                </li>
-              </ul>
-            </details>
           </article>
         </li>
       </ol>

@@ -22,7 +22,7 @@ class GroupActivityController extends Controller
             ->where('updated_at', '<=', $watermark->format('Y-m-d H:i:s.v'));
 
         if (isset($validated['from_time'])) {
-            $entries = $query->where('updated_at', '>=', CarbonImmutable::parse($validated['from_time'])->format('Y-m-d H:i:s.v'))
+            $entries = $query->where('updated_at', '>=', CarbonImmutable::parse($validated['from_time'])->subMinute()->format('Y-m-d H:i:s.v'))
                 ->orderByDesc('updated_at')->orderByDesc('id')->get();
 
             return response()->json([

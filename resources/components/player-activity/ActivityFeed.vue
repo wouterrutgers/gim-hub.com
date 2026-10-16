@@ -46,6 +46,11 @@
       );
     });
   });
+  watch(members, function resetMissingMemberFilter(currentMembers) {
+    if (memberFilter.value && !currentMembers.has(memberFilter.value)) {
+      memberFilter.value = "";
+    }
+  });
   const presentations = computed(function getPresentations() {
     return new Map(
       filteredEntries.value.map(function present(entry) {

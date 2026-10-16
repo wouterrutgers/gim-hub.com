@@ -3,6 +3,32 @@
 use App\Models\ActivityEntry;
 use Illuminate\Support\Str;
 
+it('retrieves uploads that become visible after the polling watermark passes their timestamp', function (): void {
+    $this->freezeTime();
+    $group = $this->createSnapshotGroup();
+    $member = $this->createCompleteSnapshotMember($group);
+    $writtenAt = now()->subSecond();
+    $page = $this->withHeader('Authorization', $group->hash)->getJson("/api/group/{$group->name}/activity")
+        ->assertSuccessful()->assertJsonCount(0, 'entries');
+    $this->travel(5)->seconds();
+    $from = urlencode($page->json('from_time'));
+    $poll = $this->getJson("/api/group/{$group->name}/activity?from_time={$from}")
+        ->assertSuccessful()->assertJsonCount(0, 'entries');
+
+    $entry = ActivityEntry::create([
+        'member_id' => $member->id, 'group_id' => $group->id,
+        'source_id' => Str::uuid()->toString(), 'revision' => 1, 'type' => 'quest',
+        'started_at' => $writtenAt->getTimestampMs(), 'occurred_at' => $writtenAt->getTimestampMs(),
+        'data' => ['quest_id' => 0, 'quest_name' => 'Druidic Ritual'],
+        'created_at' => $writtenAt, 'updated_at' => $writtenAt,
+    ]);
+    $this->travel(5)->seconds();
+    $from = urlencode($poll->json('from_time'));
+
+    $this->getJson("/api/group/{$group->name}/activity?from_time={$from}")
+        ->assertSuccessful()->assertJsonCount(1, 'entries')->assertJsonPath('entries.0.id', $entry->id);
+});
+
 it('paginates group history and returns updates to older cards without leaking another group', function (): void {
     $this->freezeTime();
     $group = $this->createSnapshotGroup();

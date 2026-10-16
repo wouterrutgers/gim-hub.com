@@ -8,6 +8,65 @@ import { useActivityStore } from "../../stores/activity";
 import { useImageStore } from "../../stores/images";
 
 describe("activity feed", function activityFeed() {
+  it("clears the selected player when switching groups and shows the new group's activity", async function switchGroups() {
+    vi.useFakeTimers();
+    const pinia = createTestPinia();
+    vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
+      return path;
+    });
+
+    function groupClient(memberId, name) {
+      return {
+        async fetchGameData() {
+          return { quests: new Map(), items: new Map(), diaries: new Map() };
+        },
+        async fetchGroupData() {
+          return [{ id: memberId, name }];
+        },
+        async fetchGroupCollectionLogs() {
+          return new Map();
+        },
+        async fetchActivity() {
+          return {
+            entries: [
+              {
+                id: memberId,
+                member_id: memberId,
+                revision: 1,
+                type: "xp",
+                started_at: Date.now(),
+                occurred_at: Date.now(),
+                data: { skills: { Attack: 100 } },
+              },
+            ],
+            from_time: new Date().toISOString(),
+          };
+        },
+      };
+    }
+
+    const apiStore = useApiStore(pinia);
+    apiStore.client = groupClient(10, "Alice");
+    const container = document.createElement("div");
+    document.body.append(container);
+    const application = createTestApplication(ActivityFeed);
+    application.use(pinia);
+    application.mount(container);
+    await vi.advanceTimersByTimeAsync(0);
+    const filter = container.querySelector('[aria-label="Filter activity by player"]');
+    filter.value = "10";
+    filter.dispatchEvent(new Event("change"));
+    await nextTick();
+    expect(filter.value).toBe("10");
+
+    apiStore.client = groupClient(20, "Bob");
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(filter.value).toBe("");
+    expect(container.querySelectorAll(".activity-card")).toHaveLength(1);
+    expect(container.querySelector(".activity-card strong").textContent).toBe("Bob");
+  });
+
   it("grows a multi skill card while preserving expanded details and offering new activity to a reader", async function growingCard() {
     vi.useFakeTimers();
     const pinia = createTestPinia();

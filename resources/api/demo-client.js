@@ -5,13 +5,7 @@ import { fetchGameData } from "./game-data";
 import { EXPERIENCE_99, createInitialState } from "./demo/fixtures";
 import { mockGroupDataResponse } from "./demo/group-simulation";
 import { getDemoSkillHistory, populateSkillDataFromRoster } from "./demo/skill-history";
-import {
-  createCollectionSnapshot,
-  createDiarySnapshot,
-  createQuestSnapshot,
-  createSkillsSnapshot,
-  populateSnapshotHistory,
-} from "./demo/snapshot-history";
+import { populateActivity, advanceActivity } from "./demo/activity";
 
 export default class DemoClient {
   baseURL = __API_URL__;
@@ -127,7 +121,7 @@ export default class DemoClient {
     }
 
     this.state.sharedBank = sharedBank;
-    populateSnapshotHistory(this.state, this.gameData);
+    populateActivity(this.state);
 
     return gameData;
   }
@@ -135,7 +129,10 @@ export default class DemoClient {
   async fetchGroupData() {
     await this.fetchGameData();
 
-    return mockGroupDataResponse(this.state, this.startMS, this.demoData);
+    const members = mockGroupDataResponse(this.state, this.startMS, this.demoData);
+    advanceActivity(this.state, members);
+
+    return members;
   }
 
   async fetchSkillData(range) {
@@ -162,6 +159,7 @@ export default class DemoClient {
     const takenHues = new Set(this.state.roster.map(({ colorHueDegrees }) => colorHueDegrees));
     const colorHueDegrees = memberColorHues.find((h) => !takenHues.has(h)) ?? memberColorHues[0];
     this.state.roster.push({
+      id: this.state.nextMemberIdentifier++,
       displayName: member,
       colorHueDegrees,
     });
@@ -217,7 +215,16 @@ export default class DemoClient {
       };
     }
 
+    const memberIdentifier = this.state.roster[memberInRoster].id;
     this.state.roster = [...this.state.roster.slice(0, memberInRoster), ...this.state.roster.slice(memberInRoster + 1)];
+
+    for (const [identifier, entry] of this.state.activities) {
+      if (entry.member_id === memberIdentifier) {
+        this.state.activities.delete(identifier);
+      }
+    }
+
+    this.state.activitySkills.delete(memberIdentifier);
     populateSkillDataFromRoster(this.state);
 
     return {
@@ -231,59 +238,22 @@ export default class DemoClient {
     return structuredClone(this.state.collections);
   }
 
-  async fetchMemberSnapshots(markers) {
+  async fetchActivity({ fromTime, cursor } = {}) {
     await this.fetchGameData();
-    const baselines = new Map();
+    const entries = [...this.state.activities.values()].sort(function newest(left, right) {
+      return right.started_at - left.started_at || right.id - left.id;
+    });
+    const filtered = fromTime
+      ? entries.filter(function changed(entry) {
+          return entry.updated_at >= new Date(fromTime).getTime();
+        })
+      : entries.slice(Number(cursor ?? 0), Number(cursor ?? 0) + 50);
 
-    for (const [member, snapshots] of this.state.snapshots) {
-      const lastWeek = snapshots[0];
-
-      if (!lastWeek) {
-        continue;
-      }
-
-      const marker = markers[member];
-      const lastVisit =
-        marker === undefined ? lastWeek : (snapshots.findLast((snapshot) => snapshot.timestamp <= marker) ?? lastWeek);
-      baselines.set(
-        member,
-        structuredClone({
-          lastVisit,
-          lastWeek,
-        }),
-      );
-    }
-
-    return baselines;
-  }
-
-  async createMemberSnapshot(member) {
-    await this.fetchGameData();
-    const currentMember = mockGroupDataResponse(this.state, this.startMS, this.demoData).find(
-      ({ name }) => name === member,
-    );
-
-    if (!currentMember) {
-      throw new Error("No member has that name.");
-    }
-
-    if (!currentMember.skills || !currentMember.quests || !currentMember.diaries) {
-      throw new Error("Member data is incomplete.");
-    }
-
-    const snapshot = {
-      timestamp: Date.now(),
-      skills: createSkillsSnapshot(currentMember.skills, {}),
-      quests: createQuestSnapshot(currentMember.quests, this.gameData.quests),
-      diaries: createDiarySnapshot(currentMember.diaries, []),
-      collection: createCollectionSnapshot(this.state.collections.get(member), {}),
-      bossKc: Object.fromEntries(this.state.hiscores.get(member) ?? []),
-    };
-    const snapshots = this.state.snapshots.get(member) ?? [];
-    snapshots.push(snapshot);
-    this.state.snapshots.set(member, snapshots);
-
-    return structuredClone(snapshot);
+    return structuredClone({
+      entries: filtered,
+      older_cursor: !fromTime && entries.length > Number(cursor ?? 0) + 50 ? String(Number(cursor ?? 0) + 50) : null,
+      from_time: new Date().toISOString(),
+    });
   }
 
   async fetchMemberHiscores(memberName) {

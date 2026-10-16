@@ -23,6 +23,7 @@ it("keeps a dismissed warning closed after remounting until the latest plugin ve
     async fetchGroupData() {
       return parseGroupData([
         {
+          id: 1,
           name: "Alice",
           last_online_at: new Date().toISOString(),
           plugin_status: { reason: "update_available", installed_version: "1.9.0", latest_version: latestVersion },
@@ -61,11 +62,13 @@ it("updates member warnings through polling and clears them on recovery or group
   const lastOnlineAt = new Date().toISOString();
   let payload = [
     {
+      id: 1,
       name: "Alice",
       last_online_at: lastOnlineAt,
       plugin_status: { reason: "wrong_plugin", installed_version: "1.7.0", latest_version: "1.9.1" },
     },
     {
+      id: 2,
       name: "Bob",
       last_online_at: lastOnlineAt,
       plugin_status: { reason: "update_available", installed_version: "1.9.0", latest_version: "1.9.1" },
@@ -103,8 +106,8 @@ it("updates member warnings through polling and clears them on recovery or group
   expect(container.querySelectorAll("li")[1].textContent).toContain("1.9.1");
 
   payload = [
-    { name: "Alice", plugin_status: null },
-    { name: "Bob", plugin_status: null },
+    { id: 1, name: "Alice", plugin_status: null },
+    { id: 2, name: "Bob", plugin_status: null },
   ];
   await vi.advanceTimersByTimeAsync(1000);
   await nextTick();
@@ -112,6 +115,7 @@ it("updates member warnings through polling and clears them on recovery or group
 
   payload = [
     {
+      id: 1,
       name: "Alice",
       last_online_at: lastOnlineAt,
       plugin_status: { reason: "update_available", installed_version: null, latest_version: "1.9.1" },
@@ -124,7 +128,7 @@ it("updates member warnings through polling and clears them on recovery or group
   apiStore.client = {
     ...client,
     async fetchGroupData() {
-      return [{ name: "Carol" }];
+      return [{ id: 3, name: "Carol" }];
     },
   };
   await vi.advanceTimersByTimeAsync(0);
@@ -137,26 +141,31 @@ it("expires plugin notices after 30 minutes of inactivity and restores them when
   vi.setSystemTime(new Date("2026-09-30T12:00:00.000Z"));
   const payload = [
     {
+      id: 1,
       name: "Alice",
       last_online_at: "2026-09-30T11:30:01.000Z",
       plugin_status: { reason: "wrong_plugin", installed_version: "1.7.0", latest_version: "1.9.1" },
     },
     {
+      id: 2,
       name: "Bob",
       last_online_at: "2026-09-30T11:30:01.000Z",
       plugin_status: { reason: "update_available", installed_version: "1.9.0", latest_version: "1.9.1" },
     },
     {
+      id: 3,
       name: "Carol",
       last_online_at: "2026-09-30T11:30:00.000Z",
       plugin_status: { reason: "wrong_plugin", installed_version: "1.7.0", latest_version: "1.9.1" },
     },
     {
+      id: 4,
       name: "Dave",
       last_online_at: "2026-09-30T11:00:00.000Z",
       plugin_status: { reason: "update_available", installed_version: "1.9.0", latest_version: "1.9.1" },
     },
     {
+      id: 5,
       name: "Eve",
       plugin_status: { reason: "update_available", installed_version: "1.9.0", latest_version: "1.9.1" },
     },

@@ -137,6 +137,6 @@ class MemberUpdateValidation
             }
         }
 
-        return validator($input, $rules)->validate();
+        return validator($input, [...$rules, ...ActivityUpdates::rules($input)])->validate();
     }
 }

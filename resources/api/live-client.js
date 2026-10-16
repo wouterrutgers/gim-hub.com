@@ -1,4 +1,5 @@
 import { fetchGameData } from "./game-data";
+import { fetchActivity } from "./requests/activity";
 import { fetchGroupCollectionLogs } from "./requests/collection-log";
 import { fetchGroupData } from "./requests/group-data";
 import { fetchMemberHiscores } from "./requests/hiscores";
@@ -9,7 +10,6 @@ import {
   reorderGroupMembers,
   updateMemberColor,
 } from "./requests/group-members";
-import { createMemberSnapshot, fetchMemberSnapshots } from "./requests/player-snapshot";
 import { fetchSkillData } from "./requests/skill-data";
 
 export default class LiveClient {
@@ -21,6 +21,10 @@ export default class LiveClient {
 
   fetchGameData() {
     return fetchGameData(this.baseURL);
+  }
+
+  fetchActivity(options) {
+    return fetchActivity({ baseURL: this.baseURL, credentials: this.credentials, ...options });
   }
 
   fetchGroupData(fromTime) {
@@ -49,14 +53,6 @@ export default class LiveClient {
 
   fetchGroupCollectionLogs() {
     return fetchGroupCollectionLogs({ baseURL: this.baseURL, credentials: this.credentials });
-  }
-
-  fetchMemberSnapshots(markers) {
-    return fetchMemberSnapshots({ baseURL: this.baseURL, credentials: this.credentials, markers });
-  }
-
-  createMemberSnapshot(member) {
-    return createMemberSnapshot({ baseURL: this.baseURL, credentials: this.credentials, member });
   }
 
   fetchMemberHiscores(memberName) {

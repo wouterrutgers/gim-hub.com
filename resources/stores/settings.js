@@ -1,20 +1,18 @@
 import { computed } from "vue";
 import { defineStore } from "pinia";
 import { useLocalStorage } from "../composables/local-storage";
-import { sidebarPositions, siteThemes } from "./settings-options";
+import { siteThemes } from "./settings-options";
 
 const DEFAULT_SITE_SETTINGS = Object.freeze({
-  sidebarPosition: "left",
+  showActivitySidebar: true,
   siteTheme: "light",
-  enableRecentActivity: true,
   enableVirtualLevels: true,
   enableSkillProgressBars: true,
   enableGearscapeExport: false,
 });
 
 const KEY_SITE_THEME = "settings-site-theme";
-const KEY_SIDEBAR_POSITION = "settings-sidebar-position";
-const KEY_RECENT_ACTIVITY = "settings-recent-activity";
+const KEY_ACTIVITY_SIDEBAR = "settings-activity-sidebar";
 const KEY_VIRTUAL_LEVELS = "settings-virtual-levels";
 const KEY_SKILL_PROGRESS_BARS = "settings-skill-progress-bars";
 const KEY_GEARSCAPE_EXPORT = "settings-gearscape-export";
@@ -22,12 +20,6 @@ const KEY_GEARSCAPE_EXPORT = "settings-gearscape-export";
 function validateSiteTheme(value) {
   return siteThemes.find(function matchesTheme(theme) {
     return theme === value;
-  });
-}
-
-function validateSidebarPosition(value) {
-  return sidebarPositions.find(function matchesPosition(position) {
-    return position === value;
   });
 }
 
@@ -45,14 +37,9 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     defaultValue: DEFAULT_SITE_SETTINGS.siteTheme,
     validator: validateSiteTheme,
   });
-  const [sidebarPosition, setSidebarPosition] = useLocalStorage({
-    key: KEY_SIDEBAR_POSITION,
-    defaultValue: DEFAULT_SITE_SETTINGS.sidebarPosition,
-    validator: validateSidebarPosition,
-  });
-  const [recentActivity, setRecentActivity] = useLocalStorage({
-    key: KEY_RECENT_ACTIVITY,
-    defaultValue: String(DEFAULT_SITE_SETTINGS.enableRecentActivity),
+  const [activitySidebar, setActivitySidebar] = useLocalStorage({
+    key: KEY_ACTIVITY_SIDEBAR,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.showActivitySidebar),
     validator: validateBoolean,
   });
   const [virtualLevels, setVirtualLevels] = useLocalStorage({
@@ -71,8 +58,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     validator: validateBoolean,
   });
 
-  const enableRecentActivity = computed(function recentActivityEnabled() {
-    return recentActivity.value === "true";
+  const showActivitySidebar = computed(function activitySidebarShown() {
+    return activitySidebar.value === "true";
   });
   const enableVirtualLevels = computed(function virtualLevelsEnabled() {
     return virtualLevels.value === "true";
@@ -84,8 +71,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     return gearscapeExport.value === "true";
   });
 
-  function setEnableRecentActivity(value) {
-    setRecentActivity(String(value));
+  function setShowActivitySidebar(value) {
+    setActivitySidebar(String(value));
   }
 
   function setEnableVirtualLevels(value) {
@@ -103,10 +90,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
   return {
     siteTheme,
     setSiteTheme,
-    sidebarPosition,
-    setSidebarPosition,
-    enableRecentActivity,
-    setEnableRecentActivity,
+    showActivitySidebar,
+    setShowActivitySidebar,
     enableVirtualLevels,
     setEnableVirtualLevels,
     enableSkillProgressBars,

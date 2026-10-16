@@ -1,0 +1,249 @@
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  color: var(--white);
+  font-size: 1rem;
+  line-height: 1.25;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.activity-feed-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 6px;
+  flex-wrap: wrap;
+}
+
+.activity-feed-header h2 {
+  font-size: 1.125rem;
+}
+
+.activity-feed-period {
+  font-size: 0.875rem;
+  opacity: 0.65;
+}
+
+.activity-collapse {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  color: var(--orange);
+}
+
+.activity-collapse:hover,
+.activity-collapse:focus-visible {
+  color: var(--orange-light);
+  background: var(--elevated);
+}
+
+.activity-toggle-chevron {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transform: rotate(-45deg);
+}
+
+.activity-feed-filters {
+  display: flex;
+  gap: 8px;
+  padding: 4px 12px 8px;
+}
+
+.activity-feed-filters select {
+  min-width: 0;
+  max-width: 50%;
+  font-size: 1rem;
+  border: 1px solid var(--light-border);
+  border-radius: 3px;
+  padding: 3px;
+}
+
+.activity-feed-scroll {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 0 12px 10px;
+  overflow-anchor: none;
+}
+
+.activity-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-date {
+  font-size: 0.875rem;
+  opacity: 0.65;
+  margin: 12px 0 0;
+}
+
+.activity-card {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--light-border);
+}
+
+.activity-icon {
+  margin-top: 2px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.activity-card-content {
+  min-width: 0;
+}
+
+.activity-card-player {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.activity-card-player strong {
+  color: hsl(var(--member-hue) 65% 72%);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.activity-card-player time {
+  margin-left: auto;
+  flex: none;
+  opacity: 0.65;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+
+.activity-live {
+  font-size: 0.875rem;
+  opacity: 0.65;
+}
+
+.activity-milestone .activity-card-event {
+  color: var(--orange);
+}
+
+.activity-unlock {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.875rem;
+  opacity: 0.65;
+}
+
+.activity-skill-icons {
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.activity-skill-icons img {
+  image-rendering: pixelated;
+}
+
+.activity-card-details {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+.activity-card-details summary,
+.activity-card-details li {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr);
+  column-gap: 6px;
+  align-items: center;
+  min-height: 1.4em;
+}
+
+.activity-card-details summary {
+  grid-template-columns: 8px minmax(0, 1fr) auto;
+  cursor: pointer;
+  list-style: none;
+  opacity: 0.65;
+}
+
+.activity-card-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.activity-card-details summary::before {
+  content: "";
+  justify-self: center;
+  width: 6px;
+  height: 6px;
+  background: currentcolor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.activity-card-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.activity-detail-content > span,
+.activity-card-details summary > span {
+  text-box: trim-both text alphabetic;
+}
+
+.activity-card-details summary span:last-child {
+  color: var(--orange);
+}
+
+.activity-card-details ul {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.activity-card-details li::before {
+  content: "";
+  justify-self: center;
+  transform: translateY(1px);
+  width: 4px;
+  height: 4px;
+  border: 1px solid currentcolor;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.activity-detail-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.activity-empty {
+  padding: 14px 0;
+  opacity: 0.65;
+  line-height: 1.4;
+}
+
+.activity-new-button {
+  align-self: center;
+  margin: 0 8px 6px;
+  font-size: 0.875rem;
+}
+
+.activity-older {
+  margin: 8px auto;
+  font-size: 1rem;
+}
+
+@media (width <= 800px) {
+  .activity-feed-header {
+    padding: 8px 12px 3px;
+    flex-wrap: nowrap;
+  }
+}

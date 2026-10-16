@@ -3,6 +3,7 @@
   import { useApiStore } from "../../stores/api";
   import { useSettingsStore } from "../../stores/settings";
   import AppNavigation from "../app-navigation/AppNavigation.vue";
+  import ActivityFeed from "../player-activity/ActivityFeed.vue";
   import SidePanels from "./SidePanels.vue";
   import PluginWarnings from "./PluginWarnings.vue";
   import "./layout.css";
@@ -20,21 +21,15 @@
 </script>
 
 <template>
-  <template v-if="settingsStore.sidebarPosition === 'right'">
-    <div id="main-content" class="pointer-passthrough">
-      <AppNavigation v-if="!props.hideHeader" :group-name="groupName" />
-      <PluginWarnings />
-      <slot />
+  <div class="authed-layout">
+    <div class="authed-workspace">
+      <SidePanels v-if="props.showPanels" />
+      <div id="main-content" class="pointer-passthrough">
+        <AppNavigation v-if="!props.hideHeader" :group-name="groupName" />
+        <PluginWarnings />
+        <slot />
+      </div>
     </div>
-    <SidePanels v-if="props.showPanels" />
-  </template>
-
-  <template v-else>
-    <SidePanels v-if="props.showPanels" />
-    <div id="main-content" class="pointer-passthrough">
-      <AppNavigation v-if="!props.hideHeader" :group-name="groupName" />
-      <PluginWarnings />
-      <slot />
-    </div>
-  </template>
+    <ActivityFeed id="group-activity-sidebar" v-show="settingsStore.showActivitySidebar" class="activity-dock" />
+  </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup>
   import { computed } from "vue";
   import { useRoute } from "vue-router";
+  import { useSettingsStore } from "../../stores/settings";
   import AppLink from "../app-link/AppLink.vue";
   import CachedImage from "../cached-image/CachedImage.vue";
   import GroupSwitcher from "../group-switcher/GroupSwitcher.vue";
@@ -11,6 +12,7 @@
   });
 
   const route = useRoute();
+  const settingsStore = useSettingsStore();
 
   const navigationLinks = computed(function getNavigationLinks() {
     return [
@@ -78,6 +80,16 @@
             </AppLink>
           </span>
         </template>
+        <button
+          v-if="link.href === '/group/history' && !settingsStore.showActivitySidebar"
+          class="activity-restore app-link men-button"
+          type="button"
+          aria-controls="group-activity-sidebar"
+          aria-expanded="false"
+          @click="settingsStore.setShowActivitySidebar(true)"
+        >
+          Show activity
+        </button>
       </template>
     </nav>
   </div>

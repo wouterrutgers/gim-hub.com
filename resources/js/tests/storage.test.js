@@ -15,6 +15,7 @@ describe("storage integration", function describeStorage() {
   it("updates item totals when POH storage contents change", function houseQuantities() {
     const state = update(createGroupState(), [
       {
+        id: 1,
         name: "Alice",
         bank: [995, 100, 7484, 1],
         poh_spice_rack: [7484, 2, 7485, 1],
@@ -28,10 +29,10 @@ describe("storage integration", function describeStorage() {
     expect(state.items.get(12650).get("Alice")).toEqual({ "Pet house": 1 });
     expect(state.items.get(995).get("Alice")).toEqual({ Bank: 100, "Servant’s moneybag": 1234567 });
 
-    const unchanged = update(state, [{ name: "Alice", poh_spice_rack: null }]);
+    const unchanged = update(state, [{ id: 1, name: "Alice", poh_spice_rack: null }]);
     expect(unchanged.items.get(7485).get("Alice")).toEqual({ "Spice rack": 1 });
     const emptied = update(unchanged, [
-      { name: "Alice", poh_spice_rack: [], poh_pet_house: [], poh_servants_moneybag: [] },
+      { id: 1, name: "Alice", poh_spice_rack: [], poh_pet_house: [], poh_servants_moneybag: [] },
     ]);
     expect(emptied.items.get(7484).get("Alice")).toEqual({ Bank: 1 });
     expect(emptied.items.get(995).get("Alice")).toEqual({ Bank: 100 });
@@ -42,6 +43,7 @@ describe("storage integration", function describeStorage() {
   it("includes every portable container in quantities and preserves missing fields", function portableQuantities() {
     const state = update(createGroupState(), [
       {
+        id: 1,
         name: "Alice",
         bank: [199, 3],
         herb_sack: [199, 12],
@@ -55,9 +57,9 @@ describe("storage integration", function describeStorage() {
     expect(state.items.get(5295).get("Alice")).toEqual({ "Seed box": 8 });
     expect(state.items.get(1623).get("Alice")).toEqual({ "Gem bag": 20 });
     expect(state.items.get(2430).get("Alice")).toEqual({ "Chugging barrel": 15 });
-    const unchanged = update(state, [{ name: "Alice", herb_sack: null }]);
+    const unchanged = update(state, [{ id: 1, name: "Alice", herb_sack: null }]);
     expect(unchanged.items.get(199).get("Alice")).toEqual({ Bank: 3, "Herb sack": 12, "Looting bag": 5 });
-    const empty = update(unchanged, [{ name: "Alice", herb_sack: [] }]);
+    const empty = update(unchanged, [{ id: 1, name: "Alice", herb_sack: [] }]);
     expect(empty.items.get(199).get("Alice")).toEqual({ Bank: 3, "Looting bag": 5 });
   });
 
@@ -67,15 +69,15 @@ describe("storage integration", function describeStorage() {
       unit(28959, "Wizards' Tower", "filled", [1095, 1]),
       unit(28960, "Draynor", "empty", []),
     ];
-    const state = update(createGroupState(), [{ name: "Alice", stash_units: units }]);
-    const repeated = update(state, [{ name: "Alice", stash_units: units }]);
+    const state = update(createGroupState(), [{ id: 1, name: "Alice", stash_units: units }]);
+    const repeated = update(state, [{ id: 1, name: "Alice", stash_units: units }]);
     expect(repeated.items.get(1095).get("Alice")).toEqual({ "STASH units": 2 });
     expect(stashItemLocations(repeated.memberStates.get("Alice").stashUnits, 1095)).toEqual([
       { id: 28958, name: "Lumbridge Swamp", tier: "Easy", quantity: 1 },
       { id: 28959, name: "Wizards' Tower", tier: "Easy", quantity: 1 },
     ]);
     const emptied = update(repeated, [
-      { name: "Alice", stash_units: [unit(28958, "Lumbridge Swamp", "empty", []), units[1], units[2]] },
+      { id: 1, name: "Alice", stash_units: [unit(28958, "Lumbridge Swamp", "empty", []), units[1], units[2]] },
     ]);
     expect(emptied.items.get(1095).get("Alice")).toEqual({ "STASH units": 1 });
   });
@@ -83,6 +85,7 @@ describe("storage integration", function describeStorage() {
   it("counts only filled STASH contents even when other units retain item data", function knownStashContents() {
     const state = update(createGroupState(), [
       {
+        id: 1,
         name: "Alice",
         stash_units: [
           unit(28958, "Lumbridge Swamp", "filled", [1095, 1]),
@@ -97,7 +100,7 @@ describe("storage integration", function describeStorage() {
   });
 
   it("accepts older member data without storage fields", function oldPayload() {
-    const state = update(createGroupState(), [{ name: "Alice", bank: [995, 10] }]);
+    const state = update(createGroupState(), [{ id: 1, name: "Alice", bank: [995, 10] }]);
     expect(state.memberStates.get("Alice").stashUnits.size).toBe(0);
     expect(state.items.get(995).get("Alice")).toEqual({ Bank: 10 });
   });

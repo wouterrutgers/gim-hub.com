@@ -4,7 +4,7 @@
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
-  import { sidebarPositions, siteThemes } from "../../stores/settings-options";
+  import { siteThemes } from "../../stores/settings-options";
   import { memberNameSchema } from "../../game/member-name";
   import LoadingScreen from "../loading-screen/LoadingScreen.vue";
   import EditMemberInput from "./EditMemberInput.vue";
@@ -13,8 +13,6 @@
   const labels = {
     light: "Light",
     dark: "Dark",
-    left: "Dock panels to the left",
-    right: "Dock panels to the right",
   };
   const MEMBER_COUNT_MAX = 5;
 
@@ -148,17 +146,6 @@
       <h2>Appearance settings</h2>
       <fieldset>
         <legend>Player panels</legend>
-        <div v-for="position in sidebarPositions" :key="position" class="settings-page-radio-item">
-          <input
-            :id="`panel-dock-${position}`"
-            :value="position"
-            type="radio"
-            :checked="settingsStore.sidebarPosition === position"
-            @change="settingsStore.setSidebarPosition(position)"
-          />
-          <label :for="`panel-dock-${position}`">{{ labels[position] }}</label>
-        </div>
-
         <fieldset class="setting-group">
           <legend class="setting-title">Skills</legend>
           <div class="settings-page-radio-item">
@@ -191,19 +178,6 @@
               @change="settingsStore.setEnableGearscapeExport($event.target.checked)"
             />
             <label for="enable-gearscape-export-input">Show Gearscape export button</label>
-          </div>
-        </fieldset>
-
-        <fieldset class="setting-group">
-          <legend class="setting-title">Recent activity</legend>
-          <div class="settings-page-radio-item">
-            <input
-              id="enable-recent-activity-input"
-              type="checkbox"
-              :checked="settingsStore.enableRecentActivity"
-              @change="settingsStore.setEnableRecentActivity($event.target.checked)"
-            />
-            <label for="enable-recent-activity-input">Show recent activity summaries on player panels</label>
           </div>
         </fieldset>
       </fieldset>

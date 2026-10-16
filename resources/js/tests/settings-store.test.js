@@ -11,30 +11,22 @@ describe("settings store", function describeSettingsStore() {
     const settingsStore = useSettingsStore();
 
     expect(settingsStore.siteTheme).toBe("light");
-    expect(settingsStore.sidebarPosition).toBe("left");
-    expect(settingsStore.enableRecentActivity).toBe(true);
     expect(settingsStore.enableGearscapeExport).toBe(false);
   });
 
   it("loads valid persisted settings", function testPersistedSettings() {
     localStorage.setItem("settings-site-theme", "dark");
-    localStorage.setItem("settings-sidebar-position", "right");
-    localStorage.setItem("settings-recent-activity", "false");
     setActivePinia(createTestPinia());
     const settingsStore = useSettingsStore();
 
     expect(settingsStore.siteTheme).toBe("dark");
-    expect(settingsStore.sidebarPosition).toBe("right");
-    expect(settingsStore.enableRecentActivity).toBe(false);
   });
 
   it("ignores invalid persisted settings", function testInvalidSettings() {
     localStorage.setItem("settings-site-theme", "system");
-    localStorage.setItem("settings-recent-activity", "yes");
     setActivePinia(createTestPinia());
     const settingsStore = useSettingsStore();
 
     expect(settingsStore.siteTheme).toBe("light");
-    expect(settingsStore.enableRecentActivity).toBe(true);
   });
 });

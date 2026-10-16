@@ -41,7 +41,9 @@
       return (
         members.value.has(entry.member_id) &&
         (!memberFilter.value || entry.member_id === memberFilter.value) &&
-        (!typeFilter.value || entry.type === typeFilter.value)
+        (!typeFilter.value ||
+          entry.type === typeFilter.value ||
+          (typeFilter.value === "loot" && entry.type === "collection"))
       );
     });
   });
@@ -196,8 +198,7 @@
         <option value="boss">Boss kills</option>
         <option value="quest">Quests</option>
         <option value="diary">Diaries</option>
-        <option value="loot">Drops and unlocks</option>
-        <option value="collection">Repeat collection items</option>
+        <option value="loot">Drops</option>
       </select>
     </div>
     <button v-if="newEntries" class="activity-new-button men-button small" @click="followLatest">

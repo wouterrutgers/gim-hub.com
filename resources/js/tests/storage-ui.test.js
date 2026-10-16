@@ -31,6 +31,14 @@ describe("storage UI", function storageInterface() {
   async function mount(component, itemTags) {
     vi.useFakeTimers();
     vi.stubGlobal(
+      "ResizeObserver",
+      class ResizeObserver {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+      },
+    );
+    vi.stubGlobal(
       "fetch",
       vi.fn(async function imageChunks() {
         return {

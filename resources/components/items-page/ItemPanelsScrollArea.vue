@@ -16,6 +16,9 @@
   const parent = ref(null);
   const child = ref(null);
   const columns = ref(3);
+  const resizeObserver = new ResizeObserver(function updateColumnsFromWidth([entry]) {
+    columns.value = Math.max(1, Math.floor(entry.contentRect.width / PANEL_WIDTH_PIXELS));
+  });
 
   const virtualizerOptions = computed(function getVirtualizerOptions() {
     return {
@@ -38,18 +41,13 @@
     return itemsVirtualizer.value.getTotalSize();
   });
 
-  onMounted(function registerResizeListener() {
-    window.addEventListener("resize", updateColumnsFromWidth);
-    updateColumnsFromWidth();
+  onMounted(function registerResizeObserver() {
+    resizeObserver.observe(child.value);
   });
 
-  onBeforeUnmount(function removeResizeListener() {
-    window.removeEventListener("resize", updateColumnsFromWidth);
+  onBeforeUnmount(function removeResizeObserver() {
+    resizeObserver.disconnect();
   });
-
-  function updateColumnsFromWidth() {
-    columns.value = Math.max(1, Math.floor((child.value?.scrollWidth ?? 0) / PANEL_WIDTH_PIXELS));
-  }
 
   function itemsForRow(row) {
     return props.sortedItems.slice(row.index * columns.value, (row.index + 1) * columns.value);

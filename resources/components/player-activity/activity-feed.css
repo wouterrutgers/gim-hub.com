@@ -54,17 +54,34 @@
 
 .activity-feed-filters {
   display: flex;
+  align-items: center;
   gap: 8px;
   padding: 4px 12px 8px;
 }
 
-.activity-feed-filters select {
+.activity-feed-filters .select-container {
   min-width: 0;
-  max-width: 50%;
-  font-size: 1rem;
   border: 1px solid var(--light-border);
   border-radius: 3px;
-  padding: 3px;
+  padding: 3px 6px;
+}
+
+.activity-feed-filters select {
+  min-width: 0;
+  max-width: 100%;
+  font-size: 1rem;
+  padding: 0;
+}
+
+.activity-drop-filter {
+  display: flex;
+  flex: none;
+  font-size: 0.875rem;
+}
+
+.activity-drop-filter input:focus-visible + label {
+  outline: auto;
+  outline-offset: 2px;
 }
 
 .activity-feed-scroll {

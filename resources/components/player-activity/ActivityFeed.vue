@@ -41,6 +41,7 @@
       return (
         members.value.has(entry.member_id) &&
         (!memberFilter.value || entry.member_id === memberFilter.value) &&
+        (!settingsStore.filterActivityDrops || entry.type !== "collection") &&
         (!typeFilter.value ||
           entry.type === typeFilter.value ||
           (typeFilter.value === "loot" && entry.type === "collection"))
@@ -163,10 +164,19 @@
     }
   });
 
-  watch([memberFilter, typeFilter], function resetFilters() {
-    newEntries.value = 0;
-    scroller.value.scrollTop = 0;
-  });
+  watch(
+    [
+      memberFilter,
+      typeFilter,
+      function getDropFilter() {
+        return settingsStore.filterActivityDrops;
+      },
+    ],
+    function resetFilters() {
+      newEntries.value = 0;
+      scroller.value.scrollTop = 0;
+    },
+  );
 </script>
 
 <template>
@@ -187,19 +197,36 @@
       </button>
     </header>
     <div class="activity-feed-filters">
-      <select v-model="memberFilter" aria-label="Filter activity by player">
-        <option value="">Everyone</option>
-        <option v-for="[identifier, name] in members" :key="identifier" :value="identifier">{{ name }}</option>
-      </select>
-      <select v-model="typeFilter" aria-label="Filter activity by type">
-        <option value="">All activity</option>
-        <option value="xp">XP</option>
-        <option value="level">Levels</option>
-        <option value="boss">Boss kills</option>
-        <option value="quest">Quests</option>
-        <option value="diary">Diaries</option>
-        <option value="loot">Drops</option>
-      </select>
+      <span class="select-container">
+        <select v-model="memberFilter" aria-label="Filter activity by player">
+          <option value="">Everyone</option>
+          <option v-for="[identifier, name] in members" :key="identifier" :value="identifier">{{ name }}</option>
+        </select>
+      </span>
+      <span class="select-container">
+        <select v-model="typeFilter" aria-label="Filter activity by type">
+          <option value="">All activity</option>
+          <option value="xp">XP</option>
+          <option value="level">Levels</option>
+          <option value="boss">Boss kills</option>
+          <option value="quest">Quests</option>
+          <option value="diary">Diaries</option>
+          <option value="loot">Drops</option>
+        </select>
+      </span>
+      <div class="activity-drop-filter">
+        <input
+          id="filter-activity-drops-input"
+          type="checkbox"
+          :checked="settingsStore.filterActivityDrops"
+          @change="settingsStore.setFilterActivityDrops($event.target.checked)"
+        />
+        <label
+          for="filter-activity-drops-input"
+          data-tooltip="Only show drops worth at least 1m GP or new collection log unlocks. Other activity is always shown."
+          >Filter drops</label
+        >
+      </div>
     </div>
     <button v-if="newEntries" class="activity-new-button men-button small" @click="followLatest">
       {{ newEntries }} new {{ newEntries === 1 ? "entry" : "entries" }} · Jump to latest

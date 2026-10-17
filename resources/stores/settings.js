@@ -5,6 +5,7 @@ import { siteThemes } from "./settings-options";
 
 const DEFAULT_SITE_SETTINGS = Object.freeze({
   showActivitySidebar: true,
+  filterActivityDrops: true,
   siteTheme: "light",
   enableVirtualLevels: true,
   enableSkillProgressBars: true,
@@ -13,6 +14,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
 
 const KEY_SITE_THEME = "settings-site-theme";
 const KEY_ACTIVITY_SIDEBAR = "settings-activity-sidebar";
+const KEY_ACTIVITY_DROP_FILTER = "settings-activity-drop-filter";
 const KEY_VIRTUAL_LEVELS = "settings-virtual-levels";
 const KEY_SKILL_PROGRESS_BARS = "settings-skill-progress-bars";
 const KEY_GEARSCAPE_EXPORT = "settings-gearscape-export";
@@ -42,6 +44,11 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     defaultValue: String(DEFAULT_SITE_SETTINGS.showActivitySidebar),
     validator: validateBoolean,
   });
+  const [activityDropFilter, setActivityDropFilter] = useLocalStorage({
+    key: KEY_ACTIVITY_DROP_FILTER,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.filterActivityDrops),
+    validator: validateBoolean,
+  });
   const [virtualLevels, setVirtualLevels] = useLocalStorage({
     key: KEY_VIRTUAL_LEVELS,
     defaultValue: String(DEFAULT_SITE_SETTINGS.enableVirtualLevels),
@@ -61,6 +68,9 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
   const showActivitySidebar = computed(function activitySidebarShown() {
     return activitySidebar.value === "true";
   });
+  const filterActivityDrops = computed(function activityDropsFiltered() {
+    return activityDropFilter.value === "true";
+  });
   const enableVirtualLevels = computed(function virtualLevelsEnabled() {
     return virtualLevels.value === "true";
   });
@@ -73,6 +83,10 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
 
   function setShowActivitySidebar(value) {
     setActivitySidebar(String(value));
+  }
+
+  function setFilterActivityDrops(value) {
+    setActivityDropFilter(String(value));
   }
 
   function setEnableVirtualLevels(value) {
@@ -92,6 +106,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     setSiteTheme,
     showActivitySidebar,
     setShowActivitySidebar,
+    filterActivityDrops,
+    setFilterActivityDrops,
     enableVirtualLevels,
     setEnableVirtualLevels,
     enableSkillProgressBars,

@@ -34,6 +34,10 @@
   margin-left: auto;
 }
 
+.nav-main-links .nav-activity-link {
+  display: none;
+}
+
 .nav-secondary-links {
   border-left: 1px solid var(--light-border);
   padding-left: 8px;
@@ -119,12 +123,30 @@
 @container app-navigation (width <= 560px) {
   #app-navigation #group-switcher {
     flex: 1;
-    max-width: calc(100% - 80px);
+    max-width: none;
   }
 
   #app-navigation-nav {
     order: 1;
     flex-basis: 100%;
+  }
+}
+
+@media (width <= 1439px) {
+  #app-navigation-nav {
+    gap: 8px;
+  }
+
+  #app-navigation-nav .men-button {
+    font-size: 1rem;
+  }
+
+  .nav-main-links .nav-activity-link {
+    display: flex;
+  }
+
+  #app-navigation .activity-restore {
+    display: none;
   }
 }
 

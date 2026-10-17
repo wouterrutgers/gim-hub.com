@@ -209,6 +209,7 @@
   transform: rotate(90deg);
 }
 
+.activity-drop-filter span,
 .activity-detail-content > span,
 .activity-card-details summary > span {
   text-box: trim-both text alphabetic;

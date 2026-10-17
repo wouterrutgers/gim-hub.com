@@ -1,5 +1,5 @@
 <script setup>
-  import { computed } from "vue";
+  import { computed, nextTick, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useApiStore } from "../../stores/api";
   import { useSettingsStore } from "../../stores/settings";
@@ -19,6 +19,19 @@
   const groupName = computed(function getGroupName() {
     return apiStore.credentials?.name ?? "";
   });
+  const isActivityPage = computed(function activityPageIsOpen() {
+    return route.path === "/group/activity";
+  });
+  const activityPageTarget = ref();
+
+  watch(
+    isActivityPage,
+    async function moveActivityToPage() {
+      await nextTick();
+      activityPageTarget.value = isActivityPage.value ? document.getElementById("activity-page") : undefined;
+    },
+    { immediate: true },
+  );
 </script>
 
 <template>
@@ -31,10 +44,13 @@
         <slot />
       </div>
     </div>
-    <ActivityFeed
-      id="group-activity-sidebar"
-      v-show="route.path !== '/group/panels' && settingsStore.showActivitySidebar"
-      class="activity-dock"
-    />
+    <Teleport :to="activityPageTarget" :disabled="!activityPageTarget">
+      <ActivityFeed
+        id="group-activity-sidebar"
+        v-show="isActivityPage || (route.path !== '/group/panels' && settingsStore.showActivitySidebar)"
+        :collapsible="!isActivityPage"
+        :class="isActivityPage ? 'activity-page-feed' : 'activity-dock'"
+      />
+    </Teleport>
   </div>
 </template>

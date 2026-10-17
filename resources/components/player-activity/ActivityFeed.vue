@@ -9,6 +9,10 @@
   import CachedImage from "../cached-image/CachedImage.vue";
   import "./activity-feed.css";
 
+  const props = defineProps({
+    collapsible: { type: Boolean, default: true },
+  });
+
   const activityStore = useActivityStore();
   const gameDataStore = useGameDataStore();
   const groupStore = useGroupStore();
@@ -185,6 +189,7 @@
       <h2>Group activity</h2>
       <span class="activity-feed-period">Last 30 days</span>
       <button
+        v-if="props.collapsible"
         class="activity-collapse"
         type="button"
         :aria-expanded="settingsStore.showActivitySidebar"
@@ -224,7 +229,7 @@
         <label
           for="filter-activity-drops-input"
           data-tooltip="Only show drops worth at least 1m GP or new collection log unlocks. Other activity is always shown."
-          >Filter drops</label
+          ><span>Filter drops</span></label
         >
       </div>
     </div>

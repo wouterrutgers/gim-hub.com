@@ -28,14 +28,14 @@
 
   const communityLinks = [
     {
-      label: "GitHub",
-      href: "https://github.com/wouterrutgers/gim-hub.com",
-      imageSource: "/images/github-light.webp",
-    },
-    {
       label: "Discord",
       href: "https://discord.gg/ZwzW6yYD8V",
       imageSource: "/images/discord-light.webp",
+    },
+    {
+      label: "GitHub",
+      href: "https://github.com/wouterrutgers/gim-hub.com",
+      imageSource: "/images/github-light.webp",
     },
   ];
 
@@ -53,6 +53,9 @@
       <div class="nav-main-links">
         <AppLink v-for="link in primaryLinks" :key="link.href" :href="link.href" :selected="route.path === link.href">
           {{ link.label }}
+        </AppLink>
+        <AppLink href="/group/activity" :selected="route.path === '/group/activity'" class="nav-activity-link">
+          Activity
         </AppLink>
       </div>
 
@@ -99,22 +102,12 @@
               Setup
             </AppLink>
             <AppLink href="/changelog" :selected="route.path === '/changelog'">Changelog</AppLink>
-            <button
-              v-if="route.path !== '/group/panels' && !settingsStore.showActivitySidebar"
-              class="activity-restore app-link men-button"
-              type="button"
-              aria-controls="group-activity-sidebar"
-              aria-expanded="false"
-              @click="settingsStore.setShowActivitySidebar(true)"
-            >
-              Show activity
-            </button>
           </div>
         </details>
       </div>
     </nav>
 
-    <nav class="nav-community-links" aria-label="Community">
+    <nav class="nav-community-links" aria-label="Community and activity">
       <a
         v-for="link in communityLinks"
         :key="link.href"
@@ -127,6 +120,29 @@
       >
         <CachedImage alt="" :src="link.imageSource" height="20" />
       </a>
+      <button
+        v-if="route.path !== '/group/panels' && route.path !== '/group/activity' && !settingsStore.showActivitySidebar"
+        class="activity-restore app-link men-button nav-community-link"
+        type="button"
+        aria-label="Show activity"
+        data-tooltip="Show activity"
+        aria-controls="group-activity-sidebar"
+        aria-expanded="false"
+        @click="settingsStore.setShowActivitySidebar(true)"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <path d="M15 4v16M6 12h6m-3-3 3 3-3 3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
     </nav>
   </div>
 </template>

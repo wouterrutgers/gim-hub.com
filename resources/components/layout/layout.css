@@ -56,23 +56,18 @@
   pointer-events: auto;
 }
 
-@media (width <= 1439px) {
-  .authed-layout {
-    flex-direction: column;
-  }
-
-  .activity-dock {
-    width: auto;
-    height: 200px;
-  }
-
-  .activity-collapse .activity-toggle-chevron {
-    transform: rotate(45deg);
-  }
+#activity-page {
+  display: flex;
+  flex: 1;
+  min-height: 0;
 }
 
-@media (width <= 800px) {
+.activity-page-feed {
+  flex: 1;
+}
+
+@media (width <= 1439px) {
   .activity-dock {
-    height: min(55svh, 440px);
+    display: none;
   }
 }

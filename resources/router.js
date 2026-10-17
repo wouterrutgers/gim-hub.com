@@ -95,6 +95,13 @@ const routes = [
     meta: { layout: "authed", showPanels: true },
   },
   {
+    path: "/group/activity",
+    component: function loadActivityPage() {
+      return import("./components/player-activity/ActivityPage.vue");
+    },
+    meta: { layout: "authed" },
+  },
+  {
     path: "/group/panels",
     component: function loadPanelsPage() {
       return import("./components/panels-page/PanelsPage.vue");

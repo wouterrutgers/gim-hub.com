@@ -12,23 +12,23 @@
   "devDependencies": {
     "@date-fns/utc": "^2.1.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "@tanstack/vue-virtual": "^3.13.40",
+    "@tanstack/vue-virtual": "^3.13.46",
     "@vitejs/plugin-vue": "^6.0.10",
     "chart.js": "^4.5.1",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-zoom": "^2.2.0",
     "date-fns": "^4.4.0",
-    "jsdom": "^30.1.2",
+    "jsdom": "^30.1.3",
     "laravel-vite-plugin": "^3.2.0",
-    "pinia": "^4.0.3",
+    "pinia": "^4.1.0",
     "stylelint": "^17.16.0",
     "stylelint-config-standard": "^40.0.0",
-    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0",
-    "vite-plus": "1.1.0",
-    "vue": "^3.5.43",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.3.0",
+    "vite-plus": "1.3.0",
+    "vue": "^3.5.44",
     "vue-chartjs": "^5.3.4",
     "vue-router": "^5.4.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.7"
   },
   "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
 }

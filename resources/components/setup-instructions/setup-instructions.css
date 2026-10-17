@@ -1,5 +1,6 @@
 #setup-instructions-container {
   display: flex;
+  align-items: flex-start;
   justify-content: center;
   overflow-y: auto;
   padding: 64px 12px;

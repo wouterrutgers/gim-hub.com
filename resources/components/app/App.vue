@@ -41,11 +41,7 @@
   <CanvasMap :interactive="canvasMapIsInteractive" />
 
   <RouterView v-slot="{ Component }">
-    <AuthedLayout
-      v-if="route.meta.layout === 'authed'"
-      :show-panels="route.meta.showPanels"
-      :hide-header="route.meta.hideHeader"
-    >
+    <AuthedLayout v-if="route.meta.layout === 'authed'" :show-panels="route.meta.showPanels">
       <component :is="Component" />
     </AuthedLayout>
 

@@ -1,10 +1,12 @@
 #group-switcher {
   position: relative;
-  margin-right: 8px;
+  min-width: 0;
+  max-width: 180px;
 }
 
 #group-switcher-toggle {
   display: flex;
+  max-width: 100%;
   align-items: center;
   gap: 6px;
   cursor: pointer;
@@ -21,6 +23,8 @@
 
 #group-switcher-label {
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #group-switcher-toggle:hover #group-switcher-label {
@@ -80,4 +84,17 @@
   margin-top: 2px;
   text-align: center;
   cursor: pointer;
+}
+
+.group-switcher-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--light-border);
+  padding-top: 6px;
+  margin-top: 2px;
+}
+
+.group-switcher-actions .app-link {
+  justify-content: flex-start;
 }

@@ -71,7 +71,7 @@ const routes = [
     component: function loadAuthenticatedSetupInstructions() {
       return import("./components/setup-instructions/SetupInstructions.vue");
     },
-    meta: { layout: "authed", hideHeader: true },
+    meta: { layout: "authed" },
   },
   {
     path: "/group/items",

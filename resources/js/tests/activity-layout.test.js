@@ -40,6 +40,8 @@ describe("persistent activity layout", function activityLayout() {
     collapse.click();
     await nextTick();
     expect(timeline.style.display).toBe("none");
+    container.querySelector(".nav-more summary").click();
+    await nextTick();
     container.querySelector(".activity-restore").click();
     await nextTick();
     expect(timeline.style.display).not.toBe("none");

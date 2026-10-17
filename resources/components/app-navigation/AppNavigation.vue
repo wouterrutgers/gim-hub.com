@@ -1,5 +1,5 @@
 <script setup>
-  import { computed } from "vue";
+  import { ref } from "vue";
   import { useRoute } from "vue-router";
   import { useSettingsStore } from "../../stores/settings";
   import AppLink from "../app-link/AppLink.vue";
@@ -13,84 +13,120 @@
 
   const route = useRoute();
   const settingsStore = useSettingsStore();
+  const moreMenu = ref(null);
 
-  const navigationLinks = computed(function getNavigationLinks() {
-    return [
-      { label: "Items", href: "/group/items", mobileIconSource: "/ui/777-0.png" },
-      { label: "Map", href: "/group/map", mobileIconSource: "/ui/1698-0.png" },
-      { label: "History", href: "/group/history", mobileIconSource: "/ui/3579-0.png" },
-      { label: "Panels", href: "/group/panels", mobileIconSource: "/ui/1707-0.png" },
-      { label: "Settings", href: "/group/settings", mobileIconSource: "/ui/785-0.png" },
-      { spacer: true },
-      {
-        label: "GitHub",
-        href: "https://github.com/wouterrutgers/gim-hub.com",
-        mobileIconSource: "/images/github-light.webp",
-        isExternal: true,
-      },
-      {
-        label: "Discord",
-        href: "https://discord.gg/ZwzW6yYD8V",
-        mobileIconSource: "/images/discord-light.webp",
-        isExternal: true,
-      },
-      { label: "Changelog", href: "/changelog", mobileIconSource: "/ui/2414-0.png" },
-      { label: "Setup", href: "/group/setup-instructions", mobileIconSource: "/ui/1094-0.png" },
-      { label: "Logout", href: "/logout", mobileIconSource: "/ui/225-0.png" },
-    ];
-  });
+  const primaryLinks = [
+    { label: "Items", href: "/group/items" },
+    { label: "Map", href: "/group/map" },
+    { label: "History", href: "/group/history" },
+  ];
+
+  const secondaryLinks = [
+    { label: "Panels", href: "/group/panels" },
+    { label: "Settings", href: "/group/settings" },
+  ];
+
+  const communityLinks = [
+    {
+      label: "GitHub",
+      href: "https://github.com/wouterrutgers/gim-hub.com",
+      imageSource: "/images/github-light.webp",
+    },
+    {
+      label: "Discord",
+      href: "https://discord.gg/ZwzW6yYD8V",
+      imageSource: "/images/discord-light.webp",
+    },
+  ];
+
+  function closeMoreOnOutsideClick(event) {
+    if (!moreMenu.value.contains(event.target)) {
+      moreMenu.value.open = false;
+    }
+  }
 </script>
 
 <template>
   <div id="app-navigation" class="rsborder-tiny rsbackground">
     <GroupSwitcher :group-name="props.groupName" />
-    <nav id="app-navigation-nav">
-      <template v-for="(link, index) in navigationLinks" :key="link.label ?? index">
-        <span v-if="link.spacer" id="app-navigation-spacer" class="desktop" />
+    <nav id="app-navigation-nav" aria-label="Group navigation">
+      <div class="nav-main-links">
+        <AppLink v-for="link in primaryLinks" :key="link.href" :href="link.href" :selected="route.path === link.href">
+          {{ link.label }}
+        </AppLink>
+      </div>
 
-        <template v-else>
-          <span class="desktop">
-            <a
-              v-if="link.isExternal"
-              :href="link.href"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="app-link men-button pixelated"
-            >
-              <CachedImage :alt="link.label" :src="link.mobileIconSource" height="20" style="margin-right: 8px" />
-              {{ link.label }}
-            </a>
-            <AppLink v-else :href="link.href" :selected="route.path === link.href">
-              {{ link.label }}
-            </AppLink>
-          </span>
+      <div class="nav-right-links">
+        <div class="nav-secondary-links">
+          <AppLink
+            v-for="link in secondaryLinks"
+            :key="link.href"
+            :href="link.href"
+            :selected="route.path === link.href"
+            class="nav-utility"
+          >
+            {{ link.label }}
+          </AppLink>
+        </div>
 
-          <span class="mobile">
-            <a
-              v-if="link.isExternal"
-              :href="link.href"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="app-link men-button pixelated"
-            >
-              <CachedImage :alt="link.label" :src="link.mobileIconSource" />
-            </a>
-            <AppLink v-else :href="link.href" :selected="route.path === link.href">
-              <CachedImage :alt="link.label" :src="link.mobileIconSource" class="pixelated" />
-            </AppLink>
-          </span>
-        </template>
-        <button
-          v-if="link.href === '/group/history' && !settingsStore.showActivitySidebar"
-          class="activity-restore app-link men-button"
-          type="button"
-          aria-controls="group-activity-sidebar"
-          aria-expanded="false"
-          @click="settingsStore.setShowActivitySidebar(true)"
+        <details
+          ref="moreMenu"
+          class="nav-more"
+          @mousedown.window="closeMoreOnOutsideClick"
+          @keydown.esc="moreMenu.open = false"
         >
-          Show activity
-        </button>
-      </template>
+          <summary
+            :class="[
+              'men-button',
+              'nav-utility',
+              { active: route.path === '/changelog' || route.path === '/group/setup-instructions' },
+            ]"
+          >
+            More <span aria-hidden="true">▾</span>
+          </summary>
+          <div class="nav-more-menu rsborder rsbackground" @click="moreMenu.open = false">
+            <div class="nav-more-secondary">
+              <AppLink
+                v-for="link in secondaryLinks"
+                :key="link.href"
+                :href="link.href"
+                :selected="route.path === link.href"
+              >
+                {{ link.label }}
+              </AppLink>
+            </div>
+            <AppLink href="/group/setup-instructions" :selected="route.path === '/group/setup-instructions'">
+              Setup
+            </AppLink>
+            <AppLink href="/changelog" :selected="route.path === '/changelog'">Changelog</AppLink>
+            <button
+              v-if="route.path !== '/group/panels' && !settingsStore.showActivitySidebar"
+              class="activity-restore app-link men-button"
+              type="button"
+              aria-controls="group-activity-sidebar"
+              aria-expanded="false"
+              @click="settingsStore.setShowActivitySidebar(true)"
+            >
+              Show activity
+            </button>
+          </div>
+        </details>
+      </div>
+    </nav>
+
+    <nav class="nav-community-links" aria-label="Community">
+      <a
+        v-for="link in communityLinks"
+        :key="link.href"
+        :href="link.href"
+        :aria-label="link.label"
+        :data-tooltip="link.label"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="app-link men-button nav-community-link"
+      >
+        <CachedImage alt="" :src="link.imageSource" height="20" />
+      </a>
     </nav>
   </div>
 </template>

@@ -2,6 +2,7 @@
   import { computed, onBeforeUnmount, ref, watch } from "vue";
   import { useRouter } from "vue-router";
   import { useApiStore } from "../../stores/api";
+  import AppLink from "../app-link/AppLink.vue";
   import "./group-switcher.css";
 
   const props = defineProps({
@@ -56,7 +57,7 @@
 </script>
 
 <template>
-  <div id="group-switcher" ref="container">
+  <div id="group-switcher" ref="container" @keydown.esc="open = false">
     <button
       id="group-switcher-toggle"
       type="button"
@@ -100,6 +101,9 @@
         </button>
       </div>
       <button type="button" class="group-switcher-add men-button" @click="addGroup">+ Add group</button>
+      <div class="group-switcher-actions">
+        <AppLink href="/logout" @click="open = false">Logout</AppLink>
+      </div>
     </div>
   </div>
 </template>

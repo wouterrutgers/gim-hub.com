@@ -163,6 +163,10 @@ class GroupMemberController extends Controller
 
     public function updateGroupMember(): JsonResponse
     {
+        if (! is_array(json_decode(request()->getContent(), associative: true))) {
+            return response()->json(['error' => 'Invalid JSON payload'], 400);
+        }
+
         MemberPlugin::observe();
 
         $validated = MemberUpdateValidation::validate(request()->all());

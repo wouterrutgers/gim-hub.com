@@ -130,7 +130,8 @@
 }
 
 .activity-card-player strong {
-  color: hsl(var(--member-hue) 65% 72%);
+  color: #ff3939;
+  filter: hue-rotate(var(--member-hue)) saturate(100%);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

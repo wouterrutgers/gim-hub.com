@@ -80,6 +80,7 @@
     { "label": "Chambers of Xeric completions", "lookupKey": "Chambers of Xeric" },
     { "label": "Chambers of Xeric (CM) completions", "lookupKey": "Chambers of Xeric: Challenge Mode" }
   ],
+  "The Fractured Archive": [{ "label": "Fractured Archive completions", "lookupKey": "The Fractured Archive" }],
   "Theatre of Blood": [
     { "label": "Theatre of Blood completions", "lookupKey": "Theatre of Blood" },
     { "label": "Theatre of Blood (Hard) completions", "lookupKey": "Theatre of Blood: Hard Mode" }

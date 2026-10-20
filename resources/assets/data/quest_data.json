@@ -1295,5 +1295,12 @@
     "difficulty": "Intermediate",
     "points": "1",
     "member": true
+  },
+  "17027": {
+    "name": "The Fractured Archive",
+    "difficulty": "Grandmaster",
+    "points": 0,
+    "member": true,
+    "miniquest": true
   }
 }

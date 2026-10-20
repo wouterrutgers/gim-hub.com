@@ -1914,6 +1914,79 @@
         ]
       },
       {
+        "name": "The Fractured Archive",
+        "items": [
+          {
+            "id": 34646,
+            "name": "Orion"
+          },
+          {
+            "id": 34717,
+            "name": "Obligator (uncharged)"
+          },
+          {
+            "id": 34681,
+            "name": "Ascension crossbows"
+          },
+          {
+            "id": 34727,
+            "name": "Zorya\u0027s tome (uncharged)"
+          },
+          {
+            "id": 34719,
+            "name": "Rondache"
+          },
+          {
+            "id": 34679,
+            "name": "Horn of Bran"
+          },
+          {
+            "id": 34675,
+            "name": "Fragment of whispering wind"
+          },
+          {
+            "id": 34677,
+            "name": "Fragment of burning fire"
+          },
+          {
+            "id": 34673,
+            "name": "Fragment of deep water"
+          },
+          {
+            "id": 34671,
+            "name": "Fragment of living earth"
+          },
+          {
+            "id": 34669,
+            "name": "Ascension shards"
+          },
+          {
+            "id": 34722,
+            "name": "Archivist\u0027s folio (inert)"
+          },
+          {
+            "id": 34659,
+            "name": "Living record (tier 1)"
+          },
+          {
+            "id": 34661,
+            "name": "Living record (tier 2)"
+          },
+          {
+            "id": 34663,
+            "name": "Living record (tier 3)"
+          },
+          {
+            "id": 34665,
+            "name": "Living record (tier 4)"
+          },
+          {
+            "id": 34667,
+            "name": "Living record (tier 5)"
+          }
+        ]
+      },
+      {
         "name": "Theatre of Blood",
         "items": [
           {

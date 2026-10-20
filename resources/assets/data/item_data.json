@@ -113634,5 +113634,317 @@
     "highalch": 0,
     "alchable": true,
     "mapping": null
+  },
+  "34646": {
+    "name": "Orion",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34648": {
+    "name": "Orion",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34649": {
+    "name": "Xari",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34650": {
+    "name": "Archie",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34651": {
+    "name": "Chubbles",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34652": {
+    "name": "Cole",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34653": {
+    "name": "Zeke",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34654": {
+    "name": "Mimi",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34655": {
+    "name": "Dork",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34657": {
+    "name": "Alliance's message",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34658": {
+    "name": "Archive key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34659": {
+    "name": "Living record (tier 1)",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34661": {
+    "name": "Living record (tier 2)",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34663": {
+    "name": "Living record (tier 3)",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34665": {
+    "name": "Living record (tier 4)",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34667": {
+    "name": "Living record (tier 5)",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34669": {
+    "name": "Ascension shards",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34671": {
+    "name": "Fragment of living earth",
+    "highalch": 18000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34673": {
+    "name": "Fragment of deep water",
+    "highalch": 18000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34675": {
+    "name": "Fragment of whispering wind",
+    "highalch": 18000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34677": {
+    "name": "Fragment of burning fire",
+    "highalch": 18000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34679": {
+    "name": "Horn of Bran",
+    "highalch": 1800000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34681": {
+    "name": "Ascension crossbows",
+    "highalch": 2400000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34684": {
+    "name": "Ascension bolts",
+    "highalch": 345,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        34686
+      ],
+      [
+        3,
+        34687
+      ],
+      [
+        4,
+        34688
+      ],
+      [
+        5,
+        34689
+      ]
+    ]
+  },
+  "34690": {
+    "name": "Diamond ascension bolts",
+    "highalch": 600,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        34692
+      ],
+      [
+        3,
+        34693
+      ],
+      [
+        4,
+        34694
+      ],
+      [
+        5,
+        34695
+      ]
+    ]
+  },
+  "34696": {
+    "name": "Diamond ascension bolts (e)",
+    "highalch": 618,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        34698
+      ],
+      [
+        3,
+        34699
+      ],
+      [
+        4,
+        34700
+      ],
+      [
+        5,
+        34701
+      ]
+    ]
+  },
+  "34702": {
+    "name": "Onyx ascension bolts",
+    "highalch": 8430,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        34704
+      ],
+      [
+        3,
+        34705
+      ],
+      [
+        4,
+        34706
+      ],
+      [
+        5,
+        34707
+      ]
+    ]
+  },
+  "34708": {
+    "name": "Onyx ascension bolts (e)",
+    "highalch": 9570,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        34710
+      ],
+      [
+        3,
+        34711
+      ],
+      [
+        4,
+        34712
+      ],
+      [
+        5,
+        34713
+      ]
+    ]
+  },
+  "34715": {
+    "name": "Obligator",
+    "highalch": 2400000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34717": {
+    "name": "Obligator (uncharged)",
+    "highalch": 2400000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34719": {
+    "name": "Rondache",
+    "highalch": 2400000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34722": {
+    "name": "Archivist's folio (inert)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34723": {
+    "name": "Archivist's folio",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34725": {
+    "name": "Zorya's tome",
+    "highalch": 2400000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34727": {
+    "name": "Zorya's tome (uncharged)",
+    "highalch": 2400000,
+    "alchable": true,
+    "mapping": null
+  },
+  "34729": {
+    "name": "Alliance log",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34730": {
+    "name": "Leftovers",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
   }
 }

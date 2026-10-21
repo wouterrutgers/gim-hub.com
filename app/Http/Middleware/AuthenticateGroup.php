@@ -19,10 +19,6 @@ class AuthenticateGroup
             return $this->badRequest('Missing group name from request');
         }
 
-        if ($routeGroup === '_') {
-            return $next($request);
-        }
-
         $token = $request->header('Authorization');
 
         if (! $token) {

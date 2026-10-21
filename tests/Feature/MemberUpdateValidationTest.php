@@ -12,6 +12,23 @@ function validationMember(): Member
     return Member::create(['group_id' => $group->id, 'name' => 'Alice']);
 }
 
+it('rejects malformed skill values before saving them or blocking aggregation', function (): void {
+    $member = validationMember();
+    $member->properties()->create(['key' => 'skills', 'value' => array_fill(0, 24, 100)]);
+
+    $this->withHeader('Authorization', 'validation-token')
+        ->postJson('/api/group/validation-group/update-group-member', [
+            'name' => 'Alice',
+            'skills' => [['invalid' => 100], ...array_fill(0, 23, 100)],
+            'bank' => [995, 100],
+        ])
+        ->assertUnprocessable()->assertJsonValidationErrors('skills');
+
+    expect($member->load('properties')->getProperty('bank'))->toBeNull();
+    $this->artisan('skills:aggregate')->assertSuccessful();
+    $this->assertDatabaseHas('skill_stats', ['member_id' => $member->id, 'type' => 'five_minutes', 'agility' => 100]);
+});
+
 it('returns 422 for invalid storage arrays without applying other storage updates', function (array $payload, string $attribute): void {
     $member = validationMember();
     $member->properties()->create(['key' => 'bank', 'value' => [995, 100]]);

@@ -117,7 +117,12 @@ function createMemberStates(oldState, memberNames, update) {
 
   for (const memberName of memberNames) {
     const stateUpdate = update.get(memberName);
-    const oldMemberState = oldState.memberStates.get(memberName);
+    const oldMemberState =
+      stateUpdate?.id === undefined
+        ? oldState.memberStates.get(memberName)
+        : [...oldState.memberStates.values()].find(function sameMember(member) {
+            return member.id === stateUpdate.id;
+          });
 
     if (stateUpdate || !oldMemberState) {
       memberStates.set(memberName, {

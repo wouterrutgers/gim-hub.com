@@ -59,23 +59,18 @@ function exec(command, args, options) {
   child_process.execFileSync(command, commandArgs, options);
 }
 
-async function retry(fn, skipLast) {
+async function retry(action) {
   const attempts = 10;
   for (let i = 0; i < attempts; ++i) {
     try {
-      await fn();
+      await action();
       return;
-    } catch (ex) {
+    } catch {
       await new Promise((resolve) => setTimeout(resolve, 100));
-      if (i === attempts - 1 && skipLast) {
-        console.error(ex);
-      }
     }
   }
 
-  if (!skipLast) {
-    fn();
-  }
+  await action();
 }
 
 function execGitCleanInRunelite() {
@@ -184,11 +179,9 @@ async function dumpItemData() {
       ],
       runArgs: path.resolve(`./item-data`),
     });
-  } catch (e) {
-    console.error("Failed to dumpItemData");
-    console.error(e);
+  } finally {
+    execGitCleanInRunelite();
   }
-  execGitCleanInRunelite();
 }
 
 async function getNonAlchableItemNames() {
@@ -303,25 +296,16 @@ async function dumpItemImages(allIncludedItemIds) {
       console.info(`Converting ${itemImages.length} dumped .png item images to .webp.`);
     }
 
-    let p = [];
-    for (const itemImage of itemImages) {
-      p.push(
-        new Promise(async (resolve) => {
-          const itemImageData = await sharp(itemImage).webp({ lossless: true }).toBuffer();
-          fs.unlinkSync(itemImage);
-          await sharp(itemImageData)
-            .webp({ lossless: true, effort: 6 })
-            .toFile(itemImage.replace(".png", ".webp"))
-            .then(resolve);
-        }),
-      );
-    }
-    await Promise.all(p);
-  } catch (e) {
-    console.error("Failed to dumpItemImages");
-    console.error(e);
+    await Promise.all(
+      itemImages.map(async function convertItemImage(itemImage) {
+        const itemImageData = await sharp(itemImage).webp({ lossless: true }).toBuffer();
+        fs.unlinkSync(itemImage);
+        await sharp(itemImageData).webp({ lossless: true, effort: 6 }).toFile(itemImage.replace(".png", ".webp"));
+      }),
+    );
+  } finally {
+    execGitCleanInRunelite();
   }
-  execGitCleanInRunelite();
 }
 
 async function convertXteasToRuneliteFormat() {
@@ -352,11 +336,9 @@ async function dumpMapData(xteasLocation) {
       dependencies: [],
       runArgs: `--cachedir ${osrsCacheDirectory} --xteapath ${xteasLocation} --outputdir ${path.resolve("./map-data")}`,
     });
-  } catch (e) {
-    console.error("Failed to dumpMapData");
-    console.error(e);
+  } finally {
+    execGitCleanInRunelite();
   }
-  execGitCleanInRunelite();
 }
 
 async function dumpMapLabels() {
@@ -382,25 +364,16 @@ async function dumpMapLabels() {
       console.info(`Converting ${mapLabels.length} dumped .png map labels to .webp.`);
     }
 
-    let p = [];
-    for (const mapLabel of mapLabels) {
-      p.push(
-        new Promise(async (resolve) => {
-          const mapLabelImageData = await sharp(mapLabel).webp({ lossless: true }).toBuffer();
-          fs.unlinkSync(mapLabel);
-          await sharp(mapLabelImageData)
-            .webp({ lossless: true, effort: 6 })
-            .toFile(mapLabel.replace(".png", ".webp"))
-            .then(resolve);
-        }),
-      );
-    }
-    await Promise.all(p);
-  } catch (e) {
-    console.error("Failed to dumpMapLabels");
-    console.error(e);
+    await Promise.all(
+      mapLabels.map(async function convertMapLabel(mapLabel) {
+        const mapLabelImageData = await sharp(mapLabel).webp({ lossless: true }).toBuffer();
+        fs.unlinkSync(mapLabel);
+        await sharp(mapLabelImageData).webp({ lossless: true, effort: 6 }).toFile(mapLabel.replace(".png", ".webp"));
+      }),
+    );
+  } finally {
+    execGitCleanInRunelite();
   }
-  execGitCleanInRunelite();
 }
 
 async function dumpCollectionLog() {
@@ -418,11 +391,9 @@ async function dumpCollectionLog() {
       dependencies: [],
       runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../resources/assets/data")}`,
     });
-  } catch (e) {
-    console.error("Failed to dumpCollectionLog");
-    console.error(e);
+  } finally {
+    execGitCleanInRunelite();
   }
-  execGitCleanInRunelite();
 }
 
 async function tilePlane(plane) {
@@ -525,38 +496,35 @@ async function generateMapTiles() {
   }
 }
 
-async function moveFiles(globSource, destination) {
-  const files = glob.sync(path.resolve(globSource).replace(/\\/g, "/"));
-  if (files.length === 0) {
-    console.warn("No files to move, matching glob: " + globSource);
-  }
-  for (file of files) {
+async function moveFiles(files, destination) {
+  for (const file of files) {
     const base = path.parse(file).base;
-    if (base) {
-      await retry(() => fs.renameSync(file, `${destination}/${base}`), true);
-    }
+    await retry(() => fs.renameSync(file, `${destination}/${base}`));
   }
 }
 
 async function moveResults() {
   console.log("\nStep: Moving results to site");
-  await retry(() => fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData), true);
+  const replacements = [
+    ["./item-images/*.webp", SITE_PATHS.DIRS.itemImages],
+    ["./map-data/tiles/*.webp", SITE_PATHS.DIRS.mapImages],
+    ["./map-data/labels/*.webp", SITE_PATHS.DIRS.mapLabels],
+  ].map(function findReplacements([source, destination]) {
+    const files = glob.sync(path.resolve(source).replace(/\\/g, "/"));
+    if (files.length === 0) {
+      throw new Error(`No replacement files found for ${source}.`);
+    }
+    return { files, destination };
+  });
 
-  // Clean up destination folders before moving new files
-  console.log("Removing old destination folders...");
-  await retry(() => fs.rmSync(SITE_PATHS.DIRS.itemImages, { recursive: true, force: true }), true);
-  await retry(() => fs.rmSync(SITE_PATHS.DIRS.mapImages, { recursive: true, force: true }), true);
-  await retry(() => fs.rmSync(SITE_PATHS.DIRS.mapLabels, { recursive: true, force: true }), true);
+  await retry(() => fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData));
 
-  // Recreate destination folders
-  fs.mkdirSync(SITE_PATHS.DIRS.itemImages, { recursive: true });
-  fs.mkdirSync(SITE_PATHS.DIRS.mapImages, { recursive: true });
-  fs.mkdirSync(SITE_PATHS.DIRS.mapLabels, { recursive: true });
+  for (const { files, destination } of replacements) {
+    await retry(() => fs.rmSync(destination, { recursive: true, force: true }));
+    fs.mkdirSync(destination, { recursive: true });
+    await moveFiles(files, destination);
+  }
   fs.mkdirSync(path.dirname(SITE_PATHS.FILES.mapIconAtlas), { recursive: true });
-
-  await moveFiles("./item-images/*.webp", SITE_PATHS.DIRS.itemImages);
-  await moveFiles("./map-data/tiles/*.webp", SITE_PATHS.DIRS.mapImages);
-  await moveFiles("./map-data/labels/*.webp", SITE_PATHS.DIRS.mapLabels);
 
   fs.copyFileSync("./map-data/map.json", SITE_PATHS.FILES.mapMetadata);
   fs.copyFileSync("./map-data/map_icons.webp", SITE_PATHS.FILES.mapIconAtlas);
@@ -658,11 +626,9 @@ async function dumpQuestMapping() {
       dependencies: [`implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")`],
       runArgs: SITE_PATHS.FILES.questMapping,
     });
-  } catch (e) {
-    console.error("Failed to dumpQuestMapping.");
-    console.error(e);
+  } finally {
+    execGitCleanInRunelite();
   }
-  execGitCleanInRunelite();
 }
 
 (async () => {

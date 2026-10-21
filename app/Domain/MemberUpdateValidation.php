@@ -8,60 +8,70 @@ class MemberUpdateValidation
 {
     public static function validate(array $input): array
     {
-        $itemQuantityPairs = function (string $attribute, mixed $value, Closure $fail): void {
-            if (count($value) % 2 !== 0) {
-                $fail('Storage contents must contain item and quantity pairs.');
-
-                return;
-            }
-
-            foreach ($value as $itemValue) {
-                if (! is_int($itemValue) || $itemValue < 1 || $itemValue > 2147483647) {
-                    $fail('Storage items and quantities must be positive integers.');
+        $integerList = function (int $minimum = 0, int $maximum = 4294967295, bool $pairs = false): Closure {
+            return function (string $attribute, array $value, Closure $fail) use ($minimum, $maximum, $pairs): void {
+                if ($pairs && count($value) % 2 !== 0) {
+                    $fail('Storage contents must contain item and quantity pairs.');
 
                     return;
                 }
-            }
+
+                foreach ($value as $itemValue) {
+                    if (! is_int($itemValue) || $itemValue < $minimum || $itemValue > $maximum) {
+                        $fail("Snapshot values must be integers between {$minimum} and {$maximum}.");
+
+                        return;
+                    }
+                }
+            };
         };
+        $itemQuantityPairs = $integerList(minimum: 1, maximum: 2147483647, pairs: true);
 
         $rules = [
             'name' => ['required', 'string'],
-            'stats' => ['nullable', 'array', ['size', 8]],
-            'coordinates' => ['nullable', 'array', ['size', 4]],
-            'skills' => ['nullable', 'array', ['size', 24]],
-            'quests' => ['nullable', 'array', ['max', 250]],
-            'inventory' => ['nullable', 'array', ['size', 56]],
-            'equipment' => ['nullable', 'array', ['size', 28]],
-            'bank' => ['nullable', 'array', ['max', 3000]],
-            'bank_partial' => ['nullable', 'array', ['max', 3000]],
-            'shared_bank' => ['nullable', 'array', ['max', 1000]],
-            'rune_pouch' => ['nullable', 'array', ['size', 8]],
-            'seed_vault' => ['nullable', 'array', ['max', 500]],
-            'potion_storage' => ['nullable', 'array', ['max', 2000]],
-            'poh_costume_room' => ['nullable', 'array', ['max', 4000]],
+            'stats' => [
+                'bail', 'nullable', 'array', 'list', ['size', 8], $integerList(),
+                function (string $attribute, array $value, Closure $fail): void {
+                    if ($value[5] !== 100) {
+                        $fail('Run energy maximum must be 100.');
+                    }
+                },
+            ],
+            'coordinates' => ['bail', 'nullable', 'array', 'list', ['size', 4], $integerList()],
+            'skills' => ['bail', 'nullable', 'array', 'list', ['size', 24], $integerList()],
+            'quests' => ['bail', 'nullable', 'array', 'list', ['max', 250], $integerList(maximum: 2)],
+            'inventory' => ['bail', 'nullable', 'array', 'list', ['size', 56], $integerList()],
+            'equipment' => ['bail', 'nullable', 'array', 'list', ['size', 28], $integerList()],
+            'bank' => ['bail', 'nullable', 'array', 'list', ['max', 3000], $integerList(minimum: -1, pairs: true)],
+            'bank_partial' => ['bail', 'nullable', 'array', 'list', ['max', 3000], $integerList(minimum: -2147483648, maximum: 2147483647, pairs: true)],
+            'shared_bank' => ['bail', 'nullable', 'array', 'list', ['max', 1000], $integerList(minimum: -1, pairs: true)],
+            'rune_pouch' => ['bail', 'nullable', 'array', 'list', ['size', 8], $integerList(minimum: -1)],
+            'seed_vault' => ['bail', 'nullable', 'array', 'list', ['max', 500], $integerList(minimum: -1, pairs: true)],
+            'potion_storage' => ['bail', 'nullable', 'array', 'list', ['max', 2000], $integerList(minimum: -1, pairs: true)],
+            'poh_costume_room' => ['bail', 'nullable', 'array', 'list', ['max', 4000], $integerList(minimum: -1, pairs: true)],
             'poh_spice_rack' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 16], $itemQuantityPairs],
             'poh_pet_house' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 400], $itemQuantityPairs],
             'poh_servants_moneybag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 2], $itemQuantityPairs],
             'blast_furnace_coffer' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 2], $itemQuantityPairs],
             'nightmare_zone_coffer' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 2], $itemQuantityPairs],
             'scar_essence_mine_coffer' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 2], $itemQuantityPairs],
-            'plank_sack' => ['nullable', 'array', ['max', 14]],
-            'master_scroll_book' => ['nullable', 'array', ['max', 40]],
-            'essence_pouches' => ['nullable', 'array', ['max', 16]],
-            'tackle_box' => ['nullable', 'array', ['max', 100]],
-            'tackle_box_partial' => ['nullable', 'array', ['max', 100]],
-            'tool_leprechaun' => ['nullable', 'array', ['max', 24]],
-            'elnock_inquisitor' => ['nullable', 'array', ['max', 6]],
-            'coal_bag' => ['nullable', 'array', ['max', 2]],
-            'fish_barrel' => ['nullable', 'array', ['max', 100]],
+            'plank_sack' => ['bail', 'nullable', 'array', 'list', ['max', 14], $integerList(minimum: -1, pairs: true)],
+            'master_scroll_book' => ['bail', 'nullable', 'array', 'list', ['max', 40], $integerList(minimum: -1, pairs: true)],
+            'essence_pouches' => ['bail', 'nullable', 'array', 'list', ['max', 16], $integerList(minimum: -1, pairs: true)],
+            'tackle_box' => ['bail', 'nullable', 'array', 'list', ['max', 100], $integerList(minimum: -1, pairs: true)],
+            'tackle_box_partial' => ['bail', 'nullable', 'array', 'list', ['max', 100], $integerList(minimum: -2147483648, maximum: 2147483647, pairs: true)],
+            'tool_leprechaun' => ['bail', 'nullable', 'array', 'list', ['max', 24], $integerList(minimum: -1, pairs: true)],
+            'elnock_inquisitor' => ['bail', 'nullable', 'array', 'list', ['max', 6], $integerList(minimum: -1, pairs: true)],
+            'coal_bag' => ['bail', 'nullable', 'array', 'list', ['max', 2], $integerList(minimum: -1, pairs: true)],
+            'fish_barrel' => ['bail', 'nullable', 'array', 'list', ['max', 100], $integerList(minimum: -1, pairs: true)],
             'herb_sack' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 30], $itemQuantityPairs],
             'looting_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 56], $itemQuantityPairs],
             'seed_box' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 12], $itemQuantityPairs],
             'gem_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 10], $itemQuantityPairs],
             'chugging_barrel' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 100], $itemQuantityPairs],
             'stash_units' => ['sometimes', 'nullable', 'array', 'list', ['max', 200]],
-            'quiver' => ['nullable', 'array', ['size', 2]],
-            'diary_vars' => ['nullable', 'array', ['max', 62]],
+            'quiver' => ['bail', 'nullable', 'array', 'list', ['size', 2], $integerList()],
+            'diary_vars' => ['bail', 'nullable', 'array', 'list', ['max', 62], $integerList(minimum: -2147483648, maximum: 2147483647)],
             'collection_log_updates' => ['sometimes', 'array', 'list'],
             'interacting' => ['nullable'],
             'timezone' => ['nullable', 'string', ['timezone', 'all_with_bc']],

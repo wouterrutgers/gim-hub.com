@@ -18,22 +18,11 @@ export async function fetchGameData(baseURL) {
     ],
     ["collectionLogInfo", fetchCollectionLogInfo],
   ];
-  const results = await Promise.allSettled(
-    sources.map(function fetchSource([, fetchSourceData]) {
-      return fetchSourceData();
+  const results = await Promise.all(
+    sources.map(async function fetchSource([name, fetchSourceData]) {
+      return [name, await fetchSourceData()];
     }),
   );
-  const gameData = {};
 
-  results.forEach(function storeResult(result, index) {
-    const [name] = sources[index];
-
-    if (result.status === "fulfilled") {
-      gameData[name] = result.value;
-    } else {
-      console.error(`Failed to fetch ${name}:`, result.reason);
-    }
-  });
-
-  return gameData;
+  return Object.fromEntries(results);
 }

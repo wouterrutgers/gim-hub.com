@@ -6,28 +6,26 @@ use App\Domain\Validators;
 use App\Models\Group;
 use App\Models\Member;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class GroupController extends Controller
 {
-    public function createGroup(Request $request): JsonResponse
+    public function createGroup(): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'member_names' => 'required|array',
+        $validated = request()->validate([
+            'name' => ['required', 'string'],
+            'member_names' => ['required', 'array', 'list', ['between', 2, 5]],
+            'member_names.*' => ['required', 'string', ['distinct', 'ignore_case']],
         ]);
 
-        $memberNames = collect($validated['member_names'])
-            ->filter()
-            ->values();
+        $memberNames = collect($validated['member_names']);
 
         $memberColorHues = $memberNames
             ->sort(fn (string $firstMemberName, string $secondMemberName): int => strcasecmp($firstMemberName, $secondMemberName))
             ->values()
             ->mapWithKeys(fn (string $memberName, int $index): array => [
-                $memberName => Member::DEFAULT_COLOR_HUES[$index] ?? 0,
+                $memberName => Member::DEFAULT_COLOR_HUES[$index],
             ]);
 
         foreach ($memberNames as $memberName) {
@@ -40,7 +38,7 @@ class GroupController extends Controller
 
         $token = Uuid::uuid4()->toString();
 
-        DB::transaction(function () use ($validated, $token, $memberNames, $memberColorHues) {
+        DB::transaction(function () use ($validated, $token, $memberNames, $memberColorHues): void {
             $group = Group::create([
                 'name' => $validated['name'],
                 'hash' => $token,

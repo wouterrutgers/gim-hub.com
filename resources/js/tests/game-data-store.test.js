@@ -5,6 +5,9 @@ import { describe, expect, it, vi } from "vite-plus/test";
 import { createTestPinia } from "./vue-test-helpers";
 import { useApiStore } from "../../stores/api";
 import { useGameDataStore } from "../../stores/game-data";
+import LiveClient from "../../api/live-client";
+import gameDataManifest from "@manifests/data";
+import diaryData from "../../assets/data/diary_data.json";
 
 function createDeferredPromise() {
   let resolve;
@@ -53,6 +56,34 @@ describe("game data store", function describeGameDataStore() {
     await expect(gameDataStore.load(client)).rejects.toThrow("Unavailable");
     await expect(gameDataStore.load(client)).resolves.toEqual({ quests: new Map() });
     expect(client.fetchGameData).toHaveBeenCalledTimes(2);
+  });
+
+  it("retries when one game data source fails instead of caching an incomplete result", async function testSourceRetry() {
+    setActivePinia(createTestPinia());
+    const gameDataStore = useGameDataStore();
+    const client = new LiveClient({ name: "test-group", token: "test-token" });
+    const responses = new Map([
+      [gameDataManifest["/data/quest_data.json"], {}],
+      [gameDataManifest["/data/item_data.json"], {}],
+      [gameDataManifest["/data/item_tags.json"], { tags: [], items: {} }],
+      [gameDataManifest["/data/diary_data.json"], diaryData],
+      [gameDataManifest["/data/collection_log_info.json"], []],
+    ]);
+    let pricesUnavailable = true;
+    vi.spyOn(globalThis, "fetch").mockImplementation(async function fetchData(url) {
+      if (url.startsWith("/api/ge-prices.json")) {
+        return pricesUnavailable ? new Response("", { status: 503 }) : Response.json({ 4151: 1_500_000 });
+      }
+
+      return Response.json(responses.get(url));
+    });
+
+    await expect(gameDataStore.load(client)).rejects.toThrow();
+    pricesUnavailable = false;
+    const gameData = await gameDataStore.load(client);
+
+    expect(gameData.gePrices).toEqual(new Map([[4151, 1_500_000]]));
+    expect(gameData.items).toBeInstanceOf(Map);
   });
 
   it("does not let a stale client replace current game data", async function testStaleClient() {

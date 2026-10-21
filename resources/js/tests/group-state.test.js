@@ -75,6 +75,29 @@ describe("group state", function describeGroupState() {
     expect(updatedState.memberStates.has("Wise Old Man")).toBe(false);
   });
 
+  it("preserves unchanged snapshots and collections when a member is renamed", function testMemberRename() {
+    const bank = new Map([[995, { itemID: 995, quantity: 100 }]]);
+    const collection = new Map([[4151, 1]]);
+    const memberSkills = { Attack: 100 };
+    const initialState = updateGroupState(
+      createGroupState(),
+      new Map([
+        ["Alice", { id: 1, bank, skills: memberSkills, collection }],
+        ["Bob", { id: 2 }],
+      ]),
+    );
+    const { updates } = mapGroupResponse([
+      { id: 1, name: "Carol" },
+      { id: 2, name: "Bob" },
+    ]);
+    const updatedState = updateGroupState(initialState, updates);
+
+    expect(updatedState.memberStates.get("Carol")).toMatchObject({ id: 1, bank, skills: memberSkills });
+    expect(updatedState.memberStates.has("Alice")).toBe(false);
+    expect(updatedState.collections.get("Carol")).toEqual(collection);
+    expect(updatedState.items.get(995).get("Carol")).toEqual({ Bank: 100 });
+  });
+
   it("updates the displayed member order when the server reorders the same members", function testMemberOrder() {
     const initialState = updateGroupState(
       createGroupState(),

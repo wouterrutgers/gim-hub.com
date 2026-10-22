@@ -113733,8 +113733,8 @@
   },
   "34669": {
     "name": "Ascension shards",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 600,
+    "alchable": true,
     "mapping": null
   },
   "34671": {
@@ -113913,14 +113913,14 @@
   },
   "34722": {
     "name": "Archivist's folio (inert)",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 300,
+    "alchable": true,
     "mapping": null
   },
   "34723": {
     "name": "Archivist's folio",
-    "highalch": 0,
-    "alchable": false,
+    "highalch": 300,
+    "alchable": true,
     "mapping": null
   },
   "34725": {
@@ -113944,7 +113944,7 @@
   "34730": {
     "name": "Leftovers",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   }
 }

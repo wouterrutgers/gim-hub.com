@@ -171,6 +171,7 @@ export class CanvasMapRenderer {
   regions;
   camera;
   cursor;
+  pointers = new Map();
   lastUpdateTime;
   outboundImageFetchesCount;
   iconsAtlas;
@@ -335,16 +336,25 @@ export class CanvasMapRenderer {
 
     this.labelsByRegion.clear();
   }
-  handlePointerDown() {
-    if (this.cursor.isDragging) {
-      return;
-    }
-
+  handlePointerDown(position, pointerId) {
+    this.pointers.set(pointerId, position);
+    this.cursor.position = Vec2D.average([...this.pointers.values()]);
+    this.cursor.positionPrevious = this.cursor.position;
     this.cursor.rateSamples = [];
     this.cursor.isDragging = true;
     this.onDraggingUpdate?.(this.cursor.isDragging);
   }
-  handlePointerUp() {
+  handlePointerUp(pointerId) {
+    this.pointers.delete(pointerId);
+
+    if (this.pointers.size > 0) {
+      this.cursor.position = Vec2D.average([...this.pointers.values()]);
+      this.cursor.positionPrevious = this.cursor.position;
+      this.cursor.rateSamples = [];
+
+      return;
+    }
+
     if (!this.cursor.isDragging) {
       return;
     }
@@ -352,7 +362,40 @@ export class CanvasMapRenderer {
     this.cursor.isDragging = false;
     this.onDraggingUpdate?.(this.cursor.isDragging);
   }
-  handlePointerMove(position) {
+  handlePointerMove(position, pointerId, canvasExtent) {
+    if (this.pointers.has(pointerId)) {
+      const previousPositions = [...this.pointers.values()];
+      this.pointers.set(pointerId, position);
+      const positions = [...this.pointers.values()];
+      position = Vec2D.average(positions);
+
+      if (positions.length === 2) {
+        const previousDistance = Math.sqrt(Vec2D.lengthSquared(Vec2D.sub(previousPositions[0], previousPositions[1])));
+        const distance = Math.sqrt(Vec2D.lengthSquared(Vec2D.sub(positions[0], positions[1])));
+
+        if (previousDistance > 0 && distance > 0) {
+          const anchor = Pos2D.cursorToWorld({
+            cursor: Vec2D.average(previousPositions),
+            camera: { scale: this.camera.zoom, translation: this.camera.position },
+            canvasExtent,
+          });
+          this.camera.zoom = Math.max(
+            this.camera.minZoom,
+            Math.min(this.camera.maxZoom, (this.camera.zoom * previousDistance) / distance),
+          );
+          this.camera.position = Vec2D.sub(
+            anchor,
+            Vec2D.mul(this.camera.zoom, Pos2D.cursorToView({ cursor: position, canvasExtent })),
+          );
+          this.startFollowingPlayer({ player: undefined });
+          this.forceRenderNextFrame = true;
+        }
+
+        this.cursor.positionPrevious = position;
+        this.cursor.rateSamples = [];
+      }
+    }
+
     if (!Vec2D.equals(this.cursor.position, position)) {
       this.forceRenderNextFrame = true;
     }
@@ -360,11 +403,10 @@ export class CanvasMapRenderer {
     this.cursor.isVisible = true;
     this.cursor.position = position;
   }
-  handlePointerLeave() {
-    this.cursor.isDragging = false;
-    this.cursor.isVisible = false;
+  handlePointerLeave(pointerId) {
+    this.handlePointerUp(pointerId);
+    this.cursor.isVisible = this.pointers.size > 0;
     this.forceRenderNextFrame = true;
-    this.onDraggingUpdate?.(this.cursor.isDragging);
   }
   handleScroll(amount) {
     if (!this.camera.followPlayer) {
@@ -388,6 +430,7 @@ export class CanvasMapRenderer {
   onVisiblePlaneUpdate;
   selectLocation(location) {
     this.startFollowingPlayer({ player: undefined });
+    this.pointers.clear();
     this.handlePointerLeave();
     this.cursor.rateSamples = [];
     this.cursor.accumulatedScroll = 0;

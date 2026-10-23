@@ -84,12 +84,11 @@ export const Disp2D = Object.freeze({
   },
   cursorToWorld({ cursor, camera }) {
     const view = Vec2D.create(cursor);
-    const world = this.viewToWorld({
+
+    return this.viewToWorld({
       view,
       camera,
     });
-
-    return world;
   },
 });
 export const Vec2D = Object.freeze({

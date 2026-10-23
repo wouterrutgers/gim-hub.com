@@ -82,8 +82,16 @@
     mapStore.renderer?.handleScroll(event.deltaY);
   }
 
-  function handlePointerMove({ clientX, clientY }) {
-    mapStore.renderer?.handlePointerMove(Vec2D.create({ x: clientX, y: clientY }));
+  function handlePointerDown({ clientX, clientY, pointerId }) {
+    mapStore.renderer?.handlePointerDown(Vec2D.create({ x: clientX, y: clientY }), pointerId);
+  }
+
+  function handlePointerMove({ clientX, clientY, pointerId }) {
+    mapStore.renderer?.handlePointerMove(
+      Vec2D.create({ x: clientX, y: clientY }),
+      pointerId,
+      createContext().getCanvasExtent(),
+    );
   }
 
   watch(
@@ -161,9 +169,10 @@
       ref="canvas"
       :class="{ dragging: mapStore.dragging, interactive: props.interactive }"
       @pointermove="handlePointerMove"
-      @pointerdown="mapStore.renderer?.handlePointerDown()"
-      @pointerup="mapStore.renderer?.handlePointerUp()"
-      @pointerleave="mapStore.renderer?.handlePointerLeave()"
+      @pointerdown="handlePointerDown"
+      @pointerup="mapStore.renderer?.handlePointerUp($event.pointerId)"
+      @pointerleave="mapStore.renderer?.handlePointerLeave($event.pointerId)"
+      @pointercancel="mapStore.renderer?.handlePointerLeave($event.pointerId)"
     />
   </div>
 </template>

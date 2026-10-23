@@ -87,6 +87,70 @@ function mountMap() {
   return application;
 }
 
+describe("map touch navigation", function describeTouchNavigation() {
+  it("pinches around the touch midpoint and resumes dragging when a finger lifts", async function testPinchZoom() {
+    const clock = vi.spyOn(performance, "now").mockReturnValue(1000);
+    const renderer = createRenderer();
+    renderer.camera.position = { x: 0, y: 0 };
+    vi.spyOn(CanvasMapRenderer, "load").mockResolvedValue(renderer);
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({
+      canvas: { width: 800, height: 600, clientWidth: 800, clientHeight: 600 },
+      setTransform: vi.fn(),
+      clearRect: vi.fn(),
+      fillRect: vi.fn(),
+      strokeRect: vi.fn(),
+    });
+    const scheduleFrame = vi.fn();
+    vi.stubGlobal("requestAnimationFrame", scheduleFrame);
+    mountMap();
+    await settleImageLoads();
+    await nextTick();
+    const canvas = document.getElementById("canvas-map");
+
+    function dispatchTouch(type, pointerId, clientX, clientY) {
+      canvas.dispatchEvent(new PointerEvent(type, { pointerId, pointerType: "touch", clientX, clientY }));
+    }
+
+    function renderFrame() {
+      clock.mockReturnValue(performance.now() + 16);
+      scheduleFrame.mock.lastCall[0]();
+    }
+
+    dispatchTouch("pointerdown", 1, 100, 200);
+    dispatchTouch("pointerdown", 2, 300, 200);
+    dispatchTouch("pointermove", 2, 500, 200);
+    renderFrame();
+
+    expect(renderer.camera.zoom).toBe(0.125);
+    expect(renderer.camera.position).toEqual({ x: -37.5, y: -12.5 });
+
+    dispatchTouch("pointermove", 2, 300, 200);
+    renderFrame();
+
+    expect(renderer.camera.zoom).toBe(0.25);
+    expect(renderer.camera.position).toEqual({ x: 0, y: 0 });
+
+    dispatchTouch("pointerup", 2, 300, 200);
+    dispatchTouch("pointerleave", 2, 300, 200);
+    renderFrame();
+
+    expect(renderer.camera.position).toEqual({ x: 0, y: 0 });
+
+    dispatchTouch("pointermove", 1, 120, 210);
+    renderFrame();
+
+    expect(renderer.camera.position).toEqual({ x: -5, y: -2.5 });
+
+    dispatchTouch("pointercancel", 1, 120, 210);
+    dispatchTouch("pointerdown", 3, 500, 200);
+    dispatchTouch("pointermove", 3, 520, 200);
+    renderFrame();
+
+    expect(renderer.camera.zoom).toBe(0.25);
+    expect(renderer.camera.position).toEqual({ x: -10, y: -2.5 });
+  });
+});
+
 describe("map bitmap lifetime", function describeBitmapLifetime() {
   it("bounds retained tiles while reusing recent views and reloading evicted views", async function testTileEviction() {
     const { bitmaps, createBitmap } = fakeImageLoading();

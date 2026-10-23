@@ -281,10 +281,10 @@ describe("map search", function describeMapSearch() {
     const position = { ...renderer.camera.position };
     const zoom = renderer.camera.zoom;
 
-    renderer.handlePointerDown();
+    renderer.handlePointerDown(renderer.cursor.position, 1);
     clock.mockReturnValue(1166);
     renderer.update(context);
-    renderer.handlePointerUp();
+    renderer.handlePointerUp(1);
     clock.mockReturnValue(1400);
     renderer.update(context);
 

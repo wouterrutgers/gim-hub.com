@@ -53,10 +53,36 @@
 }
 
 .activity-feed-filters {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, max-content) max-content auto;
   align-items: center;
   gap: 8px;
   padding: 4px 12px 8px;
+}
+
+.activity-feed-filters .select-container {
+  position: relative;
+  padding: 0 8px;
+}
+
+.activity-feed-filters .select-container::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  width: 5px;
+  height: 5px;
+  border-right: 1px solid var(--orange);
+  border-bottom: 1px solid var(--orange);
+  transform: translateY(-75%) rotate(45deg);
+  pointer-events: none;
+}
+
+.activity-feed-filters select {
+  appearance: none;
+  padding-right: 16px;
+  font-size: 0.875rem;
+  text-overflow: ellipsis;
 }
 
 .activity-drop-filter {

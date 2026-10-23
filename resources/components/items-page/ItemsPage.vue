@@ -432,22 +432,22 @@
     </div>
 
     <div class="items-page-utility">
-      <select
-        class="rsborder-tiny rsbackground rsbackground-hover"
-        :value="sortCategory"
-        @change="setSortCategory($event.target.value)"
-      >
-        <option v-for="category in ItemSortCategories" :key="category" :value="category">
-          {{ `Sort: ${category}` }}
-        </option>
-      </select>
-      <select
-        class="rsborder-tiny rsbackground rsbackground-hover"
-        :value="containerFilter"
-        @change="setContainerFilter(validateContainerFilter($event.target.value))"
-      >
-        <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">{{ name }}</option>
-      </select>
+      <span class="select-container">
+        <select aria-label="Sort items" :value="sortCategory" @change="setSortCategory($event.target.value)">
+          <option v-for="category in ItemSortCategories" :key="category" :value="category">
+            {{ `Sort: ${category}` }}
+          </option>
+        </select>
+      </span>
+      <span class="select-container">
+        <select
+          aria-label="Item container"
+          :value="containerFilter"
+          @change="setContainerFilter(validateContainerFilter($event.target.value))"
+        >
+          <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">{{ name }}</option>
+        </select>
+      </span>
       <div class="items-page-member-filter-clipbox rsborder-tiny rsbackground" style="overflow: hidden">
         <span class="items-page-member-filter-container">
           <span v-for="name in groupStore.memberNames" :key="name" class="rsbackground-hover">

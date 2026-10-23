@@ -166,14 +166,7 @@
         <p>This can be changed later.</p>
         <label for="group-member-count">Group size</label>
         <br />
-        <div
-          :class="[
-            'select-container',
-            'rsborder-tiny',
-            'rsbackground',
-            memberCountErrors?.length ? 'invalid' : 'valid',
-          ]"
-        >
+        <div :class="['select-container', memberCountErrors?.length ? 'invalid' : 'valid']">
           <select id="group-member-count" name="group-member-count" value="0" @change="updateMemberCount">
             <option value="0" disabled>Select an option</option>
             <option v-for="count in [2, 3, 4, 5]" :key="count" :value="count">{{ count }} Members</option>

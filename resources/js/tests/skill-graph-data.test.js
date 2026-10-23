@@ -44,9 +44,9 @@ describe("skill history calculations", function describeCalculations() {
     const options = { skillFilter: "Attack", yAxisUnit: "Cumulative experience gained" };
     expect(values(buildDatasetsFromMemberSkillData(data, range, options))).toEqual([0, 100, 300, 300]);
     expect(buildTableRowsFromMemberSkillData(data, range, options)[0].quantity).toBe(300);
-    const zoomed = { ...range, start: new Date("2026-09-07T12:15:00Z") };
-    expect(values(buildDatasetsFromMemberSkillData(data, zoomed, options))).toEqual([0, 200, 200]);
-    expect(buildTableRowsFromMemberSkillData(data, zoomed, options)[0].quantity).toBe(200);
+    const shorterRange = { ...range, start: new Date("2026-09-07T12:15:00Z") };
+    expect(values(buildDatasetsFromMemberSkillData(data, shorterRange, options))).toEqual([0, 200, 200]);
+    expect(buildTableRowsFromMemberSkillData(data, shorterRange, options)[0].quantity).toBe(200);
   });
 
   it("uses elapsed hours for irregular observations and visible duration for the table", function testRates() {
@@ -54,6 +54,47 @@ describe("skill history calculations", function describeCalculations() {
     const options = { skillFilter: "Attack", yAxisUnit: "Experience per hour" };
     expect(values(buildDatasetsFromMemberSkillData(data, range, options))).toEqual([null, 400, 600, 0]);
     expect(buildTableRowsFromMemberSkillData(data, range, options)[0].quantity).toBe(300);
+  });
+
+  it("compares players at the same time without inventing earlier progress", function testSharedTimeline() {
+    const data = [
+      ...members([sample("11:55", 100), sample("12:10", 200), sample("12:30", 400)]),
+      {
+        ...members([sample("12:20", 100_000), sample("12:40", 100_200)])[0],
+        member: "Bob",
+      },
+    ];
+    const options = { skillFilter: "Attack", yAxisUnit: "Cumulative experience gained" };
+    const datasets = buildDatasetsFromMemberSkillData(data, range, options);
+
+    expect(
+      datasets[0].data.map(function getTime(point) {
+        return point.x;
+      }),
+    ).toEqual(
+      datasets[1].data.map(function getTime(point) {
+        return point.x;
+      }),
+    );
+    expect(
+      datasets.map(function getGains(dataset) {
+        return dataset.data.map(function getValue(point) {
+          return point.y;
+        });
+      }),
+    ).toEqual([
+      [0, 100, 100, 300, 300, 300],
+      [null, null, 0, 0, 200, 200],
+    ]);
+    expect(
+      buildDatasetsFromMemberSkillData(data, range, { ...options, yAxisUnit: "Experience per hour" }).map(
+        function getRate(dataset) {
+          return dataset.data.find(function atSharedTime(point) {
+            return point.x === new Date("2026-09-07T12:40:00Z").getTime();
+          }).y;
+        },
+      ),
+    ).toEqual([400, 600]);
   });
 
   it("does not count a new member's existing experience as gains", function testMissingBaseline() {
@@ -137,9 +178,13 @@ describe("skill history calculations", function describeCalculations() {
     await vi.advanceTimersByTimeAsync(0);
     await nextTick();
 
+    for (const button of container.querySelectorAll(".skill-graph-member-toggle")) {
+      button.click();
+    }
+
     [...container.querySelectorAll("#skill-graph-presets button")]
       .find(function isWeek(button) {
-        return button.textContent === "Week";
+        return button.textContent === "7 days";
       })
       .click();
     await vi.advanceTimersByTimeAsync(0);
@@ -147,7 +192,7 @@ describe("skill history calculations", function describeCalculations() {
 
     expect(
       [...container.querySelectorAll("tbody tr")].map(function readRow(row) {
-        return [row.cells[0].textContent.trim(), Number(row.cells[1].textContent)];
+        return [row.querySelector(".skill-graph-row-name").textContent, Number(row.cells[1].textContent)];
       }),
     ).toEqual([
       ["Bob", 900],
@@ -190,12 +235,13 @@ it("loads and switches presets using server ranges when the browser clock is ahe
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-09-07T13:00:02Z"));
   const fetch = vi.spyOn(globalThis, "fetch").mockImplementation(async function fetchHistory(url) {
-    const period = new URL(url, "https://example.test").searchParams.get("period");
+    const query = new URL(url, "https://example.test").searchParams;
+    const period = query.get("period");
 
     return new Response(
       JSON.stringify({
-        start: period === "Day" ? "2026-09-06T13:00:00Z" : "2026-08-31T13:00:00Z",
-        end: "2026-09-07T13:00:00Z",
+        start: query.get("start") ?? (period === "Day" ? "2026-09-06T13:00:00Z" : "2026-08-31T13:00:00Z"),
+        end: query.get("end") ?? "2026-09-07T13:00:00Z",
         earliest: "2026-08-31T13:00:00Z",
         members: [],
       }),
@@ -224,12 +270,37 @@ it("loads and switches presets using server ranges when the browser clock is ahe
 
   expect(new URL(fetch.mock.calls[0][0], "https://example.test").search).toBe("?period=Day");
   expect(container.querySelector("#skill-graph-range").textContent).toContain(
-    new Date("2026-09-07T13:00:00Z").toLocaleString(),
+    new Date("2026-09-07T13:00:00Z").toLocaleString(undefined, {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
   );
+  expect(container.querySelector('[aria-label="Next period"]').disabled).toBe(true);
+
+  container.querySelector('[aria-label="Previous period"]').click();
+  await vi.advanceTimersByTimeAsync(0);
+  await nextTick();
+
+  expect(Object.fromEntries(new URL(fetch.mock.calls.at(-1)[0], "https://example.test").searchParams)).toEqual({
+    start: "2026-09-05T13:00:00.000Z",
+    end: "2026-09-06T13:00:00.000Z",
+  });
+
+  container.querySelector('[aria-label="Next period"]').click();
+  await vi.advanceTimersByTimeAsync(0);
+  await nextTick();
+
+  expect(Object.fromEntries(new URL(fetch.mock.calls.at(-1)[0], "https://example.test").searchParams)).toEqual({
+    start: "2026-09-06T13:00:00.000Z",
+    end: "2026-09-07T13:00:00.000Z",
+  });
+  expect(container.querySelector('[aria-label="Next period"]').disabled).toBe(true);
 
   [...container.querySelectorAll("#skill-graph-presets button")]
     .find(function isWeek(button) {
-      return button.textContent === "Week";
+      return button.textContent === "7 days";
     })
     .click();
   await vi.advanceTimersByTimeAsync(0);
@@ -237,12 +308,13 @@ it("loads and switches presets using server ranges when the browser clock is ahe
 
   expect(new URL(fetch.mock.calls.at(-1)[0], "https://example.test").search).toBe("?period=Week");
   expect(container.querySelector("#skill-graph-range").textContent).toBe(
-    `${new Date("2026-08-31T13:00:00Z").toLocaleString()} – ${new Date("2026-09-07T13:00:00Z").toLocaleString()}`,
+    `${new Date("2026-08-31T13:00:00Z").toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })} to ${new Date("2026-09-07T13:00:00Z").toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`,
   );
+  expect(container.querySelector('[aria-label="Previous period"]').disabled).toBe(true);
   expect(container.querySelector("#skill-graph-error")).toBeNull();
 });
 
-it("keeps demo history consistent when zooming into a larger period", async function testDemoNavigation() {
+it("keeps demo history consistent across overlapping periods", async function testDemoNavigation() {
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-09-07T13:00:00Z"));
   const client = new DemoClient();
@@ -252,6 +324,6 @@ it("keeps demo history consistent when zooming into a larger period", async func
   expect(all.earliest < day.start).toBe(true);
   expect(all.members.get("Thurgo").length).toBeLessThanOrEqual(1502);
   expect(day.members.get("Thurgo").at(-1)).toEqual(all.members.get("Thurgo").at(-1));
-  const zoomed = await client.fetchSkillData({ start: new Date(end.getTime() - 3600_000), end });
-  expect(zoomed.members.get("Thurgo").at(-2)).toEqual(day.members.get("Thurgo").at(-2));
+  const hour = await client.fetchSkillData({ start: new Date(end.getTime() - 3600_000), end });
+  expect(hour.members.get("Thurgo").at(-2)).toEqual(day.members.get("Thurgo").at(-2));
 });

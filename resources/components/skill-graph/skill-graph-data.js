@@ -2,9 +2,13 @@ import * as DateFNS from "date-fns";
 import { skillsInBackendOrder } from "../../api/requests/group-data";
 import { skillIcons } from "../../game/skill";
 
-export const lineChartYAxisOptions = ["Cumulative experience gained", "Total experience", "Experience per hour"];
+export const lineChartYAxisOptions = {
+  "Cumulative experience gained": "XP gained",
+  "Total experience": "Total XP",
+  "Experience per hour": "XP/h",
+};
 
-export function buildLineChartOptions({ range, earliest, latest, yAxisUnit, onNavigate, onNavigateStart }) {
+export function buildLineChartOptions({ range, yAxisUnit }) {
   return {
     maintainAspectRatio: false,
     animation: false,
@@ -12,29 +16,28 @@ export function buildLineChartOptions({ range, earliest, latest, yAxisUnit, onNa
     responsive: true,
     plugins: {
       legend: { position: "top" },
-      zoom: {
-        limits: { x: { min: earliest?.getTime(), max: latest.getTime(), minRange: 5 * 60 * 1000 } },
-        pan: { enabled: true, mode: "x", onPanStart: onNavigateStart, onPanComplete: onNavigate },
-        zoom: {
-          mode: "x",
-          wheel: { enabled: true },
-          pinch: { enabled: true },
-          onZoomStart: onNavigateStart,
-          onZoomComplete: onNavigate,
+      tooltip: {
+        callbacks: {
+          label(context) {
+            const quantity = context.parsed.y.toLocaleString(undefined, { maximumFractionDigits: 0 });
+            const unit = yAxisUnit === "Experience per hour" ? "XP/h" : "XP";
+
+            return `${context.dataset.label}: ${quantity} ${unit}`;
+          },
         },
       },
     },
-    interaction: { intersect: false, mode: "nearest", axis: "x" },
+    interaction: { intersect: false, mode: "index", axis: "x" },
     layout: { padding: 4 },
     scales: {
       x: { type: "time", min: range.start?.getTime(), max: range.end.getTime(), time: { minUnit: "minute" } },
-      y: { title: { display: true, text: yAxisUnit }, type: "linear", min: 0 },
+      y: { title: { display: true, text: lineChartYAxisOptions[yAxisUnit] }, type: "linear", min: 0 },
     },
   };
 }
 
 export function buildDatasetsFromMemberSkillData(members, range, options) {
-  return members
+  const datasets = members
     .map(function buildDataset({ member, skillSamples, style }) {
       const samples = samplesForRange(skillSamples, range);
       const baseline = samples[0];
@@ -77,6 +80,44 @@ export function buildDatasetsFromMemberSkillData(members, range, options) {
     .sort(function sortDatasets(first, second) {
       return first.label.localeCompare(second.label);
     });
+  const times = [
+    ...new Set(
+      datasets.flatMap(function getTimes(dataset) {
+        return dataset.data.map(function getTime(point) {
+          return point.x;
+        });
+      }),
+    ),
+  ].sort(function sortTimes(first, second) {
+    return first - second;
+  });
+
+  return datasets.map(function alignDataset(dataset) {
+    let index = 0;
+
+    return {
+      ...dataset,
+      data: times.map(function alignPoint(time) {
+        while (index + 1 < dataset.data.length && dataset.data[index + 1].x <= time) {
+          index += 1;
+        }
+
+        const point = dataset.data[index];
+
+        if (!point || time < point.x) {
+          return { x: time, y: null };
+        }
+
+        const next = dataset.data[index + 1];
+
+        if (dataset.stepped || !next || point.y === null) {
+          return { x: time, y: point.y };
+        }
+
+        return { x: time, y: point.y + (next.y - point.y) * ((time - point.x) / (next.x - point.x)) };
+      }),
+    };
+  });
 }
 
 export function samplesForRange(skillSamples, range) {
@@ -157,30 +198,21 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
   });
 
   for (const { name, total, perSkill, colorCSS } of groupMetrics) {
-    if (options.skillFilter !== "Overall") {
-      rows.push({
-        key: `member ${name}`,
-        name,
-        colorCSS: "hsl(69deg, 60%, 60%)",
-        fillFraction: total / safeDenominator,
-        iconSource: skillIcons[options.skillFilter],
-        quantity: total,
-        isMemberHeader: true,
-      });
-
-      continue;
-    }
-
     const overallFraction = total / safeDenominator;
     rows.push({
       key: `member ${name}`,
       name,
+      memberName: name,
       colorCSS,
       fillFraction: overallFraction,
-      iconSource: skillIcons.Overall,
+      iconSource: skillIcons[options.skillFilter],
       quantity: total,
       isMemberHeader: true,
     });
+
+    if (options.skillFilter !== "Overall") {
+      continue;
+    }
 
     const skillRows = [];
 
@@ -195,6 +227,7 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
       skillRows.push({
         key: `skill ${skill} ${name}`,
         name: skill,
+        memberName: name,
         colorCSS,
         fillFraction: (metricValue / total) * overallFraction,
         iconSource: skillIcons[skill],

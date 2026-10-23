@@ -59,20 +59,6 @@
   padding: 4px 12px 8px;
 }
 
-.activity-feed-filters .select-container {
-  min-width: 0;
-  border: 1px solid var(--light-border);
-  border-radius: 3px;
-  padding: 3px 6px;
-}
-
-.activity-feed-filters select {
-  min-width: 0;
-  max-width: 100%;
-  font-size: 1rem;
-  padding: 0;
-}
-
 .activity-drop-filter {
   display: flex;
   flex: none;

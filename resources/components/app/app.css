@@ -247,23 +247,24 @@ input.valid {
   border: 1px solid rgb(0 0 0 / 0%);
 }
 
-.rsborder-tiny.invalid {
-  outline: 1px solid var(--invalid);
-  outline-offset: -2px;
-  box-sizing: border-box;
-}
-
 .select-container {
+  box-sizing: border-box;
   display: inline-flex;
-  padding: 5px;
-  min-height: 1em;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 10px;
+  border-width: 1px;
 }
 
 select {
+  flex: 1;
+  min-width: 0;
+  max-width: 100%;
   color: var(--orange);
   border: none;
   background: none;
-  padding: 4px;
+  padding: 6px 0;
   margin: 0;
   cursor: pointer;
 }
@@ -336,30 +337,52 @@ ul {
   border-image: url("../../assets/ui/border-dark.png") 32 32 / 32px / 4px round;
 }
 
-.rsborder-tiny {
+.rsborder-tiny,
+.select-container {
   border-image: url("../../assets/ui/border-tiny.png") 4 4 / 4px round;
   border-style: solid;
   border-radius: 4px;
 }
 
-.dark-mode .rsborder-tiny {
-  border-image: url("../../assets/ui/border-tiny-dark.png") 4 4 / 4px round;
-}
-
-.rsbackground {
+.rsbackground,
+.select-container {
   background: var(--rsbackground);
   background-repeat: repeat;
 }
 
-.dark-mode .rsbackground {
+.dark-mode .rsborder-tiny,
+.dark-mode .select-container {
+  border-image: url("../../assets/ui/border-tiny-dark.png") 4 4 / 4px round;
+}
+
+.dark-mode .rsbackground,
+.dark-mode .select-container {
   background: var(--rsbackground-dark);
 }
 
-.rsbackground-hover:hover {
+.select-container select:focus-visible {
+  outline: none;
+}
+
+.select-container:focus-within {
+  outline: 2px solid var(--white);
+  outline-offset: -2px;
+}
+
+.rsborder-tiny.invalid,
+.select-container.invalid {
+  outline: 1px solid var(--invalid);
+  outline-offset: -2px;
+  box-sizing: border-box;
+}
+
+.rsbackground-hover:hover,
+.select-container:hover {
   background: linear-gradient(rgb(0 0 0 / 10%), rgb(0 0 0 / 10%)), var(--rsbackground);
 }
 
-.dark-mode .rsbackground-hover:hover {
+.dark-mode .rsbackground-hover:hover,
+.dark-mode .select-container:hover {
   background: linear-gradient(rgb(0 0 0 / 10%), rgb(0 0 0 / 10%)), var(--rsbackground-dark);
 }
 
@@ -385,4 +408,10 @@ ul {
 
 .orange-link:hover {
   color: var(--orange-light);
+}
+
+@media (pointer: coarse) {
+  .select-container {
+    min-height: 44px;
+  }
 }

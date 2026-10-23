@@ -17,7 +17,7 @@
 
 @media only screen and (width <= 800px) {
   #canvas-map-follow-dropdown {
-    display: block;
+    display: inline-flex;
   }
 
   #canvas-map-teleport-buttons {

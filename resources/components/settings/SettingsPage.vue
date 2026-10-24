@@ -183,6 +183,19 @@
       </fieldset>
 
       <fieldset>
+        <legend>History</legend>
+        <div class="settings-page-radio-item">
+          <input
+            id="expand-player-history-input"
+            type="checkbox"
+            :checked="settingsStore.expandPlayerHistory"
+            @change="settingsStore.setExpandPlayerHistory($event.target.checked)"
+          />
+          <label for="expand-player-history-input">Expand all player rows by default</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
         <legend>Style</legend>
         <div v-for="theme in siteThemes" :key="theme" class="settings-page-radio-item">
           <input

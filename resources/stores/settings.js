@@ -6,6 +6,7 @@ import { siteThemes } from "./settings-options";
 const DEFAULT_SITE_SETTINGS = Object.freeze({
   showActivitySidebar: true,
   filterActivityDrops: true,
+  expandPlayerHistory: false,
   siteTheme: "light",
   enableVirtualLevels: true,
   enableSkillProgressBars: true,
@@ -15,6 +16,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
 const KEY_SITE_THEME = "settings-site-theme";
 const KEY_ACTIVITY_SIDEBAR = "settings-activity-sidebar";
 const KEY_ACTIVITY_DROP_FILTER = "settings-activity-drop-filter";
+const KEY_PLAYER_HISTORY_EXPANSION = "settings-player-history-expansion";
 const KEY_VIRTUAL_LEVELS = "settings-virtual-levels";
 const KEY_SKILL_PROGRESS_BARS = "settings-skill-progress-bars";
 const KEY_GEARSCAPE_EXPORT = "settings-gearscape-export";
@@ -49,6 +51,11 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     defaultValue: String(DEFAULT_SITE_SETTINGS.filterActivityDrops),
     validator: validateBoolean,
   });
+  const [playerHistoryExpansion, setPlayerHistoryExpansion] = useLocalStorage({
+    key: KEY_PLAYER_HISTORY_EXPANSION,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.expandPlayerHistory),
+    validator: validateBoolean,
+  });
   const [virtualLevels, setVirtualLevels] = useLocalStorage({
     key: KEY_VIRTUAL_LEVELS,
     defaultValue: String(DEFAULT_SITE_SETTINGS.enableVirtualLevels),
@@ -71,6 +78,9 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
   const filterActivityDrops = computed(function activityDropsFiltered() {
     return activityDropFilter.value === "true";
   });
+  const expandPlayerHistory = computed(function playerHistoryExpanded() {
+    return playerHistoryExpansion.value === "true";
+  });
   const enableVirtualLevels = computed(function virtualLevelsEnabled() {
     return virtualLevels.value === "true";
   });
@@ -87,6 +97,10 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
 
   function setFilterActivityDrops(value) {
     setActivityDropFilter(String(value));
+  }
+
+  function setExpandPlayerHistory(value) {
+    setPlayerHistoryExpansion(String(value));
   }
 
   function setEnableVirtualLevels(value) {
@@ -108,6 +122,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     setShowActivitySidebar,
     filterActivityDrops,
     setFilterActivityDrops,
+    expandPlayerHistory,
+    setExpandPlayerHistory,
     enableVirtualLevels,
     setEnableVirtualLevels,
     enableSkillProgressBars,

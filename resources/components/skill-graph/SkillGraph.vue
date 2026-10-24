@@ -4,6 +4,7 @@
   import { Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, TimeScale, Tooltip } from "chart.js";
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
+  import { useSettingsStore } from "../../stores/settings";
   import { rangeForPeriod } from "../../api/requests/skill-data";
   import { skills, skillIcons } from "../../game/skill";
   import CachedImage from "../cached-image/CachedImage.vue";
@@ -29,13 +30,14 @@
   };
   const apiStore = useApiStore();
   const groupStore = useGroupStore();
+  const settingsStore = useSettingsStore();
   const lastPreset = ref("Day");
   const activePreset = ref("Day");
   const yAxisUnit = ref("Cumulative experience gained");
   const skillFilter = ref("Overall");
   const latest = ref(new Date());
   const range = ref(rangeForPeriod(lastPreset.value, latest.value));
-  const expandedMembers = ref(new Set());
+  const memberExpansion = ref(new Map());
   const history = shallowRef();
   const loading = ref(false);
   const error = ref(false);
@@ -189,14 +191,12 @@
     requestRange({ start: new Date(start), end: new Date(start + duration) });
   }
 
+  function isMemberExpanded(member) {
+    return memberExpansion.value.get(member) ?? settingsStore.expandPlayerHistory;
+  }
+
   function toggleMember(member) {
-    if (expandedMembers.value.has(member)) {
-      expandedMembers.value.delete(member);
-
-      return;
-    }
-
-    expandedMembers.value.add(member);
+    memberExpansion.value.set(member, !isMemberExpanded(member));
   }
 
   function retry() {
@@ -215,7 +215,7 @@
     },
     function resetHistory() {
       history.value = undefined;
-      expandedMembers.value.clear();
+      memberExpansion.value.clear();
       selectPreset(lastPreset.value);
     },
     { immediate: true },
@@ -300,7 +300,7 @@
       <tbody>
         <template v-for="row in chartRows" :key="row.key">
           <tr
-            v-if="row.isMemberHeader || expandedMembers.has(row.memberName)"
+            v-if="row.isMemberHeader || isMemberExpanded(row.memberName)"
             :class="{ 'skill-graph-member-header': row.isMemberHeader }"
             :style="{ background: row.background }"
           >
@@ -317,8 +317,8 @@
                 v-if="row.isMemberHeader && skillFilter === 'Overall' && row.quantity > 0"
                 type="button"
                 class="skill-graph-member-toggle"
-                :aria-expanded="expandedMembers.has(row.name)"
-                :aria-label="`${expandedMembers.has(row.name) ? 'Hide' : 'Show'} skill details for ${row.name}`"
+                :aria-expanded="isMemberExpanded(row.name)"
+                :aria-label="`${isMemberExpanded(row.name) ? 'Hide' : 'Show'} skill details for ${row.name}`"
                 @click="toggleMember(row.name)"
               >
                 <span class="skill-graph-row-name">{{ row.name }}</span>

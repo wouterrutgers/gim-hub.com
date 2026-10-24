@@ -188,8 +188,8 @@ describe("storage UI", function storageInterface() {
   });
 
   it("shows STASH contents in normal item panels with search, filters and reconciled quantities", async function stashItems() {
-    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(600);
-    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
+    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(600);
+    vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(800);
     payload = [
       {
         id: 1,
@@ -251,8 +251,8 @@ describe("storage UI", function storageInterface() {
   });
 
   it("combines excluded names and tags with AND before OR in item search", async function combinedItemSearch() {
-    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(600);
-    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
+    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(600);
+    vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(800);
     payload = [{ id: 1, name: "Alice", bank: [199, 1, 1095, 1, 5295, 1] }];
     await mount(ItemsPage, { tags: [["herb", 0]], items: { 199: 1n, 5295: 1n } });
 
@@ -282,8 +282,8 @@ describe("storage UI", function storageInterface() {
   });
 
   it("applies a tag to every alternative in a bracketed item search", async function bracketedItemSearch() {
-    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(600);
-    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(800);
+    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(600);
+    vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(800);
     payload = [{ id: 1, name: "Alice", bank: [2430, 1, 2432, 1, 30001, 1] }];
     await mount(ItemsPage, { tags: [["potions", 0]], items: { 2430: 1n, 2432: 1n } });
 

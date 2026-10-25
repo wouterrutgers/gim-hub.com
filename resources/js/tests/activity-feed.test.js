@@ -68,7 +68,7 @@ describe("activity feed", function activityFeed() {
     expect(container.querySelector(".activity-card strong").textContent).toBe("Bob");
   });
 
-  it("grows a multi skill card while preserving expanded details and offering new activity to a reader", async function growingCard() {
+  it("grows a multi skill card while preserving expanded details and the reader's scroll position", async function growingCard() {
     vi.useFakeTimers();
     const pinia = createTestPinia();
     vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
@@ -133,7 +133,6 @@ describe("activity feed", function activityFeed() {
     expect(container.textContent).toContain("240 XP");
     expect(container.querySelector('[data-entry-id="1"] details').open).toBe(true);
     expect(scroll.scrollTop).toBeGreaterThan(0);
-    expect(container.querySelector(".activity-new-button")).not.toBeNull();
   });
 
   it("loads and shows the next page near the bottom without duplicating pending requests", async function scrollHistory() {

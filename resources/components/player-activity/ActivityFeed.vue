@@ -20,7 +20,6 @@
   const scroller = ref();
   const memberFilter = ref("");
   const typeFilter = ref("");
-  const newEntries = ref(0);
   const timestamp = ref(Date.now());
   const timer = window.setInterval(function updateClock() {
     timestamp.value = Date.now();
@@ -126,34 +125,17 @@
       : `${start} to ${end}`;
   }
 
-  function followLatest() {
-    scroller.value.scrollTop = 0;
-    newEntries.value = 0;
-  }
-
   function onScroll() {
-    if (scroller.value.scrollTop <= 24) {
-      newEntries.value = 0;
-    }
-
     if (scroller.value.scrollHeight - scroller.value.scrollTop - scroller.value.clientHeight <= 200) {
       void activityStore.loadOlder();
     }
   }
 
-  watch(filteredEntries, async function preserveReadingPosition(entries, previous) {
+  watch(filteredEntries, async function preserveReadingPosition(_entries, previous) {
     if (!scroller.value || previous.length === 0) {
       return;
     }
 
-    const known = new Set(
-      previous.map(function identifier(entry) {
-        return entry.id;
-      }),
-    );
-    const added = entries.filter(function isNew(entry) {
-      return !known.has(entry.id) && entry.started_at >= previous[0].started_at;
-    }).length;
     const following = scroller.value.scrollTop <= 24;
 
     if (following) {
@@ -174,7 +156,6 @@
 
     const identifier = anchor.dataset.entryId;
     const offset = anchor.getBoundingClientRect().top - top;
-    newEntries.value += added;
     await nextTick();
     const moved = scroller.value.querySelector(`[data-entry-id="${identifier}"]`);
 
@@ -192,7 +173,6 @@
       },
     ],
     function resetFilters() {
-      newEntries.value = 0;
       scroller.value.scrollTop = 0;
     },
   );
@@ -252,9 +232,6 @@
         >
       </div>
     </div>
-    <button v-if="newEntries" class="activity-new-button men-button small" @click="followLatest">
-      {{ newEntries }} new {{ newEntries === 1 ? "entry" : "entries" }} · Jump to latest
-    </button>
     <div ref="scroller" class="activity-feed-scroll" @scroll="onScroll">
       <p v-if="!activityStore.loaded || !groupStore.loaded" class="activity-empty">Loading activity…</p>
       <p v-else-if="filteredEntries.length === 0" class="activity-empty">

@@ -261,12 +261,6 @@
   line-height: 1.4;
 }
 
-.activity-new-button {
-  align-self: center;
-  margin: 0 8px 6px;
-  font-size: 0.875rem;
-}
-
 .activity-older {
   margin: 8px auto;
   font-size: 1rem;

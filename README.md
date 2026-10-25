@@ -7,10 +7,12 @@ GIM Hub is a live dashboard for Old School RuneScape Group Ironman teams. The Ru
 ## Features
 
 - **Live group overview:** See who is online, their worlds, current activities and interactions, health, prayer, and run energy.
+- **Activity sidebar:** Follow XP gains, levels, boss kills, raid completions, quests, diaries, drops, and collection log unlocks in a live timeline.
 - **World map:** Follow member locations on an interactive map.
 - **Items:** Browse and search items across group members, with quantities by member and storage location, plus Grand Exchange and high alchemy values.
 - **Storage:** View bank, shared bank, inventory, equipment, quiver, rune pouch, seed vault, potion storage, POH costume room, spice rack, pet house, servant's moneybag, STASH units, and items held by the tool leprechaun and Elnock Inquisitor.
-- **Portable containers:** Track plank sacks, master scroll books, essence pouches, tackle boxes, coal bags, fish barrels, herb sacks, looting bags, seed boxes, gem bags, and chugging barrels.
+- **Portable containers:** Track plank sacks, master scroll books, essence pouches, tackle boxes, coal bags, fish barrels and fish sack barrels, herb sacks, looting bags, seed boxes, gem bags, and chugging barrels.
+- **Coffers:** Track coin balances in the Blast Furnace, Nightmare Zone, and Scar Essence Mine coffers.
 - **Skills:** Compare levels and experience, review experience history, and see live XP drops.
 - **Progress:** Follow quests, achievement diaries, and up to date collection logs.
 
@@ -21,7 +23,7 @@ GIM Hub is a live dashboard for Old School RuneScape Group Ironman teams. The Ru
 3. Enter the group name and token in the plugin settings in RuneLite.
 4. Share the token with your teammates so they can join the same group.
 
-The plugin updates the dashboard as members play. Storage contents are recorded when the plugin can observe them in game.
+The plugin updates the dashboard as members play. Open or check storage containers and coffers in game to sync their contents.
 
 ![GIM Hub plugin settings in RuneLite](resources/assets/images/plugin-screenshot.png)
 

@@ -1,5 +1,13 @@
 import { skillIcons } from "./skill";
 
+export function activityWeek(timestamp) {
+  const date = new Date(timestamp);
+  date.setUTCHours(0, 0, 0, 0);
+  date.setUTCDate(date.getUTCDate() - ((date.getUTCDay() + 6) % 7));
+
+  return date.getTime();
+}
+
 export function formatActivityNumber(value) {
   return new Intl.NumberFormat(undefined, {
     notation: value >= 10_000 ? "compact" : "standard",
@@ -84,5 +92,9 @@ export function activityPresentation(entry, gameData) {
 export function activityIsLive(entry, timestamp) {
   const minutes = entry.type === "boss" ? 30 : 15;
 
-  return ["xp", "boss", "diary", "collection"].includes(entry.type) && timestamp - entry.occurred_at < minutes * 60_000;
+  return (
+    !entry.is_weekly &&
+    ["xp", "boss", "diary", "collection"].includes(entry.type) &&
+    timestamp - entry.occurred_at < minutes * 60_000
+  );
 }

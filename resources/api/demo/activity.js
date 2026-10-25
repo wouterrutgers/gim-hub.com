@@ -1,3 +1,5 @@
+import { activityWeek } from "../../game/activity";
+
 export function populateActivity(state) {
   const now = Date.now();
   const samples = [
@@ -13,6 +15,7 @@ export function populateActivity(state) {
     ["xXgamerXx", "level", 52, { skill: "Runecraft", before: 98, after: 99 }],
     ["Cow31337Killer", "quest", 80, { quest_id: 17, quest_name: "Druidic Ritual" }],
     ["Thurgo", "xp", 25 * 60, { skills: { Cooking: 28_560 } }],
+    ["Cow31337Killer", "xp", 42 * 24 * 60, { skills: { Attack: 125_000, Hitpoints: 41_000 } }],
   ];
 
   for (const [index, [member, type, minutes, data]] of samples.entries()) {
@@ -24,8 +27,9 @@ export function populateActivity(state) {
       member_id: rosterMember.id,
       revision: 1,
       type,
-      started_at: now - minutes * 60_000,
+      started_at: minutes > 30 * 24 * 60 ? activityWeek(now - minutes * 60_000) : now - minutes * 60_000,
       occurred_at: now - minutes * 60_000,
+      is_weekly: minutes > 30 * 24 * 60,
       data,
       updated_at: now,
     });
@@ -69,6 +73,7 @@ export function advanceActivity(state, members) {
         revision: 0,
         started_at: now,
         occurred_at: now,
+        is_weekly: false,
         data: { skills: {} },
       };
       state.activities.set(entry.id, entry);

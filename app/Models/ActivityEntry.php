@@ -16,6 +16,7 @@ class ActivityEntry extends Model
         'revision' => 'integer',
         'started_at' => 'integer',
         'occurred_at' => 'integer',
+        'is_weekly' => 'boolean',
     ];
 
     public function member(): BelongsTo

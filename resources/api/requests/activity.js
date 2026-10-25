@@ -7,6 +7,7 @@ const activitySchema = z.object({
   type: z.enum(["xp", "level", "boss", "quest", "diary", "loot", "collection"]),
   started_at: z.number().int().positive(),
   occurred_at: z.number().int().positive(),
+  is_weekly: z.boolean(),
   data: z.record(z.string(), z.unknown()),
 });
 const responseSchema = z.object({

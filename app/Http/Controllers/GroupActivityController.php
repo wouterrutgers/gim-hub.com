@@ -18,7 +18,6 @@ class GroupActivityController extends Controller
         $group = request()->attributes->get('group');
         $watermark = CarbonImmutable::now();
         $query = ActivityEntry::where('group_id', '=', $group->id)
-            ->where('occurred_at', '>=', $watermark->subDays(30)->getTimestampMs())
             ->where('updated_at', '<=', $watermark->format('Y-m-d H:i:s.v'));
 
         if (isset($validated['from_time'])) {
@@ -48,6 +47,7 @@ class GroupActivityController extends Controller
             'type' => $entry->type,
             'started_at' => $entry->started_at,
             'occurred_at' => $entry->occurred_at,
+            'is_weekly' => $entry->is_weekly,
             'data' => $entry->data,
         ])->all();
     }

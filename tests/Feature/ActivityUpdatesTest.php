@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\ActivityEntry;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 
 it('keeps cumulative activity totals through repeated and stale uploads', function (): void {
@@ -64,4 +65,28 @@ it('records diary progress from the existing bit and value definitions without t
         ->postJson("/api/group/{$group->name}/update-group-member", ['name' => $member->name, 'activity_updates' => [[...$first, 'revision' => 2, 'data' => ['before' => $before, 'after' => $after]]]])->assertSuccessful();
     expect(ActivityEntry::where('subject', '=', 'Ardougne:Easy')->sole()->data['tasks'])->toBe([0]);
     expect(ActivityEntry::where('subject', '=', 'Karamja:Easy')->sole()->data['tasks'])->toBe([0]);
+});
+
+it('keeps late collection drops separate from the previous weekly summary', function (): void {
+    $this->travelTo(CarbonImmutable::parse('2026-10-21 00:05:00'));
+    $group = $this->createSnapshotGroup();
+    $member = $this->createCompleteSnapshotMember($group);
+    $data = ['item_id' => 4151, 'quantity' => 1, 'value' => 100, 'source' => 'Abyssal Sire', 'new_collection_item' => false];
+    ActivityEntry::create([
+        'group_id' => $group->id, 'member_id' => $member->id,
+        'source_id' => Str::uuid()->toString(), 'revision' => 1, 'type' => 'collection',
+        'started_at' => CarbonImmutable::parse('2026-09-20 23:55:00')->getTimestampMs(),
+        'occurred_at' => CarbonImmutable::parse('2026-09-20 23:55:00')->getTimestampMs(), 'data' => $data,
+    ]);
+    $this->artisan('activity:prune')->assertSuccessful();
+    $late = [
+        ...$this->activityUpdate('loot', $data),
+        'started_at' => CarbonImmutable::parse('2026-09-21 00:06:00')->getTimestampMs(),
+        'occurred_at' => CarbonImmutable::parse('2026-09-21 00:06:00')->getTimestampMs(),
+    ];
+    $this->withHeader('Authorization', $group->hash)
+        ->postJson("/api/group/{$group->name}/update-group-member", ['name' => $member->name, 'activity_updates' => [$late]])->assertSuccessful();
+
+    expect(ActivityEntry::where('is_weekly', '=', value: true)->sole()->data['quantity'])->toBe(1);
+    expect(ActivityEntry::where('is_weekly', '=', value: false)->sole()->data['quantity'])->toBe(1);
 });

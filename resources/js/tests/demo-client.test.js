@@ -21,7 +21,7 @@ describe("demo client", function describeDemoClient() {
       response.entries.filter(function member(entry) {
         return entry.member_id === renamed.id;
       }).length,
-    ).toBe(2);
+    ).toBe(3);
     expect(response.entries).toEqual(original.entries);
   });
 

@@ -158,6 +158,7 @@ class ActivityUpdates
         }
         $entry = ActivityEntry::where('member_id', '=', $member->id)
             ->where('type', '=', 'collection')
+            ->where('is_weekly', '=', false)
             ->where('data->item_id', '=', $update['data']['item_id'])
             ->where('occurred_at', '>=', $update['occurred_at'] - 15 * 60 * 1000)
             ->where('occurred_at', '<=', $update['occurred_at'])

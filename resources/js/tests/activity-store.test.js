@@ -20,6 +20,35 @@ function entry(id, revision, amount, memberIdentifier = 1) {
 }
 
 describe("activity store", function activityStore() {
+  it("replaces cached sessions with weekly history without losing another player's activity", function weeklyHistory() {
+    const store = useActivityStore(createTestPinia());
+    const recordedAt = Date.parse("2026-09-13T23:59:59.000Z");
+    const original = { ...entry(1, 1, 100), started_at: recordedAt, occurred_at: recordedAt };
+    const teammate = { ...original, id: 2, member_id: 2 };
+    const summary = {
+      ...original,
+      id: 3,
+      is_weekly: true,
+      started_at: Date.parse("2026-09-07T00:00:00.000Z"),
+      data: { skills: { Attack: 250 } },
+    };
+    store.mergeEntries([original, teammate]);
+    store.mergeEntries([summary]);
+    store.mergeEntries([original]);
+
+    expect(store.entries).toHaveLength(2);
+    expect(
+      store.entries.find(function archived(activity) {
+        return activity.member_id === 1;
+      }),
+    ).toEqual(summary);
+    expect(
+      store.entries.find(function otherPlayer(activity) {
+        return activity.member_id === 2;
+      }),
+    ).toEqual(teammate);
+  });
+
   it("recovers polling and updates existing cards without accepting stale totals", async function recoverActivity() {
     vi.useFakeTimers();
     const client = {

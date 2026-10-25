@@ -1,8 +1,7 @@
 import { computed, ref, shallowRef, watch } from "vue";
 import { defineStore } from "pinia";
 import { useApiStore } from "./api";
-
-const RETENTION_MILLISECONDS = 30 * 24 * 60 * 60 * 1000;
+import { activityWeek } from "../game/activity";
 
 export const useActivityStore = defineStore("activity", function createActivityStore() {
   const apiStore = useApiStore();
@@ -27,8 +26,18 @@ export const useActivityStore = defineStore("activity", function createActivityS
       }
     }
 
+    const archivedWeeks = new Set(
+      [...next.values()]
+        .filter(function weekly(entry) {
+          return entry.is_weekly;
+        })
+        .map(function week(entry) {
+          return `${entry.member_id}:${entry.started_at}`;
+        }),
+    );
+
     for (const [identifier, entry] of next) {
-      if (entry.occurred_at < Date.now() - RETENTION_MILLISECONDS) {
+      if (!entry.is_weekly && archivedWeeks.has(`${entry.member_id}:${activityWeek(entry.occurred_at)}`)) {
         next.delete(identifier);
       }
     }

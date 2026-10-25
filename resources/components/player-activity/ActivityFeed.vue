@@ -20,7 +20,6 @@
   const scroller = ref();
   const memberFilter = ref("");
   const typeFilter = ref("");
-  const newEntries = ref(0);
   const timestamp = ref(Date.now());
   const timer = window.setInterval(function updateClock() {
     timestamp.value = Date.now();
@@ -67,6 +66,11 @@
 
   function dateLabel(entry) {
     const date = new Date(entry.started_at);
+
+    if (entry.is_weekly) {
+      return `Week of ${date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}`;
+    }
+
     const today = new Date(timestamp.value);
 
     if (date.toDateString() === today.toDateString()) {
@@ -83,6 +87,10 @@
   }
 
   function relativeTime(entry) {
+    if (entry.is_weekly) {
+      return "Weekly summary";
+    }
+
     const minutes = Math.max(0, Math.floor((timestamp.value - entry.started_at) / 60_000));
 
     if (minutes < 1) {
@@ -101,6 +109,12 @@
   }
 
   function timeRange(entry) {
+    if (entry.is_weekly) {
+      const options = { month: "short", day: "numeric", timeZone: "UTC" };
+
+      return `${new Date(entry.started_at).toLocaleDateString(undefined, options)} to ${new Date(entry.started_at + 6 * 24 * 60 * 60_000).toLocaleDateString(undefined, options)}`;
+    }
+
     const start = new Date(entry.started_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
     const end = activityIsLive(entry, timestamp.value)
       ? "now"
@@ -111,34 +125,17 @@
       : `${start} to ${end}`;
   }
 
-  function followLatest() {
-    scroller.value.scrollTop = 0;
-    newEntries.value = 0;
-  }
-
   function onScroll() {
-    if (scroller.value.scrollTop <= 24) {
-      newEntries.value = 0;
-    }
-
     if (scroller.value.scrollHeight - scroller.value.scrollTop - scroller.value.clientHeight <= 200) {
       void activityStore.loadOlder();
     }
   }
 
-  watch(filteredEntries, async function preserveReadingPosition(entries, previous) {
+  watch(filteredEntries, async function preserveReadingPosition(_entries, previous) {
     if (!scroller.value || previous.length === 0) {
       return;
     }
 
-    const known = new Set(
-      previous.map(function identifier(entry) {
-        return entry.id;
-      }),
-    );
-    const added = entries.filter(function isNew(entry) {
-      return !known.has(entry.id) && entry.started_at >= previous[0].started_at;
-    }).length;
     const following = scroller.value.scrollTop <= 24;
 
     if (following) {
@@ -159,7 +156,6 @@
 
     const identifier = anchor.dataset.entryId;
     const offset = anchor.getBoundingClientRect().top - top;
-    newEntries.value += added;
     await nextTick();
     const moved = scroller.value.querySelector(`[data-entry-id="${identifier}"]`);
 
@@ -177,7 +173,6 @@
       },
     ],
     function resetFilters() {
-      newEntries.value = 0;
       scroller.value.scrollTop = 0;
     },
   );
@@ -187,7 +182,11 @@
   <section class="activity-feed rsborder rsbackground" aria-label="Group activity timeline">
     <header class="activity-feed-header">
       <h2>Group activity</h2>
-      <span class="activity-feed-period">Last 30 days</span>
+      <span
+        class="activity-feed-period"
+        data-tooltip="Activity stays detailed for at least 30 days. Older completed weeks are combined per player, from Monday to Sunday in UTC."
+        >All history</span
+      >
       <button
         v-if="props.collapsible"
         class="activity-collapse"
@@ -233,9 +232,6 @@
         >
       </div>
     </div>
-    <button v-if="newEntries" class="activity-new-button men-button small" @click="followLatest">
-      {{ newEntries }} new {{ newEntries === 1 ? "entry" : "entries" }} · Jump to latest
-    </button>
     <div ref="scroller" class="activity-feed-scroll" @scroll="onScroll">
       <p v-if="!activityStore.loaded || !groupStore.loaded" class="activity-empty">Loading activity…</p>
       <p v-else-if="filteredEntries.length === 0" class="activity-empty">
@@ -259,7 +255,7 @@
                 ><span v-if="activityIsLive(entry, timestamp)" class="activity-live">Live</span
                 ><time
                   :datetime="new Date(entry.started_at).toISOString()"
-                  :title="new Date(entry.started_at).toLocaleString()"
+                  :title="entry.is_weekly ? `${timeRange(entry)} (UTC)` : new Date(entry.started_at).toLocaleString()"
                   >{{ relativeTime(entry) }}</time
                 >
               </div>

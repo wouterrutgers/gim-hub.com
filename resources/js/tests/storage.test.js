@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vite-plus/test";
 import { parseGroupData } from "../../api/requests/group-data";
 import { createGroupState, updateGroupState, mapGroupResponse } from "../../stores/group-state";
-import { stashItemLocations } from "../../game/member";
+import { cargoHoldLocations, stashItemLocations } from "../../game/member";
 
 function update(state, data) {
   return updateGroupState(state, mapGroupResponse(parseGroupData(data), new Map()).updates, { partial: true });
@@ -12,6 +12,27 @@ function unit(id, name, state, items, alternatives = []) {
 }
 
 describe("storage integration", function describeStorage() {
+  it("counts cargo across boats and preserves each boat in the item breakdown", function cargoQuantities() {
+    const holds = [
+      { id: 1, name: "The Sea Wolf", items: [995, 100, 1511, 28] },
+      { id: 2, name: "The Albatross", items: [995, 50] },
+    ];
+    const state = update(createGroupState(), [{ id: 1, name: "Alice", cargo_holds: holds }]);
+    expect(state.items.get(995).get("Alice")).toEqual({ "Cargo holds": 150 });
+    expect(cargoHoldLocations(state.memberStates.get("Alice").cargoHolds, 995)).toEqual([
+      { id: 1, name: "The Sea Wolf", quantity: 100 },
+      { id: 2, name: "The Albatross", quantity: 50 },
+    ]);
+    const empty = update(state, [
+      {
+        id: 1,
+        name: "Alice",
+        cargo_holds: [{ ...holds[0], items: [] }, holds[1]],
+      },
+    ]);
+    expect(empty.items.has(1511)).toBe(false);
+    expect(empty.items.get(995).get("Alice")).toEqual({ "Cargo holds": 50 });
+  });
   it("updates item totals when POH storage contents change", function houseQuantities() {
     const state = update(createGroupState(), [
       {

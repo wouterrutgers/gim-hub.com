@@ -46,19 +46,22 @@
         return {
           name,
           quantity,
-          tooltip:
-            props.containerFilter === "All" || props.containerFilter === "STASH units"
-              ? serializeTooltip({
-                  type: "item-breakdown",
-                  name,
-                  filter: props.containerFilter,
-                  breakdown,
-                  stashLocations: Member.stashItemLocations(
-                    groupStore.memberStates.get(name)?.stashUnits ?? new Map(),
-                    props.itemID,
-                  ),
-                })
-              : undefined,
+          tooltip: ["All", "STASH units", "Cargo holds"].includes(props.containerFilter)
+            ? serializeTooltip({
+                type: "item-breakdown",
+                name,
+                filter: props.containerFilter,
+                breakdown,
+                stashLocations: Member.stashItemLocations(
+                  groupStore.memberStates.get(name)?.stashUnits ?? new Map(),
+                  props.itemID,
+                ),
+                cargoHolds: Member.cargoHoldLocations(
+                  groupStore.memberStates.get(name)?.cargoHolds ?? new Map(),
+                  props.itemID,
+                ),
+              })
+            : undefined,
           contributionStyle: {
             transform: `scaleX(${quantityPercent}%)`,
             background: `hsl(${quantityPercent}, 100%, 40%)`,

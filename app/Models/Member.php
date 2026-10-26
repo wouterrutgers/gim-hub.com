@@ -22,6 +22,9 @@ class Member extends Model
         'plank_sack', 'master_scroll_book', 'essence_pouches', 'tackle_box',
         'tool_leprechaun', 'elnock_inquisitor',
         'coal_bag', 'fish_barrel', 'herb_sack', 'looting_bag', 'seed_box', 'gem_bag', 'chugging_barrel', 'stash_units',
+        'meat_pouch', 'log_basket', 'reagent_pouch', 'fur_pouch', 'bolt_pouch', 'forestry_kit', 'huntsmans_kit',
+        'bow_string_spool', 'steel_key_ring', 'flamtaer_bag', 'bottomless_compost_bucket', 'gnomish_firelighter',
+        'blast_furnace', 'fossil_storage', 'balloon_transport', 'sandstorm', 'hallowed_sepulchre', 'cargo_holds',
         'quiver', 'diary_vars', 'interacting', 'timezone',
     ];
 

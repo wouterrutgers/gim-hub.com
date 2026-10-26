@@ -11,7 +11,7 @@
     mappedHighAlch,
     quantityColor,
   } from "../../game/items";
-  import { portableStorageKey } from "../../game/member";
+  import { portableStorageKeys } from "../../game/member";
   import { serializeTooltip } from "../tooltip/tooltip-data";
   import CachedImage from "../cached-image/CachedImage.vue";
   import "./player-inventory.css";
@@ -47,22 +47,24 @@
         gePrice: mappedGEPrice(item.itemID, gameDataStore.gameData.gePrices, gameDataStore.gameData.items),
       };
 
-      const storageKey = portableStorageKey(item.itemID);
+      const storageKeys = portableStorageKeys(item.itemID);
 
-      if (storageKey) {
+      for (const storageKey of storageKeys) {
         const contents = groupStore.memberStates.get(props.member)?.[storageKey];
 
         if (contents?.size) {
-          storedItems = [...contents.values()].map(function describeStoredItem(storedItem) {
-            const storedItemData = gameDataStore.gameData.items?.get(storedItem.itemID);
+          storedItems.push(
+            ...[...contents.values()].map(function describeStoredItem(storedItem) {
+              const storedItemData = gameDataStore.gameData.items?.get(storedItem.itemID);
 
-            return {
-              id: storedItem.itemID,
-              name: storedItemData?.name ?? `Item ${storedItem.itemID}`,
-              quantity: storedItem.quantity,
-              icon: composeItemIconHref(storedItem, storedItemData),
-            };
-          });
+              return {
+                id: storedItem.itemID,
+                name: storedItemData?.name ?? `Item ${storedItem.itemID}`,
+                quantity: storedItem.quantity,
+                icon: composeItemIconHref(storedItem, storedItemData),
+              };
+            }),
+          );
           tooltipData.storageItems = storedItems;
 
           if (storageKey === "essencePouches") {
@@ -116,9 +118,9 @@
         item,
         icon: composeItemIconHref(item, itemData),
         link: `https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=${item.itemID}`,
-        tooltip: storageKey && storedItems.length === 0 ? undefined : serializeTooltip(tooltipData),
+        tooltip: storageKeys.length > 0 && storedItems.length === 0 ? undefined : serializeTooltip(tooltipData),
         previewItems,
-        hasStoredItems: Boolean(storageKey && storedItems.length > 0),
+        hasStoredItems: storageKeys.length > 0 && storedItems.length > 0,
       };
     });
   });

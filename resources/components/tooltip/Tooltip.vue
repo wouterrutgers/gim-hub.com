@@ -264,6 +264,12 @@
               <span>{{ unit.quantity.toLocaleString() }}</span>
             </template>
           </template>
+          <template v-if="tooltip.filter === 'All' || tooltip.filter === 'Cargo holds'">
+            <template v-for="hold in tooltip.cargoHolds ?? []" :key="hold.id">
+              <span>{{ hold.name }}</span>
+              <span>{{ hold.quantity.toLocaleString() }}</span>
+            </template>
+          </template>
         </div>
       </template>
 

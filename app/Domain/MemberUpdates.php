@@ -48,14 +48,18 @@ class MemberUpdates
 
         $current = $member->properties()->whereIn('key', $keys)->get(['id', 'key', 'value'])->keyBy('key')->all();
 
-        if (isset($properties['stash_units'])) {
-            $units = array_column($current['stash_units']->value ?? [], null, 'id');
+        foreach (['stash_units', 'cargo_holds'] as $key) {
+            if (! isset($properties[$key])) {
+                continue;
+            }
 
-            foreach ($properties['stash_units'] as $unit) {
+            $units = array_column($current[$key]->value ?? [], null, 'id');
+
+            foreach ($properties[$key] as $unit) {
                 $units[$unit['id']] = $unit;
             }
 
-            $properties['stash_units'] = array_values($units);
+            $properties[$key] = array_values($units);
         }
 
         foreach (Member::PARTIAL_PROPERTY_KEYS as $key => $partialKey) {

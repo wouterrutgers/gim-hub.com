@@ -62,6 +62,24 @@ it('retains unresolved alternatives without inventing items', function (): void 
     expect($member->load('properties')->getProperty('stash_units')->value)->toEqual([$unit]);
 });
 
+it('updates cargo per boat while preserving unseen holds and clearing confirmed empty holds', function (): void {
+    $member = storageMember();
+    $first = ['id' => 1, 'name' => 'The Sea Wolf', 'items' => [995, 100, 1511, 28]];
+    $second = ['id' => 2, 'name' => 'The Albatross', 'items' => [995, 50]];
+    $this->withHeader('Authorization', 'storage-token')->postJson('/api/group/storage-group/update-group-member', [
+        'name' => 'Alice', 'cargo_holds' => [$first, $second], 'bow_string_spool' => [1777, 50],
+    ])->assertSuccessful();
+
+    $empty = [...$first, 'items' => []];
+    $this->postJson('/api/group/storage-group/update-group-member', ['name' => 'Alice', 'cargo_holds' => [$empty]])->assertSuccessful();
+    $this->postJson('/api/group/storage-group/update-group-member', ['name' => 'Alice', 'cargo_holds' => null])->assertSuccessful();
+
+    $this->getJson('/api/group/storage-group/get-group-data?from_time=2000-01-01')
+        ->assertJsonPath('0.cargo_holds', [$empty, $second])
+        ->assertJsonPath('0.bow_string_spool', [1777, 50]);
+    expect($member->load('properties')->getProperty('cargo_holds')->value)->toEqual([$empty, $second]);
+});
+
 it('rejects malformed storage snapshots without replacing saved contents', function (array $payload, string $attribute): void {
     $member = storageMember();
     $member->properties()->create(['key' => 'herb_sack', 'value' => [199, 5]]);
@@ -86,6 +104,11 @@ it('rejects malformed storage snapshots without replacing saved contents', funct
     'missing identifier' => [['stash_units' => [array_diff_key(stashUnit(28958), ['id' => true])]], 'stash_units.0.id'],
     'non-array alternatives' => [['stash_units' => [[...stashUnit(28958), 'alternatives' => 1]]], 'stash_units.0.alternatives'],
     'invalid alternative' => [['stash_units' => [[...stashUnit(28958), 'alternatives' => [1]]]], 'stash_units.0.alternatives.0'],
+    'duplicate boats' => [['cargo_holds' => [
+        ['id' => 1, 'name' => 'First', 'items' => [995, 10]],
+        ['id' => 1, 'name' => 'Second', 'items' => []],
+    ]], 'cargo_holds.0.id'],
+    'invalid boat slot' => [['cargo_holds' => [['id' => 6, 'name' => 'Sixth', 'items' => []]]], 'cargo_holds.0.id'],
 ]);
 
 it('isolates storage updates by group and member', function (): void {

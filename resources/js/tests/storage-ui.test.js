@@ -12,7 +12,7 @@ import { parseGroupData } from "../../api/requests/group-data";
 const portableItems = [13226, 22586, 24482, 24481, 30000, 12019];
 const otherContainers = [28951, 24882, 21389, 5509, 25580, 12019, 25582];
 const items = new Map([
-  ...[...portableItems, ...otherContainers, 12791].map(function portableItem(id) {
+  ...[...portableItems, ...otherContainers, 12791, 28143].map(function portableItem(id) {
     return [id, { name: `Container ${id}`, highalch: 0 }];
   }),
   [1095, { name: "Leather chaps", highalch: 12, alchable: true }],
@@ -168,6 +168,28 @@ describe("storage UI", function storageInterface() {
     expect(container.querySelector('[role="tooltip"]').textContent).toContain(
       "Combined contents of all essence pouches",
     );
+  });
+
+  it("combines logs and kit contents in the forestry basket preview", async function forestryBasketContents() {
+    payload = [
+      {
+        id: 1,
+        name: "Alice",
+        inventory: [28143, 1, ...Array(54).fill(0)],
+        log_basket: [199, 12],
+        forestry_kit: [5295, 4],
+      },
+    ];
+    await mount({
+      render() {
+        return [h(PlayerInventory, { member: "Alice" }), h(Tooltip)];
+      },
+    });
+    const basket = container.querySelector(".player-inventory-item-box");
+    basket.dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));
+    await nextTick();
+    expect(container.querySelector('[role="tooltip"]').textContent).toContain("12 Grimy guam leaf");
+    expect(container.querySelector('[role="tooltip"]').textContent).toContain("4 Ranarr seed");
   });
 
   it("uses the usual empty inventory view when STASH units have no known items", async function statusOnlyUnits() {

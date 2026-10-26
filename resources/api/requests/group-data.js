@@ -299,6 +299,35 @@ const groupDataSchema = z
       seed_box: nullableItemCollectionSchema,
       gem_bag: nullableItemCollectionSchema,
       chugging_barrel: nullableItemCollectionSchema,
+      meat_pouch: nullableItemCollectionSchema,
+      log_basket: nullableItemCollectionSchema,
+      reagent_pouch: nullableItemCollectionSchema,
+      fur_pouch: nullableItemCollectionSchema,
+      bolt_pouch: nullableItemCollectionSchema,
+      forestry_kit: nullableItemCollectionSchema,
+      huntsmans_kit: nullableItemCollectionSchema,
+      bow_string_spool: nullableItemCollectionSchema,
+      steel_key_ring: nullableItemCollectionSchema,
+      flamtaer_bag: nullableItemCollectionSchema,
+      bottomless_compost_bucket: nullableItemCollectionSchema,
+      gnomish_firelighter: nullableItemCollectionSchema,
+      blast_furnace: nullableItemCollectionSchema,
+      fossil_storage: nullableItemCollectionSchema,
+      balloon_transport: nullableItemCollectionSchema,
+      sandstorm: nullableItemCollectionSchema,
+      hallowed_sepulchre: nullableItemCollectionSchema,
+      cargo_holds: z
+        .array(z.object({ id: z.number().int().positive(), name: z.string(), items: itemCollectionSchema }))
+        .nullish()
+        .transform(function mapCargoHolds(holds) {
+          return holds == null
+            ? undefined
+            : new Map(
+                holds.map(function mapHold(hold) {
+                  return [hold.id, hold];
+                }),
+              );
+        }),
       stash_units: z
         .nullish(
           z.array(
@@ -378,6 +407,24 @@ function mapMember({
   seed_box,
   gem_bag,
   chugging_barrel,
+  meat_pouch,
+  log_basket,
+  reagent_pouch,
+  fur_pouch,
+  bolt_pouch,
+  forestry_kit,
+  huntsmans_kit,
+  bow_string_spool,
+  steel_key_ring,
+  flamtaer_bag,
+  bottomless_compost_bucket,
+  gnomish_firelighter,
+  blast_furnace,
+  fossil_storage,
+  balloon_transport,
+  sandstorm,
+  hallowed_sepulchre,
+  cargo_holds,
   stash_units,
   ...member
 }) {
@@ -411,6 +458,24 @@ function mapMember({
     seedBox: seed_box,
     gemBag: gem_bag,
     chuggingBarrel: chugging_barrel,
+    meatPouch: meat_pouch,
+    logBasket: log_basket,
+    reagentPouch: reagent_pouch,
+    furPouch: fur_pouch,
+    boltPouch: bolt_pouch,
+    forestryKit: forestry_kit,
+    huntsmansKit: huntsmans_kit,
+    bowStringSpool: bow_string_spool,
+    steelKeyRing: steel_key_ring,
+    flamtaerBag: flamtaer_bag,
+    bottomlessCompostBucket: bottomless_compost_bucket,
+    gnomishFirelighter: gnomish_firelighter,
+    blastFurnace: blast_furnace,
+    fossilStorage: fossil_storage,
+    balloonTransport: balloon_transport,
+    sandstorm,
+    hallowedSepulchre: hallowed_sepulchre,
+    cargoHolds: cargo_holds,
     stashUnits: stash_units,
   };
 

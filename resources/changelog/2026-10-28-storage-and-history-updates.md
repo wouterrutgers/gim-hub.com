@@ -1,0 +1,23 @@
+# Storage and history updates
+
+- Added tracking for meat pouches.
+- Added tracking for fur pouches.
+- Added tracking for reagent pouches.
+- Added tracking for bolt pouches.
+- Added tracking for log baskets.
+- Added tracking for Forestry kits.
+- Added tracking for huntsman's kits.
+- Added tracking for bow string spools.
+- Added tracking for steel key rings.
+- Added tracking for Flamtaer bags.
+- Added tracking for bottomless compost buckets.
+- Added tracking for gnomish firelighters.
+- Added tracking for Blast Furnace ores and bars.
+- Added tracking for fossil storage.
+- Added tracking for balloon transport supplies.
+- Added tracking for Sandstorm buckets and sand.
+- Added tracking for Hallowed Sepulchre supplies.
+- Added tracking for Sailing cargo holds.
+- Added gem sack support.
+- Group activity now keeps older history as weekly summaries per player instead of removing it after 30 days. Recent activity stays detailed for at least 30 days, with older completed weeks grouped from Monday to Sunday.
+- Added **Expand all player rows by default** in settings to automatically show each player's skill breakdown in History.

@@ -32,6 +32,7 @@ it('stores and retrieves storage contents, preserves omitted data and clears con
     'looting bag' => ['looting_bag', [995, 1000, 4151, 1]],
     'seed box' => ['seed_box', [5295, 40]],
     'gem bag' => ['gem_bag', [1623, 20]],
+    'gem sack' => ['gem_bag', [1625, 1, 1627, 2, 1629, 3, 1623, 4, 1621, 5, 1619, 6, 1617, 7, 1631, 8]],
     'chugging barrel' => ['chugging_barrel', [2430, 15]],
     'spice rack' => ['poh_spice_rack', [7480, 2, 7481, 1, 7484, 2, 7485, 1, 7488, 2, 7489, 1, 7492, 2, 7493, 1]],
     'pet house' => ['poh_pet_house', [1555, 1, 12650, 1]],

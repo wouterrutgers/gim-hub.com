@@ -137,7 +137,7 @@ export const itemContainers = [
   },
   { name: "Looting bag", key: "lootingBag", itemIds: [11941, 22586], getItems: mapToItems },
   { name: "Seed box", key: "seedBox", itemIds: [13639, 24482], getItems: mapToItems },
-  { name: "Gem bag", key: "gemBag", itemIds: [12020, 24481], getItems: mapToItems },
+  { name: "Gem bag", key: "gemBag", itemIds: [12020, 24481, 33393, 33395], getItems: mapToItems },
   { name: "Chugging barrel", key: "chuggingBarrel", itemIds: [30000], getItems: mapToItems },
   { name: "Meat pouch", key: "meatPouch", itemIds: [29295, 29297, 29462, 29464], getItems: mapToItems },
   { name: "Log basket", key: "logBasket", itemIds: [28140, 28142, 28143, 28145], getItems: mapToItems },

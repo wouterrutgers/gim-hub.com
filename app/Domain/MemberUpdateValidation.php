@@ -67,7 +67,7 @@ class MemberUpdateValidation
             'herb_sack' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 30], $itemQuantityPairs],
             'looting_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 56], $itemQuantityPairs],
             'seed_box' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 12], $itemQuantityPairs],
-            'gem_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 10], $itemQuantityPairs],
+            'gem_bag' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 16], $itemQuantityPairs],
             'chugging_barrel' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 100], $itemQuantityPairs],
             'meat_pouch' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 40], $itemQuantityPairs],
             'log_basket' => ['bail', 'sometimes', 'nullable', 'array', 'list', ['max', 56], $itemQuantityPairs],

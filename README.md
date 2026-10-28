@@ -11,7 +11,7 @@ GIM Hub is a live dashboard for Old School RuneScape Group Ironman teams. The Ru
 - **World map:** Follow member locations on an interactive map.
 - **Items:** Browse and search items across group members, with quantities by member and storage location, plus Grand Exchange and high alchemy values.
 - **Storage:** View bank, shared bank, inventory, equipment, quiver, rune pouch, seed vault, potion storage, POH costume room, spice rack, pet house, servant's moneybag, STASH units, and items held by the tool leprechaun and Elnock Inquisitor.
-- **Portable containers:** Track plank sacks, master scroll books, essence pouches, tackle boxes, coal bags, fish barrels and fish sack barrels, herb sacks, looting bags, seed boxes, gem bags, and chugging barrels.
+- **Portable containers:** Track plank sacks, master scroll books, essence pouches, tackle boxes, coal bags, fish barrels and fish sack barrels, herb sacks, looting bags, seed boxes, gem bags and gem sacks, and chugging barrels.
 - **Coffers:** Track coin balances in the Blast Furnace, Nightmare Zone, and Scar Essence Mine coffers.
 - **Skills:** Compare levels and experience, review experience history, and see live XP drops.
 - **Progress:** Follow quests, achievement diaries, and up to date collection logs.

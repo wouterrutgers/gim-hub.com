@@ -113946,5 +113946,53 @@
     "highalch": 0,
     "alchable": false,
     "mapping": null
+  },
+  "34732": {
+    "name": "Candy onion",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34734": {
+    "name": "Sugar",
+    "highalch": 6,
+    "alchable": true,
+    "mapping": null
+  },
+  "34736": {
+    "name": "Molten sugar",
+    "highalch": 1,
+    "alchable": true,
+    "mapping": null
+  },
+  "34738": {
+    "name": "Old onion",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34740": {
+    "name": "Vampyre monocle",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34742": {
+    "name": "Vampyre costume top",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34744": {
+    "name": "Vampyre costume bottom",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34746": {
+    "name": "Vampyre costume cape",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
   }
 }

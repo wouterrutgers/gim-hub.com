@@ -129,8 +129,8 @@
       <button
         type="button"
         class="app-link men-button nav-community-link"
-        aria-label="Donate"
-        data-tooltip="Donate"
+        aria-label="Support"
+        data-tooltip="Support"
         aria-haspopup="dialog"
         aria-controls="donate-window"
         :aria-expanded="modalOpen"

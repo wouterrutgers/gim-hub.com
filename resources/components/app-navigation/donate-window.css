@@ -40,7 +40,13 @@
   border-radius: 6px;
   background: var(--darken);
   font-size: 18px;
+  line-height: 1;
   text-decoration: none;
+}
+
+.donate-window-link img {
+  height: 22px;
+  flex-shrink: 0;
 }
 
 .donate-window-link-preferred {

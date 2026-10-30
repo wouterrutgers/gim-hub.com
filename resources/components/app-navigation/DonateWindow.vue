@@ -5,9 +5,14 @@
   const emit = defineEmits(["close"]);
 
   const donationLinks = [
-    { label: "GitHub sponsors", href: "https://github.com/sponsors/wouterrutgers", preferred: true },
-    { label: "Ko-fi", href: "https://ko-fi.com/wouterrutgers" },
-    { label: "PayPal", href: "https://paypal.me/wouterrutgers" },
+    {
+      label: "GitHub sponsors",
+      href: "https://github.com/sponsors/wouterrutgers",
+      imageSource: "/images/github-light.webp",
+      preferred: true,
+    },
+    { label: "Ko-fi", href: "https://ko-fi.com/wouterrutgers", imageSource: "/images/kofi.webp" },
+    { label: "PayPal", href: "https://paypal.me/wouterrutgers", imageSource: "/images/paypal.svg" },
   ];
 </script>
 
@@ -38,7 +43,7 @@
         target="_blank"
         rel="noopener noreferrer"
       >
-        <CachedImage v-if="link.preferred" src="/images/github-light.webp" alt="" width="22" height="22" />
+        <CachedImage :src="link.imageSource" alt="" />
         <span>{{ link.label }}</span>
         <span v-if="link.preferred" class="donate-window-preferred">Preferred</span>
       </a>

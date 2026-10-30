@@ -3,19 +3,29 @@ import { activityWeek } from "../../game/activity";
 export function populateActivity(state) {
   const now = Date.now();
   const samples = [
-    ["Cow31337Killer", "xp", 5, { skills: { Attack: 3400, Hitpoints: 1100 } }],
+    ["Cow31337Killer", "xp", 5, { skills: { Strength: 3400, Hitpoints: 1100 } }],
     [
       "xXgamerXx",
       "loot",
       12,
-      { item_id: 4151, quantity: 1, value: 1_800_000, source: "Abyssal Sire", new_collection_item: true },
+      { item_id: 34669, quantity: 250, value: 500_000, source: "The Fractured Archive", new_collection_item: true },
     ],
-    ["xXgamerXx", "boss", 18, { boss: "Vorkath", count_type: "kill", count: 12, total_count: 247 }],
-    ["Thurgo", "diary", 35, { region: "Falador", tier: "Easy", tasks: [0, 1, 2], complete: false }],
+    ["xXgamerXx", "boss", 18, { boss: "The Fractured Archive", count_type: "completion", count: 1, total_count: 47 }],
+    [
+      "Thurgo",
+      "diary",
+      35,
+      {
+        region: "Kourend & Kebos",
+        tier: "Easy",
+        tasks: Array.from({ length: 12 }, (_, index) => index),
+        complete: true,
+      },
+    ],
     ["xXgamerXx", "level", 52, { skill: "Runecraft", before: 98, after: 99 }],
     ["Cow31337Killer", "quest", 80, { quest_id: 17, quest_name: "Druidic Ritual" }],
     ["Thurgo", "xp", 25 * 60, { skills: { Cooking: 28_560 } }],
-    ["Cow31337Killer", "xp", 42 * 24 * 60, { skills: { Attack: 125_000, Hitpoints: 41_000 } }],
+    ["Cow31337Killer", "xp", 42 * 24 * 60, { skills: { Strength: 125_000, Hitpoints: 41_000 } }],
   ];
 
   for (const [index, [member, type, minutes, data]] of samples.entries()) {

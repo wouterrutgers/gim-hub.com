@@ -4,7 +4,7 @@ Your teammate just got a drop. Someone else is closing in on 99. GIM Hub brings 
 
 [Try the demo](https://gim-hub.com/demo) · [Get started](https://gim-hub.com/create-group) · [Changelog](https://gim-hub.com/changelog) · [Discord](https://discord.gg/ZwzW6yYD8V)
 
-![GIM Hub demo showing shared items, player skills, and the live group activity timeline](screenshots/demo-overview.webp)
+![GIM Hub demo showing shared items, raid equipment, and the live group activity timeline](screenshots/demo-overview.webp)
 
 _Screenshots use sample data from the demo._
 
@@ -35,7 +35,7 @@ Search by name or `tag:`, use quotes for exact names, and combine searches with 
 
 Find your group on the interactive world map, follow a teammate as they move, or search for a named location. Switch between floors and pinch to zoom on mobile.
 
-![GIM Hub demo map following a teammate through Morytania, with player panels and group activity alongside](screenshots/demo-map.webp)
+![GIM Hub demo map following Thurgo at the Hosidius Kitchen, with his cooking inventory and group activity alongside](screenshots/demo-map.webp)
 
 ## Watch the gains add up
 

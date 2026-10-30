@@ -66,24 +66,47 @@ export const MAX_DIARY = {
   Varrock: MAX_DIARY_TIER,
   Wilderness: MAX_DIARY_TIER,
 };
+export const HOSIDIUS_KITCHEN_ROUTE = [
+  [1678, 3621],
+  [1677, 3620],
+  [1676, 3619],
+  [1676, 3618],
+  [1676, 3617],
+  [1676, 3616],
+  [1676, 3615],
+];
+export const UNDEAD_COW_LOCATIONS = [
+  [3617, 3525],
+  [3620, 3525],
+  [3620, 3528],
+  [3617, 3528],
+];
+export const ARCHIVE_RANGED_EQUIPMENT = [
+  ["Head", 27235],
+  ["Cape", 28955],
+  ["Amulet", 33639],
+  ["Weapon", 20997],
+  ["Body", 27238],
+  ["Legs", 27241],
+  ["Boots", 31097],
+  ["Gloves", 26235],
+  ["Ring", 28310],
+  ["Ammo", 27544],
+];
+export const ARCHIVE_MELEE_EQUIPMENT = [
+  ["Head", 24419],
+  ["Cape", 21295],
+  ["Amulet", 29801],
+  ["Weapon", 34715],
+  ["Body", 24420],
+  ["Legs", 24421],
+  ["Boots", 31097],
+  ["Gloves", 22981],
+  ["Ring", 28307],
+  ["Ammo", 27544],
+];
 const INITIAL_STATE = {
-  thurgo: {
-    lastTick: 0,
-    piesCookedInInventory: 0,
-    piesUncookedInInventory: 28,
-    piesCookedInBank: 0,
-    piesUncookedInBank: 423425,
-    bankingCooldown: 0,
-  },
   cowKiller: {
-    MAX_HIT: 28,
-    COW_MAX_HP: 8,
-    cowHP: 8,
-    kills: 0,
-    damageDone: 0,
-    lastTick: 0,
-    deathCooldown: 0,
-    attackCooldown: 3,
     skills: DEFAULT_SKILLS,
     quests: MAX_QUEST,
     diaries: structuredClone(MAX_DIARY),

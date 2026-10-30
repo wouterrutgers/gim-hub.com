@@ -111,5 +111,6 @@ jobs:
         working-directory: /tmp/digests
         run: |
           docker buildx imagetools create \
+            --tag wouterrutgers/gim-hub.com:latest \
             --tag wouterrutgers/gim-hub.com:octane \
             $(printf 'wouterrutgers/gim-hub.com@sha256:%s ' *)

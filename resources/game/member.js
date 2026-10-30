@@ -79,7 +79,7 @@ export const itemContainers = [
   },
   { name: "Spice rack", key: "pohSpiceRack", getItems: mapToItems },
   { name: "Pet house", key: "pohPetHouse", getItems: mapToItems },
-  { name: "Servant’s moneybag", key: "pohServantsMoneybag", getItems: mapToItems },
+  { name: "Servant's moneybag", key: "pohServantsMoneybag", getItems: mapToItems },
   { name: "Blast Furnace coffer", key: "blastFurnaceCoffer", getItems: mapToItems },
   { name: "Nightmare Zone coffer", key: "nightmareZoneCoffer", getItems: mapToItems },
   { name: "Scar Essence Mine coffer", key: "scarEssenceMineCoffer", getItems: mapToItems },

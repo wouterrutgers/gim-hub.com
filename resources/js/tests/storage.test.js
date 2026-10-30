@@ -48,7 +48,7 @@ describe("storage integration", function describeStorage() {
     expect(state.items.get(7485).get("Alice")).toEqual({ "Spice rack": 1 });
     expect(state.items.get(1555).get("Alice")).toEqual({ "Pet house": 1 });
     expect(state.items.get(12650).get("Alice")).toEqual({ "Pet house": 1 });
-    expect(state.items.get(995).get("Alice")).toEqual({ Bank: 100, "Servant’s moneybag": 1234567 });
+    expect(state.items.get(995).get("Alice")).toEqual({ Bank: 100, "Servant's moneybag": 1234567 });
 
     const unchanged = update(state, [{ id: 1, name: "Alice", poh_spice_rack: null }]);
     expect(unchanged.items.get(7485).get("Alice")).toEqual({ "Spice rack": 1 });

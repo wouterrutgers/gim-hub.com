@@ -26,7 +26,7 @@
       </button>
     </div>
     <p>
-      I enjoy building GIM hub and sharing it with you. If you’d like to say thanks, a small donation is always
+      I enjoy building GIM hub and sharing it with you. If you'd like to say thanks, a small donation is always
       appreciated.
     </p>
     <div class="donate-window-links">

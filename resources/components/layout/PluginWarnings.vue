@@ -86,6 +86,6 @@
         <span v-else>A newer GIM hub plugin is available. Update to {{ warning.latest_version }}.</span>
       </li>
     </ul>
-    <p class="plugin-warnings-instructions">Install or update <strong>GIM hub</strong> in RuneLite’s Plugin Hub.</p>
+    <p class="plugin-warnings-instructions">Install or update <strong>GIM hub</strong> in RuneLite's Plugin Hub.</p>
   </section>
 </template>

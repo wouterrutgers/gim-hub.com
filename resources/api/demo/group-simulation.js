@@ -24,8 +24,8 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
       bank: banks.get("Thurgo"),
       stats: {
         health: {
-          current: 99,
-          max: 99,
+          current: 10,
+          max: 10,
         },
         prayer: {
           current: 1,

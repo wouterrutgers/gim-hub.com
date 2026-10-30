@@ -4,12 +4,6 @@ export const EXPERIENCE_99 = 13034431;
 export const EXPERIENCE_90 = 5346332;
 export const EXPERIENCE_80 = 1986068;
 export const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
-export const DEFAULT_MEMBER = parseGroupData([
-  {
-    id: 1,
-    name: "",
-  },
-])[0];
 export const DEFAULT_SKILLS = {
   Agility: 0,
   Attack: 0,
@@ -35,6 +29,15 @@ export const DEFAULT_SKILLS = {
   Strength: 0,
   Thieving: 0,
   Woodcutting: 0,
+};
+export const DEFAULT_MEMBER = {
+  ...parseGroupData([
+    {
+      id: 1,
+      name: "",
+    },
+  ])[0],
+  skills: DEFAULT_SKILLS,
 };
 export const MAX_QUEST = parseGroupData([
   {

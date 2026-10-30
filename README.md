@@ -6,7 +6,7 @@ Your teammate just got a drop. Someone else is closing in on 99. GIM Hub brings 
 
 ![GIM Hub demo showing shared items, player skills, and the live group activity timeline](screenshots/demo-overview.webp)
 
-*Screenshots use sample data from the demo.*
+_Screenshots use sample data from the demo._
 
 ## Keep up with the group
 

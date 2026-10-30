@@ -40,6 +40,7 @@ class MemberUpdateValidation
             'coordinates' => ['bail', 'nullable', 'array', 'list', ['size', 4], $integerList()],
             'skills' => ['bail', 'nullable', 'array', 'list', ['size', 24], $integerList()],
             'quests' => ['bail', 'nullable', 'array', 'list', ['max', 250], $integerList(maximum: 2)],
+            'combat_achievements' => ['bail', 'nullable', 'array', 'list', $integerList()],
             'inventory' => ['bail', 'nullable', 'array', 'list', ['size', 56], $integerList()],
             'equipment' => ['bail', 'nullable', 'array', 'list', ['size', 28], $integerList()],
             'bank' => ['bail', 'nullable', 'array', 'list', ['max', 3000], $integerList(minimum: -1, pairs: true)],

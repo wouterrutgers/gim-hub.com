@@ -46,6 +46,7 @@ it('returns 422 for invalid storage arrays without applying other storage update
     'empty fixed inventory' => [['inventory' => []], 'inventory'],
     'oversized bank' => [['bank' => array_fill(0, 3001, 0)], 'bank'],
     'non-array bank' => [['bank' => 995], 'bank'],
+    'invalid combat achievement identifier' => [['combat_achievements' => [-1]], 'combat_achievements'],
     'three rune pouch slots' => [['rune_pouch' => array_fill(0, 6, 0)], 'rune_pouch'],
     'incomplete rune pouch slot' => [['rune_pouch' => array_fill(0, 7, 0)], 'rune_pouch'],
     'oversized rune pouch' => [['rune_pouch' => array_fill(0, 9, 0)], 'rune_pouch'],

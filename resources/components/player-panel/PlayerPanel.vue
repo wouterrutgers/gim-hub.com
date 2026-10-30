@@ -2,6 +2,7 @@
   import { computed, ref } from "vue";
   import CachedImage from "../cached-image/CachedImage.vue";
   import CollectionLogWindow from "../collection-log/CollectionLogWindow.vue";
+  import CombatAchievementsWindow from "../combat-achievements/CombatAchievementsWindow.vue";
   import Modal from "../modal/Modal.vue";
   import { useModal } from "../modal/use-modal";
   import PlayerDiaries from "./PlayerDiaries.vue";
@@ -22,6 +23,12 @@
     componentProps: collectionLogModalProps,
     openModal: openCollectionLogModal,
     closeModal: closeCollectionLogModal,
+  } = useModal();
+  const {
+    open: combatAchievementsModalOpen,
+    componentProps: combatAchievementsModalProps,
+    openModal: openCombatAchievementsModal,
+    closeModal: closeCombatAchievementsModal,
   } = useModal();
 
   const buttons = [
@@ -44,6 +51,14 @@
     { category: "Skills", ariaLabel: "skills", alt: "osrs skills", src: "/ui/3579-0.png", width: 23, height: 22 },
     { category: "Quests", ariaLabel: "quests", alt: "osrs quest", src: "/ui/776-0.png", width: 22, height: 22 },
     { category: "Diaries", ariaLabel: "diaries", alt: "osrs diary", src: "/ui/1298-0.png", width: 22, height: 22 },
+    {
+      category: "Combat achievements",
+      ariaLabel: "combat achievements",
+      alt: "osrs combat achievements",
+      src: "/item-icons/25956.webp",
+      width: 32,
+      height: 32,
+    },
     {
       category: "Collection log",
       ariaLabel: "collection-log",
@@ -76,11 +91,23 @@
       return;
     }
 
+    if (button.category === "Combat achievements") {
+      openCombatAchievementsModal({ player: props.member });
+
+      return;
+    }
+
     subcategory.value = subcategory.value === button.category ? undefined : button.category;
   }
 </script>
 
 <template>
+  <Modal
+    :open="combatAchievementsModalOpen"
+    :component="CombatAchievementsWindow"
+    :component-props="combatAchievementsModalProps"
+    @close="closeCombatAchievementsModal"
+  />
   <Modal
     :open="collectionLogModalOpen"
     :component="CollectionLogWindow"

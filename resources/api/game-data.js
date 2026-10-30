@@ -1,4 +1,5 @@
 import { fetchDiaryData } from "../game/diaries";
+import { fetchCombatAchievementData } from "../game/combat-achievements";
 import { fetchItemData, fetchItemTags } from "../game/items";
 import { fetchQuestData } from "../game/quests";
 import { fetchCollectionLogInfo } from "./requests/collection-log-info";
@@ -10,6 +11,7 @@ export async function fetchGameData(baseURL) {
     ["items", fetchItemData],
     ["itemTags", fetchItemTags],
     ["diaries", fetchDiaryData],
+    ["combatAchievements", fetchCombatAchievementData],
     [
       "gePrices",
       function fetchPrices() {

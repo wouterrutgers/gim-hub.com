@@ -1,0 +1,4587 @@
+[
+  {
+    "id": 0,
+    "name": "Noxious Foe",
+    "description": "Kill an Aberrant Spectre.",
+    "tier": 1,
+    "monster": "Aberrant Spectres"
+  },
+  {
+    "id": 1,
+    "name": "Abyssal Adept",
+    "description": "Kill the Abyssal Sire 20 times.",
+    "tier": 3,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 2,
+    "name": "Abyssal Veteran",
+    "description": "Kill the Abyssal Sire 50 times.",
+    "tier": 4,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 3,
+    "name": "They Grow Up Too Fast",
+    "description": "Kill the Abyssal Sire without letting any Scion mature.",
+    "tier": 3,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 4,
+    "name": "Respiratory Runner",
+    "description": "Kill the Abyssal Sire after only stunning him once.",
+    "tier": 4,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 5,
+    "name": "Don't Whip Me",
+    "description": "Kill the Abyssal Sire without being hit by any external tentacles.",
+    "tier": 3,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 6,
+    "name": "Demonic Rebound",
+    "description": "Use the Vengeance spell to reflect the damage from the Abyssal Sire's explosion back to him.",
+    "tier": 4,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 7,
+    "name": "Don't Stop Moving",
+    "description": "Kill the Abyssal Sire without taking damage from any miasma pools.",
+    "tier": 3,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 8,
+    "name": "Perfect Sire",
+    "description": "Kill the Abyssal Sire without taking damage from the external tentacles, miasma pools, explosion or damage from the Abyssal Sire without praying the appropriate protection prayer.",
+    "tier": 4,
+    "monster": "Abyssal Sire"
+  },
+  {
+    "id": 9,
+    "name": "Kree'arra Adept",
+    "description": "Kill Kree'arra 50 times.",
+    "tier": 3,
+    "monster": "Kree'arra"
+  },
+  {
+    "id": 10,
+    "name": "Kree'arra Veteran",
+    "description": "Kill Kree'arra 100 times.",
+    "tier": 4,
+    "monster": "Kree'arra"
+  },
+  {
+    "id": 11,
+    "name": "Collateral Damage",
+    "description": "Kill Kree'arra in a privately rented instance without ever attacking him directly.",
+    "tier": 5,
+    "monster": "Kree'arra"
+  },
+  {
+    "id": 12,
+    "name": "Airborne Showdown",
+    "description": "Finish off Kree'arra whilst all of his bodyguards are dead.",
+    "tier": 3,
+    "monster": "Kree'arra"
+  },
+  {
+    "id": 13,
+    "name": "Swoop No More",
+    "description": "Kill Kree'arra in a privately rented instance without taking any melee damage from the boss or his bodyguards.",
+    "tier": 5,
+    "monster": "Kree'arra"
+  },
+  {
+    "id": 14,
+    "name": "The Worst Ranged Weapon",
+    "description": "Kill Kree'arra by only dealing damage to him with a salamander.",
+    "tier": 6,
+    "monster": "Kree'arra"
+  },
+  {
+    "id": 15,
+    "name": "Feather Hunter",
+    "description": "Kill Kree'arra 30 times in a privately rented instance without leaving the room.",
+    "tier": 6,
+    "monster": "Kree'arra"
+  },
+  {
+    "id": 16,
+    "name": "General Graardor Adept",
+    "description": "Kill General Graardor 50 times.",
+    "tier": 3,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 17,
+    "name": "General Graardor Veteran",
+    "description": "Kill General Graardor 100 times.",
+    "tier": 4,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 18,
+    "name": "Ourg Freezer",
+    "description": "Kill General Graardor whilst he is immobilized.",
+    "tier": 3,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 19,
+    "name": "Ourg Freezer II",
+    "description": "Kill General Graardor without him attacking any players.",
+    "tier": 4,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 20,
+    "name": "General Showdown",
+    "description": "Finish off General Graardor whilst all of his bodyguards are dead.",
+    "tier": 3,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 21,
+    "name": "Defence Matters",
+    "description": "Kill General Graardor 2 times consecutively in a privately rented instance without taking any damage from his bodyguards.",
+    "tier": 6,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 22,
+    "name": "Keep Away",
+    "description": "Kill General Graardor in a privately rented instance without taking any damage from the boss or bodyguards.",
+    "tier": 6,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 23,
+    "name": "Ourg Killer",
+    "description": "Kill General Graardor 15 times in a privately rented instance without leaving the room.",
+    "tier": 6,
+    "monster": "General Graardor"
+  },
+  {
+    "id": 24,
+    "name": "Barrows Novice",
+    "description": "Open the Barrows chest 10 times.",
+    "tier": 1,
+    "monster": "Barrows"
+  },
+  {
+    "id": 25,
+    "name": "Barrows Champion",
+    "description": "Open the Barrows chest 25 times.",
+    "tier": 2,
+    "monster": "Barrows"
+  },
+  {
+    "id": 26,
+    "name": "Can't Touch Me",
+    "description": "Kill Dharok, Verac, Torag and Guthan without letting them attack you with melee.",
+    "tier": 2,
+    "monster": "Barrows"
+  },
+  {
+    "id": 27,
+    "name": "Pray for Success",
+    "description": "Kill all six Barrows Brothers and loot the Barrows chest without taking any damage from any of the brothers.",
+    "tier": 2,
+    "monster": "Barrows"
+  },
+  {
+    "id": 28,
+    "name": "Defence? What Defence?",
+    "description": "Kill any Barrows Brother using only magical damage.",
+    "tier": 1,
+    "monster": "Barrows"
+  },
+  {
+    "id": 29,
+    "name": "Just Like That",
+    "description": "Kill Karil using only damage dealt by special attacks.",
+    "tier": 3,
+    "monster": "Barrows"
+  },
+  {
+    "id": 30,
+    "name": "Faithless Crypt Run",
+    "description": "Kill all six Barrows Brothers and loot the Barrows chest without ever having more than 0 prayer points.",
+    "tier": 3,
+    "monster": "Barrows"
+  },
+  {
+    "id": 31,
+    "name": "Reflecting on This Encounter",
+    "description": "Kill a Basilisk Knight.",
+    "tier": 4,
+    "monster": "Basilisk Knights"
+  },
+  {
+    "id": 32,
+    "name": "Big, Black and Fiery",
+    "description": "Kill a Black Dragon.",
+    "tier": 1,
+    "monster": "Black Dragons"
+  },
+  {
+    "id": 33,
+    "name": "The Demonic Punching Bag",
+    "description": "Kill a Bloodveld.",
+    "tier": 1,
+    "monster": "Bloodvelds"
+  },
+  {
+    "id": 34,
+    "name": "Brutal, Big, Black and Firey",
+    "description": "Kill a Brutal Black Dragon.",
+    "tier": 2,
+    "monster": "Brutal Black Dragons"
+  },
+  {
+    "id": 35,
+    "name": "Bryophyta Novice",
+    "description": "Open Bryophyta's chest once.",
+    "tier": 1,
+    "monster": "Bryophyta"
+  },
+  {
+    "id": 36,
+    "name": "Bryophyta Champion",
+    "description": "Open Bryophyta's chest 5 times.",
+    "tier": 2,
+    "monster": "Bryophyta"
+  },
+  {
+    "id": 37,
+    "name": "Protection from Moss",
+    "description": "Kill Bryophyta with the Protect from Magic prayer active.",
+    "tier": 1,
+    "monster": "Bryophyta"
+  },
+  {
+    "id": 38,
+    "name": "Quick Cutter",
+    "description": "Kill all 3 of Bryophyta's growthlings within 3 seconds of the first one dying.",
+    "tier": 2,
+    "monster": "Bryophyta"
+  },
+  {
+    "id": 39,
+    "name": "Preparation Is Key",
+    "description": "Kill Bryophyta without suffering any poison damage.",
+    "tier": 1,
+    "monster": "Bryophyta"
+  },
+  {
+    "id": 40,
+    "name": "A Slow Death",
+    "description": "Kill Bryophyta with either poison or venom being the final source of damage.",
+    "tier": 1,
+    "monster": "Bryophyta"
+  },
+  {
+    "id": 41,
+    "name": "Fighting as Intended II",
+    "description": "Kill Bryophyta on a free to play world.",
+    "tier": 1,
+    "monster": "Bryophyta"
+  },
+  {
+    "id": 42,
+    "name": "Callisto Adept",
+    "description": "Kill Callisto 10 times.",
+    "tier": 3,
+    "monster": "Callisto"
+  },
+  {
+    "id": 43,
+    "name": "Callisto Veteran",
+    "description": "Kill Callisto 20 times.",
+    "tier": 4,
+    "monster": "Callisto"
+  },
+  {
+    "id": 44,
+    "name": "Skotizo Champion",
+    "description": "Kill Skotizo once.",
+    "tier": 2,
+    "monster": "Skotizo"
+  },
+  {
+    "id": 45,
+    "name": "Skotizo Adept",
+    "description": "Kill Skotizo 5 times.",
+    "tier": 3,
+    "monster": "Skotizo"
+  },
+  {
+    "id": 46,
+    "name": "Demonic Weakening",
+    "description": "Kill Skotizo with no altars active.",
+    "tier": 2,
+    "monster": "Skotizo"
+  },
+  {
+    "id": 47,
+    "name": "Demon Evasion",
+    "description": "Kill Skotizo without taking any damage.",
+    "tier": 4,
+    "monster": "Skotizo"
+  },
+  {
+    "id": 48,
+    "name": "Demonbane Weaponry",
+    "description": "Kill Skotizo with a demonbane weapon equipped.",
+    "tier": 2,
+    "monster": "Skotizo"
+  },
+  {
+    "id": 49,
+    "name": "Up for the Challenge",
+    "description": "Kill Skotizo without equipping a demonbane weapon.",
+    "tier": 4,
+    "monster": "Skotizo"
+  },
+  {
+    "id": 50,
+    "name": "Precise Positioning",
+    "description": "Kill Skotizo with the final source of damage being a Chinchompa explosion.",
+    "tier": 5,
+    "monster": "Skotizo"
+  },
+  {
+    "id": 51,
+    "name": "Cerberus Veteran",
+    "description": "Kill Cerberus 75 times.",
+    "tier": 4,
+    "monster": "Cerberus"
+  },
+  {
+    "id": 52,
+    "name": "Cerberus Master",
+    "description": "Kill Cerberus 150 times.",
+    "tier": 5,
+    "monster": "Cerberus"
+  },
+  {
+    "id": 53,
+    "name": "Arooo No More",
+    "description": "Kill Cerberus without any of the Summoned Souls being spawned.",
+    "tier": 5,
+    "monster": "Cerberus"
+  },
+  {
+    "id": 54,
+    "name": "Ghost Buster",
+    "description": "Kill Cerberus after successfully negating 6 or more attacks from Summoned Souls.",
+    "tier": 4,
+    "monster": "Cerberus"
+  },
+  {
+    "id": 55,
+    "name": "Unrequired Antifire",
+    "description": "Kill Cerberus without taking damage from any lava pools.",
+    "tier": 4,
+    "monster": "Cerberus"
+  },
+  {
+    "id": 56,
+    "name": "Anti-Bite Mechanics",
+    "description": "Kill Cerberus without taking any melee damage.",
+    "tier": 4,
+    "monster": "Cerberus"
+  },
+  {
+    "id": 57,
+    "name": "Chaos Elemental Adept",
+    "description": "Kill the Chaos Elemental 10 times.",
+    "tier": 3,
+    "monster": "Chaos Elemental"
+  },
+  {
+    "id": 58,
+    "name": "Chaos Elemental Veteran",
+    "description": "Kill the Chaos Elemental 25 times.",
+    "tier": 4,
+    "monster": "Chaos Elemental"
+  },
+  {
+    "id": 59,
+    "name": "Hoarder",
+    "description": "Kill the Chaos Elemental without it unequipping any of your items.",
+    "tier": 3,
+    "monster": "Chaos Elemental"
+  },
+  {
+    "id": 60,
+    "name": "The Flincher",
+    "description": "Kill the Chaos Elemental without taking any damage from its attacks.",
+    "tier": 3,
+    "monster": "Chaos Elemental"
+  },
+  {
+    "id": 61,
+    "name": "Chaos Fanatic Champion",
+    "description": "Kill the Chaos Fanatic 10 times.",
+    "tier": 2,
+    "monster": "Chaos Fanatic"
+  },
+  {
+    "id": 62,
+    "name": "Chaos Fanatic Adept",
+    "description": "Kill the Chaos Fanatic 25 times.",
+    "tier": 3,
+    "monster": "Chaos Fanatic"
+  },
+  {
+    "id": 63,
+    "name": "Sorry, What Was That?",
+    "description": "Kill the Chaos Fanatic without anyone being hit by his explosion attack.",
+    "tier": 2,
+    "monster": "Chaos Fanatic"
+  },
+  {
+    "id": 64,
+    "name": "Praying to the Gods",
+    "description": "Kill the Chaos Fanatic 10 times without drinking any potion which restores prayer or leaving the Wilderness.",
+    "tier": 3,
+    "monster": "Chaos Fanatic"
+  },
+  {
+    "id": 65,
+    "name": "Corporeal Beast Veteran",
+    "description": "Kill the Corporeal Beast 25 times.",
+    "tier": 4,
+    "monster": "Corporeal Beast"
+  },
+  {
+    "id": 66,
+    "name": "Corporeal Beast Master",
+    "description": "Kill the Corporeal Beast 50 times.",
+    "tier": 5,
+    "monster": "Corporeal Beast"
+  },
+  {
+    "id": 67,
+    "name": "Hot on Your Feet",
+    "description": "Kill the Corporeal Beast without anyone killing the dark core or taking damage from the dark core.",
+    "tier": 4,
+    "monster": "Corporeal Beast"
+  },
+  {
+    "id": 68,
+    "name": "Finding the Weak Spot",
+    "description": "Finish off the Corporeal Beast with a Halberd special attack.",
+    "tier": 4,
+    "monster": "Corporeal Beast"
+  },
+  {
+    "id": 69,
+    "name": "Chicken Killer",
+    "description": "Kill the Corporeal Beast solo.",
+    "tier": 4,
+    "monster": "Corporeal Beast"
+  },
+  {
+    "id": 70,
+    "name": "Crazy Archaeologist Champion",
+    "description": "Kill the Crazy Archaeologist 10 times.",
+    "tier": 2,
+    "monster": "Crazy Archaeologist"
+  },
+  {
+    "id": 71,
+    "name": "Crazy Archaeologist Adept",
+    "description": "Kill the Crazy Archaeologist 25 times.",
+    "tier": 3,
+    "monster": "Crazy Archaeologist"
+  },
+  {
+    "id": 72,
+    "name": "Mage of the Ruins",
+    "description": "Kill the Crazy Archaeologist with only magical attacks.",
+    "tier": 2,
+    "monster": "Crazy Archaeologist"
+  },
+  {
+    "id": 73,
+    "name": "I'd Rather Not Learn",
+    "description": "Kill the Crazy Archaeologist without anyone being hit by his \"Rain of Knowledge\" attack.",
+    "tier": 2,
+    "monster": "Crazy Archaeologist"
+  },
+  {
+    "id": 74,
+    "name": "If Gorillas Could Fly",
+    "description": "Kill a Demonic Gorilla.",
+    "tier": 4,
+    "monster": "Demonic Gorillas"
+  },
+  {
+    "id": 75,
+    "name": "Hitting Them Where It Hurts",
+    "description": "Finish off a Demonic Gorilla with a demonbane weapon.",
+    "tier": 4,
+    "monster": "Demonic Gorillas"
+  },
+  {
+    "id": 76,
+    "name": "Deranged Archaeologist Novice",
+    "description": "Kill the Deranged Archaeologist 10 times.",
+    "tier": 1,
+    "monster": "Deranged Archaeologist"
+  },
+  {
+    "id": 77,
+    "name": "Deranged Archaeologist Champion",
+    "description": "Kill the Deranged Archaeologist 25 times.",
+    "tier": 2,
+    "monster": "Deranged Archaeologist"
+  },
+  {
+    "id": 78,
+    "name": "Mage of the Swamp",
+    "description": "Kill the Deranged Archaeologist with only magical attacks.",
+    "tier": 2,
+    "monster": "Deranged Archaeologist"
+  },
+  {
+    "id": 79,
+    "name": "I'd Rather Be Illiterate",
+    "description": "Kill the Deranged Archaeologist without anyone being hit by his \"Learn to Read\" attack.",
+    "tier": 2,
+    "monster": "Deranged Archaeologist"
+  },
+  {
+    "id": 80,
+    "name": "The Walking Volcano",
+    "description": "Kill a Fire Giant.",
+    "tier": 1,
+    "monster": "Fire Giants"
+  },
+  {
+    "id": 81,
+    "name": "Galvek Speed-Trialist",
+    "description": "Kill Galvek in less than 3 minutes.",
+    "tier": 4,
+    "monster": "Galvek"
+  },
+  {
+    "id": 82,
+    "name": "Grotesque Guardians Adept",
+    "description": "Kill the Grotesque Guardians 25 times.",
+    "tier": 3,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 83,
+    "name": "Grotesque Guardians Veteran",
+    "description": "Kill the Grotesque Guardians 50 times.",
+    "tier": 4,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 84,
+    "name": "Don't Look at the Eclipse",
+    "description": "Kill the Grotesque Guardians without taking damage from Dusk's blinding attack.",
+    "tier": 3,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 85,
+    "name": "Prison Break",
+    "description": "Kill the Grotesque Guardians without taking damage from Dusk's prison attack.",
+    "tier": 3,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 86,
+    "name": "Granite Footwork",
+    "description": "Kill the Grotesque Guardians without taking damage from Dawn's rockfall attack.",
+    "tier": 3,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 87,
+    "name": "Heal No More",
+    "description": "Kill the Grotesque Guardians without letting Dawn receive any healing from her orbs.",
+    "tier": 3,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 88,
+    "name": "Static Awareness",
+    "description": "Kill the Grotesque Guardians without being hit by any lightning attacks.",
+    "tier": 3,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 89,
+    "name": "Done before Dusk",
+    "description": "Kill the Grotesque Guardians before Dusk uses his prison attack for a second time.",
+    "tier": 4,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 90,
+    "name": "Perfect Grotesque Guardians",
+    "description": "Kill the Grotesque Guardians whilst completing the \"Don't look at the eclipse\", \"Prison Break\", \"Granite footwork\", \"Heal no more\", \"Static Awareness\" and \"Done before dusk\" tasks.",
+    "tier": 4,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 91,
+    "name": "Perfect Grotesque Guardians II",
+    "description": "Kill the Grotesque Guardians 5 times in a row without leaving the instance, whilst completing the Perfect Grotesque Guardians task every time.",
+    "tier": 5,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 92,
+    "name": "Grotesque Guardians Speed-Trialist",
+    "description": "Kill the Grotesque Guardians in less than 2 minutes.",
+    "tier": 4,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 93,
+    "name": "Grotesque Guardians Speed-Chaser",
+    "description": "Kill the Grotesque Guardians in less than 1:40 minutes.",
+    "tier": 5,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 94,
+    "name": "Grotesque Guardians Speed-Runner",
+    "description": "Kill the Grotesque Guardians in less than 1:20 minutes.",
+    "tier": 6,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 95,
+    "name": "From Dusk...",
+    "description": "Kill the Grotesque Guardians 10 times without leaving the instance.",
+    "tier": 4,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 96,
+    "name": "... 'til Dawn",
+    "description": "Kill the Grotesque Guardians 20 times without leaving the instance.",
+    "tier": 5,
+    "monster": "Grotesque Guardians"
+  },
+  {
+    "id": 97,
+    "name": "A Smashing Time",
+    "description": "Kill a Gargoyle.",
+    "tier": 2,
+    "monster": "Gargoyles"
+  },
+  {
+    "id": 98,
+    "name": "Corrupted Gauntlet Veteran",
+    "description": "Complete the Corrupted Gauntlet 5 times.",
+    "tier": 4,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 99,
+    "name": "Corrupted Gauntlet Master",
+    "description": "Complete the Corrupted Gauntlet 10 times.",
+    "tier": 5,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 100,
+    "name": "Corrupted Gauntlet Grandmaster",
+    "description": "Complete the Corrupted Gauntlet 50 times.",
+    "tier": 6,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 101,
+    "name": "3, 2, 1 - Mage",
+    "description": "Kill the Corrupted Hunllef without taking damage off prayer.",
+    "tier": 4,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 102,
+    "name": "Perfect Corrupted Hunllef",
+    "description": "Kill the Corrupted Hunllef without taking damage from: Tornadoes, Damaging Floor or Stomp Attacks. Also, do not take damage off prayer and do not attack the Corrupted Hunllef with the wrong weapon.",
+    "tier": 5,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 103,
+    "name": "Defence Doesn't Matter II",
+    "description": "Kill the Corrupted Hunllef without making any armour within the Corrupted Gauntlet.",
+    "tier": 5,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 104,
+    "name": "Egniol Diet II",
+    "description": "Kill the Corrupted Hunllef without making an egniol potion within the Corrupted Gauntlet.",
+    "tier": 6,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 105,
+    "name": "Corrupted Warrior",
+    "description": "Kill the Corrupted Hunllef with a full set of perfected corrupted armour equipped.",
+    "tier": 5,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 106,
+    "name": "Wolf Puncher II",
+    "description": "Kill the Corrupted Hunllef without making more than one attuned weapon.",
+    "tier": 6,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 107,
+    "name": "Corrupted Gauntlet Speed-Chaser",
+    "description": "Complete a Corrupted Gauntlet in less than 7 minutes and 5 seconds.",
+    "tier": 5,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 108,
+    "name": "Corrupted Gauntlet Speed-Runner",
+    "description": "Complete a Corrupted Gauntlet in less than 6 minutes and 5 seconds.",
+    "tier": 6,
+    "monster": "Corrupted Hunllef"
+  },
+  {
+    "id": 109,
+    "name": "Gauntlet Veteran",
+    "description": "Complete the Gauntlet 5 times.",
+    "tier": 4,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 110,
+    "name": "Gauntlet Master",
+    "description": "Complete the Gauntlet 20 times.",
+    "tier": 5,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 111,
+    "name": "3, 2, 1 - Range",
+    "description": "Kill the Crystalline Hunllef without taking damage off prayer.",
+    "tier": 4,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 112,
+    "name": "Perfect Crystalline Hunllef",
+    "description": "Kill the Crystalline Hunllef without taking damage from: Tornadoes, Damaging Floor or Stomp Attacks. Also, do not take damage off prayer and do not attack the Crystalline Hunllef with the wrong weapon.",
+    "tier": 5,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 113,
+    "name": "Defence Doesn't Matter",
+    "description": "Kill the Crystalline Hunllef without making any armour within the Gauntlet.",
+    "tier": 5,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 114,
+    "name": "Egniol Diet",
+    "description": "Kill the Crystalline Hunllef without making an egniol potion within the Gauntlet.",
+    "tier": 4,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 115,
+    "name": "Crystalline Warrior",
+    "description": "Kill the Crystalline Hunllef with a full set of perfected armour equipped.",
+    "tier": 4,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 116,
+    "name": "Wolf Puncher",
+    "description": "Kill the Crystalline Hunllef without making more than one attuned weapon.",
+    "tier": 4,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 117,
+    "name": "Gauntlet Speed-Chaser",
+    "description": "Complete the Gauntlet in less than 4 minutes and 45 seconds.",
+    "tier": 5,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 118,
+    "name": "Gauntlet Speed-Runner",
+    "description": "Complete the Gauntlet in less than 3 minutes and 45 seconds.",
+    "tier": 6,
+    "monster": "Crystalline Hunllef"
+  },
+  {
+    "id": 119,
+    "name": "Glough Speed-Trialist",
+    "description": "Kill Glough in less than 2 minutes and 30 seconds.",
+    "tier": 4,
+    "monster": "Glough"
+  },
+  {
+    "id": 120,
+    "name": "A Greater Foe",
+    "description": "Kill a Greater Demon.",
+    "tier": 1,
+    "monster": "Greater Demons"
+  },
+  {
+    "id": 121,
+    "name": "Not So Great After All",
+    "description": "Finish off a Greater Demon with a demonbane weapon.",
+    "tier": 1,
+    "monster": "Greater Demons"
+  },
+  {
+    "id": 122,
+    "name": "A Demon's Best Friend",
+    "description": "Kill a Hellhound.",
+    "tier": 1,
+    "monster": "Hellhounds"
+  },
+  {
+    "id": 123,
+    "name": "Hespori Adept",
+    "description": "Kill Hespori 5 times.",
+    "tier": 3,
+    "monster": "Hespori"
+  },
+  {
+    "id": 124,
+    "name": "Hesporisn't",
+    "description": "Finish off Hespori with a special attack.",
+    "tier": 3,
+    "monster": "Hespori"
+  },
+  {
+    "id": 125,
+    "name": "Weed Whacker",
+    "description": "Kill all of Hesporis flowers within 5 seconds.",
+    "tier": 3,
+    "monster": "Hespori"
+  },
+  {
+    "id": 126,
+    "name": "Plant-Based Diet",
+    "description": "Kill Hespori without losing any prayer points.",
+    "tier": 4,
+    "monster": "Hespori"
+  },
+  {
+    "id": 127,
+    "name": "Hespori Speed-Trialist",
+    "description": "Kill the Hespori in less than 48 seconds.",
+    "tier": 4,
+    "monster": "Hespori"
+  },
+  {
+    "id": 128,
+    "name": "Hespori Speed-Chaser",
+    "description": "Kill the Hespori in less than 36 seconds.",
+    "tier": 5,
+    "monster": "Hespori"
+  },
+  {
+    "id": 129,
+    "name": "Obor Novice",
+    "description": "Open Obor's chest once.",
+    "tier": 1,
+    "monster": "Obor"
+  },
+  {
+    "id": 130,
+    "name": "Obor Champion",
+    "description": "Open Obor's chest 5 times.",
+    "tier": 2,
+    "monster": "Obor"
+  },
+  {
+    "id": 131,
+    "name": "Sleeping Giant",
+    "description": "Kill Obor whilst he is immobilized.",
+    "tier": 1,
+    "monster": "Obor"
+  },
+  {
+    "id": 132,
+    "name": "Back to the Wall",
+    "description": "Kill Obor without being pushed back more than one square by his knockback attack.",
+    "tier": 2,
+    "monster": "Obor"
+  },
+  {
+    "id": 133,
+    "name": "Squashing the Giant",
+    "description": "Kill Obor without taking any damage off prayer.",
+    "tier": 2,
+    "monster": "Obor"
+  },
+  {
+    "id": 134,
+    "name": "Fighting as Intended",
+    "description": "Kill Obor on a free to play world.",
+    "tier": 1,
+    "monster": "Obor"
+  },
+  {
+    "id": 135,
+    "name": "Alchemical Veteran",
+    "description": "Kill the Alchemical Hydra 75 times.",
+    "tier": 4,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 136,
+    "name": "Alchemical Master",
+    "description": "Kill the Alchemical Hydra 150 times.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 137,
+    "name": "Unrequired Antipoisons",
+    "description": "Kill the Alchemical Hydra without being hit by the acid pool attack.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 138,
+    "name": "Lightning Lure",
+    "description": "Kill the Alchemical Hydra without being hit by the lightning attack.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 139,
+    "name": "Don't Flame Me",
+    "description": "Kill the Alchemical Hydra without being hit by the flame wall attack.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 140,
+    "name": "Mixing Correctly",
+    "description": "Kill the Alchemical Hydra without empowering it.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 141,
+    "name": "The Flame Skipper",
+    "description": "Kill the Alchemical Hydra without letting it spawn a flame wall attack.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 142,
+    "name": "Alcleanical Hydra",
+    "description": "Kill the Alchemical Hydra without taking any damage.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 143,
+    "name": "No Pressure",
+    "description": "Kill the Alchemical Hydra using only Dharok's Greataxe as a weapon whilst having no more than 10 Hitpoints throughout the entire fight.",
+    "tier": 6,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 144,
+    "name": "Alchemical Speed-Chaser",
+    "description": "Kill the Alchemical Hydra in less than 1 minute 45 seconds.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 145,
+    "name": "Alchemical Speed-Runner",
+    "description": "Kill the Alchemical Hydra in less than 1 minute 20 seconds.",
+    "tier": 6,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 146,
+    "name": "Working Overtime",
+    "description": "Kill the Alchemical Hydra 15 times without leaving the room.",
+    "tier": 5,
+    "monster": "Alchemical Hydra"
+  },
+  {
+    "id": 147,
+    "name": "Fight Caves Veteran",
+    "description": "Complete the Fight Caves once.",
+    "tier": 4,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 148,
+    "name": "Fight Caves Master",
+    "description": "Complete the Fight Caves 5 times.",
+    "tier": 5,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 149,
+    "name": "A Near Miss!",
+    "description": "Complete the Fight Caves after surviving a hit from TzTok-Jad without praying.",
+    "tier": 4,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 150,
+    "name": "Denying the Healers",
+    "description": "Complete the Fight caves without letting any of the Yt-MejKot heal.",
+    "tier": 5,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 151,
+    "name": "Denying the Healers II",
+    "description": "Complete the Fight Caves without TzTok-Jad being healed by a Yt-HurKot.",
+    "tier": 6,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 152,
+    "name": "You Didn't Say Anything About a Bat",
+    "description": "Complete the Fight Caves without being attacked by a Tz-Kih.",
+    "tier": 5,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 153,
+    "name": "Facing Jad Head-on",
+    "description": "Complete the Fight Caves with only melee.",
+    "tier": 4,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 154,
+    "name": "No Time for a Drink",
+    "description": "Complete the Fight Caves without losing any prayer points.",
+    "tier": 6,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 155,
+    "name": "Fight Caves Speed-Chaser",
+    "description": "Complete the Fight Caves in less than 30 minutes.",
+    "tier": 5,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 156,
+    "name": "Fight Caves Speed-Runner",
+    "description": "Complete the Fight Caves in less than 26 minutes and 30 seconds.",
+    "tier": 6,
+    "monster": "TzTok-Jad"
+  },
+  {
+    "id": 157,
+    "name": "Kalphite Queen Adept",
+    "description": "Kill the Kalphite Queen 25 times.",
+    "tier": 3,
+    "monster": "Kalphite Queen"
+  },
+  {
+    "id": 158,
+    "name": "Kalphite Queen Veteran",
+    "description": "Kill the Kalphite Queen 50 times.",
+    "tier": 4,
+    "monster": "Kalphite Queen"
+  },
+  {
+    "id": 159,
+    "name": "Chitin Penetrator",
+    "description": "Kill the Kalphite Queen while her defence was last lowered by you.",
+    "tier": 3,
+    "monster": "Kalphite Queen"
+  },
+  {
+    "id": 160,
+    "name": "Insect Deflection",
+    "description": "Kill the Kalphite Queen by using the Vengeance spell as the finishing blow.",
+    "tier": 4,
+    "monster": "Kalphite Queen"
+  },
+  {
+    "id": 161,
+    "name": "Prayer Smasher",
+    "description": "Kill the Kalphite Queen using only the Verac's Flail as a weapon.",
+    "tier": 4,
+    "monster": "Kalphite Queen"
+  },
+  {
+    "id": 162,
+    "name": "King Black Dragon Novice",
+    "description": "Kill the King Black Dragon 10 times.",
+    "tier": 1,
+    "monster": "King Black Dragon"
+  },
+  {
+    "id": 163,
+    "name": "King Black Dragon Champion",
+    "description": "Kill the King Black Dragon 25 times.",
+    "tier": 2,
+    "monster": "King Black Dragon"
+  },
+  {
+    "id": 164,
+    "name": "Claw Clipper",
+    "description": "Kill the King Black Dragon with the Protect from Melee prayer activated.",
+    "tier": 2,
+    "monster": "King Black Dragon"
+  },
+  {
+    "id": 165,
+    "name": "Hide Penetration",
+    "description": "Kill the King Black Dragon with a stab weapon.",
+    "tier": 2,
+    "monster": "King Black Dragon"
+  },
+  {
+    "id": 166,
+    "name": "Antifire Protection",
+    "description": "Kill the King Black Dragon with an antifire potion active and an antidragon shield equipped.",
+    "tier": 2,
+    "monster": "King Black Dragon"
+  },
+  {
+    "id": 167,
+    "name": "Who Is the King Now?",
+    "description": "Kill The King Black Dragon 10 times in a privately rented instance without leaving the instance.",
+    "tier": 3,
+    "monster": "King Black Dragon"
+  },
+  {
+    "id": 168,
+    "name": "Kraken Adept",
+    "description": "Kill the Kraken 20 times.",
+    "tier": 3,
+    "monster": "Kraken"
+  },
+  {
+    "id": 169,
+    "name": "Unnecessary Optimisation",
+    "description": "Kill the Kraken after killing all four tentacles.",
+    "tier": 3,
+    "monster": "Kraken"
+  },
+  {
+    "id": 170,
+    "name": "Krakan't Hurt Me",
+    "description": "Kill the Kraken 25 times in a privately rented instance without leaving the room.",
+    "tier": 3,
+    "monster": "Kraken"
+  },
+  {
+    "id": 171,
+    "name": "Ten-tacles",
+    "description": "Kill the Kraken 50 times in a privately rented instance without leaving the room.",
+    "tier": 4,
+    "monster": "Kraken"
+  },
+  {
+    "id": 172,
+    "name": "One Hundred Tentacles",
+    "description": "Kill the Kraken 100 times in a privately rented instance without leaving the room.",
+    "tier": 5,
+    "monster": "Kraken"
+  },
+  {
+    "id": 173,
+    "name": "Master of Broad Weaponry",
+    "description": "Kill a Kurask.",
+    "tier": 2,
+    "monster": "Kurasks"
+  },
+  {
+    "id": 174,
+    "name": "A Scaley Encounter",
+    "description": "Kill a Lizardman Shaman.",
+    "tier": 1,
+    "monster": "Lizardman Shamans"
+  },
+  {
+    "id": 175,
+    "name": "Shayzien Protector",
+    "description": "Kill a Lizardman Shaman in Molch which has not dealt damage to anyone (excluding its Spawns).",
+    "tier": 1,
+    "monster": "Lizardman Shamans"
+  },
+  {
+    "id": 176,
+    "name": "Mimic Veteran",
+    "description": "Kill the Mimic once.",
+    "tier": 4,
+    "monster": "Mimic, The"
+  },
+  {
+    "id": 177,
+    "name": "Giant Mole Novice",
+    "description": "Kill the Giant Mole 10 times.",
+    "tier": 1,
+    "monster": "Giant Mole"
+  },
+  {
+    "id": 178,
+    "name": "Giant Mole Champion",
+    "description": "Kill the Giant mole 25 times.",
+    "tier": 2,
+    "monster": "Giant Mole"
+  },
+  {
+    "id": 179,
+    "name": "Why Are You Running?",
+    "description": "Kill the Giant Mole without her burrowing more than 2 times.",
+    "tier": 3,
+    "monster": "Giant Mole"
+  },
+  {
+    "id": 180,
+    "name": "Hard Hitter",
+    "description": "Kill the Giant Mole with 4 or fewer instances of damage.",
+    "tier": 4,
+    "monster": "Giant Mole"
+  },
+  {
+    "id": 181,
+    "name": "Whack-a-Mole",
+    "description": "Kill the Giant Mole within 10 seconds of her resurfacing.",
+    "tier": 3,
+    "monster": "Giant Mole"
+  },
+  {
+    "id": 182,
+    "name": "Avoiding Those Little Arms",
+    "description": "Kill the Giant Mole without her damaging anyone.",
+    "tier": 2,
+    "monster": "Giant Mole"
+  },
+  {
+    "id": 183,
+    "name": "Nightmare Adept",
+    "description": "Kill The Nightmare once.",
+    "tier": 3,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 184,
+    "name": "Nightmare Veteran",
+    "description": "Kill The Nightmare 25 times.",
+    "tier": 4,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 185,
+    "name": "Nightmare Master",
+    "description": "Kill The Nightmare 50 times.",
+    "tier": 5,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 186,
+    "name": "Terrible Parent",
+    "description": "Kill the Nightmare solo without the Parasites healing the boss for more than 100 health.",
+    "tier": 6,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 187,
+    "name": "Explosion!",
+    "description": "Kill two Husks at the same time.",
+    "tier": 4,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 188,
+    "name": "Perfect Nightmare",
+    "description": "Kill the Nightmare without any player taking damage from the following attacks: Nightmare rifts, an un-cured parasite explosion, Corpse flowers or the Nightmare's Surge. Also, no player can take damage off prayer or have their attacks slowed by the Nightmare spores.",
+    "tier": 5,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 189,
+    "name": "Sleep Tight",
+    "description": "Kill the Nightmare solo.",
+    "tier": 4,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 190,
+    "name": "A Long Trip",
+    "description": "Kill the Nightmare without any player losing any prayer points.",
+    "tier": 6,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 191,
+    "name": "Nightmare (Solo) Speed-Trialist",
+    "description": "Defeat the Nightmare (Solo) in less than 23 minutes.",
+    "tier": 4,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 192,
+    "name": "Nightmare (Solo) Speed-Chaser",
+    "description": "Defeat the Nightmare (Solo) in less than 19 minutes.",
+    "tier": 5,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 193,
+    "name": "Nightmare (Solo) Speed-Runner",
+    "description": "Defeat the Nightmare (Solo) in less than 16 minutes.",
+    "tier": 6,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 194,
+    "name": "Nightmare (5-Scale) Speed-Trialist",
+    "description": "Defeat the Nightmare (5-scale) in less than 5 minutes.",
+    "tier": 4,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 195,
+    "name": "Nightmare (5-Scale) Speed-Chaser",
+    "description": "Defeat the Nightmare (5-scale) in less than 4 minutes.",
+    "tier": 5,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 196,
+    "name": "Nightmare (5-Scale) Speed-Runner",
+    "description": "Defeat the Nightmare (5-scale) in less than 3:30 minutes.",
+    "tier": 6,
+    "monster": "Nightmare, The"
+  },
+  {
+    "id": 197,
+    "name": "Dagannoth Prime Champion",
+    "description": "Kill Dagannoth Prime 10 times.",
+    "tier": 2,
+    "monster": "DK: Prime"
+  },
+  {
+    "id": 198,
+    "name": "Dagannoth Prime Adept",
+    "description": "Kill Dagannoth Prime 25 times.",
+    "tier": 3,
+    "monster": "DK: Prime"
+  },
+  {
+    "id": 199,
+    "name": "Death to the Seer King",
+    "description": "Kill Dagannoth Prime whilst under attack by Dagannoth Supreme and Dagannoth Rex.",
+    "tier": 4,
+    "monster": "DK: Prime"
+  },
+  {
+    "id": 200,
+    "name": "From One King to Another",
+    "description": "Kill Prime using a Rune Thrownaxe special attack, bounced off Dagannoth Rex.",
+    "tier": 4,
+    "monster": "DK: Prime"
+  },
+  {
+    "id": 201,
+    "name": "Dagannoth Rex Champion",
+    "description": "Kill Dagannoth Rex 10 times.",
+    "tier": 2,
+    "monster": "DK: Rex"
+  },
+  {
+    "id": 202,
+    "name": "Dagannoth Rex Adept",
+    "description": "Kill Dagannoth Rex 25 times.",
+    "tier": 3,
+    "monster": "DK: Rex"
+  },
+  {
+    "id": 203,
+    "name": "Death to the Warrior King",
+    "description": "Kill Dagannoth Rex whilst under attack by Dagannoth Supreme and Dagannoth Prime.",
+    "tier": 4,
+    "monster": "DK: Rex"
+  },
+  {
+    "id": 204,
+    "name": "A Frozen King",
+    "description": "Kill Dagannoth Rex whilst he is immobilised.",
+    "tier": 2,
+    "monster": "DK: Rex"
+  },
+  {
+    "id": 205,
+    "name": "Toppling the Diarchy",
+    "description": "Kill Dagannoth Rex and one other Dagannoth king at the exact same time.",
+    "tier": 4,
+    "monster": "DK: Rex"
+  },
+  {
+    "id": 206,
+    "name": "Sarachnis Novice",
+    "description": "Kill Sarachnis 10 times.",
+    "tier": 1,
+    "monster": "Sarachnis"
+  },
+  {
+    "id": 207,
+    "name": "Sarachnis Champion",
+    "description": "Kill Sarachnis 25 times.",
+    "tier": 2,
+    "monster": "Sarachnis"
+  },
+  {
+    "id": 208,
+    "name": "Ready to Pounce",
+    "description": "Kill Sarachnis without her using her range attack twice in a row.",
+    "tier": 3,
+    "monster": "Sarachnis"
+  },
+  {
+    "id": 209,
+    "name": "Inspect Repellent",
+    "description": "Kill Sarachnis without her dealing damage to anyone.",
+    "tier": 3,
+    "monster": "Sarachnis"
+  },
+  {
+    "id": 210,
+    "name": "Newspaper Enthusiast",
+    "description": "Kill Sarachnis with a crush weapon.",
+    "tier": 2,
+    "monster": "Sarachnis"
+  },
+  {
+    "id": 211,
+    "name": "Commander Zilyana Adept",
+    "description": "Kill Commander Zilyana 50 times.",
+    "tier": 3,
+    "monster": "Commander Zilyana"
+  },
+  {
+    "id": 212,
+    "name": "Commander Zilyana Veteran",
+    "description": "Kill Commander Zilyana 100 times.",
+    "tier": 4,
+    "monster": "Commander Zilyana"
+  },
+  {
+    "id": 213,
+    "name": "Commander Showdown",
+    "description": "Finish off Commander Zilyana while all of her bodyguards are dead.",
+    "tier": 3,
+    "monster": "Commander Zilyana"
+  },
+  {
+    "id": 214,
+    "name": "Animal Whisperer",
+    "description": "Kill Commander Zilyana in a privately rented instance without taking any damage from the boss or bodyguards.",
+    "tier": 6,
+    "monster": "Commander Zilyana"
+  },
+  {
+    "id": 215,
+    "name": "Moving Collateral",
+    "description": "Kill Commander Zilyana in a privately rented instance without attacking her directly.",
+    "tier": 5,
+    "monster": "Commander Zilyana"
+  },
+  {
+    "id": 216,
+    "name": "Reminisce",
+    "description": "Kill Commander Zilyana in a privately rented instance with melee only.",
+    "tier": 4,
+    "monster": "Commander Zilyana"
+  },
+  {
+    "id": 217,
+    "name": "Peach Conjurer",
+    "description": "Kill Commander Zilyana 50 times in a privately rented instance without leaving the room.",
+    "tier": 6,
+    "monster": "Commander Zilyana"
+  },
+  {
+    "id": 218,
+    "name": "Scorpia Adept",
+    "description": "Kill Scorpia 10 times.",
+    "tier": 3,
+    "monster": "Scorpia"
+  },
+  {
+    "id": 219,
+    "name": "Scorpia Veteran",
+    "description": "Kill Scorpia 25 times.",
+    "tier": 4,
+    "monster": "Scorpia"
+  },
+  {
+    "id": 220,
+    "name": "I Can't Reach That",
+    "description": "Kill Scorpia without taking any damage from her.",
+    "tier": 3,
+    "monster": "Scorpia"
+  },
+  {
+    "id": 221,
+    "name": "Guardians No More",
+    "description": "Kill Scorpia without killing her guardians.",
+    "tier": 3,
+    "monster": "Scorpia"
+  },
+  {
+    "id": 222,
+    "name": "Fragment of Seren Speed-Trialist",
+    "description": "Kill The Fragment of Seren in less than 4 minutes.",
+    "tier": 4,
+    "monster": "Fragment of Seren"
+  },
+  {
+    "id": 223,
+    "name": "A Frozen Foe from the Past",
+    "description": "Kill a Skeletal Wyvern",
+    "tier": 2,
+    "monster": "Skeletal Wyverns"
+  },
+  {
+    "id": 224,
+    "name": "Zulrah Adept",
+    "description": "Kill Zulrah 25 times.",
+    "tier": 3,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 225,
+    "name": "Zulrah Veteran",
+    "description": "Kill Zulrah 75 times.",
+    "tier": 4,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 226,
+    "name": "Zulrah Master",
+    "description": "Kill Zulrah 150 times.",
+    "tier": 5,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 227,
+    "name": "Snake Rebound",
+    "description": "Kill Zulrah by using the Vengeance spell as the finishing blow.",
+    "tier": 4,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 228,
+    "name": "Snake. Snake!? Snaaaaaake!",
+    "description": "Kill 3 Snakelings simultaneously.",
+    "tier": 4,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 229,
+    "name": "Perfect Zulrah",
+    "description": "Kill Zulrah whilst taking no damage from the following: Snakelings, Venom Clouds, Zulrah's Green or Crimson phase.",
+    "tier": 5,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 230,
+    "name": "Zulrah Speed-Trialist",
+    "description": "Kill Zulrah in less than 1 minute 20 seconds, without a slayer task.",
+    "tier": 4,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 231,
+    "name": "Zulrah Speed-Chaser",
+    "description": "Kill Zulrah in less than 1 minute, without a slayer task.",
+    "tier": 5,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 232,
+    "name": "Zulrah Speed-Runner",
+    "description": "Kill Zulrah in less than 54 seconds, without a slayer task.",
+    "tier": 6,
+    "monster": "Zulrah"
+  },
+  {
+    "id": 233,
+    "name": "Dagannoth Supreme Champion",
+    "description": "Kill Dagannoth Supreme 10 times.",
+    "tier": 2,
+    "monster": "DK: Supreme"
+  },
+  {
+    "id": 234,
+    "name": "Dagannoth Supreme Adept",
+    "description": "Kill Dagannoth Supreme 25 times.",
+    "tier": 3,
+    "monster": "DK: Supreme"
+  },
+  {
+    "id": 235,
+    "name": "Death to the Archer King",
+    "description": "Kill Dagannoth Supreme whilst under attack by Dagannoth Prime and Dagannoth Rex.",
+    "tier": 4,
+    "monster": "DK: Supreme"
+  },
+  {
+    "id": 236,
+    "name": "Rapid Succession",
+    "description": "Kill all three Dagannoth Kings within 9 seconds of the first one.",
+    "tier": 4,
+    "monster": "DK: Supreme"
+  },
+  {
+    "id": 237,
+    "name": "Theatre of Blood Veteran",
+    "description": "Complete the Theatre of Blood 25 times.",
+    "tier": 4,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 238,
+    "name": "Theatre of Blood Master",
+    "description": "Complete the Theatre of Blood 75 times.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 239,
+    "name": "Theatre of Blood Grandmaster",
+    "description": "Complete the Theatre of Blood 150 times.",
+    "tier": 6,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 240,
+    "name": "Two-Down",
+    "description": "Kill the Pestilent Bloat before he shuts down for the third time.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 241,
+    "name": "Pop It",
+    "description": "Kill Verzik without any Nylocas being frozen and without anyone taking damage from the Nylocas.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 242,
+    "name": "A Timely Snack",
+    "description": "Kill Sotetseg after surviving at least 3 ball attacks without sharing the damage and without anyone dying throughout the fight.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 243,
+    "name": "Perfect Theatre",
+    "description": "Complete the Theatre of Blood without anyone dying through any means and whilst everyone in the team completes the following Combat Achievement tasks in a single run: \"Perfect Maiden\", \"Perfect Bloat\", \"Perfect Nylocas\", \"Perfect Sotetseg\", \"Perfect Xarpus\" and \"Perfect Verzik\".",
+    "tier": 6,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 244,
+    "name": "Perfect Maiden",
+    "description": "Kill The Maiden of Sugadinti without anyone in the team taking damage from the following sources: Blood Spawn projectiles and Blood Spawn trails. Also, without taking damage off prayer and without letting any of the Nylocas Matomenos heal The Maiden.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 245,
+    "name": "Perfect Bloat",
+    "description": "Kill the Pestilent Bloat without anyone in the team taking damage from the following sources: Pestilent flies, Falling body parts or The Pestilent Bloats stomp attack.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 246,
+    "name": "Perfect Nylocas",
+    "description": "Kill the Nylocas Vasilias without anyone in the team attacking any Nylocas with the wrong attack style, without letting a pillar collapse and without getting hit by any of the Nylocas Vasilias attacks whilst off prayer.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 247,
+    "name": "Perfect Sotetseg",
+    "description": "Kill Sotetseg without anyone in the team stepping on the wrong tile in the maze, without getting hit by the tornado and without taking any damage from Sotetseg's attacks whilst off prayer.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 248,
+    "name": "Perfect Xarpus",
+    "description": "Kill Xarpus without anyone in the team taking any damage from Xarpus' attacks and without letting an exhumed heal Xarpus more than twice.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 249,
+    "name": "Perfect Verzik",
+    "description": "Defeat Verzik Vitur without anyone in the team taking damage from Verzik Vitur's attacks other than her spider form's correctly prayed against regular magical and ranged attacks.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 250,
+    "name": "Can't Drain This",
+    "description": "Kill The Maiden of Sugadinti without anyone in the team losing any prayer points.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 251,
+    "name": "Can You Dance?",
+    "description": "Kill Xarpus without anyone in the team using a ranged or magic weapon.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 252,
+    "name": "Morytania Only",
+    "description": "Complete the Theatre of Blood without any member of the team equipping a non-barrows weapon (except Dawnbringer).",
+    "tier": 6,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 253,
+    "name": "Back in My Day...",
+    "description": "Complete the Theatre of Blood without any member of the team equipping a Scythe of Vitur.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 254,
+    "name": "Theatre (Duo) Speed-Runner",
+    "description": "Complete the Theatre of Blood (Duo) in less than 26 minutes.",
+    "tier": 6,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 255,
+    "name": "Theatre (Trio) Speed-Chaser",
+    "description": "Complete the Theatre of Blood (Trio) in less than 20 minutes.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 256,
+    "name": "Theatre (Trio) Speed-Runner",
+    "description": "Complete the Theatre of Blood (Trio) in less than 17 minutes and 30 seconds.",
+    "tier": 6,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 257,
+    "name": "Theatre (4-Scale) Speed-Chaser",
+    "description": "Complete the Theatre of Blood (4-scale) in less than 17 minutes.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 258,
+    "name": "Theatre (4-Scale) Speed-Runner",
+    "description": "Complete the Theatre of Blood (4-scale) in less than 15 minutes.",
+    "tier": 6,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 259,
+    "name": "Theatre (5-Scale) Speed-Chaser",
+    "description": "Complete the Theatre of Blood (5-scale) in less than 16 minutes.",
+    "tier": 5,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 260,
+    "name": "Theatre (5-Scale) Speed-Runner",
+    "description": "Complete the Theatre of Blood (5-scale) in less than 14 minutes and 15 seconds.",
+    "tier": 6,
+    "monster": "Theatre of Blood"
+  },
+  {
+    "id": 261,
+    "name": "Thermonuclear Veteran",
+    "description": "Kill the Thermonuclear Smoke Devil 20 times.",
+    "tier": 4,
+    "monster": "Thermonuclear Smoke Devil"
+  },
+  {
+    "id": 262,
+    "name": "Hazard Prevention",
+    "description": "Kill the Thermonuclear Smoke Devil without it hitting anyone.",
+    "tier": 4,
+    "monster": "Thermonuclear Smoke Devil"
+  },
+  {
+    "id": 263,
+    "name": "Spec'd Out",
+    "description": "Kill the Thermonuclear Smoke Devil using only special attacks.",
+    "tier": 4,
+    "monster": "Thermonuclear Smoke Devil"
+  },
+  {
+    "id": 264,
+    "name": "Venenatis Adept",
+    "description": "Kill Venenatis 10 times.",
+    "tier": 3,
+    "monster": "Venenatis"
+  },
+  {
+    "id": 265,
+    "name": "Venenatis Veteran",
+    "description": "Kill Venenatis 20 times.",
+    "tier": 4,
+    "monster": "Venenatis"
+  },
+  {
+    "id": 266,
+    "name": "Vet'ion Adept",
+    "description": "Kill Vet'ion 10 times.",
+    "tier": 3,
+    "monster": "Vet'ion"
+  },
+  {
+    "id": 267,
+    "name": "Vet'eran",
+    "description": "Kill Vet'ion 20 times.",
+    "tier": 4,
+    "monster": "Vet'ion"
+  },
+  {
+    "id": 268,
+    "name": "Vorkath Veteran",
+    "description": "Kill Vorkath 50 times.",
+    "tier": 4,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 269,
+    "name": "Vorkath Master",
+    "description": "Kill Vorkath 100 times.",
+    "tier": 5,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 270,
+    "name": "The Walk",
+    "description": "Hit Vorkath 12 times during the acid special without getting hit by his rapid fire or the acid pools.",
+    "tier": 5,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 271,
+    "name": "Zombie Destroyer",
+    "description": "Kill Vorkath's zombified spawn without using crumble undead.",
+    "tier": 4,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 272,
+    "name": "Dodging the Dragon",
+    "description": "Kill Vorkath 5 times without taking any damage from his special attacks and without leaving his area.",
+    "tier": 5,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 273,
+    "name": "Stick 'em With the Pointy End",
+    "description": "Kill Vorkath using melee weapons only.",
+    "tier": 4,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 274,
+    "name": "Faithless Encounter",
+    "description": "Kill Vorkath without losing any prayer points.",
+    "tier": 6,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 275,
+    "name": "The Fremennik Way",
+    "description": "Kill Vorkath with only your fists.",
+    "tier": 6,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 276,
+    "name": "Vorkath Speed-Chaser",
+    "description": "Kill Vorkath in less than 1 minute and 15 seconds.",
+    "tier": 5,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 277,
+    "name": "Vorkath Speed-Runner",
+    "description": "Kill Vorkath in less than 54 seconds.",
+    "tier": 6,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 278,
+    "name": "Extended Encounter",
+    "description": "Kill Vorkath 10 times without leaving his area.",
+    "tier": 5,
+    "monster": "Vorkath"
+  },
+  {
+    "id": 279,
+    "name": "Wintertodt Novice",
+    "description": "Subdue the Wintertodt 5 times.",
+    "tier": 1,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 280,
+    "name": "Wintertodt Champion",
+    "description": "Subdue the Wintertodt 10 times.",
+    "tier": 2,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 281,
+    "name": "Mummy!",
+    "description": "Heal a pyromancer after they have fallen.",
+    "tier": 1,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 282,
+    "name": "Handyman",
+    "description": "Repair a brazier which has been destroyed by the Wintertodt.",
+    "tier": 1,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 283,
+    "name": "Can We Fix It?",
+    "description": "Subdue the Wintertodt without allowing all 4 braziers to be broken at the same time.",
+    "tier": 2,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 284,
+    "name": "Leaving No One Behind",
+    "description": "Subdue the Wintertodt without any of the Pyromancers falling.",
+    "tier": 2,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 285,
+    "name": "Cosy",
+    "description": "Subdue the Wintertodt with four pieces of warm equipment equipped.",
+    "tier": 1,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 286,
+    "name": "Why Fletch?",
+    "description": "Subdue the Wintertodt after earning 3000 or more points.",
+    "tier": 3,
+    "monster": "Wintertodt"
+  },
+  {
+    "id": 287,
+    "name": "A Slithery Encounter",
+    "description": "Kill a Wyrm.",
+    "tier": 1,
+    "monster": "Wyrms"
+  },
+  {
+    "id": 288,
+    "name": "Chambers of Xeric: CM Master",
+    "description": "Complete the Chambers of Xeric: Challenge Mode 10 times.",
+    "tier": 5,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 289,
+    "name": "Chambers of Xeric: CM Grandmaster",
+    "description": "Complete the Chambers of Xeric: Challenge Mode 25 times.",
+    "tier": 6,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 290,
+    "name": "Immortal Raid Team",
+    "description": "Complete a Chambers of Xeric: Challenge mode raid without anyone dying.",
+    "tier": 5,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 291,
+    "name": "Immortal Raider",
+    "description": "Complete a Chambers of Xeric Challenge mode (Solo) raid without dying.",
+    "tier": 5,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 292,
+    "name": "Dust Seeker",
+    "description": "Complete a Chambers of Xeric Challenge mode raid in the target time.",
+    "tier": 4,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 293,
+    "name": "Chambers of Xeric: CM (Solo) Speed-Chaser",
+    "description": "Complete a Chambers of Xeric: Challenge Mode (Solo) in less than 45 minutes.",
+    "tier": 5,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 294,
+    "name": "Chambers of Xeric: CM (Solo) Speed-Runner",
+    "description": "Complete a Chambers of Xeric: Challenge Mode (Solo) in less than 38 minutes and 30 seconds.",
+    "tier": 6,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 295,
+    "name": "Chambers of Xeric: CM (5-Scale) Speed-Chaser",
+    "description": "Complete a Chambers of Xeric: Challenge Mode (5-scale) in less than 30 minutes.",
+    "tier": 5,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 296,
+    "name": "Chambers of Xeric: CM (5-Scale) Speed-Runner",
+    "description": "Complete a Chambers of Xeric: Challenge Mode (5-scale) in less than 25 minutes.",
+    "tier": 6,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 297,
+    "name": "Chambers of Xeric: CM (Trio) Speed-Chaser",
+    "description": "Complete a Chambers of Xeric: Challenge Mode (Trio) in less than 35 minutes.",
+    "tier": 5,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 298,
+    "name": "Chambers of Xeric: CM (Trio) Speed-Runner",
+    "description": "Complete a Chambers of Xeric: Challenge Mode (Trio) in less than 27 minutes.",
+    "tier": 6,
+    "monster": "CM: Chambers of Xeric"
+  },
+  {
+    "id": 299,
+    "name": "Chambers of Xeric Veteran",
+    "description": "Complete the Chambers of Xeric 25 times.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 300,
+    "name": "Chambers of Xeric Master",
+    "description": "Complete the Chambers of Xeric 75 times.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 301,
+    "name": "Chambers of Xeric Grandmaster",
+    "description": "Complete the Chambers of Xeric 150 times.",
+    "tier": 6,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 302,
+    "name": "Perfectly Balanced",
+    "description": "Kill the Vanguards without them resetting their health.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 303,
+    "name": "Together We'll Fall",
+    "description": "Kill the Vanguards within 10 seconds of the first one dying.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 304,
+    "name": "No Time for Death",
+    "description": "Clear the Tightrope room without Killing any Deathly Mages or Deathly Rangers.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 305,
+    "name": "Putting It Olm on the Line",
+    "description": "Complete a Chambers of Xeric solo raid with more than 40,000 points.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 306,
+    "name": "A Not So Special Lizard",
+    "description": "Kill the Great Olm in a solo raid without letting him use any of the following special attacks in his second to last phase: Crystal Burst, Lightning Walls, Teleportation Portals or left-hand autohealing.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 307,
+    "name": "Mutta-diet",
+    "description": "Kill the Muttadile without letting her or her baby recover hitpoints from the meat tree.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 308,
+    "name": "Redemption Enthusiast",
+    "description": "Kill the Abyssal Portal without forcing Vespula to land.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 309,
+    "name": "Stop Drop and Roll",
+    "description": "Kill Vasa Nistirio before he performs his teleport attack for the second time.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 310,
+    "name": "Anvil No More",
+    "description": "Kill Tekton before he returns to his anvil for a second time after the fight begins.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 311,
+    "name": "Dancing with Statues",
+    "description": "Receive kill-credit for a Stone Guardian without taking damage from falling rocks.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 312,
+    "name": "Undying Raid Team",
+    "description": "Complete a Chambers of Xeric raid without anyone dying.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 313,
+    "name": "Undying Raider",
+    "description": "Complete a Chambers of Xeric solo raid without dying.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 314,
+    "name": "Shayzien Specialist",
+    "description": "Receive kill-credit for a Lizardman Shaman without taking damage from any shamans in the room.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 315,
+    "name": "Playing with Lasers",
+    "description": "Clear the Crystal Crabs room without wasting an orb after the first crystal has been activated.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 316,
+    "name": "Cryo No More",
+    "description": "Receive kill-credit for the Ice Demon without taking any damage.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 317,
+    "name": "Perfect Olm (Solo)",
+    "description": "Kill the Great Olm in a solo raid without taking damage from any of the following: Teleport portals, Fire Walls, Healing pools, Crystal Bombs, Crystal Burst or Prayer Orbs. You also cannot let his claws regenerate or take damage from the same acid pool back to back.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 318,
+    "name": "Perfect Olm (Trio)",
+    "description": "Kill the Great Olm in a trio raid without any team member taking damage from any of the following: Teleport portals, Fire Walls, Healing pools, Crystal Bombs, Crystal Burst or Prayer Orbs. You also cannot let his claws regenerate or take damage from the same acid pool back to back.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 319,
+    "name": "Blind Spot",
+    "description": "Kill Tekton without taking any damage.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 320,
+    "name": "Blizzard Dodger",
+    "description": "Receive kill-credit for the Ice Demon without activating the Protect from Range prayer.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 321,
+    "name": "Kill It with Fire",
+    "description": "Finish off the Ice Demon with a fire spell.",
+    "tier": 4,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 322,
+    "name": "Chambers of Xeric (Solo) Speed-Chaser",
+    "description": "Complete a Chambers of Xeric (Solo) in less than 21 minutes.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 323,
+    "name": "Chambers of Xeric (Solo) Speed-Runner",
+    "description": "Complete a Chambers of Xeric (Solo) in less than 17 minutes.",
+    "tier": 6,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 324,
+    "name": "Chambers of Xeric (5-Scale) Speed-Chaser",
+    "description": "Complete a Chambers of Xeric (5-scale) in less than 15 minutes.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 325,
+    "name": "Chambers of Xeric (5-Scale) Speed-Runner",
+    "description": "Complete a Chambers of Xeric (5-scale) in less than 12 minutes and 30 seconds.",
+    "tier": 6,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 326,
+    "name": "Chambers of Xeric (Trio) Speed-Chaser",
+    "description": "Complete a Chambers of Xeric (Trio) in less than 16 minutes and 30 seconds.",
+    "tier": 5,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 327,
+    "name": "Chambers of Xeric (Trio) Speed-Runner",
+    "description": "Complete a Chambers of Xeric (Trio) in less than 14 minutes and 30 seconds.",
+    "tier": 6,
+    "monster": "Chambers of Xeric"
+  },
+  {
+    "id": 328,
+    "name": "Zalcano Veteran",
+    "description": "Kill Zalcano 25 times.",
+    "tier": 4,
+    "monster": "Zalcano"
+  },
+  {
+    "id": 329,
+    "name": "Perfect Zalcano",
+    "description": "Kill Zalcano 5 times in a row without leaving or getting hit by the following: Falling rocks, rock explosions, Zalcano powering up, or standing in a red symbol.",
+    "tier": 4,
+    "monster": "Zalcano"
+  },
+  {
+    "id": 330,
+    "name": "Team Player",
+    "description": "Receive imbued tephra from a golem.",
+    "tier": 4,
+    "monster": "Zalcano"
+  },
+  {
+    "id": 331,
+    "name": "The Spurned Hero",
+    "description": "Kill Zalcano as the player who has dealt the most damage to her.",
+    "tier": 4,
+    "monster": "Zalcano"
+  },
+  {
+    "id": 332,
+    "name": "K'ril Tsutsaroth Adept",
+    "description": "Kill K'ril Tsutsaroth 50 times.",
+    "tier": 3,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 333,
+    "name": "K'ril Tsutsaroth Veteran",
+    "description": "Kill K'ril Tsutsaroth 100 times.",
+    "tier": 4,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 334,
+    "name": "Yarr No More",
+    "description": "Receive kill-credit for K'ril Tsutsaroth without him using his special attack.",
+    "tier": 3,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 335,
+    "name": "Demonic Showdown",
+    "description": "Finish off K'ril Tsutsaroth whilst all of his bodyguards are dead.",
+    "tier": 3,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 336,
+    "name": "The Bane of Demons",
+    "description": "Defeat K'ril Tsutsaroth in a privately rented instance using only demonbane spells.",
+    "tier": 4,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 337,
+    "name": "Demonic Defence",
+    "description": "Kill K'ril Tsutsaroth in a privately rented instance without taking any of his melee hits.",
+    "tier": 4,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 338,
+    "name": "Demon Whisperer",
+    "description": "Kill K'ril Tsutsaroth in a privately rented instance without ever being hit by his bodyguards.",
+    "tier": 6,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 339,
+    "name": "Demonbane Weaponry II",
+    "description": "Finish off K'ril Tsutsaroth with a demonbane weapon.",
+    "tier": 3,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 340,
+    "name": "Ash Collector",
+    "description": "Kill K'ril Tsutsaroth 20 times in a privately rented instance without leaving the room.",
+    "tier": 6,
+    "monster": "K'ril Tsutsaroth"
+  },
+  {
+    "id": 341,
+    "name": "Half-Way There",
+    "description": "Kill a Jal-Zek within the Inferno.",
+    "tier": 4,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 342,
+    "name": "Inferno Grandmaster",
+    "description": "Complete the Inferno 5 times.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 343,
+    "name": "The Floor Is Lava",
+    "description": "Kill TzKal-Zuk without letting Jal-ImKot dig during any wave in the Inferno.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 344,
+    "name": "Playing with Jads",
+    "description": "Complete wave 68 of the Inferno within 30 seconds of the first JalTok-Jad dying.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 345,
+    "name": "No Luck Required",
+    "description": "Kill TzKal-Zuk without being attacked by TzKal-Zuk and without taking damage from a JalTok-Jad.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 346,
+    "name": "Nibblers, Begone!",
+    "description": "Kill TzKal-Zuk without letting a pillar fall before wave 67.",
+    "tier": 5,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 347,
+    "name": "Wasn't Even Close",
+    "description": "Kill TzKal-Zuk without letting your hitpoints fall below 50 during any wave in the Inferno.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 348,
+    "name": "Budget Setup",
+    "description": "Kill TzKal-Zuk without equipping a Twisted Bow within the Inferno.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 349,
+    "name": "Nibbler Chaser",
+    "description": "Kill TzKal-Zuk without using any magic spells during any wave in the Inferno.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 350,
+    "name": "Facing Jad Head-on II",
+    "description": "Kill TzKal-Zuk without equipping any range or mage weapons before wave 69.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 351,
+    "name": "Jad? What Are You Doing Here?",
+    "description": "Kill TzKal-Zuk without killing the JalTok-Jad which spawns during wave 69.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 352,
+    "name": "Inferno Speed-Runner",
+    "description": "Complete the Inferno in less than 65 minutes.",
+    "tier": 6,
+    "monster": "TzKal-Zuk"
+  },
+  {
+    "id": 353,
+    "name": "Tempoross Novice",
+    "description": "Subdue Tempoross 5 times.",
+    "tier": 1,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 354,
+    "name": "Tempoross Champion",
+    "description": "Subdue Tempoross 10 times.",
+    "tier": 2,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 355,
+    "name": "Dress Like You Mean It",
+    "description": "Subdue Tempoross while wearing any variation of the angler outfit.",
+    "tier": 3,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 356,
+    "name": "Master of Buckets",
+    "description": "Extinguish at least 5 fires during a single Tempoross fight.",
+    "tier": 1,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 357,
+    "name": "Calm Before the Storm",
+    "description": "Repair either a mast or a totem pole.",
+    "tier": 1,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 358,
+    "name": "Why Cook?",
+    "description": "Subdue Tempoross, getting rewarded with 10 reward permits from a single Tempoross fight.",
+    "tier": 3,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 359,
+    "name": "The Lone Angler",
+    "description": "Subdue Tempoross alone without getting hit by any fires, torrents or waves.",
+    "tier": 2,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 360,
+    "name": "Fire in the Hole!",
+    "description": "Attack Tempoross from both sides by loading both cannons on both ships.",
+    "tier": 1,
+    "monster": "Tempoross"
+  },
+  {
+    "id": 361,
+    "name": "The II Jad Challenge",
+    "description": "Complete TzHaar-Ket-Rak's second challenge.",
+    "tier": 4,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 362,
+    "name": "The IV Jad Challenge",
+    "description": "Complete TzHaar-Ket-Rak's fourth challenge.",
+    "tier": 5,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 363,
+    "name": "The VI Jad Challenge",
+    "description": "Complete TzHaar-Ket-Rak's sixth challenge.",
+    "tier": 6,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 364,
+    "name": "TzHaar-Ket-Rak's Speed-Trialist",
+    "description": "Complete TzHaar-Ket-Rak's first challenge in less than 45 seconds.",
+    "tier": 4,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 365,
+    "name": "TzHaar-Ket-Rak's Speed-Chaser",
+    "description": "Complete TzHaar-Ket-Rak's third challenge in less than 3 minutes.",
+    "tier": 5,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 366,
+    "name": "TzHaar-Ket-Rak's Speed-Runner",
+    "description": "Complete TzHaar-Ket-Rak's fifth challenge in less than 5 minutes.",
+    "tier": 6,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 367,
+    "name": "Facing Jad Head-on III",
+    "description": "Complete TzHaar-Ket-Rak's second challenge with only melee.",
+    "tier": 4,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 368,
+    "name": "Facing Jad Head-on IV",
+    "description": "Complete TzHaar-Ket-Rak's fourth challenge with only melee.",
+    "tier": 5,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 369,
+    "name": "Supplies? Who Needs 'em?",
+    "description": "Complete TzHaar-Ket-Rak's third challenge without having anything in your inventory.",
+    "tier": 5,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 370,
+    "name": "It Wasn't a Fluke",
+    "description": "Complete TzHaar-Ket-Rak's fifth and sixth challenges back to back without failing.",
+    "tier": 6,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 371,
+    "name": "Multi-Style Specialist",
+    "description": "Complete TzHaar-Ket-Rak's third challenge while using a different attack style for each JalTok-Jad.",
+    "tier": 5,
+    "monster": "TzHaar-Ket-Rak"
+  },
+  {
+    "id": 372,
+    "name": "Stop Right There!",
+    "description": "Defeat the Maiden of Sugadinti in the Theatre of Blood: Hard Mode without letting blood spawns create more than 15 blood trails.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 373,
+    "name": "Personal Space",
+    "description": "Defeat the Pestilent Bloat in the Theatre of Blood: Hard Mode with at least 3 people in the room, without anyone in your team standing on top of each other.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 374,
+    "name": "Royal Affairs",
+    "description": "In the Theatre of Blood: Hard Mode, complete the Nylocas room without ever letting the Nylocas Prinkipas change styles.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 375,
+    "name": "Harder Mode I",
+    "description": "Defeat Sotetseg in the Theatre of Blood: Hard Mode without anyone sharing the ball with anyone, without anyone dying, and without anyone taking damage from any of its other attacks or stepping on the wrong tile in the maze.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 376,
+    "name": "Harder Mode II",
+    "description": "Defeat Xarpus in the Theatre of Blood: Hard Mode after letting the exhumeds heal him to full health and without anyone in the team taking any damage.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 377,
+    "name": "Nylo Sniper",
+    "description": "Defeat Verzik Vitur in the Theatre of Blood: Hard Mode without anyone in your team causing a Nylocas to explode by getting too close.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 378,
+    "name": "Team Work Makes the Dream Work",
+    "description": "When Verzik Vitur in the Theatre of Blood: Hard Mode uses her yellow power blast attack while the tornadoes are active, have everyone get through the attack without taking damage. This cannot be completed with one player alive",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 379,
+    "name": "Harder Mode III",
+    "description": "Defeat Verzik Vitur in the Theatre of Blood: Hard Mode without anyone attacking her with a melee weapon during her third phase.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 380,
+    "name": "Pack Like a Yak",
+    "description": "Complete the Theatre of Blood: Hard Mode within the challenge time, with no deaths and without anyone buying anything from a supply chest.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 381,
+    "name": "Hard Mode? Completed It",
+    "description": "Complete the Theatre of Blood: Hard Mode within the challenge time.",
+    "tier": 5,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 382,
+    "name": "Theatre: HM (Trio) Speed-Runner",
+    "description": "Complete the Theatre of Blood: Hard Mode (Trio) with an overall time of less than 23 minutes.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 383,
+    "name": "Theatre: HM (4-Scale) Speed-Runner",
+    "description": "\tComplete the Theatre of Blood: Hard Mode (4-scale) with an overall time of less than 21 minutes.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 384,
+    "name": "Theatre: HM (5-Scale) Speed-Runner",
+    "description": "Complete the Theatre of Blood: Hard Mode (5-scale) with an overall time of less than 19 minutes.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 385,
+    "name": "Theatre of Blood: HM Grandmaster",
+    "description": "Complete the Theatre of Blood: Hard Mode 50 times.",
+    "tier": 6,
+    "monster": "HM: Theatre of Blood"
+  },
+  {
+    "id": 386,
+    "name": "Anticoagulants",
+    "description": "Defeat the Maiden of Sugadinti in the Theatre of Blood: Entry Mode without letting any bloodspawn live for longer than 10 seconds.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 387,
+    "name": "Appropriate Tools",
+    "description": "Defeat the Pestilent Bloat in the Theatre of Blood: Entry Mode with everyone having a salve amulet equipped.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 388,
+    "name": "They Won't Expect This",
+    "description": "In the Theatre of Blood: Entry Mode, enter the Pestilent Bloat room from the opposite side.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 389,
+    "name": "Chally Time",
+    "description": "Defeat the Pestilent Bloat in the Theatre of Blood: Entry Mode by using a halberd special attack as your final attack.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 390,
+    "name": "Nylocas, On the Rocks",
+    "description": "In the Theatre of Blood: Entry Mode, freeze any 4 Nylocas with a single Ice Barrage spell.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 391,
+    "name": "Just To Be Safe",
+    "description": "Defeat Sotetseg in the Theatre of Blood: Entry Mode after having split the big ball with your entire team. This must be done with a group size of at least 2.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 392,
+    "name": "Don't Look at Me!",
+    "description": "Kill Xarpus in the Theatre of Blood: Entry Mode without him reflecting any damage to anyone.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 393,
+    "name": "No-Pillar",
+    "description": "Survive Verzik Vitur's pillar phase in the Theatre of Blood: Entry Mode without losing a single pillar.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 394,
+    "name": "Attack, Step, Wait",
+    "description": "Survive Verzik Vitur's second phase in the Theatre of Blood: Entry Mode without anyone getting bounced by Verzik.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 395,
+    "name": "Pass It On",
+    "description": "In the Theatre of Blood: Entry Mode, successfully pass on the green ball to a team mate.",
+    "tier": 4,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 396,
+    "name": "Theatre of Blood: SM Speed-Chaser",
+    "description": "Complete the Theatre of Blood: Entry Mode in less than 17 minutes.",
+    "tier": 5,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 397,
+    "name": "Theatre of Blood: SM Adept",
+    "description": "Complete the Theatre of Blood: Entry Mode 1 time.",
+    "tier": 3,
+    "monster": "EM: Theatre of Blood"
+  },
+  {
+    "id": 398,
+    "name": "Into the Den of Giants",
+    "description": "Kill a Hill Giant, Moss Giant and Fire Giant in the Giant Cave within the Shayzien region.",
+    "tier": 1,
+    "monster": "Giants"
+  },
+  {
+    "id": 399,
+    "name": "Sit Back and Relax",
+    "description": "Deal 100 damage to creatures using undead thralls.",
+    "tier": 2,
+    "monster": "Other"
+  },
+  {
+    "id": 400,
+    "name": "Phosani's Veteran",
+    "description": "Kill Phosani's Nightmare once.",
+    "tier": 4,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 401,
+    "name": "Phosani's Master",
+    "description": "Kill Phosani's Nightmare 5 times.",
+    "tier": 5,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 402,
+    "name": "Phosani's Grandmaster",
+    "description": "Kill Phosani's Nightmare 25 times.",
+    "tier": 6,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 403,
+    "name": "Perfect Phosani's Nightmare",
+    "description": "Kill Phosani's Nightmare while only taking damage from husks, power blasts and weakened parasites. Also, without becoming infected by spores or letting a sleepwalker reach Phosani's Nightmare.",
+    "tier": 6,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 404,
+    "name": "Phosani's Speedchaser",
+    "description": "Kill Phosani's Nightmare within 7 minutes and 30 seconds",
+    "tier": 5,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 405,
+    "name": "Phosani's Speedrunner",
+    "description": "Kill Phosani's Nightmare within 6 minutes.",
+    "tier": 6,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 406,
+    "name": "Crush Hour",
+    "description": "Kill Phosani's Nightmare while killing every husk and parasite in one hit.",
+    "tier": 5,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 407,
+    "name": "I Would Simply React",
+    "description": "Kill Phosani's Nightmare without her disabling your prayer.",
+    "tier": 5,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 408,
+    "name": "Dreamland Express",
+    "description": "Kill Phosani's Nightmare without letting a sleepwalker reach her during the desperation phase.",
+    "tier": 5,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 409,
+    "name": "Can't Wake Up",
+    "description": "Kill Phosani's Nightmare 5 times in a row without leaving Phosani's Dream.",
+    "tier": 6,
+    "monster": "Phosani's Nightmare"
+  },
+  {
+    "id": 410,
+    "name": "Nex Veteran",
+    "description": "Kill Nex once.",
+    "tier": 4,
+    "monster": "Nex"
+  },
+  {
+    "id": 411,
+    "name": "Nex Master",
+    "description": "Kill Nex 25 times.",
+    "tier": 5,
+    "monster": "Nex"
+  },
+  {
+    "id": 412,
+    "name": "Nex Survivors",
+    "description": "Kill Nex without anyone dying.",
+    "tier": 4,
+    "monster": "Nex"
+  },
+  {
+    "id": 413,
+    "name": "A siphon will solve this",
+    "description": "Kill Nex without letting her heal from her Blood Siphon special attack.",
+    "tier": 5,
+    "monster": "Nex"
+  },
+  {
+    "id": 414,
+    "name": "Contain this!",
+    "description": "Kill Nex without anyone taking damage from any Ice special attack.",
+    "tier": 5,
+    "monster": "Nex"
+  },
+  {
+    "id": 415,
+    "name": "There is no escape!",
+    "description": "Kill Nex without anyone being hit by the Smoke Dash special attack",
+    "tier": 5,
+    "monster": "Nex"
+  },
+  {
+    "id": 416,
+    "name": "Nex Trio",
+    "description": "Kill Nex with three or less players inside the arena at the start of the fight.",
+    "tier": 5,
+    "monster": "Nex"
+  },
+  {
+    "id": 417,
+    "name": "Nex Duo",
+    "description": "Kill Nex with two or less players inside the arena at the start of the fight.",
+    "tier": 6,
+    "monster": "Nex"
+  },
+  {
+    "id": 418,
+    "name": "I should see a doctor",
+    "description": "Kill Nex whilst a player is coughing.",
+    "tier": 6,
+    "monster": "Nex"
+  },
+  {
+    "id": 419,
+    "name": "Perfect Nex",
+    "description": "Kill Nex whilst completing the requirements for There is no escape, Shadows move, A siphon will solve this, and Contain this!",
+    "tier": 6,
+    "monster": "Nex"
+  },
+  {
+    "id": 420,
+    "name": "Shadows Move...",
+    "description": "Kill Nex without anyone being hit by the Shadow Smash attack.",
+    "tier": 5,
+    "monster": "Nex"
+  },
+  {
+    "id": 421,
+    "name": "Tombs Speed Runner",
+    "description": "Complete the Tombs of Amascut (normal) within 18 mins at any group size.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 422,
+    "name": "Tombs Speed Runner II",
+    "description": "Complete the Tombs of Amascut (expert) within 20 mins at any group size.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 423,
+    "name": "Tombs Speed Runner III",
+    "description": "Complete the Tombs of Amascut (expert) within 18 mins in a group of 8.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 424,
+    "name": "You are not prepared",
+    "description": "Complete a full Tombs of Amascut raid only using supplies given inside the tomb and without anyone dying.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 425,
+    "name": "Helpful spirit who?",
+    "description": "Complete the Tombs of Amascut without using any supplies from the Helpful Spirit and without anyone dying. Honey locusts are included in this restriction.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 426,
+    "name": "Resourceful Raider",
+    "description": "Complete the Tombs of Amascut with the \"On a diet\" and \"Dehydration\" invocations activated and without anyone dying.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 427,
+    "name": "But... Damage",
+    "description": "Complete the Tombs of Amascut without anyone in your party wearing or holding any equipment at tier 75 or above.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 428,
+    "name": "Chompington",
+    "description": "Defeat Zebak using only melee attacks and without dying yourself.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 429,
+    "name": "Fancy feet",
+    "description": "Complete phase three of The Wardens in a group of two or more, using only melee attacks and without dying yourself. The 'Insanity' invocation must be activated.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 430,
+    "name": "Hardcore Raiders",
+    "description": "Complete the Tombs of Amascut in a group of two or more without anyone dying.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 431,
+    "name": "Hardcore Tombs",
+    "description": "Complete the Tombs of Amascut solo without dying.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 432,
+    "name": "Perfect Het",
+    "description": "Complete the Het room without taking any hits from the light beam or orbs. You must destroy the core after one exposure.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 433,
+    "name": "Perfect Akkha",
+    "description": "Complete Akkha in a group of two or more, without anyone taking any hits from the following: Akkha's attacks off-prayer, Akkha's special attacks (orbs, memory, detonate), exploding shadow timers, orbs in the enrage phase or attacking Akkha with the wrong style. Hits for zero damage still count. You must have all Akkha invocations activated.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 434,
+    "name": "Perfection of Het",
+    "description": "Complete 'Perfect Het' and 'Perfect Akkha' in a single run of the Tombs of Amascut.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 435,
+    "name": "Perfect Apmeken",
+    "description": "Complete the Apmeken room in a group of two or more, without anyone allowing any dangers to trigger, standing in venom or being hit by a volatile baboon. You must complete this room in less than three minutes.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 436,
+    "name": "Perfect Ba-Ba",
+    "description": "Defeat Ba-Ba in a group of two or more, without anyone taking any hits from the following: Ba-Ba's Attacks off-prayer, Ba-Ba's slam, rolling boulders, rubble attack or falling rocks. Hits for zero damage still count. No sarcophagi may be opened. You must have all Ba-Ba invocations activated.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 437,
+    "name": "Perfection of Apmeken",
+    "description": "Complete 'Perfect Apmeken' and 'Perfect Ba-Ba' in a single run of the Tombs of Amascut.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 438,
+    "name": "Perfect Crondis",
+    "description": "Complete the Crondis room without letting a crocodile get to the tree, without anyone losing water from their container and in under one minute.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 439,
+    "name": "Perfect Zebak",
+    "description": "Defeat Zebak without anyone taking any hits from: poison, Zebak's basic attacks off-prayer, blood spawns and waves. You also must not push more than two jugs on the roar attack during the fight (you may destroy stationary ones). Hits for zero damage still count. You must have all Zebak invocations activated.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 440,
+    "name": "Perfection of Crondis",
+    "description": "Complete 'Perfect Crondis' and 'Perfect Zebak' in a single run of the Tombs of Amascut.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 441,
+    "name": "Perfect Scabaras",
+    "description": "Complete the Scabaras room in less than a minute without anyone taking any damage from puzzles.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 442,
+    "name": "Perfect Kephri",
+    "description": "Defeat Kephri in a group of two or more, without anyone taking any hits from the following: egg explosions, Kephri's attacks, Exploding Scarabs, Bodyguards, dung attacks. Hits for zero damage still count. No eggs may hatch throughout the fight.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 443,
+    "name": "Perfection of Scabaras",
+    "description": "Complete 'Perfect Scabaras' and 'Perfect Kephri' in a single run of Tombs of Amascut.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 444,
+    "name": "Perfect Wardens",
+    "description": "Defeat The Wardens in a group of two or more, without anyone taking avoidable hits from the following: Warden attacks, obelisk attacks, lightning attacks in phase three, skull attack in phase three, Demi god attacks in phase three. Hits for zero damage still count. You must have all Wardens invocations activated.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 445,
+    "name": "Insanity",
+    "description": "Complete 'Perfect Wardens' at expert or above.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 446,
+    "name": "Amascut's Remnant",
+    "description": "Complete the Tombs of Amascut at raid level 500 or above without anyone dying.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 447,
+    "name": "Something of an expert myself",
+    "description": "Complete the Tombs of Amascut raid at level 350 or above without anyone dying.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 448,
+    "name": "Maybe I'm the boss.",
+    "description": "Complete a Tombs of Amascut raid with every single boss invocation activated and without anyone dying.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 449,
+    "name": "Dropped the ball",
+    "description": "Defeat Akkha without dropping any materialising orbs and without dying yourself.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 450,
+    "name": "Akkhan't Do it",
+    "description": "Defeat Akkha with all Akkha invocations activated and the path levelled up to at least four, without dying yourself.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 451,
+    "name": "No skipping allowed",
+    "description": "Defeat Ba-Ba after only attacking the non-weakened boulders in the rolling boulder phase, without dying yourself. The Boulderdash invocation must be activated.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 452,
+    "name": "I'm in a rush",
+    "description": "Defeat Ba-Ba after destroying four or fewer rolling boulders in total without dying yourself.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 453,
+    "name": "Ba-Bananza",
+    "description": "Defeat Ba-Ba with all Ba-Ba invocations activated and the path levelled up to at least four, without dying yourself.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 454,
+    "name": "All Praise Zebak",
+    "description": "Defeat Zebak without losing a single prayer point. You must also meet the conditions of the 'Rockin' Around The Croc' achievement.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 455,
+    "name": "Rockin' around the croc",
+    "description": "Defeat Zebak with all Zebak invocations activated and the path levelled up to at least four, without dying yourself.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 456,
+    "name": "Doesn't bug me",
+    "description": "Defeat Kephri with all Kephri invocations activated and the path levelled up to at least four, without dying yourself.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 457,
+    "name": "All out of medics",
+    "description": "Defeat Kephri without letting her heal above 25% after the first down. The 'Medic' invocation must be activated. You must do this without dying yourself.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 458,
+    "name": "Down Do Specs",
+    "description": "Defeat the Wardens after staggering the boss a maximum of twice during phase two, without dying yourself.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 459,
+    "name": "Better get movin'",
+    "description": "Defeat Elidinis' Warden in phase three of the Wardens fight with 'Aerial Assault', 'Stay vigilant' and 'Insanity' invocations activated and without dying yourself.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 460,
+    "name": "Warden't you believe it",
+    "description": "Defeat the Wardens with all Wardens invocations activated, at expert level and without dying yourself.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 461,
+    "name": "Novice Tomb Explorer",
+    "description": "Complete the Tombs of Amascut in Entry mode (or above) once.",
+    "tier": 3,
+    "monster": "EM: Tombs of Amascut"
+  },
+  {
+    "id": 462,
+    "name": "Novice Tomb Looter",
+    "description": "Complete the Tombs of Amascut in Entry mode (or above) 25 times.",
+    "tier": 3,
+    "monster": "EM: Tombs of Amascut"
+  },
+  {
+    "id": 463,
+    "name": "Novice Tomb Raider",
+    "description": "Complete the Tombs of Amascut in Entry mode (or above) 50 times.",
+    "tier": 4,
+    "monster": "EM: Tombs of Amascut"
+  },
+  {
+    "id": 464,
+    "name": "Movin' on up",
+    "description": "Complete a Tombs of Amascut raid at level 50 or above.",
+    "tier": 3,
+    "monster": "EM: Tombs of Amascut"
+  },
+  {
+    "id": 465,
+    "name": "Confident Raider",
+    "description": "Complete a Tombs of Amascut raid at level 100 or above.",
+    "tier": 3,
+    "monster": "EM: Tombs of Amascut"
+  },
+  {
+    "id": 466,
+    "name": "Tomb Looter",
+    "description": "Complete the Tombs of Amascut 25 times.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 467,
+    "name": "Tomb Raider",
+    "description": "Complete the Tombs of Amascut 50 times.",
+    "tier": 5,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 468,
+    "name": "Tomb Explorer",
+    "description": "Complete the Tombs of Amascut once.",
+    "tier": 4,
+    "monster": "Tombs of Amascut"
+  },
+  {
+    "id": 469,
+    "name": "Expert Tomb Explorer",
+    "description": "Complete the Tombs of Amascut (Expert mode) once.",
+    "tier": 4,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 470,
+    "name": "Expert Tomb Looter",
+    "description": "Complete the Tombs of Amascut (Expert mode) 25 times.",
+    "tier": 5,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 471,
+    "name": "Expert Tomb Raider",
+    "description": "Complete the Tombs of Amascut (Expert mode) 50 times.",
+    "tier": 6,
+    "monster": "XM: Tombs of Amascut"
+  },
+  {
+    "id": 472,
+    "name": "More than just a ranged weapon",
+    "description": "Kill the Phantom Muspah by only dealing damage to it with a salamander.",
+    "tier": 5,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 473,
+    "name": "Can't Escape",
+    "description": "Kill the Phantom Muspah without running.",
+    "tier": 4,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 474,
+    "name": "Essence Farmer",
+    "description": "Kill the Phantom Muspah 10 times in one trip.",
+    "tier": 5,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 475,
+    "name": "Phantom Muspah Speed-Trialist",
+    "description": "Kill the Phantom Muspah in less than 3 minutes without a slayer task.",
+    "tier": 4,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 476,
+    "name": "Phantom Muspah Speed-Chaser",
+    "description": "Kill the Phantom Muspah in less than 2 minutes without a slayer task.",
+    "tier": 5,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 477,
+    "name": "Phantom Muspah Speed-Runner",
+    "description": "Kill the Phantom Muspah in less than 1 minute and 30 seconds without a slayer task.",
+    "tier": 6,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 478,
+    "name": "Phantom Muspah Adept",
+    "description": "Kill the Phantom Muspah.",
+    "tier": 3,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 479,
+    "name": "Phantom Muspah Veteran",
+    "description": "Kill the Phantom Muspah 25 times.",
+    "tier": 4,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 480,
+    "name": "Phantom Muspah Master",
+    "description": "Kill the Phantom Muspah 50 times.",
+    "tier": 5,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 481,
+    "name": "Space is Tight",
+    "description": "Kill the Phantom Muspah whilst it is surrounded by spikes.",
+    "tier": 5,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 482,
+    "name": "Versatile Drainer",
+    "description": "Drain the Phantom Muspah's Prayer with three different sources in one kill.",
+    "tier": 4,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 483,
+    "name": "Walk Straight Pray True",
+    "description": "Kill the Phantom Muspah without taking any avoidable damage.",
+    "tier": 5,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 484,
+    "name": "Phantom Muspah Manipulator",
+    "description": "Kill the Phantom Muspah whilst completing Walk Straight Pray True, Space is Tight & Can't Escape.",
+    "tier": 6,
+    "monster": "Phantom Muspah"
+  },
+  {
+    "id": 485,
+    "name": "Vardorvis Speed-Trialist",
+    "description": "Kill Vardorvis in less than 1:15 minutes without a slayer task.",
+    "tier": 4,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 486,
+    "name": "Vardorvis Speed-Chaser",
+    "description": "Kill Vardorvis in less than 1:05 without a slayer task.",
+    "tier": 5,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 487,
+    "name": "Vardorvis Speed-Runner",
+    "description": "Kill Vardorvis in less than 0:55 without a slayer task.",
+    "tier": 6,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 488,
+    "name": "Vardorvis Adept",
+    "description": "Kill Vardorvis once.",
+    "tier": 4,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 489,
+    "name": "Vardorvis Master",
+    "description": "Kill Vardorvis 50 times.",
+    "tier": 5,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 490,
+    "name": "Vardorvis Sleeper",
+    "description": "Kill Awakened Vardorvis.",
+    "tier": 6,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 491,
+    "name": "Perfect Vardorvis",
+    "description": "Kill Vardorvis perfectly 5 times without leaving.",
+    "tier": 5,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 492,
+    "name": "Axe Enthusiast",
+    "description": "Kill Vardorvis after surviving for 3 minutes of Vardorvis' max speed, and never leaving the centre 25 tiles.",
+    "tier": 6,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 493,
+    "name": "Budget Cutter",
+    "description": "Kill Vardorvis with gear worth 2m or less in total.",
+    "tier": 5,
+    "monster": "Vardorvis"
+  },
+  {
+    "id": 494,
+    "name": "Whisperer Speed-Trialist",
+    "description": "Kill the Whisperer in less than 3:00 without a slayer task.",
+    "tier": 4,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 495,
+    "name": "Whisperer Speed-Chaser",
+    "description": "Kill the Whisperer in less than 2:25 without a slayer task.",
+    "tier": 5,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 496,
+    "name": "Whisperer Speed-Runner",
+    "description": "Kill the Whisperer in less than 2:05 without a slayer task.",
+    "tier": 6,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 497,
+    "name": "Whisperer Adept",
+    "description": "Kill the Whisperer once.",
+    "tier": 4,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 498,
+    "name": "Whisperer Master",
+    "description": "Kill the Whisperer 50 times.",
+    "tier": 5,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 499,
+    "name": "Whispered",
+    "description": "Kill the Awakened Whisperer.",
+    "tier": 6,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 500,
+    "name": "Perfect Whisperer",
+    "description": "Kill the Whisperer without taking avoidable damage 5 times without leaving.",
+    "tier": 5,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 501,
+    "name": "Tentacular",
+    "description": "Kill the Whisperer whilst only being on the Arceuus spellbook.",
+    "tier": 4,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 502,
+    "name": "Dark Memories",
+    "description": "Kill the Whisperer whilst spending less than 6 seconds in the pre-enrage shadow realm.",
+    "tier": 6,
+    "monster": "Whisperer, The"
+  },
+  {
+    "id": 503,
+    "name": "Leviathan Speed-Trialist",
+    "description": "Kill the Leviathan in less than 1:50 without a slayer task.",
+    "tier": 4,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 504,
+    "name": "Leviathan Speed-Chaser",
+    "description": "Kill the Leviathan in less than 1:25 without a slayer task.",
+    "tier": 5,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 505,
+    "name": "Leviathan Speed-Runner",
+    "description": "Kill the Leviathan in less than 1:10 without a slayer task.",
+    "tier": 6,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 506,
+    "name": "Leviathan Adept",
+    "description": "Kill the Leviathan once.",
+    "tier": 4,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 507,
+    "name": "Leviathan Master",
+    "description": "Kill the Leviathan 50 times.",
+    "tier": 5,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 508,
+    "name": "Leviathan Sleeper",
+    "description": "Kill the Awakened Leviathan.",
+    "tier": 6,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 509,
+    "name": "Perfect Leviathan",
+    "description": "Kill the Leviathan perfectly 5 times without leaving.",
+    "tier": 5,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 510,
+    "name": "Serpentine Solo",
+    "description": "Kill the Leviathan without stunning the boss more than once.",
+    "tier": 5,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 511,
+    "name": "Unconventional",
+    "description": "Kill the Leviathan using only Mithril ammunition whilst having no more than 25 Hitpoints throughout the entire fight.",
+    "tier": 6,
+    "monster": "Leviathan, The"
+  },
+  {
+    "id": 512,
+    "name": "Duke Sucellus Speed-Trialist",
+    "description": "Kill Duke Sucellus in less than 1:00 minutes without a slayer task.",
+    "tier": 4,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 513,
+    "name": "Duke Sucellus Speed-Chaser",
+    "description": "Kill Duke Sucellus in less than 50 seconds without a slayer task.",
+    "tier": 5,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 514,
+    "name": "Duke Sucellus Speed-Runner",
+    "description": "Kill Duke Sucellus in less than 40 seconds without a slayer task.",
+    "tier": 6,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 515,
+    "name": "Duke Sucellus Adept",
+    "description": "Kill Duke Sucellus once.",
+    "tier": 4,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 516,
+    "name": "Duke Sucellus Master",
+    "description": "Kill Duke Sucellus 50 times.",
+    "tier": 5,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 517,
+    "name": "Duke Sucellus Sleeper",
+    "description": "Kill Awakened Duke Sucellus.",
+    "tier": 6,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 518,
+    "name": "Perfect Duke Sucellus",
+    "description": "Kill Duke Sucellus without taking any avoidable damage 5 times without leaving.",
+    "tier": 5,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 519,
+    "name": "Cold Feet",
+    "description": "Kill Duke Sucellus without taking any avoidable damage, whilst also never running.",
+    "tier": 5,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 520,
+    "name": "Mirror Image",
+    "description": "Kill Duke Sucellus whilst only attacking the boss on the same tick Duke attacks you.",
+    "tier": 6,
+    "monster": "Duke Sucellus"
+  },
+  {
+    "id": 521,
+    "name": "Scurrius Novice",
+    "description": "Kill Scurrius once.",
+    "tier": 1,
+    "monster": "Scurrius"
+  },
+  {
+    "id": 522,
+    "name": "Scurrius Champion",
+    "description": "Kill Scurrius 10 times.",
+    "tier": 2,
+    "monster": "Scurrius"
+  },
+  {
+    "id": 523,
+    "name": "Sit Rat",
+    "description": "Finish off Scurrius with a ratbane weapon in a private instance.",
+    "tier": 1,
+    "monster": "Scurrius"
+  },
+  {
+    "id": 524,
+    "name": "Perfect Scurrius",
+    "description": "Kill Scurrius in a private instance without taking damage from the following attacks: Tail Swipe and Falling Bricks. Pray correctly against the following attacks: Flying Fur and Bolts of Electricity.",
+    "tier": 2,
+    "monster": "Scurrius"
+  },
+  {
+    "id": 525,
+    "name": "Efficient Pest Control",
+    "description": "Kill 6 Giant Rats within Scurrius' lair in 3 seconds.",
+    "tier": 2,
+    "monster": "Scurrius"
+  },
+  {
+    "id": 526,
+    "name": "The Clone Zone",
+    "description": "Defeat the Eclipse moon by only attacking its clones.",
+    "tier": 3,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 527,
+    "name": "High Hitter",
+    "description": "Defeat a Moon before they start their second special attack.",
+    "tier": 4,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 528,
+    "name": "Lunar Triplet",
+    "description": "Open the Reward Chest after defeating all three Moons.",
+    "tier": 2,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 529,
+    "name": "Perilous Novice",
+    "description": "Open the Reward Chest 5 times.",
+    "tier": 2,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 530,
+    "name": "Perilous Champion",
+    "description": "Open the Reward Chest 25 times.",
+    "tier": 3,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 531,
+    "name": "Perilous Dancer",
+    "description": "Defeat all the Moons in one run while only taking damage from regular attacks.",
+    "tier": 3,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 532,
+    "name": "Fortified",
+    "description": "Defeat a Moon without consuming any supplies.",
+    "tier": 3,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 533,
+    "name": "Betrayal",
+    "description": "Defeat a Moon using its associated weapon drop.",
+    "tier": 3,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 534,
+    "name": "Back to Our Roots",
+    "description": "Defeat all three Moons in one run by only attacking with a Dragon Scimitar.",
+    "tier": 2,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 535,
+    "name": "Moons of Peril Speed-Trialist",
+    "description": "Defeat all three Moons in one run in under 8 minutes.",
+    "tier": 2,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 536,
+    "name": "Moons of Peril Speed-Chaser",
+    "description": "Defeat all three Moons in one run in under 6 minutes.",
+    "tier": 3,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 537,
+    "name": "Fat of the Land",
+    "description": "Defeat 30 Moons of Peril bosses without leaving the dungeon.",
+    "tier": 3,
+    "monster": "Moons of Peril"
+  },
+  {
+    "id": 538,
+    "name": "Sportsmanship",
+    "description": "Defeat Sol Heredit once.",
+    "tier": 5,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 539,
+    "name": "Colosseum Grand Champion",
+    "description": "Defeat Sol Heredit 10 times.",
+    "tier": 6,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 540,
+    "name": "I Brought Mine Too",
+    "description": "Defeat Sol Heredit using only a Spear, Hasta or Halberd.",
+    "tier": 5,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 541,
+    "name": "Slow Dancing in the Sand",
+    "description": "Defeat Sol Heredit without running during the fight with him.",
+    "tier": 6,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 542,
+    "name": "Furball",
+    "description": "Complete Wave 4 without taking avoidable damage from a Manticore.",
+    "tier": 4,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 543,
+    "name": "Perfect Footwork",
+    "description": "Defeat Sol Heredit without taking any damage from his Spear, Shield, Grapple or Triple Attack.",
+    "tier": 6,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 544,
+    "name": "Showboating",
+    "description": "Defeat Sol Heredit after Fortis Saluting to the North, East, South and West of the arena while he's below 10% Hitpoints.",
+    "tier": 5,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 545,
+    "name": "Denied",
+    "description": "Complete Wave 7 without the Minotaur ever healing other enemies.",
+    "tier": 4,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 546,
+    "name": "One-off",
+    "description": "Complete Wave 11 with either \"Red Flag\", \"Dynamic Duo\", or \"Doom II\" active.",
+    "tier": 5,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 547,
+    "name": "Reinforcements",
+    "description": "Defeat Sol Heredit with the \"Bees! II\", \"Quartet\", and \"Solarflare II\" modifiers active.",
+    "tier": 6,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 548,
+    "name": "I was here first!",
+    "description": "Kill a Jaguar Warrior using a Claw-type weapon special attack.",
+    "tier": 4,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 549,
+    "name": "Colosseum Speed-Chaser",
+    "description": "Complete the Colosseum with a total time of 28:00 or less.",
+    "tier": 5,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 550,
+    "name": "Colosseum Speed-Runner",
+    "description": "Complete the Colosseum with a total time of 24:00 or less.",
+    "tier": 6,
+    "monster": "Fortis Colosseum"
+  },
+  {
+    "id": 551,
+    "name": "Unending Torment",
+    "description": "Kill a Tormented Demon.",
+    "tier": 4,
+    "monster": "Tormented Demons"
+  },
+  {
+    "id": 552,
+    "name": "Through Fire and Flames",
+    "description": "Kill a Tormented Demon whilst their shield is inactive.",
+    "tier": 4,
+    "monster": "Tormented Demons"
+  },
+  {
+    "id": 553,
+    "name": "Two Times the Torment",
+    "description": "Kill two Tormented Demons within 2 seconds.",
+    "tier": 4,
+    "monster": "Tormented Demons"
+  },
+  {
+    "id": 554,
+    "name": "Three Times the Thrashing",
+    "description": "Kill three Tormented Demons within 3 seconds.",
+    "tier": 5,
+    "monster": "Tormented Demons"
+  },
+  {
+    "id": 555,
+    "name": "Rapid Reload",
+    "description": "Hit three Tormented Demons within 3 seconds using a ballista or a crossbow.",
+    "tier": 4,
+    "monster": "Tormented Demons"
+  },
+  {
+    "id": 556,
+    "name": "Araxxor Veteran",
+    "description": "Kill Araxxor 25 times.",
+    "tier": 4,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 557,
+    "name": "Araxxor Master",
+    "description": "Kill Araxxor 75 times.",
+    "tier": 5,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 558,
+    "name": "Araxxor Speed-Trialist",
+    "description": "Kill Araxxor 4 times in 10:00.",
+    "tier": 4,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 559,
+    "name": "Araxxor Speed-Chaser",
+    "description": "Kill Araxxor 5 times in 10:00.",
+    "tier": 5,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 560,
+    "name": "Araxxor Speed-Runner",
+    "description": "Kill Araxxor 6 times in 10:00.",
+    "tier": 6,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 561,
+    "name": "Perfect Araxxor",
+    "description": "Kill Araxxor perfectly, without taking damage from Araxxor's Mage & Range attacks, melee attack off prayer, araxyte minions damage, or damage from acid pools.",
+    "tier": 5,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 562,
+    "name": "Perfect Araxxor 2",
+    "description": "Kill Araxxor perfectly, without hitting it during the enrage phase.",
+    "tier": 6,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 563,
+    "name": "Let it seep in",
+    "description": "Kill Araxxor without ever having venom or poison immunity.",
+    "tier": 5,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 564,
+    "name": "Relaxxor",
+    "description": "Kill Araxxor after destroying six eggs.",
+    "tier": 4,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 565,
+    "name": "Swimming in Venom",
+    "description": "Kill Araxxor without the boss ever moving.",
+    "tier": 6,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 566,
+    "name": "Araxyte Betrayal",
+    "description": "Have an Araxyte kill three other Araxytes.",
+    "tier": 5,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 567,
+    "name": "Arachnid Lover",
+    "description": "Kill Araxxor 10 times without leaving.",
+    "tier": 5,
+    "monster": "Araxxor"
+  },
+  {
+    "id": 568,
+    "name": "Hueycoatl Champion",
+    "description": "Kill the Hueycoatl once.",
+    "tier": 2,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 569,
+    "name": "Hueycoatl Adept",
+    "description": "Kill the Hueycoatl 10 times.",
+    "tier": 3,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 570,
+    "name": "Hueycoatl Veteran",
+    "description": "Kill the Hueycoatl 25 times.",
+    "tier": 4,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 571,
+    "name": "Perfect Hueycoatl",
+    "description": "Kill the Hueycoatl perfectly 5 times without leaving. To get a perfect kill, you must not take any avoidable damage from the Hueycoatl's lightning attack, tail slam attack or off-prayer projectile attacks.",
+    "tier": 4,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 572,
+    "name": "Pillar Lover",
+    "description": "Kill the Hueycoatl whilst it is vulnerable.",
+    "tier": 3,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 573,
+    "name": "Is it a bird?",
+    "description": "Kill the Hueycoatl using only dragonbane weaponry.",
+    "tier": 5,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 574,
+    "name": "You're a wizard",
+    "description": "Kill the Hueycoatl using only earth spells.",
+    "tier": 2,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 575,
+    "name": "I'm your son",
+    "description": "Kill the Hueycoatl whilst wearing two pieces of Hueycoatl armour.",
+    "tier": 3,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 576,
+    "name": "Hueycoatl Speed-Trialist",
+    "description": "Kill the Hueycoatl in 2:30",
+    "tier": 4,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 577,
+    "name": "Hueycoatl Speed-Chaser",
+    "description": "Kill the Hueycoatl in 2:30 with five or fewer players.",
+    "tier": 5,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 578,
+    "name": "Hueycoatl Speed-Runner",
+    "description": "Kill the Hueycoatl in 2:30 with three or fewer players.",
+    "tier": 6,
+    "monster": "Hueycoatl, The"
+  },
+  {
+    "id": 579,
+    "name": "Amoxliatl Champion",
+    "description": "Kill Amoxliatl once.",
+    "tier": 2,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 580,
+    "name": "Amoxliatl Adept",
+    "description": "Kill Amoxliatl 20 times.",
+    "tier": 3,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 581,
+    "name": "Amoxliatl Speed-Trialist",
+    "description": "Kill Amoxliatl in less than 1 minute.",
+    "tier": 3,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 582,
+    "name": "Amoxliatl Speed-Chaser",
+    "description": "Kill Amoxliatl in less than 30 seconds.",
+    "tier": 4,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 583,
+    "name": "Nagua Negation",
+    "description": "Kill Amoxliatl without taking any damage.",
+    "tier": 3,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 584,
+    "name": "Temotli Triumph",
+    "description": "Kill Amoxliatl using only glacial temotli as a weapon.",
+    "tier": 2,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 585,
+    "name": "Without Ralos' Light",
+    "description": "Kill Amoxliatl without losing any prayer points.",
+    "tier": 4,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 586,
+    "name": "Kemo Makti",
+    "description": "Kill Amoxliatl 10 times without leaving her chamber.",
+    "tier": 3,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 587,
+    "name": "Totally Shattered",
+    "description": "Kill Amoxliatl without any of her unstable ice shattering.",
+    "tier": 3,
+    "monster": "Amoxliatl"
+  },
+  {
+    "id": 588,
+    "name": "Perfect Royal Titans",
+    "description": "Kill the Royal Titans without taking any avoidable damage. This includes damage from any melee attacks, explosions from the ice elemental or fire elemental, any icicle or fire spawn, any jump attacks or the ice or fire pulse attack.",
+    "tier": 3,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 589,
+    "name": "Royal Titan Champion",
+    "description": "Kill the Royal Titans 10 times.",
+    "tier": 2,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 590,
+    "name": "Royal Titan Adept",
+    "description": "Kill the Royal Titans 25 times.",
+    "tier": 2,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 591,
+    "name": "One by one",
+    "description": "Kill one Titan at a time, without attacking the other.",
+    "tier": 1,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 592,
+    "name": "Royal Titan Speed-Runner",
+    "description": "Kill the Royal Titans in less than 1:30 minutes.",
+    "tier": 3,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 593,
+    "name": "Titan Killer",
+    "description": "Kill the Royal Titans 15 times without leaving the area. If a player joins the fight, the current streak will be reset to 0. If a player leaves the fight, the task will be failed and a new instance will need to be created.",
+    "tier": 3,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 594,
+    "name": "Elemental Company",
+    "description": "Kill the Royal Titans without attacking any elementals.",
+    "tier": 1,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 595,
+    "name": "I need room",
+    "description": "Kill the Royal Titans while extinguishing all fires and melting all icicles before they dissipate naturally.",
+    "tier": 3,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 596,
+    "name": "No time to pray",
+    "description": "Kill the Royal Titans without losing any prayer points.",
+    "tier": 4,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 597,
+    "name": "Let them fight",
+    "description": "Kill the Royal Titans while having them kill a total of 10 elementals.",
+    "tier": 1,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 598,
+    "name": "It takes too long",
+    "description": "Kill both royal titans while they are charging up their area attack. Both titans must die during the same charging up phase.",
+    "tier": 2,
+    "monster": "Royal Titans"
+  },
+  {
+    "id": 599,
+    "name": "Yama Adept",
+    "description": "Defeat Yama once.",
+    "tier": 4,
+    "monster": "Yama"
+  },
+  {
+    "id": 600,
+    "name": "Yama Veteran",
+    "description": "Defeat Yama 50 times.",
+    "tier": 5,
+    "monster": "Yama"
+  },
+  {
+    "id": 601,
+    "name": "Yama Speed-Trialist",
+    "description": "Defeat Yama in an average time of under 3:38 over your last four kills.",
+    "tier": 4,
+    "monster": "Yama"
+  },
+  {
+    "id": 602,
+    "name": "Yama Speed-Chaser",
+    "description": "Defeat Yama in an average time of under 3:00 over your last four kills.",
+    "tier": 5,
+    "monster": "Yama"
+  },
+  {
+    "id": 603,
+    "name": "Yama Speed-Runner",
+    "description": "Defeat Yama in an average time of under 2:34 over your last four kills.",
+    "tier": 6,
+    "monster": "Yama"
+  },
+  {
+    "id": 604,
+    "name": "No toppings, no drinks, thanks",
+    "description": "Defeat Yama without anybody healing using anything other than plain pizza and without anybody drinking any potions.",
+    "tier": 5,
+    "monster": "Yama"
+  },
+  {
+    "id": 605,
+    "name": "Shadow dancer",
+    "description": "Defeat Yama without getting hit by shadows and without being more than one tile away from the center of his shadow crash attack.",
+    "tier": 5,
+    "monster": "Yama"
+  },
+  {
+    "id": 606,
+    "name": "Fire fighter",
+    "description": "Defeat Yama without getting hit by fire and having only killed void flares with special attacks.",
+    "tier": 5,
+    "monster": "Yama"
+  },
+  {
+    "id": 607,
+    "name": "Back so soon?",
+    "description": "Defeat Yama without the judge being attacked with the wrong style and without taking more than one instance of damage each time you are exiled from the arena.",
+    "tier": 4,
+    "monster": "Yama"
+  },
+  {
+    "id": 608,
+    "name": "Contract Choreographer",
+    "description": "Defeat Yama whilst completing 'Shadow Dancer', 'Fire Fighter', 'Back so soon?' and without taking any other avoidable damage.",
+    "tier": 6,
+    "monster": "Yama"
+  },
+  {
+    "id": 609,
+    "name": "Contractually Unbound",
+    "description": "Defeat Yama under the elevated conditions of one of his non-standard contracts.",
+    "tier": 6,
+    "monster": "Yama"
+  },
+  {
+    "id": 610,
+    "name": "Doom Adept",
+    "description": "Defeat the Doom of Mokhaiotl at delve level 3.",
+    "tier": 4,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 611,
+    "name": "Doom Veteran",
+    "description": "Defeat the Doom of Mokhaiotl at delve level 8.",
+    "tier": 5,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 612,
+    "name": "It's Dark Down Here",
+    "description": "Defeat the Doom of Mokhaiotl at delve level 16.",
+    "tier": 6,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 613,
+    "name": "Exposed Doom",
+    "description": "Defeat the Doom of Mokhaiotl during its Melee charge phase.",
+    "tier": 4,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 614,
+    "name": "Mokhaiotl Drift",
+    "description": "Defeat the Doom of Mokhaiotl at level 8 or above before he finishes the first burrow phase.",
+    "tier": 5,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 615,
+    "name": "Grub Patrol",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 without ever letting a grub be absorbed.",
+    "tier": 5,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 616,
+    "name": "Perfect Doom",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 without taking any damage from the boss, letting any grubs be absorbed, or stepping in acid blood.",
+    "tier": 6,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 617,
+    "name": "The Praying Mantis",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 without restoring your prayer points through any method.",
+    "tier": 6,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 618,
+    "name": "Duel of Mokhaiotl",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 whilst only damaging the boss with one-handed melee attacks.",
+    "tier": 6,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 619,
+    "name": "Darkness Is Your Ally?",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 without equipping a demonbane weapon.",
+    "tier": 6,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 620,
+    "name": "Mine's Better",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 whilst always wearing a shield.",
+    "tier": 5,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 621,
+    "name": "Doom Crawler",
+    "description": "Defeat the Doom of Mokhaiotl level 1 in less than 30 seconds.",
+    "tier": 4,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 622,
+    "name": "Doom Chaser",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 in less than 10:00.",
+    "tier": 5,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 623,
+    "name": "Doom Racer",
+    "description": "Defeat the Doom of Mokhaiotl levels 1-8 in less than 7:15.",
+    "tier": 6,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 624,
+    "name": "Mopping up",
+    "description": "Clear at least 8 acid splats in a single Volatile Earth special attack.",
+    "tier": 6,
+    "monster": "Doom of Mokhaiotl"
+  },
+  {
+    "id": 625,
+    "name": "Shellbane Adept",
+    "description": "Kill the Shellbane Gryphon 25 times.",
+    "tier": 1,
+    "monster": "Shellbane Gryphon"
+  },
+  {
+    "id": 626,
+    "name": "Shellbane Veteran",
+    "description": "Kill the Shellbane Gryphon 50 times.",
+    "tier": 2,
+    "monster": "Shellbane Gryphon"
+  },
+  {
+    "id": 627,
+    "name": "Perfect Shellbane",
+    "description": "Kill the Shellbane Gryphon without taking damage.",
+    "tier": 2,
+    "monster": "Shellbane Gryphon"
+  },
+  {
+    "id": 628,
+    "name": "Shellbane Speedrunner",
+    "description": "Kill the Shellbane Gryphon 10 times within 12:30 minutes of entering the cave.",
+    "tier": 2,
+    "monster": "Shellbane Gryphon"
+  },
+  {
+    "id": 629,
+    "name": "Shellbane Survivor",
+    "description": "Kill the Shellbane Gryphon 25 times without leaving the cave.",
+    "tier": 3,
+    "monster": "Shellbane Gryphon"
+  },
+  {
+    "id": 630,
+    "name": "Dry Cleaning",
+    "description": "Kill the Shellbane Gryphon after clearing its corrosive spit from your armour.",
+    "tier": 1,
+    "monster": "Shellbane Gryphon"
+  },
+  {
+    "id": 631,
+    "name": "Featherweight Fighter",
+    "description": "Kill the Shellbane Gryphon 5 times without leaving the cave, while wearing gear weighing less than 40kg.",
+    "tier": 3,
+    "monster": "Shellbane Gryphon"
+  },
+  {
+    "id": 632,
+    "name": "Brutus Novice",
+    "description": "Kill Brutus.",
+    "tier": 1,
+    "monster": "Brutus"
+  },
+  {
+    "id": 633,
+    "name": "Brutus Champion",
+    "description": "Kill Brutus 10 times.",
+    "tier": 2,
+    "monster": "Brutus"
+  },
+  {
+    "id": 634,
+    "name": "Brutus Speed-Trialist",
+    "description": "Kill Brutus in less than 2 seconds.",
+    "tier": 4,
+    "monster": "Brutus"
+  },
+  {
+    "id": 635,
+    "name": "Beef vs Beef",
+    "description": "Kill Brutus whilst neither equipping nor consuming anything.",
+    "tier": 2,
+    "monster": "Brutus"
+  },
+  {
+    "id": 636,
+    "name": "Smarter than a Cow",
+    "description": "Kill Brutus without being attacked.",
+    "tier": 3,
+    "monster": "Brutus"
+  },
+  {
+    "id": 637,
+    "name": "Maggot Squasher",
+    "description": "Kill the Maggot King.",
+    "tier": 3,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 638,
+    "name": "Maggot Exterminator",
+    "description": "Kill the Maggot King 25 times.",
+    "tier": 4,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 639,
+    "name": "Camping the King",
+    "description": "Kill the Maggot King 12 times without leaving the arena.",
+    "tier": 5,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 640,
+    "name": "Maggot King Speed Chaser",
+    "description": "Complete the first 5 kills of the Maggot King within 9 minutes after entering the arena.",
+    "tier": 6,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 641,
+    "name": "Trying to fit in",
+    "description": "Kill the Maggot King using only weapons that can be found in Vampyrium.",
+    "tier": 4,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 642,
+    "name": "King-sized clobbering",
+    "description": "Kill the Maggot King without missing a single melee punish.",
+    "tier": 5,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 643,
+    "name": "Digging in",
+    "description": "Kill the Maggot King without moving more than 40 tiles.",
+    "tier": 5,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 644,
+    "name": "Cordoned Off",
+    "description": "Kill the Maggot King without moving beyond the back row of tiles.",
+    "tier": 5,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 645,
+    "name": "Perfect Maggot King",
+    "description": "Kill the Maggot King without taking any avoidable damage or him ever being healed.",
+    "tier": 5,
+    "monster": "Maggot King"
+  },
+  {
+    "id": 646,
+    "name": "Mad Angel Adept",
+    "description": "Kill the Mad Angel 25 times.",
+    "tier": 2,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 647,
+    "name": "Mad Angel Veteran",
+    "description": "Kill the Mad Angel 50 times.",
+    "tier": 3,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 648,
+    "name": "Perfect Mad Angel",
+    "description": "Kill the Mad Angel without taking any avoidable damage.",
+    "tier": 3,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 649,
+    "name": "This Is Madness",
+    "description": "Kill the Mad Angel 15 times without leaving her arena.",
+    "tier": 4,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 650,
+    "name": "Mad Angel Speed-Runner",
+    "description": "Kill the Mad Angel 5 times within 10 minutes of entering her arena.",
+    "tier": 3,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 651,
+    "name": "Dancing Queen",
+    "description": "Kill the Mad Angel after getting 6 consecutive enhanced attacks by dodging the sweep attack successfully during her enrage phase.",
+    "tier": 2,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 652,
+    "name": "Smite Fight",
+    "description": "Kill the Mad Angel after getting 3 consecutive enhanced attacks by successfully praying against the smite attacks during her enrage phase.",
+    "tier": 2,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 653,
+    "name": "Juggling Act",
+    "description": "Kill the Mad Angel after attacking her between each bounce of the blast attack during her enrage phase.",
+    "tier": 2,
+    "monster": "Mad Angel, The"
+  },
+  {
+    "id": 654,
+    "name": "The Pen Is Mightier",
+    "description": "Kill the Mad Angel without equipping any weapon.",
+    "tier": 4,
+    "monster": "Mad Angel, The"
+  }
+]

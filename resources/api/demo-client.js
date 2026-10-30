@@ -121,6 +121,23 @@ export default class DemoClient {
     }
 
     this.state.sharedBank = sharedBank;
+
+    for (const member of this.state.roster) {
+      if (member.id === 3) {
+        continue;
+      }
+
+      member.combatAchievements = new Set(
+        this.gameData.combatAchievements
+          .filter(function completedTask(task) {
+            return member.id === 4 || (member.id === 2 && task.id % (task.tier + 1) !== 0);
+          })
+          .map(function taskIdentifier(task) {
+            return task.id;
+          }),
+      );
+    }
+
     populateActivity(this.state);
 
     return gameData;
@@ -130,6 +147,7 @@ export default class DemoClient {
     await this.fetchGameData();
 
     const members = mockGroupDataResponse(this.state, this.startMS, this.demoData);
+
     advanceActivity(this.state, members);
 
     return members;

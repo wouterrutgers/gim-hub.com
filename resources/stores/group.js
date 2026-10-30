@@ -169,5 +169,6 @@ export const useMemberInteracting = createMemberSelector("interacting");
 export const useMemberStats = createMemberSelector("stats");
 export const useMemberSkills = createMemberSelector("skills");
 export const useMemberQuests = createMemberSelector("quests");
+export const useMemberCombatAchievements = createMemberSelector("combatAchievements");
 export const useMemberDiaries = createMemberSelector("diaries");
 export const useMemberTimezone = createMemberSelector("timezone");

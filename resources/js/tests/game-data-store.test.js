@@ -67,6 +67,7 @@ describe("game data store", function describeGameDataStore() {
       [gameDataManifest["/data/item_data.json"], {}],
       [gameDataManifest["/data/item_tags.json"], { tags: [], items: {} }],
       [gameDataManifest["/data/diary_data.json"], diaryData],
+      [gameDataManifest["/data/combat_achievements.json"], []],
       [gameDataManifest["/data/collection_log_info.json"], []],
     ]);
     let pricesUnavailable = true;

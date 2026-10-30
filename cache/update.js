@@ -631,6 +631,24 @@ async function dumpQuestMapping() {
   }
 }
 
+async function dumpCombatAchievements() {
+  console.log("Dumping combat achievements.");
+  try {
+    fs.copyFileSync(
+      "./CombatAchievementDumper.java",
+      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/CombatAchievementDumper.java`,
+    );
+    execRuneliteGradleApplication({
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
+      mainClass: "net.runelite.cache.CombatAchievementDumper",
+      dependencies: [],
+      runArgs: `${osrsCacheDirectory} ${path.resolve("../resources/assets/data/combat_achievements.json")}`,
+    });
+  } finally {
+    execGitCleanInRunelite();
+  }
+}
+
 (async () => {
   execGitCleanInRunelite();
 
@@ -646,4 +664,5 @@ async function dumpQuestMapping() {
   await moveResults();
 
   await dumpQuestMapping();
+  await dumpCombatAchievements();
 })();

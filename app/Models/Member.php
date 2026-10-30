@@ -25,7 +25,7 @@ class Member extends Model
         'meat_pouch', 'log_basket', 'reagent_pouch', 'fur_pouch', 'bolt_pouch', 'forestry_kit', 'huntsmans_kit',
         'bow_string_spool', 'steel_key_ring', 'flamtaer_bag', 'bottomless_compost_bucket', 'gnomish_firelighter',
         'blast_furnace', 'fossil_storage', 'balloon_transport', 'sandstorm', 'hallowed_sepulchre', 'cargo_holds',
-        'quiver', 'diary_vars', 'interacting', 'timezone',
+        'quiver', 'diary_vars', 'combat_achievements', 'interacting', 'timezone',
     ];
 
     // Keys that represent a partial view of an item collection, like items that the plugin has seen removed from an unopened tackle box.

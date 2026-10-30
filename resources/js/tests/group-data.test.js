@@ -13,6 +13,9 @@ describe("parseGroupData", function describeParseGroupData() {
         stats: [90, 99, 50, 70, 8750, 100, 301, 42],
         skills: [123, 456, ...new Array(skillsInBackendOrder.length - 3).fill(0), 789],
         quests: [0, 1, 2],
+        combat_achievements: Array.from({ length: 800 }, function taskIdentifier(_value, index) {
+          return index;
+        }),
       },
     ]);
 
@@ -25,6 +28,7 @@ describe("parseGroupData", function describeParseGroupData() {
     expect(member.skills.Attack).toBe(456);
     expect(member.skills.Sailing).toBe(789);
     expect(member.quests).toEqual(["IN_PROGRESS", "NOT_STARTED", "FINISHED"]);
+    expect(member.combatAchievements.size).toBe(800);
   });
 
   it.each([

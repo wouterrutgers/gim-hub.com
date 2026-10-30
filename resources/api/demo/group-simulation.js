@@ -626,13 +626,14 @@ export function mockGroupDataResponse({ roster, thurgo, cowKiller, banks, shared
   }
 
   return [
-    ...roster.map(function getMember({ id, displayName, colorHueDegrees }) {
+    ...roster.map(function getMember({ id, displayName, colorHueDegrees, combatAchievements }) {
       return {
         ...results.find(function matchesMember(member) {
           return member.name === displayName;
         }),
         id,
         colorHueDegrees,
+        combatAchievements,
       };
     }),
     { ...DEFAULT_MEMBER, id: 5, name: "@SHARED", bank: sharedBank },

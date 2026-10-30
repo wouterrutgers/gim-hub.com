@@ -365,6 +365,12 @@ const groupDataSchema = z
       diary_vars: diariesSchema.nullish().transform(function omitNull(value) {
         return value ?? undefined;
       }),
+      combat_achievements: z
+        .array(z.uint32())
+        .nullish()
+        .transform(function mapCombatAchievements(value) {
+          return value == null ? undefined : new Set(value);
+        }),
       color_hue_degrees: z
         .number()
         .int()
@@ -396,6 +402,7 @@ function mapMember({
   master_scroll_book,
   essence_pouches,
   diary_vars,
+  combat_achievements,
   color_hue_degrees,
   tackle_box,
   tool_leprechaun,
@@ -447,6 +454,7 @@ function mapMember({
     masterScrollBook: master_scroll_book,
     essencePouches: essence_pouches,
     diaries: diary_vars,
+    combatAchievements: combat_achievements,
     colorHueDegrees: color_hue_degrees,
     tackleBox: tackle_box,
     toolLeprechaun: tool_leprechaun,

@@ -47,11 +47,15 @@ it('stores and returns member properties from supported plugin versions', functi
         ->assertJsonPath('0.stats', $properties['stats'])
         ->assertJsonPath('0.rune_pouch', $properties['rune_pouch'])
         ->assertJsonPath('0.skills', $properties['skills'])
+        ->assertJsonPath('0.combat_achievements', $properties['combat_achievements'] ?? null)
         ->assertJsonMissingPath('0.shared_bank')
         ->assertJsonMissingPath('0.deposited')
         ->assertJsonMissingPath('0.collection_log');
 })->with([
     'current plugin 27c7ce2' => [[]],
+    'combat achievements snapshot' => [['combat_achievements' => [0, 31, 32, 654]]],
+    'future combat achievements snapshot' => [['combat_achievements' => range(0, 799)]],
+    'empty combat achievements snapshot' => [['combat_achievements' => []]],
     'system timezone alias' => [['timezone' => 'America/Indianapolis']],
     'pending plugin e432a79' => [[
         'herb_sack' => [199, 12],

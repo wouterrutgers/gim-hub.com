@@ -5,6 +5,9 @@
   import AppLink from "../app-link/AppLink.vue";
   import CachedImage from "../cached-image/CachedImage.vue";
   import GroupSwitcher from "../group-switcher/GroupSwitcher.vue";
+  import Modal from "../modal/Modal.vue";
+  import { useModal } from "../modal/use-modal";
+  import DonateWindow from "./DonateWindow.vue";
   import "./app-navigation.css";
 
   const props = defineProps({
@@ -14,6 +17,7 @@
   const route = useRoute();
   const settingsStore = useSettingsStore();
   const moreMenu = ref(null);
+  const { open: modalOpen, openModal, closeModal } = useModal();
 
   const primaryLinks = [
     { label: "Items", href: "/group/items" },
@@ -47,6 +51,8 @@
 </script>
 
 <template>
+  <Modal :open="modalOpen" :component="DonateWindow" @close="closeModal" />
+
   <div id="app-navigation" class="rsborder-tiny rsbackground">
     <GroupSwitcher :group-name="props.groupName" />
     <nav id="app-navigation-nav" aria-label="Group navigation">
@@ -120,6 +126,32 @@
       >
         <CachedImage alt="" :src="link.imageSource" height="20" />
       </a>
+      <button
+        type="button"
+        class="app-link men-button nav-community-link"
+        aria-label="Donate"
+        data-tooltip="Donate"
+        aria-haspopup="dialog"
+        aria-controls="donate-window"
+        :aria-expanded="modalOpen"
+        @click="openModal()"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"
+          />
+        </svg>
+      </button>
       <button
         v-if="route.path !== '/group/panels' && route.path !== '/group/activity' && !settingsStore.showActivitySidebar"
         class="activity-restore app-link men-button nav-community-link"

@@ -89,7 +89,7 @@
           :href="link.href"
           :selected="route.path === link.href"
           :aria-label="link.label"
-          :title="settingsStore.collapseNavigation ? link.label : undefined"
+          :data-tooltip="settingsStore.collapseNavigation ? link.label : undefined"
         >
           <CachedImage alt="" :src="link.icon" width="20" height="20" />
           <span class="nav-label-full">{{ link.label }}</span>
@@ -134,7 +134,7 @@
           :href="link.href"
           :selected="route.path === link.href"
           :aria-label="link.label"
-          :title="settingsStore.collapseNavigation ? link.label : undefined"
+          :data-tooltip="settingsStore.collapseNavigation ? link.label : undefined"
         >
           <CachedImage class="nav-tool-icon" :src="link.icon" alt="" width="20" height="20" />
           <span class="nav-label-full">{{ link.label }}</span>
@@ -161,7 +161,7 @@
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Discord"
-          :title="settingsStore.collapseNavigation ? 'Discord' : undefined"
+          :data-tooltip="settingsStore.collapseNavigation ? 'Discord' : undefined"
         >
           <CachedImage class="nav-community-icon" src="/images/discord-light.webp" alt="" width="20" height="20" />
           <span class="nav-label-full">Discord</span>
@@ -171,7 +171,7 @@
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
-          :title="settingsStore.collapseNavigation ? 'GitHub' : undefined"
+          :data-tooltip="settingsStore.collapseNavigation ? 'GitHub' : undefined"
         >
           <CachedImage class="nav-community-icon" src="/images/github-light.webp" alt="" width="20" height="20" />
           <span class="nav-label-full">GitHub</span>

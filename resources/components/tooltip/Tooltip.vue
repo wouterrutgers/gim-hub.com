@@ -222,7 +222,7 @@
   }
 
   function handleFocusIn(event) {
-    const value = getDataTooltipElement(event.target)?.dataset.tooltip ?? event.target.getAttribute("title");
+    const value = getDataTooltipElement(event.target)?.dataset.tooltip;
 
     if (!value || !event.target.matches(":focus-visible")) {
       return;

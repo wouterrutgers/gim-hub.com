@@ -118,7 +118,7 @@
         item,
         icon: composeItemIconHref(item, itemData),
         link: `https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=${item.itemID}`,
-        tooltip: storageKeys.length > 0 && storedItems.length === 0 ? undefined : serializeTooltip(tooltipData),
+        tooltip: serializeTooltip(tooltipData),
         previewItems,
         hasStoredItems: storageKeys.length > 0 && storedItems.length > 0,
       };

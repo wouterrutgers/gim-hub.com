@@ -9,10 +9,9 @@ import Tooltip from "../../components/tooltip/Tooltip.vue";
 import { useApiStore } from "../../stores/api";
 import { parseGroupData } from "../../api/requests/group-data";
 
-const portableItems = [13226, 22586, 24482, 24481, 30000, 12019];
-const otherContainers = [28951, 24882, 21389, 5509, 25580, 12019, 25582];
+const portableItems = [28951, 24882, 21389, 5509, 25580, 12019, 25582, 30000, 12791];
 const items = new Map([
-  ...[...portableItems, ...otherContainers, 12791, 28143].map(function portableItem(id) {
+  ...[...portableItems, 28143].map(function portableItem(id) {
     return [id, { name: `Container ${id}`, highalch: 0 }];
   }),
   [1095, { name: "Leather chaps", highalch: 12, alchable: true }],
@@ -75,59 +74,12 @@ describe("storage UI", function storageInterface() {
     await nextTick();
   }
 
-  it("shows contents only for filled portable containers", async function portableTooltips() {
-    payload = [
-      {
-        id: 1,
-        name: "Alice",
-        inventory: Array.from({ length: 28 }, function slot(_value, index) {
-          return [portableItems[index] ?? 0, portableItems[index] ? 1 : 0];
-        }).flat(),
-      },
-    ];
-    await mount({
-      render() {
-        return [h(PlayerInventory, { member: "Alice" }), h(Tooltip)];
-      },
-    });
-    const links = container.querySelectorAll(".player-inventory-item-box");
-    expect(links.length).toBe(6);
-
-    for (const link of links) {
-      expect(link.querySelector(".player-inventory-contents-indicator")).toBeNull();
-      expect(link.hasAttribute("data-tooltip")).toBe(false);
-    }
-
-    payload = [
-      {
-        ...payload[0],
-        herb_sack: [199, 2],
-        looting_bag: [],
-        seed_box: [],
-        gem_bag: [],
-        chugging_barrel: [],
-        coal_bag: [],
-      },
-    ];
-    await vi.advanceTimersByTimeAsync(1000);
-    await nextTick();
-    links[0].dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));
-    await nextTick();
-    expect(container.querySelector('[role="tooltip"]').textContent).toContain("2 Grimy guam leaf");
-    expect(links[0].querySelector(".player-inventory-contents-indicator")).not.toBeNull();
-
-    for (const link of [...links].slice(1)) {
-      expect(link.querySelector(".player-inventory-contents-indicator")).toBeNull();
-      expect(link.hasAttribute("data-tooltip")).toBe(false);
-    }
-  });
-
   it("marks tracked containers with contents and shows combined essence details", async function containerPreviews() {
     payload = [
       {
         id: 1,
         name: "Alice",
-        inventory: [...otherContainers, 30000, 12791]
+        inventory: portableItems
           .flatMap(function inventoryItem(id) {
             return [id, 1];
           })

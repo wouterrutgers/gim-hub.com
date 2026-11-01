@@ -20,42 +20,6 @@
   background: var(--background);
 }
 
-.workspace-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.workspace-actions {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
-}
-
-.workspace-header .activity-page-link {
-  display: none;
-}
-
-.workspace-description {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.demo-badge {
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  color: var(--orange);
-  font: 11px var(--font-body);
-  white-space: nowrap;
-}
-
 .workspace-page {
   display: flex;
   flex: 1;
@@ -133,6 +97,51 @@
   pointer-events: auto;
 }
 
+.activity-rail {
+  display: flex;
+  flex: 0 0 44px;
+  box-sizing: border-box;
+  padding-top: 16px;
+  background: var(--background);
+}
+
+.activity-rail-open {
+  display: none;
+}
+
+.activity-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 12px;
+  box-sizing: border-box;
+  width: 44px;
+  min-height: 112px;
+  padding: 12px 8px;
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-radius: 3px 0 0 3px;
+  background: var(--surface);
+  color: var(--text);
+  pointer-events: auto;
+}
+
+.activity-toggle:hover,
+.activity-toggle:focus-visible {
+  background: var(--elevated);
+}
+
+.activity-toggle:focus-visible {
+  outline-offset: -4px;
+}
+
+.activity-toggle-label {
+  writing-mode: vertical-rl;
+  font: 12px / 1.3 var(--font-body);
+}
+
 .activity-feed.activity-dock {
   border-width: 0 0 0 1px;
   border-radius: 0;
@@ -151,7 +160,11 @@
 }
 
 @media (768px <= width <= 1439px) {
-  .activity-dock {
+  .activity-rail-open {
+    display: flex;
+  }
+
+  .activity-feed.activity-dock {
     position: absolute;
     inset: 0 0 0 auto;
     z-index: 20;
@@ -166,11 +179,8 @@
   background: transparent;
 }
 
-.map-workspace .workspace-header {
-  padding: 16px 20px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  background: color-mix(in srgb, var(--surface) 96%, transparent);
+.map-workspace .activity-rail {
+  background: transparent;
 }
 
 #unauthed-content {
@@ -244,12 +254,8 @@
 
 @media (width <= 767px) {
   .activity-dock,
-  .workspace-header .activity-toggle {
+  .activity-rail {
     display: none;
-  }
-
-  .workspace-header .activity-page-link {
-    display: inline-flex;
   }
 
   .authed-layout {
@@ -259,20 +265,6 @@
   #main-content {
     gap: 20px;
     padding: 22px 16px 0;
-  }
-
-  .workspace-header h1 {
-    font-size: 28px;
-  }
-
-  .workspace-description {
-    max-width: 250px;
-    line-height: 1.5;
-    font-size: 12px;
-  }
-
-  .demo-badge {
-    align-self: flex-start;
   }
 
   .workspace-page {

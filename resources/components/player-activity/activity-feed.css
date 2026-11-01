@@ -29,8 +29,8 @@
 .activity-collapse {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 44px;
+  height: 44px;
   margin-left: auto;
   color: var(--link);
 }

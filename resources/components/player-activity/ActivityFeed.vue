@@ -213,8 +213,8 @@
         class="activity-collapse"
         type="button"
         :aria-expanded="settingsStore.showActivitySidebar"
-        aria-label="Collapse activity timeline"
-        data-tooltip="Collapse activity timeline"
+        aria-label="Close activity sidebar"
+        data-tooltip="Close activity sidebar"
         aria-controls="group-activity-sidebar"
         @click="settingsStore.setShowActivitySidebar(false)"
       >

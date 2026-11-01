@@ -22,37 +22,35 @@
   const isActivityPage = computed(function activityPageIsOpen() {
     return route.path === "/group/activity";
   });
-  const page = computed(function getCurrentPage() {
+  const pageName = computed(function getCurrentPageName() {
     return {
-      "/group/items": { title: "Group items", description: "Search items across all members and storage." },
-      "/group/map": { title: "World map", description: "Live player locations across Gielinor." },
-      "/group/history": { title: "Skill history", description: "Compare experience gains by member." },
-      "/group/activity": { title: "Group activity", description: "Drops, levels, and completed achievements." },
-      "/group/panels": { title: "Group members", description: "Equipment, skills, quests, and collection logs." },
-      "/group/settings": { title: "Settings", description: "Group members and display preferences." },
-      "/group/setup-instructions": { title: "Plugin setup", description: "Connect GIM hub to RuneLite." },
-      "/changelog": { title: "What's new", description: "Updates to the website and plugin." },
+      "/group/items": "Group items",
+      "/group/map": "World map",
+      "/group/history": "Skill history",
+      "/group/activity": "Group activity",
+      "/group/panels": "Group members",
+      "/group/settings": "Settings",
+      "/group/setup-instructions": "Plugin setup",
+      "/changelog": "What's new",
     }[route.path];
   });
   const activityPageTarget = ref();
   const activityFeed = ref();
   const activityToggle = ref();
 
-  async function toggleActivitySidebar() {
-    settingsStore.setShowActivitySidebar(!settingsStore.showActivitySidebar);
-
-    if (settingsStore.showActivitySidebar) {
-      await nextTick();
-      activityFeed.value.$el.querySelector(".activity-collapse").focus();
-    }
+  async function openActivitySidebar() {
+    settingsStore.setShowActivitySidebar(true);
+    await nextTick();
+    activityFeed.value.$el.querySelector(".activity-collapse").focus();
   }
 
   watch(
     function activityIsShown() {
       return settingsStore.showActivitySidebar;
     },
-    function restoreActivityFocus(shown) {
+    async function restoreActivityFocus(shown) {
       if (!shown && !isActivityPage.value && activityFeed.value.$el.contains(document.activeElement)) {
+        await nextTick();
         activityToggle.value.focus();
       }
     },
@@ -74,38 +72,31 @@
     <aside v-if="props.showPanels" class="group-rail" aria-label="Your group">
       <SidePanels />
     </aside>
-    <main id="main-content" class="pointer-passthrough">
-      <header class="workspace-header">
-        <div>
-          <h1>{{ page.title }}</h1>
-          <p class="workspace-description">{{ page.description }}</p>
-        </div>
-        <div class="workspace-actions">
-          <span v-if="apiStore.isDemo" class="demo-badge">Demo mode</span>
-          <button
-            v-if="!isActivityPage"
-            ref="activityToggle"
-            class="activity-toggle men-button"
-            type="button"
-            aria-controls="group-activity-sidebar"
-            :aria-expanded="settingsStore.showActivitySidebar"
-            @click="toggleActivitySidebar"
-          >
-            <span
-              class="chevron"
-              :class="settingsStore.showActivitySidebar ? 'chevron-right' : 'chevron-left'"
-              aria-hidden="true"
-            />
-            {{ settingsStore.showActivitySidebar ? "Hide activity" : "Show activity" }}
-          </button>
-          <RouterLink to="/group/activity" class="activity-page-link men-button">Activity</RouterLink>
-        </div>
-      </header>
+    <main id="main-content" class="pointer-passthrough" :aria-label="pageName">
       <PluginWarnings />
       <div class="workspace-page pointer-passthrough">
         <slot />
       </div>
     </main>
+    <div
+      v-if="!isActivityPage"
+      class="activity-rail"
+      :class="{ 'activity-rail-open': settingsStore.showActivitySidebar }"
+    >
+      <button
+        v-show="!settingsStore.showActivitySidebar"
+        ref="activityToggle"
+        class="activity-toggle"
+        type="button"
+        aria-label="Open activity sidebar"
+        aria-controls="group-activity-sidebar"
+        :aria-expanded="settingsStore.showActivitySidebar"
+        @click="openActivitySidebar"
+      >
+        <span class="chevron chevron-left" aria-hidden="true" />
+        <span class="activity-toggle-label" aria-hidden="true">Activity</span>
+      </button>
+    </div>
     <Teleport :to="activityPageTarget" :disabled="!activityPageTarget">
       <ActivityFeed
         ref="activityFeed"

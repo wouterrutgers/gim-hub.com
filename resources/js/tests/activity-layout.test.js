@@ -62,7 +62,9 @@ describe("persistent activity layout", function activityLayout() {
     expect(timeline.querySelector('[aria-label="Filter activity by type"]').value).toBe("xp");
     collapse.click();
     await nextTick();
-    expect(document.activeElement).toBe(container.querySelector(".activity-toggle"));
+    await vi.waitFor(function activityTabHasFocus() {
+      expect(document.activeElement).toBe(container.querySelector(".activity-toggle"));
+    });
     application.unmount();
 
     const nextVisit = await mountLayout();

@@ -558,16 +558,38 @@
       <h2>
         Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
       </h2>
-      <button
-        v-if="settingsStore.enableGearscapeExport"
-        id="items-page-gearscape-export-button"
-        class="men-button men-button-small"
-        data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
-        aria-label="Copy current items to clipboard for Gearscape"
-        @click="copyItemsForGearscape"
-      >
-        {{ gearscapeExportLabel }}
-      </button>
+      <div class="items-results-actions">
+        <div class="items-view-toggle" role="group" aria-label="Item display">
+          <button
+            type="button"
+            class="men-button men-button-small"
+            :class="{ active: !settingsStore.showItemOwners }"
+            :aria-pressed="!settingsStore.showItemOwners"
+            @click="settingsStore.setShowItemOwners(false)"
+          >
+            Compact
+          </button>
+          <button
+            type="button"
+            class="men-button men-button-small"
+            :class="{ active: settingsStore.showItemOwners }"
+            :aria-pressed="settingsStore.showItemOwners"
+            @click="settingsStore.setShowItemOwners(true)"
+          >
+            Detailed
+          </button>
+        </div>
+        <button
+          v-if="settingsStore.enableGearscapeExport"
+          id="items-page-gearscape-export-button"
+          class="men-button men-button-small"
+          data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
+          aria-label="Copy current items to clipboard for Gearscape"
+          @click="copyItemsForGearscape"
+        >
+          {{ gearscapeExportLabel }}
+        </button>
+      </div>
     </div>
 
     <p v-if="sortedItems.length === 0" class="items-empty">
@@ -575,14 +597,19 @@
     </p>
 
     <ItemBank
+      :key="settingsStore.showItemOwners"
       :sorted-items="sortedItems"
       :pinned-items="pinnedItems"
       :selected-item-identifier="selectedItemIdentifier"
+      :show-owners="settingsStore.showItemOwners"
+      :member-filter="memberFilter"
+      :container-filter="containerFilter"
       @select-item="selectItem"
+      @toggle-pin="togglePin"
     />
 
     <section
-      v-if="selectedItem"
+      v-if="selectedItem && !settingsStore.showItemOwners"
       id="selected-item-details"
       ref="itemInspector"
       class="item-inspector"

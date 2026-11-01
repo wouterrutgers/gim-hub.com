@@ -72,13 +72,15 @@
       <h2>Item breakdown</h2>
       <p>
         Select an item in the bank to see its value and who holds it in the panel below. Hover over a helmet to see the
-        owner's name and quantity.
+        owner's name and quantity. Switch to Detailed above the bank to show names and quantities on every item.
       </p>
       <div class="items-page-tutorial-preview">
         <ItemBank
           :sorted-items="[tutorialItem]"
           :pinned-items="new Set(pinned ? [tutorialItem.itemID] : [])"
           :selected-item-identifier="tutorialItem.itemID"
+          :member-filter="new Set()"
+          container-filter="All"
           details-identifier="search-help-item-details"
         />
         <section id="search-help-item-details" class="item-inspector" aria-label="Example item details">

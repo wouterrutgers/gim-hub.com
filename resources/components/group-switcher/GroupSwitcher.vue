@@ -81,10 +81,12 @@
     <button
       id="group-switcher-toggle"
       type="button"
+      :aria-label="`Switch group: ${props.groupName}`"
       :aria-expanded="open"
       aria-controls="group-switcher-dropdown"
       @click="toggle"
     >
+      <CachedImage class="group-switcher-icon" src="/ui/grouping.png" alt="" width="20" height="20" />
       <span id="group-switcher-label">{{ props.groupName }}</span>
       <span id="group-switcher-arrow" class="chevron" :class="{ 'chevron-up': open }" aria-hidden="true" />
     </button>

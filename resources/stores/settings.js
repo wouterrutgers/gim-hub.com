@@ -4,6 +4,8 @@ import { useLocalStorage } from "../composables/local-storage";
 import { siteThemes } from "./settings-options";
 
 const DEFAULT_SITE_SETTINGS = Object.freeze({
+  collapseNavigation: false,
+  showItemOwners: false,
   showActivitySidebar: false,
   filterActivityDrops: true,
   expandPlayerHistory: false,
@@ -14,6 +16,8 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
 });
 
 const KEY_SITE_THEME = "settings-site-theme";
+const KEY_NAVIGATION_COLLAPSED = "settings-navigation-collapsed";
+const KEY_ITEM_OWNERS = "settings-item-owners";
 const KEY_ACTIVITY_SIDEBAR = "settings-activity-sidebar";
 const KEY_ACTIVITY_DROP_FILTER = "settings-activity-drop-filter";
 const KEY_PLAYER_HISTORY_EXPANSION = "settings-player-history-expansion";
@@ -36,6 +40,16 @@ function validateBoolean(value) {
 }
 
 export const useSettingsStore = defineStore("settings", function createSettingsStore() {
+  const [navigationCollapsed, setNavigationCollapsed] = useLocalStorage({
+    key: KEY_NAVIGATION_COLLAPSED,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.collapseNavigation),
+    validator: validateBoolean,
+  });
+  const [itemOwners, setItemOwners] = useLocalStorage({
+    key: KEY_ITEM_OWNERS,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.showItemOwners),
+    validator: validateBoolean,
+  });
   const [siteTheme, setSiteTheme] = useLocalStorage({
     key: KEY_SITE_THEME,
     defaultValue: DEFAULT_SITE_SETTINGS.siteTheme,
@@ -72,6 +86,12 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     validator: validateBoolean,
   });
 
+  const collapseNavigation = computed(function navigationIsCollapsed() {
+    return navigationCollapsed.value === "true";
+  });
+  const showItemOwners = computed(function itemOwnersAreShown() {
+    return itemOwners.value === "true";
+  });
   const showActivitySidebar = computed(function activitySidebarShown() {
     return activitySidebar.value === "true";
   });
@@ -90,6 +110,14 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
   const enableGearscapeExport = computed(function gearscapeExportEnabled() {
     return gearscapeExport.value === "true";
   });
+
+  function setCollapseNavigation(value) {
+    setNavigationCollapsed(String(value));
+  }
+
+  function setShowItemOwners(value) {
+    setItemOwners(String(value));
+  }
 
   function setShowActivitySidebar(value) {
     setActivitySidebar(String(value));
@@ -116,6 +144,10 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
   }
 
   return {
+    collapseNavigation,
+    setCollapseNavigation,
+    showItemOwners,
+    setShowItemOwners,
     siteTheme,
     setSiteTheme,
     showActivitySidebar,

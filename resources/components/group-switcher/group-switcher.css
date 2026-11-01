@@ -24,6 +24,11 @@
   border-color: var(--orange);
 }
 
+.group-switcher-icon {
+  display: none;
+  object-fit: contain;
+}
+
 #group-switcher-label {
   overflow: hidden;
   text-overflow: ellipsis;

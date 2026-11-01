@@ -129,6 +129,23 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.items-results-actions,
+.items-view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.items-results-actions {
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.items-view-toggle {
+  gap: 4px;
 }
 
 .items-results-heading h2 {
@@ -284,6 +301,22 @@
   max-width: 260px;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
+}
+
+.items-bank-detailed .items-page-panel {
+  flex-direction: column;
+  align-self: stretch;
+  min-width: 0;
+  gap: 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.items-bank-detailed .items-page-panel-top,
+.items-bank-detailed .items-page-panel-quantity-breakdown {
+  flex: none;
+  max-width: none;
 }
 
 .item-owner {

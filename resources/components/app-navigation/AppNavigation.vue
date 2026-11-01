@@ -38,6 +38,15 @@
       moreMenu.value.open = false;
     }
   }
+
+  function closeMoreOnEscape(event) {
+    if (!moreMenu.value.open) {
+      return;
+    }
+
+    moreMenu.value.open = false;
+    event.stopPropagation();
+  }
 </script>
 
 <template>
@@ -90,7 +99,7 @@
         ref="moreMenu"
         class="nav-mobile-more"
         @mousedown.window="closeMoreOnOutsideClick"
-        @keydown.esc="moreMenu.open = false"
+        @keydown.esc="closeMoreOnEscape"
       >
         <summary
           :class="{

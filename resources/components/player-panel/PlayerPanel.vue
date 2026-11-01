@@ -1,5 +1,6 @@
 <script setup>
-  import { computed, ref } from "vue";
+  import { computed } from "vue";
+  import { useRememberedState } from "../../composables/remembered-state";
   import CachedImage from "../cached-image/CachedImage.vue";
   import CollectionLogWindow from "../collection-log/CollectionLogWindow.vue";
   import CombatAchievementsWindow from "../combat-achievements/CombatAchievementsWindow.vue";
@@ -17,7 +18,10 @@
     member: { type: String, default: undefined },
   });
 
-  const subcategory = ref();
+  const [subcategory, setSubcategory] = useRememberedState({
+    key: `player-panel-${props.member}`,
+    defaultValue: undefined,
+  });
   const {
     open: collectionLogModalOpen,
     componentProps: collectionLogModalProps,
@@ -92,7 +96,7 @@
       return;
     }
 
-    subcategory.value = subcategory.value === button.category ? undefined : button.category;
+    setSubcategory(subcategory.value === button.category ? undefined : button.category);
   }
 </script>
 

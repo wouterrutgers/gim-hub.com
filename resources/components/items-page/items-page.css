@@ -55,6 +55,12 @@
   display: none;
 }
 
+.items-filter-summary {
+  display: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+
 #items-page-head .men-button > img {
   width: 16px;
   height: 16px;
@@ -227,16 +233,20 @@
 }
 
 .item-inspector {
+  container-type: inline-size;
   flex-shrink: 0;
   padding-top: 12px;
   border-top: 1px solid var(--border);
 }
 
 .items-page-panel.rsborder {
-  display: flex;
+  --item-pin-size: 24px;
+
+  display: grid;
   position: relative;
-  flex-wrap: wrap;
-  gap: 12px 32px;
+  grid-template: "heading owners" auto "prices owners" auto / minmax(0, 320px) minmax(0, 260px);
+  align-content: start;
+  gap: 8px 32px;
   border: 0;
   background: transparent;
   box-shadow: none;
@@ -244,28 +254,34 @@
 
 .items-page-panel-top {
   display: grid;
-  flex: 1 1 260px;
-  grid-template-columns: minmax(0, 1fr) 48px;
+  grid-area: heading;
+  grid-template: "name pin icon" auto / minmax(0, 1fr) var(--item-pin-size) 48px;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   min-width: 0;
   max-width: 320px;
 }
 
 .items-page-panel-heading {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  margin-bottom: 8px;
+  grid-area: name;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .items-page-panel-name {
-  flex: 1;
   min-width: 0;
   color: var(--text);
   text-decoration-color: var(--link);
   font: 20px / 1.1 var(--font-game);
   text-decoration-line: underline;
+}
+
+.items-page-panel-total {
+  color: var(--muted);
+  font: 12px / 1.4 var(--font-body);
+  font-variant-numeric: tabular-nums;
 }
 
 .items-page-panel-name:hover {
@@ -274,6 +290,7 @@
 
 .items-page-panel-item-details {
   display: grid;
+  grid-area: prices;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 3px 8px;
   font-size: 12px;
@@ -286,6 +303,7 @@
 }
 
 .items-page-panel-icon {
+  grid-area: icon;
   width: 48px;
   max-height: 64px;
   object-fit: contain;
@@ -293,7 +311,7 @@
 
 .items-page-panel-quantity-breakdown {
   display: grid;
-  flex: 1 1 180px;
+  grid-area: owners;
   grid-template-columns: minmax(0, 1fr) auto;
   align-content: start;
   align-items: center;
@@ -303,14 +321,32 @@
   font-variant-numeric: tabular-nums;
 }
 
+@container (width <= 500px) {
+  .item-inspector .items-page-panel {
+    grid-template: "heading" auto "owners" auto "prices" auto / minmax(0, 1fr);
+  }
+}
+
 .items-bank-detailed .items-page-panel {
-  flex-direction: column;
+  display: grid;
+  grid-template: "heading" auto "owners" 1fr "prices" auto / minmax(0, 1fr);
   align-self: stretch;
   min-width: 0;
   gap: 16px;
   padding: 12px;
   border: 1px solid var(--border);
   background: var(--surface);
+}
+
+.items-bank-detailed .items-page-panel-top {
+  grid-template: "icon name pin" auto / 48px minmax(0, 1fr) var(--item-pin-size);
+}
+
+.items-bank-detailed .items-page-panel-item-details {
+  padding-top: 8px;
+  border-top: 1px solid var(--light-border);
+  color: var(--muted);
+  font-size: 11px;
 }
 
 .items-bank-detailed .items-page-panel-top,
@@ -326,12 +362,17 @@
   min-width: 0;
 }
 
+.item-owner-quantity {
+  text-align: right;
+}
+
 .items-page-panel-pin-button {
   display: grid;
+  grid-area: pin;
   flex: none;
   place-items: center;
-  width: 24px;
-  height: 24px;
+  width: var(--item-pin-size);
+  height: var(--item-pin-size);
   color: var(--muted);
   font-size: 19px;
 }
@@ -339,6 +380,10 @@
 .items-page-panel-pin-button:hover,
 .items-page-panel-pin-button.pinned {
   color: var(--link);
+}
+
+.items-bank-detailed .items-page-panel-pin-button {
+  align-self: start;
 }
 
 #items-page-no-items,
@@ -397,7 +442,7 @@
 
 .items-page-tutorial-inline-search,
 .items-page-tutorial-inline-item-name {
-  color: var(--link);
+  color: var(--link-hover);
 }
 
 @media (width <= 767px) {
@@ -420,6 +465,10 @@
 
   #items-page-filters-button {
     display: inline-flex;
+  }
+
+  .items-filter-summary {
+    display: block;
   }
 
   .items-page-utility {
@@ -450,9 +499,8 @@
 }
 
 @media (pointer: coarse) {
-  .items-page-panel-pin-button {
-    width: 44px;
-    height: 44px;
+  .items-page-panel.rsborder {
+    --item-pin-size: 44px;
   }
 
   .items-page-member-filter-container > span {

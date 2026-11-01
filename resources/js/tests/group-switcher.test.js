@@ -19,7 +19,7 @@ describe("saved group switching", function savedGroupSwitching() {
     const { container, apiStore } = await mountSwitcher(groups);
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(null, { status: 503 })));
 
-    container.querySelector('[title="Second group"]').click();
+    container.querySelector('[aria-label="Switch to group Second group"]').click();
 
     await vi.waitFor(function switchErrorIsVisible() {
       expect(container.querySelector('[role="alert"]')).not.toBeNull();
@@ -31,7 +31,7 @@ describe("saved group switching", function savedGroupSwitching() {
   it("returns home after removing the last saved group", async function removeLastGroup() {
     const { container, router, apiStore } = await mountSwitcher([{ name: "First group", token: "first-token" }]);
 
-    container.querySelector('[aria-label="Remove saved group First group"]').click();
+    container.querySelector('[aria-label="Forget saved login for First group"]').click();
 
     await vi.waitFor(function returnedHome() {
       expect(router.currentRoute.value.path).toBe("/");

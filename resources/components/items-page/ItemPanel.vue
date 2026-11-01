@@ -18,6 +18,7 @@
     containerFilter: { type: String, required: true },
     quantities: { type: Map, required: true },
     isPinned: { type: Boolean, required: true },
+    detailed: { type: Boolean, default: false },
   });
   const groupStore = useGroupStore();
   const emit = defineEmits(["togglePin"]);
@@ -92,49 +93,55 @@
 <template>
   <div class="items-page-panel rsborder rsbackground">
     <div class="items-page-panel-top">
-      <div>
-        <div class="items-page-panel-heading">
-          <a class="items-page-panel-name" :href="wikiLink" target="_blank" rel="noopener noreferrer">
-            {{ props.itemName }}
-          </a>
-          <button
-            :class="['items-page-panel-pin-button', { pinned: props.isPinned }]"
-            :data-tooltip="pinLabel"
-            :aria-label="pinLabel"
-            @click="emit('togglePin', props.itemID)"
-          >
-            {{ props.isPinned ? "★" : "☆" }}
-          </button>
-        </div>
-        <div class="items-page-panel-item-details">
-          <span>Quantity</span>
-          <span>{{ props.totalQuantity.toLocaleString() }}</span>
-          <span>High alch</span>
-          <span :data-tooltip="highAlchTooltip">
-            {{ props.alchable ? `${highAlch.toLocaleString()}gp` : "n/a" }}
-          </span>
-          <span>GE price</span>
-          <span :data-tooltip="grandExchangeTooltip">
-            {{ props.gePricePer > 0 ? `${gePrice.toLocaleString()}gp` : "n/a" }}
-          </span>
-        </div>
-      </div>
       <CachedImage
         loading="lazy"
         class="items-page-panel-icon"
         :alt="props.itemName ?? 'An unknown item'"
         :src="props.imageURL"
       />
+      <div class="items-page-panel-heading">
+        <a class="items-page-panel-name" :href="wikiLink" target="_blank" rel="noopener noreferrer">
+          {{ props.itemName }}
+        </a>
+        <span v-if="props.detailed" class="items-page-panel-total"
+          >{{ props.totalQuantity.toLocaleString() }} total</span
+        >
+      </div>
+      <button
+        type="button"
+        :class="['items-page-panel-pin-button', { pinned: props.isPinned }]"
+        :data-tooltip="pinLabel"
+        :aria-label="pinLabel"
+        @click="emit('togglePin', props.itemID)"
+      >
+        {{ props.isPinned ? "★" : "☆" }}
+      </button>
     </div>
     <div class="items-page-panel-quantity-breakdown">
       <template v-for="breakdown in quantityBreakdown" :key="breakdown.name">
-        <span class="item-owner" :data-tooltip="breakdown.tooltip">
+        <span class="item-owner" :data-tooltip="breakdown.tooltip" :tabindex="breakdown.tooltip ? 0 : undefined">
           <PlayerIcon v-if="breakdown.name !== '@SHARED'" :name="breakdown.name" />
           <CachedImage v-else src="/ui/777-0.png" alt="Shared storage" width="14" height="15" />
           {{ breakdown.name === "@SHARED" ? "Shared" : breakdown.name }}
         </span>
-        <span :data-tooltip="breakdown.tooltip">{{ breakdown.quantity.toLocaleString() }}</span>
+        <span class="item-owner-quantity" :data-tooltip="breakdown.tooltip">{{
+          breakdown.quantity.toLocaleString()
+        }}</span>
       </template>
+    </div>
+    <div class="items-page-panel-item-details">
+      <template v-if="!props.detailed">
+        <span>Quantity</span>
+        <span>{{ props.totalQuantity.toLocaleString() }}</span>
+      </template>
+      <span>High alch</span>
+      <span :data-tooltip="highAlchTooltip" :tabindex="highAlchTooltip ? 0 : undefined">
+        {{ props.alchable ? `${highAlch.toLocaleString()}gp` : "n/a" }}
+      </span>
+      <span>GE price</span>
+      <span :data-tooltip="grandExchangeTooltip" :tabindex="grandExchangeTooltip ? 0 : undefined">
+        {{ props.gePricePer > 0 ? `${gePrice.toLocaleString()}gp` : "n/a" }}
+      </span>
     </div>
   </div>
 </template>

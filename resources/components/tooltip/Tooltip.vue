@@ -11,6 +11,7 @@
   const pointerPosition = ref({ x: 0, y: 0 });
   const tooltip = ref();
   let touchTooltipElement;
+  let tooltipTrigger;
 
   const itemLines = computed(function getItemLines() {
     if (!tooltip.value || typeof tooltip.value === "string") {
@@ -28,6 +29,9 @@
     window.addEventListener("pointercancel", hideTooltip);
     window.addEventListener("click", handleClick);
     window.addEventListener("scroll", hideTooltip, { capture: true });
+    window.addEventListener("focusin", handleFocusIn);
+    window.addEventListener("focusout", handleFocusOut);
+    window.addEventListener("keydown", dismissOnEscape, { capture: true });
   });
 
   onBeforeUnmount(function removeTooltipListeners() {
@@ -38,6 +42,10 @@
     window.removeEventListener("pointercancel", hideTooltip);
     window.removeEventListener("click", handleClick);
     window.removeEventListener("scroll", hideTooltip, { capture: true });
+    window.removeEventListener("focusin", handleFocusIn);
+    window.removeEventListener("focusout", handleFocusOut);
+    window.removeEventListener("keydown", dismissOnEscape, { capture: true });
+    hideTooltip();
   });
 
   function buildItemLines(data) {
@@ -124,8 +132,12 @@
     return target instanceof Element ? target.closest("[data-tooltip]") : null;
   }
 
-  function handlePointerMove({ clientX: x, clientY: y, pointerType }) {
-    if (pointerType === "touch") {
+  function handlePointerMove({ clientX: x, clientY: y, pointerType, target }) {
+    if (
+      pointerType === "touch" ||
+      document.activeElement === tooltipTrigger ||
+      (target instanceof Node && tooltipElement.value.contains(target))
+    ) {
       return;
     }
 
@@ -146,7 +158,7 @@
 
     touchTooltipElement = undefined;
     pointerPosition.value = { x: event.clientX, y: event.clientY };
-    tooltip.value = deserializeTooltip(hoveredElement.dataset.tooltip ?? "");
+    showTooltip(hoveredElement, hoveredElement.dataset.tooltip);
   }
 
   function handlePointerOut(event) {
@@ -154,9 +166,15 @@
       return;
     }
 
-    if (getDataTooltipElement(event.target) !== getDataTooltipElement(event.relatedTarget)) {
-      hideTooltip();
+    if (
+      tooltipTrigger?.contains(event.relatedTarget) ||
+      tooltipElement.value.contains(event.relatedTarget) ||
+      document.activeElement === tooltipTrigger
+    ) {
+      return;
     }
+
+    hideTooltip();
   }
 
   function handlePointerDown(event) {
@@ -165,7 +183,7 @@
     if (event.pointerType === "touch" && touchedElement && touchedElement !== touchTooltipElement) {
       touchTooltipElement = touchedElement;
       pointerPosition.value = { x: event.clientX, y: event.clientY };
-      tooltip.value = deserializeTooltip(touchedElement.dataset.tooltip);
+      showTooltip(touchedElement, touchedElement.dataset.tooltip);
 
       return;
     }
@@ -190,8 +208,43 @@
   }
 
   function hideTooltip() {
+    tooltipTrigger?.removeAttribute("aria-describedby");
+    tooltipTrigger = undefined;
     touchTooltipElement = undefined;
     tooltip.value = undefined;
+  }
+
+  function showTooltip(trigger, value) {
+    tooltipTrigger?.removeAttribute("aria-describedby");
+    tooltipTrigger = trigger;
+    trigger.setAttribute("aria-describedby", "tooltip");
+    tooltip.value = deserializeTooltip(value);
+  }
+
+  function handleFocusIn(event) {
+    const value = getDataTooltipElement(event.target)?.dataset.tooltip ?? event.target.getAttribute("title");
+
+    if (!value || !event.target.matches(":focus-visible")) {
+      return;
+    }
+
+    const rectangle = event.target.getBoundingClientRect();
+    pointerPosition.value = { x: rectangle.left, y: rectangle.bottom };
+    showTooltip(event.target, value);
+  }
+
+  function handleFocusOut(event) {
+    if (event.target === tooltipTrigger) {
+      hideTooltip();
+    }
+  }
+
+  function dismissOnEscape(event) {
+    if (event.key === "Escape" && tooltip.value) {
+      hideTooltip();
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
   }
 
   watch(tooltip, async function repositionAfterContentChange() {

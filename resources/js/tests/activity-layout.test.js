@@ -1,13 +1,27 @@
 // @vitest-environment jsdom
-import { h, nextTick } from "vue";
+import { nextTick } from "vue";
 import { setActivePinia } from "pinia";
-import { createMemoryHistory, useRoute } from "vue-router";
+import { createMemoryHistory } from "vue-router";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import { createApplicationRouter } from "../../router";
 import { useApiStore } from "../../stores/api";
 import { useImageStore } from "../../stores/images";
-import AuthedLayout from "../../components/layout/AuthedLayout.vue";
+import App from "../../components/app/App.vue";
+
+vi.mock("../../components/canvas-map/CanvasMap.vue", function mapCanvas() {
+  return {
+    __esModule: true,
+    default: {
+      render() {
+        return null;
+      },
+    },
+  };
+});
+vi.mock("../../api/requests/changelog", function changelog() {
+  return { fetchChangelog: vi.fn().mockResolvedValue([]) };
+});
 
 describe("persistent activity layout", function activityLayout() {
   it("keeps the timeline and its filters while changing pages and player panel visibility", async function persistentTimeline() {
@@ -44,18 +58,46 @@ describe("persistent activity layout", function activityLayout() {
     await nextTick();
     expect(timeline.style.display).not.toBe("none");
     expect(container.querySelector(".activity-toggle").getAttribute("aria-expanded")).toBe("true");
+    expect(document.activeElement).toBe(collapse);
     expect(timeline.querySelector('[aria-label="Filter activity by type"]').value).toBe("xp");
     collapse.click();
     await nextTick();
+    expect(document.activeElement).toBe(container.querySelector(".activity-toggle"));
     application.unmount();
 
     const nextVisit = await mountLayout();
     expect(nextVisit.container.querySelector(".activity-feed").style.display).toBe("none");
     expect(nextVisit.container.querySelector(".activity-toggle").getAttribute("aria-expanded")).toBe("false");
   });
+
+  it("keeps independent player panels and activity filters through Members and What's new", async function workspaceState() {
+    vi.useFakeTimers();
+    const { container, router } = await mountLayout([
+      { id: 1, name: "Workspace Alice" },
+      { id: 2, name: "Workspace Bob" },
+    ]);
+
+    for (const panel of container.querySelectorAll(".player-panel")) {
+      panel.querySelector('[aria-label="inventory"]').click();
+    }
+
+    const timeline = container.querySelector(".activity-feed");
+    const filter = timeline.querySelector('[aria-label="Filter activity by type"]');
+    filter.value = "xp";
+    filter.dispatchEvent(new Event("change"));
+    await nextTick();
+
+    for (const path of ["/group/panels", "/changelog", "/group/items"]) {
+      await router.push(path);
+      await nextTick();
+      expect(container.querySelectorAll('.player-panel [aria-label="inventory"][aria-pressed="true"]')).toHaveLength(2);
+      expect(container.querySelector(".activity-feed")).toBe(timeline);
+      expect(filter.value).toBe("xp");
+    }
+  });
 });
 
-async function mountLayout() {
+async function mountLayout(members = []) {
   const pinia = createTestPinia();
   setActivePinia(pinia);
   vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
@@ -67,7 +109,7 @@ async function mountLayout() {
       return { quests: new Map(), items: new Map(), diaries: new Map() };
     },
     async fetchGroupData() {
-      return [];
+      return members;
     },
     async fetchGroupCollectionLogs() {
       return new Map();
@@ -78,24 +120,7 @@ async function mountLayout() {
   };
   const router = createApplicationRouter(createMemoryHistory());
   await router.push("/group/items");
-  const wrapper = {
-    setup() {
-      const route = useRoute();
-
-      return function renderPage() {
-        return h(
-          AuthedLayout,
-          { showPanels: route.meta.showPanels },
-          {
-            default: function pageContent() {
-              return h("div", { "data-page": route.path }, route.path);
-            },
-          },
-        );
-      };
-    },
-  };
-  const application = createTestApplication(wrapper);
+  const application = createTestApplication(App);
   application.use(pinia);
   application.use(router);
   const container = document.createElement("div");

@@ -20,6 +20,40 @@ function tap(element) {
 }
 
 describe("tooltips", function describeTooltips() {
+  it("shows keyboard descriptions, allows hovering them and dismisses them with Escape", async function keyboardTooltips() {
+    const application = createTestApplication({
+      render() {
+        return [h("button", { "data-tooltip": "Storage details" }, "Owner"), h(Tooltip)];
+      },
+    });
+    const container = document.createElement("div");
+    document.body.append(container);
+    application.mount(container);
+    const trigger = container.querySelector("button");
+    const tooltip = container.querySelector('[role="tooltip"]');
+    trigger.focus();
+    await nextTick();
+    expect(tooltip.textContent).toContain("Storage details");
+    expect(trigger.getAttribute("aria-describedby")).toBe(tooltip.id);
+
+    trigger.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await nextTick();
+    expect(tooltip.textContent).toBe("");
+    expect(document.activeElement).toBe(trigger);
+    trigger.blur();
+    trigger.dispatchEvent(new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" }));
+    trigger.dispatchEvent(
+      new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse", relatedTarget: tooltip }),
+    );
+    await nextTick();
+    expect(tooltip.textContent).toContain("Storage details");
+    tooltip.dispatchEvent(
+      new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse", relatedTarget: document.body }),
+    );
+    await nextTick();
+    expect(tooltip.textContent).toBe("");
+  });
+
   it("shows tooltips on touch while retaining link and button actions", async function touchTooltips() {
     vi.useFakeTimers();
     vi.stubGlobal(

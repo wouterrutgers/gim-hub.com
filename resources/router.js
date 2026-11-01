@@ -151,8 +151,13 @@ async function prepareRoute(to) {
     }
   }
 
-  if (to.path === "/changelog" && !apiStore.client && apiStore.hasStoredCredentials) {
-    await restoreStoredSession(apiStore);
+  if (to.path === "/changelog") {
+    if (!apiStore.client && apiStore.hasStoredCredentials) {
+      await restoreStoredSession(apiStore);
+    }
+
+    to.meta.layout = apiStore.client ? "authed" : "unauthed";
+    to.meta.showPanels = true;
   }
 }
 

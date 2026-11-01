@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
   import { useVirtualizer } from "@tanstack/vue-virtual";
   import { formatShortQuantity } from "../../game/items";
   import CachedImage from "../cached-image/CachedImage.vue";
@@ -14,8 +14,9 @@
     showOwners: { type: Boolean, default: false },
     memberFilter: { type: Set, required: true },
     containerFilter: { type: String, required: true },
+    anchorItemIdentifier: { type: Number, default: undefined },
   });
-  const emit = defineEmits(["selectItem", "togglePin"]);
+  const emit = defineEmits(["selectItem", "togglePin", "rememberItem"]);
   const parent = ref();
   const columns = ref(props.showOwners ? 3 : 6);
   const resizeObserver = new ResizeObserver(function updateColumns([entry]) {
@@ -39,11 +40,43 @@
   });
 
   onMounted(function observeBank() {
+    columns.value = Math.max(1, Math.floor(parent.value.clientWidth / (props.showOwners ? 280 : 104)));
     resizeObserver.observe(parent.value);
+    nextTick(restorePosition);
   });
   onBeforeUnmount(function stopObservingBank() {
+    rememberPosition();
     resizeObserver.disconnect();
   });
+  watch(columns, restorePosition, { flush: "post" });
+
+  function onScroll() {
+    nextTick(function rememberScrollPosition() {
+      if (parent.value) {
+        rememberPosition();
+      }
+    });
+  }
+
+  function rememberPosition() {
+    const firstVisibleRow = rows.value.find(function isVisible(row) {
+      return row.end > parent.value.scrollTop;
+    });
+
+    if (firstVisibleRow) {
+      emit("rememberItem", props.sortedItems[firstVisibleRow.index * columns.value].itemID);
+    }
+  }
+
+  function restorePosition() {
+    const index = props.sortedItems.findIndex(function isAnchor(item) {
+      return item.itemID === props.anchorItemIdentifier;
+    });
+
+    if (index >= 0) {
+      virtualizer.value.scrollToIndex(Math.floor(index / columns.value), { align: "start" });
+    }
+  }
 
   function itemsForRow(row) {
     return props.sortedItems.slice(row.index * columns.value, (row.index + 1) * columns.value);
@@ -77,12 +110,14 @@
     :class="{ 'items-bank-detailed': props.showOwners }"
     role="group"
     aria-label="Group bank items"
+    @scroll="onScroll"
   >
     <div :style="{ height: `${virtualizer.getTotalSize()}px`, position: 'relative' }">
       <div v-for="row in rows" :key="row.key" :ref="measureRow" :data-index="row.index" :style="rowStyle(row)">
         <template v-for="item in itemsForRow(row)" :key="item.itemID">
           <ItemPanel
             v-if="props.showOwners"
+            detailed
             :item-i-d="item.itemID"
             :image-u-r-l="item.imageURL"
             :total-quantity="item.totalQuantity"

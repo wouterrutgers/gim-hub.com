@@ -35,6 +35,28 @@
     }[route.path];
   });
   const activityPageTarget = ref();
+  const activityFeed = ref();
+  const activityToggle = ref();
+
+  async function toggleActivitySidebar() {
+    settingsStore.setShowActivitySidebar(!settingsStore.showActivitySidebar);
+
+    if (settingsStore.showActivitySidebar) {
+      await nextTick();
+      activityFeed.value.$el.querySelector(".activity-collapse").focus();
+    }
+  }
+
+  watch(
+    function activityIsShown() {
+      return settingsStore.showActivitySidebar;
+    },
+    function restoreActivityFocus(shown) {
+      if (!shown && !isActivityPage.value && activityFeed.value.$el.contains(document.activeElement)) {
+        activityToggle.value.focus();
+      }
+    },
+  );
 
   watch(
     isActivityPage,
@@ -62,11 +84,12 @@
           <span v-if="apiStore.isDemo" class="demo-badge">Demo mode</span>
           <button
             v-if="!isActivityPage"
+            ref="activityToggle"
             class="activity-toggle men-button"
             type="button"
             aria-controls="group-activity-sidebar"
             :aria-expanded="settingsStore.showActivitySidebar"
-            @click="settingsStore.setShowActivitySidebar(!settingsStore.showActivitySidebar)"
+            @click="toggleActivitySidebar"
           >
             <span
               class="chevron"
@@ -85,6 +108,7 @@
     </main>
     <Teleport :to="activityPageTarget" :disabled="!activityPageTarget">
       <ActivityFeed
+        ref="activityFeed"
         id="group-activity-sidebar"
         v-show="isActivityPage || settingsStore.showActivitySidebar"
         :collapsible="!isActivityPage"

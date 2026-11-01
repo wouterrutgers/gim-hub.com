@@ -142,7 +142,7 @@
 }
 
 .activity-milestone .activity-card-event {
-  color: var(--link);
+  color: var(--link-hover);
   font-weight: 600;
 }
 

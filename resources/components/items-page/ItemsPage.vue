@@ -62,6 +62,10 @@
     defaultValue: undefined,
   });
   const itemInspector = ref();
+  const [anchorItemIdentifier, setAnchorItemIdentifier] = useRememberedState({
+    key: "bank-visible-item",
+    defaultValue: undefined,
+  });
   const {
     open: tutorialModalOpen,
     componentProps: tutorialModalProps,
@@ -170,6 +174,30 @@
       sortCategory.value !== DEFAULT_SORT_CATEGORY ||
       containerFilter.value !== DEFAULT_CONTAINER_FILTER
     );
+  });
+
+  const activeFilterCount = computed(function countActiveFilters() {
+    return [
+      Boolean(searchExpression.value),
+      memberFilter.value.size > 0,
+      sortCategory.value !== DEFAULT_SORT_CATEGORY,
+      containerFilter.value !== DEFAULT_CONTAINER_FILTER,
+    ].filter(Boolean).length;
+  });
+  const filterSummary = computed(function describeFilters() {
+    const summary = [containerFilter.value === "All" ? "All storage" : containerFilter.value];
+
+    if (memberFilter.value.size > 0) {
+      summary.push(
+        `${groupStore.memberNames.size - memberFilter.value.size} of ${groupStore.memberNames.size} members`,
+      );
+    }
+
+    if (sortCategory.value !== DEFAULT_SORT_CATEGORY) {
+      summary.push(`Sorted by ${sortCategory.value}`);
+    }
+
+    return summary.join(", ");
   });
 
   const selectedItem = computed(function getSelectedItem() {
@@ -488,7 +516,8 @@
         aria-controls="items-page-filters"
         @click="filtersExpanded = !filtersExpanded"
       >
-        Filters <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
+        Filters{{ activeFilterCount ? ` (${activeFilterCount})` : "" }}
+        <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
       </button>
       <button
         v-if="hasActiveFilters"
@@ -506,6 +535,8 @@
         Search help
       </button>
     </div>
+
+    <p v-if="hasActiveFilters && !filtersExpanded" class="items-filter-summary">{{ filterSummary }}</p>
 
     <div id="items-page-filters" class="items-page-utility" :class="{ 'filters-expanded': filtersExpanded }">
       <label class="items-filter-label">
@@ -604,8 +635,10 @@
       :show-owners="settingsStore.showItemOwners"
       :member-filter="memberFilter"
       :container-filter="containerFilter"
+      :anchor-item-identifier="anchorItemIdentifier"
       @select-item="selectItem"
       @toggle-pin="togglePin"
+      @remember-item="setAnchorItemIdentifier"
     />
 
     <section

@@ -204,8 +204,9 @@
       <h2>Group activity</h2>
       <span
         class="activity-feed-period"
+        tabindex="0"
         data-tooltip="Activity stays detailed for at least 30 days. Older completed weeks are combined per player, from Monday to Sunday in UTC."
-        >All history</span
+        >{{ activityStore.olderCursor ? "Loaded history" : "All history" }}</span
       >
       <button
         v-if="props.collapsible"
@@ -238,24 +239,29 @@
           <option value="loot">Drops</option>
         </select>
       </span>
-      <div class="activity-drop-filter">
+      <div
+        class="activity-drop-filter"
+        data-tooltip="Only show drops worth at least 1m GP or new collection log unlocks. Other activity is always shown."
+      >
         <input
           id="filter-activity-drops-input"
           type="checkbox"
           :checked="settingsStore.filterActivityDrops"
           @change="settingsStore.setFilterActivityDrops($event.target.checked)"
         />
-        <label
-          for="filter-activity-drops-input"
-          data-tooltip="Only show drops worth at least 1m GP or new collection log unlocks. Other activity is always shown."
-          ><span>Filter drops</span></label
-        >
+        <label for="filter-activity-drops-input"><span>Filter drops</span></label>
       </div>
     </div>
     <div ref="scroller" class="activity-feed-scroll" @scroll="onScroll">
       <p v-if="!activityStore.loaded || !groupStore.loaded" class="activity-empty">Loading activity…</p>
       <p v-else-if="filteredEntries.length === 0" class="activity-empty">
-        {{ activityStore.entries.length ? "No activity matches these filters." : "No activity yet." }}
+        {{
+          activityStore.entries.length
+            ? activityStore.olderCursor
+              ? "No matches in loaded history. Load earlier activity to search further."
+              : "No activity matches these filters."
+            : "No activity yet."
+        }}
       </p>
       <ol class="activity-timeline">
         <li v-for="(entry, index) in filteredEntries" :key="entry.id" :data-entry-id="entry.id">

@@ -206,10 +206,6 @@
     padding-inline: 8px;
   }
 
-  .navigation-collapsed #group-switcher-dropdown {
-    width: 208px;
-  }
-
   .navigation-collapsed .nav-secondary-links {
     padding-top: 16px;
     border-top: 1px solid var(--border);

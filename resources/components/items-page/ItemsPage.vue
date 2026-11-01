@@ -184,22 +184,6 @@
       containerFilter.value !== DEFAULT_CONTAINER_FILTER,
     ].filter(Boolean).length;
   });
-  const filterSummary = computed(function describeFilters() {
-    const summary = [containerFilter.value === "All" ? "All storage" : containerFilter.value];
-
-    if (memberFilter.value.size > 0) {
-      summary.push(
-        `${groupStore.memberNames.size - memberFilter.value.size} of ${groupStore.memberNames.size} members`,
-      );
-    }
-
-    if (sortCategory.value !== DEFAULT_SORT_CATEGORY) {
-      summary.push(`Sorted by ${sortCategory.value}`);
-    }
-
-    return summary.join(", ");
-  });
-
   const selectedItem = computed(function getSelectedItem() {
     return sortedItems.value.find(function isSelected(item) {
       return item.itemID === selectedItemIdentifier.value;
@@ -489,137 +473,143 @@
   </div>
 
   <template v-else>
-    <div class="items-summary" aria-label="Item totals for current filters">
-      <div>
-        <span>Grand Exchange value</span>
-        <strong>{{ itemAggregates.totalGEPrice.toLocaleString() }} <small>gp</small></strong>
+    <div class="items-toolbar">
+      <div class="items-summary" aria-label="Item totals for current filters">
+        <div>
+          <span>Grand Exchange value</span>
+          <strong>{{ itemAggregates.totalGEPrice.toLocaleString() }} <small>gp</small></strong>
+        </div>
+        <div>
+          <span>High alch value</span>
+          <strong>{{ itemAggregates.totalHighAlch.toLocaleString() }} <small>gp</small></strong>
+        </div>
       </div>
-      <div>
-        <span>High alch value</span>
-        <strong>{{ itemAggregates.totalHighAlch.toLocaleString() }} <small>gp</small></strong>
+
+      <div id="items-page-head">
+        <SearchElement
+          id="items-page-search"
+          placeholder="Search your group's items…"
+          :value="searchFilterUserString ?? ''"
+          :default-value="searchFilterUserString"
+          @change="setSearchFilterUserString"
+        />
+        <button
+          id="items-page-filters-button"
+          class="men-button"
+          type="button"
+          :aria-expanded="filtersExpanded"
+          aria-controls="items-page-filters"
+          @click="filtersExpanded = !filtersExpanded"
+        >
+          Filters{{ activeFilterCount ? ` (${activeFilterCount})` : "" }}
+          <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
+        </button>
       </div>
-    </div>
 
-    <div id="items-page-head">
-      <SearchElement
-        id="items-page-search"
-        placeholder="Search your group's items…"
-        :value="searchFilterUserString ?? ''"
-        :default-value="searchFilterUserString"
-        @change="setSearchFilterUserString"
-      />
-      <button
-        id="items-page-filters-button"
-        class="men-button"
-        type="button"
-        :aria-expanded="filtersExpanded"
-        aria-controls="items-page-filters"
-        @click="filtersExpanded = !filtersExpanded"
-      >
-        Filters{{ activeFilterCount ? ` (${activeFilterCount})` : "" }}
-        <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
-      </button>
-      <button
-        v-if="hasActiveFilters"
-        id="items-page-reset-filters-button"
-        class="men-button"
-        data-tooltip="Reset all filters to default"
-        aria-label="Reset all filters to default"
-        @click="resetFilters"
-      >
-        <CachedImage alt="" src="/ui/1731-0.png" />
-        Reset
-      </button>
-      <button id="items-page-tutorial-button" class="men-button" @click="openTutorialModal()">
-        <CachedImage alt="" src="/ui/1094-0.png" />
-        Search help
-      </button>
-    </div>
-
-    <p v-if="hasActiveFilters && !filtersExpanded" class="items-filter-summary">{{ filterSummary }}</p>
-
-    <div id="items-page-filters" class="items-page-utility" :class="{ 'filters-expanded': filtersExpanded }">
-      <label class="items-filter-label">
-        Sort by
-        <span class="select-container">
-          <select aria-label="Sort items" :value="sortCategory" @change="setSortCategory($event.target.value)">
-            <option v-for="category in ItemSortCategories" :key="category" :value="category">
-              {{ category }}
-            </option>
-          </select>
-        </span>
-      </label>
-      <label class="items-filter-label">
-        Storage
-        <span class="select-container">
-          <select
-            aria-label="Item container"
-            :value="containerFilter"
-            @change="setContainerFilter(validateContainerFilter($event.target.value))"
-          >
-            <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">
-              {{ name === "All" ? "All storage" : name }}
-            </option>
-          </select>
-        </span>
-      </label>
-      <div class="items-page-member-filter-clipbox" role="group" aria-label="Include group members">
-        <span class="items-filter-caption">Include members</span>
-        <span class="items-page-member-filter-container">
-          <span v-for="name in groupStore.memberNames" :key="name">
-            <input
-              :id="`items-page-member-filter-${name}`"
-              type="checkbox"
-              :checked="!memberFilter.has(name)"
-              @change="toggleMember(name)"
-            />
-            <label :for="`items-page-member-filter-${name}`">
-              <span aria-hidden="true">
-                <PlayerIcon v-if="name !== '@SHARED'" :name="name" />
-                <CachedImage v-else src="/ui/777-0.png" alt="" width="14" height="15" />
-              </span>
-              {{ name === "@SHARED" ? "Shared" : name }}
-            </label>
-          </span>
-        </span>
-      </div>
-    </div>
-
-    <div class="items-results-heading">
-      <h2>
-        Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
-      </h2>
-      <div class="items-results-actions">
-        <div class="items-view-toggle" role="group" aria-label="Item display">
+      <div id="items-page-filters" class="items-page-utility" :class="{ 'filters-expanded': filtersExpanded }">
+        <div class="items-filter-actions">
           <button
-            type="button"
-            class="men-button men-button-small"
-            :class="{ active: !settingsStore.showItemOwners }"
-            :aria-pressed="!settingsStore.showItemOwners"
-            @click="settingsStore.setShowItemOwners(false)"
+            v-if="hasActiveFilters"
+            id="items-page-reset-filters-button"
+            class="men-button"
+            data-tooltip="Reset all filters to default"
+            aria-label="Reset all filters to default"
+            @click="resetFilters"
           >
-            Compact
+            <CachedImage alt="" src="/ui/1731-0.png" />
+            Reset
           </button>
-          <button
-            type="button"
-            class="men-button men-button-small"
-            :class="{ active: settingsStore.showItemOwners }"
-            :aria-pressed="settingsStore.showItemOwners"
-            @click="settingsStore.setShowItemOwners(true)"
-          >
-            Detailed
+          <button id="items-page-tutorial-button" class="men-button" @click="openTutorialModal()">
+            <CachedImage alt="" src="/ui/1094-0.png" />
+            Search help
           </button>
         </div>
-        <button
-          v-if="settingsStore.enableGearscapeExport"
-          id="items-page-gearscape-export-button"
-          class="men-button men-button-small"
-          data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
-          aria-label="Copy current items to clipboard for Gearscape"
-          @click="copyItemsForGearscape"
-        >
-          {{ gearscapeExportLabel }}
-        </button>
+
+        <div class="items-filter-fields">
+          <label class="items-filter-label">
+            Sort by
+            <span class="select-container">
+              <select aria-label="Sort items" :value="sortCategory" @change="setSortCategory($event.target.value)">
+                <option v-for="category in ItemSortCategories" :key="category" :value="category">
+                  {{ category }}
+                </option>
+              </select>
+            </span>
+          </label>
+          <label class="items-filter-label">
+            Storage
+            <span class="select-container">
+              <select
+                aria-label="Item container"
+                :value="containerFilter"
+                @change="setContainerFilter(validateContainerFilter($event.target.value))"
+              >
+                <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">
+                  {{ name === "All" ? "All storage" : name }}
+                </option>
+              </select>
+            </span>
+          </label>
+          <div class="items-page-member-filter-clipbox" role="group" aria-label="Include group members">
+            <span class="items-filter-caption">Include members</span>
+            <span class="items-page-member-filter-container">
+              <span v-for="name in groupStore.memberNames" :key="name">
+                <input
+                  :id="`items-page-member-filter-${name}`"
+                  type="checkbox"
+                  :checked="!memberFilter.has(name)"
+                  @change="toggleMember(name)"
+                />
+                <label :for="`items-page-member-filter-${name}`">
+                  <span aria-hidden="true">
+                    <PlayerIcon v-if="name !== '@SHARED'" :name="name" />
+                    <CachedImage v-else src="/ui/777-0.png" alt="" width="14" height="15" />
+                  </span>
+                  {{ name === "@SHARED" ? "Shared" : name }}
+                </label>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="items-results-actions">
+          <div class="items-view-toggle" role="group" aria-label="Item display">
+            <button
+              type="button"
+              class="men-button men-button-small"
+              :class="{ active: !settingsStore.showItemOwners }"
+              :aria-pressed="!settingsStore.showItemOwners"
+              @click="settingsStore.setShowItemOwners(false)"
+            >
+              Compact
+            </button>
+            <button
+              type="button"
+              class="men-button men-button-small"
+              :class="{ active: settingsStore.showItemOwners }"
+              :aria-pressed="settingsStore.showItemOwners"
+              @click="settingsStore.setShowItemOwners(true)"
+            >
+              Detailed
+            </button>
+          </div>
+          <button
+            v-if="settingsStore.enableGearscapeExport"
+            id="items-page-gearscape-export-button"
+            class="men-button men-button-small"
+            data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
+            aria-label="Copy current items to clipboard for Gearscape"
+            @click="copyItemsForGearscape"
+          >
+            {{ gearscapeExportLabel }}
+          </button>
+        </div>
+      </div>
+
+      <div class="items-results-heading">
+        <h2>
+          Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
+        </h2>
       </div>
     </div>
 

@@ -46,6 +46,7 @@
 
     moreMenu.value.open = false;
     event.stopPropagation();
+    moreMenu.value.querySelector("summary").focus();
   }
 </script>
 

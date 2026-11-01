@@ -201,6 +201,7 @@
 
 @media (width <= 767px) {
   #group-switcher-toggle {
+    min-height: 44px;
     padding: 7px 10px;
     font-size: 12px;
   }

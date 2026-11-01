@@ -264,12 +264,12 @@
 
   #main-content {
     gap: 20px;
-    padding: 22px 16px 0;
+    padding: 8px 8px 0;
   }
 
   .workspace-page {
     gap: 12px;
-    padding-bottom: 16px;
+    padding-bottom: 8px;
   }
 
   .public-header,

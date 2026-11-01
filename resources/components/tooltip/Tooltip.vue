@@ -135,7 +135,7 @@
   function handlePointerMove({ clientX: x, clientY: y, pointerType, target }) {
     if (
       pointerType === "touch" ||
-      document.activeElement === tooltipTrigger ||
+      (document.activeElement === tooltipTrigger && !tooltipTrigger.contains(target)) ||
       (target instanceof Node && tooltipElement.value.contains(target))
     ) {
       return;

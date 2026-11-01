@@ -10,11 +10,8 @@
 
     <script>
       const storedTheme = localStorage.getItem("settings-site-theme");
-      const prefersDarkTheme = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
-      document.documentElement.classList.toggle(
-        "dark-mode",
-        storedTheme === "dark" || (!storedTheme && prefersDarkTheme),
-      );
+      document.documentElement.classList.toggle("dark-mode", storedTheme === "dark");
+      document.documentElement.classList.toggle("browntown-mode", storedTheme === "browntown");
     </script>
     @vite(['resources/views/index.js'])
   </head>

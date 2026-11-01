@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, ref, watch } from "vue";
+  import { computed, nextTick, ref, watch } from "vue";
   import * as Member from "../../game/member";
   import { useGameDataStore } from "../../stores/game-data";
   import { useGroupStore } from "../../stores/group";
@@ -8,11 +8,14 @@
   import { useLocalStorage } from "../../composables/local-storage";
   import { useRememberedState } from "../../composables/remembered-state";
   import CachedImage from "../cached-image/CachedImage.vue";
+  import PlayerIcon from "../player-icon/PlayerIcon.vue";
+  import LoadingScreen from "../loading-screen/LoadingScreen.vue";
   import Modal from "../modal/Modal.vue";
   import { useModal } from "../modal/use-modal";
   import SearchElement from "../search-element/SearchElement.vue";
   import { copyGearscapeItems } from "./gearscape-export";
-  import ItemPanelsScrollArea from "./ItemPanelsScrollArea.vue";
+  import ItemBank from "./ItemBank.vue";
+  import ItemPanel from "./ItemPanel.vue";
   import ItemsPageTutorialWindow from "./ItemsPageTutorialWindow.vue";
   import "./items-page.css";
 
@@ -53,6 +56,12 @@
     validator: validatePinnedItems,
   });
   const gearscapeExportStatus = ref("idle");
+  const filtersExpanded = ref(false);
+  const [selectedItemIdentifier, setSelectedItemIdentifier] = useRememberedState({
+    key: "bank-selected-item",
+    defaultValue: undefined,
+  });
+  const itemInspector = ref();
   const {
     open: tutorialModalOpen,
     componentProps: tutorialModalProps,
@@ -98,7 +107,10 @@
         continue;
       }
 
-      const totalQuantity = getFilteredQuantity(breakdownByMember);
+      const owners = getFilteredQuantities(breakdownByMember);
+      const totalQuantity = owners.reduce(function sumQuantities(total, owner) {
+        return total + owner.quantity;
+      }, 0);
 
       if (totalQuantity <= 0) {
         continue;
@@ -113,6 +125,7 @@
         itemID,
         itemName: itemDatum.name,
         breakdownByMember,
+        owners,
         totalQuantity,
         gePrice: grandExchangePrice,
         highAlch,
@@ -158,6 +171,41 @@
       containerFilter.value !== DEFAULT_CONTAINER_FILTER
     );
   });
+
+  const selectedItem = computed(function getSelectedItem() {
+    return sortedItems.value.find(function isSelected(item) {
+      return item.itemID === selectedItemIdentifier.value;
+    });
+  });
+
+  watch(
+    [
+      sortedItems,
+      function groupIsLoaded() {
+        return groupStore.loaded;
+      },
+    ],
+    function keepSelectionInResults([items, loaded]) {
+      if (!loaded) {
+        return;
+      }
+
+      if (
+        !items.some(function isSelected(item) {
+          return item.itemID === selectedItemIdentifier.value;
+        })
+      ) {
+        setSelectedItemIdentifier(items[0]?.itemID);
+      }
+    },
+    { immediate: true },
+  );
+
+  async function selectItem(identifier) {
+    setSelectedItemIdentifier(identifier);
+    await nextTick();
+    itemInspector.value.scrollIntoView({ block: "nearest" });
+  }
 
   const gearscapeExportLabel = computed(function getGearscapeExportLabel() {
     return {
@@ -298,22 +346,28 @@
     return matchesSearchExpression(searchExpression.value, itemID, itemDatum.name.toLocaleLowerCase(), itemTags);
   }
 
-  function getFilteredQuantity(breakdownByMember) {
-    let totalQuantity = 0;
+  function getFilteredQuantities(breakdownByMember) {
+    const quantities = [];
 
     for (const [name, breakdown] of breakdownByMember) {
       if (memberFilter.value.has(name)) {
         continue;
       }
 
+      let quantity = 0;
+
       for (const itemContainer of Member.itemContainerNames) {
         if (containerFilter.value === "All" || containerFilter.value === itemContainer) {
-          totalQuantity += breakdown[itemContainer] ?? 0;
+          quantity += breakdown[itemContainer] ?? 0;
         }
+      }
+
+      if (quantity > 0) {
+        quantities.push({ name, quantity });
       }
     }
 
-    return totalQuantity;
+    return quantities;
   }
 
   function togglePin(itemID) {
@@ -396,7 +450,8 @@
     @close="closeTutorialModal"
   />
 
-  <div v-if="groupStore.items.size <= 0" id="items-page-no-items" class="rsborder rsbackground">
+  <LoadingScreen v-if="!groupStore.loaded" />
+  <div v-else-if="groupStore.items.size <= 0" id="items-page-no-items" class="rsborder rsbackground">
     <h3>Your group has no recorded items!</h3>
     <p>
       Either no members have logged in with the plugin, or there is an issue. Please double check that the names in the
@@ -406,14 +461,35 @@
   </div>
 
   <template v-else>
+    <div class="items-summary" aria-label="Item totals for current filters">
+      <div>
+        <span>Grand Exchange value</span>
+        <strong>{{ itemAggregates.totalGEPrice.toLocaleString() }} <small>gp</small></strong>
+      </div>
+      <div>
+        <span>High alch value</span>
+        <strong>{{ itemAggregates.totalHighAlch.toLocaleString() }} <small>gp</small></strong>
+      </div>
+    </div>
+
     <div id="items-page-head">
       <SearchElement
         id="items-page-search"
-        placeholder="Search"
+        placeholder="Search your group's items…"
         :value="searchFilterUserString ?? ''"
         :default-value="searchFilterUserString"
         @change="setSearchFilterUserString"
       />
+      <button
+        id="items-page-filters-button"
+        class="men-button"
+        type="button"
+        :aria-expanded="filtersExpanded"
+        aria-controls="items-page-filters"
+        @click="filtersExpanded = !filtersExpanded"
+      >
+        Filters <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
+      </button>
       <button
         v-if="hasActiveFilters"
         id="items-page-reset-filters-button"
@@ -422,52 +498,66 @@
         aria-label="Reset all filters to default"
         @click="resetFilters"
       >
-        <CachedImage alt="Reset filters" src="/ui/1731-0.png" />
+        <CachedImage alt="" src="/ui/1731-0.png" />
         Reset
       </button>
       <button id="items-page-tutorial-button" class="men-button" @click="openTutorialModal()">
-        <CachedImage alt="Items tutorial" src="/ui/1094-0.png" />
-        Tutorial
+        <CachedImage alt="" src="/ui/1094-0.png" />
+        Search help
       </button>
     </div>
 
-    <div class="items-page-utility">
-      <span class="select-container">
-        <select aria-label="Sort items" :value="sortCategory" @change="setSortCategory($event.target.value)">
-          <option v-for="category in ItemSortCategories" :key="category" :value="category">
-            {{ `Sort: ${category}` }}
-          </option>
-        </select>
-      </span>
-      <span class="select-container">
-        <select
-          aria-label="Item container"
-          :value="containerFilter"
-          @change="setContainerFilter(validateContainerFilter($event.target.value))"
-        >
-          <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">{{ name }}</option>
-        </select>
-      </span>
-      <div class="items-page-member-filter-clipbox rsborder-tiny rsbackground" style="overflow: hidden">
+    <div id="items-page-filters" class="items-page-utility" :class="{ 'filters-expanded': filtersExpanded }">
+      <label class="items-filter-label">
+        Sort by
+        <span class="select-container">
+          <select aria-label="Sort items" :value="sortCategory" @change="setSortCategory($event.target.value)">
+            <option v-for="category in ItemSortCategories" :key="category" :value="category">
+              {{ category }}
+            </option>
+          </select>
+        </span>
+      </label>
+      <label class="items-filter-label">
+        Storage
+        <span class="select-container">
+          <select
+            aria-label="Item container"
+            :value="containerFilter"
+            @change="setContainerFilter(validateContainerFilter($event.target.value))"
+          >
+            <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">
+              {{ name === "All" ? "All storage" : name }}
+            </option>
+          </select>
+        </span>
+      </label>
+      <div class="items-page-member-filter-clipbox" role="group" aria-label="Include group members">
+        <span class="items-filter-caption">Include members</span>
         <span class="items-page-member-filter-container">
-          <span v-for="name in groupStore.memberNames" :key="name" class="rsbackground-hover">
+          <span v-for="name in groupStore.memberNames" :key="name">
             <input
               :id="`items-page-member-filter-${name}`"
               type="checkbox"
               :checked="!memberFilter.has(name)"
               @change="toggleMember(name)"
             />
-            <label :for="`items-page-member-filter-${name}`">{{ name }}</label>
+            <label :for="`items-page-member-filter-${name}`">
+              <span aria-hidden="true">
+                <PlayerIcon v-if="name !== '@SHARED'" :name="name" />
+                <CachedImage v-else src="/ui/777-0.png" alt="" width="14" height="15" />
+              </span>
+              {{ name === "@SHARED" ? "Shared" : name }}
+            </label>
           </span>
         </span>
       </div>
     </div>
 
-    <div class="items-page-utility">
-      <span class="rsborder-tiny rsbackground rsbackground-hover">
-        <span>{{ itemAggregates.filteredItems.length.toLocaleString() }}</span
-        >&nbsp;<span>items</span>
-      </span>
+    <div class="items-results-heading">
+      <h2>
+        Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
+      </h2>
       <button
         v-if="settingsStore.enableGearscapeExport"
         id="items-page-gearscape-export-button"
@@ -478,22 +568,40 @@
       >
         {{ gearscapeExportLabel }}
       </button>
-      <span class="rsborder-tiny rsbackground rsbackground-hover">
-        HA:&nbsp;<span>{{ itemAggregates.totalHighAlch.toLocaleString() }}</span
-        ><span>gp</span>
-      </span>
-      <span class="rsborder-tiny rsbackground rsbackground-hover">
-        GE:&nbsp;<span>{{ itemAggregates.totalGEPrice.toLocaleString() }}</span
-        ><span>gp</span>
-      </span>
     </div>
 
-    <ItemPanelsScrollArea
+    <p v-if="sortedItems.length === 0" class="items-empty">
+      No items match these filters. Try another search or reset your filters.
+    </p>
+
+    <ItemBank
       :sorted-items="sortedItems"
-      :member-filter="memberFilter"
-      :container-filter="containerFilter"
       :pinned-items="pinnedItems"
-      @toggle-pin="togglePin"
+      :selected-item-identifier="selectedItemIdentifier"
+      @select-item="selectItem"
     />
+
+    <section
+      v-if="selectedItem"
+      id="selected-item-details"
+      ref="itemInspector"
+      class="item-inspector"
+      aria-label="Selected item details"
+    >
+      <ItemPanel
+        :item-name="selectedItem.itemName"
+        :item-i-d="selectedItem.itemID"
+        :high-alch-per="selectedItem.highAlch"
+        :alchable="selectedItem.alchable"
+        :ge-price-per="selectedItem.gePrice"
+        :image-u-r-l="selectedItem.imageURL"
+        :total-quantity="selectedItem.totalQuantity"
+        :member-filter="memberFilter"
+        :container-filter="containerFilter"
+        :quantities="selectedItem.breakdownByMember"
+        :is-pinned="pinnedItems.has(selectedItem.itemID)"
+        @toggle-pin="togglePin"
+      />
+    </section>
   </template>
 </template>

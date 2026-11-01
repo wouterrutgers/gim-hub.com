@@ -37,36 +37,31 @@
       ariaLabel: "inventory",
       alt: "osrs inventory",
       src: "/ui/777-0.png",
-      width: 26,
-      height: 28,
     },
     {
       category: "Equipment",
       ariaLabel: "equipment",
       alt: "osrs t-posing knight",
       src: "/ui/778-0.png",
-      width: 27,
-      height: 32,
     },
-    { category: "Skills", ariaLabel: "skills", alt: "osrs skills", src: "/ui/3579-0.png", width: 23, height: 22 },
-    { category: "Quests", ariaLabel: "quests", alt: "osrs quest", src: "/ui/776-0.png", width: 22, height: 22 },
-    { category: "Diaries", ariaLabel: "diaries", alt: "osrs diary", src: "/ui/1298-0.png", width: 22, height: 22 },
+    { category: "Skills", ariaLabel: "skills", alt: "osrs skills", src: "/ui/3579-0.png" },
+    { category: "Quests", ariaLabel: "quests", alt: "osrs quest", src: "/ui/776-0.png" },
+    { category: "Diaries", ariaLabel: "diaries", alt: "osrs diary", src: "/ui/1298-0.png" },
     {
       category: "Combat achievements",
+      opensDialog: true,
       ariaLabel: "combat achievements",
       alt: "osrs combat achievements",
       src: "/item-icons/25956.webp",
-      width: 32,
-      height: 32,
+      className: "player-panel-item-icon",
     },
     {
       category: "Collection log",
+      opensDialog: true,
       ariaLabel: "collection-log",
       alt: "osrs collection log",
       src: "/item-icons/22711.webp",
-      width: 32,
-      height: 32,
-      className: "player-panel-collection-log",
+      className: "player-panel-item-icon",
     },
   ];
 
@@ -124,10 +119,13 @@
         :key="button.category"
         :class="[{ 'player-panel-tab-active': button.category === subcategory }, button.className]"
         :aria-label="button.ariaLabel"
+        :aria-pressed="button.opensDialog ? undefined : button.category === subcategory"
+        :aria-haspopup="button.opensDialog ? 'dialog' : undefined"
+        :data-tooltip="button.category"
         type="button"
         @click="activateButton(button)"
       >
-        <CachedImage :alt="button.alt" :src="button.src" :width="button.width" :height="button.height" />
+        <CachedImage :alt="button.alt" :src="button.src" />
       </button>
     </div>
     <div class="player-panel-content">

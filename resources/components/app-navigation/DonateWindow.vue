@@ -26,9 +26,7 @@
   >
     <div class="donate-window-header">
       <h2 id="donate-window-title">Support GIM hub</h2>
-      <button type="button" class="dialog-close" aria-label="Close dialog" @click="emit('close')">
-        <CachedImage src="/ui/1731-0.png" alt="" />
-      </button>
+      <button type="button" class="dialog-close" aria-label="Close dialog" @click="emit('close')" />
     </div>
     <p>
       I enjoy building GIM hub and sharing it with you. If you'd like to say thanks, a small donation is always

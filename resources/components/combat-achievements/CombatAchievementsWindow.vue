@@ -94,9 +94,7 @@
         <h1 id="combat-achievements-title">Combat achievements</h1>
         <div class="combat-achievements-player"><PlayerIcon :name="props.player" /> {{ props.player }}</div>
       </div>
-      <button class="dialog-close" aria-label="Close combat achievements" @click="emit('close')">
-        <CachedImage src="/ui/1731-0.png" alt="" />
-      </button>
+      <button type="button" class="dialog-close" aria-label="Close combat achievements" @click="emit('close')" />
     </header>
     <div class="combat-achievements-title-border" />
 

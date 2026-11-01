@@ -25,15 +25,15 @@
 }
 
 .player-quests-not-started {
-  color: #f00;
+  color: var(--red);
 }
 
 .player-quests-in-progress {
-  color: #ff0;
+  color: var(--yellow);
 }
 
 .player-quests-finished {
-  color: #0f0;
+  color: var(--green);
 }
 
 .player-quests-difficulty-icon {

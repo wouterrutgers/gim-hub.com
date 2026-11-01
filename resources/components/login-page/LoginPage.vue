@@ -57,9 +57,12 @@
 <template>
   <div id="login-page-container">
     <form id="login-page-window" class="rsborder rsbackground" @submit.prevent="tryLogin">
+      <div class="auth-heading">
+        <h1>{{ isAddingGroup ? "Add a group" : "Sign in to GIM hub" }}</h1>
+        <p>Enter the group name and token from your plugin settings.</p>
+      </div>
       <div class="login-page-step">
         <label for="login-group-name">Group name</label>
-        <br />
         <input
           aria-required="true"
           id="login-group-name"
@@ -78,7 +81,6 @@
 
       <div class="login-page-step">
         <label for="login-group-token">Group token</label>
-        <br />
         <input
           aria-required="true"
           id="login-group-token"
@@ -96,7 +98,10 @@
         </div>
       </div>
 
-      <button :disabled="pendingSubmission" id="login-page-submit" class="men-button" type="submit">Login</button>
+      <button :disabled="pendingSubmission" id="login-page-submit" class="men-button button-primary" type="submit">
+        {{ isAddingGroup ? "Add group" : "Sign in to your group" }}
+      </button>
+      <p class="auth-footnote">Starting a new journey? <RouterLink to="/create-group">Create a group</RouterLink></p>
 
       <div v-if="serverErrors?.length" class="validation-error">
         <template v-for="(error, index) in serverErrors" :key="error">

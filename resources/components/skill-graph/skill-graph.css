@@ -52,6 +52,7 @@
   margin: 0;
   text-align: center;
   font-variant-numeric: tabular-nums;
+  font-size: 12px;
 }
 
 #skill-graph-filters {
@@ -78,7 +79,7 @@
 #skill-graph-line-chart-container {
   position: absolute;
   inset: 0;
-  background: rgb(255 255 255 / 5%);
+  background: var(--darken);
 }
 
 #skill-graph-skill-image {
@@ -89,7 +90,6 @@
   right: 0;
   margin: auto;
   transform: translateY(-50%);
-  image-rendering: pixelated;
   opacity: 0.08;
   aspect-ratio: 1;
   object-fit: contain;
@@ -108,6 +108,7 @@
 #skill-graph-xp-change-table {
   margin: 8px 12px;
   border-collapse: collapse;
+  font-size: 12px;
 }
 
 .skill-graph-xp-change-table-image-container {
@@ -147,7 +148,7 @@
 }
 
 #skill-graph-xp-change-table thead th {
-  font-family: rsbold, ui-sans-serif, Arial, sans-serif;
+  font-family: var(--font-body);
   font-weight: bold;
   padding: 8px;
   text-align: left;
@@ -180,22 +181,6 @@
   color: var(--orange);
 }
 
-.skill-graph-member-toggle::after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  margin-right: 4px;
-  border-right: 2px solid currentcolor;
-  border-bottom: 2px solid currentcolor;
-  flex-shrink: 0;
-  opacity: 0.7;
-  transform: rotate(-45deg);
-}
-
-.skill-graph-member-toggle[aria-expanded="true"]::after {
-  transform: rotate(45deg);
-}
-
 .skill-graph-member-header::before {
   content: "";
   position: absolute;
@@ -210,12 +195,12 @@
 #skill-graph-xp-change-table tr.skill-graph-member-header .skill-graph-xp-change-table-label {
   min-height: 32px;
   padding-block: 0;
-  font-family: rsbold, ui-sans-serif, Arial, sans-serif;
+  font-family: var(--font-body);
   font-weight: bold;
 }
 
 #skill-graph-xp-change-table tr.skill-graph-member-header .skill-graph-xp-change-data {
-  font-family: rsbold, ui-sans-serif, Arial, sans-serif;
+  font-family: var(--font-body);
   font-weight: bold;
 }
 

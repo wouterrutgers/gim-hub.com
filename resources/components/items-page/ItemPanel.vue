@@ -4,6 +4,7 @@
   import * as Member from "../../game/member";
   import { serializeTooltip } from "../tooltip/tooltip-data";
   import CachedImage from "../cached-image/CachedImage.vue";
+  import PlayerIcon from "../player-icon/PlayerIcon.vue";
 
   const props = defineProps({
     itemName: { type: String, required: true },
@@ -41,8 +42,6 @@
         return quantity > 0;
       })
       .map(function prepareBreakdown({ name, quantity, breakdown }) {
-        const quantityPercent = (quantity / props.totalQuantity) * 100;
-
         return {
           name,
           quantity,
@@ -62,10 +61,6 @@
                 ),
               })
             : undefined,
-          contributionStyle: {
-            transform: `scaleX(${quantityPercent}%)`,
-            background: `hsl(${quantityPercent}, 100%, 40%)`,
-          },
         };
       });
   });
@@ -95,20 +90,22 @@
 </script>
 
 <template>
-  <div :class="['items-page-panel', 'rsborder', 'rsbackground', { 'items-page-panel-pinned': props.isPinned }]">
-    <div class="items-page-panel-top rsborder-tiny">
+  <div class="items-page-panel rsborder rsbackground">
+    <div class="items-page-panel-top">
       <div>
-        <a class="items-page-panel-name rstext" :href="wikiLink" target="_blank" rel="noopener noreferrer">
-          {{ props.itemName }}
-        </a>
-        <button
-          :class="['items-page-panel-pin-button', { pinned: props.isPinned }]"
-          :data-tooltip="pinLabel"
-          :aria-label="pinLabel"
-          @click="emit('togglePin', props.itemID)"
-        >
-          {{ props.isPinned ? "★" : "☆" }}
-        </button>
+        <div class="items-page-panel-heading">
+          <a class="items-page-panel-name" :href="wikiLink" target="_blank" rel="noopener noreferrer">
+            {{ props.itemName }}
+          </a>
+          <button
+            :class="['items-page-panel-pin-button', { pinned: props.isPinned }]"
+            :data-tooltip="pinLabel"
+            :aria-label="pinLabel"
+            @click="emit('togglePin', props.itemID)"
+          >
+            {{ props.isPinned ? "★" : "☆" }}
+          </button>
+        </div>
         <div class="items-page-panel-item-details">
           <span>Quantity</span>
           <span>{{ props.totalQuantity.toLocaleString() }}</span>
@@ -131,13 +128,12 @@
     </div>
     <div class="items-page-panel-quantity-breakdown">
       <template v-for="breakdown in quantityBreakdown" :key="breakdown.name">
-        <span :data-tooltip="breakdown.tooltip">{{ breakdown.name }}</span>
+        <span class="item-owner" :data-tooltip="breakdown.tooltip">
+          <PlayerIcon v-if="breakdown.name !== '@SHARED'" :name="breakdown.name" />
+          <CachedImage v-else src="/ui/777-0.png" alt="Shared storage" width="14" height="15" />
+          {{ breakdown.name === "@SHARED" ? "Shared" : breakdown.name }}
+        </span>
         <span :data-tooltip="breakdown.tooltip">{{ breakdown.quantity.toLocaleString() }}</span>
-        <span
-          class="items-page-panel-quantity-contribution"
-          :data-tooltip="breakdown.tooltip"
-          :style="breakdown.contributionStyle"
-        />
       </template>
     </div>
   </div>

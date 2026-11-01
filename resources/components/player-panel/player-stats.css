@@ -87,6 +87,7 @@
   margin-left: 8px;
   position: relative;
   z-index: 1;
+  color: #fff;
 }
 
 .player-stats-prayer-bar,
@@ -145,6 +146,7 @@
   z-index: 1;
   width: 100%;
   box-sizing: border-box;
+  color: #fff;
   font-size: 11px;
   text-align: center;
   text-overflow: ellipsis;

@@ -4,7 +4,7 @@ import { useLocalStorage } from "../composables/local-storage";
 import { siteThemes } from "./settings-options";
 
 const DEFAULT_SITE_SETTINGS = Object.freeze({
-  showActivitySidebar: true,
+  showActivitySidebar: false,
   filterActivityDrops: true,
   expandPlayerHistory: false,
   siteTheme: "light",

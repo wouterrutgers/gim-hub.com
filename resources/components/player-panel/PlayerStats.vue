@@ -87,7 +87,9 @@
       return undefined;
     }
 
-    return new Intl.DateTimeFormat(undefined, { timeZone: timezone.value, timeStyle: "short" }).format(new Date());
+    return new Intl.DateTimeFormat(undefined, { timeZone: timezone.value, timeStyle: "short" }).format(
+      new Date(currentTimeMilliseconds.value),
+    );
   });
   const healthRatio = computed(function getHealthRatio() {
     return playerStats.value.health.current / playerStats.value.health.max;
@@ -138,7 +140,6 @@
       <span v-else-if="lastOnlineAt?.getTime() > 0">Last online {{ formatLastOnlineAt(lastOnlineAt) }}</span>
       <span v-else>Offline</span>
       <template v-if="online && playerStats.world !== undefined">
-        <span class="player-stats-status-separator" aria-hidden="true">·</span>
         <span class="player-stats-world">W{{ playerStats.world }}</span>
       </template>
     </div>

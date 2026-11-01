@@ -20,6 +20,7 @@
     <input
       :class="['search-element-input', props.className]"
       :placeholder="props.placeholder"
+      :aria-label="props.placeholder"
       type="text"
       tabindex="0"
       :value="props.value ?? props.defaultValue"

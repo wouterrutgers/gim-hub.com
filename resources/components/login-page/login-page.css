@@ -1,40 +1,75 @@
 #login-page-container {
   display: flex;
-  height: 100%;
-  justify-content: center;
   align-items: center;
-}
-
-#login-page-container .validation-error {
-  min-height: 20px;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 64px 16px;
 }
 
 #login-page-window {
-  position: relative;
   display: flex;
+  box-sizing: border-box;
+  position: relative;
   flex-direction: column;
-  gap: 4px;
-  min-width: 260px;
-  padding: 16px;
+  gap: 16px;
+  width: min(440px, 100%);
+  padding: 36px;
 }
 
-#login-page-window > button {
-  align-self: center;
+.auth-heading {
+  margin-bottom: 12px;
+}
+
+.auth-heading > p:last-child {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 .login-page-step {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
-#login-page-window > .validation-error {
-  align-self: center;
-  font-size: 24px;
+.login-page-step label {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#login-page-window .validation-error:empty {
+  display: none;
+}
+
+#login-page-submit {
+  margin-top: 8px;
+  min-height: 44px;
+}
+
+.auth-footnote {
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+.auth-footnote a {
+  color: var(--orange);
 }
 
 #login-page-loading-overlay {
-  background-color: black;
-  opacity: 0.6;
   position: absolute;
   inset: 0;
+  border-radius: inherit;
+  background: rgb(0 0 0 / 60%);
+}
+
+@media (width <= 767px) {
+  #login-page-container {
+    padding-block: 32px;
+  }
+
+  #login-page-window {
+    padding: 28px 24px;
+  }
 }

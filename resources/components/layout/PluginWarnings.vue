@@ -2,7 +2,6 @@
   import { computed, onBeforeUnmount, onMounted, ref } from "vue";
   import { useLocalStorage } from "../../composables/local-storage";
   import { useGroupStore } from "../../stores/group";
-  import CachedImage from "../cached-image/CachedImage.vue";
   import "./plugin-warnings.css";
 
   const RECENT_ACTIVITY_MILLISECONDS = 30 * 60 * 1000;
@@ -70,9 +69,7 @@
         class="plugin-warnings-close dialog-close"
         aria-label="Close plugin warning"
         @click="setDismissedVersions(warningVersions)"
-      >
-        <CachedImage src="/ui/1731-0.png" alt="" />
-      </button>
+      />
     </div>
     <ul>
       <li v-for="warning in warnings" :key="warning.name">

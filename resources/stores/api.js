@@ -125,7 +125,7 @@ export const useApiStore = defineStore("api", function createApiStore() {
     }
 
     if (remainingGroups.length > 0) {
-      logInLive(remainingGroups[0]).catch(logOut);
+      return logInLive(remainingGroups[0]).catch(logOut);
     } else {
       logOut();
     }

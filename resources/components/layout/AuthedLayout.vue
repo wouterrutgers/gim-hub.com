@@ -22,6 +22,18 @@
   const isActivityPage = computed(function activityPageIsOpen() {
     return route.path === "/group/activity";
   });
+  const page = computed(function getCurrentPage() {
+    return {
+      "/group/items": { title: "Group items", description: "Search items across all members and storage." },
+      "/group/map": { title: "World map", description: "Live player locations across Gielinor." },
+      "/group/history": { title: "Skill history", description: "Compare experience gains by member." },
+      "/group/activity": { title: "Group activity", description: "Drops, levels, and completed achievements." },
+      "/group/panels": { title: "Group members", description: "Equipment, skills, quests, and collection logs." },
+      "/group/settings": { title: "Settings", description: "Group members and display preferences." },
+      "/group/setup-instructions": { title: "Plugin setup", description: "Connect GIM hub to RuneLite." },
+      "/changelog": { title: "What's new", description: "Updates to the website and plugin." },
+    }[route.path];
+  });
   const activityPageTarget = ref();
 
   watch(
@@ -35,19 +47,46 @@
 </script>
 
 <template>
-  <div class="authed-layout">
-    <div class="authed-workspace">
-      <SidePanels v-if="props.showPanels" />
-      <div id="main-content" class="pointer-passthrough">
-        <AppNavigation :group-name="groupName" />
-        <PluginWarnings />
+  <div class="authed-layout" :class="{ 'map-workspace': route.path === '/group/map' }">
+    <AppNavigation :group-name="groupName" />
+    <aside v-if="props.showPanels" class="group-rail" aria-label="Your group">
+      <SidePanels />
+    </aside>
+    <main id="main-content" class="pointer-passthrough">
+      <header class="workspace-header">
+        <div>
+          <h1>{{ page.title }}</h1>
+          <p class="workspace-description">{{ page.description }}</p>
+        </div>
+        <div class="workspace-actions">
+          <span v-if="apiStore.isDemo" class="demo-badge">Demo mode</span>
+          <button
+            v-if="!isActivityPage"
+            class="activity-toggle men-button"
+            type="button"
+            aria-controls="group-activity-sidebar"
+            :aria-expanded="settingsStore.showActivitySidebar"
+            @click="settingsStore.setShowActivitySidebar(!settingsStore.showActivitySidebar)"
+          >
+            <span
+              class="chevron"
+              :class="settingsStore.showActivitySidebar ? 'chevron-right' : 'chevron-left'"
+              aria-hidden="true"
+            />
+            {{ settingsStore.showActivitySidebar ? "Hide activity" : "Show activity" }}
+          </button>
+          <RouterLink to="/group/activity" class="activity-page-link men-button">Activity</RouterLink>
+        </div>
+      </header>
+      <PluginWarnings />
+      <div class="workspace-page pointer-passthrough">
         <slot />
       </div>
-    </div>
+    </main>
     <Teleport :to="activityPageTarget" :disabled="!activityPageTarget">
       <ActivityFeed
         id="group-activity-sidebar"
-        v-show="isActivityPage || (route.path !== '/group/panels' && settingsStore.showActivitySidebar)"
+        v-show="isActivityPage || settingsStore.showActivitySidebar"
         :collapsible="!isActivityPage"
         :class="isActivityPage ? 'activity-page-feed' : 'activity-dock'"
       />

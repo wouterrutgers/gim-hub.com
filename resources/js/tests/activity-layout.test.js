@@ -40,10 +40,10 @@ describe("persistent activity layout", function activityLayout() {
     collapse.click();
     await nextTick();
     expect(timeline.style.display).toBe("none");
-    container.querySelector(".activity-restore").click();
+    container.querySelector(".activity-toggle").click();
     await nextTick();
     expect(timeline.style.display).not.toBe("none");
-    expect(container.querySelector(".activity-restore")).toBeNull();
+    expect(container.querySelector(".activity-toggle").getAttribute("aria-expanded")).toBe("true");
     expect(timeline.querySelector('[aria-label="Filter activity by type"]').value).toBe("xp");
     collapse.click();
     await nextTick();
@@ -51,7 +51,7 @@ describe("persistent activity layout", function activityLayout() {
 
     const nextVisit = await mountLayout();
     expect(nextVisit.container.querySelector(".activity-feed").style.display).toBe("none");
-    expect(nextVisit.container.querySelector(".activity-restore")).not.toBeNull();
+    expect(nextVisit.container.querySelector(".activity-toggle").getAttribute("aria-expanded")).toBe("false");
   });
 });
 

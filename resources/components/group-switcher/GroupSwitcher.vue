@@ -3,6 +3,7 @@
   import { useRouter } from "vue-router";
   import { useApiStore } from "../../stores/api";
   import AppLink from "../app-link/AppLink.vue";
+  import CachedImage from "../cached-image/CachedImage.vue";
   import "./group-switcher.css";
 
   const props = defineProps({
@@ -14,6 +15,8 @@
 
   const open = ref(false);
   const container = ref(null);
+  const pending = ref(false);
+  const error = ref();
 
   const sortedGroups = computed(function getSortedGroups() {
     return [...apiStore.savedGroups].sort(function sortGroups(left, right) {
@@ -35,15 +38,32 @@
     }
   }
 
-  function switchGroup(group) {
-    open.value = false;
-    apiStore.logInLive(group).catch(function removeInvalidGroup() {
-      apiStore.removeSavedGroup(group);
-    });
+  async function switchGroup(group) {
+    pending.value = true;
+    error.value = undefined;
+
+    try {
+      await apiStore.logInLive(group);
+      open.value = false;
+    } catch {
+      error.value = "Could not switch groups. Please try again.";
+    } finally {
+      pending.value = false;
+    }
   }
 
-  function removeGroup(group) {
-    apiStore.removeSavedGroup(group);
+  async function removeGroup(group) {
+    pending.value = true;
+
+    try {
+      await apiStore.removeSavedGroup(group);
+
+      if (!apiStore.client) {
+        await router.push("/");
+      }
+    } finally {
+      pending.value = false;
+    }
   }
 
   function addGroup() {
@@ -62,47 +82,43 @@
       id="group-switcher-toggle"
       type="button"
       :aria-expanded="open"
-      aria-haspopup="menu"
       aria-controls="group-switcher-dropdown"
       @click="toggle"
     >
       <span id="group-switcher-label">{{ props.groupName }}</span>
-      <svg
-        id="group-switcher-arrow"
-        :class="{ open }"
-        width="12"
-        height="12"
-        viewBox="0 0 12 12"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M2.5 4.5L6 8L9.5 4.5"
-          stroke="currentColor"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+      <span id="group-switcher-arrow" class="chevron" :class="{ 'chevron-up': open }" aria-hidden="true" />
     </button>
 
-    <div v-if="open" id="group-switcher-dropdown" class="rsborder rsbackground">
+    <div v-if="open" id="group-switcher-dropdown" class="rsborder rsbackground" :aria-busy="pending">
       <div v-for="(group, index) in sortedGroups" :key="`${group.name}-${index}`" class="group-switcher-item">
-        <button type="button" class="group-switcher-item-button men-button" @click="switchGroup(group)">
+        <button
+          type="button"
+          class="group-switcher-item-button men-button"
+          :class="{ active: group.name === props.groupName }"
+          :title="group.name"
+          :disabled="pending"
+          @click="switchGroup(group)"
+        >
           {{ group.name }}
         </button>
         <button
           type="button"
           class="group-switcher-remove men-button"
-          :data-tooltip="`Remove ${group.name}`"
+          :aria-label="`Remove saved group ${group.name}`"
+          :data-tooltip="`Remove saved group ${group.name}`"
+          :disabled="pending"
           @click="removeGroup(group)"
         >
-          ✕
+          <CachedImage src="/ui/1731-0.png" alt="" width="16" height="16" />
         </button>
       </div>
-      <button type="button" class="group-switcher-add men-button" @click="addGroup">+ Add group</button>
+      <p v-if="error" class="validation-error" role="alert">{{ error }}</p>
+      <button type="button" class="group-switcher-add men-button" :disabled="pending" @click="addGroup">
+        Add group
+      </button>
       <div class="group-switcher-actions">
-        <AppLink href="/logout" @click="open = false">Logout</AppLink>
+        <span v-if="pending" role="status">Connecting…</span>
+        <AppLink v-else href="/logout" @click="open = false">Log out</AppLink>
       </div>
     </div>
   </div>

@@ -206,10 +206,10 @@ describe("storage UI", function storageInterface() {
     await mount(ItemsPage);
     expect(container.querySelector(".stash-units")).toBeNull();
     expect(container.querySelector("#items-page-no-items")).not.toBeNull();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(0);
+    expect(container.querySelectorAll(".bank-item").length).toBe(0);
   });
 
-  it("shows STASH contents in normal item panels with search, filters and reconciled quantities", async function stashItems() {
+  it("shows STASH contents in the bank with search, filters and reconciled quantities", async function stashItems() {
     vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(600);
     vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(800);
     payload = [
@@ -231,13 +231,13 @@ describe("storage UI", function storageInterface() {
       },
     });
     expect(container.querySelector(".stash-units")).toBeNull();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(2);
+    expect(container.querySelectorAll(".bank-item").length).toBe(2);
 
     const storageFilter = container.querySelectorAll("select")[1];
     storageFilter.value = "STASH units";
     storageFilter.dispatchEvent(new Event("change", { bubbles: true }));
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(1);
+    expect(container.querySelectorAll(".bank-item").length).toBe(1);
     expect(container.querySelector(".items-page-panel-name").textContent).toBe("Leather chaps");
     expect(container.querySelector(".items-page-panel-item-details").children[1].textContent).toBe("2");
     expect(container.querySelector(".items-page-panel-item-details").children[3].textContent).toBe("24gp");
@@ -253,11 +253,11 @@ describe("storage UI", function storageInterface() {
     search.value = "guam";
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(0);
+    expect(container.querySelectorAll(".bank-item").length).toBe(0);
     search.value = "leather";
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(1);
+    expect(container.querySelectorAll(".bank-item").length).toBe(1);
 
     payload[0].stash_units[0] = { ...payload[0].stash_units[0], state: "empty", items: [] };
     await vi.advanceTimersByTimeAsync(1000);
@@ -266,10 +266,10 @@ describe("storage UI", function storageInterface() {
 
     container.querySelector("#items-page-member-filter-Alice").click();
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(0);
+    expect(container.querySelectorAll(".bank-item").length).toBe(0);
     container.querySelector("#items-page-reset-filters-button").click();
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(2);
+    expect(container.querySelectorAll(".bank-item").length).toBe(2);
   });
 
   it("combines excluded names and tags with AND before OR in item search", async function combinedItemSearch() {
@@ -280,9 +280,9 @@ describe("storage UI", function storageInterface() {
 
     const search = container.querySelector("#items-page-search input");
     function visibleNames() {
-      return [...container.querySelectorAll(".items-page-panel-name")]
+      return [...container.querySelectorAll(".bank-item")]
         .map(function itemName(element) {
-          return element.textContent;
+          return element.dataset.tooltip;
         })
         .sort();
     }
@@ -314,9 +314,9 @@ describe("storage UI", function storageInterface() {
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
     expect(
-      [...container.querySelectorAll(".items-page-panel-name")]
+      [...container.querySelectorAll(".bank-item")]
         .map(function itemName(element) {
-          return element.textContent;
+          return element.dataset.tooltip;
         })
         .sort(),
     ).toEqual(["Restore potion(3)", "Restore potion(4)"]);

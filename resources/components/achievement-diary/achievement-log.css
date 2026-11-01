@@ -81,7 +81,7 @@
 .diary-dialog-section-title {
   color: var(--orange);
   text-decoration: underline;
-  background: #28251e;
+  background: var(--surface-raised);
   margin: 0;
   padding: 4px;
   border-block: 1px solid hsl(40deg 15.79% 29.8%);

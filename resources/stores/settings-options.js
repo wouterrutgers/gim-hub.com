@@ -1,1 +1,1 @@
-export const siteThemes = ["light", "dark"];
+export const siteThemes = ["light", "dark", "browntown"];

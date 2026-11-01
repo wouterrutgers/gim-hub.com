@@ -18,8 +18,8 @@
   <div id="setup-instructions-container">
     <div id="setup-instructions" class="rsbackground rsborder">
       <div class="setup-block">
-        <h3>The group's login</h3>
-        <p>Only share these with your group. You can't recover it so keep it safe!</p>
+        <h2>Your group credentials</h2>
+        <p>Share these only with your group. Your token cannot be recovered, so save it somewhere safe.</p>
         <div class="setup-block">
           <h4>Group name</h4>
           <div class="setup-credential rsborder-tiny rsbackground">{{ credentials?.name ?? "Group name" }}</div>
@@ -40,23 +40,23 @@
       </div>
 
       <div class="setup-block">
-        <h3>Setup</h3>
+        <h2>Install the plugin</h2>
         <p>
-          This app requires each group member to install a runelite plugin from the Plugin Hub in order to track player
-          information. Find it by searching "<span class="emphasize">GIM hub</span>" in the Runelite client.
+          Each member needs the GIM hub plugin to share their progress. Open the Plugin Hub in RuneLite and search for
+          <span class="emphasize">GIM hub</span>.
         </p>
       </div>
 
       <div id="setup-config">
         <p>
-          Use the provided credentials to fill in the <span class="emphasize">Group Config</span> section in the
-          plugin's configuration.
+          Enter your group name and token in the plugin's group configuration. Log in to OSRS and your group will appear
+          here.
         </p>
         <CachedImage alt="GIM Hub Runelite plugin screenshot" src="/images/plugin-screenshot.png" />
       </div>
 
       <div id="setup-go-to-group">
-        <AppLink href="/group">Go to group</AppLink>
+        <AppLink href="/group" class="button-primary">Go to your group</AppLink>
       </div>
     </div>
   </div>

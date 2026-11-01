@@ -49,6 +49,10 @@
   flex-shrink: 0;
 }
 
+:root:not(.dark-mode, .browntown-mode) .donate-window-link-preferred img {
+  filter: brightness(0);
+}
+
 .donate-window-link-preferred {
   grid-column: 1 / -1;
   justify-content: flex-start;

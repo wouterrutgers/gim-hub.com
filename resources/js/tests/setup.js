@@ -7,7 +7,7 @@ afterEach(function cleanup() {
 
   if (typeof window !== "undefined") {
     document.body.innerHTML = "";
-    document.documentElement.classList.remove("dark-mode");
+    document.documentElement.classList.remove("dark-mode", "browntown-mode");
     window.localStorage.clear();
   }
 });

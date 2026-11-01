@@ -5,8 +5,8 @@
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
   import { activityIsLive, activityPresentation } from "../../game/activity";
-  import { skillIcons } from "../../game/skill";
   import CachedImage from "../cached-image/CachedImage.vue";
+  import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import "./activity-feed.css";
 
   const props = defineProps({
@@ -108,6 +108,18 @@
     return `${Math.floor(minutes / 1440)}d ago`;
   }
 
+  function entryClock(entry) {
+    if (entry.is_weekly) {
+      return "Week";
+    }
+
+    return new Date(entry.started_at).toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    });
+  }
+
   function timeRange(entry) {
     if (entry.is_weekly) {
       const options = { month: "short", day: "numeric", timeZone: "UTC" };
@@ -115,10 +127,18 @@
       return `${new Date(entry.started_at).toLocaleDateString(undefined, options)} to ${new Date(entry.started_at + 6 * 24 * 60 * 60_000).toLocaleDateString(undefined, options)}`;
     }
 
-    const start = new Date(entry.started_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    const start = new Date(entry.started_at).toLocaleTimeString(undefined, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    });
     const end = activityIsLive(entry, timestamp.value)
       ? "now"
-      : new Date(entry.occurred_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+      : new Date(entry.occurred_at).toLocaleTimeString(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+          hourCycle: "h23",
+        });
 
     return entry.started_at === entry.occurred_at && !activityIsLive(entry, timestamp.value)
       ? start
@@ -197,7 +217,7 @@
         aria-controls="group-activity-sidebar"
         @click="settingsStore.setShowActivitySidebar(false)"
       >
-        <span class="activity-toggle-chevron" aria-hidden="true" />
+        <span class="chevron chevron-right" aria-hidden="true" />
       </button>
     </header>
     <div class="activity-feed-filters">
@@ -242,53 +262,43 @@
           <h3 v-if="index === 0 || dateLabel(entry) !== dateLabel(filteredEntries[index - 1])" class="activity-date">
             {{ dateLabel(entry) }}
           </h3>
-          <article
-            :class="['activity-card', { 'activity-milestone': presentations.get(entry.id).milestone }]"
-            :style="{
-              '--member-hue': `${groupStore.memberColors.get(members.get(entry.member_id)).hueDegrees}deg`,
-            }"
-          >
-            <CachedImage class="activity-icon" :src="presentations.get(entry.id).icon" alt="" width="24" height="24" />
+          <article :class="['activity-card', { 'activity-milestone': presentations.get(entry.id).milestone }]">
+            <time
+              class="activity-time"
+              :datetime="new Date(entry.started_at).toISOString()"
+              :title="
+                entry.is_weekly
+                  ? `${timeRange(entry)} (UTC)`
+                  : `${relativeTime(entry)} (${new Date(entry.started_at).toLocaleString()})`
+              "
+              >{{ entryClock(entry) }}</time
+            >
             <div class="activity-card-content">
-              <div class="activity-card-player">
+              <span class="activity-card-player">
+                <PlayerIcon :name="members.get(entry.member_id)" />
                 <strong>{{ members.get(entry.member_id) }}</strong
-                ><span v-if="activityIsLive(entry, timestamp)" class="activity-live">Live</span
-                ><time
-                  :datetime="new Date(entry.started_at).toISOString()"
-                  :title="entry.is_weekly ? `${timeRange(entry)} (UTC)` : new Date(entry.started_at).toLocaleString()"
-                  >{{ relativeTime(entry) }}</time
-                >
-              </div>
-              <div class="activity-card-event">{{ presentations.get(entry.id).text }}</div>
+                >:
+              </span>
+              <span class="activity-card-event">{{ presentations.get(entry.id).text }}</span>
+              <CachedImage
+                v-if="presentations.get(entry.id).milestone"
+                class="activity-icon"
+                :src="presentations.get(entry.id).icon"
+                alt=""
+                width="16"
+                height="16"
+              />
+              <span v-if="activityIsLive(entry, timestamp)" class="activity-live">Live</span>
               <span v-if="presentations.get(entry.id).collectionUnlock" class="activity-unlock"
                 >New collection item</span
               >
-              <div v-if="presentations.get(entry.id).skills?.length > 1" class="activity-skill-icons">
-                <CachedImage
-                  v-for="skill in presentations.get(entry.id).skills"
-                  :key="skill"
-                  :src="skillIcons[skill]"
-                  :alt="skill"
-                  :title="skill"
-                  width="16"
-                  height="16"
-                />
-              </div>
               <details v-if="presentations.get(entry.id).details.length" class="activity-card-details">
-                <summary>
-                  <span>{{ timeRange(entry) }}</span
-                  ><span>Details</span>
-                </summary>
+                <summary><span class="chevron chevron-right" aria-hidden="true" /><span>Details</span></summary>
+                <p class="activity-detail-range">{{ timeRange(entry) }}{{ entry.is_weekly ? " (UTC)" : "" }}</p>
                 <ul>
                   <li v-for="detail in presentations.get(entry.id).details" :key="detail">
                     <span class="activity-detail-content">
-                      <template v-if="entry.type === 'level'">
-                        <span>Level {{ entry.data.before }}</span>
-                        <svg width="10" height="8" viewBox="0 0 10 8" role="img" aria-label="to">
-                          <path d="M0 4h8M5 1l3 3-3 3" fill="none" stroke="currentColor" />
-                        </svg>
-                        <span>{{ entry.data.after }}</span>
-                      </template>
+                      <span v-if="entry.type === 'level'">Level {{ entry.data.before }} to {{ entry.data.after }}</span>
                       <span v-else>{{ detail }}</span>
                     </span>
                   </li>

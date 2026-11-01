@@ -13,6 +13,7 @@
   const labels = {
     light: "Light",
     dark: "Dark",
+    browntown: "Browntown",
   };
   const MEMBER_COUNT_MAX = 5;
 
@@ -92,8 +93,8 @@
 <template>
   <div id="settings-page">
     <div class="group-settings-container rsborder rsbackground">
-      <h2>Member settings</h2>
-      <div>These <span class="emphasize">do</span> need to match the in-game names.</div>
+      <h2>Your members</h2>
+      <p class="settings-description">Display names must match your members' exact names in OSRS.</p>
       <div v-for="(member, index) in members" :key="`edit-member-${member}`" class="group-settings-member-row">
         <EditMemberInput :member="member" />
         <div class="group-settings-member-order" role="group" :aria-label="`Order ${member}`">
@@ -103,7 +104,7 @@
             :aria-label="`Move ${member} up`"
             @click="moveMember(index, -1)"
           >
-            ▲
+            <span class="chevron chevron-up" aria-hidden="true" />
           </button>
           <button
             class="men-button small"
@@ -111,7 +112,7 @@
             :aria-label="`Move ${member} down`"
             @click="moveMember(index, 1)"
           >
-            ▼
+            <span class="chevron" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -143,7 +144,7 @@
     </div>
 
     <div class="group-settings-container rsborder rsbackground">
-      <h2>Appearance settings</h2>
+      <h2>Your preferences</h2>
       <fieldset>
         <legend>Player panels</legend>
         <fieldset class="setting-group">

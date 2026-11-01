@@ -1,0 +1,15 @@
+.player-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.roster-empty {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.roster-loading {
+  min-height: 100px;
+}

@@ -20,19 +20,10 @@
   });
 
   watch(
-    [
-      function getLayout() {
-        return route.meta.layout;
-      },
-      function getSiteTheme() {
-        return settingsStore.siteTheme;
-      },
-    ],
-    function updateTheme([layout, siteTheme]) {
-      if (layout === "authed") {
-        applySiteTheme(siteTheme);
-      }
+    function getSiteTheme() {
+      return settingsStore.siteTheme;
     },
+    applySiteTheme,
     { immediate: true },
   );
 </script>

@@ -1,9 +1,11 @@
 #panels-page-container {
-  gap: 8px;
-  padding: 8px 0;
   overflow-y: auto;
+  padding-bottom: 16px;
+}
+
+#panels-page-container .player-roster {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, max-content));
-  justify-content: start;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   align-items: start;
+  gap: 20px;
 }

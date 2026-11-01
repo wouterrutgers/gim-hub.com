@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <AuthedLayout v-if="loggedIn" :show-panels="false">
+  <AuthedLayout v-if="loggedIn" :show-panels="true">
     <ChangelogPage back-href="/group/items" back-label="Go to group" />
   </AuthedLayout>
   <UnauthedLayout v-else>

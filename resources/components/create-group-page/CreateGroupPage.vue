@@ -141,11 +141,14 @@
 <template>
   <div id="create-group-container">
     <form id="create-group-window" class="rsborder rsbackground" @submit.prevent="submit">
+      <div class="auth-heading">
+        <h1>Create a group</h1>
+        <p>Choose a name and add your Group Ironman members.</p>
+      </div>
       <div>
-        <h3>Pick a name for your group</h3>
-        <p>This does <span class="emphasize">not</span> need to be the in-game name.</p>
+        <h3>01 <span>Choose a group name</span></h3>
+        <p>Any name you like. It can be different from your name in OSRS.</p>
         <label for="create-group-group-name">Group name</label>
-        <br />
         <input
           id="create-group-group-name"
           name="group-name"
@@ -162,14 +165,13 @@
       </div>
 
       <div>
-        <h3>What size is the group?</h3>
-        <p>This can be changed later.</p>
+        <h3>02 <span>Gather your team</span></h3>
+        <p>Choose your group size. You can change it later.</p>
         <label for="group-member-count">Group size</label>
-        <br />
         <div :class="['select-container', memberCountErrors?.length ? 'invalid' : 'valid']">
           <select id="group-member-count" name="group-member-count" value="0" @change="updateMemberCount">
             <option value="0" disabled>Select an option</option>
-            <option v-for="count in [2, 3, 4, 5]" :key="count" :value="count">{{ count }} Members</option>
+            <option v-for="count in [2, 3, 4, 5]" :key="count" :value="count">{{ count }} members</option>
           </select>
         </div>
         <div class="validation-error">
@@ -181,12 +183,11 @@
       </div>
 
       <div v-if="memberInputIndexes.length > 0">
-        <h3>Enter each members' name</h3>
-        <p>This <span class="emphasize">does</span> need to match the in-game name. (Can be changed later)</p>
+        <h3>03 <span>Meet the group</span></h3>
+        <p>Use each member's exact display name in OSRS.</p>
 
         <template v-for="index in memberInputIndexes" :key="index">
-          <label :for="`create-group-member-name-${index}`">Name for Member {{ index + 1 }}</label>
-          <br />
+          <label :for="`create-group-member-name-${index}`">Member {{ index + 1 }}</label>
           <input
             aria-required="true"
             :id="`create-group-member-name-${index}`"
@@ -204,7 +205,8 @@
         </template>
       </div>
 
-      <button :disabled="pending" class="men-button" type="submit">Create group</button>
+      <button :disabled="pending" class="men-button button-primary" type="submit">Create your group</button>
+      <p class="auth-footnote">Already part of a group? <RouterLink to="/login">Sign in</RouterLink></p>
 
       <div v-if="formState.type === 'Pending' && formState.serverErrors?.length" class="validation-error">
         <template v-for="(error, index) in formState.serverErrors" :key="error">

@@ -71,7 +71,7 @@ const routes = [
     component: function loadAuthenticatedSetupInstructions() {
       return import("./components/setup-instructions/SetupInstructions.vue");
     },
-    meta: { layout: "authed" },
+    meta: { layout: "authed", showPanels: true },
   },
   {
     path: "/group/items",
@@ -99,7 +99,7 @@ const routes = [
     component: function loadActivityPage() {
       return import("./components/player-activity/ActivityPage.vue");
     },
-    meta: { layout: "authed" },
+    meta: { layout: "authed", showPanels: true },
   },
   {
     path: "/group/panels",

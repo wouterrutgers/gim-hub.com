@@ -7,6 +7,7 @@
   import UnauthedLayout from "../layout/UnauthedLayout.vue";
   import Tooltip from "../tooltip/Tooltip.vue";
   import "./app.css";
+  import "./classic-theme.css";
 
   const CanvasMap = defineAsyncComponent(function loadCanvasMap() {
     return import("../canvas-map/CanvasMap.vue");

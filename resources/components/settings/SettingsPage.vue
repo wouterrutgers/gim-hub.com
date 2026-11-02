@@ -14,6 +14,8 @@
     light: "Light",
     dark: "Dark",
     browntown: "Browntown",
+    "classic-light": "Classic light",
+    "classic-dark": "Classic dark",
   };
   const MEMBER_COUNT_MAX = 5;
 

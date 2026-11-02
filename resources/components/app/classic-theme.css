@@ -78,7 +78,10 @@
     .items-page-panel-total,
     .items-page-member-filter-container > span,
     .item-inspector-prompt,
-    .group-switcher-current strong
+    .group-switcher-current strong,
+    .collection-log-tab-buttons button,
+    .collection-log-page-directory-page,
+    .collection-log-page-top
   ) {
   font-size: 16px;
   line-height: 1.25;
@@ -105,7 +108,8 @@
     .activity-unlock,
     .activity-card-details,
     .activity-detail-range,
-    .activity-drop-filter
+    .activity-drop-filter,
+    .collection-log-totals
   ) {
   font-size: 14px;
 }
@@ -117,6 +121,16 @@
 
 :root.classic-mode .activity-feed-header h2 {
   font-size: 18px;
+}
+
+:root.classic-mode .collection-log-container {
+  --muted: var(--orange);
+}
+
+:root.classic-mode .collection-log-header h1,
+:root.classic-mode .collection-log-page-name-link {
+  color: var(--orange);
+  font-size: 20px;
 }
 
 :root.classic-mode .item-owner-bar-fill {

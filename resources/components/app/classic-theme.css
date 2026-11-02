@@ -65,6 +65,68 @@
   font-family: rsbold, arial, sans-serif;
 }
 
+:root.classic-mode #app-navigation-nav .app-link,
+:root.classic-mode #group-switcher-toggle,
+:root.classic-mode #group-switcher-dropdown,
+:root.classic-mode
+  :is(
+    .nav-mobile-more summary,
+    .nav-support,
+    .items-results-heading h2,
+    .items-page-panel-item-details,
+    .items-page-panel-quantity-breakdown,
+    .items-page-panel-total,
+    .items-page-member-filter-container > span,
+    .item-inspector-prompt,
+    .group-switcher-current strong
+  ) {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+:root.classic-mode
+  :is(
+    .nav-section-label,
+    .nav-community-links,
+    .items-summary span,
+    .items-summary small,
+    .items-filter-label,
+    .items-filter-caption,
+    .items-results-heading h2 > span,
+    .settings-description,
+    .group-switcher-caption,
+    .group-switcher-demo,
+    .group-switcher-current-label,
+    .group-switcher-remove,
+    .activity-feed-period,
+    .activity-date,
+    .activity-time,
+    .activity-live,
+    .activity-unlock,
+    .activity-card-details,
+    .activity-detail-range,
+    .activity-drop-filter
+  ) {
+  font-size: 14px;
+}
+
+:root.classic-mode .activity-feed {
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+:root.classic-mode .activity-feed-header h2 {
+  font-size: 18px;
+}
+
+:root.classic-mode .item-owner-bar-fill {
+  background: hsl(calc(var(--item-owner-share) * 100) 100% 40%);
+}
+
+:root.classic-mode #canvas-map-controls {
+  max-width: min(480px, 100%);
+}
+
 :root.classic-mode :is(.rsborder, .metal-border),
 :root.classic-mode :is(#app-navigation, #tooltip) {
   border-width: 1px;
@@ -104,6 +166,10 @@
 
 :root.classic-mode .men-button:not(:disabled):hover {
   background: var(--surface-raised);
+}
+
+:root.classic-mode #items-page-head .men-button {
+  font-size: 16px;
 }
 
 :root.classic-mode .bank-item:hover {

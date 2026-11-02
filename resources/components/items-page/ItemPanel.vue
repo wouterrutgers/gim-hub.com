@@ -92,7 +92,7 @@
         </span>
         <span class="item-owner-quantity">{{ owner.quantity.toLocaleString() }}</span>
         <span class="item-owner-bar" aria-hidden="true">
-          <span class="item-owner-bar-fill" :style="{ width: `${(owner.quantity / props.totalQuantity) * 100}%` }" />
+          <span class="item-owner-bar-fill" :style="{ '--item-owner-share': owner.quantity / props.totalQuantity }" />
         </span>
       </div>
     </div>

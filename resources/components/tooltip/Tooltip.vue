@@ -28,7 +28,7 @@
     window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("pointercancel", hideTooltip);
     window.addEventListener("click", handleClick);
-    window.addEventListener("scroll", hideTooltip, { capture: true });
+    window.addEventListener("scroll", handleScroll, { capture: true });
     window.addEventListener("focusin", handleFocusIn);
     window.addEventListener("focusout", handleFocusOut);
     window.addEventListener("keydown", dismissOnEscape, { capture: true });
@@ -41,7 +41,7 @@
     window.removeEventListener("pointerdown", handlePointerDown);
     window.removeEventListener("pointercancel", hideTooltip);
     window.removeEventListener("click", handleClick);
-    window.removeEventListener("scroll", hideTooltip, { capture: true });
+    window.removeEventListener("scroll", handleScroll, { capture: true });
     window.removeEventListener("focusin", handleFocusIn);
     window.removeEventListener("focusout", handleFocusOut);
     window.removeEventListener("keydown", dismissOnEscape, { capture: true });
@@ -124,8 +124,17 @@
 
     const rectangle = tooltipElement.value.getBoundingClientRect();
     const offsetX = x + 5 + rectangle.width > window.innerWidth ? Math.max(5 - x, -(rectangle.width + 5)) : 5;
-    const offsetY = y - rectangle.height - 5 < 0 ? 5 : -(rectangle.height + 5);
+    const offsetY =
+      y - rectangle.height - 5 < 0
+        ? Math.min(5, window.innerHeight - y - rectangle.height - 5)
+        : -(rectangle.height + 5);
     tooltipElement.value.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+  }
+
+  function handleScroll(event) {
+    if (!tooltipElement.value.contains(event.target)) {
+      hideTooltip();
+    }
   }
 
   function getDataTooltipElement(target) {
@@ -297,33 +306,38 @@
 
       <template v-else-if="tooltip?.type === 'item-breakdown'">
         {{ tooltip.name }}
-        <br />
-        <hr />
-        <div class="tooltip-item-breakdown">
-          <template v-for="itemContainer in Member.itemContainerNames" :key="itemContainer">
-            <template
-              v-if="
-                (tooltip.filter === 'All' || tooltip.filter === itemContainer) &&
-                (tooltip.filter !== 'All' || (tooltip.breakdown[itemContainer] ?? 0) !== 0)
-              "
-            >
-              <span>{{ itemContainer }}</span>
-              <span>{{ (tooltip.breakdown[itemContainer] ?? 0).toLocaleString() }}</span>
+        <section v-for="owner in tooltip.owners" :key="owner.name" class="tooltip-item-owner">
+          <hr />
+          <strong class="tooltip-item-breakdown">
+            <span>{{ owner.name === "@SHARED" ? "Shared" : owner.name }}:</span>
+            <span>{{ owner.quantity.toLocaleString() }}</span>
+          </strong>
+          <div class="tooltip-item-breakdown">
+            <template v-for="itemContainer in Member.itemContainerNames" :key="itemContainer">
+              <template
+                v-if="
+                  (tooltip.filter === 'All' || tooltip.filter === itemContainer) &&
+                  (owner.breakdown[itemContainer] ?? 0) !== 0
+                "
+              >
+                <span>{{ itemContainer }}</span>
+                <span>{{ owner.breakdown[itemContainer].toLocaleString() }}</span>
+              </template>
             </template>
-          </template>
-          <template v-if="tooltip.filter === 'All' || tooltip.filter === 'STASH units'">
-            <template v-for="unit in tooltip.stashLocations ?? []" :key="unit.id">
-              <span>{{ unit.name }} ({{ unit.tier }})</span>
-              <span>{{ unit.quantity.toLocaleString() }}</span>
+            <template v-if="tooltip.filter === 'All' || tooltip.filter === 'STASH units'">
+              <template v-for="unit in owner.stashLocations" :key="unit.id">
+                <span>{{ unit.name }} ({{ unit.tier }})</span>
+                <span>{{ unit.quantity.toLocaleString() }}</span>
+              </template>
             </template>
-          </template>
-          <template v-if="tooltip.filter === 'All' || tooltip.filter === 'Cargo holds'">
-            <template v-for="hold in tooltip.cargoHolds ?? []" :key="hold.id">
-              <span>{{ hold.name }}</span>
-              <span>{{ hold.quantity.toLocaleString() }}</span>
+            <template v-if="tooltip.filter === 'All' || tooltip.filter === 'Cargo holds'">
+              <template v-for="hold in owner.cargoHolds" :key="hold.id">
+                <span>{{ hold.name }}</span>
+                <span>{{ hold.quantity.toLocaleString() }}</span>
+              </template>
             </template>
-          </template>
-        </div>
+          </div>
+        </section>
       </template>
 
       <template v-else-if="tooltip?.type === 'collection-log-item'">

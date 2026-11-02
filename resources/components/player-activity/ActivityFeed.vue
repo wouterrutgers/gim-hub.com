@@ -286,8 +286,19 @@
                 >:
               </span>
               <span class="activity-card-event">{{ presentations.get(entry.id).text }}</span>
+              <span v-if="entry.type === 'xp'" class="activity-skill-icons">
+                <CachedImage
+                  v-for="detail in presentations.get(entry.id).details"
+                  :key="detail.skill"
+                  class="activity-icon"
+                  :src="detail.icon"
+                  :alt="detail.skill"
+                  width="16"
+                  height="16"
+                />
+              </span>
               <CachedImage
-                v-if="presentations.get(entry.id).milestone"
+                v-else-if="['level', 'boss'].includes(entry.type) || presentations.get(entry.id).milestone"
                 class="activity-icon"
                 :src="presentations.get(entry.id).icon"
                 alt=""
@@ -302,10 +313,17 @@
                 <summary><span class="chevron chevron-right" aria-hidden="true" /><span>Details</span></summary>
                 <p class="activity-detail-range">{{ timeRange(entry) }}{{ entry.is_weekly ? " (UTC)" : "" }}</p>
                 <ul>
-                  <li v-for="detail in presentations.get(entry.id).details" :key="detail">
+                  <li v-for="detail in presentations.get(entry.id).details" :key="detail.text">
                     <span class="activity-detail-content">
-                      <span v-if="entry.type === 'level'">Level {{ entry.data.before }} to {{ entry.data.after }}</span>
-                      <span v-else>{{ detail }}</span>
+                      <CachedImage
+                        v-if="detail.icon"
+                        class="activity-detail-icon"
+                        :src="detail.icon"
+                        alt=""
+                        width="16"
+                        height="16"
+                      />
+                      {{ detail.text }}
                     </span>
                   </li>
                 </ul>

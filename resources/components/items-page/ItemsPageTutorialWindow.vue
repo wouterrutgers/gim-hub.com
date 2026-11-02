@@ -14,7 +14,7 @@
     itemName: "Team-5 cape",
     imageURL: "/item-icons/4323.webp",
     totalQuantity: 115,
-    owners: [{ name: "Zezima", quantity: 115 }],
+    owners: [{ name: "Zezima", quantity: 115, breakdown: { Bank: 100, Inventory: 15 } }],
   };
   const tutorialQuantities = new Map([["Zezima", { Bank: 100, Inventory: 15 }]]);
 
@@ -72,7 +72,8 @@
       <h2>Item breakdown</h2>
       <p>
         Select an item in the bank to see its value and who holds it in the panel below. Hover over a helmet to see the
-        owner's name and quantity. Switch to Detailed above the bank to show names and quantities on every item.
+        owner's name, quantity, and storage locations. Focus an item to see every owner's storage breakdown. Switch to
+        Detailed above the bank to show names, quantities, and ownership bars on every item.
       </p>
       <div class="items-page-tutorial-preview">
         <ItemBank

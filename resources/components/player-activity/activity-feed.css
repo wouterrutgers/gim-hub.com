@@ -135,6 +135,25 @@
   vertical-align: text-bottom;
 }
 
+.activity-skill-icons {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 100%;
+  margin-left: 4px;
+  vertical-align: text-bottom;
+}
+
+.activity-skill-icons .activity-icon {
+  margin-left: 0;
+}
+
+.activity-detail-icon {
+  margin-right: 4px;
+  object-fit: contain;
+  vertical-align: text-bottom;
+}
+
 .activity-live {
   margin-left: 5px;
   color: var(--muted);

@@ -22,6 +22,9 @@
   const isActivityPage = computed(function activityPageIsOpen() {
     return route.path === "/group/activity";
   });
+  const isMapPage = computed(function mapPageIsOpen() {
+    return route.path === "/group/map";
+  });
   const pageName = computed(function getCurrentPageName() {
     return {
       "/group/items": "Group items",
@@ -35,6 +38,7 @@
     }[route.path];
   });
   const activityPageTarget = ref();
+  const mapPlayerPanelsTarget = ref();
   const activityFeed = ref();
   const activityToggle = ref();
 
@@ -64,14 +68,28 @@
     },
     { immediate: true },
   );
+
+  watch(
+    isMapPage,
+    async function movePlayerPanelsToMap() {
+      await nextTick();
+      mapPlayerPanelsTarget.value = isMapPage.value ? document.getElementById("map-player-panels") : undefined;
+    },
+    { immediate: true },
+  );
 </script>
 
 <template>
-  <div class="authed-layout" :class="{ 'map-workspace': route.path === '/group/map' }">
+  <div
+    class="authed-layout"
+    :class="{ 'map-workspace': isMapPage, 'translucent-page-background': settingsStore.translucentPageBackground }"
+  >
     <AppNavigation :group-name="groupName" />
-    <aside v-if="props.showPanels" class="group-rail" aria-label="Your group">
-      <SidePanels />
-    </aside>
+    <Teleport :to="mapPlayerPanelsTarget" :disabled="!mapPlayerPanelsTarget">
+      <aside v-if="props.showPanels" class="group-rail" aria-label="Your group">
+        <SidePanels />
+      </aside>
+    </Teleport>
     <main id="main-content" class="pointer-passthrough" :aria-label="pageName">
       <PluginWarnings />
       <div class="workspace-page pointer-passthrough">

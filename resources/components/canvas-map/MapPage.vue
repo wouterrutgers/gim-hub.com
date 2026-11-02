@@ -11,39 +11,42 @@
 
 <template>
   <div id="canvas-map-coordinates">{{ mapStore.coordinatesLabel }}</div>
-  <div id="canvas-map-controls">
-    <MapSearch />
-    <span class="select-container">
-      <select aria-label="Map plane" :value="mapStore.visiblePlane" @change="selectPlane">
-        <option v-for="plane in [0, 1, 2, 3]" :key="plane" :value="plane">Plane: {{ plane + 1 }}</option>
-      </select>
-    </span>
-    <span id="canvas-map-follow-dropdown" class="select-container">
-      <select
-        aria-label="Follow player"
-        :value="mapStore.followedPlayer ?? ''"
-        @change="mapStore.followPlayer($event.target.value)"
-      >
-        <option value="">Follow a player</option>
-        <option v-for="position in mapStore.memberCoordinates" :key="position.label" :value="position.label">
+  <div class="map-overlays pointer-passthrough">
+    <div id="map-player-panels" />
+    <div id="canvas-map-controls">
+      <MapSearch />
+      <span class="select-container">
+        <select aria-label="Map plane" :value="mapStore.visiblePlane" @change="selectPlane">
+          <option v-for="plane in [0, 1, 2, 3]" :key="plane" :value="plane">Plane: {{ plane + 1 }}</option>
+        </select>
+      </span>
+      <span id="canvas-map-follow-dropdown" class="select-container">
+        <select
+          aria-label="Follow player"
+          :value="mapStore.followedPlayer ?? ''"
+          @change="mapStore.followPlayer($event.target.value)"
+        >
+          <option value="">Follow a player</option>
+          <option v-for="position in mapStore.memberCoordinates" :key="position.label" :value="position.label">
+            {{ position.label }}
+          </option>
+        </select>
+      </span>
+      <span id="canvas-map-teleport-buttons">
+        <button
+          v-for="position in mapStore.memberCoordinates"
+          :key="position.label"
+          :class="[
+            'men-button',
+            'men-button-small',
+            'canvas-map-teleport-button',
+            { 'canvas-map-selected-teleport-button': position.label === mapStore.followedPlayer },
+          ]"
+          @click="mapStore.followPlayer(position.label)"
+        >
           {{ position.label }}
-        </option>
-      </select>
-    </span>
-    <span id="canvas-map-teleport-buttons">
-      <button
-        v-for="position in mapStore.memberCoordinates"
-        :key="position.label"
-        :class="[
-          'men-button',
-          'men-button-small',
-          'canvas-map-teleport-button',
-          { 'canvas-map-selected-teleport-button': position.label === mapStore.followedPlayer },
-        ]"
-        @click="mapStore.followPlayer(position.label)"
-      >
-        {{ position.label }}
-      </button>
-    </span>
+        </button>
+      </span>
+    </div>
   </div>
 </template>

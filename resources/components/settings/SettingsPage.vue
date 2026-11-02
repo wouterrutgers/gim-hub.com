@@ -198,6 +198,15 @@
 
       <fieldset>
         <legend>Style</legend>
+        <div class="settings-page-radio-item">
+          <input
+            id="translucent-page-background-input"
+            type="checkbox"
+            :checked="settingsStore.translucentPageBackground"
+            @change="settingsStore.setTranslucentPageBackground($event.target.checked)"
+          />
+          <label for="translucent-page-background-input">Translucent page background</label>
+        </div>
         <div v-for="theme in siteThemes" :key="theme" class="settings-page-radio-item">
           <input
             :id="`style-${theme}`"

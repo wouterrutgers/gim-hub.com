@@ -10,12 +10,14 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
   filterActivityDrops: true,
   expandPlayerHistory: false,
   siteTheme: "light",
+  translucentPageBackground: false,
   enableVirtualLevels: true,
   enableSkillProgressBars: true,
   enableGearscapeExport: false,
 });
 
 const KEY_SITE_THEME = "settings-site-theme";
+const KEY_TRANSLUCENT_PAGE_BACKGROUND = "settings-translucent-page-background";
 const KEY_NAVIGATION_COLLAPSED = "settings-navigation-collapsed";
 const KEY_ITEM_OWNERS = "settings-item-owners";
 const KEY_ACTIVITY_SIDEBAR = "settings-activity-sidebar";
@@ -55,6 +57,11 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     defaultValue: DEFAULT_SITE_SETTINGS.siteTheme,
     validator: validateSiteTheme,
   });
+  const [translucentBackground, setTranslucentBackground] = useLocalStorage({
+    key: KEY_TRANSLUCENT_PAGE_BACKGROUND,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.translucentPageBackground),
+    validator: validateBoolean,
+  });
   const [activitySidebar, setActivitySidebar] = useLocalStorage({
     key: KEY_ACTIVITY_SIDEBAR,
     defaultValue: String(DEFAULT_SITE_SETTINGS.showActivitySidebar),
@@ -89,6 +96,9 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
   const collapseNavigation = computed(function navigationIsCollapsed() {
     return navigationCollapsed.value === "true";
   });
+  const translucentPageBackground = computed(function pageBackgroundIsTranslucent() {
+    return translucentBackground.value === "true";
+  });
   const showItemOwners = computed(function itemOwnersAreShown() {
     return itemOwners.value === "true";
   });
@@ -113,6 +123,10 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
 
   function setCollapseNavigation(value) {
     setNavigationCollapsed(String(value));
+  }
+
+  function setTranslucentPageBackground(value) {
+    setTranslucentBackground(String(value));
   }
 
   function setShowItemOwners(value) {
@@ -150,6 +164,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     setShowItemOwners,
     siteTheme,
     setSiteTheme,
+    translucentPageBackground,
+    setTranslucentPageBackground,
     showActivitySidebar,
     setShowActivitySidebar,
     filterActivityDrops,

@@ -6,6 +6,7 @@ import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import PlayerInventory from "../../components/player-panel/PlayerInventory.vue";
 import ItemsPage from "../../components/items-page/ItemsPage.vue";
 import Tooltip from "../../components/tooltip/Tooltip.vue";
+import { deserializeTooltip } from "../../components/tooltip/tooltip-data";
 import { useApiStore } from "../../stores/api";
 import { parseGroupData } from "../../api/requests/group-data";
 
@@ -190,6 +191,8 @@ describe("storage UI", function storageInterface() {
     storageFilter.dispatchEvent(new Event("change", { bubbles: true }));
     await nextTick();
     expect(container.querySelectorAll(".bank-item").length).toBe(1);
+    container.querySelector(".bank-item").click();
+    await nextTick();
     expect(container.querySelector(".items-page-panel-name").textContent).toBe("Leather chaps");
     expect(container.querySelector(".items-page-panel-item-details").children[1].textContent).toBe("2");
     expect(container.querySelector(".items-page-panel-item-details").children[3].textContent).toBe("24gp");
@@ -210,6 +213,8 @@ describe("storage UI", function storageInterface() {
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
     expect(container.querySelectorAll(".bank-item").length).toBe(1);
+    container.querySelector(".bank-item").click();
+    await nextTick();
 
     payload[0].stash_units[0] = { ...payload[0].stash_units[0], state: "empty", items: [] };
     await vi.advanceTimersByTimeAsync(1000);
@@ -234,7 +239,7 @@ describe("storage UI", function storageInterface() {
     function visibleNames() {
       return [...container.querySelectorAll(".bank-item")]
         .map(function itemName(element) {
-          return element.dataset.tooltip;
+          return deserializeTooltip(element.dataset.tooltip).name;
         })
         .sort();
     }
@@ -268,7 +273,7 @@ describe("storage UI", function storageInterface() {
     expect(
       [...container.querySelectorAll(".bank-item")]
         .map(function itemName(element) {
-          return element.dataset.tooltip;
+          return deserializeTooltip(element.dataset.tooltip).name;
         })
         .sort(),
     ).toEqual(["Restore potion(3)", "Restore potion(4)"]);

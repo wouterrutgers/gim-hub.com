@@ -2,7 +2,7 @@
   import { computed } from "vue";
   import { useGroupStore } from "../../stores/group";
   import * as Member from "../../game/member";
-  import { serializeTooltip } from "../tooltip/tooltip-data";
+  import { itemBreakdownTooltip, serializeTooltip } from "../tooltip/tooltip-data";
   import CachedImage from "../cached-image/CachedImage.vue";
   import PlayerIcon from "../player-icon/PlayerIcon.vue";
 
@@ -24,46 +24,7 @@
   const emit = defineEmits(["togglePin"]);
 
   const quantityBreakdown = computed(function getQuantityBreakdown() {
-    return [...props.quantities]
-      .filter(function memberIsVisible([name]) {
-        return !props.memberFilter.has(name);
-      })
-      .map(function sumMemberQuantity([name, breakdown]) {
-        let quantity = 0;
-
-        for (const itemContainer of Member.itemContainerNames) {
-          if (props.containerFilter === "All" || props.containerFilter === itemContainer) {
-            quantity += breakdown[itemContainer] ?? 0;
-          }
-        }
-
-        return { name, quantity, breakdown };
-      })
-      .filter(function hasQuantity({ quantity }) {
-        return quantity > 0;
-      })
-      .map(function prepareBreakdown({ name, quantity, breakdown }) {
-        return {
-          name,
-          quantity,
-          tooltip: ["All", "STASH units", "Cargo holds"].includes(props.containerFilter)
-            ? serializeTooltip({
-                type: "item-breakdown",
-                name,
-                filter: props.containerFilter,
-                breakdown,
-                stashLocations: Member.stashItemLocations(
-                  groupStore.memberStates.get(name)?.stashUnits ?? new Map(),
-                  props.itemID,
-                ),
-                cargoHolds: Member.cargoHoldLocations(
-                  groupStore.memberStates.get(name)?.cargoHolds ?? new Map(),
-                  props.itemID,
-                ),
-              })
-            : undefined,
-        };
-      });
+    return Member.itemQuantityBreakdown(props.quantities, props.memberFilter, props.containerFilter);
   });
 
   const highAlch = computed(function getHighAlch() {
@@ -93,12 +54,9 @@
 <template>
   <div class="items-page-panel rsborder rsbackground">
     <div class="items-page-panel-top">
-      <CachedImage
-        loading="lazy"
-        class="items-page-panel-icon"
-        :alt="props.itemName ?? 'An unknown item'"
-        :src="props.imageURL"
-      />
+      <span class="items-page-panel-icon">
+        <CachedImage loading="lazy" :alt="props.itemName" :src="props.imageURL" width="64" height="64" />
+      </span>
       <div class="items-page-panel-heading">
         <a class="items-page-panel-name" :href="wikiLink" target="_blank" rel="noopener noreferrer">
           {{ props.itemName }}
@@ -118,16 +76,25 @@
       </button>
     </div>
     <div class="items-page-panel-quantity-breakdown">
-      <template v-for="breakdown in quantityBreakdown" :key="breakdown.name">
-        <span class="item-owner" :data-tooltip="breakdown.tooltip" :tabindex="breakdown.tooltip ? 0 : undefined">
-          <PlayerIcon v-if="breakdown.name !== '@SHARED'" :name="breakdown.name" />
+      <div
+        v-for="owner in quantityBreakdown"
+        :key="owner.name"
+        class="item-owner-row"
+        :data-tooltip="
+          itemBreakdownTooltip(props.itemName, props.itemID, [owner], props.containerFilter, groupStore.memberStates)
+        "
+        tabindex="0"
+      >
+        <span class="item-owner">
+          <PlayerIcon v-if="owner.name !== '@SHARED'" :name="owner.name" />
           <CachedImage v-else src="/ui/777-0.png" alt="Shared storage" width="14" height="15" />
-          {{ breakdown.name === "@SHARED" ? "Shared" : breakdown.name }}
+          <span class="item-owner-name">{{ owner.name === "@SHARED" ? "Shared" : owner.name }}</span>
         </span>
-        <span class="item-owner-quantity" :data-tooltip="breakdown.tooltip">{{
-          breakdown.quantity.toLocaleString()
-        }}</span>
-      </template>
+        <span class="item-owner-quantity">{{ owner.quantity.toLocaleString() }}</span>
+        <span class="item-owner-bar" aria-hidden="true">
+          <span class="item-owner-bar-fill" :style="{ width: `${(owner.quantity / props.totalQuantity) * 100}%` }" />
+        </span>
+      </div>
     </div>
     <div class="items-page-panel-item-details">
       <template v-if="!props.detailed">

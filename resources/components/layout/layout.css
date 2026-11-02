@@ -175,12 +175,45 @@
   }
 }
 
+.translucent-page-background {
+  background: color-mix(in srgb, var(--background) 90%, transparent);
+}
+
+.translucent-page-background #main-content,
+.translucent-page-background .activity-rail,
+.map-workspace,
 .map-workspace #main-content {
   background: transparent;
 }
 
 .map-workspace .activity-rail {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
   background: transparent;
+}
+
+.map-workspace .group-rail {
+  width: 300px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+.map-workspace .roster-heading {
+  display: none;
+}
+
+.map-workspace #side-panels-container,
+.map-workspace .player-roster {
+  pointer-events: none;
+}
+
+.map-workspace .player-panel {
+  pointer-events: auto;
 }
 
 #unauthed-content {

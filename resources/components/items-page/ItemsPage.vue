@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, nextTick, ref, watch } from "vue";
+  import { computed, ref, watch } from "vue";
   import * as Member from "../../game/member";
   import { useGameDataStore } from "../../stores/game-data";
   import { useGroupStore } from "../../stores/group";
@@ -61,7 +61,6 @@
     key: "bank-selected-item",
     defaultValue: undefined,
   });
-  const itemInspector = ref();
   const [anchorItemIdentifier, setAnchorItemIdentifier] = useRememberedState({
     key: "bank-visible-item",
     defaultValue: undefined,
@@ -111,7 +110,7 @@
         continue;
       }
 
-      const owners = getFilteredQuantities(breakdownByMember);
+      const owners = Member.itemQuantityBreakdown(breakdownByMember, memberFilter.value, containerFilter.value);
       const totalQuantity = owners.reduce(function sumQuantities(total, owner) {
         return total + owner.quantity;
       }, 0);
@@ -207,16 +206,14 @@
           return item.itemID === selectedItemIdentifier.value;
         })
       ) {
-        setSelectedItemIdentifier(items[0]?.itemID);
+        setSelectedItemIdentifier(undefined);
       }
     },
     { immediate: true },
   );
 
-  async function selectItem(identifier) {
+  function selectItem(identifier) {
     setSelectedItemIdentifier(identifier);
-    await nextTick();
-    itemInspector.value.scrollIntoView({ block: "nearest" });
   }
 
   const gearscapeExportLabel = computed(function getGearscapeExportLabel() {
@@ -356,30 +353,6 @@
     }
 
     return matchesSearchExpression(searchExpression.value, itemID, itemDatum.name.toLocaleLowerCase(), itemTags);
-  }
-
-  function getFilteredQuantities(breakdownByMember) {
-    const quantities = [];
-
-    for (const [name, breakdown] of breakdownByMember) {
-      if (memberFilter.value.has(name)) {
-        continue;
-      }
-
-      let quantity = 0;
-
-      for (const itemContainer of Member.itemContainerNames) {
-        if (containerFilter.value === "All" || containerFilter.value === itemContainer) {
-          quantity += breakdown[itemContainer] ?? 0;
-        }
-      }
-
-      if (quantity > 0) {
-        quantities.push({ name, quantity });
-      }
-    }
-
-    return quantities;
   }
 
   function togglePin(itemID) {
@@ -632,13 +605,13 @@
     />
 
     <section
-      v-if="selectedItem && !settingsStore.showItemOwners"
+      v-if="!settingsStore.showItemOwners"
       id="selected-item-details"
-      ref="itemInspector"
       class="item-inspector"
       aria-label="Selected item details"
     >
       <ItemPanel
+        v-if="selectedItem"
         :item-name="selectedItem.itemName"
         :item-i-d="selectedItem.itemID"
         :high-alch-per="selectedItem.highAlch"
@@ -652,6 +625,7 @@
         :is-pinned="pinnedItems.has(selectedItem.itemID)"
         @toggle-pin="togglePin"
       />
+      <p v-else class="item-inspector-prompt">Select an item to see its details.</p>
     </section>
   </template>
 </template>

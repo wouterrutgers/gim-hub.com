@@ -2,6 +2,8 @@
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
   import { useVirtualizer } from "@tanstack/vue-virtual";
   import { formatShortQuantity } from "../../game/items";
+  import { useGroupStore } from "../../stores/group";
+  import { itemBreakdownTooltip } from "../tooltip/tooltip-data";
   import CachedImage from "../cached-image/CachedImage.vue";
   import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import ItemPanel from "./ItemPanel.vue";
@@ -17,6 +19,7 @@
     anchorItemIdentifier: { type: Number, default: undefined },
   });
   const emit = defineEmits(["selectItem", "togglePin", "rememberItem"]);
+  const groupStore = useGroupStore();
   const parent = ref();
   const columns = ref(props.showOwners ? 3 : 6);
   const resizeObserver = new ResizeObserver(function updateColumns([entry]) {
@@ -139,19 +142,37 @@
               'bank-item-selected': item.itemID === props.selectedItemIdentifier,
               'bank-item-pinned': props.pinnedItems.has(item.itemID),
             }"
-            :data-tooltip="item.itemName"
+            :data-tooltip="
+              itemBreakdownTooltip(
+                item.itemName,
+                item.itemID,
+                item.owners,
+                props.containerFilter,
+                groupStore.memberStates,
+              )
+            "
             :aria-label="`${item.itemName}, ${item.totalQuantity.toLocaleString()} total`"
             :aria-pressed="item.itemID === props.selectedItemIdentifier"
             :aria-controls="props.detailsIdentifier"
             @click="emit('selectItem', item.itemID)"
           >
             <span class="bank-item-quantity">{{ formatShortQuantity(item.totalQuantity) }}</span>
-            <CachedImage class="bank-item-sprite" :src="item.imageURL" alt="" width="48" />
+            <span class="bank-item-sprite">
+              <CachedImage :src="item.imageURL" alt="" width="48" height="48" />
+            </span>
             <span class="bank-item-owners" aria-hidden="true">
               <span
                 v-for="owner in item.owners"
                 :key="owner.name"
-                :data-tooltip="`${owner.name === '@SHARED' ? 'Shared' : owner.name}: ${owner.quantity.toLocaleString()}`"
+                :data-tooltip="
+                  itemBreakdownTooltip(
+                    item.itemName,
+                    item.itemID,
+                    [owner],
+                    props.containerFilter,
+                    groupStore.memberStates,
+                  )
+                "
               >
                 <PlayerIcon v-if="owner.name !== '@SHARED'" :name="owner.name" />
                 <CachedImage

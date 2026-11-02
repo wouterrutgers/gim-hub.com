@@ -67,16 +67,36 @@
   font-size: 11px;
 }
 
+.map-overlays.pointer-passthrough {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 0;
+  pointer-events: none;
+}
+
 #canvas-map-controls {
   display: flex;
+  box-sizing: border-box;
   gap: 8px;
   flex-wrap: wrap;
-  align-self: baseline;
+  align-self: flex-start;
+  min-width: 0;
   max-width: 100%;
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 3px;
   background: var(--surface);
+}
+
+#map-player-panels {
+  flex: 0 0 300px;
+  align-self: stretch;
+  min-height: 0;
+  width: 300px;
+  max-width: 100%;
+  pointer-events: none;
 }
 
 .canvas-map-search {
@@ -146,13 +166,18 @@
   color: var(--orange-light);
 }
 
+@media (width <= 1199px) {
+  #map-player-panels {
+    display: none;
+  }
+}
+
 @media (width <= 767px) {
   #canvas-map-coordinates {
     left: 16px;
   }
 
   #canvas-map-controls {
-    box-sizing: border-box;
     width: 100%;
   }
 

@@ -242,7 +242,7 @@ ul {
   color: var(--text);
 }
 
-input:not([type="checkbox"], [type="radio"]) {
+input:not([type="checkbox"], [type="radio"], [type="range"]) {
   box-sizing: border-box;
   min-width: 0;
   padding: 10px 12px;

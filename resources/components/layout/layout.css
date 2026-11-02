@@ -176,7 +176,7 @@
 }
 
 .translucent-page-background {
-  background: color-mix(in srgb, var(--background) 90%, transparent);
+  background: color-mix(in srgb, var(--background) var(--page-background-opacity), transparent);
 }
 
 .translucent-page-background #main-content,

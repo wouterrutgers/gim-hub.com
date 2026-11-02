@@ -200,14 +200,19 @@
 
       <fieldset>
         <legend>Style</legend>
-        <div class="settings-page-radio-item">
-          <input
-            id="translucent-page-background-input"
-            type="checkbox"
-            :checked="settingsStore.translucentPageBackground"
-            @change="settingsStore.setTranslucentPageBackground($event.target.checked)"
-          />
-          <label for="translucent-page-background-input">Translucent page background</label>
+        <div class="settings-page-range-item">
+          <label for="page-background-opacity-input">Background opacity</label>
+          <div class="settings-page-range-control">
+            <input
+              id="page-background-opacity-input"
+              type="range"
+              min="0"
+              max="100"
+              :value="settingsStore.pageBackgroundOpacity"
+              @input="settingsStore.setPageBackgroundOpacity($event.target.valueAsNumber)"
+            />
+            <output for="page-background-opacity-input">{{ settingsStore.pageBackgroundOpacity }}%</output>
+          </div>
         </div>
         <div v-for="theme in siteThemes" :key="theme" class="settings-page-radio-item">
           <input

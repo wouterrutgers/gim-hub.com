@@ -122,6 +122,31 @@
   margin-block: 4px;
 }
 
+.settings-page-range-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.settings-page-range-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-page-range-control input {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--orange);
+}
+
+.settings-page-range-control output {
+  min-width: 4ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 .settings-page-radio-item {
   display: flex;
   align-items: center;

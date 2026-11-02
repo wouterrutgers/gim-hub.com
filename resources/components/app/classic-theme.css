@@ -145,7 +145,7 @@
   border-radius: 4px;
 }
 
-:root.classic-mode :is(.rsbackground, .bank-item, .roster-heading),
+:root.classic-mode :is(.rsbackground, .bank-item),
 :root.classic-mode :is(#app-navigation, #canvas-map-controls, #tooltip) {
   background-image: var(--classic-texture);
   background-repeat: repeat;
@@ -181,7 +181,7 @@
   background: linear-gradient(var(--selected), var(--selected)), var(--classic-texture);
 }
 
-:root.classic-mode input:not([type="checkbox"], [type="radio"]) {
+:root.classic-mode input:not([type="checkbox"], [type="radio"], [type="range"]) {
   background: var(--surface-sunken);
   box-shadow: inset 3px 3px 3px var(--classic-input-shadow);
   color: var(--orange);

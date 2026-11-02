@@ -10,14 +10,14 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
   filterActivityDrops: true,
   expandPlayerHistory: false,
   siteTheme: "light",
-  translucentPageBackground: false,
+  pageBackgroundOpacity: 100,
   enableVirtualLevels: true,
   enableSkillProgressBars: true,
   enableGearscapeExport: false,
 });
 
 const KEY_SITE_THEME = "settings-site-theme";
-const KEY_TRANSLUCENT_PAGE_BACKGROUND = "settings-translucent-page-background";
+const KEY_PAGE_BACKGROUND_OPACITY = "settings-translucent-page-background";
 const KEY_NAVIGATION_COLLAPSED = "settings-navigation-collapsed";
 const KEY_ITEM_OWNERS = "settings-item-owners";
 const KEY_ACTIVITY_SIDEBAR = "settings-activity-sidebar";
@@ -41,6 +41,20 @@ function validateBoolean(value) {
   return undefined;
 }
 
+function validatePageBackgroundOpacity(value) {
+  if (value === "true" || value === "false") {
+    return value === "true" ? "90" : "100";
+  }
+
+  const opacity = Number(value);
+
+  if (Number.isInteger(opacity) && opacity >= 0 && opacity <= 100) {
+    return value;
+  }
+
+  return undefined;
+}
+
 export const useSettingsStore = defineStore("settings", function createSettingsStore() {
   const [navigationCollapsed, setNavigationCollapsed] = useLocalStorage({
     key: KEY_NAVIGATION_COLLAPSED,
@@ -57,10 +71,10 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     defaultValue: DEFAULT_SITE_SETTINGS.siteTheme,
     validator: validateSiteTheme,
   });
-  const [translucentBackground, setTranslucentBackground] = useLocalStorage({
-    key: KEY_TRANSLUCENT_PAGE_BACKGROUND,
-    defaultValue: String(DEFAULT_SITE_SETTINGS.translucentPageBackground),
-    validator: validateBoolean,
+  const [backgroundOpacity, setBackgroundOpacity] = useLocalStorage({
+    key: KEY_PAGE_BACKGROUND_OPACITY,
+    defaultValue: String(DEFAULT_SITE_SETTINGS.pageBackgroundOpacity),
+    validator: validatePageBackgroundOpacity,
   });
   const [activitySidebar, setActivitySidebar] = useLocalStorage({
     key: KEY_ACTIVITY_SIDEBAR,
@@ -96,8 +110,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
   const collapseNavigation = computed(function navigationIsCollapsed() {
     return navigationCollapsed.value === "true";
   });
-  const translucentPageBackground = computed(function pageBackgroundIsTranslucent() {
-    return translucentBackground.value === "true";
+  const pageBackgroundOpacity = computed(function getPageBackgroundOpacity() {
+    return Number(backgroundOpacity.value);
   });
   const showItemOwners = computed(function itemOwnersAreShown() {
     return itemOwners.value === "true";
@@ -125,8 +139,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     setNavigationCollapsed(String(value));
   }
 
-  function setTranslucentPageBackground(value) {
-    setTranslucentBackground(String(value));
+  function setPageBackgroundOpacity(value) {
+    setBackgroundOpacity(String(value));
   }
 
   function setShowItemOwners(value) {
@@ -164,8 +178,8 @@ export const useSettingsStore = defineStore("settings", function createSettingsS
     setShowItemOwners,
     siteTheme,
     setSiteTheme,
-    translucentPageBackground,
-    setTranslucentPageBackground,
+    pageBackgroundOpacity,
+    setPageBackgroundOpacity,
     showActivitySidebar,
     setShowActivitySidebar,
     filterActivityDrops,

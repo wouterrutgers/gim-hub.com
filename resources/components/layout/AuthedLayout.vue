@@ -82,7 +82,8 @@
 <template>
   <div
     class="authed-layout"
-    :class="{ 'map-workspace': isMapPage, 'translucent-page-background': settingsStore.translucentPageBackground }"
+    :class="{ 'map-workspace': isMapPage, 'translucent-page-background': settingsStore.pageBackgroundOpacity < 100 }"
+    :style="{ '--page-background-opacity': `${settingsStore.pageBackgroundOpacity}%` }"
   >
     <AppNavigation :group-name="groupName" />
     <Teleport :to="mapPlayerPanelsTarget" :disabled="!mapPlayerPanelsTarget">

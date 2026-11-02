@@ -1,5 +1,5 @@
 import { skillIcons } from "./skill";
-import { bossIcons } from "./boss-icons";
+import { getBossIcon } from "./boss-icons";
 
 export function activityWeek(timestamp) {
   const date = new Date(timestamp);
@@ -47,7 +47,7 @@ export function activityPresentation(entry, gameData) {
 
   if (entry.type === "boss") {
     return {
-      icon: bossIcons[data.boss.toLowerCase()] ?? "/ui/216-0.png",
+      icon: getBossIcon(data.boss) ?? "/ui/216-0.png",
       text: `${data.boss}: ${data.count.toLocaleString()} ${data.count_type}${data.count === 1 ? "" : "s"}`,
       details: [{ text: `Total kill count: ${data.total_count.toLocaleString()}` }],
     };

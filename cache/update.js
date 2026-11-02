@@ -28,6 +28,7 @@ const RUNELITE_PATHS = (() => {
     BUILD_SCRIPTS: {
       cache: path.resolve(cache, "build.gradle.kts"),
       api: path.resolve(api, "build.gradle.kts"),
+      client: path.resolve(root, "runelite-client/build.gradle.kts"),
     },
   };
 })();
@@ -649,6 +650,27 @@ async function dumpCombatAchievements() {
   }
 }
 
+async function dumpBossIcons() {
+  console.info("Dumping boss icons.");
+  try {
+    fs.copyFileSync(
+      "./BossIconDumper.java",
+      path.resolve(
+        RUNELITE_PATHS.DIRS.client,
+        "src/main/java/net/runelite/client/plugins/chatcommands/BossIconDumper.java",
+      ),
+    );
+    execRuneliteGradleApplication({
+      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.client,
+      mainClass: "net.runelite.client.plugins.chatcommands.BossIconDumper",
+      dependencies: ['implementation("net.runelite:cache:${project.version}")'],
+      runArgs: `${osrsCacheDirectory} ${path.resolve("../resources/assets/icons")} ${path.resolve("../resources/assets/data/boss_icons.json")}`,
+    });
+  } finally {
+    execGitCleanInRunelite();
+  }
+}
+
 (async () => {
   execGitCleanInRunelite();
 
@@ -665,4 +687,5 @@ async function dumpCombatAchievements() {
 
   await dumpQuestMapping();
   await dumpCombatAchievements();
+  await dumpBossIcons();
 })();

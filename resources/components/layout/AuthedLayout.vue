@@ -38,7 +38,6 @@
     }[route.path];
   });
   const activityPageTarget = ref();
-  const mapPlayerPanelsTarget = ref();
   const activityFeed = ref();
   const activityToggle = ref();
 
@@ -68,15 +67,6 @@
     },
     { immediate: true },
   );
-
-  watch(
-    isMapPage,
-    async function movePlayerPanelsToMap() {
-      await nextTick();
-      mapPlayerPanelsTarget.value = isMapPage.value ? document.getElementById("map-player-panels") : undefined;
-    },
-    { immediate: true },
-  );
 </script>
 
 <template>
@@ -86,11 +76,9 @@
     :style="{ '--page-background-opacity': `${settingsStore.pageBackgroundOpacity}%` }"
   >
     <AppNavigation :group-name="groupName" />
-    <Teleport :to="mapPlayerPanelsTarget" :disabled="!mapPlayerPanelsTarget">
-      <aside v-if="props.showPanels" class="group-rail" aria-label="Your group">
-        <SidePanels />
-      </aside>
-    </Teleport>
+    <aside v-if="props.showPanels" class="group-rail" aria-label="Your group">
+      <SidePanels />
+    </aside>
     <main id="main-content" class="pointer-passthrough" :aria-label="pageName">
       <PluginWarnings />
       <div class="workspace-page pointer-passthrough">

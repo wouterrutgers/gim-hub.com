@@ -195,16 +195,13 @@
 }
 
 .map-workspace .group-rail {
-  width: 300px;
-  height: 100%;
-  padding: 0;
-  border: 0;
+  border-color: transparent;
   background: transparent;
   pointer-events: none;
 }
 
 .map-workspace .roster-heading {
-  display: none;
+  visibility: hidden;
 }
 
 .map-workspace #side-panels-container,

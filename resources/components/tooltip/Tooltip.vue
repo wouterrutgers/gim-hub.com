@@ -169,7 +169,7 @@
     if (
       tooltipTrigger?.contains(event.relatedTarget) ||
       tooltipElement.value.contains(event.relatedTarget) ||
-      document.activeElement === tooltipTrigger
+      tooltipTrigger?.matches(":focus-visible")
     ) {
       return;
     }

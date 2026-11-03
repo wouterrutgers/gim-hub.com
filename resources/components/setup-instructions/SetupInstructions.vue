@@ -17,19 +17,19 @@
 <template>
   <div id="setup-instructions-container">
     <div id="setup-instructions" class="rsbackground rsborder">
-      <div class="setup-block">
+      <div v-if="credentials" class="setup-block">
         <h2>Your group credentials</h2>
         <p>Share these only with your group. Your token cannot be recovered, so save it somewhere safe.</p>
         <div class="setup-block">
           <h4>Group name</h4>
-          <div class="setup-credential rsborder-tiny rsbackground">{{ credentials?.name ?? "Group name" }}</div>
+          <div class="setup-credential rsborder-tiny rsbackground">{{ credentials.name }}</div>
         </div>
 
         <div class="setup-block">
           <h4>Group token</h4>
           <div class="setup-credential rsborder-tiny rsbackground">
             <template v-if="tokenVisible">
-              {{ credentials?.token ?? "00000000-0000-0000-0000-000000000000" }}
+              {{ credentials.token }}
             </template>
             <template v-else>
               <button id="setup-credential-hide" @click="tokenVisible = true">Click to show token</button>
@@ -37,6 +37,15 @@
             </template>
           </div>
         </div>
+      </div>
+
+      <div v-else class="setup-block">
+        <h2>Set up your group</h2>
+        <p>
+          <RouterLink to="/create-group" class="orange-link">Create a group</RouterLink> to get your group name and
+          token, or <RouterLink to="/login" class="orange-link">sign in</RouterLink> with the credentials shared by your
+          teammates.
+        </p>
       </div>
 
       <div class="setup-block">
@@ -55,7 +64,7 @@
         <CachedImage alt="GIM Hub Runelite plugin screenshot" src="/images/plugin-screenshot.png" />
       </div>
 
-      <div id="setup-go-to-group">
+      <div v-if="credentials" id="setup-go-to-group">
         <AppLink href="/group" class="button-primary">Go to your group</AppLink>
       </div>
     </div>

@@ -31,7 +31,7 @@
   text-decoration: underline;
   text-underline-offset: -40%;
   text-decoration-skip-ink: none;
-  color: rgb(255 255 255 / 60%) !important;
+  color: var(--muted) !important;
 }
 
 .diary-dialog-task {
@@ -119,7 +119,7 @@
   text-decoration: underline;
   text-underline-offset: -40%;
   text-decoration-skip-ink: none;
-  color: rgb(255 255 255 / 60%);
+  color: var(--muted);
 }
 
 @media screen and (width <= 800px) {

@@ -120,6 +120,9 @@
           >
             {{ link.label }}
           </AppLink>
+          <a href="https://discord.gg/ZwzW6yYD8V" target="_blank" rel="noopener noreferrer" class="app-link men-button">
+            Discord
+          </a>
           <button class="app-link men-button" type="button" aria-haspopup="dialog" @click="openModal()">
             <CachedImage class="nav-support-heart" src="/ui/203-0.png" alt="" width="16" height="14" />
             Support the hub

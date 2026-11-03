@@ -1,6 +1,7 @@
 import { JSDOM } from "jsdom";
 import fs from "fs";
 import questsMapping from "./mapping.json" with { type: "json" };
+import fetchWiki from "../../../cache/wiki.js";
 
 const questNameToIdMap = new Map();
 for (const [questId, questName] of Object.entries(questsMapping)) {
@@ -29,13 +30,7 @@ function getQuestTableData(table) {
 }
 
 async function run() {
-  const response = await fetch("https://oldschool.runescape.wiki/w/Quests/List");
-
-  if (!response.ok) {
-    throw new Error("Unable to fetch the quest list.");
-  }
-
-  const dom = new JSDOM(await response.text());
+  const dom = new JSDOM(await fetchWiki("https://oldschool.runescape.wiki/w/Quests/List"));
 
   const questTables = Array.from(dom.window.document.querySelectorAll("table")).filter((table) => {
     const ths = Array.from(table.querySelectorAll("th"));

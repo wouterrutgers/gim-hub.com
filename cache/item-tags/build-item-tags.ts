@@ -1,13 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
 import wikiTagCategories from "./wiki_tag_categories.json" with { type: "json" };
+import fetchWiki from "../wiki.js";
 
 const outDir = "../../resources/assets/data";
 
 const CONFIG = {
   itemTagsPath: path.resolve(import.meta.dirname, outDir, "item_tags.json"),
   itemDataPath: path.resolve(import.meta.dirname, outDir, "item_data.json"),
-  userAgent: `gim-hub.com (https://github.com/wouterrutgers/gim-hub.com) ${navigator.userAgent}`,
 };
 
 process.stdout.write("Building item tags...\n");
@@ -33,13 +33,8 @@ for (const [ourNames, wikiNames] of wikiTagCategories) {
 
     let cmcontinue = "";
     do {
-      const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${wikiName}&cmlimit=100&format=json&cmcontinue=${cmcontinue}`;
-      const response = await fetch(url, {
-        headers: {
-          "User-Agent": CONFIG.userAgent,
-        },
-      });
-      const data = (await response.json()) as {
+      const url = `https://oldschool.runescape.wiki/api.php?action=query&list=categorymembers&cmtitle=Category:${wikiName}&cmlimit=500&format=json&cmcontinue=${cmcontinue}`;
+      const data = JSON.parse(await fetchWiki(url)) as {
         continue?: { cmcontinue?: string };
         query: { categorymembers: { title: string }[] };
       };

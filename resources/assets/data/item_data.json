@@ -5144,43 +5144,43 @@
     "mapping": null
   },
   "1277": {
-    "name": "Bronze sword",
+    "name": "Bronze shortsword",
     "highalch": 15,
     "alchable": true,
     "mapping": null
   },
   "1279": {
-    "name": "Iron sword",
+    "name": "Iron shortsword",
     "highalch": 54,
     "alchable": true,
     "mapping": null
   },
   "1281": {
-    "name": "Steel sword",
+    "name": "Steel shortsword",
     "highalch": 195,
     "alchable": true,
     "mapping": null
   },
   "1283": {
-    "name": "Black sword",
+    "name": "Black shortsword",
     "highalch": 374,
     "alchable": true,
     "mapping": null
   },
   "1285": {
-    "name": "Mithril sword",
+    "name": "Mithril shortsword",
     "highalch": 507,
     "alchable": true,
     "mapping": null
   },
   "1287": {
-    "name": "Adamant sword",
+    "name": "Adamant shortsword",
     "highalch": 1248,
     "alchable": true,
     "mapping": null
   },
   "1289": {
-    "name": "Rune sword",
+    "name": "Rune shortsword",
     "highalch": 12480,
     "alchable": true,
     "mapping": null
@@ -26506,7 +26506,7 @@
     "mapping": null
   },
   "6605": {
-    "name": "White sword",
+    "name": "White shortsword",
     "highalch": 374,
     "alchable": true,
     "mapping": null
@@ -31095,7 +31095,7 @@
     "mapping": null
   },
   "7675": {
-    "name": "Wooden sword",
+    "name": "Wooden shortsword",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -40393,7 +40393,7 @@
     "mapping": null
   },
   "9703": {
-    "name": "Training sword",
+    "name": "Training shortsword",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -40405,7 +40405,7 @@
     "mapping": null
   },
   "9705": {
-    "name": "Training bow",
+    "name": "Training shortbow",
     "highalch": 0,
     "alchable": true,
     "mapping": null
@@ -63439,7 +63439,7 @@
     "mapping": null
   },
   "21009": {
-    "name": "Dragon sword",
+    "name": "Dragon shortsword",
     "highalch": 43200,
     "alchable": true,
     "mapping": null
@@ -64098,7 +64098,7 @@
     "mapping": null
   },
   "21206": {
-    "name": "Dragon sword",
+    "name": "Dragon shortsword",
     "highalch": 18,
     "alchable": true,
     "mapping": null
@@ -89779,7 +89779,7 @@
     ]
   },
   "28029": {
-    "name": "Dragon sword (cr)",
+    "name": "Dragon shortsword (cr)",
     "highalch": 43800,
     "alchable": true,
     "mapping": [
@@ -113992,6 +113992,96 @@
   "34746": {
     "name": "Vampyre costume cape",
     "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34748": {
+    "name": "Antique lamp",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "34749": {
+    "name": "Antique lamp",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "34750": {
+    "name": "Antique lamp",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "34751": {
+    "name": "Antique lamp",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "34752": {
+    "name": "Mudfoot",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34753": {
+    "name": "Mudfoot",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34754": {
+    "name": "Antique lamp",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "34755": {
+    "name": "Antique lamp",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": null
+  },
+  "34756": {
+    "name": "Letter",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34757": {
+    "name": "Newspaper cutting",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34758": {
+    "name": "Bloody knife",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34759": {
+    "name": "Human head",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34760": {
+    "name": "Letter",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34761": {
+    "name": "Certificate",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34762": {
+    "name": "Amulet of sight",
+    "highalch": 900,
     "alchable": true,
     "mapping": null
   }

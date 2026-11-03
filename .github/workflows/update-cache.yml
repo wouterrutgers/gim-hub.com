@@ -8,16 +8,57 @@ permissions:
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "47 7 * * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  cache:
-    runs-on: macos-latest
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-id: ${{ steps.latest.outputs.cache-id }}
 
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ github.ref }}
+
+      - name: Check for a new complete cache
+        id: latest
+        shell: bash
+        run: |
+          cache_id=$(curl --fail --silent --show-error https://archive.openrs2.org/caches.json | jq -r '
+            [ .[] | select(.game == "oldschool" and .environment == "live" and .language == "en" and (.sources | contains(["Jagex"]))) ] |
+            max_by(.id) |
+            select(.size != null and .indexes != null and .groups != null and .keys != null and
+              .valid_indexes == .indexes and .valid_groups == .groups and .valid_keys == .keys) |
+            .id
+          ')
+
+          if [[ -z "$cache_id" ]]; then
+            echo "The latest OpenRS2 cache is not complete yet."
+            exit 0
+          fi
+
+          if [[ -f cache/last-processed-id.txt ]] && [[ "$cache_id" == "$(cat cache/last-processed-id.txt)" ]]; then
+            echo "OpenRS2 cache $cache_id has already been processed."
+            exit 0
+          fi
+
+          echo "cache-id=$cache_id" >> "$GITHUB_OUTPUT"
+
+  cache:
+    needs: check
+    if: needs.check.outputs.cache-id != ''
+    runs-on: macos-latest
+    env:
+      CACHE_ID: ${{ needs.check.outputs.cache-id }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref }}
           token: ${{ secrets.PAT }}
 
       - uses: actions/checkout@v7
@@ -39,47 +80,57 @@ jobs:
           distribution: zulu
           java-version: 11
 
-      - run: |
-          cache=$(curl -s https://archive.openrs2.org/caches.json | jq -r '
-            [ .[] | select(.game == "oldschool" and .environment == "live" and .language == "en" and (.sources | contains(["Jagex"])) and .size != null) ] |
-            sort_by(.id) | last
-          ')
-          id=$(echo $cache | jq -r '.id')
-          valid_keys=$(echo $cache | jq -r '.valid_keys')
-          echo "CACHE_ID=$id" >> $GITHUB_ENV
-          echo "VALID_KEYS=$valid_keys" >> $GITHUB_ENV
-
       - run: pnpm install --frozen-lockfile
         working-directory: ./cache
 
       - run: pnpm install --frozen-lockfile
         working-directory: ./
 
-      - uses: actions/cache@v6
+      - uses: actions/cache/restore@v6
         id: cache
         with:
           path: cache/cache
-          key: cache-${{ env.CACHE_ID }}-${{ env.VALID_KEYS }}
+          key: openrs2-${{ env.CACHE_ID }}
 
       - if: steps.cache.outputs.cache-hit != 'true'
-        run: curl -o cache/cache/xteas.json https://archive.openrs2.org/caches/runescape/$CACHE_ID/keys.json
+        name: Download cache
+        run: |
+          curl --fail --silent --show-error --location -o cache/cache/xteas.json "https://archive.openrs2.org/caches/runescape/$CACHE_ID/keys.json"
+          curl --fail --silent --show-error --location -o cache/cache/disk.zip "https://archive.openrs2.org/caches/runescape/$CACHE_ID/disk.zip"
+          unzip cache/cache/disk.zip -d cache/cache
+          rm cache/cache/disk.zip
 
       - if: steps.cache.outputs.cache-hit != 'true'
-        run: curl -o cache/cache/disk.zip https://archive.openrs2.org/caches/runescape/$CACHE_ID/disk.zip
+        uses: actions/cache/save@v6
+        with:
+          path: cache/cache
+          key: ${{ steps.cache.outputs.cache-primary-key }}
 
-      - if: steps.cache.outputs.cache-hit != 'true'
-        run: unzip cache/cache/disk.zip -d cache/cache
+      - uses: actions/cache/restore@v6
+        id: wiki
+        with:
+          path: cache/wiki-responses
+          key: wiki-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: wiki-v1-
 
       - run: pnpm run update
         working-directory: ./cache
 
       - run: node resources/js/quests/scraper.js
 
+      - uses: actions/cache/save@v6
+        if: ${{ !cancelled() && steps.wiki.outcome == 'success' }}
+        with:
+          path: cache/wiki-responses
+          key: ${{ steps.wiki.outputs.cache-primary-key }}
+
       - run: pnpm run bundle
 
       - run: node resources/js/check-collection-log-mappings.js --github-issue
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - run: echo "$CACHE_ID" > cache/last-processed-id.txt
 
       - uses: stefanzweifel/git-auto-commit-action@v7
         if: ${{ ! env.ACT }}

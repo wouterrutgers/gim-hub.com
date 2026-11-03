@@ -10,7 +10,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
   filterActivityDrops: true,
   expandPlayerHistory: false,
   siteTheme: "light",
-  pageBackgroundOpacity: 100,
+  pageBackgroundOpacity: 90,
   enableVirtualLevels: true,
   enableSkillProgressBars: true,
   enableGearscapeExport: false,

@@ -20,6 +20,7 @@
 
 #app-navigation-nav {
   flex: 1;
+  flex-wrap: wrap;
   min-width: 0;
   gap: 12px;
 }

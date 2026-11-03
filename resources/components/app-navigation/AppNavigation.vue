@@ -66,6 +66,15 @@
       </div>
 
       <div class="nav-right-links">
+        <a
+          href="https://staging.gim-hub.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="app-link men-button nav-utility"
+          data-tooltip="Explore our new design and layout at staging.gim-hub.com using your usual login details, try the different themes in settings, and join our Discord to share your feedback."
+        >
+          Try the new design
+        </a>
         <div class="nav-secondary-links">
           <AppLink
             v-for="link in secondaryLinks"

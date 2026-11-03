@@ -213,7 +213,7 @@
   );
 
   function selectItem(identifier) {
-    setSelectedItemIdentifier(identifier);
+    setSelectedItemIdentifier(selectedItemIdentifier.value === identifier ? undefined : identifier);
   }
 
   const gearscapeExportLabel = computed(function getGearscapeExportLabel() {
@@ -605,13 +605,12 @@
     />
 
     <section
-      v-if="!settingsStore.showItemOwners"
+      v-if="!settingsStore.showItemOwners && selectedItem"
       id="selected-item-details"
       class="item-inspector"
       aria-label="Selected item details"
     >
       <ItemPanel
-        v-if="selectedItem"
         :item-name="selectedItem.itemName"
         :item-i-d="selectedItem.itemID"
         :high-alch-per="selectedItem.highAlch"
@@ -625,7 +624,6 @@
         :is-pinned="pinnedItems.has(selectedItem.itemID)"
         @toggle-pin="togglePin"
       />
-      <p v-else class="item-inspector-prompt">Select an item to see its details.</p>
     </section>
   </template>
 </template>

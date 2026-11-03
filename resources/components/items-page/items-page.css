@@ -273,11 +273,6 @@
   border-top: 1px solid var(--border);
 }
 
-.item-inspector-prompt {
-  color: var(--muted);
-  font-size: 12px;
-}
-
 .items-page-panel.rsborder {
   --item-pin-size: 24px;
 

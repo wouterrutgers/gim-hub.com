@@ -3,7 +3,7 @@ const fs = require("fs");
 const glob = require("glob");
 const nAsync = require("async");
 const path = require("path");
-const axios = require("axios");
+const fetchWiki = require("./wiki");
 const sharp = require("sharp");
 const { buildMapLabels } = require("./map-labels");
 
@@ -190,12 +190,12 @@ async function getNonAlchableItemNames() {
   let cmcontinue = "";
   do {
     const url = `https://oldschool.runescape.wiki/api.php?cmtitle=Category:Items_that_cannot_be_alchemised&action=query&list=categorymembers&format=json&cmlimit=500&cmcontinue=${cmcontinue}`;
-    const response = await axios.get(url);
-    const itemNames = response.data.query.categorymembers
+    const response = JSON.parse(await fetchWiki(url));
+    const itemNames = response.query.categorymembers
       .map((member) => member.title)
       .filter((title) => !title.startsWith("File:") && !title.startsWith("Category:"));
     itemNames.forEach((name) => nonAlchableItemNames.add(name));
-    cmcontinue = response.data?.continue?.cmcontinue || null;
+    cmcontinue = response.continue?.cmcontinue || null;
   } while (cmcontinue);
 
   return nonAlchableItemNames;

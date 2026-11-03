@@ -73,6 +73,21 @@
   background: var(--elevated);
 }
 
+#app-navigation .nav-design-preview {
+  padding-inline: 12px;
+  border: 1px solid var(--orange);
+  border-image: none;
+  background: var(--orange);
+  color: var(--black);
+  font-family: rsbold, sans-serif;
+  text-shadow: none;
+}
+
+#app-navigation .nav-design-preview:hover,
+#app-navigation .nav-design-preview:focus-visible {
+  background: var(--orange-light);
+}
+
 #app-navigation .nav-community-link {
   width: 34px;
   padding: 4px;

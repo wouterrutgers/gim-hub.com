@@ -70,7 +70,7 @@
           href="https://staging.gim-hub.com"
           target="_blank"
           rel="noopener noreferrer"
-          class="app-link men-button nav-utility"
+          class="app-link men-button nav-design-preview"
           data-tooltip="Explore our new design and layout at staging.gim-hub.com using your usual login details, try the different themes in settings, and join our Discord to share your feedback."
         >
           Try the new design

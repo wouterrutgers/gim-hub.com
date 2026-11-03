@@ -114051,8 +114051,8 @@
   },
   "34757": {
     "name": "Newspaper cutting",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "34758": {
@@ -114063,8 +114063,8 @@
   },
   "34759": {
     "name": "Human head",
-    "highalch": 18,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   },
   "34760": {

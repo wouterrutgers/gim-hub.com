@@ -545,29 +545,8 @@
           </div>
         </div>
 
-        <div class="items-results-actions">
-          <div class="items-view-toggle" role="group" aria-label="Item display">
-            <button
-              type="button"
-              class="men-button men-button-small"
-              :class="{ active: !settingsStore.showItemOwners }"
-              :aria-pressed="!settingsStore.showItemOwners"
-              @click="settingsStore.setShowItemOwners(false)"
-            >
-              Compact
-            </button>
-            <button
-              type="button"
-              class="men-button men-button-small"
-              :class="{ active: settingsStore.showItemOwners }"
-              :aria-pressed="settingsStore.showItemOwners"
-              @click="settingsStore.setShowItemOwners(true)"
-            >
-              Detailed
-            </button>
-          </div>
+        <div v-if="settingsStore.enableGearscapeExport" class="items-results-actions">
           <button
-            v-if="settingsStore.enableGearscapeExport"
             id="items-page-gearscape-export-button"
             class="men-button men-button-small"
             data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
@@ -583,6 +562,26 @@
         <h2>
           Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
         </h2>
+        <div class="items-view-toggle" role="group" aria-label="Item display">
+          <button
+            type="button"
+            class="men-button men-button-small"
+            :class="{ active: !settingsStore.showItemOwners }"
+            :aria-pressed="!settingsStore.showItemOwners"
+            @click="settingsStore.setShowItemOwners(false)"
+          >
+            Compact
+          </button>
+          <button
+            type="button"
+            class="men-button men-button-small"
+            :class="{ active: settingsStore.showItemOwners }"
+            :aria-pressed="settingsStore.showItemOwners"
+            @click="settingsStore.setShowItemOwners(true)"
+          >
+            Detailed
+          </button>
+        </div>
       </div>
     </div>
 
@@ -625,5 +624,8 @@
         @toggle-pin="togglePin"
       />
     </section>
+    <p v-else-if="!settingsStore.showItemOwners && sortedItems.length > 0" class="item-selection-hint">
+      Select an item to see its owners and value.
+    </p>
   </template>
 </template>

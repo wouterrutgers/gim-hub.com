@@ -167,6 +167,10 @@
   flex-wrap: wrap;
 }
 
+.items-toolbar:not(:has(.items-results-actions)) .items-results-heading {
+  grid-column: 1 / -1;
+}
+
 .items-results-actions,
 .items-view-toggle {
   display: flex;
@@ -271,6 +275,14 @@
   scrollbar-gutter: stable;
   padding-top: 12px;
   border-top: 1px solid var(--border);
+}
+
+.item-selection-hint {
+  flex-shrink: 0;
+  padding-block: 8px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .items-page-panel.rsborder {

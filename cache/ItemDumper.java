@@ -1,37 +1,31 @@
 package net.runelite.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import net.runelite.client.game.ItemMapping;
 
 public class ItemDumper {
     public static void main(String[] args) throws IOException {
-        File itemDataFolder = new File(args[0]);
+        File file = new File(args[0]);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Map<String, Object>> items = objectMapper.readValue(file, new TypeReference<Map<String, Map<String, Object>>>() {});
 
-        File[] jsonFiles = itemDataFolder.listFiles((dir, name) -> name.endsWith(".json"));
-
-        ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-
-        for (File jsonFile : jsonFiles) {
-            processItemFile(jsonFile, objectMapper);
+        for (Map<String, Object> item : items.values()) {
+            List<Map<String, Integer>> tradeableItems = fetchTradeableItems((int) item.get("id"));
+            if (tradeableItems != null) {
+                tradeableItems.sort(Comparator.comparingInt(mapping -> mapping.get("id")));
+            }
+            item.put("mapping", tradeableItems);
         }
-    }
-
-    private static void processItemFile(File file, ObjectMapper objectMapper) throws IOException {
-        Map<String, Object> itemData = objectMapper.readValue(file, Map.class);
-
-        List<Map<String, Integer>> tradeableItems = fetchTradeableItems((int) itemData.get("id"));
-
-        if (tradeableItems != null) {
-            tradeableItems.sort(Comparator.comparingInt(item -> item.get("id")));
-        }
-
-        itemData.put("mapping", tradeableItems);
-
-        objectMapper.writeValue(file, itemData);
+        objectMapper.writeValue(file, items);
     }
 
     private static List<Map<String, Integer>> fetchTradeableItems(int itemId) {

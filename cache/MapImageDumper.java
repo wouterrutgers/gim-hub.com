@@ -991,7 +991,7 @@ public class MapImageDumper
     private void dumpMapIcons(int z) {
         Map<Integer, List<Integer>> icons = new HashMap<>();
 
-        if (z == 0) return;
+        if (z != 0) return;
 
         for (Region region : regionLoader.getRegions()) {
             for (Location location : region.getLocations()) {

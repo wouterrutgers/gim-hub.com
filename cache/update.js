@@ -1,17 +1,10 @@
-const child_process = require("child_process");
-const fs = require("fs");
-const glob = require("glob");
-const nAsync = require("async");
-const path = require("path");
+const childProcess = require("node:child_process");
+const fs = require("node:fs");
+const path = require("node:path");
 const fetchWiki = require("./wiki");
-const sharp = require("sharp");
 const { buildMapLabels } = require("./map-labels");
 
-// NOTE: sharp will keep some files open and prevent them from being deleted
-sharp.cache(false);
-
 const osrsCacheDirectory = path.resolve("./cache/cache");
-const tileSize = 256;
 
 const RUNELITE_PATHS = (() => {
   const root = path.resolve("./runelite");
@@ -51,12 +44,9 @@ const SITE_PATHS = (() => {
   };
 })();
 
-function exec(command, args, options) {
-  const commandArgs = Array.isArray(args) ? args : [];
-  console.log(`[exec] ${[command, ...commandArgs].join(" ")}`);
-  options = options || {};
-  options.stdio = "inherit";
-  child_process.execFileSync(command, commandArgs, options);
+function exec(command, commandArguments, options) {
+  console.info(`[exec] ${[command, ...commandArguments].join(" ")}`);
+  childProcess.execFileSync(command, commandArguments, { ...options, stdio: "inherit" });
 }
 
 async function retry(action) {
@@ -74,25 +64,21 @@ async function retry(action) {
 }
 
 function execGitCleanInRunelite() {
-  exec("git", ["clean", "-ffdxq"], { cwd: RUNELITE_PATHS.DIRS.root });
+  exec("git", ["clean", "-ffdq"], { cwd: RUNELITE_PATHS.DIRS.root });
   exec("git", ["reset", "--hard", "-q"], { cwd: RUNELITE_PATHS.DIRS.root });
 }
 
-function execRuneliteGradleApplication(args) {
-  const { buildScriptPath, mainClass, dependencies, runArgs } = args;
+function prepareRuneliteGradleApplication(buildScriptPath, dependencies) {
   let lines = fs.readFileSync(buildScriptPath).toString("utf8").split("\n");
-
-  if (typeof mainClass === "string" && mainClass.length > 0) {
-    const lineOfPlugins = lines.findIndex((line) => !!line.match("plugins"));
-    if (lineOfPlugins < 0) {
-      throw new Error(`No plugins block in ${buildScriptPath}`);
-    }
-    lines = [...lines.slice(0, lineOfPlugins + 1), "application", ...lines.slice(lineOfPlugins + 1)];
-
-    lines.push("", "application {", `mainClass = "${mainClass}"`, "}", "");
+  const lineOfPlugins = lines.findIndex((line) => !!line.match("plugins"));
+  if (lineOfPlugins < 0) {
+    throw new Error(`No plugins block in ${buildScriptPath}`);
   }
 
-  if (Array.isArray(dependencies) && dependencies.length > 0) {
+  lines = [...lines.slice(0, lineOfPlugins + 1), "application", ...lines.slice(lineOfPlugins + 1)];
+  lines.push("", 'tasks.named<JavaExec>("run") {', 'mainClass.set(providers.gradleProperty("dumpMainClass"))', "}", "");
+
+  if (dependencies.length > 0) {
     const lineOfDependencies = lines.findIndex((line) => !!line.match("dependencies"));
     if (lineOfDependencies < 0) {
       throw new Error(`No dependencies block in ${buildScriptPath}`);
@@ -101,9 +87,43 @@ function execRuneliteGradleApplication(args) {
   }
 
   fs.writeFileSync(buildScriptPath, lines.join("\n"));
+}
 
+function prepareRunelite() {
+  for (const name of ["Cache", "MapImageDumper", "MapLabelDumper", "CollectionLogDumper", "CombatAchievementDumper"]) {
+    fs.copyFileSync(`./${name}.java`, `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/${name}.java`);
+  }
+
+  fs.copyFileSync(
+    "./ItemSpriteFactory.java",
+    `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/item/ItemSpriteFactory.java`,
+  );
+  fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/client/game`, { recursive: true });
+  fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/resources`, { recursive: true });
+
+  for (const stub of [
+    "src/main/java/net/runelite/client/game/ItemMapping.java",
+    "src/main/java/net/runelite/client/game/ItemVariationMapping.java",
+    "src/main/resources/item_variations.json",
+  ]) {
+    fs.copyFileSync(path.resolve(RUNELITE_PATHS.DIRS.client, stub), path.resolve(RUNELITE_PATHS.DIRS.api, stub));
+  }
+
+  for (const name of ["ItemDumper", "QuestDumper"]) {
+    fs.copyFileSync(`./${name}.java`, `${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/api/${name}.java`);
+  }
+
+  prepareRuneliteGradleApplication(RUNELITE_PATHS.BUILD_SCRIPTS.cache, []);
+  prepareRuneliteGradleApplication(RUNELITE_PATHS.BUILD_SCRIPTS.api, [
+    "implementation(libs.gson)",
+    "implementation(libs.guava)",
+    'implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")',
+  ]);
+}
+
+function execRuneliteGradleApplication({ buildScriptPath, mainClass, runArgs }) {
   const gradlew = path.resolve(RUNELITE_PATHS.DIRS.root, "gradlew");
-  exec(gradlew, ["-b", buildScriptPath, "-q", "run", `--args=${runArgs}`], {
+  exec(gradlew, ["-b", buildScriptPath, "-q", "run", `-PdumpMainClass=${mainClass}`, `--args=${runArgs}`], {
     cwd: RUNELITE_PATHS.DIRS.root,
     env: {
       ...process.env,
@@ -112,76 +132,24 @@ function execRuneliteGradleApplication(args) {
   });
 }
 
-async function readAllItemFiles() {
-  const itemFiles = glob.sync(`${path.resolve("./item-data")}/*.json`.replace(/\\/g, "/"));
+async function dumpItemData(wikiOnly) {
+  console.info("\nStep: Dumping items from cache");
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
+    mainClass: "net.runelite.cache.Cache",
+    runArgs: `-c ${osrsCacheDirectory} -items ${path.resolve("./item-data.json")}`,
+  });
 
-  if (itemFiles.length === 0) {
-    throw new Error("No item files in item-data to read.");
+  if (wikiOnly) {
+    return;
   }
 
-  const result = {};
-
-  const q = nAsync.queue((itemFile, callback) => {
-    fs.promises.readFile(itemFile, "utf8").then((itemFileData) => {
-      const item = JSON.parse(itemFileData);
-      if (isNaN(item.id)) console.log(item);
-      result[item.id] = item;
-
-      callback();
-    });
-  }, 50);
-
-  for (const itemFile of itemFiles) {
-    q.push(itemFile);
-  }
-
-  await q.drain();
-
-  return result;
-}
-
-async function dumpItemData() {
-  try {
-    console.log("\nStep: Dumping items from cache");
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
-      mainClass: "net.runelite.cache.Cache",
-      dependencies: [],
-      runArgs: `-c ${osrsCacheDirectory} -items ${path.resolve("./item-data")}`,
-    });
-
-    console.log("\nStep: Converting cache item data");
-    fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/client/game/`, { recursive: true });
-    fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/resources`, { recursive: true });
-
-    for (const stub of [
-      "src/main/java/net/runelite/client/game/ItemMapping.java",
-      "src/main/java/net/runelite/client/game/ItemVariationMapping.java",
-      "src/main/resources/item_variations.json",
-    ]) {
-      const from = path.resolve(RUNELITE_PATHS.DIRS.client, stub);
-      const to = path.resolve(RUNELITE_PATHS.DIRS.api, stub);
-      fs.copyFileSync(from, to);
-    }
-
-    fs.copyFileSync(
-      "./ItemDumper.java",
-      path.resolve(RUNELITE_PATHS.DIRS.api, "src/main/java/net/runelite/api/ItemDumper.java"),
-    );
-
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
-      mainClass: "net.runelite.api.ItemDumper",
-      dependencies: [
-        "implementation(libs.gson)",
-        "implementation(libs.guava)",
-        `implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")`,
-      ],
-      runArgs: path.resolve(`./item-data`),
-    });
-  } finally {
-    execGitCleanInRunelite();
-  }
+  console.info("\nStep: Converting cache item data");
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
+    mainClass: "net.runelite.api.ItemDumper",
+    runArgs: path.resolve("./item-data.json"),
+  });
 }
 
 async function getNonAlchableItemNames() {
@@ -201,18 +169,19 @@ async function getNonAlchableItemNames() {
   return nonAlchableItemNames;
 }
 
-async function buildItemDataJson() {
+async function buildItemDataJson(wikiOnly) {
   console.log("\nStep: Build item_data.json");
-  const items = await readAllItemFiles();
+  const items = JSON.parse(fs.readFileSync("./item-data.json", "utf8"));
+  const mappedItems = wikiOnly ? JSON.parse(fs.readFileSync(SITE_PATHS.FILES.itemData, "utf8")) : items;
   const includedItems = {};
   const allIncludedItemIds = new Set();
   for (const [itemId, item] of Object.entries(items)) {
     if (item.name && item.name.trim().toLowerCase() !== "null") {
-      includedItem = {
+      const includedItem = {
         name: item.name,
         highalch: Math.floor(item.cost * 0.6),
         alchable: true,
-        mapping: item.mapping,
+        mapping: mappedItems[itemId].mapping,
       };
 
       const stackedList = [];
@@ -268,44 +237,15 @@ async function buildItemDataJson() {
 }
 
 async function dumpItemImages(allIncludedItemIds) {
-  // TODO: Zoom on holy symbol is incorrect
-  console.log("\nStep: Extract item model images");
-
-  try {
-    console.log(`Generating images for ${allIncludedItemIds.size} items`);
-    fs.writeFileSync("items_need_images.csv", Array.from(allIncludedItemIds.values()).join(","));
-    const imageDumperDriver = fs.readFileSync("./Cache.java", "utf8");
-    fs.writeFileSync(`${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/Cache.java`, imageDumperDriver);
-    const itemSpriteFactory = fs.readFileSync("./ItemSpriteFactory.java", "utf8");
-    fs.writeFileSync(
-      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/item/ItemSpriteFactory.java`,
-      itemSpriteFactory,
-    );
-
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
-      mainClass: "net.runelite.cache.Cache",
-      dependencies: [],
-      runArgs: `-c ${osrsCacheDirectory} -ids ${path.resolve("./items_need_images.csv")} -output ${path.resolve("./item-images")}`,
-    });
-
-    const itemImages = glob.sync(`${path.resolve("./item-images")}/*.png`.replace(/\\/g, "/"));
-    if (itemImages.length === 0) {
-      console.warn("No item-images to convert to .webp.");
-    } else {
-      console.info(`Converting ${itemImages.length} dumped .png item images to .webp.`);
-    }
-
-    await Promise.all(
-      itemImages.map(async function convertItemImage(itemImage) {
-        const itemImageData = await sharp(itemImage).webp({ lossless: true }).toBuffer();
-        fs.unlinkSync(itemImage);
-        await sharp(itemImageData).webp({ lossless: true, effort: 6 }).toFile(itemImage.replace(".png", ".webp"));
-      }),
-    );
-  } finally {
-    execGitCleanInRunelite();
-  }
+  console.info(`\nStep: Generating images for ${allIncludedItemIds.size} items`);
+  fs.rmSync("./item-images", { recursive: true, force: true });
+  fs.writeFileSync("items_need_images.csv", [...allIncludedItemIds].join(","));
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
+    mainClass: "net.runelite.cache.Cache",
+    runArgs: `-c ${osrsCacheDirectory} -ids ${path.resolve("./items_need_images.csv")} -output ${path.resolve("./item-images")}`,
+  });
+  await require("./images").convertPngImages(path.resolve("./item-images"));
 }
 
 async function convertXteasToRuneliteFormat() {
@@ -322,178 +262,32 @@ async function convertXteasToRuneliteFormat() {
 }
 
 async function dumpMapData(xteasLocation) {
-  console.log("\nStep: Dumping map data");
-  try {
-    const mapImageDumper = fs.readFileSync("./MapImageDumper.java", "utf8");
-    fs.writeFileSync(
-      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/MapImageDumper.java`,
-      mapImageDumper,
-    );
-
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
-      mainClass: "net.runelite.cache.MapImageDumper",
-      dependencies: [],
-      runArgs: `--cachedir ${osrsCacheDirectory} --xteapath ${xteasLocation} --outputdir ${path.resolve("./map-data")}`,
-    });
-  } finally {
-    execGitCleanInRunelite();
-  }
+  console.info("\nStep: Dumping map data");
+  fs.rmSync("./map-data", { recursive: true, force: true });
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
+    mainClass: "net.runelite.cache.MapImageDumper",
+    runArgs: `--cachedir ${osrsCacheDirectory} --xteapath ${xteasLocation} --outputdir ${path.resolve("./map-data")}`,
+  });
 }
 
 async function dumpMapLabels() {
-  console.log("\nStep: Dumping map labels");
-  try {
-    const mapLabelDumper = fs.readFileSync("./MapLabelDumper.java", "utf8");
-    fs.writeFileSync(
-      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/MapLabelDumper.java`,
-      mapLabelDumper,
-    );
-
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
-      mainClass: "net.runelite.cache.MapLabelDumper",
-      dependencies: [],
-      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("./map-data/labels")}`,
-    });
-
-    const mapLabels = glob.sync(path.resolve("./map-data/labels/*.png").replace(/\\/g, "/"));
-    if (mapLabels.length === 0) {
-      console.warn("No map labels to convert to .webp.");
-    } else {
-      console.info(`Converting ${mapLabels.length} dumped .png map labels to .webp.`);
-    }
-
-    await Promise.all(
-      mapLabels.map(async function convertMapLabel(mapLabel) {
-        const mapLabelImageData = await sharp(mapLabel).webp({ lossless: true }).toBuffer();
-        fs.unlinkSync(mapLabel);
-        await sharp(mapLabelImageData).webp({ lossless: true, effort: 6 }).toFile(mapLabel.replace(".png", ".webp"));
-      }),
-    );
-  } finally {
-    execGitCleanInRunelite();
-  }
+  console.info("\nStep: Dumping map labels");
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
+    mainClass: "net.runelite.cache.MapLabelDumper",
+    runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("./map-data/labels")}`,
+  });
+  await require("./images").convertPngImages(path.resolve("./map-data/labels"));
 }
 
 async function dumpCollectionLog() {
-  console.log("\nStep: Dumping collection log");
-  try {
-    const collectionLogDumper = fs.readFileSync("./CollectionLogDumper.java", "utf8");
-    fs.writeFileSync(
-      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/CollectionLogDumper.java`,
-      collectionLogDumper,
-    );
-
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
-      mainClass: "net.runelite.cache.CollectionLogDumper",
-      dependencies: [],
-      runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../resources/assets/data")}`,
-    });
-  } finally {
-    execGitCleanInRunelite();
-  }
-}
-
-async function tilePlane(plane) {
-  await retry(() => fs.rmSync("./output_files", { recursive: true, force: true }));
-  const planeImage = sharp(`./map-data/img-${plane}.png`, { limitInputPixels: false }).flip();
-  await planeImage
-    .webp({ lossless: true })
-    .tile({
-      size: tileSize,
-      depth: "one",
-      background: { r: 0, g: 0, b: 0, alpha: 0 },
-      skipBlanks: 0,
-    })
-    .toFile("output.dz");
-}
-
-async function outputTileImage(s, plane, x, y) {
-  return s
-    .flatten({ background: "#000" })
-    .webp({ lossless: true, alphaQuality: 0, effort: 6 })
-    .toFile(`./map-data/tiles/${plane}_${x}_${y}.webp`);
-}
-
-async function finalizePlaneTiles(plane, previousTiles) {
-  const tileImages = glob.sync(path.resolve("./output_files/0/*.webp").replace(/\\/g, "/"));
-  if (tileImages.length === 0) {
-    console.warn("No tileImages to convert to .webp.");
-  } else {
-    console.info(`Processing ${tileImages.length} dumped .png tileImages to .webp.`);
-  }
-
-  const p = [];
-  for (const tileImage of tileImages) {
-    p.push(
-      new Promise(async (resolve) => {
-        const filename = path.basename(tileImage, ".webp");
-        const [x, y] = filename.split("_").map((coord) => parseInt(coord, 10));
-
-        const finalX = x + 4608 / tileSize;
-        const finalY = y + 4864 / tileSize;
-
-        let s;
-        if (plane > 0) {
-          const backgroundPath = `./map-data/tiles/${plane - 1}_${finalX}_${finalY}.webp`;
-          const backgroundExists = fs.existsSync(backgroundPath);
-
-          if (backgroundExists) {
-            const tile = await sharp(tileImage).flip().webp({ lossless: true }).toBuffer();
-            const background = await sharp(backgroundPath).linear(0.5).webp({ lossless: true }).toBuffer();
-            s = sharp(background).composite([{ input: tile }]);
-          }
-        }
-
-        if (!s) {
-          s = sharp(tileImage).flip();
-        }
-
-        previousTiles.add(`${plane}_${finalX}_${finalY}`);
-        await outputTileImage(s, plane, finalX, finalY);
-
-        resolve();
-      }),
-    );
-  }
-  await Promise.all(p);
-
-  // NOTE: This is just so the plane will have a darker version of the tile below it
-  // even if the plane does not have its own image for a tile.
-  if (plane > 0) {
-    const belowTiles = [...previousTiles].filter((x) => x.startsWith(plane - 1));
-    for (const belowTile of belowTiles) {
-      const [belowPlane, x, y] = belowTile.split("_");
-      const lookup = `${plane}_${x}_${y}`;
-      if (!previousTiles.has(lookup)) {
-        const outputPath = `./map-data/tiles/${plane}_${x}_${y}.webp`;
-        if (fs.existsSync(outputPath) === true) {
-          throw new Error(`Filling tile ${outputPath} but it already exists!`);
-        }
-
-        const s = sharp(`./map-data/tiles/${belowTile}.webp`).linear(0.5);
-        previousTiles.add(lookup);
-        await outputTileImage(s, plane, x, y);
-      }
-    }
-  }
-}
-
-async function generateMapTiles() {
-  console.log("\nStep: Generate map tiles");
-  fs.rmSync("./map-data/tiles", { recursive: true, force: true });
-  fs.mkdirSync("./map-data/tiles");
-
-  const previousTiles = new Set();
-  const planes = 4;
-  for (let i = 0; i < planes; ++i) {
-    console.log(`Tiling map plane ${i + 1}/${planes}`);
-    await tilePlane(i);
-    console.log(`Finalizing map plane ${i + 1}/${planes}`);
-    await finalizePlaneTiles(i, previousTiles);
-  }
+  console.info("\nStep: Dumping collection log");
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
+    mainClass: "net.runelite.cache.CollectionLogDumper",
+    runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../resources/assets/data")}`,
+  });
 }
 
 async function moveFiles(files, destination) {
@@ -506,11 +300,18 @@ async function moveFiles(files, destination) {
 async function moveResults() {
   console.log("\nStep: Moving results to site");
   const replacements = [
-    ["./item-images/*.webp", SITE_PATHS.DIRS.itemImages],
-    ["./map-data/tiles/*.webp", SITE_PATHS.DIRS.mapImages],
-    ["./map-data/labels/*.webp", SITE_PATHS.DIRS.mapLabels],
+    ["./item-images", SITE_PATHS.DIRS.itemImages],
+    ["./map-data/tiles", SITE_PATHS.DIRS.mapImages],
+    ["./map-data/labels", SITE_PATHS.DIRS.mapLabels],
   ].map(function findReplacements([source, destination]) {
-    const files = glob.sync(path.resolve(source).replace(/\\/g, "/"));
+    const files = fs
+      .readdirSync(source)
+      .filter(function isWebp(file) {
+        return file.endsWith(".webp");
+      })
+      .map(function sourcePath(file) {
+        return path.join(source, file);
+      });
     if (files.length === 0) {
       throw new Error(`No replacement files found for ${source}.`);
     }
@@ -531,10 +332,19 @@ async function moveResults() {
 }
 
 async function buildMapJsonAndIconAtlas() {
+  const sharp = require("sharp");
   console.info("Step: Building map json and icon atlas...");
 
   // Create a tile sheet of the map icons
-  const mapIcons = glob.sync(path.resolve("./map-data/icons/*.png").replace(/\\/g, "/"));
+  const mapIcons = fs
+    .readdirSync("./map-data/icons")
+    .filter(function isPng(file) {
+      return file.endsWith(".png");
+    })
+    .sort()
+    .map(function iconPath(file) {
+      return path.resolve("./map-data/icons", file);
+    });
   if (mapIcons.length === 0) {
     console.warn("No mapIcons to process into atlas.");
   } else {
@@ -617,52 +427,49 @@ async function buildMapJsonAndIconAtlas() {
 }
 
 async function dumpQuestMapping() {
-  console.log("Dumping quest mappings.");
-  try {
-    fs.copyFileSync("./QuestDumper.java", `${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/api/QuestDumper.java`);
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
-      mainClass: "net.runelite.api.QuestDumper",
-      dependencies: [`implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")`],
-      runArgs: SITE_PATHS.FILES.questMapping,
-    });
-  } finally {
-    execGitCleanInRunelite();
-  }
+  console.info("Dumping quest mappings.");
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
+    mainClass: "net.runelite.api.QuestDumper",
+    runArgs: SITE_PATHS.FILES.questMapping,
+  });
 }
 
 async function dumpCombatAchievements() {
-  console.log("Dumping combat achievements.");
-  try {
-    fs.copyFileSync(
-      "./CombatAchievementDumper.java",
-      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/CombatAchievementDumper.java`,
-    );
-    execRuneliteGradleApplication({
-      buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
-      mainClass: "net.runelite.cache.CombatAchievementDumper",
-      dependencies: [],
-      runArgs: `${osrsCacheDirectory} ${path.resolve("../resources/assets/data/combat_achievements.json")}`,
-    });
-  } finally {
-    execGitCleanInRunelite();
-  }
+  console.info("Dumping combat achievements.");
+  execRuneliteGradleApplication({
+    buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
+    mainClass: "net.runelite.cache.CombatAchievementDumper",
+    runArgs: `${osrsCacheDirectory} ${path.resolve("../resources/assets/data/combat_achievements.json")}`,
+  });
 }
 
 (async () => {
   execGitCleanInRunelite();
 
-  await dumpItemData();
-  const allIncludedItemIds = await buildItemDataJson();
-  await dumpItemImages(allIncludedItemIds);
-  const xteasLocation = await convertXteasToRuneliteFormat();
-  await dumpMapData(xteasLocation);
-  await generateMapTiles();
-  await dumpMapLabels();
-  await dumpCollectionLog();
-  await buildMapJsonAndIconAtlas();
-  await moveResults();
+  try {
+    prepareRunelite();
+    const wikiOnly = process.argv.includes("--wiki-only");
+    await dumpItemData(wikiOnly);
+    const allIncludedItemIds = await buildItemDataJson(wikiOnly);
 
-  await dumpQuestMapping();
-  await dumpCombatAchievements();
+    if (wikiOnly) {
+      fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData);
+      return;
+    }
+
+    await dumpItemImages(allIncludedItemIds);
+    const xteasLocation = await convertXteasToRuneliteFormat();
+    await dumpMapData(xteasLocation);
+    await require("./images").generateMapTiles(path.resolve("./map-data"));
+    await dumpMapLabels();
+    await dumpCollectionLog();
+    await buildMapJsonAndIconAtlas();
+    await moveResults();
+
+    await dumpQuestMapping();
+    await dumpCombatAchievements();
+  } finally {
+    execGitCleanInRunelite();
+  }
 })();

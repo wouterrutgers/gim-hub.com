@@ -24,7 +24,7 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Check for a new complete cache
+      - name: Check for cache or wiki updates
         id: latest
         shell: bash
         run: |
@@ -38,10 +38,10 @@ jobs:
 
           if [[ -z "$cache_id" ]]; then
             echo "The latest OpenRS2 cache is not complete yet."
-            exit 0
+            cache_id=$(cat cache/last-processed-id.txt)
           fi
 
-          if [[ -f cache/last-processed-id.txt ]] && [[ "$cache_id" == "$(cat cache/last-processed-id.txt)" ]]; then
+          if [[ -f cache/last-processed-id.txt ]] && [[ "$cache_id" == "$(cat cache/last-processed-id.txt)" ]] && (( 10#$(date -u +%H) % 4 != 0 )); then
             echo "OpenRS2 cache $cache_id has already been processed."
             exit 0
           fi
@@ -106,23 +106,10 @@ jobs:
           path: cache/cache
           key: ${{ steps.cache.outputs.cache-primary-key }}
 
-      - uses: actions/cache/restore@v6
-        id: wiki
-        with:
-          path: cache/wiki-responses
-          key: wiki-v1-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: wiki-v1-
-
       - run: pnpm run update
         working-directory: ./cache
 
       - run: node resources/js/quests/scraper.js
-
-      - uses: actions/cache/save@v6
-        if: ${{ !cancelled() && steps.wiki.outcome == 'success' }}
-        with:
-          path: cache/wiki-responses
-          key: ${{ steps.wiki.outputs.cache-primary-key }}
 
       - run: pnpm run bundle
 

@@ -4,8 +4,6 @@ permissions:
   contents: write
   issues: write
 
-# To run locally: act --env GROUP_IRONMEN_PATH=$PWD -W .github/workflows/update-cache.yml -s PAT="$(gh auth token)" -P macos-latest=-self-hosted workflow_dispatch
-
 on:
   workflow_dispatch:
 
@@ -18,16 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       cache-id: ${{ steps.latest.outputs.cache-id }}
+      update-cache: ${{ steps.latest.outputs.update-cache }}
 
     steps:
       - uses: actions/checkout@v7
-        with:
-          ref: ${{ github.ref }}
 
-      - name: Check for a new complete cache
-        id: latest
+      - id: latest
         shell: bash
         run: |
+          processed_cache_id=$(cat cache/last-processed-id.txt)
           cache_id=$(curl --fail --silent --show-error https://archive.openrs2.org/caches.json | jq -r '
             [ .[] | select(.game == "oldschool" and .environment == "live" and .language == "en" and (.sources | contains(["Jagex"]))) ] |
             max_by(.id) |
@@ -38,27 +35,30 @@ jobs:
 
           if [[ -z "$cache_id" ]]; then
             echo "The latest OpenRS2 cache is not complete yet."
-            exit 0
+            cache_id=$processed_cache_id
           fi
 
-          if [[ -f cache/last-processed-id.txt ]] && [[ "$cache_id" == "$(cat cache/last-processed-id.txt)" ]]; then
+          if [[ "$cache_id" == "$processed_cache_id" ]] && (( 10#$(date -u +%H) % 4 != 0 )); then
             echo "OpenRS2 cache $cache_id has already been processed."
             exit 0
           fi
 
           echo "cache-id=$cache_id" >> "$GITHUB_OUTPUT"
 
-  cache:
+          if [[ "$cache_id" != "$processed_cache_id" ]]; then
+            echo "update-cache=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  dump:
     needs: check
     if: needs.check.outputs.cache-id != ''
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       CACHE_ID: ${{ needs.check.outputs.cache-id }}
 
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.ref }}
           token: ${{ secrets.PAT }}
 
       - uses: actions/checkout@v7
@@ -79,12 +79,19 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
+          cache: gradle
+          cache-dependency-path: |
+            cache/**/*.java
+            cache/**/*.gradle*
+            cache/**/gradle*.properties
+            cache/**/libs.versions.toml
+            cache/update.js
 
-      - run: pnpm install --frozen-lockfile
+      - if: needs.check.outputs.update-cache == 'true'
+        run: pnpm install --frozen-lockfile
         working-directory: ./cache
 
       - run: pnpm install --frozen-lockfile
-        working-directory: ./
 
       - uses: actions/cache/restore@v6
         id: cache
@@ -93,7 +100,6 @@ jobs:
           key: openrs2-${{ env.CACHE_ID }}
 
       - if: steps.cache.outputs.cache-hit != 'true'
-        name: Download cache
         run: |
           curl --fail --silent --show-error --location -o cache/cache/xteas.json "https://archive.openrs2.org/caches/runescape/$CACHE_ID/keys.json"
           curl --fail --silent --show-error --location -o cache/cache/disk.zip "https://archive.openrs2.org/caches/runescape/$CACHE_ID/disk.zip"
@@ -106,25 +112,10 @@ jobs:
           path: cache/cache
           key: ${{ steps.cache.outputs.cache-primary-key }}
 
-      - uses: actions/cache/restore@v6
-        id: wiki
-        with:
-          path: cache/wiki-responses
-          key: wiki-v1-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: wiki-v1-
-
-      - run: pnpm run update
+      - run: pnpm run ${{ needs.check.outputs.update-cache == 'true' && 'update' || 'update:wiki' }}
         working-directory: ./cache
 
       - run: node resources/js/quests/scraper.js
-
-      - uses: actions/cache/save@v6
-        if: ${{ !cancelled() && steps.wiki.outcome == 'success' }}
-        with:
-          path: cache/wiki-responses
-          key: ${{ steps.wiki.outputs.cache-primary-key }}
-
-      - run: pnpm run bundle
 
       - run: node resources/js/check-collection-log-mappings.js --github-issue
         env:
@@ -133,9 +124,5 @@ jobs:
       - run: echo "$CACHE_ID" > cache/last-processed-id.txt
 
       - uses: stefanzweifel/git-auto-commit-action@v7
-        if: ${{ ! env.ACT }}
         with:
           commit_message: dump latest game data
-
-      - run: rsync -avh --delete --exclude='.git' --filter='dir-merge,- .gitignore' . $GROUP_IRONMEN_PATH
-        if: ${{ env.ACT }}

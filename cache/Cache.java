@@ -1,5 +1,7 @@
 package net.runelite.cache;
 
+import com.google.gson.Gson;
+import net.runelite.cache.definitions.ItemDefinition;
 import net.runelite.cache.definitions.loaders.ModelLoader;
 import net.runelite.cache.definitions.providers.ModelProvider;
 import net.runelite.cache.fs.Archive;
@@ -14,14 +16,21 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Cache {
   public static void main(String[] args) throws IOException {
     Options options = new Options();
 
     options.addOption("c", "cache", true, "cache base");
+    options.addOption(null, "items", true, "file to dump item data to");
 
     options.addOption(null, "ids", true, "csv file with item ids to create images from");
     options.addOption(null, "output", true, "directory to dump item model images to");
@@ -39,6 +48,25 @@ public class Cache {
     String cache = cmd.getOptionValue("cache");
 
     Store store = loadStore(cache);
+
+    if (cmd.hasOption("items")) {
+      ItemManager items = new ItemManager(store);
+      items.load();
+      Map<Integer, Map<String, Object>> data = new TreeMap<>();
+      for (ItemDefinition item : items.getItems()) {
+        Map<String, Object> values = new LinkedHashMap<>();
+        values.put("id", item.id);
+        values.put("name", item.name);
+        values.put("cost", item.cost);
+        values.put("countCo", item.countCo);
+        values.put("countObj", item.countObj);
+        data.put(item.id, values);
+      }
+      try (Writer writer = Files.newBufferedWriter(new File(cmd.getOptionValue("items")).toPath(), StandardCharsets.UTF_8)) {
+        new Gson().toJson(data, writer);
+      }
+      return;
+    }
 
     if (cmd.hasOption("output") && cmd.hasOption("ids")) {
       String outputDir = cmd.getOptionValue("output");

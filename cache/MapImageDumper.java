@@ -63,7 +63,6 @@ import net.runelite.cache.region.Location;
 import net.runelite.cache.region.Position;
 import net.runelite.cache.region.Region;
 import net.runelite.cache.region.RegionLoader;
-import net.runelite.cache.util.BigBufferedImage;
 import net.runelite.cache.util.KeyProvider;
 import net.runelite.cache.util.XteaKeyManager;
 import org.apache.commons.cli.CommandLine;
@@ -193,15 +192,18 @@ public class MapImageDumper
                 MapImageDumper dumper = new MapImageDumper(store, xteaKeyManager);
                 dumper.load();
 
+                MapTiles previous = null;
                 for (int i = 0; i < Region.Z; ++i)
                     {
                         BufferedImage image = dumper.drawMap(i);
-
-                        File imageFile = new File(outDir, "img-" + i + ".png");
-
-                        ImageIO.write(image, "png", imageFile);
-                        BigBufferedImage.dispose(image);
-                        log.info("Wrote image {}", imageFile);
+                        MapTiles tiles = (MapTiles) image.getRaster().getDataBuffer();
+                        if (previous != null)
+                            {
+                                tiles.blend(previous);
+                            }
+                        tiles.writeRgbTiles(new File(outDir, "raw-tiles/" + i));
+                        previous = tiles;
+                        log.info("Wrote tiles for plane {}", i);
                     }
             }
     }
@@ -259,7 +261,7 @@ public class MapImageDumper
         BufferedImage image;
         if (lowMemory)
             {
-                image = BigBufferedImage.create(pixelsX, pixelsY, transparency ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+                image = new MapTiles(pixelsX, pixelsY).createImage(transparency);
             }
         else
             {
@@ -353,20 +355,19 @@ public class MapImageDumper
 
     private void drawMap(BufferedImage image, int z)
     {
-        for (Region region : regionLoader.getRegions())
-            {
-                int baseX = region.getBaseX();
-                int baseY = region.getBaseY();
+        regionLoader.getRegions().parallelStream().forEach(region -> {
+            int baseX = region.getBaseX();
+            int baseY = region.getBaseY();
 
-                // to pixel X
-                int drawBaseX = baseX - regionLoader.getLowestX().getBaseX();
+            // to pixel X
+            int drawBaseX = baseX - regionLoader.getLowestX().getBaseX();
 
-                // to pixel Y. top most y is 0, but the top most
-                // region has the greatest y, so invert
-                int drawBaseY = regionLoader.getHighestY().getBaseY() - baseY;
+            // to pixel Y. top most y is 0, but the top most
+            // region has the greatest y, so invert
+            int drawBaseY = regionLoader.getHighestY().getBaseY() - baseY;
 
-                drawMap(image, drawBaseX, drawBaseY, z, region);
-            }
+            drawMap(image, drawBaseX, drawBaseY, z, region);
+        });
     }
 
     private void drawTile(BufferedImage to, int[][][] planes, Region region, int drawBaseX, int drawBaseY, int z, int x, int y)
@@ -666,26 +667,33 @@ public class MapImageDumper
         List<Location> planeLocs = new ArrayList<>();
         List<Location> pushDownLocs = new ArrayList<>();
         List<List<Location>> layers = Arrays.asList(planeLocs, pushDownLocs);
+        Map<Integer, List<Location>> locationsByTile = new HashMap<>();
+        for (Location location : region.getLocations())
+            {
+                Position position = location.getPosition();
+                int localX = position.getX() - region.getBaseX();
+                int localY = position.getY() - region.getBaseY();
+                locationsByTile.computeIfAbsent(localX * Region.Y + localY, ignored -> new ArrayList<>()).add(location);
+            }
+
         for (int localX = 0; localX < Region.X; localX++)
             {
-                int regionX = localX + region.getBaseX();
                 for (int localY = 0; localY < Region.Y; localY++)
                     {
-                        int regionY = localY + region.getBaseY();
+                        List<Location> locations = locationsByTile.get(localX * Region.Y + localY);
+                        if (locations == null)
+                            {
+                                continue;
+                            }
 
                         planeLocs.clear();
                         pushDownLocs.clear();
                         boolean isBridge = (region.getTileSetting(1, localX, localY) & 2) != 0;
                         int tileZ = z + (isBridge ? 1 : 0);
 
-                        for (Location loc : region.getLocations())
+                        for (Location loc : locations)
                             {
                                 Position pos = loc.getPosition();
-                                if (pos.getX() != regionX || pos.getY() != regionY)
-                                    {
-                                        continue;
-                                    }
-
                                 if (pos.getZ() == tileZ && (region.getTileSetting(z, localX, localY) & 24) == 0)
                                     {
                                         planeLocs.add(loc);
@@ -991,7 +999,7 @@ public class MapImageDumper
     private void dumpMapIcons(int z) {
         Map<Integer, List<Integer>> icons = new HashMap<>();
 
-        if (z == 0) return;
+        if (z != 0) return;
 
         for (Region region : regionLoader.getRegions()) {
             for (Location location : region.getLocations()) {

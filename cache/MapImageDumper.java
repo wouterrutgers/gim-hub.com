@@ -353,20 +353,19 @@ public class MapImageDumper
 
     private void drawMap(BufferedImage image, int z)
     {
-        for (Region region : regionLoader.getRegions())
-            {
-                int baseX = region.getBaseX();
-                int baseY = region.getBaseY();
+        regionLoader.getRegions().parallelStream().forEach(region -> {
+            int baseX = region.getBaseX();
+            int baseY = region.getBaseY();
 
-                // to pixel X
-                int drawBaseX = baseX - regionLoader.getLowestX().getBaseX();
+            // to pixel X
+            int drawBaseX = baseX - regionLoader.getLowestX().getBaseX();
 
-                // to pixel Y. top most y is 0, but the top most
-                // region has the greatest y, so invert
-                int drawBaseY = regionLoader.getHighestY().getBaseY() - baseY;
+            // to pixel Y. top most y is 0, but the top most
+            // region has the greatest y, so invert
+            int drawBaseY = regionLoader.getHighestY().getBaseY() - baseY;
 
-                drawMap(image, drawBaseX, drawBaseY, z, region);
-            }
+            drawMap(image, drawBaseX, drawBaseY, z, region);
+        });
     }
 
     private void drawTile(BufferedImage to, int[][][] planes, Region region, int drawBaseX, int drawBaseY, int z, int x, int y)

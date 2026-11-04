@@ -21,8 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Check for cache or wiki updates
-        id: latest
+      - id: latest
         shell: bash
         run: |
           processed_cache_id=$(cat cache/last-processed-id.txt)
@@ -53,7 +52,7 @@ jobs:
   dump:
     needs: check
     if: needs.check.outputs.cache-id != ''
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     env:
       CACHE_ID: ${{ needs.check.outputs.cache-id }}
 
@@ -94,7 +93,6 @@ jobs:
           key: openrs2-${{ env.CACHE_ID }}
 
       - if: steps.cache.outputs.cache-hit != 'true'
-        name: Download cache
         run: |
           curl --fail --silent --show-error --location -o cache/cache/xteas.json "https://archive.openrs2.org/caches/runescape/$CACHE_ID/keys.json"
           curl --fail --silent --show-error --location -o cache/cache/disk.zip "https://archive.openrs2.org/caches/runescape/$CACHE_ID/disk.zip"
@@ -107,12 +105,10 @@ jobs:
           path: cache/cache
           key: ${{ steps.cache.outputs.cache-primary-key }}
 
-      - name: Dump game data
-        run: pnpm run ${{ needs.check.outputs.update-cache == 'true' && 'update' || 'update:wiki' }}
+      - run: pnpm run ${{ needs.check.outputs.update-cache == 'true' && 'update' || 'update:wiki' }}
         working-directory: ./cache
 
-      - name: Update wiki quest data
-        run: node resources/js/quests/scraper.js
+      - run: node resources/js/quests/scraper.js
 
       - run: node resources/js/check-collection-log-mappings.js --github-issue
         env:

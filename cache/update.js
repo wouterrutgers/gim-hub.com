@@ -121,20 +121,34 @@ function prepareRunelite() {
   ]);
 }
 
-function execRuneliteGradleApplication({ buildScriptPath, mainClass, runArgs }) {
+async function execRuneliteGradleApplication({ buildScriptPath, mainClass, runArgs }) {
   const gradlew = path.resolve(RUNELITE_PATHS.DIRS.root, "gradlew");
-  exec(gradlew, ["-b", buildScriptPath, "-q", "run", `-PdumpMainClass=${mainClass}`, `--args=${runArgs}`], {
-    cwd: RUNELITE_PATHS.DIRS.root,
-    env: {
-      ...process.env,
-      JAVA_TOOL_OPTIONS: "-Xmx4g -Dorg.slf4j.simpleLogger.defaultLogLevel=error",
-    },
+  const commandArguments = ["-b", buildScriptPath, "-q", "run", `-PdumpMainClass=${mainClass}`, `--args=${runArgs}`];
+  console.info(`[exec] ${[gradlew, ...commandArguments].join(" ")}`);
+  await new Promise(function runGradle(resolve, reject) {
+    const application = childProcess.spawn(gradlew, commandArguments, {
+      cwd: RUNELITE_PATHS.DIRS.root,
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        JAVA_TOOL_OPTIONS: "-Xmx4g -Djava.awt.headless=true -Dorg.slf4j.simpleLogger.defaultLogLevel=error",
+      },
+    });
+    application.once("error", reject);
+    application.once("close", function finished(code) {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+
+      reject(new Error(`${mainClass} exited with code ${code}`));
+    });
   });
 }
 
 async function dumpItemData(wikiOnly) {
   console.info("\nStep: Dumping items from cache");
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
     mainClass: "net.runelite.cache.Cache",
     runArgs: `-c ${osrsCacheDirectory} -items ${path.resolve("./item-data.json")}`,
@@ -145,7 +159,7 @@ async function dumpItemData(wikiOnly) {
   }
 
   console.info("\nStep: Converting cache item data");
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
     mainClass: "net.runelite.api.ItemDumper",
     runArgs: path.resolve("./item-data.json"),
@@ -240,12 +254,11 @@ async function dumpItemImages(allIncludedItemIds) {
   console.info(`\nStep: Generating images for ${allIncludedItemIds.size} items`);
   fs.rmSync("./item-images", { recursive: true, force: true });
   fs.writeFileSync("items_need_images.csv", [...allIncludedItemIds].join(","));
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
     mainClass: "net.runelite.cache.Cache",
     runArgs: `-c ${osrsCacheDirectory} -ids ${path.resolve("./items_need_images.csv")} -output ${path.resolve("./item-images")}`,
   });
-  await require("./images").convertPngImages(path.resolve("./item-images"));
 }
 
 async function convertXteasToRuneliteFormat() {
@@ -264,7 +277,7 @@ async function convertXteasToRuneliteFormat() {
 async function dumpMapData(xteasLocation) {
   console.info("\nStep: Dumping map data");
   fs.rmSync("./map-data", { recursive: true, force: true });
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
     mainClass: "net.runelite.cache.MapImageDumper",
     runArgs: `--cachedir ${osrsCacheDirectory} --xteapath ${xteasLocation} --outputdir ${path.resolve("./map-data")}`,
@@ -273,7 +286,7 @@ async function dumpMapData(xteasLocation) {
 
 async function dumpMapLabels() {
   console.info("\nStep: Dumping map labels");
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
     mainClass: "net.runelite.cache.MapLabelDumper",
     runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("./map-data/labels")}`,
@@ -283,7 +296,7 @@ async function dumpMapLabels() {
 
 async function dumpCollectionLog() {
   console.info("\nStep: Dumping collection log");
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
     mainClass: "net.runelite.cache.CollectionLogDumper",
     runArgs: `--cachedir ${osrsCacheDirectory} --outputdir ${path.resolve("../resources/assets/data")}`,
@@ -428,7 +441,7 @@ async function buildMapJsonAndIconAtlas() {
 
 async function dumpQuestMapping() {
   console.info("Dumping quest mappings.");
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.api,
     mainClass: "net.runelite.api.QuestDumper",
     runArgs: SITE_PATHS.FILES.questMapping,
@@ -437,7 +450,7 @@ async function dumpQuestMapping() {
 
 async function dumpCombatAchievements() {
   console.info("Dumping combat achievements.");
-  execRuneliteGradleApplication({
+  await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
     mainClass: "net.runelite.cache.CombatAchievementDumper",
     runArgs: `${osrsCacheDirectory} ${path.resolve("../resources/assets/data/combat_achievements.json")}`,
@@ -458,17 +471,31 @@ async function dumpCombatAchievements() {
       return;
     }
 
+    const images = require("./images");
     await dumpItemImages(allIncludedItemIds);
     const xteasLocation = await convertXteasToRuneliteFormat();
-    await dumpMapData(xteasLocation);
-    await require("./images").generateMapTiles(path.resolve("./map-data"));
-    await dumpMapLabels();
-    await dumpCollectionLog();
+    const mapDump = dumpMapData(xteasLocation);
+    const results = await Promise.allSettled([
+      images.convertPngImages(path.resolve("./item-images")),
+      mapDump.then(function generateMapTiles() {
+        return images.generateMapTiles(path.resolve("./map-data"));
+      }),
+      mapDump.then(async function dumpMapMetadata() {
+        await dumpMapLabels();
+        await dumpCollectionLog();
+        await dumpCombatAchievements();
+      }),
+      dumpQuestMapping(),
+    ]);
+
+    for (const result of results) {
+      if (result.status === "rejected") {
+        throw result.reason;
+      }
+    }
+
     await buildMapJsonAndIconAtlas();
     await moveResults();
-
-    await dumpQuestMapping();
-    await dumpCombatAchievements();
   } finally {
     execGitCleanInRunelite();
   }

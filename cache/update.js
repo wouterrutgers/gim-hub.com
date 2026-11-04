@@ -90,7 +90,14 @@ function prepareRuneliteGradleApplication(buildScriptPath, dependencies) {
 }
 
 function prepareRunelite() {
-  for (const name of ["Cache", "MapImageDumper", "MapLabelDumper", "CollectionLogDumper", "CombatAchievementDumper"]) {
+  for (const name of [
+    "Cache",
+    "MapImageDumper",
+    "MapTiles",
+    "MapLabelDumper",
+    "CollectionLogDumper",
+    "CombatAchievementDumper",
+  ]) {
     fs.copyFileSync(`./${name}.java`, `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/${name}.java`);
   }
 
@@ -123,7 +130,15 @@ function prepareRunelite() {
 
 async function execRuneliteGradleApplication({ buildScriptPath, mainClass, runArgs }) {
   const gradlew = path.resolve(RUNELITE_PATHS.DIRS.root, "gradlew");
-  const commandArguments = ["-b", buildScriptPath, "-q", "run", `-PdumpMainClass=${mainClass}`, `--args=${runArgs}`];
+  const commandArguments = [
+    "-b",
+    buildScriptPath,
+    "--build-cache",
+    "-q",
+    "run",
+    `-PdumpMainClass=${mainClass}`,
+    `--args=${runArgs}`,
+  ];
   console.info(`[exec] ${[gradlew, ...commandArguments].join(" ")}`);
   await new Promise(function runGradle(resolve, reject) {
     const application = childProcess.spawn(gradlew, commandArguments, {

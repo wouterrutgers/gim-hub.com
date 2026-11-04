@@ -29,6 +29,10 @@
   const pendingReorder = ref(false);
   const reorderError = ref();
 
+  const recommendedBackgroundOpacity = computed(function getRecommendedBackgroundOpacity() {
+    return ["classic-light", "classic-dark"].includes(settingsStore.siteTheme) ? 90 : 100;
+  });
+
   const members = computed(function getMembers() {
     return [...groupStore.memberNames].filter(function excludeSharedMember(member) {
       return member !== "@SHARED";
@@ -200,20 +204,6 @@
 
       <fieldset>
         <legend>Style</legend>
-        <div class="settings-page-range-item">
-          <label for="page-background-opacity-input">Background opacity</label>
-          <div class="settings-page-range-control">
-            <input
-              id="page-background-opacity-input"
-              type="range"
-              min="0"
-              max="100"
-              :value="settingsStore.pageBackgroundOpacity"
-              @input="settingsStore.setPageBackgroundOpacity($event.target.valueAsNumber)"
-            />
-            <output for="page-background-opacity-input">{{ settingsStore.pageBackgroundOpacity }}%</output>
-          </div>
-        </div>
         <div v-for="theme in siteThemes" :key="theme" class="settings-page-radio-item">
           <input
             :id="`style-${theme}`"
@@ -223,6 +213,24 @@
             @change="settingsStore.setSiteTheme(theme)"
           />
           <label :for="`style-${theme}`">{{ labels[theme] }}</label>
+        </div>
+        <div class="settings-page-range-item">
+          <label for="page-background-opacity-input">Background opacity</label>
+          <div class="settings-page-range-control">
+            <input
+              id="page-background-opacity-input"
+              aria-describedby="page-background-opacity-recommendation"
+              type="range"
+              min="0"
+              max="100"
+              :value="settingsStore.pageBackgroundOpacity"
+              @input="settingsStore.setPageBackgroundOpacity($event.target.valueAsNumber)"
+            />
+            <output for="page-background-opacity-input">{{ settingsStore.pageBackgroundOpacity }}%</output>
+          </div>
+          <p id="page-background-opacity-recommendation" class="settings-description">
+            Recommended for {{ labels[settingsStore.siteTheme].toLowerCase() }}: {{ recommendedBackgroundOpacity }}%.
+          </p>
         </div>
       </fieldset>
     </div>

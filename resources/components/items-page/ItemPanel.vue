@@ -87,7 +87,14 @@
       >
         <span class="item-owner">
           <PlayerIcon v-if="owner.name !== '@SHARED'" :name="owner.name" />
-          <CachedImage v-else src="/ui/777-0.png" alt="Shared storage" width="14" height="15" />
+          <CachedImage
+            v-else
+            class="shared-storage-icon"
+            src="/icons/group-storage.png"
+            alt="Shared storage"
+            width="18"
+            height="15"
+          />
           <span class="item-owner-name">{{ owner.name === "@SHARED" ? "Shared" : owner.name }}</span>
         </span>
         <span class="item-owner-quantity">{{ owner.quantity.toLocaleString() }}</span>

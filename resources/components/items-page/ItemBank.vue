@@ -177,10 +177,10 @@
                 <PlayerIcon v-if="owner.name !== '@SHARED'" :name="owner.name" />
                 <CachedImage
                   v-else
-                  class="bank-item-shared-icon"
-                  src="/ui/777-0.png"
+                  class="shared-storage-icon"
+                  src="/icons/group-storage.png"
                   alt="Shared storage"
-                  width="14"
+                  width="18"
                   height="15"
                 />
               </span>

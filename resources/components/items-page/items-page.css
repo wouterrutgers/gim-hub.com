@@ -56,8 +56,16 @@
   object-fit: contain;
 }
 
-.bank-item-owners .bank-item-shared-icon {
-  width: 14px;
+.shared-storage-icon {
+  filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000);
+}
+
+.bank-item-owners .shared-storage-icon {
+  width: 18px;
+}
+
+.bank-item-owners > span:not(:last-child) .shared-storage-icon {
+  margin-right: 1px;
 }
 
 .items-page-member-filter-container :where(label) > span {

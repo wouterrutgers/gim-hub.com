@@ -536,7 +536,14 @@
                 <label :for="`items-page-member-filter-${name}`">
                   <span aria-hidden="true">
                     <PlayerIcon v-if="name !== '@SHARED'" :name="name" />
-                    <CachedImage v-else src="/ui/777-0.png" alt="" width="14" height="15" />
+                    <CachedImage
+                      v-else
+                      class="shared-storage-icon"
+                      src="/icons/group-storage.png"
+                      alt=""
+                      width="18"
+                      height="15"
+                    />
                   </span>
                   {{ name === "@SHARED" ? "Shared" : name }}
                 </label>

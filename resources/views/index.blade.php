@@ -8,11 +8,6 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" href="/favicon.png" />
 
-    <script>
-      const storedTheme = localStorage.getItem("settings-site-theme");
-      document.documentElement.classList.toggle("dark-mode", storedTheme === "dark");
-      document.documentElement.classList.toggle("browntown-mode", storedTheme === "browntown");
-    </script>
     @vite(['resources/views/index.js'])
   </head>
   <body id="root"></body>

@@ -5,7 +5,6 @@
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
   import { composeItemIconHref, mappedAlchable, mappedGEPrice, mappedHighAlch } from "../../game/items";
-  import { useLocalStorage } from "../../composables/local-storage";
   import { useRememberedState } from "../../composables/remembered-state";
   import CachedImage from "../cached-image/CachedImage.vue";
   import PlayerIcon from "../player-icon/PlayerIcon.vue";
@@ -50,11 +49,6 @@
     key: "item-page-container-filter",
     defaultValue: DEFAULT_CONTAINER_FILTER,
   });
-  const [pinnedItemsUserString, setPinnedItemsUserString] = useLocalStorage({
-    key: "pinned-items",
-    defaultValue: "",
-    validator: validatePinnedItems,
-  });
   const gearscapeExportStatus = ref("idle");
   const filtersExpanded = ref(false);
   const [selectedItemIdentifier, setSelectedItemIdentifier] = useRememberedState({
@@ -73,16 +67,7 @@
   } = useModal();
 
   const pinnedItems = computed(function getPinnedItems() {
-    return new Set(
-      pinnedItemsUserString.value
-        .split(",")
-        .filter(function hasIdentifier(identifier) {
-          return identifier.length > 0;
-        })
-        .map(function parseIdentifier(identifier) {
-          return Number.parseInt(identifier, 10);
-        }),
-    );
+    return new Set(settingsStore.pinnedItemIds);
   });
 
   const searchExpression = computed(function getSearchExpression() {
@@ -224,10 +209,6 @@
     }[gearscapeExportStatus.value];
   });
 
-  function validatePinnedItems(value) {
-    return value;
-  }
-
   function validateContainerFilter(value) {
     return value === "All" || Member.itemContainerNames.includes(value) ? value : undefined;
   }
@@ -364,7 +345,7 @@
       newPinnedItems.add(itemID);
     }
 
-    setPinnedItemsUserString([...newPinnedItems].join(","));
+    settingsStore.setPinnedItemIds([...newPinnedItems]);
   }
 
   function toggleMember(name) {

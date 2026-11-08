@@ -1,5 +1,6 @@
 <script setup>
   import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+  import { openModalCount } from "./use-modal";
   import "./modal.css";
 
   const props = defineProps({
@@ -15,6 +16,7 @@
   const emit = defineEmits(["close"]);
   const dialog = ref();
   let opener;
+  let counted = false;
   const focusableSelector =
     'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
 
@@ -24,6 +26,11 @@
 
   onBeforeUnmount(function cleanupModal() {
     window.removeEventListener("keydown", handleKeyDown);
+
+    if (counted) {
+      openModalCount.value -= 1;
+    }
+
     restoreFocus();
   });
 
@@ -82,11 +89,18 @@
     },
     async function handleOpenState(open) {
       if (!open) {
+        if (counted) {
+          openModalCount.value -= 1;
+          counted = false;
+        }
+
         restoreFocus();
 
         return;
       }
 
+      openModalCount.value += 1;
+      counted = true;
       opener = document.activeElement;
       toggleBackgroundInert(true);
       await nextTick();

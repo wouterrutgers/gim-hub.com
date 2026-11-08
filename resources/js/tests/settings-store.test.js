@@ -6,7 +6,7 @@ import { createTestPinia } from "./vue-test-helpers";
 import { useSettingsStore } from "../../stores/settings";
 
 describe("settings store", function describeSettingsStore() {
-  it("uses the default settings when storage is empty", function testDefaultSettings() {
+  it("uses the default settings before loading a player", function testDefaultSettings() {
     setActivePinia(createTestPinia());
     const settingsStore = useSettingsStore();
 
@@ -14,19 +14,13 @@ describe("settings store", function describeSettingsStore() {
     expect(settingsStore.enableGearscapeExport).toBe(false);
   });
 
-  it("loads valid persisted settings", function testPersistedSettings() {
-    localStorage.setItem("settings-site-theme", "dark");
+  it("resets player preferences when disconnecting", function testDisconnect() {
     setActivePinia(createTestPinia());
     const settingsStore = useSettingsStore();
-
-    expect(settingsStore.siteTheme).toBe("dark");
-  });
-
-  it("ignores invalid persisted settings", function testInvalidSettings() {
-    localStorage.setItem("settings-site-theme", "system");
-    setActivePinia(createTestPinia());
-    const settingsStore = useSettingsStore();
+    settingsStore.setPlayerPreferences({ siteTheme: "dark", pinnedItemIds: [995] });
+    settingsStore.setPlayerPreferences();
 
     expect(settingsStore.siteTheme).toBe("light");
+    expect(settingsStore.pinnedItemIds).toEqual([]);
   });
 });

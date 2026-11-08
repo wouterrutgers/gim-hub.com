@@ -1,5 +1,7 @@
 import { ref, shallowRef } from "vue";
 
+export const openModalCount = ref(0);
+
 export function useModal() {
   const open = ref(false);
   const componentProps = shallowRef({});

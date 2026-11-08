@@ -1,12 +1,13 @@
 <script setup>
   import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-  import { useLocalStorage } from "../../composables/local-storage";
   import { useGroupStore } from "../../stores/group";
+  import { useSettingsStore } from "../../stores/settings";
   import "./plugin-warnings.css";
 
   const RECENT_ACTIVITY_MILLISECONDS = 30 * 60 * 1000;
 
   const groupStore = useGroupStore();
+  const settingsStore = useSettingsStore();
   const currentTimeMilliseconds = ref(Date.now());
   let currentTimeInterval;
 
@@ -19,13 +20,6 @@
     window.clearInterval(currentTimeInterval);
   });
 
-  const [dismissedVersions, setDismissedVersions] = useLocalStorage({
-    key: "dismissed-plugin-warning-versions",
-    defaultValue: "",
-    validator: function validateDismissedVersions(value) {
-      return value;
-    },
-  });
   const warnings = computed(function getPluginWarnings() {
     return [...groupStore.memberStates]
       .filter(function hasWarning([, member]) {
@@ -53,7 +47,7 @@
 
 <template>
   <section
-    v-if="warnings.length && dismissedVersions !== warningVersions"
+    v-if="warnings.length && settingsStore.dismissedPluginWarningVersions !== warningVersions"
     class="plugin-warnings rsbackground"
     role="status"
     aria-labelledby="plugin-warnings-title"
@@ -68,7 +62,7 @@
         type="button"
         class="plugin-warnings-close dialog-close"
         aria-label="Close plugin warning"
-        @click="setDismissedVersions(warningVersions)"
+        @click="settingsStore.setDismissedPluginWarningVersions(warningVersions)"
       />
     </div>
     <ul>

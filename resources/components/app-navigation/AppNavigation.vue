@@ -1,12 +1,15 @@
 <script setup>
   import { ref } from "vue";
   import { useRoute } from "vue-router";
+  import { useApiStore } from "../../stores/api";
+  import { usePlayerPreferencesStore } from "../../stores/player-preferences";
   import { useSettingsStore } from "../../stores/settings";
   import AppLink from "../app-link/AppLink.vue";
   import CachedImage from "../cached-image/CachedImage.vue";
   import GroupSwitcher from "../group-switcher/GroupSwitcher.vue";
   import Modal from "../modal/Modal.vue";
   import { useModal } from "../modal/use-modal";
+  import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import DonateWindow from "./DonateWindow.vue";
   import "./app-navigation.css";
 
@@ -15,6 +18,8 @@
   });
 
   const route = useRoute();
+  const apiStore = useApiStore();
+  const playerPreferencesStore = usePlayerPreferencesStore();
   const settingsStore = useSettingsStore();
   const moreMenu = ref();
   const { open: modalOpen, openModal, closeModal } = useModal();
@@ -80,6 +85,40 @@
         :group-name="props.groupName"
         :title="settingsStore.collapseNavigation ? `Switch group: ${props.groupName}` : undefined"
       />
+      <button
+        v-if="!apiStore.isDemo"
+        type="button"
+        class="nav-player"
+        :disabled="playerPreferencesStore.members.length === 0"
+        aria-haspopup="dialog"
+        aria-controls="player-chooser-window"
+        :aria-expanded="playerPreferencesStore.chooserOpen"
+        :aria-label="
+          playerPreferencesStore.selectedMemberName
+            ? `Change your player. Current player: ${playerPreferencesStore.selectedMemberName}`
+            : 'Choose your player'
+        "
+        :data-tooltip="
+          settingsStore.collapseNavigation
+            ? playerPreferencesStore.selectedMemberName
+              ? `Change your player: ${playerPreferencesStore.selectedMemberName}`
+              : 'Choose your player'
+            : undefined
+        "
+        @click="playerPreferencesStore.openChooser()"
+      >
+        <PlayerIcon
+          v-if="playerPreferencesStore.selectedMemberName"
+          :name="playerPreferencesStore.selectedMemberName"
+        />
+        <CachedImage v-else src="/ui/player-icon.webp" alt="" width="12" height="15" />
+        <span class="nav-player-label">
+          <span class="nav-player-caption">Your player</span>
+          <span class="nav-player-name">{{ playerPreferencesStore.selectedMemberName ?? "Choose your player" }}</span>
+        </span>
+        <span v-if="playerPreferencesStore.selectedMemberName" class="nav-player-change">Change</span>
+        <span class="nav-player-short">{{ playerPreferencesStore.selectedMemberName ? "You" : "Choose" }}</span>
+      </button>
     </div>
     <nav id="app-navigation-nav" aria-label="Group navigation">
       <div class="nav-main-links">

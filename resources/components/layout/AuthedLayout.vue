@@ -2,9 +2,11 @@
   import { computed, nextTick, ref, watch } from "vue";
   import { useRoute } from "vue-router";
   import { useApiStore } from "../../stores/api";
+  import { usePlayerPreferencesStore } from "../../stores/player-preferences";
   import { useSettingsStore } from "../../stores/settings";
   import AppNavigation from "../app-navigation/AppNavigation.vue";
   import ActivityFeed from "../player-activity/ActivityFeed.vue";
+  import PlayerPreferences from "../player-preferences/PlayerPreferences.vue";
   import SidePanels from "./SidePanels.vue";
   import PluginWarnings from "./PluginWarnings.vue";
   import "./layout.css";
@@ -16,6 +18,7 @@
   const apiStore = useApiStore();
   const route = useRoute();
   const settingsStore = useSettingsStore();
+  usePlayerPreferencesStore().start();
   const groupName = computed(function getGroupName() {
     return apiStore.credentials?.name ?? "";
   });
@@ -80,6 +83,7 @@
       <SidePanels />
     </aside>
     <main id="main-content" class="pointer-passthrough" :aria-label="pageName">
+      <PlayerPreferences />
       <PluginWarnings />
       <div class="workspace-page pointer-passthrough">
         <slot />

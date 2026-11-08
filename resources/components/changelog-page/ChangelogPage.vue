@@ -1,6 +1,7 @@
 <script setup>
-  import { onMounted, ref } from "vue";
+  import { nextTick, onMounted, ref } from "vue";
   import { fetchChangelog } from "../../api/requests/changelog";
+  import { usePlayerPreferencesStore } from "../../stores/player-preferences";
   import AppLink from "../app-link/AppLink.vue";
   import "./changelog-page.css";
 
@@ -11,11 +12,14 @@
 
   const entries = ref();
   const error = ref();
+  const playerPreferencesStore = usePlayerPreferencesStore();
 
   onMounted(function loadChangelog() {
     fetchChangelog({ baseURL: __API_URL__ })
-      .then(function storeChangelog(response) {
+      .then(async function storeChangelog(response) {
         entries.value = response;
+        await nextTick();
+        await playerPreferencesStore.markChangelogRead(response);
       })
       .catch(function reportChangelogError(reason) {
         console.error("Failed to load changelog:", reason);

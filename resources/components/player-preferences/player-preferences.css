@@ -1,0 +1,120 @@
+.player-preferences-window {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  gap: 20px;
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100svh - 32px);
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.player-preferences-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.player-preferences-window-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.player-preferences-window p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.player-preferences-window form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.player-chooser-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.player-chooser-options legend {
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.player-chooser-option {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.player-chooser-option:focus-within {
+  outline: auto;
+}
+
+.player-chooser-option:has(input:checked) {
+  border-color: var(--orange);
+  background: var(--surface-raised);
+}
+
+.player-chooser-option input {
+  margin: 0;
+  accent-color: var(--orange);
+}
+
+.player-chooser-current {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.player-preferences-window-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-preferences-window-actions > * {
+  min-height: 44px;
+}
+
+.player-preferences-update + .player-preferences-update {
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.player-preferences-save-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--invalid);
+  line-height: 1.6;
+  pointer-events: auto;
+}
+
+.player-preferences-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (width <= 767px) {
+  .player-preferences-window {
+    gap: 16px;
+    padding: 20px 16px;
+  }
+}

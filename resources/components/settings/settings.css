@@ -226,6 +226,21 @@
   line-height: 1.6;
 }
 
+.settings-preferences-player {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 8px;
+}
+
+.settings-change-player {
+  min-height: 44px;
+  color: var(--orange-light);
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 @media (width <= 767px) {
   .group-settings-container {
     padding: 20px 16px;

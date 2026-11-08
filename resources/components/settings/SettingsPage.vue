@@ -3,6 +3,7 @@
   import * as z from "zod/v4";
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
+  import { usePlayerPreferencesStore } from "../../stores/player-preferences";
   import { useSettingsStore } from "../../stores/settings";
   import { siteThemes } from "../../stores/settings-options";
   import { memberNameSchema } from "../../game/member-name";
@@ -21,6 +22,7 @@
 
   const apiStore = useApiStore();
   const groupStore = useGroupStore();
+  const playerPreferencesStore = usePlayerPreferencesStore();
   const settingsStore = useSettingsStore();
 
   const addMemberInput = ref();
@@ -151,6 +153,33 @@
 
     <div class="group-settings-container rsborder rsbackground">
       <h2>Your preferences</h2>
+      <div class="settings-preferences-player settings-description">
+        <template v-if="playerPreferencesStore.selectedMemberName">
+          <span>Saved for {{ playerPreferencesStore.selectedMemberName }}.</span>
+          <button
+            type="button"
+            class="settings-change-player"
+            aria-haspopup="dialog"
+            @click="playerPreferencesStore.openChooser()"
+          >
+            Change player
+          </button>
+        </template>
+        <template v-else-if="apiStore.isDemo">
+          <span>Preferences apply to this demo visit only.</span>
+        </template>
+        <template v-else>
+          <button
+            type="button"
+            class="settings-change-player"
+            :disabled="playerPreferencesStore.members.length === 0"
+            aria-haspopup="dialog"
+            @click="playerPreferencesStore.openChooser()"
+          >
+            Choose your player to save your preferences.
+          </button>
+        </template>
+      </div>
       <fieldset>
         <legend>Player panels</legend>
         <fieldset class="setting-group">
@@ -224,7 +253,8 @@
               min="0"
               max="100"
               :value="settingsStore.pageBackgroundOpacity"
-              @input="settingsStore.setPageBackgroundOpacity($event.target.valueAsNumber)"
+              @input="settingsStore.previewPageBackgroundOpacity($event.target.valueAsNumber)"
+              @change="settingsStore.setPageBackgroundOpacity($event.target.valueAsNumber)"
             />
             <output for="page-background-opacity-input">{{ settingsStore.pageBackgroundOpacity }}%</output>
           </div>

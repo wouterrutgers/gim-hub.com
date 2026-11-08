@@ -1,6 +1,6 @@
 import { reactive, toRefs } from "vue";
 import { defineStore } from "pinia";
-import { readCachedPlayerPreferences } from "./cached-player-preferences";
+import { readCachedPlayer } from "./cached-player-preferences";
 
 export const DEFAULT_PLAYER_PREFERENCES = Object.freeze({
   collapseNavigation: false,
@@ -20,7 +20,7 @@ export const DEFAULT_PLAYER_PREFERENCES = Object.freeze({
 export const useSettingsStore = defineStore("settings", function createSettingsStore() {
   const preferences = reactive({
     ...DEFAULT_PLAYER_PREFERENCES,
-    ...(window.location.pathname === "/demo" ? undefined : readCachedPlayerPreferences()),
+    ...(window.location.pathname === "/demo" ? undefined : readCachedPlayer()?.preferences),
   });
 
   function setPlayerPreferences(values = DEFAULT_PLAYER_PREFERENCES) {

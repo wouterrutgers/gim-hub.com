@@ -9,11 +9,7 @@ import { useApiStore } from "./api";
 import { useGroupStore } from "./group";
 import { DEFAULT_PLAYER_PREFERENCES, useSettingsStore } from "./settings";
 import { clearLegacyPreferences, readLegacyPreferences } from "./legacy-preferences";
-import {
-  cachePlayerPreferences,
-  clearCachedPlayerPreferences,
-  readCachedPlayerPreferences,
-} from "./cached-player-preferences";
+import { cachePlayerPreferences, clearCachedPlayerPreferences, readCachedPlayer } from "./cached-player-preferences";
 
 const preferenceActions = {
   setSiteTheme: "siteTheme",
@@ -80,6 +76,16 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
       return member.id === selectedMemberId.value;
     })?.name;
   });
+  const displayMemberId = computed(function getDisplayMemberId() {
+    return selectedMemberId.value ?? JSON.parse(storedSelections.value)[apiStore.credentials?.name];
+  });
+  const displayMemberName = computed(function getDisplayMemberName() {
+    return (
+      members.value.find(function isDisplayedMember(member) {
+        return member.id === displayMemberId.value;
+      })?.name ?? readCachedPlayer(apiStore.credentials?.name)?.memberName
+    );
+  });
   const unseenEntries = computed(function getUnseenEntries() {
     if (!preferences.value?.seenChangelogIds) {
       return [];
@@ -115,7 +121,12 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
   }
 
   function cachePreferences() {
-    cachePlayerPreferences(activeClient.credentials.name, selectedMemberId.value, settingsStore);
+    cachePlayerPreferences(
+      activeClient.credentials.name,
+      selectedMemberId.value,
+      selectedMemberName.value,
+      settingsStore,
+    );
   }
 
   function requestPreferences(memberId, changes) {
@@ -374,7 +385,7 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
         if (activeClient !== apiStore.client) {
           reset(
             apiStore.client && !apiStore.isDemo
-              ? readCachedPlayerPreferences(apiStore.client.credentials.name)
+              ? readCachedPlayer(apiStore.client.credentials.name)?.preferences
               : undefined,
           );
           activeClient = apiStore.client;
@@ -385,7 +396,7 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
           return;
         }
 
-        const selection = selectedMemberId.value ?? JSON.parse(storedSelections.value)[activeClient.credentials.name];
+        const selection = displayMemberId.value;
 
         if (
           selection &&
@@ -449,6 +460,8 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
   return {
     selectedMemberId,
     selectedMemberName,
+    displayMemberId,
+    displayMemberName,
     members,
     chooserOpen,
     pending,

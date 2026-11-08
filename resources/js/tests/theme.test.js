@@ -24,7 +24,7 @@ describe("site theme", function describeSiteTheme() {
   it("applies the remembered classic theme before the application loads and keeps demo startup separate", function cachedTheme() {
     localStorage.setItem("groupName", "test-group");
     localStorage.setItem("selected-players", JSON.stringify({ "test-group": 1 }));
-    cachePlayerPreferences("test-group", 1, { siteTheme: "classic-dark" });
+    cachePlayerPreferences("test-group", 1, "Alice", { siteTheme: "classic-dark" });
     const template = readFileSync("resources/views/index.blade.php", "utf8");
     const script = template.match(/<script>([\s\S]*?)<\/script>/)[1];
 

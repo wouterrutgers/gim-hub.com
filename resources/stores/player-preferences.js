@@ -9,6 +9,11 @@ import { useApiStore } from "./api";
 import { useGroupStore } from "./group";
 import { DEFAULT_PLAYER_PREFERENCES, useSettingsStore } from "./settings";
 import { clearLegacyPreferences, readLegacyPreferences } from "./legacy-preferences";
+import {
+  cachePlayerPreferences,
+  clearCachedPlayerPreferences,
+  readCachedPlayerPreferences,
+} from "./cached-player-preferences";
 
 const preferenceActions = {
   setSiteTheme: "siteTheme",
@@ -94,7 +99,7 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
     );
   }
 
-  function reset() {
+  function reset(cachedPreferences) {
     generation += 1;
     selectedMemberId.value = undefined;
     preferences.value = undefined;
@@ -106,7 +111,11 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
     saveError.value = undefined;
     status.value = "";
     changelogEntries.value = [];
-    settingsStore.setPlayerPreferences(undefined);
+    settingsStore.setPlayerPreferences(cachedPreferences);
+  }
+
+  function cachePreferences() {
+    cachePlayerPreferences(activeClient.credentials.name, selectedMemberId.value, settingsStore);
   }
 
   function requestPreferences(memberId, changes) {
@@ -222,6 +231,7 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
       preferences.value = response;
       changelogEntries.value = entries;
       settingsStore.setPlayerPreferences(response ?? DEFAULT_PLAYER_PREFERENCES);
+      cachePreferences();
       saveError.value = undefined;
 
       if (!response?.seenChangelogIds || viewingChangelog.value) {
@@ -287,6 +297,7 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
       selectedMemberId.value = memberId;
       settingsStore.setPlayerPreferences(response);
       rememberSelection(memberId);
+      cachePreferences();
       status.value = `Using preferences for ${selectedMemberName.value}.`;
       pending.value = false;
       chooserOpen.value = false;
@@ -361,7 +372,11 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
       },
       async function restoreSelection() {
         if (activeClient !== apiStore.client) {
-          reset();
+          reset(
+            apiStore.client && !apiStore.isDemo
+              ? readCachedPlayerPreferences(apiStore.client.credentials.name)
+              : undefined,
+          );
           activeClient = apiStore.client;
           restored = false;
         }
@@ -370,7 +385,15 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
           return;
         }
 
-        if (selectedMemberId.value && !selectedMemberName.value) {
+        const selection = selectedMemberId.value ?? JSON.parse(storedSelections.value)[activeClient.credentials.name];
+
+        if (
+          selection &&
+          !members.value.some(function isRememberedMember(member) {
+            return member.id === selection;
+          })
+        ) {
+          clearCachedPlayerPreferences(activeClient.credentials.name);
           rememberSelection(undefined);
           reset();
           restored = false;
@@ -381,7 +404,6 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
         }
 
         restored = true;
-        const selection = JSON.parse(storedSelections.value)[activeClient.credentials.name];
 
         if (
           members.value.some(function isRememberedMember(member) {
@@ -408,6 +430,7 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
       }
 
       after(function queuePreference() {
+        cachePreferences();
         preferenceRevision += 1;
         pendingChanges[key] = args[0];
         void saveChanges();

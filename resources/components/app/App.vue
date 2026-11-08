@@ -7,7 +7,7 @@
   import UnauthedLayout from "../layout/UnauthedLayout.vue";
   import Tooltip from "../tooltip/Tooltip.vue";
   import "./app.css";
-  import classicStylesheet from "./classic-theme.css?url";
+  import "./classic-theme.css";
 
   const CanvasMap = defineAsyncComponent(function loadCanvasMap() {
     return import("../canvas-map/CanvasMap.vue");
@@ -30,11 +30,6 @@
 </script>
 
 <template>
-  <link
-    v-if="['classic-light', 'classic-dark'].includes(settingsStore.siteTheme)"
-    rel="stylesheet"
-    :href="classicStylesheet"
-  />
   <CanvasMap :interactive="canvasMapIsInteractive" />
 
   <RouterView v-slot="{ Component }">

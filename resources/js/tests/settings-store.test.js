@@ -23,4 +23,17 @@ describe("settings store", function describeSettingsStore() {
     expect(settingsStore.siteTheme).toBe("light");
     expect(settingsStore.pinnedItemIds).toEqual([]);
   });
+
+  it("ignores an invalid snapshot and a snapshot belonging to another player", function invalidCache() {
+    localStorage.setItem("groupName", "test-group");
+    localStorage.setItem("selected-players", JSON.stringify({ "test-group": 2 }));
+    localStorage.setItem("player-preferences:test-group", "{");
+    expect(useSettingsStore(createTestPinia()).siteTheme).toBe("light");
+
+    localStorage.setItem(
+      "player-preferences:test-group",
+      JSON.stringify({ memberId: 1, preferences: { siteTheme: "dark" } }),
+    );
+    expect(useSettingsStore(createTestPinia()).siteTheme).toBe("light");
+  });
 });

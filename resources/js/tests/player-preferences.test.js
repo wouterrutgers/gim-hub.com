@@ -97,6 +97,71 @@ it("preserves the current player on a failed switch and uses defaults for a new 
   });
 });
 
+it("renders cached preferences while loading and accepts server changes without uploading the cache", async function cachedStartup() {
+  const server = createServer();
+  let session = await mountPreferences(server);
+  await session.preferences.choosePlayer(1);
+  session.settings.setSiteTheme("dark");
+  session.settings.setCollapseNavigation(true);
+  await vi.waitFor(function saved() {
+    expect(server.profiles.get(1).collapseNavigation).toBe(true);
+  });
+  session.application.unmount();
+  setActivePinia(createTestPinia());
+  expect(useSettingsStore().siteTheme).toBe("dark");
+  expect(useSettingsStore().collapseNavigation).toBe(true);
+
+  server.profiles.get(1).siteTheme = "browntown";
+  const patchCount = server.patches.length;
+  let finishRead;
+  server.holdRead = new Promise(function hold(resolve) {
+    finishRead = resolve;
+  });
+  session = await mountPreferences(server);
+  expect(session.settings.siteTheme).toBe("dark");
+  expect(session.preferences.selectedMemberId).toBeUndefined();
+  expect(server.patches).toHaveLength(patchCount);
+
+  server.holdRead = undefined;
+  finishRead(Response.json({ preferences: server.profiles.get(1) }));
+  await vi.waitFor(function reconciled() {
+    expect(session.preferences.selectedMemberId).toBe(1);
+    expect(session.settings.siteTheme).toBe("browntown");
+  });
+  expect(server.patches).toHaveLength(patchCount);
+  session.application.unmount();
+  setActivePinia(createTestPinia());
+  expect(useSettingsStore().siteTheme).toBe("browntown");
+});
+
+it("isolates cached settings between groups and clears them when the remembered player disappears", async function isolatedCache() {
+  const server = createServer();
+  const session = await mountPreferences(server);
+  await session.preferences.choosePlayer(1);
+  session.settings.setSiteTheme("classic-dark");
+  await vi.waitFor(function saved() {
+    expect(server.profiles.get(1).siteTheme).toBe("classic-dark");
+  });
+
+  session.group.loaded = false;
+  useApiStore().client = { baseURL: "/api", credentials: { name: "other-group", token: "other-token" } };
+  await nextTick();
+  expect(session.settings.siteTheme).toBe("light");
+  useApiStore().client = { baseURL: "/api", credentials: { name: "test-group", token: "group-token" } };
+  await nextTick();
+  expect(session.settings.siteTheme).toBe("classic-dark");
+  expect(session.preferences.selectedMemberId).toBeUndefined();
+
+  session.group.memberStates.delete("Alice");
+  session.group.loaded = true;
+  await nextTick();
+  expect(session.settings.siteTheme).toBe("light");
+  expect(session.preferences.chooserOpen).toBe(true);
+  session.application.unmount();
+  setActivePinia(createTestPinia());
+  expect(useSettingsStore().siteTheme).toBe("light");
+});
+
 it("shows new changelog IDs once, including another entry on the same date", async function changelogAcknowledgement() {
   const server = createServer();
   const session = await mountPreferences(server);
@@ -163,6 +228,7 @@ it("keeps a failed edit visible when an older refresh finishes and retries the u
 
 async function mountPreferences(server) {
   document.head.innerHTML = '<meta name="csrf-token" content="test-token">';
+  localStorage.setItem("groupName", "test-group");
   const pinia = createTestPinia();
   setActivePinia(pinia);
   vi.mocked(useGroupStore).mockReturnValue(

@@ -30,6 +30,10 @@ describe("saved group switching", function savedGroupSwitching() {
 
   it("returns home after removing the last saved group", async function removeLastGroup() {
     const { container, router, apiStore } = await mountSwitcher([{ name: "First group", token: "first-token" }]);
+    localStorage.setItem(
+      "player-preferences:First group",
+      JSON.stringify({ memberId: 1, preferences: { siteTheme: "dark" } }),
+    );
 
     container.querySelector('[aria-label="Forget saved login for First group"]').click();
 
@@ -38,6 +42,7 @@ describe("saved group switching", function savedGroupSwitching() {
     });
     expect(apiStore.client).toBeUndefined();
     expect(JSON.parse(localStorage.getItem("savedGroups"))).toEqual([]);
+    expect(localStorage.getItem("player-preferences:First group")).toBeNull();
   });
 });
 

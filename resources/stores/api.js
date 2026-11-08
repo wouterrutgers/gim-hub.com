@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import * as z from "zod/v4";
 import LiveClient, { authenticateGroup } from "../api/live-client";
 import { useLocalStorage } from "../composables/local-storage";
+import { clearCachedPlayerPreferences } from "./cached-player-preferences";
 
 const LOCAL_STORAGE_KEY_GROUP_NAME = "groupName";
 const LOCAL_STORAGE_KEY_GROUP_TOKEN = "groupToken";
@@ -119,6 +120,7 @@ export const useApiStore = defineStore("api", function createApiStore() {
       });
 
     saveGroups(remainingGroups);
+    clearCachedPlayerPreferences(credentialsToRemove.name);
 
     if (storedGroupName.value !== credentialsToRemove.name) {
       return;

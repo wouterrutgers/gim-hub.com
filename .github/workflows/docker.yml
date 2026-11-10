@@ -7,9 +7,6 @@ on:
   pull_request:
     branches:
       - master
-  push:
-    branches:
-      - new-theme
   workflow_dispatch:
   workflow_run:
     workflows:
@@ -24,11 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PUBLISH_IMAGE: >-
-    ${{ github.event_name == 'workflow_run' ||
-    ((github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
-    (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/new-theme')) }}
-  IMAGE_TAG: ${{ github.ref == 'refs/heads/new-theme' && 'new-theme' || 'latest' }}
+  PUBLISH_IMAGE: ${{ github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master') }}
   SOURCE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
 
 jobs:
@@ -94,10 +87,7 @@ jobs:
 
   manifest:
     name: Create Docker manifest
-    if: >-
-      github.event_name == 'workflow_run' ||
-      ((github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
-      (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/new-theme'))
+    if: github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master')
     needs: build
     runs-on: ubuntu-24.04
     steps:
@@ -120,12 +110,7 @@ jobs:
       - name: Create manifest
         working-directory: /tmp/digests
         run: |
-          tags=(--tag "wouterrutgers/gim-hub.com:${IMAGE_TAG}")
-
-          if [[ "$IMAGE_TAG" == "latest" ]]; then
-            tags+=(--tag wouterrutgers/gim-hub.com:octane)
-          fi
-
           docker buildx imagetools create \
-            "${tags[@]}" \
+            --tag wouterrutgers/gim-hub.com:latest \
+            --tag wouterrutgers/gim-hub.com:octane \
             $(printf 'wouterrutgers/gim-hub.com@sha256:%s ' *)

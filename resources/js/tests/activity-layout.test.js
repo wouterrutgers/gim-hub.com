@@ -98,9 +98,8 @@ describe("persistent activity layout", function activityLayout() {
     });
     await router.push("/group/activity");
     await vi.waitFor(function pageIsReady() {
-      expect(container.querySelector(".activity-display-switch")).not.toBeNull();
+      expect(container.querySelector(".activity-comparison-table")).not.toBeNull();
     });
-    container.querySelector(".activity-display-switch button:last-child").click();
     await vi.advanceTimersByTimeAsync(0);
     const comparison = container.querySelector(".activity-comparison-scroll");
 
@@ -170,19 +169,17 @@ describe("persistent activity layout", function activityLayout() {
 
     await router.push("/group/items");
     await vi.waitFor(function sidebarIsReady() {
-      expect(container.querySelector(".activity-dock .activity-player-buttons")).not.toBeNull();
+      expect(container.querySelector(".activity-dock .activity-page-link")).not.toBeNull();
     });
     expect(container.querySelector(".activity-comparison-scroll")).toBeNull();
-    expect(container.querySelector('.activity-player-buttons [aria-pressed="true"]').textContent.trim()).toBe(
-      "Everyone",
-    );
+    expect(container.querySelector(".activity-player-buttons")).toBeNull();
     await router.push("/group/activity");
     await vi.waitFor(function comparisonIsReady() {
       expect(container.querySelectorAll(".activity-comparison-table thead th")).toHaveLength(2);
     });
   });
 
-  it("shows complete player summaries by day and keeps the choice between the sidebar and activity page", async function playerActivity() {
+  it("opens daily comparisons from the sidebar and remembers the players while keeping the sidebar a group timeline", async function compareFromSidebar() {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-11-09T12:00:00Z"));
     const startedAt = new Date().setHours(0, 0, 0, 0);
@@ -211,47 +208,47 @@ describe("persistent activity layout", function activityLayout() {
       history,
     );
     const feed = container.querySelector(".activity-feed");
-    const players = feed.querySelector(".activity-player-buttons");
-    expect(
-      [...players.querySelectorAll("button")].map(function name(button) {
-        return button.textContent.trim();
-      }),
-    ).toEqual(["Everyone", "Alice", "Bob"]);
-    const scroll = feed.querySelector(".activity-feed-scroll");
-    scroll.scrollTop = 100;
+    const link = feed.querySelector(".activity-page-link");
+    expect(link.getAttribute("href")).toBe("/group/activity");
+    expect(feed.querySelector(".activity-player-buttons")).toBeNull();
 
-    players.querySelectorAll("button")[1].click();
-    await vi.advanceTimersByTimeAsync(0);
-
-    expect(feed.querySelector(".activity-day .activity-date").textContent).toBe("Today");
-    expect(feed.querySelector(".activity-summary-category").textContent).toContain("Attack: +300 XP");
-    expect(scroll.scrollTop).toBe(0);
-    const day = feed.querySelector(".activity-day");
-
-    await router.push("/group/activity");
+    link.click();
     await vi.waitFor(function activityPageIsReady() {
       expect(container.querySelector("#activity-page .activity-feed")).toBe(feed);
+      expect(feed.querySelector(".activity-comparison-table tbody")).not.toBeNull();
     });
-    expect(players.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Alice");
-    expect(feed.querySelector(".activity-day")).toBe(day);
+    const players = feed.querySelector(".activity-player-buttons");
+    const comparison = feed.querySelector(".activity-comparison-scroll");
+    expect(comparison.querySelector(".activity-comparison-period").textContent).toContain("Today");
+    expect(comparison.querySelector("tbody td").textContent.trim()).toBe("300");
+    expect(comparison.querySelectorAll("thead th")).toHaveLength(3);
+    players.querySelectorAll("button")[2].click();
+    await nextTick();
+    expect(comparison.querySelectorAll("thead th")).toHaveLength(2);
 
+    comparison.scrollTop = 100;
     const filter = feed.querySelector('[aria-label="Filter activity by type"]');
     filter.value = "quest";
     filter.dispatchEvent(new Event("change"));
     await nextTick();
-    expect(feed.querySelector(".activity-day")).toBeNull();
+    expect(comparison.querySelector("tbody")).toBeNull();
     expect(feed.querySelector(".activity-empty")).not.toBeNull();
+    expect(comparison.scrollTop).toBe(0);
     filter.value = "";
     filter.dispatchEvent(new Event("change"));
     await nextTick();
-    players.querySelectorAll("button")[2].click();
-    await vi.advanceTimersByTimeAsync(0);
-    expect(feed.querySelector(".activity-day")).toBeNull();
+    expect(comparison.querySelector("tbody td").textContent.trim()).toBe("300");
 
-    players.querySelector("button").click();
-    await nextTick();
-    expect(feed.querySelector(".activity-day")).toBeNull();
-    expect(players.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Everyone");
+    await router.push("/group/items");
+    await vi.waitFor(function sidebarIsReady() {
+      expect(feed.querySelector(".activity-page-link")).not.toBeNull();
+    });
+    expect(feed.querySelector(".activity-player-buttons")).toBeNull();
+    expect(feed.querySelector(".activity-timeline")).not.toBeNull();
+    feed.querySelector(".activity-page-link").click();
+    await vi.waitFor(function comparisonIsReady() {
+      expect(feed.querySelectorAll(".activity-comparison-table thead th")).toHaveLength(2);
+    });
   });
 
   it("keeps the timeline and its filters while changing pages and player panel visibility", async function persistentTimeline() {

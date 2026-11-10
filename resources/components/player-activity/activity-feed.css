@@ -39,19 +39,16 @@
   background: var(--elevated);
 }
 
-.activity-player-buttons,
-.activity-display-switch {
-  display: flex;
-  gap: 6px;
-}
-
-.activity-display-switch {
-  margin-left: auto;
+.activity-page-link {
+  align-self: flex-start;
+  margin: 0 12px 12px;
 }
 
 .activity-player-buttons {
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
+  gap: 6px;
   padding: 0 12px 12px;
 }
 
@@ -232,26 +229,6 @@
 .activity-empty {
   padding: 20px 0;
   color: var(--muted);
-}
-
-.activity-summary-category {
-  margin-block: 10px;
-}
-
-.activity-summary-category h4 {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 400;
-}
-
-.activity-summary-category ul {
-  padding: 0;
-  list-style: none;
-}
-
-.activity-summary-category li {
-  padding-block: 2px;
-  overflow-wrap: anywhere;
 }
 
 .activity-error {

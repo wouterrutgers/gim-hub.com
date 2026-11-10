@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { nextTick } from "vue";
+import { createMemoryHistory, createRouter } from "vue-router";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import ActivityFeed from "../../components/player-activity/ActivityFeed.vue";
@@ -17,7 +18,7 @@ function playerHistory(entries) {
 }
 
 describe("activity feed", function activityFeed() {
-  it("clears the selected player when switching groups and shows the new group's activity", async function switchGroups() {
+  it("clears excluded players when switching groups and shows the new group's comparison", async function switchGroups() {
     vi.useFakeTimers();
     const pinia = createTestPinia();
     vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
@@ -61,23 +62,20 @@ describe("activity feed", function activityFeed() {
 
     const apiStore = useApiStore(pinia);
     apiStore.client = groupClient(10, "Alice");
-    const container = document.createElement("div");
-    document.body.append(container);
-    const application = createTestApplication(ActivityFeed);
-    application.use(pinia);
-    application.mount(container);
+    const container = mountFeed(pinia, { collapsible: false });
     await vi.advanceTimersByTimeAsync(0);
-    const filter = container.querySelector('[aria-label="Filter activity by player"]');
+    const filter = container.querySelector('[aria-label="Select players to compare"]');
     filter.querySelector("button:last-child").click();
     await vi.advanceTimersByTimeAsync(0);
-    expect(filter.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Alice");
+    expect(filter.querySelector("button:last-child").getAttribute("aria-pressed")).toBe("false");
 
     apiStore.client = groupClient(20, "Bob");
     await vi.advanceTimersByTimeAsync(0);
 
-    expect(filter.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Everyone");
-    expect(container.querySelectorAll(".activity-card")).toHaveLength(1);
-    expect(container.querySelector(".activity-card strong").textContent).toBe("Bob");
+    expect(filter.querySelector("button:last-child").getAttribute("aria-pressed")).toBe("true");
+    expect(container.querySelectorAll(".activity-comparison-table thead th")).toHaveLength(2);
+    expect(container.querySelector(".activity-comparison-table thead th:last-child").textContent).toContain("Bob");
+    expect(container.querySelector(".activity-comparison-table tbody td").textContent.trim()).toBe("100");
   });
 
   it("grows a multi skill card while preserving expanded details and the reader's scroll position", async function growingCard() {
@@ -116,11 +114,7 @@ describe("activity feed", function activityFeed() {
     };
     store.mergeEntries([training]);
     store.loaded = true;
-    const container = document.createElement("div");
-    document.body.append(container);
-    const application = createTestApplication(ActivityFeed);
-    application.use(pinia);
-    application.mount(container);
+    const container = mountFeed(pinia);
     await vi.advanceTimersByTimeAsync(0);
     expect(container.textContent).toContain("120 XP");
     const details = container.querySelector("details");
@@ -194,11 +188,7 @@ describe("activity feed", function activityFeed() {
         }),
     };
     useApiStore(pinia).client = client;
-    const container = document.createElement("div");
-    document.body.append(container);
-    const application = createTestApplication(ActivityFeed);
-    application.use(pinia);
-    application.mount(container);
+    const container = mountFeed(pinia);
     await vi.advanceTimersByTimeAsync(0);
     expect(container.querySelectorAll(".activity-card")).toHaveLength(50);
     const scroll = container.querySelector(".activity-feed-scroll");
@@ -221,7 +211,7 @@ describe("activity feed", function activityFeed() {
     expect(client.fetchActivity).toHaveBeenCalledTimes(2);
   });
 
-  it("renames the selected player and keeps cached summaries without fetching activity again", async function renameActivityMember() {
+  it("renames a comparison player and keeps cached summaries without fetching activity again", async function renameActivityMember() {
     vi.useFakeTimers();
     const pinia = createTestPinia();
     vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
@@ -251,24 +241,35 @@ describe("activity feed", function activityFeed() {
         .mockResolvedValue({ entries: [training], older_cursor: null, from_time: new Date(now).toISOString() }),
     };
     useApiStore(pinia).client = client;
-    const container = document.createElement("div");
-    document.body.append(container);
-    const application = createTestApplication(ActivityFeed);
-    application.use(pinia);
-    application.mount(container);
+    const container = mountFeed(pinia, { collapsible: false });
     await vi.advanceTimersByTimeAsync(0);
-    const filter = container.querySelector('[aria-label="Filter activity by player"]');
-    filter.querySelector("button:last-child").click();
-    await vi.advanceTimersByTimeAsync(0);
-    const summary = container.querySelector(".activity-day");
+    const summary = container.querySelector(".activity-comparison-table tbody");
 
     client.fetchGroupData.mockResolvedValue([{ id: 10, name: "Renamed", colorHueDegrees: 100 }]);
     await vi.advanceTimersByTimeAsync(1000);
 
-    expect(container.querySelector(".activity-day")).toBe(summary);
-    expect(summary.textContent).toContain("Attack: +100 XP");
-    expect(filter.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Renamed");
+    expect(container.querySelector(".activity-comparison-table tbody")).toBe(summary);
+    expect(summary.querySelector("td").textContent.trim()).toBe("100");
+    expect(container.querySelector(".activity-comparison-table thead th:last-child").textContent).toContain("Renamed");
     expect(client.fetchActivity).toHaveBeenCalledTimes(1);
     expect(client.fetchPlayerActivity).toHaveBeenCalledTimes(1);
   });
 });
+
+function mountFeed(pinia, props) {
+  const router = createRouter({
+    history: createMemoryHistory(),
+    routes: [
+      { path: "/", component: ActivityFeed },
+      { path: "/group/activity", component: ActivityFeed },
+    ],
+  });
+  const application = createTestApplication(ActivityFeed, props);
+  application.use(pinia);
+  application.use(router);
+  const container = document.createElement("div");
+  document.body.append(container);
+  application.mount(container);
+
+  return container;
+}

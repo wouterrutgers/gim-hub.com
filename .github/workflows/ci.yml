@@ -72,6 +72,11 @@ jobs:
           extensions: pdo_sqlite, pdo_mysql
           coverage: none
 
+      - name: Install legacy timezone data
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes tzdata-legacy
+
       - name: Get Composer cache directory
         id: composer-cache
         run: echo "path=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"

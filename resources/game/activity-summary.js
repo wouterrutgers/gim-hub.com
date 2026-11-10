@@ -93,7 +93,7 @@ export function summarizeActivity(entries, gameData) {
       icon: presentation.icon,
       text:
         category === "Drops"
-          ? `${presentation.text} (${entry.data.source})${presentation.collectionUnlock ? " · New collection item" : ""}`
+          ? `${presentation.text} (${entry.data.source})${presentation.collectionUnlock ? " (new collection item)" : ""}`
           : presentation.text,
     });
   }

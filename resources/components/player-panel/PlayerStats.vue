@@ -135,7 +135,7 @@
           :aria-label="`Change your player. Current player: ${props.member}`"
           @click="playerPreferencesStore.openChooser()"
         >
-          You · Change
+          You (change)
         </button>
       </div>
       <span

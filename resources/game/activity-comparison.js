@@ -87,7 +87,7 @@ export function activityComparisonRows(entries, gameData) {
       category: "Drops",
       label: `${gameData.items?.get(data.item_id)?.name ?? `Item ${data.item_id}`} (${data.source})`,
       icon: presentation.icon,
-      value: `${data.quantity.toLocaleString()}${data.new_collection_item ? " · New collection item" : ""}`,
+      value: `${data.quantity.toLocaleString()}${data.new_collection_item ? " (new collection item)" : ""}`,
     });
   }
 

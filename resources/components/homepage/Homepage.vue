@@ -25,7 +25,7 @@
   <div id="homepage">
     <div class="homepage-introduction">
       <CachedImage class="homepage-logo" alt="GIM hub" src="/images/logo-quarter.webp" />
-      <p>A companion for your Group Ironman team.</p>
+      <p>A companion for your Old School RuneScape Group Ironman team.</p>
     </div>
     <section class="homepage-welcome rsborder rsbackground" aria-labelledby="homepage-heading">
       <header>

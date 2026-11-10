@@ -60,7 +60,4 @@
     <span>{{ playerPreferencesStore.saveError }}</span>
     <button type="button" class="men-button small" @click="playerPreferencesStore.retrySave()">Retry</button>
   </div>
-  <p v-else-if="playerPreferencesStore.status" class="player-preferences-status" role="status">
-    {{ playerPreferencesStore.status }}
-  </p>
 </template>

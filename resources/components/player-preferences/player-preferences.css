@@ -106,12 +106,6 @@
   pointer-events: auto;
 }
 
-.player-preferences-status {
-  margin: 0;
-  color: var(--muted);
-  font-size: 12px;
-}
-
 @media (width <= 767px) {
   .player-preferences-window {
     gap: 16px;

@@ -51,7 +51,6 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
   const pending = ref(false);
   const error = ref();
   const saveError = ref();
-  const status = ref("");
   const changelogEntries = ref([]);
   const viewingChangelog = ref(false);
   let generation = 0;
@@ -115,7 +114,6 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
     chooserOpen.value = false;
     error.value = undefined;
     saveError.value = undefined;
-    status.value = "";
     changelogEntries.value = [];
     settingsStore.setPlayerPreferences(cachedPreferences);
   }
@@ -317,7 +315,6 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
       settingsStore.setPlayerPreferences(response);
       rememberSelection(memberId);
       cachePreferences();
-      status.value = `Using preferences for ${selectedMemberName.value}.`;
       pending.value = false;
       chooserOpen.value = false;
       await refresh();
@@ -475,7 +472,6 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
     pending,
     error,
     saveError,
-    status,
     unseenEntries,
     changelogOpen,
     openChooser,

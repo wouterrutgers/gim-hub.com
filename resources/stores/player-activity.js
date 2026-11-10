@@ -4,8 +4,11 @@ import { useApiStore } from "./api";
 import { activityWeek } from "../game/activity";
 
 export const usePlayerActivityStore = defineStore("player-activity", function createPlayerActivityStore() {
+  return createPlayerActivityHistory(ref(""));
+});
+
+export function createPlayerActivityHistory(selectedMember) {
   const apiStore = useApiStore();
-  const selectedMember = ref("");
   const records = shallowRef(new Map());
   const loaded = ref(false);
   const error = ref("");
@@ -168,8 +171,8 @@ export const usePlayerActivityStore = defineStore("player-activity", function cr
         connection = undefined;
       });
     },
-    { flush: "sync" },
+    { flush: "sync", immediate: true },
   );
 
   return { selectedMember, periods, loaded, error, olderCursor, loadingOlder, loadOlder };
-});
+}

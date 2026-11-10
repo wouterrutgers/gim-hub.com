@@ -1,6 +1,6 @@
 import { activityPresentation } from "./activity";
 
-export function summarizeActivity(entries, gameData) {
+export function combineActivityEntries(entries) {
   const combined = new Map();
 
   for (const entry of entries) {
@@ -53,6 +53,10 @@ export function summarizeActivity(entries, gameData) {
     }
   }
 
+  return [...combined.values()];
+}
+
+export function summarizeActivity(entries, gameData) {
   const categories = new Map([
     ["Skills", []],
     ["Boss kills", []],
@@ -61,7 +65,7 @@ export function summarizeActivity(entries, gameData) {
     ["Drops", []],
   ]);
 
-  for (const entry of combined.values()) {
+  for (const entry of combineActivityEntries(entries)) {
     const presentation = activityPresentation(entry, gameData);
 
     if (entry.type === "xp") {

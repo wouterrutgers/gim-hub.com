@@ -10,6 +10,7 @@
   import CachedImage from "../cached-image/CachedImage.vue";
   import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import ActivityTimeline from "./ActivityTimeline.vue";
+  import ActivityComparison from "./ActivityComparison.vue";
   import "./activity-feed.css";
 
   const props = defineProps({ collapsible: { type: Boolean, default: true } });
@@ -20,6 +21,12 @@
   const groupStore = useGroupStore();
   const settingsStore = useSettingsStore();
   const scroller = ref();
+  const comparisonScroller = ref();
+  const comparison = ref(false);
+  const excludedMembers = ref(new Set());
+  const comparing = computed(function comparingPlayers() {
+    return !props.collapsible && comparison.value;
+  });
   const typeFilter = ref("");
   const memberFilter = computed({
     get() {
@@ -55,7 +62,48 @@
     if (memberFilter.value && !currentMembers.has(memberFilter.value)) {
       memberFilter.value = "";
     }
+
+    for (const identifier of excludedMembers.value) {
+      if (!currentMembers.has(identifier)) {
+        excludedMembers.value.delete(identifier);
+      }
+    }
   });
+  const comparisonPlayers = computed(function selectedComparisonPlayers() {
+    return [...members.value]
+      .filter(function included([identifier]) {
+        return !excludedMembers.value.has(identifier);
+      })
+      .map(function player([identifier, name]) {
+        return { identifier, name };
+      });
+  });
+
+  function selectEveryone() {
+    if (comparing.value) {
+      excludedMembers.value.clear();
+
+      return;
+    }
+
+    memberFilter.value = "";
+  }
+
+  function selectMember(identifier) {
+    if (!comparing.value) {
+      memberFilter.value = identifier;
+
+      return;
+    }
+
+    if (excludedMembers.value.has(identifier)) {
+      excludedMembers.value.delete(identifier);
+
+      return;
+    }
+
+    excludedMembers.value.add(identifier);
+  }
 
   function matches(entry) {
     return (
@@ -157,6 +205,14 @@
     [
       memberFilter,
       typeFilter,
+      comparing,
+      function selectedComparisonPlayers() {
+        return comparisonPlayers.value
+          .map(function identifier(player) {
+            return player.identifier;
+          })
+          .join(",");
+      },
       function getDropFilter() {
         return settingsStore.filterActivityDrops;
       },
@@ -165,17 +221,26 @@
       },
     ],
     function resetView() {
-      scroller.value.scrollTop = 0;
+      const element = comparing.value ? comparisonScroller.value?.$el : scroller.value;
+
+      if (element) {
+        element.scrollTop = 0;
+      }
     },
     { flush: "sync" },
   );
 </script>
 
 <template>
-  <section class="activity-feed rsborder rsbackground" aria-label="Group activity">
+  <section
+    class="activity-feed rsborder rsbackground"
+    :class="{ 'activity-comparison-feed': comparing }"
+    aria-label="Group activity"
+  >
     <header class="activity-feed-header">
       <h2>Group activity</h2>
       <span
+        v-if="!comparing"
         class="activity-feed-period"
         tabindex="0"
         data-tooltip="Activity stays detailed for at least 30 days. Older completed weeks are combined per player, from Monday to Sunday in UTC."
@@ -194,13 +259,33 @@
         <span class="chevron chevron-right" aria-hidden="true" />
       </button>
     </header>
+    <div v-if="!props.collapsible" class="activity-display-switch" role="group" aria-label="Activity display">
+      <button
+        type="button"
+        class="men-button small"
+        :class="{ active: !comparison }"
+        :aria-pressed="!comparison"
+        @click="comparison = false"
+      >
+        Activity
+      </button>
+      <button
+        type="button"
+        class="men-button small"
+        :class="{ active: comparison }"
+        :aria-pressed="comparison"
+        @click="comparison = true"
+      >
+        Compare
+      </button>
+    </div>
     <div class="activity-player-buttons" role="group" aria-label="Filter activity by player">
       <button
         type="button"
         class="men-button small"
-        :class="{ active: !memberFilter }"
-        :aria-pressed="!memberFilter"
-        @click="memberFilter = ''"
+        :class="{ active: comparing ? excludedMembers.size === 0 : !memberFilter }"
+        :aria-pressed="comparing ? excludedMembers.size === 0 : !memberFilter"
+        @click="selectEveryone"
       >
         Everyone
       </button>
@@ -209,9 +294,9 @@
         :key="identifier"
         type="button"
         class="men-button small"
-        :class="{ active: memberFilter === identifier }"
-        :aria-pressed="memberFilter === identifier"
-        @click="memberFilter = identifier"
+        :class="{ active: comparing ? !excludedMembers.has(identifier) : memberFilter === identifier }"
+        :aria-pressed="comparing ? !excludedMembers.has(identifier) : memberFilter === identifier"
+        @click="selectMember(identifier)"
       >
         <PlayerIcon :name="name" />{{ name }}
       </button>
@@ -241,7 +326,14 @@
         <label for="filter-activity-drops-input"><span>Filter drops</span></label>
       </div>
     </div>
-    <div ref="scroller" class="activity-feed-scroll" @scroll="onScroll">
+    <ActivityComparison
+      v-if="comparing"
+      ref="comparisonScroller"
+      :players="comparisonPlayers"
+      :filter-entry="matches"
+      :period-label="periodLabel"
+    />
+    <div v-else ref="scroller" class="activity-feed-scroll" @scroll="onScroll">
       <p v-if="memberFilter && playerActivityStore.error" class="activity-error" role="status">
         {{ playerActivityStore.error }}
       </p>

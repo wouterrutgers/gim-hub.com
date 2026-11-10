@@ -24,6 +24,123 @@ vi.mock("../../api/requests/changelog", function changelog() {
 });
 
 describe("persistent activity layout", function activityLayout() {
+  it("aligns selected players by day and activity without treating unloaded history as inactivity", async function compareActivity() {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-11-10T12:00:00Z"));
+    const today = new Date().setHours(0, 0, 0, 0);
+    const yesterday = today - 86_400_000;
+
+    function day(start, memberIdentifier, skills) {
+      return {
+        key: `day:${start}`,
+        kind: "day",
+        started_at: start,
+        ended_at: start + 86_400_000,
+        entries: [
+          {
+            id: start + memberIdentifier,
+            member_id: memberIdentifier,
+            type: "xp",
+            revision: 1,
+            started_at: start + 60_000,
+            occurred_at: start + 60_000,
+            data: { skills },
+          },
+        ],
+      };
+    }
+
+    const { container, router } = await mountLayout([
+      { id: 10, name: "Alice" },
+      { id: 20, name: "Bob" },
+    ]);
+    const client = useApiStore().client;
+    const fetch = vi.spyOn(client, "fetchPlayerActivity").mockImplementation(async function history({
+      memberIdentifier,
+      cursor,
+      fromTime,
+    }) {
+      if (memberIdentifier === 10) {
+        return {
+          periods: [day(today, 10, { Attack: fromTime ? 300 : 100, Strength: 25 }), day(yesterday, 10, { Attack: 50 })],
+          older_cursor: null,
+          from_time: new Date().toISOString(),
+        };
+      }
+
+      return {
+        periods: [cursor ? day(yesterday, 20, { Attack: 250 }) : day(today, 20, { Attack: 200 })],
+        older_cursor: cursor ? null : `day:${today}`,
+        from_time: new Date().toISOString(),
+      };
+    });
+    await router.push("/group/activity");
+    await vi.waitFor(function pageIsReady() {
+      expect(container.querySelector(".activity-display-switch")).not.toBeNull();
+    });
+    container.querySelector(".activity-display-switch button:last-child").click();
+    await vi.advanceTimersByTimeAsync(0);
+    const comparison = container.querySelector(".activity-comparison-scroll");
+
+    function values(start, label) {
+      const row = [...comparison.querySelector(`[data-period-key="day:${start}"]`).querySelectorAll("tr")].find(
+        function activity(row) {
+          return row.querySelector('th[scope="row"]')?.textContent.trim() === label;
+        },
+      );
+
+      return [...row.querySelectorAll("td")].map(function value(cell) {
+        return cell.textContent.trim();
+      });
+    }
+
+    expect(
+      [...comparison.querySelectorAll("thead th")].map(function name(header) {
+        return header.textContent.trim();
+      }),
+    ).toEqual(["Activity", "Alice", "Bob"]);
+    expect(values(today, "Attack XP")).toEqual(["100", "200"]);
+    expect(values(today, "Total XP")).toEqual(["125", "200"]);
+    expect(values(today, "Strength XP")).toEqual(["25", "None"]);
+    expect(values(yesterday, "Attack XP")).toEqual(["50", "Not loaded"]);
+
+    comparison.querySelector(".activity-older").click();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(values(yesterday, "Attack XP")).toEqual(["50", "250"]);
+
+    const filter = container.querySelector('[aria-label="Filter activity by type"]');
+    filter.value = "boss";
+    filter.dispatchEvent(new Event("change"));
+    await nextTick();
+    expect(comparison.querySelectorAll("tbody")).toHaveLength(0);
+    filter.value = "";
+    filter.dispatchEvent(new Event("change"));
+    await nextTick();
+    container.querySelector(".activity-player-buttons button:last-child").click();
+    await nextTick();
+    const calls = fetch.mock.calls.length;
+    await vi.advanceTimersByTimeAsync(5000);
+    expect(values(today, "Attack XP")).toEqual(["300"]);
+    expect(
+      fetch.mock.calls.slice(calls).map(function player([options]) {
+        return options.memberIdentifier;
+      }),
+    ).toEqual([10]);
+
+    await router.push("/group/items");
+    await vi.waitFor(function sidebarIsReady() {
+      expect(container.querySelector(".activity-dock .activity-player-buttons")).not.toBeNull();
+    });
+    expect(container.querySelector(".activity-comparison-scroll")).toBeNull();
+    expect(container.querySelector('.activity-player-buttons [aria-pressed="true"]').textContent.trim()).toBe(
+      "Everyone",
+    );
+    await router.push("/group/activity");
+    await vi.waitFor(function comparisonIsReady() {
+      expect(container.querySelectorAll(".activity-comparison-table thead th")).toHaveLength(2);
+    });
+  });
+
   it("shows complete player summaries by day and keeps the choice between the sidebar and activity page", async function playerActivity() {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-11-09T12:00:00Z"));

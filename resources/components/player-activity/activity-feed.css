@@ -39,7 +39,8 @@
   background: var(--elevated);
 }
 
-.activity-player-buttons {
+.activity-player-buttons,
+.activity-display-switch {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -255,7 +256,8 @@
   padding: 20px;
 }
 
-.activity-page-feed .activity-player-buttons {
+.activity-page-feed .activity-player-buttons,
+.activity-page-feed .activity-display-switch {
   padding-inline: 20px;
 }
 
@@ -266,6 +268,76 @@
 
 .activity-page-feed .activity-feed-scroll {
   padding-inline: 20px;
+}
+
+.activity-page-feed.activity-comparison-feed {
+  max-width: none;
+}
+
+.activity-comparison-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 20px 12px;
+}
+
+.activity-comparison-table {
+  width: 100%;
+  min-width: calc(200px + var(--comparison-player-count) * 180px);
+  border-spacing: 0;
+  table-layout: fixed;
+  font-variant-numeric: tabular-nums;
+}
+
+.activity-comparison-table th,
+.activity-comparison-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--light-border);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.activity-comparison-table th {
+  font-weight: 400;
+}
+
+.activity-comparison-period th {
+  padding-top: 20px;
+  background: var(--sidebar);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.activity-comparison-category th {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.activity-comparison-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface);
+  font-weight: 600;
+}
+
+.activity-comparison-table thead th:first-child {
+  left: 0;
+  z-index: 3;
+  width: 176px;
+}
+
+.activity-comparison-table th[scope="row"] {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface);
+}
+
+.activity-comparison-table thead img {
+  margin-right: 6px;
+  vertical-align: text-bottom;
 }
 
 @media (width <= 767px) {
@@ -282,11 +354,16 @@
     padding: 16px 14px;
   }
 
-  .activity-page-feed .activity-player-buttons {
+  .activity-page-feed .activity-player-buttons,
+  .activity-page-feed .activity-display-switch {
     padding-inline: 14px;
   }
 
   .activity-page-feed .activity-feed-scroll {
+    padding-inline: 14px;
+  }
+
+  .activity-comparison-scroll {
     padding-inline: 14px;
   }
 }

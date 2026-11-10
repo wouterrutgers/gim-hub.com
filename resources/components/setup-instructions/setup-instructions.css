@@ -1,58 +1,97 @@
 #setup-instructions-container {
   display: flex;
   align-items: flex-start;
-  justify-content: center;
-  overflow-y: auto;
-  padding: 64px 12px;
-  width: 100%;
   box-sizing: border-box;
+  justify-content: center;
+  width: 100%;
+  overflow-y: auto;
+  padding: 32px 16px;
 }
 
 #setup-instructions {
-  max-width: 500px;
-  padding: 8px;
-  width: 100%;
   box-sizing: border-box;
+  width: 100%;
+  max-width: 640px;
+  padding: 32px;
 }
 
 .setup-block {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 1em;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.setup-block .setup-block {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.setup-block > p,
+#setup-config p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.setup-block h4 {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+#setup-config {
+  padding-top: 20px;
+  border-top: 1px solid var(--light-border);
 }
 
 #setup-config img {
-  max-width: 250px;
+  display: block;
+  max-width: 100%;
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 
 #setup-go-to-group {
   display: flex;
-  justify-content: center;
-  margin-top: 2em;
+  justify-content: flex-start;
+  margin-top: 28px;
 }
 
 .setup-credential {
-  padding: 0.25em 0.5em;
+  box-sizing: border-box;
   position: relative;
   width: 100%;
+  padding: 12px;
+  background: var(--surface-sunken);
+  overflow-wrap: anywhere;
 }
 
 #setup-credential-hide {
-  position: absolute;
-  left: 0;
-  top: 0;
-  background: #222;
-  color: var(--white);
-  height: 100%;
-  width: 100%;
   display: flex;
-  justify-content: center;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   align-items: center;
-  cursor: pointer;
-  z-index: 10;
+  justify-content: center;
+  width: 100%;
+  background: var(--surface-sunken);
+  color: var(--orange);
+  border-radius: inherit;
 }
 
 #setup-credential-hide:hover {
-  background: #444;
+  background: var(--surface-raised);
+}
+
+@media (width <= 767px) {
+  #setup-instructions-container {
+    padding: 24px 16px;
+  }
+
+  #setup-instructions {
+    padding: 24px;
+  }
 }

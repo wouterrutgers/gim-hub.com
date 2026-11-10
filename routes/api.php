@@ -3,6 +3,7 @@
 use App\Http\Controllers\GroupActivityController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupMemberController;
+use App\Http\Controllers\MemberPreferencesController;
 use App\Http\Controllers\UnauthedController;
 use App\Http\Middleware\AuthenticateGroup;
 use Illuminate\Support\Facades\Route;
@@ -13,12 +14,15 @@ Route::get('/changelog', [UnauthedController::class, 'getChangelog']);
 Route::post('/create-group', [GroupController::class, 'createGroup']);
 
 Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(function () {
+    Route::get('/members/{member}/preferences', [MemberPreferencesController::class, 'show'])->whereNumber('member');
+    Route::patch('/members/{member}/preferences', [MemberPreferencesController::class, 'update'])->whereNumber('member');
     Route::post('/add-group-member', [GroupMemberController::class, 'addGroupMember']);
     Route::delete('/delete-group-member', [GroupMemberController::class, 'deleteGroupMember']);
     Route::put('/rename-group-member', [GroupMemberController::class, 'renameGroupMember']);
     Route::put('/reorder-group-members', [GroupMemberController::class, 'reorderGroupMembers']);
     Route::post('/update-group-member', [GroupMemberController::class, 'updateGroupMember']);
     Route::get('/activity', [GroupActivityController::class, 'index']);
+    Route::get('/activity/player/{member}', [GroupActivityController::class, 'player'])->whereNumber('member');
     Route::put('/update-member-color', [GroupMemberController::class, 'updateMemberColor']);
     Route::get('/get-group-data', [GroupMemberController::class, 'getGroupData']);
     Route::get('/get-skill-data', [GroupMemberController::class, 'getSkillData']);

@@ -24,7 +24,7 @@
         :value="mapStore.followedPlayer ?? ''"
         @change="mapStore.followPlayer($event.target.value)"
       >
-        <option value="">None</option>
+        <option value="">Follow a player</option>
         <option v-for="position in mapStore.memberCoordinates" :key="position.label" :value="position.label">
           {{ position.label }}
         </option>

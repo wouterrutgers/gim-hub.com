@@ -5,14 +5,16 @@
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
   import { composeItemIconHref, mappedAlchable, mappedGEPrice, mappedHighAlch } from "../../game/items";
-  import { useLocalStorage } from "../../composables/local-storage";
   import { useRememberedState } from "../../composables/remembered-state";
   import CachedImage from "../cached-image/CachedImage.vue";
+  import PlayerIcon from "../player-icon/PlayerIcon.vue";
+  import LoadingScreen from "../loading-screen/LoadingScreen.vue";
   import Modal from "../modal/Modal.vue";
   import { useModal } from "../modal/use-modal";
   import SearchElement from "../search-element/SearchElement.vue";
   import { copyGearscapeItems } from "./gearscape-export";
-  import ItemPanelsScrollArea from "./ItemPanelsScrollArea.vue";
+  import ItemBank from "./ItemBank.vue";
+  import ItemPanel from "./ItemPanel.vue";
   import ItemsPageTutorialWindow from "./ItemsPageTutorialWindow.vue";
   import "./items-page.css";
 
@@ -47,12 +49,16 @@
     key: "item-page-container-filter",
     defaultValue: DEFAULT_CONTAINER_FILTER,
   });
-  const [pinnedItemsUserString, setPinnedItemsUserString] = useLocalStorage({
-    key: "pinned-items",
-    defaultValue: "",
-    validator: validatePinnedItems,
-  });
   const gearscapeExportStatus = ref("idle");
+  const filtersExpanded = ref(false);
+  const [selectedItemIdentifier, setSelectedItemIdentifier] = useRememberedState({
+    key: "bank-selected-item",
+    defaultValue: undefined,
+  });
+  const [anchorItemIdentifier, setAnchorItemIdentifier] = useRememberedState({
+    key: "bank-visible-item",
+    defaultValue: undefined,
+  });
   const {
     open: tutorialModalOpen,
     componentProps: tutorialModalProps,
@@ -61,16 +67,7 @@
   } = useModal();
 
   const pinnedItems = computed(function getPinnedItems() {
-    return new Set(
-      pinnedItemsUserString.value
-        .split(",")
-        .filter(function hasIdentifier(identifier) {
-          return identifier.length > 0;
-        })
-        .map(function parseIdentifier(identifier) {
-          return Number.parseInt(identifier, 10);
-        }),
-    );
+    return new Set(settingsStore.pinnedItemIds);
   });
 
   const searchExpression = computed(function getSearchExpression() {
@@ -98,7 +95,10 @@
         continue;
       }
 
-      const totalQuantity = getFilteredQuantity(breakdownByMember);
+      const owners = Member.itemQuantityBreakdown(breakdownByMember, memberFilter.value, containerFilter.value);
+      const totalQuantity = owners.reduce(function sumQuantities(total, owner) {
+        return total + owner.quantity;
+      }, 0);
 
       if (totalQuantity <= 0) {
         continue;
@@ -113,6 +113,7 @@
         itemID,
         itemName: itemDatum.name,
         breakdownByMember,
+        owners,
         totalQuantity,
         gePrice: grandExchangePrice,
         highAlch,
@@ -159,6 +160,47 @@
     );
   });
 
+  const activeFilterCount = computed(function countActiveFilters() {
+    return [
+      Boolean(searchExpression.value),
+      memberFilter.value.size > 0,
+      sortCategory.value !== DEFAULT_SORT_CATEGORY,
+      containerFilter.value !== DEFAULT_CONTAINER_FILTER,
+    ].filter(Boolean).length;
+  });
+  const selectedItem = computed(function getSelectedItem() {
+    return sortedItems.value.find(function isSelected(item) {
+      return item.itemID === selectedItemIdentifier.value;
+    });
+  });
+
+  watch(
+    [
+      sortedItems,
+      function groupIsLoaded() {
+        return groupStore.loaded;
+      },
+    ],
+    function keepSelectionInResults([items, loaded]) {
+      if (!loaded) {
+        return;
+      }
+
+      if (
+        !items.some(function isSelected(item) {
+          return item.itemID === selectedItemIdentifier.value;
+        })
+      ) {
+        setSelectedItemIdentifier(undefined);
+      }
+    },
+    { immediate: true },
+  );
+
+  function selectItem(identifier) {
+    setSelectedItemIdentifier(selectedItemIdentifier.value === identifier ? undefined : identifier);
+  }
+
   const gearscapeExportLabel = computed(function getGearscapeExportLabel() {
     return {
       idle: "Copy for Gearscape",
@@ -166,10 +208,6 @@
       error: "Copy failed",
     }[gearscapeExportStatus.value];
   });
-
-  function validatePinnedItems(value) {
-    return value;
-  }
 
   function validateContainerFilter(value) {
     return value === "All" || Member.itemContainerNames.includes(value) ? value : undefined;
@@ -298,24 +336,6 @@
     return matchesSearchExpression(searchExpression.value, itemID, itemDatum.name.toLocaleLowerCase(), itemTags);
   }
 
-  function getFilteredQuantity(breakdownByMember) {
-    let totalQuantity = 0;
-
-    for (const [name, breakdown] of breakdownByMember) {
-      if (memberFilter.value.has(name)) {
-        continue;
-      }
-
-      for (const itemContainer of Member.itemContainerNames) {
-        if (containerFilter.value === "All" || containerFilter.value === itemContainer) {
-          totalQuantity += breakdown[itemContainer] ?? 0;
-        }
-      }
-    }
-
-    return totalQuantity;
-  }
-
   function togglePin(itemID) {
     const newPinnedItems = new Set(pinnedItems.value);
 
@@ -325,7 +345,7 @@
       newPinnedItems.add(itemID);
     }
 
-    setPinnedItemsUserString([...newPinnedItems].join(","));
+    settingsStore.setPinnedItemIds([...newPinnedItems]);
   }
 
   function toggleMember(name) {
@@ -396,7 +416,8 @@
     @close="closeTutorialModal"
   />
 
-  <div v-if="groupStore.items.size <= 0" id="items-page-no-items" class="rsborder rsbackground">
+  <LoadingScreen v-if="!groupStore.loaded" />
+  <div v-else-if="groupStore.items.size <= 0" id="items-page-no-items" class="rsborder rsbackground">
     <h3>Your group has no recorded items!</h3>
     <p>
       Either no members have logged in with the plugin, or there is an issue. Please double check that the names in the
@@ -406,94 +427,193 @@
   </div>
 
   <template v-else>
-    <div id="items-page-head">
-      <SearchElement
-        id="items-page-search"
-        placeholder="Search"
-        :value="searchFilterUserString ?? ''"
-        :default-value="searchFilterUserString"
-        @change="setSearchFilterUserString"
-      />
-      <button
-        v-if="hasActiveFilters"
-        id="items-page-reset-filters-button"
-        class="men-button"
-        data-tooltip="Reset all filters to default"
-        aria-label="Reset all filters to default"
-        @click="resetFilters"
-      >
-        <CachedImage alt="Reset filters" src="/ui/1731-0.png" />
-        Reset
-      </button>
-      <button id="items-page-tutorial-button" class="men-button" @click="openTutorialModal()">
-        <CachedImage alt="Items tutorial" src="/ui/1094-0.png" />
-        Tutorial
-      </button>
-    </div>
+    <div class="items-toolbar">
+      <div class="items-summary" aria-label="Item totals for current filters">
+        <div>
+          <span>Grand Exchange value</span>
+          <strong>{{ itemAggregates.totalGEPrice.toLocaleString() }} <small>gp</small></strong>
+        </div>
+        <div>
+          <span>High alch value</span>
+          <strong>{{ itemAggregates.totalHighAlch.toLocaleString() }} <small>gp</small></strong>
+        </div>
+      </div>
 
-    <div class="items-page-utility">
-      <span class="select-container">
-        <select aria-label="Sort items" :value="sortCategory" @change="setSortCategory($event.target.value)">
-          <option v-for="category in ItemSortCategories" :key="category" :value="category">
-            {{ `Sort: ${category}` }}
-          </option>
-        </select>
-      </span>
-      <span class="select-container">
-        <select
-          aria-label="Item container"
-          :value="containerFilter"
-          @change="setContainerFilter(validateContainerFilter($event.target.value))"
+      <div id="items-page-head">
+        <SearchElement
+          id="items-page-search"
+          placeholder="Search your group's items…"
+          :value="searchFilterUserString ?? ''"
+          :default-value="searchFilterUserString"
+          @change="setSearchFilterUserString"
+        />
+        <button
+          id="items-page-filters-button"
+          class="men-button"
+          type="button"
+          :aria-expanded="filtersExpanded"
+          aria-controls="items-page-filters"
+          @click="filtersExpanded = !filtersExpanded"
         >
-          <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">{{ name }}</option>
-        </select>
-      </span>
-      <div class="items-page-member-filter-clipbox rsborder-tiny rsbackground" style="overflow: hidden">
-        <span class="items-page-member-filter-container">
-          <span v-for="name in groupStore.memberNames" :key="name" class="rsbackground-hover">
-            <input
-              :id="`items-page-member-filter-${name}`"
-              type="checkbox"
-              :checked="!memberFilter.has(name)"
-              @change="toggleMember(name)"
-            />
-            <label :for="`items-page-member-filter-${name}`">{{ name }}</label>
-          </span>
-        </span>
+          Filters{{ activeFilterCount ? ` (${activeFilterCount})` : "" }}
+          <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
+        </button>
+      </div>
+
+      <div id="items-page-filters" class="items-page-utility" :class="{ 'filters-expanded': filtersExpanded }">
+        <div class="items-filter-actions">
+          <button
+            v-if="hasActiveFilters"
+            id="items-page-reset-filters-button"
+            class="men-button"
+            data-tooltip="Reset all filters to default"
+            aria-label="Reset all filters to default"
+            @click="resetFilters"
+          >
+            <CachedImage alt="" src="/ui/1731-0.png" />
+            Reset
+          </button>
+          <button id="items-page-tutorial-button" class="men-button" @click="openTutorialModal()">
+            <CachedImage alt="" src="/ui/1094-0.png" />
+            Search help
+          </button>
+        </div>
+
+        <div class="items-filter-fields">
+          <label class="items-filter-label">
+            Sort by
+            <span class="select-container">
+              <select aria-label="Sort items" :value="sortCategory" @change="setSortCategory($event.target.value)">
+                <option v-for="category in ItemSortCategories" :key="category" :value="category">
+                  {{ category }}
+                </option>
+              </select>
+            </span>
+          </label>
+          <label class="items-filter-label">
+            Storage
+            <span class="select-container">
+              <select
+                aria-label="Item container"
+                :value="containerFilter"
+                @change="setContainerFilter(validateContainerFilter($event.target.value))"
+              >
+                <option v-for="name in ['All', ...Member.itemContainerNames]" :key="name" :value="name">
+                  {{ name === "All" ? "All storage" : name }}
+                </option>
+              </select>
+            </span>
+          </label>
+          <div class="items-page-member-filter-clipbox" role="group" aria-label="Include group members">
+            <span class="items-filter-caption">Include members</span>
+            <span class="items-page-member-filter-container">
+              <span v-for="name in groupStore.memberNames" :key="name">
+                <input
+                  :id="`items-page-member-filter-${name}`"
+                  type="checkbox"
+                  :checked="!memberFilter.has(name)"
+                  @change="toggleMember(name)"
+                />
+                <label :for="`items-page-member-filter-${name}`">
+                  <span aria-hidden="true">
+                    <PlayerIcon v-if="name !== '@SHARED'" :name="name" />
+                    <CachedImage
+                      v-else
+                      class="shared-storage-icon"
+                      src="/icons/group-storage.png"
+                      alt=""
+                      width="18"
+                      height="15"
+                    />
+                  </span>
+                  {{ name === "@SHARED" ? "Shared" : name }}
+                </label>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div v-if="settingsStore.enableGearscapeExport" class="items-results-actions">
+          <button
+            id="items-page-gearscape-export-button"
+            class="men-button men-button-small"
+            data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
+            aria-label="Copy current items to clipboard for Gearscape"
+            @click="copyItemsForGearscape"
+          >
+            {{ gearscapeExportLabel }}
+          </button>
+        </div>
+      </div>
+
+      <div class="items-results-heading">
+        <h2>
+          Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
+        </h2>
+        <div class="items-view-toggle" role="group" aria-label="Item display">
+          <button
+            type="button"
+            class="men-button men-button-small"
+            :class="{ active: !settingsStore.showItemOwners }"
+            :aria-pressed="!settingsStore.showItemOwners"
+            @click="settingsStore.setShowItemOwners(false)"
+          >
+            Compact
+          </button>
+          <button
+            type="button"
+            class="men-button men-button-small"
+            :class="{ active: settingsStore.showItemOwners }"
+            :aria-pressed="settingsStore.showItemOwners"
+            @click="settingsStore.setShowItemOwners(true)"
+          >
+            Detailed
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="items-page-utility">
-      <span class="rsborder-tiny rsbackground rsbackground-hover">
-        <span>{{ itemAggregates.filteredItems.length.toLocaleString() }}</span
-        >&nbsp;<span>items</span>
-      </span>
-      <button
-        v-if="settingsStore.enableGearscapeExport"
-        id="items-page-gearscape-export-button"
-        class="men-button men-button-small"
-        data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
-        aria-label="Copy current items to clipboard for Gearscape"
-        @click="copyItemsForGearscape"
-      >
-        {{ gearscapeExportLabel }}
-      </button>
-      <span class="rsborder-tiny rsbackground rsbackground-hover">
-        HA:&nbsp;<span>{{ itemAggregates.totalHighAlch.toLocaleString() }}</span
-        ><span>gp</span>
-      </span>
-      <span class="rsborder-tiny rsbackground rsbackground-hover">
-        GE:&nbsp;<span>{{ itemAggregates.totalGEPrice.toLocaleString() }}</span
-        ><span>gp</span>
-      </span>
-    </div>
+    <p v-if="sortedItems.length === 0" class="items-empty">
+      No items match these filters. Try another search or reset your filters.
+    </p>
 
-    <ItemPanelsScrollArea
+    <ItemBank
+      :key="settingsStore.showItemOwners"
       :sorted-items="sortedItems"
+      :pinned-items="pinnedItems"
+      :selected-item-identifier="selectedItemIdentifier"
+      :show-owners="settingsStore.showItemOwners"
       :member-filter="memberFilter"
       :container-filter="containerFilter"
-      :pinned-items="pinnedItems"
+      :anchor-item-identifier="anchorItemIdentifier"
+      @select-item="selectItem"
       @toggle-pin="togglePin"
+      @remember-item="setAnchorItemIdentifier"
     />
+
+    <section
+      v-if="!settingsStore.showItemOwners && selectedItem"
+      id="selected-item-details"
+      class="item-inspector"
+      aria-label="Selected item details"
+    >
+      <ItemPanel
+        :item-name="selectedItem.itemName"
+        :item-i-d="selectedItem.itemID"
+        :high-alch-per="selectedItem.highAlch"
+        :alchable="selectedItem.alchable"
+        :ge-price-per="selectedItem.gePrice"
+        :image-u-r-l="selectedItem.imageURL"
+        :total-quantity="selectedItem.totalQuantity"
+        :member-filter="memberFilter"
+        :container-filter="containerFilter"
+        :quantities="selectedItem.breakdownByMember"
+        :is-pinned="pinnedItems.has(selectedItem.itemID)"
+        @toggle-pin="togglePin"
+      />
+    </section>
+    <p v-else-if="!settingsStore.showItemOwners && sortedItems.length > 0" class="item-selection-hint">
+      Select an item to see its owners and value.
+    </p>
   </template>
 </template>

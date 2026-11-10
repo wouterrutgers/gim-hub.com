@@ -204,8 +204,8 @@
   }
 
   const style = getComputedStyle(document.body);
-  ChartJS.defaults.font.family = "rssmall";
-  ChartJS.defaults.font.size = 16;
+  ChartJS.defaults.font.family = style.fontFamily;
+  ChartJS.defaults.font.size = 12;
   ChartJS.defaults.color = style.getPropertyValue("--white");
   ChartJS.defaults.scale.grid.color = style.getPropertyValue("--graph-grid-border");
 
@@ -244,7 +244,7 @@
         :disabled="loading || !canGoPrevious"
         @click="shiftPeriod(-1)"
       >
-        <span aria-hidden="true">‹</span>
+        <span class="chevron chevron-left" aria-hidden="true" />
       </button>
       <p id="skill-graph-range" aria-live="polite">{{ dateRangeLabel }}</p>
       <button
@@ -254,7 +254,7 @@
         :disabled="loading || !canGoNext"
         @click="shiftPeriod(1)"
       >
-        <span aria-hidden="true">›</span>
+        <span class="chevron chevron-right" aria-hidden="true" />
       </button>
     </div>
     <div id="skill-graph-filters">
@@ -322,6 +322,7 @@
                 @click="toggleMember(row.name)"
               >
                 <span class="skill-graph-row-name">{{ row.name }}</span>
+                <span class="chevron" :class="{ 'chevron-right': !isMemberExpanded(row.name) }" aria-hidden="true" />
               </button>
               <span v-else class="skill-graph-row-name">{{ row.name }}</span>
             </th>

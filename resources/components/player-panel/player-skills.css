@@ -10,15 +10,13 @@
   position: relative;
   display: flex;
   font-family: rstiny, sans-serif;
-}
-
-.skill-box-left {
-  background-image: url("../../assets/ui/174-0.png");
+  background-image: url("../../assets/ui/skill-background.png");
+  background-repeat: no-repeat;
+  background-size: 62px 32px;
 }
 
 .skill-box-right {
   position: relative;
-  background-image: url("../../assets/ui/175-0.png");
 }
 
 .skill-box-left,
@@ -28,8 +26,6 @@
   align-items: center;
   width: 31px;
   height: 32px;
-  background-repeat: no-repeat;
-  background-size: contain;
 }
 
 .skill-box-left,
@@ -38,12 +34,8 @@
   pointer-events: none;
 }
 
-.dark-mode .skill-box-left {
-  background-image: url("../../assets/ui/174-0-dark.png");
-}
-
-.dark-mode .skill-box-right {
-  background-image: url("../../assets/ui/175-0-dark.png");
+.dark-mode .skill-box {
+  background-image: url("../../assets/ui/skill-background-dark.png");
 }
 
 .skill-box-current-level,

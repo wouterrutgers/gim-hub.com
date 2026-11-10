@@ -3,6 +3,7 @@
   import * as z from "zod/v4";
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
+  import { usePlayerPreferencesStore } from "../../stores/player-preferences";
   import { useSettingsStore } from "../../stores/settings";
   import { siteThemes } from "../../stores/settings-options";
   import { memberNameSchema } from "../../game/member-name";
@@ -13,11 +14,15 @@
   const labels = {
     light: "Light",
     dark: "Dark",
+    browntown: "Browntown",
+    "classic-light": "Classic light",
+    "classic-dark": "Classic dark",
   };
   const MEMBER_COUNT_MAX = 5;
 
   const apiStore = useApiStore();
   const groupStore = useGroupStore();
+  const playerPreferencesStore = usePlayerPreferencesStore();
   const settingsStore = useSettingsStore();
 
   const addMemberInput = ref();
@@ -25,6 +30,10 @@
   const pendingAddMember = ref(false);
   const pendingReorder = ref(false);
   const reorderError = ref();
+
+  const recommendedBackgroundOpacity = computed(function getRecommendedBackgroundOpacity() {
+    return ["classic-light", "classic-dark"].includes(settingsStore.siteTheme) ? 90 : 100;
+  });
 
   const members = computed(function getMembers() {
     return [...groupStore.memberNames].filter(function excludeSharedMember(member) {
@@ -92,8 +101,8 @@
 <template>
   <div id="settings-page">
     <div class="group-settings-container rsborder rsbackground">
-      <h2>Member settings</h2>
-      <div>These <span class="emphasize">do</span> need to match the in-game names.</div>
+      <h2>Your members</h2>
+      <p class="settings-description">Display names must match your members' exact names in OSRS.</p>
       <div v-for="(member, index) in members" :key="`edit-member-${member}`" class="group-settings-member-row">
         <EditMemberInput :member="member" />
         <div class="group-settings-member-order" role="group" :aria-label="`Order ${member}`">
@@ -103,7 +112,7 @@
             :aria-label="`Move ${member} up`"
             @click="moveMember(index, -1)"
           >
-            ▲
+            <span class="chevron chevron-up" aria-hidden="true" />
           </button>
           <button
             class="men-button small"
@@ -111,7 +120,7 @@
             :aria-label="`Move ${member} down`"
             @click="moveMember(index, 1)"
           >
-            ▼
+            <span class="chevron" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -143,7 +152,34 @@
     </div>
 
     <div class="group-settings-container rsborder rsbackground">
-      <h2>Appearance settings</h2>
+      <h2>Your preferences</h2>
+      <div class="settings-preferences-player settings-description">
+        <template v-if="playerPreferencesStore.selectedMemberName">
+          <span>Saved for {{ playerPreferencesStore.selectedMemberName }}.</span>
+          <button
+            type="button"
+            class="settings-change-player"
+            aria-haspopup="dialog"
+            @click="playerPreferencesStore.openChooser()"
+          >
+            Change player
+          </button>
+        </template>
+        <template v-else-if="apiStore.isDemo">
+          <span>Preferences apply to this demo visit only.</span>
+        </template>
+        <template v-else>
+          <button
+            type="button"
+            class="settings-change-player"
+            :disabled="playerPreferencesStore.members.length === 0"
+            aria-haspopup="dialog"
+            @click="playerPreferencesStore.openChooser()"
+          >
+            Choose your player to save your preferences.
+          </button>
+        </template>
+      </div>
       <fieldset>
         <legend>Player panels</legend>
         <fieldset class="setting-group">
@@ -206,6 +242,25 @@
             @change="settingsStore.setSiteTheme(theme)"
           />
           <label :for="`style-${theme}`">{{ labels[theme] }}</label>
+        </div>
+        <div class="settings-page-range-item">
+          <label for="page-background-opacity-input">Background opacity</label>
+          <div class="settings-page-range-control">
+            <input
+              id="page-background-opacity-input"
+              aria-describedby="page-background-opacity-recommendation"
+              type="range"
+              min="0"
+              max="100"
+              :value="settingsStore.pageBackgroundOpacity"
+              @input="settingsStore.previewPageBackgroundOpacity($event.target.valueAsNumber)"
+              @change="settingsStore.setPageBackgroundOpacity($event.target.valueAsNumber)"
+            />
+            <output for="page-background-opacity-input">{{ settingsStore.pageBackgroundOpacity }}%</output>
+          </div>
+          <p id="page-background-opacity-recommendation" class="settings-description">
+            Recommended for {{ labels[settingsStore.siteTheme].toLowerCase() }}: {{ recommendedBackgroundOpacity }}%.
+          </p>
         </div>
       </fieldset>
     </div>

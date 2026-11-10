@@ -163,6 +163,27 @@ export const itemContainerNames = itemContainers.map(function getContainerName({
   return name;
 });
 
+export function itemQuantityBreakdown(quantities, memberFilter, containerFilter) {
+  return [...quantities]
+    .filter(function memberIsVisible([name]) {
+      return !memberFilter.has(name);
+    })
+    .map(function sumMemberQuantity([name, breakdown]) {
+      let quantity = 0;
+
+      for (const itemContainer of itemContainerNames) {
+        if (containerFilter === "All" || containerFilter === itemContainer) {
+          quantity += breakdown[itemContainer] ?? 0;
+        }
+      }
+
+      return { name, quantity, breakdown };
+    })
+    .filter(function hasQuantity({ quantity }) {
+      return quantity > 0;
+    });
+}
+
 export function portableStorageKeys(itemID) {
   return itemContainers
     .filter(function containsVariant(container) {

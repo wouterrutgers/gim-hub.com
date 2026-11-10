@@ -8,6 +8,14 @@ import { useActivityStore } from "../../stores/activity";
 import { useImageStore } from "../../stores/images";
 import { activityWeek } from "../../game/activity";
 
+function playerHistory(entries) {
+  return {
+    periods: [{ key: "day:1", kind: "day", started_at: Date.now(), ended_at: Date.now() + 86_400_000, entries }],
+    older_cursor: null,
+    from_time: new Date().toISOString(),
+  };
+}
+
 describe("activity feed", function activityFeed() {
   it("clears the selected player when switching groups and shows the new group's activity", async function switchGroups() {
     vi.useFakeTimers();
@@ -26,6 +34,11 @@ describe("activity feed", function activityFeed() {
         },
         async fetchGroupCollectionLogs() {
           return new Map();
+        },
+        async fetchPlayerActivity() {
+          const response = await this.fetchActivity();
+
+          return playerHistory(response.entries);
         },
         async fetchActivity() {
           return {
@@ -55,15 +68,14 @@ describe("activity feed", function activityFeed() {
     application.mount(container);
     await vi.advanceTimersByTimeAsync(0);
     const filter = container.querySelector('[aria-label="Filter activity by player"]');
-    filter.value = "10";
-    filter.dispatchEvent(new Event("change"));
-    await nextTick();
-    expect(filter.value).toBe("10");
+    filter.querySelector("button:last-child").click();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(filter.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Alice");
 
     apiStore.client = groupClient(20, "Bob");
     await vi.advanceTimersByTimeAsync(0);
 
-    expect(filter.value).toBe("");
+    expect(filter.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Everyone");
     expect(container.querySelectorAll(".activity-card")).toHaveLength(1);
     expect(container.querySelector(".activity-card strong").textContent).toBe("Bob");
   });
@@ -209,13 +221,22 @@ describe("activity feed", function activityFeed() {
     expect(client.fetchActivity).toHaveBeenCalledTimes(2);
   });
 
-  it("renames cached cards and keeps the selected player without fetching activity again", async function renameActivityMember() {
+  it("renames the selected player and keeps cached summaries without fetching activity again", async function renameActivityMember() {
     vi.useFakeTimers();
     const pinia = createTestPinia();
     vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
       return path;
     });
     const now = Date.now();
+    const training = {
+      id: 1,
+      member_id: 10,
+      revision: 1,
+      type: "xp",
+      started_at: now,
+      occurred_at: now,
+      data: { skills: { Attack: 100 } },
+    };
     const client = {
       async fetchGameData() {
         return { quests: new Map(), items: new Map(), diaries: new Map() };
@@ -224,21 +245,10 @@ describe("activity feed", function activityFeed() {
       async fetchGroupCollectionLogs() {
         return new Map();
       },
-      fetchActivity: vi.fn().mockResolvedValue({
-        entries: [
-          {
-            id: 1,
-            member_id: 10,
-            revision: 1,
-            type: "xp",
-            started_at: now,
-            occurred_at: now,
-            data: { skills: { Attack: 100 } },
-          },
-        ],
-        older_cursor: null,
-        from_time: new Date(now).toISOString(),
-      }),
+      fetchPlayerActivity: vi.fn().mockResolvedValue(playerHistory([training])),
+      fetchActivity: vi
+        .fn()
+        .mockResolvedValue({ entries: [training], older_cursor: null, from_time: new Date(now).toISOString() }),
     };
     useApiStore(pinia).client = client;
     const container = document.createElement("div");
@@ -247,21 +257,18 @@ describe("activity feed", function activityFeed() {
     application.use(pinia);
     application.mount(container);
     await vi.advanceTimersByTimeAsync(0);
-    const card = container.querySelector('[data-entry-id="1"]');
     const filter = container.querySelector('[aria-label="Filter activity by player"]');
-    filter.value = "10";
-    filter.dispatchEvent(new Event("change"));
-    await nextTick();
-    card.querySelector("details").open = true;
+    filter.querySelector("button:last-child").click();
+    await vi.advanceTimersByTimeAsync(0);
+    const summary = container.querySelector(".activity-day");
 
     client.fetchGroupData.mockResolvedValue([{ id: 10, name: "Renamed", colorHueDegrees: 100 }]);
     await vi.advanceTimersByTimeAsync(1000);
 
-    expect(container.querySelector('[data-entry-id="1"]')).toBe(card);
-    expect(card.querySelector("strong").textContent).toBe("Renamed");
-    expect(filter.value).toBe("10");
-    expect(filter.selectedOptions[0].textContent).toBe("Renamed");
-    expect(card.querySelector("details").open).toBe(true);
+    expect(container.querySelector(".activity-day")).toBe(summary);
+    expect(summary.textContent).toContain("Attack: +100 XP");
+    expect(filter.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Renamed");
     expect(client.fetchActivity).toHaveBeenCalledTimes(1);
+    expect(client.fetchPlayerActivity).toHaveBeenCalledTimes(1);
   });
 });

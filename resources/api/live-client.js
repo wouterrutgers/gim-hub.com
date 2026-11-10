@@ -1,5 +1,5 @@
 import { fetchGameData } from "./game-data";
-import { fetchActivity } from "./requests/activity";
+import { fetchActivity, fetchPlayerActivity } from "./requests/activity";
 import { fetchGroupCollectionLogs } from "./requests/collection-log";
 import { fetchGroupData } from "./requests/group-data";
 import { fetchMemberHiscores } from "./requests/hiscores";
@@ -25,6 +25,10 @@ export default class LiveClient {
 
   fetchActivity(options) {
     return fetchActivity({ baseURL: this.baseURL, credentials: this.credentials, ...options });
+  }
+
+  fetchPlayerActivity(options) {
+    return fetchPlayerActivity({ baseURL: this.baseURL, credentials: this.credentials, ...options });
   }
 
   fetchGroupData(fromTime) {

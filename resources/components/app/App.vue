@@ -7,6 +7,7 @@
   import UnauthedLayout from "../layout/UnauthedLayout.vue";
   import Tooltip from "../tooltip/Tooltip.vue";
   import "./app.css";
+  import "./classic-theme.css";
 
   const CanvasMap = defineAsyncComponent(function loadCanvasMap() {
     return import("../canvas-map/CanvasMap.vue");
@@ -20,19 +21,10 @@
   });
 
   watch(
-    [
-      function getLayout() {
-        return route.meta.layout;
-      },
-      function getSiteTheme() {
-        return settingsStore.siteTheme;
-      },
-    ],
-    function updateTheme([layout, siteTheme]) {
-      if (layout === "authed") {
-        applySiteTheme(siteTheme);
-      }
+    function getSiteTheme() {
+      return settingsStore.siteTheme;
     },
+    applySiteTheme,
     { immediate: true },
   );
 </script>

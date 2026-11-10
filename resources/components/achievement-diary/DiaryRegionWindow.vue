@@ -58,9 +58,13 @@
           {{ `${props.region} achievement diary` }}
         </a>
       </h1>
-      <button class="diary-dialog-close dialog-close" data-tooltip="Close dialog" @click="close">
-        <CachedImage src="/ui/1731-0.png" alt="Close dialog" />
-      </button>
+      <button
+        type="button"
+        class="diary-dialog-close dialog-close"
+        aria-label="Close dialog"
+        data-tooltip="Close dialog"
+        @click="close"
+      />
     </div>
     <div class="diary-dialog-title-border" />
     <div class="diary-dialog-scroll-container">

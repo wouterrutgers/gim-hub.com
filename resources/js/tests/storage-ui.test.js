@@ -6,13 +6,13 @@ import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import PlayerInventory from "../../components/player-panel/PlayerInventory.vue";
 import ItemsPage from "../../components/items-page/ItemsPage.vue";
 import Tooltip from "../../components/tooltip/Tooltip.vue";
+import { deserializeTooltip } from "../../components/tooltip/tooltip-data";
 import { useApiStore } from "../../stores/api";
 import { parseGroupData } from "../../api/requests/group-data";
 
-const portableItems = [13226, 22586, 24482, 24481, 30000, 12019];
-const otherContainers = [28951, 24882, 21389, 5509, 25580, 12019, 25582];
+const portableItems = [28951, 24882, 21389, 5509, 25580, 12019, 25582, 30000, 12791];
 const items = new Map([
-  ...[...portableItems, ...otherContainers, 12791, 28143].map(function portableItem(id) {
+  ...[...portableItems, 28143].map(function portableItem(id) {
     return [id, { name: `Container ${id}`, highalch: 0 }];
   }),
   [1095, { name: "Leather chaps", highalch: 12, alchable: true }],
@@ -75,59 +75,12 @@ describe("storage UI", function storageInterface() {
     await nextTick();
   }
 
-  it("shows contents only for filled portable containers", async function portableTooltips() {
-    payload = [
-      {
-        id: 1,
-        name: "Alice",
-        inventory: Array.from({ length: 28 }, function slot(_value, index) {
-          return [portableItems[index] ?? 0, portableItems[index] ? 1 : 0];
-        }).flat(),
-      },
-    ];
-    await mount({
-      render() {
-        return [h(PlayerInventory, { member: "Alice" }), h(Tooltip)];
-      },
-    });
-    const links = container.querySelectorAll(".player-inventory-item-box");
-    expect(links.length).toBe(6);
-
-    for (const link of links) {
-      expect(link.querySelector(".player-inventory-contents-indicator")).toBeNull();
-      expect(link.hasAttribute("data-tooltip")).toBe(false);
-    }
-
-    payload = [
-      {
-        ...payload[0],
-        herb_sack: [199, 2],
-        looting_bag: [],
-        seed_box: [],
-        gem_bag: [],
-        chugging_barrel: [],
-        coal_bag: [],
-      },
-    ];
-    await vi.advanceTimersByTimeAsync(1000);
-    await nextTick();
-    links[0].dispatchEvent(new MouseEvent("pointerover", { bubbles: true }));
-    await nextTick();
-    expect(container.querySelector('[role="tooltip"]').textContent).toContain("2 Grimy guam leaf");
-    expect(links[0].querySelector(".player-inventory-contents-indicator")).not.toBeNull();
-
-    for (const link of [...links].slice(1)) {
-      expect(link.querySelector(".player-inventory-contents-indicator")).toBeNull();
-      expect(link.hasAttribute("data-tooltip")).toBe(false);
-    }
-  });
-
   it("marks tracked containers with contents and shows combined essence details", async function containerPreviews() {
     payload = [
       {
         id: 1,
         name: "Alice",
-        inventory: [...otherContainers, 30000, 12791]
+        inventory: portableItems
           .flatMap(function inventoryItem(id) {
             return [id, 1];
           })
@@ -206,10 +159,10 @@ describe("storage UI", function storageInterface() {
     await mount(ItemsPage);
     expect(container.querySelector(".stash-units")).toBeNull();
     expect(container.querySelector("#items-page-no-items")).not.toBeNull();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(0);
+    expect(container.querySelectorAll(".bank-item").length).toBe(0);
   });
 
-  it("shows STASH contents in normal item panels with search, filters and reconciled quantities", async function stashItems() {
+  it("shows STASH contents in the bank with search, filters and reconciled quantities", async function stashItems() {
     vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(600);
     vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(800);
     payload = [
@@ -231,13 +184,15 @@ describe("storage UI", function storageInterface() {
       },
     });
     expect(container.querySelector(".stash-units")).toBeNull();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(2);
+    expect(container.querySelectorAll(".bank-item").length).toBe(2);
 
     const storageFilter = container.querySelectorAll("select")[1];
     storageFilter.value = "STASH units";
     storageFilter.dispatchEvent(new Event("change", { bubbles: true }));
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(1);
+    expect(container.querySelectorAll(".bank-item").length).toBe(1);
+    container.querySelector(".bank-item").click();
+    await nextTick();
     expect(container.querySelector(".items-page-panel-name").textContent).toBe("Leather chaps");
     expect(container.querySelector(".items-page-panel-item-details").children[1].textContent).toBe("2");
     expect(container.querySelector(".items-page-panel-item-details").children[3].textContent).toBe("24gp");
@@ -253,11 +208,13 @@ describe("storage UI", function storageInterface() {
     search.value = "guam";
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(0);
+    expect(container.querySelectorAll(".bank-item").length).toBe(0);
     search.value = "leather";
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(1);
+    expect(container.querySelectorAll(".bank-item").length).toBe(1);
+    container.querySelector(".bank-item").click();
+    await nextTick();
 
     payload[0].stash_units[0] = { ...payload[0].stash_units[0], state: "empty", items: [] };
     await vi.advanceTimersByTimeAsync(1000);
@@ -266,10 +223,10 @@ describe("storage UI", function storageInterface() {
 
     container.querySelector("#items-page-member-filter-Alice").click();
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(0);
+    expect(container.querySelectorAll(".bank-item").length).toBe(0);
     container.querySelector("#items-page-reset-filters-button").click();
     await nextTick();
-    expect(container.querySelectorAll(".items-page-panel").length).toBe(2);
+    expect(container.querySelectorAll(".bank-item").length).toBe(2);
   });
 
   it("combines excluded names and tags with AND before OR in item search", async function combinedItemSearch() {
@@ -280,9 +237,9 @@ describe("storage UI", function storageInterface() {
 
     const search = container.querySelector("#items-page-search input");
     function visibleNames() {
-      return [...container.querySelectorAll(".items-page-panel-name")]
+      return [...container.querySelectorAll(".bank-item")]
         .map(function itemName(element) {
-          return element.textContent;
+          return deserializeTooltip(element.dataset.tooltip).name;
         })
         .sort();
     }
@@ -314,9 +271,9 @@ describe("storage UI", function storageInterface() {
     search.dispatchEvent(new Event("input", { bubbles: true }));
     await nextTick();
     expect(
-      [...container.querySelectorAll(".items-page-panel-name")]
+      [...container.querySelectorAll(".bank-item")]
         .map(function itemName(element) {
-          return element.textContent;
+          return deserializeTooltip(element.dataset.tooltip).name;
         })
         .sort(),
     ).toEqual(["Restore potion(3)", "Restore potion(4)"]);

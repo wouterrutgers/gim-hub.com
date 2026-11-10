@@ -7,6 +7,7 @@
     useMemberStats,
     useMemberTimezone,
   } from "../../stores/group";
+  import { usePlayerPreferencesStore } from "../../stores/player-preferences";
   import { serializeTooltip } from "../tooltip/tooltip-data";
   import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import XpDropper from "../xp-dropper/XpDropper.vue";
@@ -34,6 +35,7 @@
   });
 
   const groupStore = useGroupStore();
+  const playerPreferencesStore = usePlayerPreferencesStore();
   const currentTimeMilliseconds = ref(Date.now());
   let currentTimeInterval;
 
@@ -87,7 +89,9 @@
       return undefined;
     }
 
-    return new Intl.DateTimeFormat(undefined, { timeZone: timezone.value, timeStyle: "short" }).format(new Date());
+    return new Intl.DateTimeFormat(undefined, { timeZone: timezone.value, timeStyle: "short" }).format(
+      new Date(currentTimeMilliseconds.value),
+    );
   });
   const healthRatio = computed(function getHealthRatio() {
     return playerStats.value.health.current / playerStats.value.health.max;
@@ -122,6 +126,17 @@
       <div class="player-stats-identity">
         <PlayerIcon :name="props.member" />
         <span class="player-stats-name">{{ props.member }}</span>
+        <button
+          v-if="playerPreferencesStore.selectedMemberId && playerPreferencesStore.selectedMemberName === props.member"
+          type="button"
+          class="player-stats-you"
+          aria-haspopup="dialog"
+          aria-controls="player-chooser-window"
+          :aria-label="`Change your player. Current player: ${props.member}`"
+          @click="playerPreferencesStore.openChooser()"
+        >
+          You (change)
+        </button>
       </div>
       <span
         v-if="localTime && timezone"
@@ -138,7 +153,6 @@
       <span v-else-if="lastOnlineAt?.getTime() > 0">Last online {{ formatLastOnlineAt(lastOnlineAt) }}</span>
       <span v-else>Offline</span>
       <template v-if="online && playerStats.world !== undefined">
-        <span class="player-stats-status-separator" aria-hidden="true">·</span>
         <span class="player-stats-world">W{{ playerStats.world }}</span>
       </template>
     </div>

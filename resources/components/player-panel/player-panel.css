@@ -1,46 +1,51 @@
 .player-panel {
   display: block;
-  width: 300px;
-  position: relative;
-  transform: translate3d(0, 0, 1px);
-  color: var(--white);
   box-sizing: border-box;
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 340px;
+  overflow: hidden;
+  color: var(--text);
+  font: 16px / 1.2 var(--font-game);
 }
 
 .player-panel-minibar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-}
-
-.player-panel.expanded .player-panel-minibar {
-  box-shadow: rgb(0 0 0 / 15%) 0 2px 8px;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 4px;
+  border-top: 1px solid var(--light-border);
+  background: var(--darken);
 }
 
 .player-panel-minibar button {
-  flex-grow: 1;
-  margin: 0;
-  background: none;
-  border: none;
-  padding: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
-  cursor: pointer;
+  justify-content: center;
+  min-height: 32px;
+  border-radius: 4px;
 }
 
 .player-panel-minibar img {
+  width: auto;
+  height: 24px;
+  object-fit: contain;
   pointer-events: none;
-  image-rendering: pixelated;
-  transform: translateZ(0);
-  padding: 4px 0;
+}
+
+.player-panel-item-icon img {
+  /* Compensate for the transparent padding around item sprites. */
+  height: calc(24px * 64 / 54);
+  transform: translate(2px, -1px);
 }
 
 .player-panel-minibar button:hover {
-  background: rgb(255 255 255 / 10%);
+  background: var(--elevated);
 }
 
 button.player-panel-tab-active {
-  background: rgb(255 255 255 / 20%);
+  background: color-mix(in srgb, var(--orange) 15%, transparent);
+  box-shadow: inset 0 -2px var(--orange);
 }
 
 .player-panel-content {
@@ -49,5 +54,72 @@ button.player-panel-tab-active {
 }
 
 .player-panel-content > * {
-  margin: 8px 0;
+  margin: 12px 0;
+}
+
+.player-panel .player-stats {
+  padding-top: 8px;
+  background: none;
+}
+
+.player-panel .player-stats-header {
+  padding-inline: 12px;
+}
+
+.player-panel .player-stats-name {
+  font: 18px var(--font-game);
+}
+
+.player-panel .player-stats-local-time {
+  color: var(--muted);
+  font: 10px var(--font-body);
+}
+
+.player-panel .player-stats-status {
+  height: 20px;
+  padding-inline: 12px;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font: 11px var(--font-body);
+}
+
+.player-panel .player-stats-hitpoints,
+.player-panel .player-stats-prayer {
+  height: 16px;
+  margin-inline: 12px;
+  padding: 2px 0;
+  overflow: hidden;
+  border-radius: 3px;
+  font-size: 14px;
+  text-shadow: 1px 1px #10130f;
+}
+
+.player-panel .player-stats-prayer {
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.player-panel .player-stats-energy,
+.player-panel .player-stats-special-attack {
+  margin-inline: 12px;
+  margin-bottom: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.player-panel .player-stats-special-attack {
+  margin-bottom: 6px;
+}
+
+@media (pointer: coarse) {
+  .player-panel-minibar button {
+    min-height: 40px;
+  }
+}
+
+.player-panel .men-button,
+.player-panel input,
+.player-panel select {
+  font-family: var(--font-game);
+  font-size: 16px;
 }

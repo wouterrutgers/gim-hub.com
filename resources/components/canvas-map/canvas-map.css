@@ -1,8 +1,8 @@
 #canvas-map-container {
   touch-action: none;
-  image-rendering: pixelated;
   position: absolute;
   inset: 0;
+  background: #000;
 }
 
 #canvas-map-follow-dropdown {
@@ -57,16 +57,28 @@
 }
 
 #canvas-map-coordinates {
-  position: fixed;
+  position: absolute;
   bottom: 0;
-  left: 8px;
+  left: 24px;
+  padding: 4px 8px;
+  border-radius: 4px 4px 0 0;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 11px;
 }
 
 #canvas-map-controls {
   display: flex;
+  box-sizing: border-box;
   gap: 8px;
   flex-wrap: wrap;
-  align-self: baseline;
+  align-self: flex-start;
+  min-width: 0;
+  max-width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
 }
 
 .canvas-map-search {
@@ -116,7 +128,7 @@
 
 .canvas-map-search small {
   color: var(--white);
-  font-family: rssmall, ui-sans-serif, Arial, sans-serif;
+  font-family: var(--font-body);
 }
 
 .canvas-map-search-empty {
@@ -132,6 +144,24 @@
 }
 
 .canvas-map-selected-teleport-button {
-  outline: 1px solid rgb(200 200 200);
-  filter: brightness(1.2);
+  border-color: var(--orange);
+  color: var(--orange-light);
+}
+
+@media (width <= 767px) {
+  #canvas-map-coordinates {
+    left: 16px;
+  }
+
+  #canvas-map-controls {
+    width: 100%;
+  }
+
+  .canvas-map-search {
+    width: 100%;
+  }
+
+  #canvas-map-controls > .select-container {
+    flex: 1;
+  }
 }

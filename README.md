@@ -2,7 +2,7 @@
 
 Your teammate just got a drop. Someone else is closing in on 99. GIM Hub brings your Old School RuneScape Group Ironman team together in one live dashboard, so you can keep up with the grind and find the gear your group needs.
 
-[Try the demo](https://gim-hub.com/demo) · [Get started](https://gim-hub.com/create-group) · [Changelog](https://gim-hub.com/changelog) · [Discord](https://discord.gg/ZwzW6yYD8V)
+[Try the demo](https://gim-hub.com/demo), [get started](https://gim-hub.com/create-group), [read the changelog](https://gim-hub.com/changelog), or [join us on Discord](https://discord.gg/ZwzW6yYD8V).
 
 ![GIM Hub demo showing shared items, raid equipment, and the live group activity timeline](screenshots/demo-overview.webp)
 

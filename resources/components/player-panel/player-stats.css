@@ -30,6 +30,16 @@
   text-overflow: ellipsis;
 }
 
+.player-stats-you {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding-inline: 5px;
+  color: var(--orange-light);
+  font: 11px var(--font-body);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .player-stats-local-time {
   font-size: 10px;
   line-height: 1;
@@ -87,6 +97,7 @@
   margin-left: 8px;
   position: relative;
   z-index: 1;
+  color: #fff;
 }
 
 .player-stats-prayer-bar,
@@ -145,6 +156,7 @@
   z-index: 1;
   width: 100%;
   box-sizing: border-box;
+  color: #fff;
   font-size: 11px;
   text-align: center;
   text-overflow: ellipsis;

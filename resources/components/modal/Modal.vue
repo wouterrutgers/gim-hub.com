@@ -1,5 +1,6 @@
 <script setup>
-  import { nextTick, onBeforeUnmount, onMounted, watch } from "vue";
+  import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+  import { openModalCount } from "./use-modal";
   import "./modal.css";
 
   const props = defineProps({
@@ -13,14 +14,24 @@
     },
   });
   const emit = defineEmits(["close"]);
+  const dialog = ref();
+  let opener;
+  let counted = false;
+  const focusableSelector =
+    'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
 
   onMounted(function registerModalListeners() {
-    window.addEventListener("keydown", closeOnEscape);
+    window.addEventListener("keydown", handleKeyDown);
   });
 
   onBeforeUnmount(function cleanupModal() {
-    window.removeEventListener("keydown", closeOnEscape);
-    toggleBackgroundInert(false);
+    window.removeEventListener("keydown", handleKeyDown);
+
+    if (counted) {
+      openModalCount.value -= 1;
+    }
+
+    restoreFocus();
   });
 
   function close() {
@@ -28,14 +39,47 @@
   }
 
   function toggleBackgroundInert(inert) {
-    document.body.querySelectorAll(":scope > :not(#modal, #modal-clickbox)").forEach(function toggleElement(element) {
-      element.inert = inert;
-    });
+    document.body
+      .querySelectorAll(":scope > :not(#modal, #modal-clickbox, #tooltip-container)")
+      .forEach(function toggleElement(element) {
+        element.inert = inert;
+      });
   }
 
-  function closeOnEscape(event) {
+  function restoreFocus() {
+    if (!opener) {
+      return;
+    }
+
+    toggleBackgroundInert(false);
+    opener.focus();
+    opener = undefined;
+  }
+
+  function handleKeyDown(event) {
+    if (!props.open) {
+      return;
+    }
+
     if (event.key === "Escape" || event.key === "Esc") {
+      event.preventDefault();
+      event.stopImmediatePropagation();
       close();
+
+      return;
+    }
+
+    if (event.key !== "Tab") {
+      return;
+    }
+
+    const controls = [...dialog.value.querySelectorAll(focusableSelector)];
+    const target = event.shiftKey ? controls.at(-1) : controls[0];
+    const boundary = event.shiftKey ? controls[0] : controls.at(-1);
+
+    if (document.activeElement === boundary || !dialog.value.contains(document.activeElement)) {
+      event.preventDefault();
+      target.focus();
     }
   }
 
@@ -44,19 +88,23 @@
       return props.open;
     },
     async function handleOpenState(open) {
-      toggleBackgroundInert(open);
-
       if (!open) {
+        if (counted) {
+          openModalCount.value -= 1;
+          counted = false;
+        }
+
+        restoreFocus();
+
         return;
       }
 
+      openModalCount.value += 1;
+      counted = true;
+      opener = document.activeElement;
+      toggleBackgroundInert(true);
       await nextTick();
-
-      const firstFocusable = document.querySelector(
-        '#modal button, #modal [href], #modal input, #modal select, #modal textarea, #modal [tabindex]:not([tabindex="-1"])',
-      );
-      firstFocusable?.focus();
-      firstFocusable?.blur();
+      dialog.value.querySelector(focusableSelector).focus();
     },
     { immediate: true },
   );
@@ -65,8 +113,8 @@
 <template>
   <Teleport to="body">
     <template v-if="props.open">
-      <button id="modal-clickbox" aria-label="Exit modal" @click="close" />
-      <div id="modal">
+      <div id="modal-clickbox" aria-hidden="true" @click="close" />
+      <div id="modal" ref="dialog">
         <component :is="props.component" v-bind="props.componentProps" @close="close" />
       </div>
     </template>

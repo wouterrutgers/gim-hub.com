@@ -11,6 +11,7 @@
   const pointerPosition = ref({ x: 0, y: 0 });
   const tooltip = ref();
   let touchTooltipElement;
+  let tooltipTrigger;
 
   const itemLines = computed(function getItemLines() {
     if (!tooltip.value || typeof tooltip.value === "string") {
@@ -27,7 +28,10 @@
     window.addEventListener("pointerdown", handlePointerDown);
     window.addEventListener("pointercancel", hideTooltip);
     window.addEventListener("click", handleClick);
-    window.addEventListener("scroll", hideTooltip, { capture: true });
+    window.addEventListener("scroll", handleScroll, { capture: true });
+    window.addEventListener("focusin", handleFocusIn);
+    window.addEventListener("focusout", handleFocusOut);
+    window.addEventListener("keydown", dismissOnEscape, { capture: true });
   });
 
   onBeforeUnmount(function removeTooltipListeners() {
@@ -37,7 +41,11 @@
     window.removeEventListener("pointerdown", handlePointerDown);
     window.removeEventListener("pointercancel", hideTooltip);
     window.removeEventListener("click", handleClick);
-    window.removeEventListener("scroll", hideTooltip, { capture: true });
+    window.removeEventListener("scroll", handleScroll, { capture: true });
+    window.removeEventListener("focusin", handleFocusIn);
+    window.removeEventListener("focusout", handleFocusOut);
+    window.removeEventListener("keydown", dismissOnEscape, { capture: true });
+    hideTooltip();
   });
 
   function buildItemLines(data) {
@@ -116,16 +124,29 @@
 
     const rectangle = tooltipElement.value.getBoundingClientRect();
     const offsetX = x + 5 + rectangle.width > window.innerWidth ? Math.max(5 - x, -(rectangle.width + 5)) : 5;
-    const offsetY = y - rectangle.height - 5 < 0 ? 5 : -(rectangle.height + 5);
+    const offsetY =
+      y - rectangle.height - 5 < 0
+        ? Math.min(5, window.innerHeight - y - rectangle.height - 5)
+        : -(rectangle.height + 5);
     tooltipElement.value.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+  }
+
+  function handleScroll(event) {
+    if (!tooltipElement.value.contains(event.target)) {
+      hideTooltip();
+    }
   }
 
   function getDataTooltipElement(target) {
     return target instanceof Element ? target.closest("[data-tooltip]") : null;
   }
 
-  function handlePointerMove({ clientX: x, clientY: y, pointerType }) {
-    if (pointerType === "touch") {
+  function handlePointerMove({ clientX: x, clientY: y, pointerType, target }) {
+    if (
+      pointerType === "touch" ||
+      (document.activeElement === tooltipTrigger && !tooltipTrigger.contains(target)) ||
+      (target instanceof Node && tooltipElement.value.contains(target))
+    ) {
       return;
     }
 
@@ -146,7 +167,7 @@
 
     touchTooltipElement = undefined;
     pointerPosition.value = { x: event.clientX, y: event.clientY };
-    tooltip.value = deserializeTooltip(hoveredElement.dataset.tooltip ?? "");
+    showTooltip(hoveredElement, hoveredElement.dataset.tooltip);
   }
 
   function handlePointerOut(event) {
@@ -154,9 +175,15 @@
       return;
     }
 
-    if (getDataTooltipElement(event.target) !== getDataTooltipElement(event.relatedTarget)) {
-      hideTooltip();
+    if (
+      tooltipTrigger?.contains(event.relatedTarget) ||
+      tooltipElement.value.contains(event.relatedTarget) ||
+      tooltipTrigger?.matches(":focus-visible")
+    ) {
+      return;
     }
+
+    hideTooltip();
   }
 
   function handlePointerDown(event) {
@@ -165,7 +192,7 @@
     if (event.pointerType === "touch" && touchedElement && touchedElement !== touchTooltipElement) {
       touchTooltipElement = touchedElement;
       pointerPosition.value = { x: event.clientX, y: event.clientY };
-      tooltip.value = deserializeTooltip(touchedElement.dataset.tooltip);
+      showTooltip(touchedElement, touchedElement.dataset.tooltip);
 
       return;
     }
@@ -190,8 +217,43 @@
   }
 
   function hideTooltip() {
+    tooltipTrigger?.removeAttribute("aria-describedby");
+    tooltipTrigger = undefined;
     touchTooltipElement = undefined;
     tooltip.value = undefined;
+  }
+
+  function showTooltip(trigger, value) {
+    tooltipTrigger?.removeAttribute("aria-describedby");
+    tooltipTrigger = trigger;
+    trigger.setAttribute("aria-describedby", "tooltip");
+    tooltip.value = deserializeTooltip(value);
+  }
+
+  function handleFocusIn(event) {
+    const value = getDataTooltipElement(event.target)?.dataset.tooltip;
+
+    if (!value || !event.target.matches(":focus-visible")) {
+      return;
+    }
+
+    const rectangle = event.target.getBoundingClientRect();
+    pointerPosition.value = { x: rectangle.left, y: rectangle.bottom };
+    showTooltip(event.target, value);
+  }
+
+  function handleFocusOut(event) {
+    if (event.target === tooltipTrigger) {
+      hideTooltip();
+    }
+  }
+
+  function dismissOnEscape(event) {
+    if (event.key === "Escape" && tooltip.value) {
+      hideTooltip();
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
   }
 
   watch(tooltip, async function repositionAfterContentChange() {
@@ -244,33 +306,38 @@
 
       <template v-else-if="tooltip?.type === 'item-breakdown'">
         {{ tooltip.name }}
-        <br />
-        <hr />
-        <div class="tooltip-item-breakdown">
-          <template v-for="itemContainer in Member.itemContainerNames" :key="itemContainer">
-            <template
-              v-if="
-                (tooltip.filter === 'All' || tooltip.filter === itemContainer) &&
-                (tooltip.filter !== 'All' || (tooltip.breakdown[itemContainer] ?? 0) !== 0)
-              "
-            >
-              <span>{{ itemContainer }}</span>
-              <span>{{ (tooltip.breakdown[itemContainer] ?? 0).toLocaleString() }}</span>
+        <section v-for="owner in tooltip.owners" :key="owner.name" class="tooltip-item-owner">
+          <hr />
+          <strong class="tooltip-item-breakdown">
+            <span>{{ owner.name === "@SHARED" ? "Shared" : owner.name }}:</span>
+            <span>{{ owner.quantity.toLocaleString() }}</span>
+          </strong>
+          <div class="tooltip-item-breakdown">
+            <template v-for="itemContainer in Member.itemContainerNames" :key="itemContainer">
+              <template
+                v-if="
+                  (tooltip.filter === 'All' || tooltip.filter === itemContainer) &&
+                  (owner.breakdown[itemContainer] ?? 0) !== 0
+                "
+              >
+                <span>{{ itemContainer }}</span>
+                <span>{{ owner.breakdown[itemContainer].toLocaleString() }}</span>
+              </template>
             </template>
-          </template>
-          <template v-if="tooltip.filter === 'All' || tooltip.filter === 'STASH units'">
-            <template v-for="unit in tooltip.stashLocations ?? []" :key="unit.id">
-              <span>{{ unit.name }} ({{ unit.tier }})</span>
-              <span>{{ unit.quantity.toLocaleString() }}</span>
+            <template v-if="tooltip.filter === 'All' || tooltip.filter === 'STASH units'">
+              <template v-for="unit in owner.stashLocations" :key="unit.id">
+                <span>{{ unit.name }} ({{ unit.tier }})</span>
+                <span>{{ unit.quantity.toLocaleString() }}</span>
+              </template>
             </template>
-          </template>
-          <template v-if="tooltip.filter === 'All' || tooltip.filter === 'Cargo holds'">
-            <template v-for="hold in tooltip.cargoHolds ?? []" :key="hold.id">
-              <span>{{ hold.name }}</span>
-              <span>{{ hold.quantity.toLocaleString() }}</span>
+            <template v-if="tooltip.filter === 'All' || tooltip.filter === 'Cargo holds'">
+              <template v-for="hold in owner.cargoHolds" :key="hold.id">
+                <span>{{ hold.name }}</span>
+                <span>{{ hold.quantity.toLocaleString() }}</span>
+              </template>
             </template>
-          </template>
-        </div>
+          </div>
+        </section>
       </template>
 
       <template v-else-if="tooltip?.type === 'collection-log-item'">

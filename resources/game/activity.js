@@ -1,4 +1,5 @@
 import { skillIcons } from "./skill";
+import { getBossIcon } from "./boss-icons";
 
 export function activityWeek(timestamp) {
   const date = new Date(timestamp);
@@ -24,17 +25,13 @@ export function activityPresentation(entry, gameData) {
     });
 
     return {
-      icon: skillIcons[skills[0][0]],
       text: `Gained ${formatActivityNumber(
         skills.reduce(function total(sum, skill) {
           return sum + skill[1];
         }, 0),
       )} XP`,
       details: skills.map(function skillDetail([skill, quantity]) {
-        return `${skill}: +${quantity.toLocaleString()} XP`;
-      }),
-      skills: skills.map(function skillName([skill]) {
-        return skill;
+        return { skill, icon: skillIcons[skill], text: `${skill}: +${quantity.toLocaleString()} XP` };
       }),
     };
   }
@@ -43,16 +40,16 @@ export function activityPresentation(entry, gameData) {
     return {
       icon: skillIcons[data.skill],
       text: `Reached level ${data.after} ${data.skill}`,
-      details: [`Level ${data.before} → ${data.after}`],
+      details: [{ text: `Level ${data.before} to ${data.after}` }],
       milestone: data.after === 99,
     };
   }
 
   if (entry.type === "boss") {
     return {
-      icon: "/ui/216-0.png",
+      icon: getBossIcon(data.boss) ?? "/ui/216-0.png",
       text: `${data.boss}: ${data.count.toLocaleString()} ${data.count_type}${data.count === 1 ? "" : "s"}`,
-      details: [`Total kill count: ${data.total_count.toLocaleString()}`],
+      details: [{ text: `Total kill count: ${data.total_count.toLocaleString()}` }],
     };
   }
 
@@ -69,7 +66,7 @@ export function activityPresentation(entry, gameData) {
         ? `Completed the ${data.tier.toLowerCase()} ${data.region} diary`
         : `${data.region} ${data.tier.toLowerCase()} diary: ${data.tasks.length} task${data.tasks.length === 1 ? "" : "s"}`,
       details: data.tasks.map(function taskDescription(index) {
-        return tasks?.[index]?.task ?? `Task ${index + 1}`;
+        return { text: tasks?.[index]?.task ?? `Task ${index + 1}` };
       }),
       milestone: data.complete,
     };
@@ -81,8 +78,8 @@ export function activityPresentation(entry, gameData) {
     icon: `/item-icons/${data.item_id}.webp`,
     text: `${data.new_collection_item && data.source === "Collection log" ? "Unlocked" : "Received"} ${data.quantity > 1 ? `${data.quantity.toLocaleString()} × ` : ""}${item?.name ?? `Item ${data.item_id}`}`,
     details: [
-      data.source === "Collection log" ? "Collection log unlock" : `From ${data.source}`,
-      ...(data.value > 0 ? [`Value: ${data.value.toLocaleString()} GP`] : []),
+      { text: data.source === "Collection log" ? "Collection log unlock" : `From ${data.source}` },
+      ...(data.value > 0 ? [{ text: `Value: ${data.value.toLocaleString()} GP` }] : []),
     ],
     milestone: data.new_collection_item,
     collectionUnlock: data.new_collection_item,

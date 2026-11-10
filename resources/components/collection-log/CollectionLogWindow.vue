@@ -206,16 +206,29 @@
 </script>
 
 <template>
-  <div class="collection-log-container dialog-container metal-border rsbackground">
+  <div
+    class="collection-log-container dialog-container metal-border rsbackground"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="collection-log-title"
+  >
     <div class="collection-log-header">
-      <h1 class="collection-log-title">
-        {{ `${props.player}'s collection log` }} - {{ totalCollected }} /
-        {{ gameDataStore.gameData.collectionLogInfo?.uniqueSlots ?? 0 }} (Group: {{ totalGroupCollected }} /
-        {{ gameDataStore.gameData.collectionLogInfo?.uniqueSlots ?? 0 }})
+      <h1 id="collection-log-title" class="collection-log-title">
+        {{ `${props.player}'s collection log` }}
+        <span class="collection-log-totals">
+          <span>{{ totalCollected }} / {{ gameDataStore.gameData.collectionLogInfo?.uniqueSlots ?? 0 }} collected</span>
+          <span
+            >Group {{ totalGroupCollected }} / {{ gameDataStore.gameData.collectionLogInfo?.uniqueSlots ?? 0 }}</span
+          >
+        </span>
       </h1>
-      <button class="collection-log-close dialog-close" data-tooltip="Close dialog" @click="emit('close')">
-        <CachedImage src="/ui/1731-0.png" alt="Close dialog" />
-      </button>
+      <button
+        type="button"
+        class="collection-log-close dialog-close"
+        aria-label="Close dialog"
+        data-tooltip="Close dialog"
+        @click="emit('close')"
+      />
     </div>
     <div class="collection-log-title-border" />
     <div v-if="hiscoresError" class="collection-log-error" role="alert">

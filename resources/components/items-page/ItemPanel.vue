@@ -2,8 +2,9 @@
   import { computed } from "vue";
   import { useGroupStore } from "../../stores/group";
   import * as Member from "../../game/member";
-  import { serializeTooltip } from "../tooltip/tooltip-data";
+  import { itemBreakdownTooltip, serializeTooltip } from "../tooltip/tooltip-data";
   import CachedImage from "../cached-image/CachedImage.vue";
+  import PlayerIcon from "../player-icon/PlayerIcon.vue";
 
   const props = defineProps({
     itemName: { type: String, required: true },
@@ -17,57 +18,13 @@
     containerFilter: { type: String, required: true },
     quantities: { type: Map, required: true },
     isPinned: { type: Boolean, required: true },
+    detailed: { type: Boolean, default: false },
   });
   const groupStore = useGroupStore();
   const emit = defineEmits(["togglePin"]);
 
   const quantityBreakdown = computed(function getQuantityBreakdown() {
-    return [...props.quantities]
-      .filter(function memberIsVisible([name]) {
-        return !props.memberFilter.has(name);
-      })
-      .map(function sumMemberQuantity([name, breakdown]) {
-        let quantity = 0;
-
-        for (const itemContainer of Member.itemContainerNames) {
-          if (props.containerFilter === "All" || props.containerFilter === itemContainer) {
-            quantity += breakdown[itemContainer] ?? 0;
-          }
-        }
-
-        return { name, quantity, breakdown };
-      })
-      .filter(function hasQuantity({ quantity }) {
-        return quantity > 0;
-      })
-      .map(function prepareBreakdown({ name, quantity, breakdown }) {
-        const quantityPercent = (quantity / props.totalQuantity) * 100;
-
-        return {
-          name,
-          quantity,
-          tooltip: ["All", "STASH units", "Cargo holds"].includes(props.containerFilter)
-            ? serializeTooltip({
-                type: "item-breakdown",
-                name,
-                filter: props.containerFilter,
-                breakdown,
-                stashLocations: Member.stashItemLocations(
-                  groupStore.memberStates.get(name)?.stashUnits ?? new Map(),
-                  props.itemID,
-                ),
-                cargoHolds: Member.cargoHoldLocations(
-                  groupStore.memberStates.get(name)?.cargoHolds ?? new Map(),
-                  props.itemID,
-                ),
-              })
-            : undefined,
-          contributionStyle: {
-            transform: `scaleX(${quantityPercent}%)`,
-            background: `hsl(${quantityPercent}, 100%, 40%)`,
-          },
-        };
-      });
+    return Member.itemQuantityBreakdown(props.quantities, props.memberFilter, props.containerFilter);
   });
 
   const highAlch = computed(function getHighAlch() {
@@ -95,50 +52,70 @@
 </script>
 
 <template>
-  <div :class="['items-page-panel', 'rsborder', 'rsbackground', { 'items-page-panel-pinned': props.isPinned }]">
-    <div class="items-page-panel-top rsborder-tiny">
-      <div>
-        <a class="items-page-panel-name rstext" :href="wikiLink" target="_blank" rel="noopener noreferrer">
+  <div class="items-page-panel rsborder rsbackground">
+    <div class="items-page-panel-top">
+      <span class="items-page-panel-icon">
+        <CachedImage loading="lazy" :alt="props.itemName" :src="props.imageURL" width="64" height="64" />
+      </span>
+      <div class="items-page-panel-heading">
+        <a class="items-page-panel-name" :href="wikiLink" target="_blank" rel="noopener noreferrer">
           {{ props.itemName }}
         </a>
-        <button
-          :class="['items-page-panel-pin-button', { pinned: props.isPinned }]"
-          :data-tooltip="pinLabel"
-          :aria-label="pinLabel"
-          @click="emit('togglePin', props.itemID)"
+        <span v-if="props.detailed" class="items-page-panel-total"
+          >{{ props.totalQuantity.toLocaleString() }} total</span
         >
-          {{ props.isPinned ? "★" : "☆" }}
-        </button>
-        <div class="items-page-panel-item-details">
-          <span>Quantity</span>
-          <span>{{ props.totalQuantity.toLocaleString() }}</span>
-          <span>High alch</span>
-          <span :data-tooltip="highAlchTooltip">
-            {{ props.alchable ? `${highAlch.toLocaleString()}gp` : "n/a" }}
-          </span>
-          <span>GE price</span>
-          <span :data-tooltip="grandExchangeTooltip">
-            {{ props.gePricePer > 0 ? `${gePrice.toLocaleString()}gp` : "n/a" }}
-          </span>
-        </div>
       </div>
-      <CachedImage
-        loading="lazy"
-        class="items-page-panel-icon"
-        :alt="props.itemName ?? 'An unknown item'"
-        :src="props.imageURL"
-      />
+      <button
+        type="button"
+        :class="['items-page-panel-pin-button', { pinned: props.isPinned }]"
+        :data-tooltip="pinLabel"
+        :aria-label="pinLabel"
+        @click="emit('togglePin', props.itemID)"
+      >
+        {{ props.isPinned ? "★" : "☆" }}
+      </button>
     </div>
     <div class="items-page-panel-quantity-breakdown">
-      <template v-for="breakdown in quantityBreakdown" :key="breakdown.name">
-        <span :data-tooltip="breakdown.tooltip">{{ breakdown.name }}</span>
-        <span :data-tooltip="breakdown.tooltip">{{ breakdown.quantity.toLocaleString() }}</span>
-        <span
-          class="items-page-panel-quantity-contribution"
-          :data-tooltip="breakdown.tooltip"
-          :style="breakdown.contributionStyle"
-        />
+      <div
+        v-for="owner in quantityBreakdown"
+        :key="owner.name"
+        class="item-owner-row"
+        :data-tooltip="
+          itemBreakdownTooltip(props.itemName, props.itemID, [owner], props.containerFilter, groupStore.memberStates)
+        "
+        tabindex="0"
+      >
+        <span class="item-owner">
+          <PlayerIcon v-if="owner.name !== '@SHARED'" :name="owner.name" />
+          <CachedImage
+            v-else
+            class="shared-storage-icon"
+            src="/icons/group-storage.png"
+            alt="Shared storage"
+            width="18"
+            height="15"
+          />
+          <span class="item-owner-name">{{ owner.name === "@SHARED" ? "Shared" : owner.name }}</span>
+        </span>
+        <span class="item-owner-quantity">{{ owner.quantity.toLocaleString() }}</span>
+        <span class="item-owner-bar" aria-hidden="true">
+          <span class="item-owner-bar-fill" :style="{ '--item-owner-share': owner.quantity / props.totalQuantity }" />
+        </span>
+      </div>
+    </div>
+    <div class="items-page-panel-item-details">
+      <template v-if="!props.detailed">
+        <span>Quantity</span>
+        <span>{{ props.totalQuantity.toLocaleString() }}</span>
       </template>
+      <span>High alch</span>
+      <span :data-tooltip="highAlchTooltip" :tabindex="highAlchTooltip ? 0 : undefined">
+        {{ props.alchable ? `${highAlch.toLocaleString()}gp` : "n/a" }}
+      </span>
+      <span>GE price</span>
+      <span :data-tooltip="grandExchangeTooltip" :tabindex="grandExchangeTooltip ? 0 : undefined">
+        {{ props.gePricePer > 0 ? `${gePrice.toLocaleString()}gp` : "n/a" }}
+      </span>
     </div>
   </div>
 </template>

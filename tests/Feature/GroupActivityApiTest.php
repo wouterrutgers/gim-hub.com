@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\ActivityEntry;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Str;
 
 it('retrieves uploads that become visible after the polling watermark passes their timestamp', function (): void {
@@ -72,4 +73,90 @@ it('only announces ordinary drops worth at least one million GP', function (): v
 
     $this->withHeader('Authorization', $group->hash)->getJson("/api/group/{$group->name}/activity")
         ->assertSuccessful()->assertJsonCount(1, 'entries')->assertJsonPath('entries.0.data.value', 1_000_000);
+});
+
+it('returns complete player days with independent period pagination and group isolation', function (): void {
+    $this->travelTo(CarbonImmutable::parse('2026-11-09T12:00:00Z'));
+    $group = $this->createSnapshotGroup();
+    $member = $this->createCompleteSnapshotMember($group);
+    $otherMember = $this->createCompleteSnapshotMember($this->createSnapshotGroup('other-group'));
+
+    for ($index = 0; $index < 60; $index++) {
+        ActivityEntry::create([
+            'member_id' => $member->id, 'group_id' => $group->id, 'source_id' => Str::uuid()->toString(),
+            'revision' => 1, 'type' => 'xp', 'started_at' => now()->subMinutes($index)->getTimestampMs(),
+            'occurred_at' => now()->getTimestampMs(), 'data' => ['skills' => ['Attack' => 100]],
+        ]);
+    }
+
+    for ($day = 1; $day <= 7; $day++) {
+        ActivityEntry::create([
+            'member_id' => $member->id, 'group_id' => $group->id, 'source_id' => Str::uuid()->toString(),
+            'revision' => 1, 'type' => 'xp', 'started_at' => now()->subDays($day)->getTimestampMs(),
+            'occurred_at' => now()->subDays($day)->getTimestampMs(), 'data' => ['skills' => ['Attack' => 100]],
+        ]);
+    }
+
+    ActivityEntry::create([
+        'member_id' => $member->id, 'group_id' => $group->id, 'source_id' => Str::uuid()->toString(),
+        'revision' => 1, 'type' => 'xp', 'is_weekly' => true,
+        'started_at' => CarbonImmutable::parse('2026-09-07T00:00:00Z')->getTimestampMs(),
+        'occurred_at' => CarbonImmutable::parse('2026-09-13T12:00:00Z')->getTimestampMs(),
+        'data' => ['skills' => ['Attack' => 1000]],
+    ]);
+    $url = "/api/group/{$group->name}/activity/player/{$member->id}";
+    $page = $this->withHeader('Authorization', $group->hash)->getJson("{$url}?timezone=Europe/Amsterdam")
+        ->assertSuccessful()->assertJsonCount(7, 'periods')->assertJsonCount(60, 'periods.0.entries');
+    $cursor = urlencode($page->json('older_cursor'));
+    $this->getJson("{$url}?timezone=Europe/Amsterdam&cursor={$cursor}")->assertSuccessful()
+        ->assertJsonCount(2, 'periods')->assertJsonCount(1, 'periods.0.entries')
+        ->assertJsonPath('periods.1.kind', 'week')->assertJsonPath('older_cursor', null);
+    $this->getJson("/api/group/{$group->name}/activity/player/{$otherMember->id}?timezone=UTC")->assertNotFound();
+    $this->getJson("{$url}?timezone=invalid")->assertUnprocessable()->assertJsonValidationErrors('timezone');
+    $this->getJson("{$url}?timezone=UTC&cursor=invalid")->assertUnprocessable()->assertJsonValidationErrors('cursor');
+    $this->withHeader('Authorization', 'wrong-token')->getJson("{$url}?timezone=UTC")->assertUnauthorized();
+});
+
+it('uses complete local days across daylight saving boundaries', function (string $start, string $end, int $hours): void {
+    $group = $this->createSnapshotGroup();
+    $member = $this->createCompleteSnapshotMember($group);
+    $start = CarbonImmutable::parse($start)->getTimestampMs();
+    $end = CarbonImmutable::parse($end)->getTimestampMs();
+
+    foreach ([$start - 1, $start, $end - 1, $end] as $timestamp) {
+        ActivityEntry::create([
+            'member_id' => $member->id, 'group_id' => $group->id, 'source_id' => Str::uuid()->toString(),
+            'revision' => 1, 'type' => 'xp', 'started_at' => $timestamp, 'occurred_at' => $timestamp,
+            'data' => ['skills' => ['Attack' => 100]],
+        ]);
+    }
+
+    $page = $this->withHeader('Authorization', $group->hash)
+        ->getJson("/api/group/{$group->name}/activity/player/{$member->id}?timezone=Europe/Amsterdam")
+        ->assertSuccessful()->assertJsonCount(3, 'periods')->assertJsonCount(2, 'periods.1.entries')
+        ->assertJsonPath('periods.1.started_at', $start)->assertJsonPath('periods.1.ended_at', $end);
+    expect($page->json('periods.1.ended_at') - $page->json('periods.1.started_at'))->toBe($hours * 60 * 60 * 1000);
+})->with([
+    'spring' => ['2026-03-28T23:00:00Z', '2026-03-29T22:00:00Z', 23],
+    'autumn' => ['2026-10-24T22:00:00Z', '2026-10-25T23:00:00Z', 25],
+]);
+
+it('returns the whole changed player day when one recorded session grows', function (): void {
+    $this->freezeTime();
+    $group = $this->createSnapshotGroup();
+    $member = $this->createCompleteSnapshotMember($group);
+    $entries = collect([100, 200])->map(fn (int $quantity): ActivityEntry => ActivityEntry::create([
+        'member_id' => $member->id, 'group_id' => $group->id, 'source_id' => Str::uuid()->toString(),
+        'revision' => 1, 'type' => 'xp', 'started_at' => now()->subMinutes(5)->getTimestampMs(),
+        'occurred_at' => now()->getTimestampMs(), 'data' => ['skills' => ['Attack' => $quantity]],
+    ]));
+    $url = "/api/group/{$group->name}/activity/player/{$member->id}?timezone=UTC";
+    $first = $this->withHeader('Authorization', $group->hash)->getJson($url)->assertSuccessful();
+    $this->travel(90)->seconds();
+    $entries->first()->update(['revision' => 2, 'data' => ['skills' => ['Attack' => 300]]]);
+    $from = urlencode($first->json('from_time'));
+    $response = $this->getJson("{$url}&from_time={$from}")->assertSuccessful()
+        ->assertJsonCount(1, 'periods')->assertJsonCount(2, 'periods.0.entries');
+    expect(collect($response->json('periods.0.entries'))->sum('data.skills.Attack'))->toBe(500);
+    expect(collect($response->json('periods.0.entries'))->firstWhere('id', $entries->first()->id)['revision'])->toBe(2);
 });

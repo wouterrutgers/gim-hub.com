@@ -10,6 +10,10 @@ class Member extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'preferences' => 'array',
+    ];
+
     public const SHARED_MEMBER = '@SHARED';
 
     public const DEFAULT_COLOR_HUES = [330, 100, 230, 170, 40];

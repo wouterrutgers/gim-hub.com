@@ -7,7 +7,7 @@
 <template>
   <div id="history-page">
     <section class="history-page-skill-history" aria-labelledby="skill-history-heading">
-      <h2 id="skill-history-heading">Skill history</h2>
+      <h2 id="skill-history-heading">Experience gained</h2>
       <SkillGraph />
     </section>
     <p class="history-page-settings-notice">

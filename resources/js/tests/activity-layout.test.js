@@ -24,6 +24,78 @@ vi.mock("../../api/requests/changelog", function changelog() {
 });
 
 describe("persistent activity layout", function activityLayout() {
+  it("shows complete player summaries by day and keeps the choice between the sidebar and activity page", async function playerActivity() {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-11-09T12:00:00Z"));
+    const startedAt = new Date().setHours(0, 0, 0, 0);
+    const entries = [100, 200].map(function training(quantity, index) {
+      return {
+        id: index + 1,
+        revision: 1,
+        member_id: 10,
+        type: "xp",
+        started_at: Date.now() - index * 60_000,
+        occurred_at: Date.now(),
+        data: { skills: { Attack: quantity } },
+      };
+    });
+    const history = new Map([
+      [
+        10,
+        [{ key: `day:${startedAt}`, kind: "day", started_at: startedAt, ended_at: startedAt + 86_400_000, entries }],
+      ],
+    ]);
+    const { container, router } = await mountLayout(
+      [
+        { id: 10, name: "Alice" },
+        { id: 20, name: "Bob" },
+      ],
+      history,
+    );
+    const feed = container.querySelector(".activity-feed");
+    const players = feed.querySelector(".activity-player-buttons");
+    expect(
+      [...players.querySelectorAll("button")].map(function name(button) {
+        return button.textContent.trim();
+      }),
+    ).toEqual(["Everyone", "Alice", "Bob"]);
+    const scroll = feed.querySelector(".activity-feed-scroll");
+    scroll.scrollTop = 100;
+
+    players.querySelectorAll("button")[1].click();
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(feed.querySelector(".activity-day .activity-date").textContent).toBe("Today");
+    expect(feed.querySelector(".activity-summary-category").textContent).toContain("Attack: +300 XP");
+    expect(scroll.scrollTop).toBe(0);
+    const day = feed.querySelector(".activity-day");
+
+    await router.push("/group/activity");
+    await vi.waitFor(function activityPageIsReady() {
+      expect(container.querySelector("#activity-page .activity-feed")).toBe(feed);
+    });
+    expect(players.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Alice");
+    expect(feed.querySelector(".activity-day")).toBe(day);
+
+    const filter = feed.querySelector('[aria-label="Filter activity by type"]');
+    filter.value = "quest";
+    filter.dispatchEvent(new Event("change"));
+    await nextTick();
+    expect(feed.querySelector(".activity-day")).toBeNull();
+    expect(feed.querySelector(".activity-empty")).not.toBeNull();
+    filter.value = "";
+    filter.dispatchEvent(new Event("change"));
+    await nextTick();
+    players.querySelectorAll("button")[2].click();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(feed.querySelector(".activity-day")).toBeNull();
+
+    players.querySelector("button").click();
+    await nextTick();
+    expect(feed.querySelector(".activity-day")).toBeNull();
+    expect(players.querySelector('[aria-pressed="true"]').textContent.trim()).toBe("Everyone");
+  });
+
   it("keeps the timeline and its filters while changing pages and player panel visibility", async function persistentTimeline() {
     vi.useFakeTimers();
     const { container, router } = await mountLayout();
@@ -99,7 +171,7 @@ describe("persistent activity layout", function activityLayout() {
   });
 });
 
-async function mountLayout(members = []) {
+async function mountLayout(members = [], history = new Map()) {
   const pinia = createTestPinia();
   setActivePinia(pinia);
   vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
@@ -115,6 +187,9 @@ async function mountLayout(members = []) {
     },
     async fetchGroupCollectionLogs() {
       return new Map();
+    },
+    async fetchPlayerActivity({ memberIdentifier }) {
+      return { periods: history.get(memberIdentifier) ?? [], older_cursor: null, from_time: new Date().toISOString() };
     },
     async fetchActivity() {
       return { entries: [], older_cursor: null, from_time: new Date().toISOString() };

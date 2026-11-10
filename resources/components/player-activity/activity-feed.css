@@ -39,9 +39,16 @@
   background: var(--elevated);
 }
 
+.activity-player-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 12px 12px;
+}
+
 .activity-feed-filters {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 8px;
   padding: 0 12px 12px;
@@ -61,7 +68,6 @@
 
 .activity-drop-filter {
   display: flex;
-  grid-column: 1 / -1;
   align-items: center;
   color: var(--muted);
   font-size: 11px;
@@ -190,7 +196,7 @@
   display: none;
 }
 
-.activity-card-details[open] .chevron {
+.activity-card-details[open] > summary .chevron {
   transform: rotate(45deg);
 }
 
@@ -210,18 +216,47 @@
   color: var(--muted);
 }
 
+.activity-summary-category {
+  margin-block: 10px;
+}
+
+.activity-summary-category h4 {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.activity-summary-category ul {
+  padding: 0;
+  list-style: none;
+}
+
+.activity-summary-category li {
+  padding-block: 2px;
+  overflow-wrap: anywhere;
+}
+
+.activity-error {
+  padding-top: 12px;
+  color: var(--invalid);
+}
+
 .activity-older {
   margin: 12px auto;
 }
 
 .activity-page-feed .activity-feed-filters {
-  grid-template-columns: minmax(0, 180px) minmax(0, 150px) auto;
+  grid-template-columns: minmax(0, 180px) auto;
   justify-content: start;
   padding: 4px 20px 16px;
 }
 
 .activity-page-feed .activity-feed-header {
   padding: 20px;
+}
+
+.activity-page-feed .activity-player-buttons {
+  padding-inline: 20px;
 }
 
 .activity-page-feed .activity-drop-filter {
@@ -235,17 +270,20 @@
 
 @media (width <= 767px) {
   .activity-page-feed .activity-feed-filters {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto;
     padding-inline: 14px;
   }
 
   .activity-page-feed .activity-drop-filter {
-    grid-column: 1 / -1;
     margin-left: 0;
   }
 
   .activity-page-feed .activity-feed-header {
     padding: 16px 14px;
+  }
+
+  .activity-page-feed .activity-player-buttons {
+    padding-inline: 14px;
   }
 
   .activity-page-feed .activity-feed-scroll {

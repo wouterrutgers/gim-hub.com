@@ -22,6 +22,7 @@ Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(func
     Route::put('/reorder-group-members', [GroupMemberController::class, 'reorderGroupMembers']);
     Route::post('/update-group-member', [GroupMemberController::class, 'updateGroupMember']);
     Route::get('/activity', [GroupActivityController::class, 'index']);
+    Route::get('/activity/player/{member}', [GroupActivityController::class, 'player'])->whereNumber('member');
     Route::put('/update-member-color', [GroupMemberController::class, 'updateMemberColor']);
     Route::get('/get-group-data', [GroupMemberController::class, 'getGroupData']);
     Route::get('/get-skill-data', [GroupMemberController::class, 'getSkillData']);

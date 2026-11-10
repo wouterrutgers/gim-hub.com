@@ -187,6 +187,10 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
       return saving;
     }
 
+    if (!Object.keys(pendingChanges).length) {
+      return true;
+    }
+
     const operation = saveQueuedChanges();
     saving = operation;
     const result = await operation;
@@ -222,12 +226,12 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
   }
 
   async function refresh() {
+    const currentGeneration = generation;
+    const revision = preferenceRevision;
+
     if (!selectedMemberId.value || pending.value || !(await saveChanges())) {
       return;
     }
-
-    const currentGeneration = generation;
-    const revision = preferenceRevision;
 
     try {
       const [response, entries] = await Promise.all([
@@ -239,13 +243,17 @@ export const usePlayerPreferencesStore = defineStore("player-preferences", funct
         return;
       }
 
+      if (response === null) {
+        throw new Error("Player preferences are missing from the server.");
+      }
+
       preferences.value = response;
       changelogEntries.value = entries;
-      settingsStore.setPlayerPreferences(response ?? DEFAULT_PLAYER_PREFERENCES);
+      settingsStore.setPlayerPreferences(response);
       cachePreferences();
       saveError.value = undefined;
 
-      if (!response?.seenChangelogIds || viewingChangelog.value) {
+      if (!response.seenChangelogIds || viewingChangelog.value) {
         await markChangelogRead(entries);
       }
     } catch (reason) {

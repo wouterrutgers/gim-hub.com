@@ -274,6 +274,72 @@ export default class DemoClient {
     });
   }
 
+  async fetchPlayerActivity({ memberIdentifier, fromTime, cursor } = {}) {
+    await this.fetchGameData();
+    const periods = new Map();
+
+    for (const entry of this.state.activities.values()) {
+      if (entry.member_id !== memberIdentifier) {
+        continue;
+      }
+
+      const start = new Date(entry.started_at);
+
+      if (!entry.is_weekly) {
+        start.setHours(0, 0, 0, 0);
+      }
+
+      const end = new Date(start);
+
+      if (entry.is_weekly) {
+        end.setUTCDate(end.getUTCDate() + 7);
+      } else {
+        end.setDate(end.getDate() + 1);
+      }
+
+      const kind = entry.is_weekly ? "week" : "day";
+      const key = `${kind}:${start.getTime()}`;
+
+      if (!periods.has(key)) {
+        periods.set(key, { key, kind, started_at: start.getTime(), ended_at: end.getTime(), entries: [] });
+      }
+
+      periods.get(key).entries.push(entry);
+    }
+
+    const sorted = [...periods.values()]
+      .sort(function newestFirst(left, right) {
+        return right.started_at - left.started_at || right.kind.localeCompare(left.kind);
+      })
+      .filter(function requestedPeriod(period) {
+        if (fromTime) {
+          return period.entries.some(function changed(entry) {
+            return entry.updated_at >= Date.parse(fromTime) - 60_000;
+          });
+        }
+
+        if (cursor) {
+          const [kind, start] = cursor.split(":");
+
+          return period.started_at < Number(start) || (period.started_at === Number(start) && period.kind < kind);
+        }
+
+        return true;
+      });
+
+    for (const period of sorted) {
+      period.entries.sort(function newestEntry(left, right) {
+        return right.started_at - left.started_at || right.id - left.id;
+      });
+    }
+
+    return structuredClone({
+      periods: fromTime ? sorted : sorted.slice(0, 7),
+      ...(!fromTime ? { older_cursor: sorted.length > 7 ? sorted[6].key : null } : {}),
+      from_time: new Date().toISOString(),
+    });
+  }
+
   async fetchMemberHiscores(memberName) {
     await this.fetchGameData();
 

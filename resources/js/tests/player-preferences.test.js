@@ -287,6 +287,10 @@ function createServer() {
       }
 
       if (options.method === "PATCH") {
+        if (server.holdSave) {
+          await server.holdSave;
+        }
+
         if (server.failSaves) {
           return new Response(null, { status: 503 });
         }

@@ -24,11 +24,10 @@ vi.mock("../../api/requests/changelog", function changelog() {
 });
 
 describe("persistent activity layout", function activityLayout() {
-  it("aligns selected players by day and activity without treating unloaded history as inactivity", async function compareActivity() {
+  it("loads complete comparison days automatically and keeps earlier history paged", async function compareActivity() {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-11-10T12:00:00Z"));
     const today = new Date().setHours(0, 0, 0, 0);
-    const yesterday = today - 86_400_000;
 
     function day(start, memberIdentifier, skills) {
       return {
@@ -55,22 +54,45 @@ describe("persistent activity layout", function activityLayout() {
       { id: 20, name: "Bob" },
     ]);
     const client = useApiStore().client;
+    let finishOlder;
     const fetch = vi.spyOn(client, "fetchPlayerActivity").mockImplementation(async function history({
       memberIdentifier,
       cursor,
       fromTime,
     }) {
-      if (memberIdentifier === 10) {
+      if (memberIdentifier === 10 && cursor === `day:${today - 6 * 86_400_000}`) {
+        return new Promise(function pendingHistory(resolve) {
+          finishOlder = resolve;
+        });
+      }
+
+      if (cursor) {
         return {
-          periods: [day(today, 10, { Attack: fromTime ? 300 : 100, Strength: 25 }), day(yesterday, 10, { Attack: 50 })],
+          periods: [day(today - 14 * 86_400_000, memberIdentifier, { Attack: memberIdentifier === 10 ? 500 : 750 })],
           older_cursor: null,
           from_time: new Date().toISOString(),
         };
       }
 
+      if (memberIdentifier === 10) {
+        return {
+          periods: Array.from({ length: 7 }, function recordedDay(_value, index) {
+            return day(
+              today - index * 86_400_000,
+              10,
+              index === 0 ? { Attack: fromTime ? 300 : 100, Strength: 25 } : { Attack: 50 },
+            );
+          }),
+          older_cursor: `day:${today - 6 * 86_400_000}`,
+          from_time: new Date().toISOString(),
+        };
+      }
+
       return {
-        periods: [cursor ? day(yesterday, 20, { Attack: 250 }) : day(today, 20, { Attack: 200 })],
-        older_cursor: cursor ? null : `day:${today}`,
+        periods: Array.from({ length: 7 }, function recordedDay(_value, index) {
+          return day(today - index * 2 * 86_400_000, 20, { Attack: index === 0 ? 200 : 250 });
+        }),
+        older_cursor: `day:${today - 12 * 86_400_000}`,
         from_time: new Date().toISOString(),
       };
     });
@@ -102,11 +124,30 @@ describe("persistent activity layout", function activityLayout() {
     expect(values(today, "Attack XP")).toEqual(["100", "200"]);
     expect(values(today, "Total XP")).toEqual(["125", "200"]);
     expect(values(today, "Strength XP")).toEqual(["25", "None"]);
-    expect(values(yesterday, "Attack XP")).toEqual(["50", "Not loaded"]);
+    expect(values(today - 8 * 86_400_000, "Attack XP")).toEqual(["Loading…", "250"]);
+    finishOlder({
+      periods: Array.from({ length: 7 }, function recordedDay(_value, index) {
+        return day(today - (index + 7) * 86_400_000, 10, { Attack: 150 });
+      }),
+      older_cursor: `day:${today - 13 * 86_400_000}`,
+      from_time: new Date().toISOString(),
+    });
+    await vi.advanceTimersByTimeAsync(0);
+    expect(values(today - 8 * 86_400_000, "Attack XP")).toEqual(["150", "250"]);
+    expect(comparison.querySelectorAll("tbody")).toHaveLength(13);
+    expect(
+      fetch.mock.calls
+        .filter(function earlier([options]) {
+          return options.cursor;
+        })
+        .map(function cursor([options]) {
+          return options.cursor;
+        }),
+    ).toEqual([`day:${today - 6 * 86_400_000}`]);
 
     comparison.querySelector(".activity-older").click();
     await vi.advanceTimersByTimeAsync(0);
-    expect(values(yesterday, "Attack XP")).toEqual(["50", "250"]);
+    expect(values(today - 14 * 86_400_000, "Attack XP")).toEqual(["500", "750"]);
 
     const filter = container.querySelector('[aria-label="Filter activity by type"]');
     filter.value = "boss";

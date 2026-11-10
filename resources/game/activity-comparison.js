@@ -95,8 +95,16 @@ export function activityComparisonRows(entries, gameData) {
 }
 
 export function playerPeriodStatus(history, period) {
-  if (!history.loaded) {
+  if (!playerPeriodIsLoaded(history, period)) {
     return history.error ? "Unavailable" : "Loading…";
+  }
+
+  return "None";
+}
+
+export function playerPeriodIsLoaded(history, period) {
+  if (!history.loaded) {
+    return false;
   }
 
   if (
@@ -105,12 +113,10 @@ export function playerPeriodStatus(history, period) {
       return candidate.key === period.key;
     })
   ) {
-    return "None";
+    return true;
   }
 
   const [kind, start] = history.olderCursor.split(":");
 
-  return period.started_at > Number(start) || (period.started_at === Number(start) && period.kind >= kind)
-    ? "None"
-    : "Not loaded";
+  return period.started_at > Number(start) || (period.started_at === Number(start) && period.kind >= kind);
 }

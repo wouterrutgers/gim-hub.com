@@ -258,28 +258,29 @@
       >
         <span class="chevron chevron-right" aria-hidden="true" />
       </button>
+      <div v-if="!props.collapsible" class="activity-display-switch" role="group" aria-label="Activity display">
+        <button
+          type="button"
+          class="men-button small"
+          :class="{ active: !comparison }"
+          :aria-pressed="!comparison"
+          @click="comparison = false"
+        >
+          Activity
+        </button>
+        <button
+          type="button"
+          class="men-button small"
+          :class="{ active: comparison }"
+          :aria-pressed="comparison"
+          @click="comparison = true"
+        >
+          Compare
+        </button>
+      </div>
     </header>
-    <div v-if="!props.collapsible" class="activity-display-switch" role="group" aria-label="Activity display">
-      <button
-        type="button"
-        class="men-button small"
-        :class="{ active: !comparison }"
-        :aria-pressed="!comparison"
-        @click="comparison = false"
-      >
-        Activity
-      </button>
-      <button
-        type="button"
-        class="men-button small"
-        :class="{ active: comparison }"
-        :aria-pressed="comparison"
-        @click="comparison = true"
-      >
-        Compare
-      </button>
-    </div>
     <div class="activity-player-buttons" role="group" aria-label="Filter activity by player">
+      <span v-if="comparing" class="activity-selection-label">Select players to compare</span>
       <button
         type="button"
         class="men-button small"
@@ -298,6 +299,9 @@
         :aria-pressed="comparing ? !excludedMembers.has(identifier) : memberFilter === identifier"
         @click="selectMember(identifier)"
       >
+        <span v-if="comparing" class="activity-player-check" aria-hidden="true">{{
+          excludedMembers.has(identifier) ? "" : "✓"
+        }}</span>
         <PlayerIcon :name="name" />{{ name }}
       </button>
     </div>

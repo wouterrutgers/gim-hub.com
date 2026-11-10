@@ -1,8 +1,8 @@
 <script setup>
-  import { computed, effectScope, onBeforeUnmount, reactive, ref, shallowRef, watch } from "vue";
+  import { computed, effectScope, onBeforeUnmount, reactive, ref, shallowRef, watch, watchEffect } from "vue";
   import { createPlayerActivityHistory } from "../../stores/player-activity";
   import { useGameDataStore } from "../../stores/game-data";
-  import { activityComparisonRows, playerPeriodStatus } from "../../game/activity-comparison";
+  import { activityComparisonRows, playerPeriodIsLoaded, playerPeriodStatus } from "../../game/activity-comparison";
   import CachedImage from "../cached-image/CachedImage.vue";
   import PlayerIcon from "../player-icon/PlayerIcon.vue";
 
@@ -13,6 +13,7 @@
   });
   const gameDataStore = useGameDataStore();
   const sources = shallowRef(new Map());
+  const visibleThrough = shallowRef();
 
   watch(
     function selectedPlayers() {
@@ -37,6 +38,7 @@
           continue;
         }
 
+        visibleThrough.value = undefined;
         const scope = effectScope();
         const history = scope.run(function startHistory() {
           return reactive(createPlayerActivityHistory(ref(player.identifier)));
@@ -55,7 +57,7 @@
     }
   });
 
-  const periods = computed(function comparePeriods() {
+  const allPeriods = computed(function comparePeriods() {
     const combined = new Map();
 
     for (const player of props.players) {
@@ -112,15 +114,27 @@
         };
       });
   });
+  const periods = computed(function visiblePeriods() {
+    return allPeriods.value.filter(function inVisibleRange(period) {
+      return (
+        !visibleThrough.value ||
+        period.started_at > visibleThrough.value.started_at ||
+        (period.started_at === visibleThrough.value.started_at && period.kind >= visibleThrough.value.kind)
+      );
+    });
+  });
   const loading = computed(function loadingPlayers() {
     return [...sources.value.values()].some(function pending(source) {
       return !source.history.loaded && !source.history.error;
     });
   });
   const hasOlder = computed(function earlierHistory() {
-    return [...sources.value.values()].some(function earlier(source) {
-      return source.history.olderCursor;
-    });
+    return (
+      allPeriods.value.length > periods.value.length ||
+      [...sources.value.values()].some(function earlier(source) {
+        return source.history.olderCursor;
+      })
+    );
   });
   const loadingOlder = computed(function fetchingHistory() {
     return [...sources.value.values()].some(function fetching(source) {
@@ -128,7 +142,31 @@
     });
   });
 
+  watchEffect(function loadMissingHistory() {
+    if (loading.value || loadingOlder.value || allPeriods.value.length === 0) {
+      return;
+    }
+
+    visibleThrough.value ??= allPeriods.value.at(-1);
+    const oldest = periods.value.at(-1);
+
+    if (!oldest) {
+      return;
+    }
+
+    for (const { history } of sources.value.values()) {
+      if (!history.error && !playerPeriodIsLoaded(history, oldest)) {
+        void history.loadOlder();
+      }
+    }
+  });
+
   async function loadOlder() {
+    if (loadingOlder.value || !hasOlder.value) {
+      return;
+    }
+
+    visibleThrough.value = undefined;
     await Promise.all(
       [...sources.value.values()].map(function earlier(source) {
         return source.history.loadOlder();
@@ -181,13 +219,17 @@
       </thead>
       <tbody v-for="period in periods" :key="period.key" :data-period-key="period.key">
         <tr class="activity-comparison-period">
-          <th :colspan="props.players.length + 1" scope="rowgroup">{{ props.periodLabel(period) }}</th>
+          <th :colspan="props.players.length + 1" scope="rowgroup">
+            <span class="activity-comparison-heading">{{ props.periodLabel(period) }}</span>
+          </th>
         </tr>
         <template v-for="[label, rows] in period.categories" :key="label">
           <tr class="activity-comparison-category">
-            <th :colspan="props.players.length + 1">{{ label }}</th>
+            <th :colspan="props.players.length + 1">
+              <span class="activity-comparison-heading">{{ label }}</span>
+            </th>
           </tr>
-          <tr v-for="row in rows" :key="row.key">
+          <tr v-for="row in rows" :key="row.key" :class="{ 'activity-comparison-total': row.key === 'xp:total' }">
             <th scope="row">
               <CachedImage
                 v-if="row.icon"
@@ -198,7 +240,17 @@
                 height="16"
               />{{ row.label }}
             </th>
-            <td v-for="player in props.players" :key="player.identifier">
+            <td
+              v-for="player in props.players"
+              :key="player.identifier"
+              :class="{ 'activity-comparison-empty': !row.values.has(player.identifier) }"
+              :aria-label="
+                !row.values.has(player.identifier) &&
+                playerPeriodIsLoaded(sources.get(player.identifier).history, period)
+                  ? 'No recorded activity'
+                  : undefined
+              "
+            >
               {{
                 row.values.get(player.identifier) ?? playerPeriodStatus(sources.get(player.identifier).history, period)
               }}

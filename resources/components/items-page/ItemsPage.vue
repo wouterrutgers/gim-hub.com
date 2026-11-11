@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, ref, watch } from "vue";
+  import { computed, nextTick, ref, watch } from "vue";
   import * as Member from "../../game/member";
   import { useGameDataStore } from "../../stores/game-data";
   import { useGroupStore } from "../../stores/group";
@@ -51,6 +51,7 @@
   });
   const gearscapeExportStatus = ref("idle");
   const filtersExpanded = ref(false);
+  const selectedItemDetails = ref();
   const [selectedItemIdentifier, setSelectedItemIdentifier] = useRememberedState({
     key: "bank-selected-item",
     defaultValue: undefined,
@@ -197,8 +198,15 @@
     { immediate: true },
   );
 
-  function selectItem(identifier) {
+  async function selectItem(identifier) {
     setSelectedItemIdentifier(selectedItemIdentifier.value === identifier ? undefined : identifier);
+    await nextTick();
+
+    const details = selectedItemDetails.value;
+
+    if (details && details.getBoundingClientRect().bottom > window.innerHeight) {
+      details.scrollIntoView({ block: "nearest" });
+    }
   }
 
   const gearscapeExportLabel = computed(function getGearscapeExportLabel() {
@@ -594,6 +602,7 @@
     <section
       v-if="!settingsStore.showItemOwners && selectedItem"
       id="selected-item-details"
+      ref="selectedItemDetails"
       class="item-inspector"
       aria-label="Selected item details"
     >

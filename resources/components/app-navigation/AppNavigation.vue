@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, ref } from "vue";
+  import { computed, onBeforeUnmount, onMounted, ref } from "vue";
   import { useRoute } from "vue-router";
   import { useApiStore } from "../../stores/api";
   import { usePlayerPreferencesStore } from "../../stores/player-preferences";
@@ -25,6 +25,8 @@
     return playerPreferencesStore.displayMemberName ?? "Choose your player";
   });
   const moreMenu = ref();
+  const moreToggle = ref();
+  const moreOpen = ref(false);
   const { open: modalOpen, openModal, closeModal } = useModal();
 
   const primaryLinks = [
@@ -42,20 +44,43 @@
   ];
 
   function closeMoreOnOutsideClick(event) {
-    if (!moreMenu.value.contains(event.target)) {
-      moreMenu.value.open = false;
+    if (moreOpen.value && !moreMenu.value.contains(event.target)) {
+      moreOpen.value = false;
     }
+  }
+
+  function closeMoreOnFocusOut(event) {
+    if (event.relatedTarget && !moreMenu.value.contains(event.relatedTarget)) {
+      moreOpen.value = false;
+    }
+  }
+
+  function closeMore() {
+    moreOpen.value = false;
+    moreToggle.value.focus();
   }
 
   function closeMoreOnEscape(event) {
-    if (!moreMenu.value.open) {
+    if (!moreOpen.value) {
       return;
     }
 
-    moreMenu.value.open = false;
     event.stopPropagation();
-    moreMenu.value.querySelector("summary").focus();
+    closeMore();
   }
+
+  function openSupportFromMore() {
+    closeMore();
+    openModal();
+  }
+
+  onMounted(function listenForOutsidePointer() {
+    document.addEventListener("pointerdown", closeMoreOnOutsideClick);
+  });
+
+  onBeforeUnmount(function removeOutsidePointerListener() {
+    document.removeEventListener("pointerdown", closeMoreOnOutsideClick);
+  });
 </script>
 
 <template>
@@ -135,39 +160,47 @@
           <span class="nav-label-short">{{ link.shortLabel }}</span>
         </AppLink>
       </div>
-      <details
-        ref="moreMenu"
-        class="nav-mobile-more"
-        @mousedown.window="closeMoreOnOutsideClick"
-        @keydown.esc="closeMoreOnEscape"
-      >
-        <summary
+      <div ref="moreMenu" class="nav-mobile-more" @focusout="closeMoreOnFocusOut" @keydown.esc="closeMoreOnEscape">
+        <button
+          ref="moreToggle"
+          type="button"
+          class="nav-mobile-more-toggle"
+          aria-controls="app-navigation-more"
+          :aria-expanded="moreOpen"
           :class="{
             active: secondaryLinks.some(function isCurrentLink(link) {
               return route.path === link.href;
             }),
           }"
+          @click="moreOpen = !moreOpen"
         >
           More <span class="chevron" aria-hidden="true" />
-        </summary>
-        <div class="nav-mobile-menu rsborder rsbackground" @click.capture="moreMenu.open = false">
+        </button>
+        <div v-show="moreOpen" id="app-navigation-more" class="nav-mobile-menu rsborder rsbackground">
           <AppLink
             v-for="link in secondaryLinks"
             :key="link.href"
             :href="link.href"
             :selected="route.path === link.href"
+            @click="closeMore"
           >
             {{ link.label }}
           </AppLink>
-          <a href="https://discord.gg/ZwzW6yYD8V" target="_blank" rel="noopener noreferrer" class="app-link men-button">
+          <a
+            href="https://discord.gg/ZwzW6yYD8V"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="app-link men-button"
+            @click="closeMore"
+          >
             Discord
           </a>
-          <button class="app-link men-button" type="button" aria-haspopup="dialog" @click="openModal()">
+          <button class="app-link men-button" type="button" aria-haspopup="dialog" @click="openSupportFromMore">
             <CachedImage class="nav-support-heart" src="/ui/203-0.png" alt="" width="16" height="14" />
             Support the hub
           </button>
         </div>
-      </details>
+      </div>
       <div class="nav-secondary-links">
         <h2 class="nav-section-label">Tools</h2>
         <AppLink

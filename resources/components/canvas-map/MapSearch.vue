@@ -62,6 +62,14 @@
     mapStore.selectLocation(location);
   }
 
+  function selectSuggestion(location, event) {
+    selectLocation(location);
+
+    if (event.detail > 0 && window.matchMedia("(pointer: coarse)").matches) {
+      search.value.querySelector("input").blur();
+    }
+  }
+
   async function handleKeydown(event) {
     if (event.key === "Escape") {
       isOpen.value = false;
@@ -147,7 +155,7 @@
             tabindex="-1"
             @pointermove="activeIndex = index"
             @mousedown.prevent
-            @click="selectLocation(location)"
+            @click="selectSuggestion(location, $event)"
           >
             <span>{{ location.name }}</span>
             <small v-if="nameCounts.get(location.name.toLowerCase()) > 1">

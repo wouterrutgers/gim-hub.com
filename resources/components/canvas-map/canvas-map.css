@@ -149,6 +149,10 @@
 }
 
 @media (width <= 767px) {
+  .map-workspace .workspace-page {
+    container-type: size;
+  }
+
   #canvas-map-coordinates {
     left: 16px;
   }
@@ -159,6 +163,10 @@
 
   .canvas-map-search {
     width: 100%;
+  }
+
+  .canvas-map-search-dropdown {
+    max-height: min(50dvh, calc(100cqh - 4.5rem));
   }
 
   #canvas-map-controls > .select-container {

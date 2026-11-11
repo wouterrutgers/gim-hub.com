@@ -17,8 +17,9 @@
   const scroller = ref();
   const comparisonScroller = ref();
   const excludedMembers = ref(new Set());
+  const showTimeline = ref(false);
   const comparing = computed(function comparingPlayers() {
-    return !props.collapsible;
+    return !props.collapsible && !showTimeline.value;
   });
   const typeFilter = ref("");
   const timestamp = ref(Date.now());
@@ -47,6 +48,16 @@
       }
     }
   });
+  watch(
+    function isSidebar() {
+      return props.collapsible;
+    },
+    function resetPageView(collapsible) {
+      if (collapsible) {
+        showTimeline.value = false;
+      }
+    },
+  );
   const comparisonPlayers = computed(function selectedComparisonPlayers() {
     return [...members.value]
       .filter(function included([identifier]) {
@@ -110,19 +121,21 @@
   }
 
   watch(filteredEntries, async function preserveReadingPosition(_entries, previous) {
-    if (!scroller.value || previous.length === 0) {
+    const timeline = scroller.value;
+
+    if (!timeline || previous.length === 0) {
       return;
     }
 
-    if (scroller.value.scrollTop <= 24) {
+    if (timeline.scrollTop <= 24) {
       await nextTick();
-      scroller.value.scrollTop = 0;
+      timeline.scrollTop = 0;
 
       return;
     }
 
-    const { top, bottom } = scroller.value.getBoundingClientRect();
-    const anchor = [...scroller.value.querySelectorAll("[data-entry-id]")].find(function visible(element) {
+    const { top, bottom } = timeline.getBoundingClientRect();
+    const anchor = [...timeline.querySelectorAll("[data-entry-id]")].find(function visible(element) {
       const bounds = element.getBoundingClientRect();
 
       return bounds.bottom >= top && bounds.top <= bottom;
@@ -135,10 +148,10 @@
     const selector = `[data-entry-id="${anchor.dataset.entryId}"]`;
     const offset = anchor.getBoundingClientRect().top - top;
     await nextTick();
-    const moved = scroller.value.querySelector(selector);
+    const moved = timeline.querySelector(selector);
 
     if (moved) {
-      scroller.value.scrollTop += moved.getBoundingClientRect().top - top - offset;
+      timeline.scrollTop += moved.getBoundingClientRect().top - top - offset;
     }
   });
 
@@ -178,14 +191,16 @@
     aria-label="Group activity"
   >
     <header class="activity-feed-header">
-      <h2>Group activity</h2>
-      <span
-        v-if="!comparing"
-        class="activity-feed-period"
-        tabindex="0"
-        data-tooltip="Activity stays detailed for at least 30 days. Older completed weeks are combined per player, from Monday to Sunday in UTC."
-        >{{ activityStore.olderCursor ? "Loaded history" : "All history" }}</span
-      >
+      <div>
+        <h2>Group activity</h2>
+        <span
+          v-if="!comparing"
+          class="activity-feed-period"
+          tabindex="0"
+          data-tooltip="Activity stays detailed for at least 30 days. Older completed weeks are combined per player, from Monday to Sunday in UTC."
+          >{{ activityStore.olderCursor ? "Loaded history" : "All history" }}</span
+        >
+      </div>
       <button
         v-if="props.collapsible"
         class="activity-collapse"
@@ -198,6 +213,14 @@
       >
         <span class="chevron chevron-right" aria-hidden="true" />
       </button>
+      <div v-else class="activity-view-toggle" role="group" aria-label="Activity view">
+        <button type="button" class="men-button" :aria-pressed="!comparing" @click="showTimeline = true">
+          Timeline
+        </button>
+        <button type="button" class="men-button" :aria-pressed="comparing" @click="showTimeline = false">
+          Compare
+        </button>
+      </div>
     </header>
     <div v-if="comparing" class="activity-player-buttons" role="group" aria-label="Select players to compare">
       <span class="activity-selection-label">Select players to compare</span>
@@ -223,7 +246,9 @@
         <PlayerIcon :name="name" />{{ name }}
       </button>
     </div>
-    <RouterLink v-else to="/group/activity" class="activity-page-link men-button small">Compare players</RouterLink>
+    <RouterLink v-else-if="props.collapsible" to="/group/activity" class="activity-page-link men-button small"
+      >Compare players</RouterLink
+    >
     <div class="activity-feed-filters">
       <span class="select-container">
         <select v-model="typeFilter" aria-label="Filter activity by type">

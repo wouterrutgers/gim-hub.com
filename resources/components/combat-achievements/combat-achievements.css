@@ -350,24 +350,20 @@
   }
 
   .combat-achievements-tier {
-    display: grid;
-    grid-template-columns: 26px 1fr;
     gap: 4px;
-    padding: 8px;
-    text-align: left;
+    padding: 8px 2px;
+    text-align: center;
   }
 
   .combat-achievements-tier img {
     width: 26px;
-    grid-row: span 2;
+    height: 26px;
   }
 
   .combat-achievements-tier-name {
+    max-width: 100%;
+    overflow-wrap: anywhere;
     font-size: 14px;
-  }
-
-  .combat-achievements-tier .combat-achievements-progress {
-    grid-column: span 2;
   }
 
   .combat-achievements-filters {

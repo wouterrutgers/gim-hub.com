@@ -22,6 +22,7 @@
 }
 
 .activity-feed-period {
+  display: block;
   color: var(--muted);
   font-size: 10px;
 }
@@ -42,6 +43,22 @@
 .activity-page-link {
   align-self: flex-start;
   margin: 0 12px 12px;
+}
+
+.activity-view-toggle {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.activity-view-toggle .men-button {
+  padding-inline: 10px;
+}
+
+.activity-feed .activity-view-toggle .men-button[aria-pressed="true"] {
+  border-color: var(--orange);
+  background: var(--selected);
+  color: var(--text);
 }
 
 .activity-player-buttons {
@@ -268,15 +285,22 @@
 }
 
 .activity-comparison-scroll {
+  --comparison-inset: 20px;
+  --comparison-label-width: 200px;
+
   flex: 1;
   min-height: 0;
   overflow: auto;
-  padding: 0 20px 12px;
+  padding-bottom: 12px;
+}
+
+.activity-comparison-scroll > :is(.activity-empty, .activity-error, .activity-older) {
+  margin-inline: var(--comparison-inset);
 }
 
 .activity-comparison-table {
   width: 100%;
-  min-width: calc(200px + var(--comparison-player-count) * 180px);
+  min-width: calc(var(--comparison-label-width) + var(--comparison-player-count) * 180px);
   border-spacing: 0;
   table-layout: fixed;
   font-variant-numeric: tabular-nums;
@@ -299,6 +323,14 @@
   text-align: right;
 }
 
+.activity-comparison-table tr > :first-child {
+  padding-inline-start: var(--comparison-inset);
+}
+
+.activity-comparison-table tr > :last-child {
+  padding-inline-end: var(--comparison-inset);
+}
+
 .activity-comparison-empty {
   color: var(--muted);
   font-size: 11px;
@@ -319,7 +351,7 @@
 .activity-comparison-heading {
   display: block;
   position: sticky;
-  left: 12px;
+  inset-inline-start: var(--comparison-inset);
   width: max-content;
 }
 
@@ -333,7 +365,6 @@
 
 .activity-comparison-table th[scope="row"] {
   position: sticky;
-  left: 0;
   z-index: 1;
   background: var(--surface);
 }
@@ -351,13 +382,18 @@
 }
 
 .activity-comparison-table thead th:first-child {
-  left: 0;
+  box-sizing: border-box;
   z-index: 3;
-  width: 176px;
+  width: var(--comparison-label-width);
 }
 
 .activity-comparison-table thead th:not(:first-child) {
   text-align: right;
+}
+
+.activity-comparison-table :is(thead th:first-child, th[scope="row"]) {
+  inset-inline-start: 0;
+  border-inline-end: 1px solid var(--border);
 }
 
 @media (width <= 767px) {
@@ -375,7 +411,7 @@
   }
 
   .activity-page-feed .activity-feed-header {
-    padding: 16px 14px;
+    padding: 8px 14px;
   }
 
   .activity-page-feed .activity-player-buttons {
@@ -387,14 +423,71 @@
   }
 
   .activity-comparison-scroll {
-    padding-inline: 14px;
+    --comparison-inset: 14px;
+    --comparison-label-width: 100px;
+
+    container-type: inline-size;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline-start: var(--comparison-label-width);
   }
 
   .activity-comparison-table {
-    min-width: calc(140px + var(--comparison-player-count) * 140px);
+    --comparison-visible-players: 2;
+
+    min-width: calc(
+      var(--comparison-label-width) + var(--comparison-player-count) *
+        max(85px, (100cqw - var(--comparison-label-width)) / var(--comparison-visible-players))
+    );
   }
 
-  .activity-comparison-table thead th:first-child {
-    width: 116px;
+  .activity-comparison-table th,
+  .activity-comparison-table td {
+    padding-inline: 8px;
+  }
+
+  .activity-comparison-table thead th:not(:first-child) {
+    scroll-snap-align: start;
+  }
+
+  @container (width >= 380px) {
+    .activity-comparison-table {
+      --comparison-visible-players: 3;
+    }
+  }
+
+  @container (width >= 540px) {
+    .activity-comparison-table {
+      --comparison-visible-players: 4;
+    }
+  }
+}
+
+@media (width <= 767px) and (height <= 430px) {
+  .activity-page-feed.activity-comparison-feed {
+    display: grid;
+    grid-template: auto auto minmax(0, 1fr) / minmax(0, 1fr) auto;
+  }
+
+  .activity-page-feed .activity-feed-header {
+    grid-column: 1 / -1;
+    padding-block: 4px;
+  }
+
+  .activity-comparison-scroll {
+    grid-column: 1 / -1;
+  }
+
+  .activity-page-feed .activity-player-buttons {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .activity-page-feed .activity-selection-label {
+    display: none;
+  }
+
+  .activity-page-feed .activity-feed-filters {
+    padding-block: 0 6px;
   }
 }

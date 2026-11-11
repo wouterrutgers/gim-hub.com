@@ -9,3 +9,9 @@
   align-items: start;
   gap: 20px;
 }
+
+@media (width <= 767px) {
+  #panels-page-container .player-panel {
+    max-width: none;
+  }
+}

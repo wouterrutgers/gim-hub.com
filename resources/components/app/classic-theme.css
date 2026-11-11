@@ -70,7 +70,7 @@
 :root.classic-mode #group-switcher-dropdown,
 :root.classic-mode
   :is(
-    .nav-mobile-more summary,
+    .nav-mobile-more-toggle,
     .nav-support,
     .items-results-heading h2,
     .items-page-panel-item-details,

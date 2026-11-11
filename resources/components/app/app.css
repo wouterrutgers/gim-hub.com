@@ -461,16 +461,6 @@ legend {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
 .chevron,
 .select-container::after {
   display: inline-block;

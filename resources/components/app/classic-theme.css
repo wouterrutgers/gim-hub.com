@@ -141,6 +141,10 @@
   background: hsl(calc(var(--item-owner-share) * 100) 100% 40%);
 }
 
+:root.classic-mode .items-page-panel {
+  padding: 20px;
+}
+
 :root.classic-mode #canvas-map-controls {
   max-width: min(480px, 100%);
 }
@@ -255,51 +259,4 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-}
-
-@media (width >= 768px) {
-  :root.classic-mode #main-content:has(.items-toolbar) {
-    padding: 12px 16px 0;
-  }
-
-  :root.classic-mode .workspace-page:has(.items-toolbar) {
-    gap: 8px;
-    padding-bottom: 16px;
-  }
-
-  :root.classic-mode .items-toolbar {
-    gap: 8px;
-  }
-
-  :root.classic-mode .items-summary {
-    gap: 8px 24px;
-    padding-block: 6px;
-  }
-
-  :root.classic-mode .items-summary > div {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 6px;
-  }
-
-  :root.classic-mode .items-filter-fields {
-    gap: 8px;
-  }
-
-  :root.classic-mode .items-filter-label {
-    gap: 3px;
-  }
-
-  :root.classic-mode .items-filter-caption {
-    margin-bottom: 3px;
-  }
-
-  :root.classic-mode .items-page-member-filter-container > span {
-    padding-block: 1px;
-  }
-
-  :root.classic-mode .items-bank-detailed .items-page-panel {
-    gap: 8px;
-    padding: 8px;
-  }
 }

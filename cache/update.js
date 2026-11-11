@@ -90,46 +90,67 @@ function prepareRuneliteGradleApplication(buildScriptPath, dependencies) {
   fs.writeFileSync(buildScriptPath, lines.join("\n"));
 }
 
-function prepareRunelite() {
-  for (const name of [
-    "Cache",
-    "MapImageDumper",
-    "MapTiles",
-    "MapLabelDumper",
-    "CollectionLogDumper",
-    "CombatAchievementDumper",
-  ]) {
-    fs.copyFileSync(`./${name}.java`, `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/${name}.java`);
+function prepareRunelite(buildScriptPath) {
+  const dependencies = [];
+
+  if (buildScriptPath === RUNELITE_PATHS.BUILD_SCRIPTS.cache) {
+    for (const name of [
+      "Cache",
+      "MapImageDumper",
+      "MapTiles",
+      "MapLabelDumper",
+      "CollectionLogDumper",
+      "CombatAchievementDumper",
+    ]) {
+      fs.copyFileSync(`./${name}.java`, `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/${name}.java`);
+    }
+
+    fs.copyFileSync(
+      "./ItemSpriteFactory.java",
+      `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/item/ItemSpriteFactory.java`,
+    );
   }
 
-  fs.copyFileSync(
-    "./ItemSpriteFactory.java",
-    `${RUNELITE_PATHS.DIRS.cache}/src/main/java/net/runelite/cache/item/ItemSpriteFactory.java`,
-  );
-  fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/client/game`, { recursive: true });
-  fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/resources`, { recursive: true });
+  if (buildScriptPath === RUNELITE_PATHS.BUILD_SCRIPTS.api) {
+    fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/client/game`, { recursive: true });
+    fs.mkdirSync(`${RUNELITE_PATHS.DIRS.api}/src/main/resources`, { recursive: true });
 
-  for (const stub of [
-    "src/main/java/net/runelite/client/game/ItemMapping.java",
-    "src/main/java/net/runelite/client/game/ItemVariationMapping.java",
-    "src/main/resources/item_variations.json",
-  ]) {
-    fs.copyFileSync(path.resolve(RUNELITE_PATHS.DIRS.client, stub), path.resolve(RUNELITE_PATHS.DIRS.api, stub));
+    for (const stub of [
+      "src/main/java/net/runelite/client/game/ItemMapping.java",
+      "src/main/java/net/runelite/client/game/ItemVariationMapping.java",
+      "src/main/resources/item_variations.json",
+    ]) {
+      fs.copyFileSync(path.resolve(RUNELITE_PATHS.DIRS.client, stub), path.resolve(RUNELITE_PATHS.DIRS.api, stub));
+    }
+
+    for (const name of ["ItemDumper", "QuestDumper"]) {
+      fs.copyFileSync(`./${name}.java`, `${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/api/${name}.java`);
+    }
+
+    dependencies.push(
+      "implementation(libs.gson)",
+      "implementation(libs.guava)",
+      'implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")',
+    );
   }
 
-  for (const name of ["ItemDumper", "QuestDumper"]) {
-    fs.copyFileSync(`./${name}.java`, `${RUNELITE_PATHS.DIRS.api}/src/main/java/net/runelite/api/${name}.java`);
+  if (buildScriptPath === RUNELITE_PATHS.BUILD_SCRIPTS.client) {
+    fs.copyFileSync(
+      "./BossIconDumper.java",
+      path.resolve(
+        RUNELITE_PATHS.DIRS.client,
+        "src/main/java/net/runelite/client/plugins/chatcommands/BossIconDumper.java",
+      ),
+    );
+    dependencies.push('implementation("net.runelite:cache:${project.version}")');
   }
 
-  prepareRuneliteGradleApplication(RUNELITE_PATHS.BUILD_SCRIPTS.cache, []);
-  prepareRuneliteGradleApplication(RUNELITE_PATHS.BUILD_SCRIPTS.api, [
-    "implementation(libs.gson)",
-    "implementation(libs.guava)",
-    'implementation("com.fasterxml.jackson.core:jackson-databind:2.17.0")',
-  ]);
+  prepareRuneliteGradleApplication(buildScriptPath, dependencies);
 }
 
 async function execRuneliteGradleApplication({ buildScriptPath, mainClass, runArgs }) {
+  execGitCleanInRunelite();
+  prepareRunelite(buildScriptPath);
   const gradlew = path.resolve(RUNELITE_PATHS.DIRS.root, "gradlew");
   const commandArguments = [
     "-b",
@@ -475,16 +496,6 @@ async function dumpCombatAchievements() {
 
 async function dumpBossIcons() {
   console.info("Dumping boss icons.");
-  fs.copyFileSync(
-    "./BossIconDumper.java",
-    path.resolve(
-      RUNELITE_PATHS.DIRS.client,
-      "src/main/java/net/runelite/client/plugins/chatcommands/BossIconDumper.java",
-    ),
-  );
-  prepareRuneliteGradleApplication(RUNELITE_PATHS.BUILD_SCRIPTS.client, [
-    'implementation("net.runelite:cache:${project.version}")',
-  ]);
   await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.client,
     mainClass: "net.runelite.client.plugins.chatcommands.BossIconDumper",
@@ -493,10 +504,7 @@ async function dumpBossIcons() {
 }
 
 (async () => {
-  execGitCleanInRunelite();
-
   try {
-    prepareRunelite();
     const wikiOnly = process.argv.includes("--wiki-only");
     await dumpItemData(wikiOnly);
     const allIncludedItemIds = await buildItemDataJson(wikiOnly);
@@ -519,8 +527,8 @@ async function dumpBossIcons() {
         await dumpMapLabels();
         await dumpCollectionLog();
         await dumpCombatAchievements();
+        await dumpQuestMapping();
       }),
-      dumpQuestMapping(),
     ]);
 
     for (const result of results) {

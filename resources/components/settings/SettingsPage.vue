@@ -8,6 +8,7 @@
   import { siteThemes } from "../../stores/settings-options";
   import { memberNameSchema } from "../../game/member-name";
   import LoadingScreen from "../loading-screen/LoadingScreen.vue";
+  import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import EditMemberInput from "./EditMemberInput.vue";
   import "./settings.css";
 
@@ -111,6 +112,38 @@
 
 <template>
   <div id="settings-page">
+    <div class="settings-player-container group-settings-container rsborder rsbackground">
+      <div class="settings-player-details">
+        <div class="settings-player-heading">
+          <h2>Your player</h2>
+          <span v-if="playerPreferencesStore.selectedMemberName" class="settings-player-name">
+            <PlayerIcon :name="playerPreferencesStore.selectedMemberName" />
+            {{ playerPreferencesStore.selectedMemberName }}
+          </span>
+        </div>
+        <p v-if="apiStore.isDemo" class="settings-description">Preferences apply to this demo visit only.</p>
+        <p v-else class="settings-description">
+          {{
+            playerPreferencesStore.selectedMemberName
+              ? "Your preferences and pinned items sync across devices for this player."
+              : "Choose your player to sync your preferences and pinned items across devices."
+          }}
+        </p>
+      </div>
+      <button
+        v-if="!apiStore.isDemo"
+        type="button"
+        class="settings-change-player men-button button-primary"
+        :disabled="playerPreferencesStore.members.length === 0"
+        aria-haspopup="dialog"
+        aria-controls="player-chooser-window"
+        :aria-expanded="playerPreferencesStore.chooserOpen"
+        @click="playerPreferencesStore.openChooser()"
+      >
+        {{ playerPreferencesStore.selectedMemberName ? "Change player" : "Choose your player" }}
+      </button>
+    </div>
+
     <div class="group-settings-container rsborder rsbackground">
       <h2>Your members</h2>
       <p class="settings-description">Display names must match your members' exact names in OSRS.</p>
@@ -164,33 +197,6 @@
 
     <div class="group-settings-container rsborder rsbackground">
       <h2>Your preferences</h2>
-      <div class="settings-preferences-player settings-description">
-        <template v-if="playerPreferencesStore.selectedMemberName">
-          <span>Saved for {{ playerPreferencesStore.selectedMemberName }}.</span>
-          <button
-            type="button"
-            class="settings-change-player"
-            aria-haspopup="dialog"
-            @click="playerPreferencesStore.openChooser()"
-          >
-            Change player
-          </button>
-        </template>
-        <template v-else-if="apiStore.isDemo">
-          <span>Preferences apply to this demo visit only.</span>
-        </template>
-        <template v-else>
-          <button
-            type="button"
-            class="settings-change-player"
-            :disabled="playerPreferencesStore.members.length === 0"
-            aria-haspopup="dialog"
-            @click="playerPreferencesStore.openChooser()"
-          >
-            Choose your player to save your preferences.
-          </button>
-        </template>
-      </div>
       <fieldset>
         <legend>Player panels</legend>
         <fieldset class="setting-group">

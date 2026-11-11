@@ -20,6 +20,36 @@
   margin: 0;
 }
 
+.settings-player-container {
+  flex: 1 1 100%;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 12px;
+  padding-block: 14px;
+}
+
+.settings-player-details {
+  display: flex;
+  flex: 1 1 240px;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.settings-player-heading {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  gap: 4px 12px;
+}
+
+.settings-player-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
 .group-settings-container .setting-title {
   margin-block: 0.5rem 0.125rem;
   font-weight: bold;
@@ -226,24 +256,17 @@
   line-height: 1.6;
 }
 
-.settings-preferences-player {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 8px;
-}
-
 .settings-change-player {
   min-height: 44px;
-  color: var(--orange-light);
-  text-align: left;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 @media (width <= 767px) {
   .group-settings-container {
     padding: 20px 16px;
+  }
+
+  .settings-player-container {
+    padding-block: 12px;
   }
 
   .group-settings-member-title {

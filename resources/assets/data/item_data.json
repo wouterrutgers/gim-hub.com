@@ -41803,7 +41803,7 @@
     "mapping": null
   },
   "10010": {
-    "name": "Butterfly net",
+    "name": "Insect net",
     "highalch": 12,
     "alchable": true,
     "mapping": null
@@ -46333,7 +46333,7 @@
     "mapping": null
   },
   "11259": {
-    "name": "Magic butterfly net",
+    "name": "Magic insect net",
     "highalch": 600,
     "alchable": true,
     "mapping": null
@@ -113897,7 +113897,12 @@
     "name": "Obligator",
     "highalch": 2400000,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 34717,
+        "quantity": 1
+      }
+    ]
   },
   "34717": {
     "name": "Obligator (uncharged)",
@@ -113927,7 +113932,12 @@
     "name": "Zorya's tome",
     "highalch": 2400000,
     "alchable": true,
-    "mapping": null
+    "mapping": [
+      {
+        "id": 34727,
+        "quantity": 1
+      }
+    ]
   },
   "34727": {
     "name": "Zorya's tome (uncharged)",
@@ -114082,6 +114092,120 @@
   "34762": {
     "name": "Amulet of sight",
     "highalch": 900,
+    "alchable": true,
+    "mapping": null
+  },
+  "34766": {
+    "name": "Painted shortsword",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34769": {
+    "name": "Painted kiteshield",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34772": {
+    "name": "Painted shortbow",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34775": {
+    "name": "Bee box",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34777": {
+    "name": "Bee hunter's hat",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34779": {
+    "name": "Wasp sting",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34781": {
+    "name": "Killer wasp sting",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34783": {
+    "name": "Brown feather",
+    "highalch": 9,
+    "alchable": true,
+    "mapping": null
+  },
+  "34785": {
+    "name": "Black feather",
+    "highalch": 9,
+    "alchable": true,
+    "mapping": null
+  },
+  "34787": {
+    "name": "Wasp dart",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34789": {
+    "name": "Killer wasp dart",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34791": {
+    "name": "Bea's supplies",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34793": {
+    "name": "Fresh leaves",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34795": {
+    "name": "Dew-covered branch",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34797": {
+    "name": "Restorative dew",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34799": {
+    "name": "Strong sticks",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34801": {
+    "name": "Pink snelm",
+    "highalch": 180,
+    "alchable": true,
+    "mapping": null
+  },
+  "34806": {
+    "name": "Honey buzzard",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34807": {
+    "name": "Black honey buzzard",
+    "highalch": 0,
     "alchable": true,
     "mapping": null
   }

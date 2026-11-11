@@ -69,13 +69,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.5
-          extensions: pdo_sqlite, pdo_mysql
+          extensions: pdo_sqlite, pdo_mysql, timezonedb
           coverage: none
-
-      - name: Install legacy timezone data
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes tzdata-legacy
+        env:
+          fail-fast: true
 
       - name: Get Composer cache directory
         id: composer-cache

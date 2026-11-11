@@ -31,8 +31,13 @@
   const pendingReorder = ref(false);
   const reorderError = ref();
 
-  const recommendedBackgroundOpacity = computed(function getRecommendedBackgroundOpacity() {
-    return ["classic-light", "classic-dark"].includes(settingsStore.siteTheme) ? 90 : 100;
+  const usesClassicTheme = computed(function classicThemeIsSelected() {
+    return ["classic-light", "classic-dark"].includes(settingsStore.siteTheme);
+  });
+  const classicSettingsDiffer = computed(function classicSettingsAreDifferent() {
+    return (
+      !settingsStore.showItemOwners || !settingsStore.collapseNavigation || settingsStore.pageBackgroundOpacity !== 90
+    );
   });
 
   const members = computed(function getMembers() {
@@ -40,6 +45,12 @@
       return member !== "@SHARED";
     });
   });
+
+  function applyClassicSettings() {
+    settingsStore.setShowItemOwners(true);
+    settingsStore.setCollapseNavigation(true);
+    settingsStore.setPageBackgroundOpacity(90);
+  }
 
   async function addMember() {
     if (pendingAddMember.value || !apiStore.client || !addMemberInput.value) {
@@ -238,17 +249,36 @@
             :id="`style-${theme}`"
             :value="theme"
             type="radio"
+            name="site-theme"
             :checked="settingsStore.siteTheme === theme"
             @change="settingsStore.setSiteTheme(theme)"
           />
           <label :for="`style-${theme}`">{{ labels[theme] }}</label>
+        </div>
+        <div aria-live="polite">
+          <div v-if="usesClassicTheme" class="settings-classic-offer rsborder-tiny">
+            <h3>Make it feel more like the old theme?</h3>
+            <p id="classic-settings-description" class="settings-description">
+              Use detailed items, collapse the desktop navigation, and set background opacity to 90%.
+            </p>
+            <div class="settings-classic-offer-actions">
+              <button
+                type="button"
+                class="men-button"
+                aria-describedby="classic-settings-description"
+                :disabled="!classicSettingsDiffer"
+                @click="applyClassicSettings"
+              >
+                {{ classicSettingsDiffer ? "Apply classic settings" : "Classic settings applied" }}
+              </button>
+            </div>
+          </div>
         </div>
         <div class="settings-page-range-item">
           <label for="page-background-opacity-input">Background opacity</label>
           <div class="settings-page-range-control">
             <input
               id="page-background-opacity-input"
-              aria-describedby="page-background-opacity-recommendation"
               type="range"
               min="0"
               max="100"
@@ -258,9 +288,6 @@
             />
             <output for="page-background-opacity-input">{{ settingsStore.pageBackgroundOpacity }}%</output>
           </div>
-          <p id="page-background-opacity-recommendation" class="settings-description">
-            Recommended for {{ labels[settingsStore.siteTheme].toLowerCase() }}: {{ recommendedBackgroundOpacity }}%.
-          </p>
         </div>
       </fieldset>
     </div>

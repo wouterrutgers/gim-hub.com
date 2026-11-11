@@ -68,6 +68,8 @@
 :root.classic-mode #app-navigation-nav .app-link,
 :root.classic-mode #group-switcher-toggle,
 :root.classic-mode #group-switcher-dropdown,
+:root.classic-mode #skill-graph-range,
+:root.classic-mode #skill-graph-xp-change-table,
 :root.classic-mode
   :is(
     .nav-mobile-more-toggle,
@@ -95,7 +97,10 @@
     .items-filter-label,
     .items-filter-caption,
     .items-results-heading h2 > span,
+    .item-selection-hint,
     .settings-description,
+    .history-page-settings-notice,
+    .roster-heading a,
     .group-switcher-caption,
     .group-switcher-demo,
     .group-switcher-current-label,
@@ -235,4 +240,66 @@
 
 :root.classic-mode :is(.rstext, .items-page-panel-name) {
   color: var(--yellow);
+}
+
+:root.classic-mode .settings-classic-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--darken);
+}
+
+:root.classic-mode .settings-classic-offer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (width >= 768px) {
+  :root.classic-mode #main-content:has(.items-toolbar) {
+    padding: 12px 16px 0;
+  }
+
+  :root.classic-mode .workspace-page:has(.items-toolbar) {
+    gap: 8px;
+    padding-bottom: 16px;
+  }
+
+  :root.classic-mode .items-toolbar {
+    gap: 8px;
+  }
+
+  :root.classic-mode .items-summary {
+    gap: 8px 24px;
+    padding-block: 6px;
+  }
+
+  :root.classic-mode .items-summary > div {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  :root.classic-mode .items-filter-fields {
+    gap: 8px;
+  }
+
+  :root.classic-mode .items-filter-label {
+    gap: 3px;
+  }
+
+  :root.classic-mode .items-filter-caption {
+    margin-bottom: 3px;
+  }
+
+  :root.classic-mode .items-page-member-filter-container > span {
+    padding-block: 1px;
+  }
+
+  :root.classic-mode .items-bank-detailed .items-page-panel {
+    gap: 8px;
+    padding: 8px;
+  }
 }

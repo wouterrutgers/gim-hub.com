@@ -4,7 +4,7 @@ Your teammate just got a drop. Someone else is closing in on 99. GIM Hub brings 
 
 [Try the demo](https://gim-hub.com/demo), [get started](https://gim-hub.com/create-group), [read the changelog](https://gim-hub.com/changelog), or [join us on Discord](https://discord.gg/ZwzW6yYD8V).
 
-![GIM Hub demo showing shared items, raid equipment, and the live group activity timeline](screenshots/demo-overview.webp)
+![GIM Hub demo showing the compact group bank, item owners, player equipment, and live activity sidebar](screenshots/demo-overview.webp)
 
 _Screenshots use sample data from the demo._
 
@@ -12,11 +12,15 @@ _Screenshots use sample data from the demo._
 
 The RuneLite plugin updates the dashboard as your teammates play. See who is online, their worlds, current interactions, local times, and when they were last online. Player panels show health, prayer, run energy, special attack energy, and live XP drops.
 
-Follow XP gains, levels, boss kills, raid completions, quests, diaries, drops, and collection log unlocks in the activity timeline. Filter by teammate or activity type, expand entries for details, and catch up on older history through weekly summaries.
+Follow XP gains, levels, boss kills, raid completions, quests, diaries, drops, and collection log unlocks in the live activity sidebar. Filter by activity type and expand entries for details.
+
+Open **Activity** to compare teammates side by side, with daily progress summaries and weekly summaries for older history.
+
+![Demo activity page comparing today's XP gains, levels, boss kills, and quests across four teammates](screenshots/demo-activity.webp)
 
 ## Find the gear you need
 
-Search your whole group's items, with quantities by member and storage location, plus Grand Exchange and high alchemy values. Pin useful items, filter by teammate or container, and copy your filtered items to **Gearscape** by enabling its export button in appearance settings.
+Browse your whole group's items in **Compact** or **Detailed** view, with quantities by member and storage location, plus Grand Exchange and high alchemy values. Pin useful items, filter by teammate or container, and copy your filtered items to **Gearscape** by enabling its export button in **Settings**.
 
 Search by name or `tag:`, use quotes for exact names, and combine searches with `&`, `|`, `-`, and square brackets. For example, `bandos | whip` finds either, while `coal & -bag` leaves out coal bags.
 
@@ -35,13 +39,13 @@ Search by name or `tag:`, use quotes for exact names, and combine searches with 
 
 Find your group on the interactive world map, follow a teammate as they move, or search for a named location. Switch between floors and pinch to zoom on mobile.
 
-![GIM Hub demo map following Thurgo at the Hosidius Kitchen, with his cooking inventory and group activity alongside](screenshots/demo-map.webp)
+![GIM Hub demo map following Thurgo near Hosidius, with his cooking inventory alongside](screenshots/demo-map.webp)
 
 ## Watch the gains add up
 
 Compare XP gained, total XP, and XP per hour across your group. Browse a day, week, month, year, or all recorded history, then expand a player's row for their skill breakdown.
 
-![Demo skill history comparing experience gains across four group members](screenshots/demo-history.webp)
+![Demo skill history comparing a week of experience gains across four group members](screenshots/demo-history.webp)
 
 ## Plan the next achievement
 
@@ -53,7 +57,9 @@ Open **Combat achievements** from a player panel to see completed tasks, points,
 
 ## Make it yours
 
-Choose light or dark mode, set member colors and display order, and toggle virtual levels and skill progress bars. You can also expand everyone's history rows by default and switch between saved groups from the group name menu.
+Choose **Light**, **Dark**, or **Browntown**. Adjust the background opacity in **Settings**, set member colors and display order, toggle virtual levels and skill progress bars, or expand everyone's history rows by default.
+
+Select your player to sync your theme, display settings, and pinned items across browsers and devices. Switch between saved groups from the group name menu.
 
 ## Getting started
 

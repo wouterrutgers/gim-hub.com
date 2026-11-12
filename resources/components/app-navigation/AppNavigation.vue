@@ -1,5 +1,5 @@
 <script setup>
-  import { onBeforeUnmount, onMounted, ref } from "vue";
+  import { computed, onBeforeUnmount, onMounted, ref } from "vue";
   import { useRoute } from "vue-router";
   import { useSettingsStore } from "../../stores/settings";
   import AppLink from "../app-link/AppLink.vue";
@@ -16,10 +16,15 @@
 
   const route = useRoute();
   const settingsStore = useSettingsStore();
+  const windowWidth = ref(window.innerWidth);
   const moreMenu = ref();
   const moreToggle = ref();
   const moreOpen = ref(false);
   const { open: modalOpen, openModal, closeModal } = useModal();
+
+  const navigationCollapsed = computed(function isNavigationCollapsed() {
+    return windowWidth.value >= 768 && settingsStore.collapseNavigation;
+  });
 
   const primaryLinks = [
     { label: "Group items", shortLabel: "Items", href: "/group/items", icon: "/ui/777-0.png" },
@@ -66,19 +71,25 @@
     openModal();
   }
 
+  function updateWindowWidth() {
+    windowWidth.value = window.innerWidth;
+  }
+
   onMounted(function listenForOutsidePointer() {
     document.addEventListener("pointerdown", closeMoreOnOutsideClick);
+    window.addEventListener("resize", updateWindowWidth);
   });
 
   onBeforeUnmount(function removeOutsidePointerListener() {
     document.removeEventListener("pointerdown", closeMoreOnOutsideClick);
+    window.removeEventListener("resize", updateWindowWidth);
   });
 </script>
 
 <template>
   <Modal :open="modalOpen" :component="DonateWindow" @close="closeModal" />
 
-  <aside id="app-navigation" :class="{ 'navigation-collapsed': settingsStore.collapseNavigation }">
+  <aside id="app-navigation" :class="{ 'navigation-collapsed': navigationCollapsed }">
     <div class="nav-header">
       <RouterLink to="/group/items" class="brand" aria-label="GIM hub home">
         <CachedImage class="brand-logo" src="/images/logo-quarter.webp" alt="GIM hub" />
@@ -86,24 +97,20 @@
       <button
         type="button"
         class="nav-collapse-toggle"
-        :aria-label="settingsStore.collapseNavigation ? 'Expand menu' : 'Collapse menu'"
-        :data-tooltip="settingsStore.collapseNavigation ? 'Expand menu' : 'Collapse menu'"
-        :aria-expanded="!settingsStore.collapseNavigation"
+        :aria-label="navigationCollapsed ? 'Expand menu' : 'Collapse menu'"
+        :data-tooltip="navigationCollapsed ? 'Expand menu' : 'Collapse menu'"
+        :aria-expanded="!navigationCollapsed"
         aria-controls="app-navigation-nav"
         @click="settingsStore.setCollapseNavigation(!settingsStore.collapseNavigation)"
       >
-        <span
-          class="chevron"
-          :class="settingsStore.collapseNavigation ? 'chevron-right' : 'chevron-left'"
-          aria-hidden="true"
-        />
+        <span class="chevron" :class="navigationCollapsed ? 'chevron-right' : 'chevron-left'" aria-hidden="true" />
       </button>
     </div>
     <div class="nav-group">
       <h2 class="nav-section-label">Group</h2>
       <GroupSwitcher
         :group-name="props.groupName"
-        :title="settingsStore.collapseNavigation ? `Switch group: ${props.groupName}` : undefined"
+        :title="navigationCollapsed ? `Switch group: ${props.groupName}` : undefined"
       />
     </div>
     <nav id="app-navigation-nav" aria-label="Group navigation">
@@ -114,7 +121,7 @@
           :href="link.href"
           :selected="route.path === link.href"
           :aria-label="link.label"
-          :data-tooltip="settingsStore.collapseNavigation ? link.label : undefined"
+          :data-tooltip="navigationCollapsed ? link.label : undefined"
         >
           <CachedImage alt="" :src="link.icon" width="20" height="20" />
           <span class="nav-label-full">{{ link.label }}</span>
@@ -170,7 +177,7 @@
           :href="link.href"
           :selected="route.path === link.href"
           :aria-label="link.label"
-          :data-tooltip="settingsStore.collapseNavigation ? link.label : undefined"
+          :data-tooltip="navigationCollapsed ? link.label : undefined"
         >
           <CachedImage class="nav-tool-icon" :src="link.icon" alt="" width="20" height="20" />
           <span class="nav-label-full">{{ link.label }}</span>
@@ -184,7 +191,7 @@
         aria-haspopup="dialog"
         aria-controls="donate-window"
         aria-label="Support the hub"
-        :data-tooltip="settingsStore.collapseNavigation ? 'Support the hub' : undefined"
+        :data-tooltip="navigationCollapsed ? 'Support the hub' : undefined"
         :aria-expanded="modalOpen"
         @click="openModal()"
       >
@@ -197,7 +204,7 @@
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Discord"
-          :data-tooltip="settingsStore.collapseNavigation ? 'Discord' : undefined"
+          :data-tooltip="navigationCollapsed ? 'Discord' : undefined"
         >
           <CachedImage class="nav-community-icon" src="/images/discord-light.webp" alt="" width="20" height="20" />
           <span class="nav-label-full">Discord</span>
@@ -207,7 +214,7 @@
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
-          :data-tooltip="settingsStore.collapseNavigation ? 'GitHub' : undefined"
+          :data-tooltip="navigationCollapsed ? 'GitHub' : undefined"
         >
           <CachedImage class="nav-community-icon" src="/images/github-light.webp" alt="" width="20" height="20" />
           <span class="nav-label-full">GitHub</span>

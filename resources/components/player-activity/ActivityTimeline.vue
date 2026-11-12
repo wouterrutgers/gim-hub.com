@@ -137,7 +137,9 @@
                 />
               </span>
               <CachedImage
-                v-else-if="['level', 'boss'].includes(entry.type) || presentations.get(entry.id).milestone"
+                v-else-if="
+                  ['level', 'boss', 'loot', 'collection'].includes(entry.type) || presentations.get(entry.id).milestone
+                "
                 class="activity-icon"
                 :src="presentations.get(entry.id).icon"
                 alt=""

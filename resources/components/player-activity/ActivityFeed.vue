@@ -4,7 +4,6 @@
   import { useActivityStore } from "../../stores/activity";
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
-  import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import ActivityTimeline from "./ActivityTimeline.vue";
   import ActivityComparison from "./ActivityComparison.vue";
   import "./activity-feed.css";
@@ -200,6 +199,9 @@
           data-tooltip="Activity stays detailed for at least 30 days. Older completed weeks are combined per player, from Monday to Sunday in UTC."
           >{{ activityStore.olderCursor ? "Loaded history" : "All history" }}</span
         >
+        <RouterLink v-if="props.collapsible" to="/group/activity" class="activity-page-link">
+          Compare players <span class="chevron chevron-right" aria-hidden="true" />
+        </RouterLink>
       </div>
       <button
         v-if="props.collapsible"
@@ -243,12 +245,9 @@
         @click="selectMember(identifier)"
       >
         <span class="activity-player-check" aria-hidden="true">{{ excludedMembers.has(identifier) ? "" : "✓" }}</span>
-        <PlayerIcon :name="name" />{{ name }}
+        {{ name }}
       </button>
     </div>
-    <RouterLink v-else-if="props.collapsible" to="/group/activity" class="activity-page-link men-button small"
-      >Compare players</RouterLink
-    >
     <div class="activity-feed-filters">
       <span class="select-container">
         <select v-model="typeFilter" aria-label="Filter activity by type">

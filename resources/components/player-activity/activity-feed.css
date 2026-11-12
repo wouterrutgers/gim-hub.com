@@ -41,8 +41,24 @@
 }
 
 .activity-page-link {
-  align-self: flex-start;
-  margin: 0 12px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 24px;
+  margin-top: 4px;
+  font-size: 0.9167em;
+  text-decoration: none;
+}
+
+.activity-page-link:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.activity-page-link .chevron {
+  width: 4px;
+  height: 4px;
+  border-width: 1px;
 }
 
 .activity-view-toggle {
@@ -134,10 +150,6 @@
 }
 
 .activity-card {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  align-items: baseline;
-  gap: 8px;
   padding: 6px 0;
 }
 
@@ -145,6 +157,7 @@
   color: var(--muted);
   font-size: 10px;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .activity-card-content {
@@ -152,19 +165,52 @@
   overflow-wrap: anywhere;
 }
 
+.activity-card-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  min-block-size: 24px;
+}
+
+.activity-card-content > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.activity-card-content > summary::-webkit-details-marker {
+  display: none;
+}
+
+.activity-card-header {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.9167em;
+}
+
 .activity-card-player {
-  display: inline;
-  margin-right: 4px;
-}
-
-.activity-card-player img {
-  margin-right: 4px;
-  vertical-align: text-bottom;
-}
-
-.activity-card-player strong {
+  flex: 1;
+  min-width: 0;
   color: var(--text);
   font-weight: 600;
+}
+
+.activity-card-summary > .activity-card-chevron {
+  width: 4px;
+  height: 4px;
+  margin-right: 2px;
+  border-width: 1px;
+  color: var(--muted);
+}
+
+.activity-card-content[open] > summary .activity-card-chevron {
+  transform: rotate(45deg);
+}
+
+.activity-card-content > summary:is(:hover, :focus-visible) .activity-card-chevron {
+  color: var(--link-hover);
 }
 
 .activity-icon {
@@ -193,7 +239,6 @@
 }
 
 .activity-live {
-  margin-left: 5px;
   color: var(--muted);
   font-size: 10px;
 }
@@ -210,37 +255,22 @@
 }
 
 .activity-card-details {
-  margin-top: 2px;
+  padding-left: 10px;
+  margin-top: 6px;
+  border-left: 1px solid var(--light-border);
   font-size: 11px;
   line-height: 1.6;
 }
 
-.activity-card-details summary {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  list-style: none;
-  color: var(--muted);
-}
-
-.activity-card-details summary::-webkit-details-marker {
-  display: none;
-}
-
-.activity-card-details[open] > summary .chevron {
-  transform: rotate(45deg);
-}
-
 .activity-detail-range {
-  margin-top: 4px;
   color: var(--muted);
   font-size: 10px;
 }
 
 .activity-card-details ul {
+  list-style: none;
   margin-top: 4px;
-  padding-left: 14px;
+  padding-left: 0;
 }
 
 .activity-empty {
@@ -280,6 +310,10 @@
   padding-inline: 20px;
 }
 
+.activity-page-feed .activity-timeline {
+  max-width: 720px;
+}
+
 .activity-page-feed.activity-comparison-feed {
   max-width: none;
 }
@@ -308,7 +342,7 @@
 
 .activity-comparison-table th,
 .activity-comparison-table td {
-  padding: 10px 12px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--light-border);
   text-align: left;
   vertical-align: top;
@@ -369,11 +403,6 @@
   background: var(--surface);
 }
 
-.activity-comparison-table thead img {
-  margin-right: 6px;
-  vertical-align: text-bottom;
-}
-
 .activity-comparison-table .activity-comparison-total th,
 .activity-comparison-table .activity-comparison-total td {
   background: var(--surface-raised);
@@ -394,6 +423,13 @@
 .activity-comparison-table :is(thead th:first-child, th[scope="row"]) {
   inset-inline-start: 0;
   border-inline-end: 1px solid var(--border);
+}
+
+@media (pointer: coarse) {
+  .activity-card-summary,
+  .activity-page-link {
+    min-block-size: 44px;
+  }
 }
 
 @media (width <= 767px) {

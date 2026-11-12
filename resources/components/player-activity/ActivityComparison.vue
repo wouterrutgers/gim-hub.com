@@ -4,7 +4,6 @@
   import { useGameDataStore } from "../../stores/game-data";
   import { activityComparisonRows, playerPeriodIsLoaded, playerPeriodStatus } from "../../game/activity-comparison";
   import CachedImage from "../cached-image/CachedImage.vue";
-  import PlayerIcon from "../player-icon/PlayerIcon.vue";
 
   const props = defineProps({
     players: { type: Array, required: true },
@@ -213,7 +212,7 @@
         <tr>
           <th scope="col">Activity</th>
           <th v-for="player in props.players" :key="player.identifier" scope="col">
-            <PlayerIcon :name="player.name" />{{ player.name }}
+            {{ player.name }}
           </th>
         </tr>
       </thead>

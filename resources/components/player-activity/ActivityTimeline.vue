@@ -3,7 +3,6 @@
   import { useGameDataStore } from "../../stores/game-data";
   import { activityIsLive, activityPresentation } from "../../game/activity";
   import CachedImage from "../cached-image/CachedImage.vue";
-  import PlayerIcon from "../player-icon/PlayerIcon.vue";
 
   const props = defineProps({
     entries: { type: Array, required: true },
@@ -108,64 +107,70 @@
         {{ dateLabel(entry) }}
       </h3>
       <article :class="['activity-card', { 'activity-milestone': presentations.get(entry.id).milestone }]">
-        <time
-          class="activity-time"
-          :datetime="new Date(entry.started_at).toISOString()"
-          :title="
-            entry.is_weekly
-              ? `${timeRange(entry)} (UTC)`
-              : `${relativeTime(entry)} (${new Date(entry.started_at).toLocaleString()})`
-          "
-          >{{ entryClock(entry) }}</time
-        >
-        <div class="activity-card-content">
-          <span class="activity-card-player">
-            <PlayerIcon :name="props.members.get(entry.member_id)" />
-            <strong>{{ props.members.get(entry.member_id) }}</strong
-            >:
-          </span>
-          <span class="activity-card-event">{{ presentations.get(entry.id).text }}</span>
-          <span v-if="entry.type === 'xp'" class="activity-skill-icons">
-            <CachedImage
-              v-for="detail in presentations.get(entry.id).details"
-              :key="detail.skill"
-              class="activity-icon"
-              :src="detail.icon"
-              :alt="detail.skill"
-              width="16"
-              height="16"
+        <component :is="presentations.get(entry.id).details.length ? 'details' : 'div'" class="activity-card-content">
+          <component :is="presentations.get(entry.id).details.length ? 'summary' : 'div'" class="activity-card-summary">
+            <span class="activity-card-header">
+              <strong class="activity-card-player">{{ props.members.get(entry.member_id) }}</strong>
+              <span v-if="activityIsLive(entry, props.timestamp)" class="activity-live">Live</span>
+              <time
+                class="activity-time"
+                :datetime="new Date(entry.started_at).toISOString()"
+                :title="
+                  entry.is_weekly
+                    ? `${timeRange(entry)} (UTC)`
+                    : `${relativeTime(entry)} (${new Date(entry.started_at).toLocaleString()})`
+                "
+                >{{ entryClock(entry) }}</time
+              >
+            </span>
+            <span class="activity-card-description">
+              <span class="activity-card-event">{{ presentations.get(entry.id).text }}</span>
+              <span v-if="entry.type === 'xp'" class="activity-skill-icons">
+                <CachedImage
+                  v-for="detail in presentations.get(entry.id).details"
+                  :key="detail.skill"
+                  class="activity-icon"
+                  :src="detail.icon"
+                  :alt="detail.skill"
+                  width="16"
+                  height="16"
+                />
+              </span>
+              <CachedImage
+                v-else-if="['level', 'boss'].includes(entry.type) || presentations.get(entry.id).milestone"
+                class="activity-icon"
+                :src="presentations.get(entry.id).icon"
+                alt=""
+                width="16"
+                height="16"
+              />
+              <span v-if="presentations.get(entry.id).collectionUnlock" class="activity-unlock"
+                >New collection item</span
+              >
+            </span>
+            <span
+              v-if="presentations.get(entry.id).details.length"
+              class="activity-card-chevron chevron chevron-right"
+              aria-hidden="true"
             />
-          </span>
-          <CachedImage
-            v-else-if="['level', 'boss'].includes(entry.type) || presentations.get(entry.id).milestone"
-            class="activity-icon"
-            :src="presentations.get(entry.id).icon"
-            alt=""
-            width="16"
-            height="16"
-          />
-          <span v-if="activityIsLive(entry, props.timestamp)" class="activity-live">Live</span>
-          <span v-if="presentations.get(entry.id).collectionUnlock" class="activity-unlock">New collection item</span>
-          <details v-if="presentations.get(entry.id).details.length" class="activity-card-details">
-            <summary><span class="chevron chevron-right" aria-hidden="true" /><span>Details</span></summary>
+          </component>
+          <div v-if="presentations.get(entry.id).details.length" class="activity-card-details">
             <p class="activity-detail-range">{{ timeRange(entry) }}{{ entry.is_weekly ? " (UTC)" : "" }}</p>
-            <ul>
+            <ul role="list">
               <li v-for="detail in presentations.get(entry.id).details" :key="detail.text">
-                <span class="activity-detail-content">
-                  <CachedImage
-                    v-if="detail.icon"
-                    class="activity-detail-icon"
-                    :src="detail.icon"
-                    alt=""
-                    width="16"
-                    height="16"
-                  />
-                  {{ detail.text }}
-                </span>
+                <CachedImage
+                  v-if="detail.icon"
+                  class="activity-detail-icon"
+                  :src="detail.icon"
+                  alt=""
+                  width="16"
+                  height="16"
+                />
+                {{ detail.text }}
               </li>
             </ul>
-          </details>
-        </div>
+          </div>
+        </component>
       </article>
     </li>
   </ol>

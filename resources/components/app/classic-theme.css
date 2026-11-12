@@ -113,6 +113,15 @@
     .activity-card-details,
     .activity-detail-range,
     .activity-drop-filter,
+    .activity-selection-label,
+    .activity-comparison-category th,
+    .activity-comparison-empty,
+    .activity-toggle-label,
+    .group-switcher-empty,
+    .group-switcher-status,
+    .player-chooser-options legend,
+    .player-chooser-current,
+    .validation-error,
     .collection-log-totals
   ) {
   font-size: 14px;
@@ -127,6 +136,19 @@
   font-size: 18px;
 }
 
+:root.classic-mode .activity-comparison-table .activity-comparison-total :is(th, td) {
+  font-size: 16px;
+}
+
+:root.classic-mode .activity-comparison-table :is(thead th, th[scope="row"]) {
+  background: var(--surface) var(--classic-texture);
+}
+
+:root.classic-mode .activity-comparison-period th,
+:root.classic-mode .activity-comparison-table .activity-comparison-total :is(th, td) {
+  background: linear-gradient(var(--darken), var(--darken)), var(--classic-texture);
+}
+
 :root.classic-mode .collection-log-container {
   --muted: var(--orange);
 }
@@ -137,12 +159,38 @@
   font-size: 20px;
 }
 
+:root.classic-mode .collection-log-title-border {
+  height: 6px;
+  background: url("../../assets/ui/173-0.png") repeat-x center;
+}
+
 :root.classic-mode .item-owner-bar-fill {
   background: hsl(calc(var(--item-owner-share) * 100) 100% 40%);
 }
 
 :root.classic-mode .items-page-panel {
   padding: 20px;
+}
+
+:root.classic-mode .items-page-panel-name {
+  text-decoration: none;
+}
+
+:root.classic-mode .items-page-panel-name:hover {
+  text-decoration: underline;
+}
+
+:root.classic-mode :is(.items-summary, .items-page-member-filter-clipbox) {
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-image: var(--classic-border-tiny) 4 / 4px round;
+  border-radius: 4px;
+  background: var(--surface) var(--classic-texture);
+}
+
+:root.classic-mode .items-page-panel.rsborder {
+  background: var(--surface) var(--classic-texture);
 }
 
 :root.classic-mode #canvas-map-controls {
@@ -186,8 +234,45 @@
   font-size: 16px;
 }
 
+:root.classic-mode #app-navigation-nav .app-link,
+:root.classic-mode #group-switcher-toggle,
+:root.classic-mode .nav-mobile-more-toggle {
+  border: 1px solid var(--border);
+  border-image: var(--classic-border-button) 9 / 9px stretch;
+  border-radius: 4px;
+  background: var(--button-background);
+  color: var(--orange);
+}
+
+:root.classic-mode #app-navigation-nav .app-link:hover,
+:root.classic-mode #group-switcher-toggle:hover,
+:root.classic-mode .nav-mobile-more-toggle:hover {
+  background: var(--surface-raised);
+  color: var(--orange-light);
+}
+
 :root.classic-mode .men-button:not(:disabled):hover {
   background: var(--surface-raised);
+}
+
+:root.classic-mode .men-button:is(.active, [aria-pressed="true"]):not(:disabled),
+:root.classic-mode #app-navigation-nav .app-link.active,
+:root.classic-mode .nav-mobile-more-toggle[aria-expanded="true"] {
+  outline: 1px solid #c8c8c8;
+  outline-offset: -2px;
+  background: var(--surface-sunken);
+  color: var(--orange-light);
+}
+
+:root.classic-mode .men-button:not(:disabled):focus-visible,
+:root.classic-mode #app-navigation-nav .app-link:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+
+:root.classic-mode #group-switcher-dropdown,
+:root.classic-mode .nav-mobile-menu {
+  padding: 10px;
 }
 
 :root.classic-mode #items-page-head .men-button {
@@ -215,7 +300,8 @@
   color: var(--orange);
 }
 
-:root.classic-mode select {
+:root.classic-mode select,
+:root.classic-mode .activity-feed-filters select {
   font-size: 16px;
 }
 
@@ -226,6 +312,8 @@
 :root.classic-mode input[type="checkbox"],
 :root.classic-mode input[type="radio"] {
   appearance: none;
+  width: 16px;
+  height: 16px;
   border: 0;
   background: url("../../assets/ui/checkbox.png") center / contain no-repeat;
 }
@@ -259,4 +347,64 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+@media (width >= 768px) {
+  :root.classic-mode .authed-layout {
+    box-sizing: border-box;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  :root.classic-mode .authed-layout:not(.map-workspace) {
+    background: color-mix(in srgb, var(--background) var(--page-background-opacity), transparent);
+  }
+
+  :root.classic-mode .group-rail {
+    gap: 12px;
+    padding: 12px 0 0;
+    border: 0;
+    background: transparent;
+  }
+
+  :root.classic-mode .roster-heading {
+    background: var(--background);
+  }
+
+  :root.classic-mode #main-content {
+    padding: 12px 8px 0;
+  }
+
+  :root.classic-mode .workspace-page {
+    padding-bottom: 8px;
+  }
+}
+
+@media (forced-colors: active) {
+  :root.classic-mode,
+  :root.classic-mode.dark-mode {
+    --classic-texture: none;
+    --classic-border: none;
+    --classic-border-tiny: none;
+    --classic-border-button: none;
+  }
+
+  :root.classic-mode
+    :is(.rsborder, .rsborder-tiny, .men-button, .select-container, .items-summary, .items-page-member-filter-clipbox),
+  :root.classic-mode #app-navigation,
+  :root.classic-mode #app-navigation-nav .app-link,
+  :root.classic-mode #group-switcher-toggle,
+  :root.classic-mode .nav-mobile-more-toggle {
+    border-image-source: none;
+    border-color: ButtonText;
+    background-image: none;
+  }
+
+  :root.classic-mode input[type="checkbox"],
+  :root.classic-mode input[type="radio"],
+  :root.classic-mode input[type="checkbox"]:checked,
+  :root.classic-mode input[type="radio"]:checked {
+    appearance: auto;
+    background-image: none;
+  }
 }

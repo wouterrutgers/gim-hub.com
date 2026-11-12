@@ -1,5 +1,16 @@
 <script setup>
-  import { computed, effectScope, onBeforeUnmount, reactive, ref, shallowRef, watch, watchEffect } from "vue";
+  import {
+    computed,
+    effectScope,
+    onActivated,
+    onBeforeUnmount,
+    onDeactivated,
+    reactive,
+    ref,
+    shallowRef,
+    watch,
+    watchEffect,
+  } from "vue";
   import { createPlayerActivityHistory } from "../../stores/player-activity";
   import { useGameDataStore } from "../../stores/game-data";
   import { activityComparisonRows, playerPeriodIsLoaded, playerPeriodStatus } from "../../game/activity-comparison";
@@ -11,8 +22,16 @@
     periodLabel: { type: Function, required: true },
   });
   const gameDataStore = useGameDataStore();
+  const active = ref(true);
   const sources = shallowRef(new Map());
   const visibleThrough = shallowRef();
+
+  onActivated(function resumePolling() {
+    active.value = true;
+  });
+  onDeactivated(function pausePolling() {
+    active.value = false;
+  });
 
   watch(
     function selectedPlayers() {
@@ -40,7 +59,7 @@
         visibleThrough.value = undefined;
         const scope = effectScope();
         const history = scope.run(function startHistory() {
-          return reactive(createPlayerActivityHistory(ref(player.identifier)));
+          return reactive(createPlayerActivityHistory(ref(player.identifier), active));
         });
         next.set(player.identifier, { scope, history });
       }
@@ -142,7 +161,7 @@
   });
 
   watchEffect(function loadMissingHistory() {
-    if (loading.value || loadingOlder.value || allPeriods.value.length === 0) {
+    if (!active.value || loading.value || loadingOlder.value || allPeriods.value.length === 0) {
       return;
     }
 
@@ -191,8 +210,7 @@
     @scroll="onScroll"
   >
     <p v-if="props.players.length === 0" class="activity-empty">Select players to compare.</p>
-    <p v-else-if="loading" class="activity-empty" role="status">Loading player activity…</p>
-    <p v-else-if="periods.length === 0" class="activity-empty">No activity matches these filters.</p>
+    <p v-else-if="!loading && periods.length === 0" class="activity-empty">No activity matches these filters.</p>
     <p
       v-for="player in props.players.filter(function failed(player) {
         return sources.get(player.identifier).history.error;
@@ -258,6 +276,7 @@
         </template>
       </tbody>
     </table>
+    <p v-if="loading && periods.length === 0" class="activity-empty" role="status">Loading player activity…</p>
     <button
       v-if="hasOlder"
       type="button"

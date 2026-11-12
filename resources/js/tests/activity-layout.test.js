@@ -24,6 +24,74 @@ vi.mock("../../api/requests/changelog", function changelog() {
 });
 
 describe("persistent activity layout", function activityLayout() {
+  it("keeps comparison values visible while resuming a paused refresh without duplicate requests", async function resumeComparison() {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-11-10T12:00:00Z"));
+    const startedAt = Date.now();
+
+    function history(quantity) {
+      return {
+        periods: [
+          {
+            key: `day:${startedAt}`,
+            kind: "day",
+            started_at: startedAt,
+            ended_at: startedAt + 86_400_000,
+            entries: [
+              {
+                id: 1,
+                member_id: 10,
+                type: "xp",
+                revision: quantity,
+                started_at: startedAt,
+                occurred_at: startedAt,
+                data: { skills: { Attack: quantity } },
+              },
+            ],
+          },
+        ],
+        older_cursor: null,
+        from_time: new Date().toISOString(),
+      };
+    }
+
+    const { container, router } = await mountLayout([{ id: 10, name: "Alice" }]);
+    let finishRefresh;
+    const fetch = vi
+      .spyOn(useApiStore().client, "fetchPlayerActivity")
+      .mockResolvedValueOnce(history(100))
+      .mockImplementationOnce(function pendingRefresh() {
+        return new Promise(function captureResponse(resolve) {
+          finishRefresh = resolve;
+        });
+      })
+      .mockImplementation(async function latestHistory() {
+        return history(300);
+      });
+    await router.push("/group/activity");
+    await vi.advanceTimersByTimeAsync(0);
+
+    await router.push("/group/items");
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(fetch).toHaveBeenCalledTimes(1);
+
+    await router.push("/group/activity");
+    await vi.advanceTimersByTimeAsync(0);
+    expect(container.querySelector(".activity-comparison-table tbody td").textContent.trim()).toBe("100");
+    expect(container.querySelector('.activity-comparison-scroll [role="status"]')).toBeNull();
+
+    await router.push("/group/items");
+    await router.push("/group/activity");
+    await vi.advanceTimersByTimeAsync(0);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    finishRefresh(history(200));
+    await vi.advanceTimersByTimeAsync(0);
+    expect(container.querySelector(".activity-comparison-table tbody td").textContent.trim()).toBe("200");
+
+    await vi.advanceTimersByTimeAsync(5000);
+    expect(container.querySelector(".activity-comparison-table tbody td").textContent.trim()).toBe("300");
+  });
+
   it("loads complete comparison days automatically and keeps earlier history paged", async function compareActivity() {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-11-10T12:00:00Z"));

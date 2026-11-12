@@ -78,16 +78,15 @@
 }
 
 .activity-player-buttons {
+  padding: 0 12px 12px;
+}
+
+.activity-player-options {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  padding: 0 12px 12px;
-}
-
-.activity-selection-label {
-  color: var(--muted);
-  font-size: 11px;
+  min-width: 0;
 }
 
 .activity-player-check {
@@ -287,18 +286,48 @@
   margin: 12px auto;
 }
 
+.activity-page-feed {
+  container: activity-page / inline-size;
+  font-size: 13px;
+}
+
 .activity-page-feed .activity-feed-filters {
   grid-template-columns: minmax(0, 180px) auto;
   justify-content: start;
-  padding: 4px 20px 16px;
+  padding: 0 20px 14px;
 }
 
 .activity-page-feed .activity-feed-header {
-  padding: 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+  padding: 20px 20px 12px;
+}
+
+.activity-page-feed .activity-feed-header > div:first-child {
+  display: grid;
+  grid-template-rows: auto 1.6em;
+}
+
+.activity-page-feed .activity-feed-header h1 {
+  font-size: 22px;
+}
+
+.activity-page-feed .activity-view-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-left: 0;
 }
 
 .activity-page-feed .activity-player-buttons {
-  padding-inline: 20px;
+  padding: 0 20px 14px;
+  border-bottom: 1px solid var(--light-border);
+}
+
+.activity-page-feed .activity-player-buttons .men-button[aria-pressed="true"] {
+  border-color: var(--link);
+  background: var(--selected);
 }
 
 .activity-page-feed .activity-drop-filter {
@@ -310,12 +339,25 @@
   padding-inline: 20px;
 }
 
-.activity-page-feed .activity-timeline {
-  max-width: 720px;
+.activity-page-feed :is(.activity-feed-scroll, .activity-comparison-scroll) {
+  scrollbar-gutter: stable;
 }
 
-.activity-page-feed.activity-comparison-feed {
-  max-width: none;
+.activity-page-feed :is(.activity-feed-scroll, .activity-comparison-scroll):focus-visible {
+  outline-offset: -3px;
+}
+
+.activity-page-feed .activity-date {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.activity-page-feed :is(.activity-time, .activity-live, .activity-unlock, .activity-detail-range) {
+  font-size: 11px;
+}
+
+.activity-page-feed.activity-comparison-feed .activity-feed-filters {
+  border-bottom-color: transparent;
 }
 
 .activity-comparison-scroll {
@@ -355,6 +397,7 @@
 
 .activity-comparison-table td {
   text-align: right;
+  overflow-wrap: normal;
 }
 
 .activity-comparison-table tr > :first-child {
@@ -371,13 +414,14 @@
 }
 
 .activity-comparison-period th {
-  padding-top: 20px;
+  padding-top: 12px;
   background: var(--sidebar);
   color: var(--text);
   font-weight: 600;
 }
 
 .activity-comparison-category th {
+  padding-block: 4px;
   color: var(--muted);
   font-size: 11px;
 }
@@ -425,18 +469,80 @@
   border-inline-end: 1px solid var(--border);
 }
 
+@container activity-page (width >= 760px) {
+  .activity-page-feed .activity-card {
+    padding-block: 8px;
+  }
+
+  .activity-page-feed .activity-card-summary {
+    grid-template-columns: 160px minmax(0, 1fr) auto 44px 8px;
+    column-gap: 12px;
+  }
+
+  .activity-page-feed .activity-card-header {
+    display: contents;
+  }
+
+  .activity-page-feed .activity-card-player {
+    grid-area: 1 / 1;
+  }
+
+  .activity-page-feed .activity-card-description {
+    grid-area: 1 / 2;
+  }
+
+  .activity-page-feed .activity-live {
+    grid-area: 1 / 3;
+  }
+
+  .activity-page-feed .activity-time {
+    grid-area: 1 / 4;
+    text-align: right;
+  }
+
+  .activity-page-feed .activity-card-chevron {
+    grid-area: 1 / 5;
+  }
+
+  .activity-page-feed .activity-card-details {
+    max-width: 720px;
+    margin-inline-start: 172px;
+  }
+}
+
+@container activity-page (width < 400px) {
+  .activity-page-feed .activity-feed-header {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}
+
+@media (hover: hover) {
+  .activity-page-feed .activity-card-content > summary:hover,
+  .activity-comparison-table tbody tr:hover > :is(th[scope="row"], td) {
+    background: var(--elevated);
+  }
+}
+
 @media (pointer: coarse) {
   .activity-card-summary,
   .activity-page-link {
     min-block-size: 44px;
   }
+
+  .activity-page-feed :is(.men-button, .select-container),
+  .activity-page-feed .men-button.small {
+    min-height: 44px;
+  }
+
+  .activity-page-feed .activity-drop-filter label {
+    display: flex;
+    align-items: center;
+    min-block-size: 44px;
+  }
 }
 
 @media (width <= 767px) {
-  .activity-selection-label {
-    flex-basis: 100%;
-  }
-
   .activity-page-feed .activity-feed-filters {
     grid-template-columns: minmax(0, 1fr) auto;
     padding-inline: 14px;
@@ -447,11 +553,18 @@
   }
 
   .activity-page-feed .activity-feed-header {
-    padding: 8px 14px;
+    padding: 14px 14px 12px;
   }
 
   .activity-page-feed .activity-player-buttons {
     padding-inline: 14px;
+  }
+
+  .activity-page-feed .activity-player-options {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 5px;
+    margin: -5px;
   }
 
   .activity-page-feed .activity-feed-scroll {
@@ -499,9 +612,9 @@
 }
 
 @media (width <= 767px) and (height <= 430px) {
-  .activity-page-feed.activity-comparison-feed {
+  .activity-page-feed {
     display: grid;
-    grid-template: auto auto minmax(0, 1fr) / minmax(0, 1fr) auto;
+    grid-template: auto auto minmax(0, 1fr) / minmax(0, 260px) minmax(0, 1fr);
   }
 
   .activity-page-feed .activity-feed-header {
@@ -509,21 +622,27 @@
     padding-block: 4px;
   }
 
-  .activity-comparison-scroll {
+  .activity-page-feed .activity-feed-header > div:first-child {
+    grid-template-rows: auto;
+  }
+
+  .activity-page-feed .activity-feed-period {
+    display: none;
+  }
+
+  .activity-page-feed :is(.activity-feed-scroll, .activity-comparison-scroll) {
+    grid-row: 3;
     grid-column: 1 / -1;
   }
 
   .activity-page-feed .activity-player-buttons {
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    grid-area: 2 / 2;
+    min-width: 0;
     padding-bottom: 6px;
   }
 
-  .activity-page-feed .activity-selection-label {
-    display: none;
-  }
-
   .activity-page-feed .activity-feed-filters {
+    grid-area: 2 / 1;
     padding-block: 0 6px;
   }
 }

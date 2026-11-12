@@ -7,7 +7,7 @@ export const usePlayerActivityStore = defineStore("player-activity", function cr
   return createPlayerActivityHistory(ref(""));
 });
 
-export function createPlayerActivityHistory(selectedMember) {
+export function createPlayerActivityHistory(selectedMember, active = ref(true)) {
   const apiStore = useApiStore();
   const records = shallowRef(new Map());
   const loaded = ref(false);
@@ -134,8 +134,15 @@ export function createPlayerActivityHistory(selectedMember) {
 
       let timeout;
       let fromTime;
+      let polling = false;
 
       async function poll() {
+        if (polling) {
+          return;
+        }
+
+        polling = true;
+
         try {
           const response = await client.fetchPlayerActivity({ memberIdentifier: member, timezone, fromTime });
 
@@ -158,15 +165,28 @@ export function createPlayerActivityHistory(selectedMember) {
           }
 
           console.error("Failed to fetch player activity", reason);
-        }
+        } finally {
+          polling = false;
 
-        if (connection === current) {
-          timeout = window.setTimeout(poll, 5000);
+          if (connection === current && active.value) {
+            timeout = window.setTimeout(poll, 5000);
+          }
         }
       }
 
-      void poll();
+      const stopWatchingActive = watch(
+        active,
+        function updatePolling(active) {
+          window.clearTimeout(timeout);
+
+          if (active) {
+            void poll();
+          }
+        },
+        { immediate: true, flush: "sync" },
+      );
       onCleanup(function disconnect() {
+        stopWatchingActive();
         window.clearTimeout(timeout);
         connection = undefined;
       });

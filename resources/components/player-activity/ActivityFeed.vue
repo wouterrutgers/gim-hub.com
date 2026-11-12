@@ -47,16 +47,6 @@
       }
     }
   });
-  watch(
-    function isSidebar() {
-      return props.collapsible;
-    },
-    function resetPageView(collapsible) {
-      if (collapsible) {
-        showTimeline.value = false;
-      }
-    },
-  );
   const comparisonPlayers = computed(function selectedComparisonPlayers() {
     return [...members.value]
       .filter(function included([identifier]) {
@@ -191,7 +181,7 @@
   >
     <header class="activity-feed-header">
       <div>
-        <h2>Group activity</h2>
+        <component :is="props.collapsible ? 'h2' : 'h1'">Group activity</component>
         <span
           v-if="!comparing"
           class="activity-feed-period"
@@ -199,7 +189,12 @@
           data-tooltip="Activity stays detailed for at least 30 days. Older completed weeks are combined per player, from Monday to Sunday in UTC."
           >{{ activityStore.olderCursor ? "Loaded history" : "All history" }}</span
         >
-        <RouterLink v-if="props.collapsible" to="/group/activity" class="activity-page-link">
+        <RouterLink
+          v-if="props.collapsible"
+          to="/group/activity"
+          class="activity-page-link"
+          @click="showTimeline = false"
+        >
           Compare players <span class="chevron chevron-right" aria-hidden="true" />
         </RouterLink>
       </div>
@@ -224,30 +219,6 @@
         </button>
       </div>
     </header>
-    <div v-if="comparing" class="activity-player-buttons" role="group" aria-label="Select players to compare">
-      <span class="activity-selection-label">Select players to compare</span>
-      <button
-        type="button"
-        class="men-button small"
-        :class="{ active: excludedMembers.size === 0 }"
-        :aria-pressed="excludedMembers.size === 0"
-        @click="excludedMembers.clear()"
-      >
-        Everyone
-      </button>
-      <button
-        v-for="[identifier, name] in members"
-        :key="identifier"
-        type="button"
-        class="men-button small"
-        :class="{ active: !excludedMembers.has(identifier) }"
-        :aria-pressed="!excludedMembers.has(identifier)"
-        @click="selectMember(identifier)"
-      >
-        <span class="activity-player-check" aria-hidden="true">{{ excludedMembers.has(identifier) ? "" : "✓" }}</span>
-        {{ name }}
-      </button>
-    </div>
     <div class="activity-feed-filters">
       <span class="select-container">
         <select v-model="typeFilter" aria-label="Filter activity by type">
@@ -273,14 +244,49 @@
         <label for="filter-activity-drops-input"><span>Filter drops</span></label>
       </div>
     </div>
-    <ActivityComparison
-      v-if="comparing"
-      ref="comparisonScroller"
-      :players="comparisonPlayers"
-      :filter-entry="matches"
-      :period-label="periodLabel"
-    />
-    <div v-else ref="scroller" class="activity-feed-scroll" @scroll="onScroll">
+    <div v-if="comparing" class="activity-player-buttons" role="group" aria-label="Select players to compare">
+      <div class="activity-player-options">
+        <button
+          type="button"
+          class="men-button small"
+          :class="{ active: excludedMembers.size === 0 }"
+          :aria-pressed="excludedMembers.size === 0"
+          @click="excludedMembers.clear()"
+        >
+          Everyone
+        </button>
+        <button
+          v-for="[identifier, name] in members"
+          :key="identifier"
+          type="button"
+          class="men-button small"
+          :class="{ active: !excludedMembers.has(identifier) }"
+          :aria-pressed="!excludedMembers.has(identifier)"
+          @click="selectMember(identifier)"
+        >
+          <span class="activity-player-check" aria-hidden="true">{{ excludedMembers.has(identifier) ? "" : "✓" }}</span>
+          {{ name }}
+        </button>
+      </div>
+    </div>
+    <KeepAlive>
+      <ActivityComparison
+        v-if="comparing"
+        ref="comparisonScroller"
+        :players="comparisonPlayers"
+        :filter-entry="matches"
+        :period-label="periodLabel"
+      />
+    </KeepAlive>
+    <div
+      v-if="!comparing"
+      ref="scroller"
+      class="activity-feed-scroll"
+      :role="props.collapsible ? undefined : 'region'"
+      :aria-label="props.collapsible ? undefined : 'Group activity timeline'"
+      :tabindex="props.collapsible ? undefined : 0"
+      @scroll="onScroll"
+    >
       <p v-if="!activityStore.loaded || !groupStore.loaded" class="activity-empty">Loading activity…</p>
       <p v-else-if="filteredEntries.length === 0" class="activity-empty">
         {{

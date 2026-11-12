@@ -156,7 +156,7 @@
 
 .activity-page-feed {
   flex: 1;
-  max-width: 1000px;
+  min-width: 0;
 }
 
 @media (768px <= width <= 1439px) {

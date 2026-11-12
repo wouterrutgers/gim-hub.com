@@ -210,8 +210,12 @@
   font-weight: 400;
 }
 
+.workspace-page:has(.items-scroll-area) {
+  overflow-y: auto;
+}
+
 .items-scroll-area {
-  flex: 1;
+  flex: 1 0 264px;
   min-height: 100px;
   overflow-y: auto;
   scrollbar-gutter: stable;
@@ -574,14 +578,6 @@
 
   .items-results-actions {
     margin-left: 0;
-  }
-
-  .workspace-page:has(.items-scroll-area) {
-    overflow-y: auto;
-  }
-
-  .items-scroll-area {
-    flex: 1 0 264px;
   }
 
   .item-inspector {

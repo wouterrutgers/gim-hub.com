@@ -17,13 +17,14 @@
   const route = useRoute();
   const settingsStore = useSettingsStore();
   const windowWidth = ref(window.innerWidth);
+  const windowHeight = ref(window.innerHeight);
   const moreMenu = ref();
   const moreToggle = ref();
   const moreOpen = ref(false);
   const { open: modalOpen, openModal, closeModal } = useModal();
 
   const navigationCollapsed = computed(function isNavigationCollapsed() {
-    return windowWidth.value >= 768 && settingsStore.collapseNavigation;
+    return windowWidth.value >= 768 && windowHeight.value > 500 && settingsStore.collapseNavigation;
   });
 
   const primaryLinks = [
@@ -71,18 +72,19 @@
     openModal();
   }
 
-  function updateWindowWidth() {
+  function updateWindowSize() {
     windowWidth.value = window.innerWidth;
+    windowHeight.value = window.innerHeight;
   }
 
   onMounted(function listenForOutsidePointer() {
     document.addEventListener("pointerdown", closeMoreOnOutsideClick);
-    window.addEventListener("resize", updateWindowWidth);
+    window.addEventListener("resize", updateWindowSize);
   });
 
   onBeforeUnmount(function removeOutsidePointerListener() {
     document.removeEventListener("pointerdown", closeMoreOnOutsideClick);
-    window.removeEventListener("resize", updateWindowWidth);
+    window.removeEventListener("resize", updateWindowSize);
   });
 </script>
 

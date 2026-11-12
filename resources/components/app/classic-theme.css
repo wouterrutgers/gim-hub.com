@@ -348,7 +348,7 @@
   gap: 8px;
 }
 
-@media (width >= 768px) {
+@media (width >= 768px) and (height > 500px) {
   :root.classic-mode .authed-layout {
     box-sizing: border-box;
     gap: 8px;

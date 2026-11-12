@@ -175,7 +175,7 @@
   }
 }
 
-@media (width >= 768px) {
+@media (width >= 768px) and (height > 500px) {
   #app-navigation.navigation-collapsed {
     flex-basis: 72px;
     padding-inline: 10px;
@@ -238,7 +238,7 @@
   }
 }
 
-@media (width <= 767px) {
+@media (width <= 767px), (height <= 500px) {
   #app-navigation {
     position: relative;
     display: grid;
@@ -348,7 +348,7 @@
     gap: 2px;
     box-sizing: border-box;
     width: 180px;
-    max-height: 60dvh;
+    max-height: min(60dvh, calc(100dvh - 112px));
     overflow-y: auto;
     padding: 6px;
     box-shadow: 0 12px 32px rgb(0 0 0 / 30%);

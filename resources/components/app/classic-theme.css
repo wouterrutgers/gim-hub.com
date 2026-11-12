@@ -367,7 +367,7 @@
   }
 
   :root.classic-mode .roster-heading {
-    background: color-mix(in srgb, var(--background) var(--page-background-opacity), transparent);
+    background: transparent;
   }
 
   :root.classic-mode #main-content {

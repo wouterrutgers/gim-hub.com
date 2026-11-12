@@ -41,25 +41,19 @@
       {
         title: "Free quests",
         quests: questList.value.filter(function isFree(quest) {
-          return !quest.member && !quest.tutorial;
+          return !quest.member;
         }),
       },
       {
         title: "Members' quests",
         quests: questList.value.filter(function isMembersQuest(quest) {
-          return quest.member && !quest.miniquest && !quest.tutorial;
+          return quest.member && !quest.miniquest;
         }),
       },
       {
         title: "Miniquests",
         quests: questList.value.filter(function isMiniquest(quest) {
           return quest.miniquest;
-        }),
-      },
-      {
-        title: "Tutorial",
-        quests: questList.value.filter(function isTutorial(quest) {
-          return quest.tutorial;
         }),
       },
     ];

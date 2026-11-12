@@ -19,7 +19,6 @@ const questDataSchema = z
         }),
       member: z.boolean(),
       miniquest: z.boolean().optional(),
-      tutorial: z.boolean().optional(),
       hidden: z.boolean().optional(),
     }),
   )

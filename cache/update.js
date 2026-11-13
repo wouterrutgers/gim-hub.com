@@ -183,17 +183,13 @@ async function execRuneliteGradleApplication({ buildScriptPath, mainClass, runAr
   });
 }
 
-async function dumpItemData(wikiOnly) {
+async function dumpItemData() {
   console.info("\nStep: Dumping items from cache");
   await execRuneliteGradleApplication({
     buildScriptPath: RUNELITE_PATHS.BUILD_SCRIPTS.cache,
     mainClass: "net.runelite.cache.Cache",
     runArgs: `-c ${osrsCacheDirectory} -items ${path.resolve("./item-data.json")}`,
   });
-
-  if (wikiOnly) {
-    return;
-  }
 
   console.info("\nStep: Converting cache item data");
   await execRuneliteGradleApplication({
@@ -220,10 +216,9 @@ async function getNonAlchableItemNames() {
   return nonAlchableItemNames;
 }
 
-async function buildItemDataJson(wikiOnly) {
+async function buildItemDataJson() {
   console.log("\nStep: Build item_data.json");
   const items = JSON.parse(fs.readFileSync("./item-data.json", "utf8"));
-  const mappedItems = wikiOnly ? JSON.parse(fs.readFileSync(SITE_PATHS.FILES.itemData, "utf8")) : items;
   const includedItems = {};
   const allIncludedItemIds = new Set();
   for (const [itemId, item] of Object.entries(items)) {
@@ -232,7 +227,7 @@ async function buildItemDataJson(wikiOnly) {
         name: item.name,
         highalch: Math.floor(item.cost * 0.6),
         alchable: true,
-        mapping: mappedItems[itemId].mapping,
+        mapping: item.mapping,
       };
 
       const stackedList = [];
@@ -506,8 +501,10 @@ async function dumpBossIcons() {
 (async () => {
   try {
     const wikiOnly = process.argv.includes("--wiki-only");
-    await dumpItemData(wikiOnly);
-    const allIncludedItemIds = await buildItemDataJson(wikiOnly);
+    await dumpItemData();
+    const allIncludedItemIds = await buildItemDataJson();
+    await dumpQuestMapping();
+    await dumpBossIcons();
 
     if (wikiOnly) {
       fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData);
@@ -527,7 +524,6 @@ async function dumpBossIcons() {
         await dumpMapLabels();
         await dumpCollectionLog();
         await dumpCombatAchievements();
-        await dumpQuestMapping();
       }),
     ]);
 
@@ -539,7 +535,6 @@ async function dumpBossIcons() {
 
     await buildMapJsonAndIconAtlas();
     await moveResults();
-    await dumpBossIcons();
   } finally {
     execGitCleanInRunelite();
   }

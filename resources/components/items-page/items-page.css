@@ -115,6 +115,7 @@
 .items-filter-actions {
   display: flex;
   grid-area: actions;
+  justify-self: end;
   gap: 8px;
 }
 

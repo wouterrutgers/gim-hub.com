@@ -213,6 +213,8 @@
 
 .workspace-page:has(.items-scroll-area) {
   overflow-y: auto;
+  padding-inline-end: calc(3px + var(--items-scrollbar-width, 0px));
+  margin-inline-end: calc(-3px - var(--items-scrollbar-width, 0px));
 }
 
 .items-scroll-area {
@@ -221,6 +223,10 @@
   overflow-y: auto;
   scrollbar-gutter: stable;
   padding: 3px;
+}
+
+.workspace-page > .items-scroll-area {
+  margin-inline: -3px calc(-3px - var(--items-scrollbar-width, 0px));
 }
 
 .bank-item {
@@ -529,6 +535,12 @@
 .items-page-tutorial-inline-search,
 .items-page-tutorial-inline-item-name {
   color: var(--link-hover);
+}
+
+@media (width <= 767px), (height <= 500px) {
+  .workspace-page:has(.items-scroll-area) {
+    margin-inline-end: -5px;
+  }
 }
 
 @media (width <= 767px) {

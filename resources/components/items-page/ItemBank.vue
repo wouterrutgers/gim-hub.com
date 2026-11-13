@@ -23,6 +23,10 @@
   const parent = ref();
   const columns = ref(props.showOwners ? 3 : 6);
   const resizeObserver = new ResizeObserver(function updateColumns([entry]) {
+    parent.value.parentElement.style.setProperty(
+      "--items-scrollbar-width",
+      `${parent.value.offsetWidth - parent.value.clientWidth}px`,
+    );
     columns.value = Math.max(1, Math.floor(entry.contentRect.width / (props.showOwners ? 280 : 104)));
   });
   const options = computed(function virtualizerOptions() {

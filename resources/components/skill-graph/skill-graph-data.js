@@ -7,11 +7,13 @@ export const lineChartYAxisOptions = {
   "Total experience": "Total XP",
   "Experience per hour": "XP/h",
   "Levels gained": "Levels gained",
+  "Total levels": "Total levels",
 };
 
 export function buildLineChartOptions({ range, yAxisUnit }) {
   const durationInDays = (range.end - range.start) / (24 * 60 * 60 * 1000);
   const timeUnit = durationInDays <= 1 ? "hour" : durationInDays <= 31 ? "day" : "month";
+  const isLevelMetric = yAxisUnit === "Levels gained" || yAxisUnit === "Total levels";
 
   return {
     maintainAspectRatio: false,
@@ -26,14 +28,13 @@ export function buildLineChartOptions({ range, yAxisUnit }) {
         callbacks: {
           label(context) {
             const quantity = context.parsed.y.toLocaleString(undefined, { maximumFractionDigits: 0 });
-            const unit =
-              yAxisUnit === "Levels gained"
-                ? context.parsed.y === 1
-                  ? "level"
-                  : "levels"
-                : yAxisUnit === "Experience per hour"
-                  ? "XP/h"
-                  : "XP";
+            const unit = isLevelMetric
+              ? context.parsed.y === 1
+                ? "level"
+                : "levels"
+              : yAxisUnit === "Experience per hour"
+                ? "XP/h"
+                : "XP";
 
             return `${context.dataset.label}: ${quantity} ${unit}`;
           },
@@ -55,12 +56,12 @@ export function buildLineChartOptions({ range, yAxisUnit }) {
       y: {
         title: { display: true, text: lineChartYAxisOptions[yAxisUnit] },
         type: "linear",
-        min: 0,
+        min: yAxisUnit === "Total levels" ? undefined : 0,
         ticks: {
           maxTicksLimit: 6,
           precision: 0,
           callback(value) {
-            if (yAxisUnit === "Levels gained") {
+            if (isLevelMetric) {
               return value.toLocaleString();
             }
 
@@ -89,6 +90,8 @@ export function buildDatasetsFromMemberSkillData(members, range, options) {
           value = Math.max(0, experience - startingExperience);
         } else if (options.yAxisUnit === "Levels gained") {
           value = Math.max(0, sumFilteredLevels(sample.data, options.skillFilter) - startingLevel);
+        } else if (options.yAxisUnit === "Total levels") {
+          value = sumFilteredLevels(sample.data, options.skillFilter);
         } else if (options.yAxisUnit === "Experience per hour") {
           const previous = samples[index - 1];
           value = previous
@@ -239,6 +242,7 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
         start,
         end,
         elapsedHours,
+        endLevel,
         levelsGained,
         yAxisUnit: options.yAxisUnit,
       });
@@ -355,7 +359,7 @@ function differenceInHoursPrecise({ earlierDate, laterDate }) {
   return DateFNS.differenceInMilliseconds(laterDate, earlierDate) / (60 * 60 * 1000);
 }
 
-function calculateMetricValue({ start, end, elapsedHours, levelsGained, yAxisUnit }) {
+function calculateMetricValue({ start, end, elapsedHours, endLevel, levelsGained, yAxisUnit }) {
   switch (yAxisUnit) {
     case "Total experience":
       return Math.max(0, end);
@@ -365,5 +369,7 @@ function calculateMetricValue({ start, end, elapsedHours, levelsGained, yAxisUni
       return Math.max(0, end - start);
     case "Levels gained":
       return levelsGained;
+    case "Total levels":
+      return endLevel;
   }
 }

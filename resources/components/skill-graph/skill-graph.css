@@ -2,16 +2,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px 12px;
+  gap: 12px 16px;
   flex-wrap: wrap;
-  padding: 8px 12px;
+  padding: 12px 16px;
   container: skill-graph-controls / inline-size;
 }
 
 #skill-graph-control-container button {
   box-sizing: border-box;
   min-height: 36px;
-  padding: 6px 8px;
+  padding: 6px 10px;
 }
 
 #skill-graph-presets {
@@ -21,18 +21,19 @@
 }
 
 #skill-graph-presets button {
-  border: 0;
+  border: 1px solid transparent;
   border-radius: 3px;
   background: transparent;
-  color: var(--white);
+  color: var(--text);
   line-height: 1;
   text-align: center;
   white-space: nowrap;
 }
 
 #skill-graph-presets button[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--orange) 16%, transparent);
-  color: var(--orange);
+  border-color: var(--border);
+  background: var(--selected);
+  color: var(--link-hover);
 }
 
 #skill-graph-period-navigation,
@@ -43,13 +44,14 @@
 }
 
 #skill-graph-period-navigation button {
-  width: 36px;
+  min-width: 36px;
   flex-shrink: 0;
   text-align: center;
 }
 
 #skill-graph-range {
   margin: 0;
+  color: var(--muted);
   text-align: center;
   font-variant-numeric: tabular-nums;
   font-size: 12px;
@@ -59,38 +61,171 @@
   margin-left: auto;
 }
 
+.skill-graph-field {
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.skill-graph-field .select-container {
+  min-height: 36px;
+}
+
+.skill-graph-field select {
+  color: var(--text);
+  font-size: 12px;
+}
+
 #skill-graph-body {
   display: flex;
   position: relative;
   flex-direction: column;
   flex: 1;
-  margin-top: 8px;
+  min-width: 0;
+}
+
+#skill-graph-content {
+  min-width: 0;
+  container: skill-graph-content / inline-size;
+}
+
+#skill-graph-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 20px;
+  border-bottom: 1px solid var(--light-border);
+}
+
+#skill-graph-summary > div {
+  min-width: 0;
+}
+
+#skill-graph-summary dt {
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#skill-graph-summary dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+#skill-graph-summary > div:last-child dd {
+  font-size: 16px;
+}
+
+.skill-graph-summary-detail {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+#skill-graph-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 20px 20px 8px;
+}
+
+#skill-graph-heading h3 {
+  font-size: 16px;
+}
+
+.skill-graph-metric-label {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+#skill-graph-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 14px 10px;
+}
+
+.skill-graph-legend-label {
+  margin-inline: 6px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+#skill-graph-legend button {
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 5px 7px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--text);
+  font-size: 12px;
+}
+
+#skill-graph-legend button[aria-pressed="true"] {
+  border-color: var(--border);
+  background: var(--surface-raised);
+}
+
+#skill-graph-legend button[aria-pressed="false"] {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+#skill-graph-legend svg {
+  flex-shrink: 0;
+  width: 26px;
+  height: 10px;
 }
 
 #skill-graph-container {
   min-width: 0;
   position: relative;
-  height: max(40vh, 300px);
-  display: flex;
-  justify-content: space-around;
-  flex-shrink: 0;
+  height: clamp(280px, 40cqw, 360px);
+  margin-inline: 16px;
+  overflow: hidden;
+  background: var(--surface-sunken);
 }
 
 #skill-graph-line-chart-container {
   position: absolute;
-  inset: 0;
-  background: var(--darken);
+  inset: 8px;
+}
+
+#skill-graph-hidden-lines {
+  display: grid;
+  position: absolute;
+  inset: 20px;
+  place-items: center;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+  pointer-events: none;
 }
 
 #skill-graph-skill-image {
   position: absolute;
-  height: 50%;
+  height: 45%;
   top: 50%;
   left: 0;
   right: 0;
   margin: auto;
   transform: translateY(-50%);
-  opacity: 0.08;
+  opacity: 0.04;
   aspect-ratio: 1;
   object-fit: contain;
   -webkit-user-drag: none;
@@ -99,22 +234,92 @@
 }
 
 #skill-graph-loading-overlay {
-  background-color: black;
-  opacity: 0.5;
+  display: flex;
   position: absolute;
   inset: 0;
+  z-index: 3;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+#skill-graph-loading-overlay .loader {
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+#skill-graph-table-scroll {
+  min-width: 0;
+  margin-top: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scrollbar-gutter: stable;
 }
 
 #skill-graph-xp-change-table {
-  margin: 8px 12px;
-  border-collapse: collapse;
+  width: 100%;
+  min-width: 700px;
+  border-spacing: 0;
+  table-layout: fixed;
   font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+#skill-graph-xp-change-table.has-total-experience {
+  min-width: 800px;
+}
+
+.skill-graph-member-header th,
+.skill-graph-member-header td {
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+
+#skill-graph-xp-change-table th,
+#skill-graph-xp-change-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--light-border);
+  text-align: right;
+  vertical-align: middle;
+}
+
+#skill-graph-xp-change-table thead th {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+#skill-graph-xp-change-table tr > :first-child {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  width: 220px;
+  padding-inline-start: 20px;
+  border-inline-end: 1px solid var(--light-border);
+  background-color: var(--surface);
+  text-align: left;
+}
+
+#skill-graph-xp-change-table tr > :last-child {
+  padding-inline-end: 20px;
+}
+
+.skill-graph-row-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+  font-weight: 400;
 }
 
 .skill-graph-xp-change-table-image-container {
-  width: 1em;
-  height: 1em;
-  margin-inline: 0.5em;
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  margin-inline-start: 18px;
   flex-shrink: 0;
 }
 
@@ -124,45 +329,39 @@
   object-fit: contain;
 }
 
-.skill-graph-xp-change-data {
-  padding-inline: 8px;
-  font-variant-numeric: tabular-nums;
+.skill-graph-xp-change-data,
+.skill-graph-rate,
+.skill-graph-level,
+.skill-graph-level-gain {
   white-space: nowrap;
 }
 
-.skill-graph-xp-change-table-label {
-  display: flex;
-  align-items: center;
-  padding: 4px 8px 4px 24px;
-  font-weight: normal;
-  text-align: left;
+.skill-graph-rate,
+.skill-graph-level,
+.skill-graph-level-gain {
+  color: var(--muted);
 }
 
-.skill-graph-member-header {
-  position: relative;
+.skill-graph-level-gain.has-gain {
+  color: var(--green);
+  font-weight: 600;
 }
 
-.skill-graph-member-header th,
-.skill-graph-member-header td {
-  padding: 8px;
+.skill-graph-level-kind {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
 }
 
-#skill-graph-xp-change-table thead th {
-  font-family: var(--font-body);
-  font-weight: bold;
-  padding: 8px;
-  text-align: left;
-}
-
-#skill-graph-xp-change-table thead th:last-child,
-.skill-graph-xp-change-data {
-  text-align: right;
+.skill-graph-member-header .skill-graph-row-label {
+  min-height: 24px;
+  font-weight: 600;
 }
 
 .skill-graph-member-color {
-  width: 0.75em;
-  height: 0.75em;
-  margin-right: 8px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -172,44 +371,46 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: 32px;
-  font-family: inherit;
   width: 100%;
-}
-
-.skill-graph-member-toggle:hover {
-  color: var(--orange);
-}
-
-.skill-graph-member-header::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 2px;
-  background: var(--light-border);
-  pointer-events: none;
-}
-
-#skill-graph-xp-change-table tr.skill-graph-member-header .skill-graph-xp-change-table-label {
   min-height: 32px;
-  padding-block: 0;
-  font-family: var(--font-body);
-  font-weight: bold;
+  font: inherit;
 }
 
-#skill-graph-xp-change-table tr.skill-graph-member-header .skill-graph-xp-change-data {
-  font-family: var(--font-body);
-  font-weight: bold;
+.skill-graph-row-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-#skill-graph-no-data {
-  padding: 8px;
+.skill-graph-member-toggle .chevron {
+  flex-shrink: 0;
+  margin-inline-end: 2px;
+  color: var(--muted);
 }
 
+#skill-graph-no-data,
 #skill-graph-error {
-  padding: 12px;
+  padding: 20px;
+  color: var(--muted);
+}
+
+#skill-graph-error button {
+  min-height: 36px;
+  margin-top: 12px;
+  padding: 6px 12px;
+  color: var(--text);
+}
+
+#skill-graph-control-container button:focus-visible,
+#skill-graph-legend button:focus-visible,
+#skill-graph-table-scroll:focus-visible,
+.skill-graph-member-toggle:focus-visible {
+  outline: 2px solid var(--link-hover);
+  outline-offset: -2px;
+}
+
+#skill-graph-control-container button:disabled {
+  cursor: default;
+  opacity: 0.5;
 }
 
 @container skill-graph-controls (width <= 1080px) {
@@ -221,36 +422,91 @@
 }
 
 @container skill-graph-controls (width <= 480px) {
-  #skill-graph-presets {
+  #skill-graph-presets,
+  #skill-graph-filters {
     width: 100%;
   }
 
-  #skill-graph-presets button {
+  #skill-graph-presets button,
+  .skill-graph-field {
     flex: 1;
+    min-width: 0;
+  }
+
+  #skill-graph-presets button {
+    padding-inline: 6px;
+  }
+
+  .skill-graph-field .select-container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@container skill-graph-content (width <= 600px) {
+  #skill-graph-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 16px;
+    padding: 16px;
+  }
+
+  #skill-graph-summary dd {
+    font-size: 20px;
+  }
+
+  #skill-graph-heading {
+    padding: 16px 16px 8px;
+  }
+
+  #skill-graph-legend {
+    padding-inline: 10px;
+  }
+
+  #skill-graph-container {
+    margin-inline: 12px;
+  }
+
+  #skill-graph-xp-change-table {
+    min-width: 620px;
+  }
+
+  #skill-graph-xp-change-table tr > :first-child {
+    width: 156px;
+    padding-inline-start: 16px;
+  }
+
+  #skill-graph-xp-change-table tr > :last-child {
+    padding-inline-end: 16px;
+  }
+}
+
+@media (hover: hover) {
+  #skill-graph-legend button:hover,
+  #skill-graph-presets button:not(:disabled):hover {
+    background: var(--elevated);
+    color: var(--link-hover);
+  }
+
+  .skill-graph-member-toggle:hover {
+    color: var(--link-hover);
+  }
+
+  #skill-graph-xp-change-table tbody tr:hover > :is(th, td) {
+    background-color: var(--elevated);
   }
 }
 
 @media (pointer: coarse) {
-  #skill-graph-control-container button {
+  #skill-graph-control-container button,
+  #skill-graph-period-navigation button,
+  #skill-graph-legend button,
+  .skill-graph-member-toggle,
+  .skill-graph-field .select-container,
+  #skill-graph-error button {
     min-height: 44px;
   }
 
   #skill-graph-period-navigation button {
-    width: 44px;
+    min-width: 44px;
   }
-}
-
-#skill-graph-control-container button:focus-visible,
-.skill-graph-member-toggle:focus-visible {
-  outline: 2px solid var(--white);
-  outline-offset: -2px;
-}
-
-#skill-graph-control-container button:disabled {
-  cursor: default;
-  opacity: 0.5;
-}
-
-#skill-graph-presets button:hover {
-  background: var(--elevated);
 }

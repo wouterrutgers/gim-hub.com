@@ -1,26 +1,39 @@
 import * as DateFNS from "date-fns";
 import { skillsInBackendOrder } from "../../api/requests/group-data";
-import { skillIcons } from "../../game/skill";
+import { decomposeExperience, skillIcons } from "../../game/skill";
 
 export const lineChartYAxisOptions = {
   "Cumulative experience gained": "XP gained",
   "Total experience": "Total XP",
   "Experience per hour": "XP/h",
+  "Levels gained": "Levels gained",
 };
 
 export function buildLineChartOptions({ range, yAxisUnit }) {
+  const durationInDays = (range.end - range.start) / (24 * 60 * 60 * 1000);
+  const timeUnit = durationInDays <= 1 ? "hour" : durationInDays <= 31 ? "day" : "month";
+
   return {
     maintainAspectRatio: false,
     animation: false,
     parsing: false,
     responsive: true,
     plugins: {
-      legend: { position: "top" },
+      legend: { display: false },
       tooltip: {
+        padding: 12,
+        boxPadding: 6,
         callbacks: {
           label(context) {
             const quantity = context.parsed.y.toLocaleString(undefined, { maximumFractionDigits: 0 });
-            const unit = yAxisUnit === "Experience per hour" ? "XP/h" : "XP";
+            const unit =
+              yAxisUnit === "Levels gained"
+                ? context.parsed.y === 1
+                  ? "level"
+                  : "levels"
+                : yAxisUnit === "Experience per hour"
+                  ? "XP/h"
+                  : "XP";
 
             return `${context.dataset.label}: ${quantity} ${unit}`;
           },
@@ -28,10 +41,35 @@ export function buildLineChartOptions({ range, yAxisUnit }) {
       },
     },
     interaction: { intersect: false, mode: "index", axis: "x" },
-    layout: { padding: 4 },
+    layout: { padding: 8 },
     scales: {
-      x: { type: "time", min: range.start?.getTime(), max: range.end.getTime(), time: { minUnit: "minute" } },
-      y: { title: { display: true, text: lineChartYAxisOptions[yAxisUnit] }, type: "linear", min: 0 },
+      x: {
+        type: "time",
+        min: range.start?.getTime(),
+        max: range.end.getTime(),
+        time: { unit: timeUnit, displayFormats: { hour: "HH:mm", day: "d MMM", month: "MMM yy" } },
+        ticks: { maxTicksLimit: 8, maxRotation: 0 },
+        grid: { display: false },
+        border: { display: false },
+      },
+      y: {
+        title: { display: true, text: lineChartYAxisOptions[yAxisUnit] },
+        type: "linear",
+        min: 0,
+        ticks: {
+          maxTicksLimit: 6,
+          precision: 0,
+          callback(value) {
+            if (yAxisUnit === "Levels gained") {
+              return value.toLocaleString();
+            }
+
+            return value.toLocaleString(undefined, { notation: "compact", maximumFractionDigits: 1 });
+          },
+        },
+        grid: { drawTicks: false },
+        border: { display: false },
+      },
     },
   };
 }
@@ -42,12 +80,15 @@ export function buildDatasetsFromMemberSkillData(members, range, options) {
       const samples = samplesForRange(skillSamples, range);
       const baseline = samples[0];
       const startingExperience = baseline ? sumFilteredExperience(baseline.data, options.skillFilter) : 0;
+      const startingLevel = baseline ? sumFilteredLevels(baseline.data, options.skillFilter) : 0;
       const data = samples.map(function buildPoint(sample, index) {
         const experience = sumFilteredExperience(sample.data, options.skillFilter);
         let value = experience;
 
         if (options.yAxisUnit === "Cumulative experience gained") {
           value = Math.max(0, experience - startingExperience);
+        } else if (options.yAxisUnit === "Levels gained") {
+          value = Math.max(0, sumFilteredLevels(sample.data, options.skillFilter) - startingLevel);
         } else if (options.yAxisUnit === "Experience per hour") {
           const previous = samples[index - 1];
           value = previous
@@ -92,11 +133,12 @@ export function buildDatasetsFromMemberSkillData(members, range, options) {
     return first - second;
   });
 
-  return datasets.map(function alignDataset(dataset) {
+  return datasets.map(function alignDataset(dataset, datasetIndex) {
     let index = 0;
 
     return {
       ...dataset,
+      borderDash: [[], [8, 3], [3, 3], [10, 3, 2, 3], [2, 2]][datasetIndex],
       data: times.map(function alignPoint(time) {
         while (index + 1 < dataset.data.length && dataset.data[index + 1].x <= time) {
           index += 1;
@@ -167,7 +209,17 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
 
     const startSkills = samples[0].data;
     const endSkills = samples.at(-1).data;
-    const memberMetrics = { name: member, total: 0, perSkill: [], colorCSS: style.barBackground };
+    const memberMetrics = {
+      name: member,
+      total: 0,
+      experienceGained: 0,
+      experiencePerHour: 0,
+      startLevel: 0,
+      endLevel: 0,
+      levelsGained: 0,
+      perSkill: [],
+      colorCSS: style.barBackground,
+    };
 
     for (let skillIndex = 0; skillIndex < skillsInBackendOrder.length; skillIndex++) {
       const skill = skillsInBackendOrder[skillIndex];
@@ -178,15 +230,38 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
 
       const start = startSkills[skillIndex] ?? 0;
       const end = endSkills[skillIndex] ?? 0;
-      const metricValue = calculateMetricValue({ start, end, elapsedHours, yAxisUnit: options.yAxisUnit });
+      const startLevel = decomposeExperience(start).levelReal;
+      const endLevel = decomposeExperience(end).levelReal;
+      const levelsGained = Math.max(0, endLevel - startLevel);
+      const experienceGained = Math.max(0, end - start);
+      const experiencePerHour = Math.round(experienceGained / elapsedHours);
+      const metricValue = calculateMetricValue({
+        start,
+        end,
+        elapsedHours,
+        levelsGained,
+        yAxisUnit: options.yAxisUnit,
+      });
 
       if (options.skillFilter === "Overall") {
-        memberMetrics.perSkill[skillIndex] = metricValue;
+        memberMetrics.perSkill[skillIndex] = {
+          quantity: metricValue,
+          experienceGained,
+          experiencePerHour,
+          startLevel,
+          endLevel,
+          levelsGained,
+        };
       }
 
       memberMetrics.total += metricValue;
+      memberMetrics.experienceGained += experienceGained;
+      memberMetrics.startLevel += startLevel;
+      memberMetrics.endLevel += endLevel;
+      memberMetrics.levelsGained += levelsGained;
     }
 
+    memberMetrics.experiencePerHour = Math.round(memberMetrics.experienceGained / elapsedHours);
     groupMetricTotal += memberMetrics.total;
     groupMetrics.push(memberMetrics);
   }
@@ -197,7 +272,17 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
     return secondTotal - firstTotal;
   });
 
-  for (const { name, total, perSkill, colorCSS } of groupMetrics) {
+  for (const {
+    name,
+    total,
+    perSkill,
+    colorCSS,
+    experienceGained,
+    experiencePerHour,
+    startLevel,
+    endLevel,
+    levelsGained,
+  } of groupMetrics) {
     const overallFraction = total / safeDenominator;
     rows.push({
       key: `member ${name}`,
@@ -207,6 +292,11 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
       fillFraction: overallFraction,
       iconSource: skillIcons[options.skillFilter],
       quantity: total,
+      experienceGained,
+      experiencePerHour,
+      startLevel,
+      endLevel,
+      levelsGained,
       isMemberHeader: true,
     });
 
@@ -217,10 +307,10 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
     const skillRows = [];
 
     for (let skillIndex = 0; skillIndex < perSkill.length; skillIndex++) {
-      const metricValue = perSkill.at(skillIndex);
+      const metrics = perSkill.at(skillIndex);
       const skill = skillsInBackendOrder[skillIndex];
 
-      if (!metricValue || metricValue <= 0 || !skill) {
+      if (!metrics || metrics.experienceGained <= 0 || !skill) {
         continue;
       }
 
@@ -229,9 +319,9 @@ export function buildTableRowsFromMemberSkillData(members, range, options) {
         name: skill,
         memberName: name,
         colorCSS,
-        fillFraction: (metricValue / total) * overallFraction,
+        fillFraction: metrics.quantity / safeDenominator,
         iconSource: skillIcons[skill],
-        quantity: metricValue,
+        ...metrics,
         isMemberHeader: false,
       });
     }
@@ -253,11 +343,19 @@ function sumFilteredExperience(skills, skillFilter) {
   }, 0);
 }
 
+function sumFilteredLevels(skills, skillFilter) {
+  return skills.reduce(function sumLevels(sum, experience, index) {
+    const skill = skillsInBackendOrder[index];
+
+    return skillFilter === "Overall" || skill === skillFilter ? sum + decomposeExperience(experience).levelReal : sum;
+  }, 0);
+}
+
 function differenceInHoursPrecise({ earlierDate, laterDate }) {
   return DateFNS.differenceInMilliseconds(laterDate, earlierDate) / (60 * 60 * 1000);
 }
 
-function calculateMetricValue({ start, end, elapsedHours, yAxisUnit }) {
+function calculateMetricValue({ start, end, elapsedHours, levelsGained, yAxisUnit }) {
   switch (yAxisUnit) {
     case "Total experience":
       return Math.max(0, end);
@@ -265,5 +363,7 @@ function calculateMetricValue({ start, end, elapsedHours, yAxisUnit }) {
       return Math.max(0, Math.round((end - start) / elapsedHours));
     case "Cumulative experience gained":
       return Math.max(0, end - start);
+    case "Levels gained":
+      return levelsGained;
   }
 }

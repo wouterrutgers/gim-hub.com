@@ -1,7 +1,7 @@
 <script setup>
   import { computed, onBeforeUnmount, ref, shallowRef, watch } from "vue";
   import { Line } from "vue-chartjs";
-  import { Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, TimeScale, Tooltip } from "chart.js";
+  import { Chart as ChartJS, LinearScale, LineElement, PointElement, TimeScale, Tooltip } from "chart.js";
   import { useApiStore } from "../../stores/api";
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
@@ -18,7 +18,7 @@
   import "chartjs-adapter-date-fns";
   import "./skill-graph.css";
 
-  ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+  ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Tooltip);
 
   const skillFilteringOptions = ["Overall", ...skills];
   const historyPresets = {
@@ -38,6 +38,7 @@
   const latest = ref(new Date());
   const range = ref(rangeForPeriod(lastPreset.value, latest.value));
   const memberExpansion = ref(new Map());
+  const hiddenChartMembers = ref(new Set());
   const history = shallowRef();
   const loading = ref(false);
   const error = ref(false);
@@ -45,6 +46,7 @@
 
   const memberChartData = computed(function buildMemberChartData() {
     const members = [];
+    const lineLightness = settingsStore.siteTheme === "light" ? 35 : 65;
 
     for (const [member, skillSamples] of history.value?.members ?? []) {
       if (!groupStore.memberColors.has(member) || !skillSamples.length) {
@@ -56,7 +58,7 @@
         member,
         skillSamples,
         style: {
-          lineBorder: `hsl(${hueDegrees}deg 60% 50%)`,
+          lineBorder: `hsl(${hueDegrees}deg 60% ${lineLightness}%)`,
           lineBackground: `hsl(${hueDegrees}deg 60% 40%)`,
           barBackground: `hsl(${hueDegrees}deg 60% 40%)`,
         },
@@ -72,6 +74,8 @@
         datasets: buildDatasetsFromMemberSkillData(memberChartData.value, range.value, {
           yAxisUnit: yAxisUnit.value,
           skillFilter: skillFilter.value,
+        }).map(function setVisibility(dataset) {
+          return { ...dataset, hidden: hiddenChartMembers.value.has(dataset.label) };
         }),
       },
       options: buildLineChartOptions({
@@ -84,6 +88,14 @@
     return chart.value.data.datasets.some(function hasPoints(dataset) {
       return dataset.data.length > 0;
     });
+  });
+  const allChartMembersHidden = computed(function allMembersHidden() {
+    return (
+      hasChartData.value &&
+      chart.value.data.datasets.every(function isHidden(dataset) {
+        return dataset.hidden;
+      })
+    );
   });
   const dateRangeLabel = computed(function formatRange() {
     if (!range.value.start) {
@@ -110,13 +122,6 @@
   const canGoNext = computed(function hasLaterHistory() {
     return history.value?.earliest && range.value.end < latest.value;
   });
-  const tableTitle = computed(function describeMetric() {
-    return {
-      "Cumulative experience gained": "XP gained in this period",
-      "Total experience": "Total XP at the end of this period",
-      "Experience per hour": "Average XP/h in this period",
-    }[yAxisUnit.value];
-  });
   const chartRows = computed(function buildRows() {
     return buildTableRowsFromMemberSkillData(memberChartData.value, range.value, {
       yAxisUnit: yAxisUnit.value,
@@ -129,6 +134,27 @@
         background: `linear-gradient(90deg, color-mix(in srgb, ${row.colorCSS} 24%, transparent) ${fillPercent}%, transparent ${fillPercent}%)`,
       };
     });
+  });
+  const periodSummary = computed(function summarizeProgress() {
+    const members = chartRows.value.filter(function memberRow(row) {
+      return row.isMemberHeader;
+    });
+
+    return {
+      experienceGained: members.reduce(function totalExperience(total, member) {
+        return total + member.experienceGained;
+      }, 0),
+      levelsGained: members.reduce(function totalLevels(total, member) {
+        return total + member.levelsGained;
+      }, 0),
+      activePlayers: members.filter(function gainedExperience(member) {
+        return member.experienceGained > 0;
+      }).length,
+      sampledPlayers: members.length,
+      topContributor: members.reduce(function mostExperience(top, member) {
+        return member.experienceGained > (top?.experienceGained ?? 0) ? member : top;
+      }, undefined),
+    };
   });
 
   function invalidateRequest() {
@@ -199,6 +225,16 @@
     memberExpansion.value.set(member, !isMemberExpanded(member));
   }
 
+  function toggleChartMember(member) {
+    if (hiddenChartMembers.value.has(member)) {
+      hiddenChartMembers.value.delete(member);
+
+      return;
+    }
+
+    hiddenChartMembers.value.add(member);
+  }
+
   function retry() {
     requestRange(activePreset.value ? { period: activePreset.value } : range.value);
   }
@@ -216,6 +252,7 @@
     function resetHistory() {
       history.value = undefined;
       memberExpansion.value.clear();
+      hiddenChartMembers.value.clear();
       selectPreset(lastPreset.value);
     },
     { immediate: true },
@@ -258,81 +295,188 @@
       </button>
     </div>
     <div id="skill-graph-filters">
-      <span class="select-container">
-        <select aria-label="Skill" v-model="skillFilter">
-          <option v-for="option in skillFilteringOptions" :key="option" :value="option">{{ option }}</option>
-        </select>
-      </span>
-      <span class="select-container">
-        <select aria-label="Experience metric" v-model="yAxisUnit">
-          <option v-for="(label, value) in lineChartYAxisOptions" :key="value" :value="value">{{ label }}</option>
-        </select>
-      </span>
+      <label class="skill-graph-field" for="skill-graph-skill">
+        <span>Skill</span>
+        <span class="select-container">
+          <select id="skill-graph-skill" v-model="skillFilter">
+            <option v-for="option in skillFilteringOptions" :key="option" :value="option">{{ option }}</option>
+          </select>
+        </span>
+      </label>
+      <label class="skill-graph-field" for="skill-graph-metric">
+        <span>Chart metric</span>
+        <span class="select-container">
+          <select id="skill-graph-metric" v-model="yAxisUnit">
+            <option v-for="(label, value) in lineChartYAxisOptions" :key="value" :value="value">{{ label }}</option>
+          </select>
+        </span>
+      </label>
     </div>
   </div>
 
   <div id="skill-graph-body" class="rsborder rsbackground" :aria-busy="loading">
-    <div id="skill-graph-container" class="rsborder-tiny">
-      <CachedImage id="skill-graph-skill-image" :alt="skillFilter" loading="lazy" :src="skillIcons[skillFilter]" />
-      <div id="skill-graph-line-chart-container">
-        <Line :options="chart.options" :data="chart.data" aria-label="Skill progress by player over time" />
-      </div>
-    </div>
-
     <div v-if="error" id="skill-graph-error" role="alert">
       <p>Skill history could not be loaded.</p>
       <button type="button" class="rsborder-tiny rsbackground rsbackground-hover" @click="retry">Try again</button>
     </div>
-    <div v-else-if="!loading && !hasChartData" id="skill-graph-no-data">
-      <p>
-        No skill history is available for this period. New samples are recorded every five minutes while the plugin
-        sends updates.
-      </p>
-    </div>
+    <div v-else id="skill-graph-content" :inert="loading">
+      <dl v-if="hasChartData" id="skill-graph-summary">
+        <div>
+          <dt>XP gained</dt>
+          <dd>+{{ periodSummary.experienceGained.toLocaleString() }}</dd>
+        </div>
+        <div>
+          <dt>Levels gained</dt>
+          <dd>{{ periodSummary.levelsGained > 0 ? "+" : "" }}{{ periodSummary.levelsGained.toLocaleString() }}</dd>
+        </div>
+        <div>
+          <dt>Active players</dt>
+          <dd>{{ periodSummary.activePlayers }} / {{ periodSummary.sampledPlayers }}</dd>
+        </div>
+        <div>
+          <dt>Top contributor</dt>
+          <dd>
+            {{ periodSummary.topContributor?.name ?? "No XP gained" }}
+            <span v-if="periodSummary.topContributor" class="skill-graph-summary-detail">
+              +{{ periodSummary.topContributor.experienceGained.toLocaleString() }} XP
+            </span>
+          </dd>
+        </div>
+      </dl>
 
-    <table v-else-if="hasChartData" id="skill-graph-xp-change-table">
-      <thead>
-        <tr>
-          <th scope="col">Player</th>
-          <th scope="col">{{ tableTitle }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-for="row in chartRows" :key="row.key">
-          <tr
-            v-if="row.isMemberHeader || isMemberExpanded(row.memberName)"
-            :class="{ 'skill-graph-member-header': row.isMemberHeader }"
-            :style="{ background: row.background }"
-          >
-            <th scope="row" class="skill-graph-xp-change-table-label">
-              <span
-                v-if="row.isMemberHeader"
-                class="skill-graph-member-color"
-                :style="{ background: row.colorCSS }"
-              ></span>
-              <span v-else class="skill-graph-xp-change-table-image-container">
-                <CachedImage alt="" :src="row.iconSource" />
-              </span>
-              <button
-                v-if="row.isMemberHeader && skillFilter === 'Overall' && row.quantity > 0"
-                type="button"
-                class="skill-graph-member-toggle"
-                :aria-expanded="isMemberExpanded(row.name)"
-                :aria-label="`${isMemberExpanded(row.name) ? 'Hide' : 'Show'} skill details for ${row.name}`"
-                @click="toggleMember(row.name)"
+      <header id="skill-graph-heading">
+        <h3>{{ skillFilter }} progress</h3>
+        <p class="skill-graph-metric-label">{{ lineChartYAxisOptions[yAxisUnit] }}</p>
+      </header>
+
+      <div v-if="hasChartData" id="skill-graph-legend" role="group" aria-label="Chart players">
+        <span class="skill-graph-legend-label">Chart players</span>
+        <button
+          v-for="dataset in chart.data.datasets"
+          :key="dataset.label"
+          type="button"
+          :aria-pressed="!dataset.hidden"
+          :disabled="loading"
+          @click="toggleChartMember(dataset.label)"
+        >
+          <svg width="28" height="12" viewBox="0 0 28 12" aria-hidden="true">
+            <line
+              x1="1"
+              y1="6"
+              x2="27"
+              y2="6"
+              :stroke="dataset.borderColor"
+              stroke-width="3"
+              :stroke-dasharray="dataset.borderDash?.join(' ')"
+            />
+          </svg>
+          <span>{{ dataset.label }}</span>
+        </button>
+      </div>
+
+      <div id="skill-graph-container" class="rsborder-tiny">
+        <CachedImage id="skill-graph-skill-image" alt="" loading="lazy" :src="skillIcons[skillFilter]" />
+        <div id="skill-graph-line-chart-container">
+          <Line
+            :options="chart.options"
+            :data="chart.data"
+            :aria-label="`${skillFilter} ${lineChartYAxisOptions[yAxisUnit]} by player, ${dateRangeLabel}`"
+            :aria-describedby="hasChartData ? 'skill-graph-summary' : undefined"
+          />
+        </div>
+        <p v-if="allChartMembersHidden" id="skill-graph-hidden-lines">Choose a player above to show their progress.</p>
+      </div>
+
+      <div v-if="!loading && !hasChartData" id="skill-graph-no-data">
+        <p>
+          No skill history is available for this period. New samples are recorded every five minutes while the plugin
+          sends updates.
+        </p>
+      </div>
+
+      <div
+        v-else-if="hasChartData"
+        id="skill-graph-table-scroll"
+        role="region"
+        aria-label="Player skill progress"
+        tabindex="0"
+      >
+        <table
+          id="skill-graph-xp-change-table"
+          :class="{ 'has-total-experience': yAxisUnit === 'Total experience' }"
+          :aria-label="`${skillFilter} progress`"
+        >
+          <thead>
+            <tr>
+              <th scope="col">Player / skill</th>
+              <th scope="col">XP gained</th>
+              <th scope="col">XP/h</th>
+              <th v-if="yAxisUnit === 'Total experience'" scope="col">Total XP</th>
+              <th scope="col">Level</th>
+              <th scope="col">Levels gained</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="row in chartRows" :key="row.key">
+              <tr
+                v-if="row.isMemberHeader || isMemberExpanded(row.memberName)"
+                :class="{ 'skill-graph-member-header': row.isMemberHeader }"
               >
-                <span class="skill-graph-row-name">{{ row.name }}</span>
-                <span class="chevron" :class="{ 'chevron-right': !isMemberExpanded(row.name) }" aria-hidden="true" />
-              </button>
-              <span v-else class="skill-graph-row-name">{{ row.name }}</span>
-            </th>
-            <td class="skill-graph-xp-change-data">
-              {{ yAxisUnit === "Cumulative experience gained" ? "+" : "" }}{{ row.quantity.toLocaleString() }}
-            </td>
-          </tr>
-        </template>
-      </tbody>
-    </table>
+                <th
+                  scope="row"
+                  class="skill-graph-xp-change-table-label"
+                  :aria-label="row.isMemberHeader ? undefined : `${row.memberName}: ${row.name}`"
+                  :style="{ backgroundImage: row.background }"
+                >
+                  <span class="skill-graph-row-label">
+                    <span
+                      v-if="row.isMemberHeader"
+                      class="skill-graph-member-color"
+                      :style="{ background: row.colorCSS }"
+                      aria-hidden="true"
+                    ></span>
+                    <span v-else class="skill-graph-xp-change-table-image-container">
+                      <CachedImage alt="" :src="row.iconSource" />
+                    </span>
+                    <button
+                      v-if="row.isMemberHeader && skillFilter === 'Overall' && row.experienceGained > 0"
+                      type="button"
+                      class="skill-graph-member-toggle"
+                      :aria-expanded="isMemberExpanded(row.name)"
+                      :aria-label="`${isMemberExpanded(row.name) ? 'Hide' : 'Show'} skill details for ${row.name}`"
+                      @click="toggleMember(row.name)"
+                    >
+                      <span class="skill-graph-row-name">{{ row.name }}</span>
+                      <span
+                        class="chevron"
+                        :class="{ 'chevron-right': !isMemberExpanded(row.name) }"
+                        aria-hidden="true"
+                      />
+                    </button>
+                    <span v-else class="skill-graph-row-name">{{ row.name }}</span>
+                  </span>
+                </th>
+                <td class="skill-graph-xp-change-data">+{{ row.experienceGained.toLocaleString() }}</td>
+                <td class="skill-graph-rate">{{ row.experiencePerHour.toLocaleString() }}</td>
+                <td v-if="yAxisUnit === 'Total experience'" class="skill-graph-total-experience">
+                  {{ row.quantity.toLocaleString() }}
+                </td>
+                <td class="skill-graph-level">
+                  <template v-if="row.startLevel !== row.endLevel">{{ row.startLevel.toLocaleString() }} → </template>
+                  {{ row.endLevel.toLocaleString() }}
+                  <span v-if="row.isMemberHeader && skillFilter === 'Overall'" class="skill-graph-level-kind">
+                    total
+                  </span>
+                </td>
+                <td class="skill-graph-level-gain" :class="{ 'has-gain': row.levelsGained > 0 }">
+                  {{ row.levelsGained > 0 ? "+" : "" }}{{ row.levelsGained.toLocaleString() }}
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <div v-if="loading" id="skill-graph-loading-overlay">
       <LoadingScreen />

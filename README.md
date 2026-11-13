@@ -43,9 +43,9 @@ Find your group on the interactive world map, follow a teammate as they move, or
 
 ## Watch the gains add up
 
-Compare XP gained, total XP, and XP per hour across your group. Browse a day, week, month, year, or all recorded history, then expand a player's row for their skill breakdown.
+Compare XP gained, total XP, XP per hour, and levels gained across your group. Browse a day, week, month, year, or all recorded history, then expand a player's row for their skill breakdown and level changes.
 
-![Demo skill history comparing a week of experience gains across four group members](screenshots/demo-history.webp)
+![Demo skill history comparing a week of XP gains and level changes across four group members](screenshots/demo-history.webp)
 
 ## Plan the next achievement
 

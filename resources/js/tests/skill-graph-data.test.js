@@ -106,6 +106,67 @@ describe("skill history calculations", function describeCalculations() {
     expect(buildTableRowsFromMemberSkillData(data, range, options)[0].quantity).toBe(200);
   });
 
+  it("counts observed skill levels up to 99 while retaining experience earned after maxing", function testLevelGains() {
+    const start = sample("11:55", 82);
+    start.data[3] = 173;
+    start.data[20] = 13_034_431;
+    const end = sample("12:30", 174);
+    end.data[3] = 276;
+    end.data[20] = 20_000_000;
+    const data = [
+      ...members([start, end]),
+      { ...members([sample("12:10", 173), sample("12:30", 276)])[0], member: "Bob" },
+    ];
+    const options = { skillFilter: "Overall", yAxisUnit: "Levels gained" };
+
+    const datasets = buildDatasetsFromMemberSkillData(data, range, options);
+    const rows = buildTableRowsFromMemberSkillData(data, range, options);
+
+    expect(
+      datasets.map(function getLevelGains(dataset) {
+        return dataset.data.map(function getValue(point) {
+          return point.y;
+        });
+      }),
+    ).toEqual([
+      [0, 0, 4, 4],
+      [null, 0, 2, 2],
+    ]);
+    expect(
+      rows.find(function isAlice(row) {
+        return row.isMemberHeader && row.memberName === "Alice";
+      }),
+    ).toMatchObject({ quantity: 4, startLevel: 123, endLevel: 127, levelsGained: 4 });
+    expect(
+      rows.find(function isBob(row) {
+        return row.isMemberHeader && row.memberName === "Bob";
+      }),
+    ).toMatchObject({ quantity: 2, startLevel: 25, endLevel: 27, levelsGained: 2 });
+    expect(
+      rows.find(function isAttack(row) {
+        return row.name === "Attack" && row.memberName === "Alice";
+      }),
+    ).toMatchObject({
+      quantity: 2,
+      startLevel: 1,
+      endLevel: 3,
+      levelsGained: 2,
+      experienceGained: 92,
+      experiencePerHour: 92,
+    });
+    expect(
+      rows.find(function isMaxedStrength(row) {
+        return row.name === "Strength" && row.memberName === "Alice";
+      }),
+    ).toMatchObject({
+      quantity: 0,
+      startLevel: 99,
+      endLevel: 99,
+      levelsGained: 0,
+      experienceGained: 6_965_569,
+    });
+  });
+
   it("carries inactive totals forward and excludes observations after the visible end", function testInactive() {
     const data = members([sample("11:00", 100), sample("13:30", 999)]);
     expect(
@@ -202,6 +263,29 @@ describe("skill history calculations", function describeCalculations() {
       ["Attack", 400],
       ["Cooking", 400],
     ]);
+
+    const metric = container.querySelector("#skill-graph-metric");
+    metric.value = "Levels gained";
+    metric.dispatchEvent(new Event("change", { bubbles: true }));
+    await nextTick();
+
+    expect(
+      [...container.querySelectorAll("tbody tr")].map(function readProgress(row) {
+        return [
+          row.querySelector(".skill-graph-row-name").textContent,
+          Number(row.cells[1].textContent),
+          Number(row.querySelector(".skill-graph-level-gain").textContent),
+        ];
+      }),
+    ).toEqual([
+      ["Alice", 800, 8],
+      ["Attack", 400, 4],
+      ["Cooking", 400, 4],
+      ["Bob", 900, 8],
+      ["Attack", 600, 5],
+      ["Cooking", 300, 3],
+    ]);
+    expect(Number(container.querySelectorAll("#skill-graph-summary dd")[1].textContent)).toBe(16);
   });
 
   it("uses calendar periods in UTC including across daylight saving changes", function testPresets() {

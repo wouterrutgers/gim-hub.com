@@ -9,6 +9,7 @@ use App\Http\Middleware\AuthenticateGroup;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/ge-prices.json', [UnauthedController::class, 'getGEPrices']);
+Route::get('/game-data', [UnauthedController::class, 'getGameData']);
 Route::get('/changelog', [UnauthedController::class, 'getChangelog']);
 
 Route::post('/create-group', [GroupController::class, 'createGroup']);

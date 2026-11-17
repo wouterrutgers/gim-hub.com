@@ -1313,5 +1313,17 @@
     "difficulty": "Intermediate",
     "points": "1",
     "member": true
+  },
+  "17315": {
+    "name": "A Shell of a Friend",
+    "difficulty": "Intermediate",
+    "points": "2",
+    "member": true
+  },
+  "17316": {
+    "name": "The Birds and the Wasps",
+    "difficulty": "Novice",
+    "points": "1",
+    "member": true
   }
 }

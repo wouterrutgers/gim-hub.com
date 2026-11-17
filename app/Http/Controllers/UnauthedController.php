@@ -13,13 +13,9 @@ class UnauthedController extends Controller
     public function getGameData(): JsonResponse
     {
         return response()->json([
-            'items' => File::json(resource_path('assets/data/item_data.json'), JSON_THROW_ON_ERROR),
             'quests' => File::json(resource_path('assets/data/quest_data.json'), JSON_THROW_ON_ERROR),
             'diaries' => File::json(resource_path('assets/data/diary_data.json'), JSON_THROW_ON_ERROR),
             'diary_tasks' => File::json(resource_path('game/diary-tasks.json'), JSON_THROW_ON_ERROR),
-            'combat_achievements' => File::json(resource_path('assets/data/combat_achievements.json'), JSON_THROW_ON_ERROR),
-            'collection_log' => File::json(resource_path('assets/data/collection_log_info.json'), JSON_THROW_ON_ERROR),
-            'collection_log_aliases' => File::json(resource_path('game/collection-log-item-aliases.json'), JSON_THROW_ON_ERROR),
         ])->header('Cache-Control', 'public, max-age=3600');
     }
 

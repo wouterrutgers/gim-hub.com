@@ -1271,6 +1271,20 @@
     "points": "1",
     "member": false
   },
+  "13708": {
+    "name": "A New Leaf",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true,
+    "hidden": true
+  },
+  "13730": {
+    "name": "Rag and Bone Man III",
+    "difficulty": "Novice",
+    "points": 0,
+    "member": true,
+    "hidden": true
+  },
   "16414": {
     "name": "The Blood Moon Rises",
     "difficulty": "Grandmaster",

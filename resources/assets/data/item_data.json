@@ -31666,7 +31666,7 @@
   "7813": {
     "name": "Goblin skull in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7814": {
@@ -31684,7 +31684,7 @@
   "7816": {
     "name": "Bear ribs in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7817": {
@@ -31702,7 +31702,7 @@
   "7819": {
     "name": "Ram skull in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7820": {

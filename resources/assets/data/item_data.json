@@ -31664,9 +31664,9 @@
     "mapping": null
   },
   "7813": {
-    "name": "Bone in vinegar",
+    "name": "Goblin skull in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7814": {
@@ -31682,9 +31682,9 @@
     "mapping": null
   },
   "7816": {
-    "name": "Bone in vinegar",
+    "name": "Bear ribs in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7817": {
@@ -31700,9 +31700,9 @@
     "mapping": null
   },
   "7819": {
-    "name": "Bone in vinegar",
+    "name": "Ram skull in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7820": {
@@ -31718,9 +31718,9 @@
     "mapping": null
   },
   "7822": {
-    "name": "Bone in vinegar",
+    "name": "Unicorn bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7823": {
@@ -31736,9 +31736,9 @@
     "mapping": null
   },
   "7825": {
-    "name": "Bone in vinegar",
+    "name": "Giant rat bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7826": {
@@ -31754,9 +31754,9 @@
     "mapping": null
   },
   "7828": {
-    "name": "Bone in vinegar",
+    "name": "Giant bat wing in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7829": {
@@ -31772,9 +31772,9 @@
     "mapping": null
   },
   "7831": {
-    "name": "Bone in vinegar",
+    "name": "Wolf bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7832": {
@@ -31790,9 +31790,9 @@
     "mapping": null
   },
   "7834": {
-    "name": "Bone in vinegar",
+    "name": "Bat wing in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7835": {
@@ -31808,9 +31808,9 @@
     "mapping": null
   },
   "7837": {
-    "name": "Bone in vinegar",
+    "name": "Rat bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7838": {
@@ -31826,9 +31826,9 @@
     "mapping": null
   },
   "7840": {
-    "name": "Bone in vinegar",
+    "name": "Baby dragon bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7841": {
@@ -31844,9 +31844,9 @@
     "mapping": null
   },
   "7843": {
-    "name": "Bone in vinegar",
+    "name": "Ogre ribs in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7844": {
@@ -31862,9 +31862,9 @@
     "mapping": null
   },
   "7846": {
-    "name": "Bone in vinegar",
+    "name": "Jogre bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7847": {
@@ -31880,9 +31880,9 @@
     "mapping": null
   },
   "7849": {
-    "name": "Bone in vinegar",
+    "name": "Zogre bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7850": {
@@ -31898,9 +31898,9 @@
     "mapping": null
   },
   "7852": {
-    "name": "Bone in vinegar",
+    "name": "Mogre bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7853": {
@@ -31916,9 +31916,9 @@
     "mapping": null
   },
   "7855": {
-    "name": "Bone in vinegar",
+    "name": "Monkey paw in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7856": {
@@ -31934,9 +31934,9 @@
     "mapping": null
   },
   "7858": {
-    "name": "Bone in vinegar",
+    "name": "Dagannoth ribs in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7859": {
@@ -31952,9 +31952,9 @@
     "mapping": null
   },
   "7861": {
-    "name": "Bone in vinegar",
+    "name": "Snake spine in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7862": {
@@ -31970,9 +31970,9 @@
     "mapping": null
   },
   "7864": {
-    "name": "Bone in vinegar",
+    "name": "Zombie bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7865": {
@@ -31988,9 +31988,9 @@
     "mapping": null
   },
   "7867": {
-    "name": "Bone in vinegar",
+    "name": "Werewolf bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7868": {
@@ -32006,9 +32006,9 @@
     "mapping": null
   },
   "7870": {
-    "name": "Bone in vinegar",
+    "name": "Moss giant bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7871": {
@@ -32024,9 +32024,9 @@
     "mapping": null
   },
   "7873": {
-    "name": "Bone in vinegar",
+    "name": "Fire giant bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7874": {
@@ -32042,9 +32042,9 @@
     "mapping": null
   },
   "7876": {
-    "name": "Bone in vinegar",
+    "name": "Ice giant ribs in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7877": {
@@ -32060,9 +32060,9 @@
     "mapping": null
   },
   "7879": {
-    "name": "Bone in vinegar",
+    "name": "Terrorbird wing in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7880": {
@@ -32078,9 +32078,9 @@
     "mapping": null
   },
   "7882": {
-    "name": "Bone in vinegar",
+    "name": "Ghoul bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7883": {
@@ -32096,9 +32096,9 @@
     "mapping": null
   },
   "7885": {
-    "name": "Bone in vinegar",
+    "name": "Troll bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7886": {
@@ -32114,9 +32114,9 @@
     "mapping": null
   },
   "7888": {
-    "name": "Bone in vinegar",
+    "name": "Seagull wing in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7889": {
@@ -32132,9 +32132,9 @@
     "mapping": null
   },
   "7891": {
-    "name": "Bone in vinegar",
+    "name": "Undead cow ribs in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7892": {
@@ -32150,9 +32150,9 @@
     "mapping": null
   },
   "7894": {
-    "name": "Bone in vinegar",
+    "name": "Experiment bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7895": {
@@ -32168,9 +32168,9 @@
     "mapping": null
   },
   "7897": {
-    "name": "Bone in vinegar",
+    "name": "Rabbit bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7898": {
@@ -32186,9 +32186,9 @@
     "mapping": null
   },
   "7900": {
-    "name": "Bone in vinegar",
+    "name": "Basilisk bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7901": {
@@ -32204,9 +32204,9 @@
     "mapping": null
   },
   "7903": {
-    "name": "Bone in vinegar",
+    "name": "Desert lizard bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7904": {
@@ -32222,9 +32222,9 @@
     "mapping": null
   },
   "7906": {
-    "name": "Bone in vinegar",
+    "name": "Cave goblin skull in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7907": {
@@ -32240,9 +32240,9 @@
     "mapping": null
   },
   "7909": {
-    "name": "Bone in vinegar",
+    "name": "Big frog leg in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7910": {
@@ -32258,9 +32258,9 @@
     "mapping": null
   },
   "7912": {
-    "name": "Bone in vinegar",
+    "name": "Vulture wing in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7913": {
@@ -32276,9 +32276,9 @@
     "mapping": null
   },
   "7915": {
-    "name": "Bone in vinegar",
+    "name": "Jackal bone in vinegar",
     "highalch": 0,
-    "alchable": false,
+    "alchable": true,
     "mapping": null
   },
   "7916": {
@@ -113957,30 +113957,6 @@
     "alchable": false,
     "mapping": null
   },
-  "34732": {
-    "name": "Candy onion",
-    "highalch": 0,
-    "alchable": true,
-    "mapping": null
-  },
-  "34734": {
-    "name": "Sugar",
-    "highalch": 6,
-    "alchable": true,
-    "mapping": null
-  },
-  "34736": {
-    "name": "Molten sugar",
-    "highalch": 1,
-    "alchable": true,
-    "mapping": null
-  },
-  "34738": {
-    "name": "Old onion",
-    "highalch": 0,
-    "alchable": true,
-    "mapping": null
-  },
   "34740": {
     "name": "Vampyre monocle",
     "highalch": 0,
@@ -114206,6 +114182,690 @@
   "34807": {
     "name": "Black honey buzzard",
     "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34808": {
+    "name": "Communication cabbage",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34810": {
+    "name": "The Bib Vol. 1: Seeds of Truth",
+    "highalch": 120,
+    "alchable": true,
+    "mapping": null
+  },
+  "34812": {
+    "name": "Antique lamp",
+    "highalch": 30,
+    "alchable": true,
+    "mapping": null
+  },
+  "34813": {
+    "name": "Seed of growth",
+    "highalch": 150,
+    "alchable": true,
+    "mapping": null
+  },
+  "34815": {
+    "name": "Cabbage water",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34817": {
+    "name": "Brassican sentience potion",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34819": {
+    "name": "Blessed compost",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34821": {
+    "name": "All Potions Are Gazpacho Vol. 2: The Cabbage Years",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34823": {
+    "name": "Sprout spy",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34825": {
+    "name": "Perfect cabbage",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34827": {
+    "name": "Perfect potato",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34829": {
+    "name": "Perfect rosemary",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34831": {
+    "name": "Perfect cabbage stew",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34833": {
+    "name": "Prayer to Brassica",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34835": {
+    "name": "Sedridor's staff",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34836": {
+    "name": "Asylum key",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "34837": {
+    "name": "Magic lamp (prayer)",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34838": {
+    "name": "Magic lamp (slayer)",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34839": {
+    "name": "Condition notes",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34840": {
+    "name": "Heavy bonesack",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34842": {
+    "name": "Heavy bonesack (open)",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34844": {
+    "name": "Gatestone",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34845": {
+    "name": "Gatestone",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": null
+  },
+  "34846": {
+    "name": "Angry giant rat bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34848": {
+    "name": "Ankou bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34850": {
+    "name": "Armoured zombie bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34852": {
+    "name": "Aviansie wing in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34854": {
+    "name": "Blue dragon bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34856": {
+    "name": "Boar bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34858": {
+    "name": "Catablepon ribs in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34860": {
+    "name": "Cave horror bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34862": {
+    "name": "Chicken wing in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34864": {
+    "name": "Colonel radick's bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34866": {
+    "name": "Cow bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34868": {
+    "name": "Crawling hand bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34870": {
+    "name": "Crocodile bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34872": {
+    "name": "Cyclops bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34874": {
+    "name": "Druid ribs in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34876": {
+    "name": "Fox bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34878": {
+    "name": "Frogeel spine in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34880": {
+    "name": "Gnome child bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34882": {
+    "name": "Goat ribs in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34884": {
+    "name": "Hill giant bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34886": {
+    "name": "Infernal mage bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34888": {
+    "name": "Lizardman bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34890": {
+    "name": "Lynx bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34892": {
+    "name": "Minotaur bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34894": {
+    "name": "Ork skull in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34896": {
+    "name": "Sorebones bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34898": {
+    "name": "Tortoise bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34900": {
+    "name": "Turoth leg in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34902": {
+    "name": "Ugthanki ribs in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34904": {
+    "name": "Wallasalki bone in vinegar",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34906": {
+    "name": "Angry giant rat bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34908": {
+    "name": "Ankou bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34910": {
+    "name": "Armoured zombie bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34912": {
+    "name": "Aviansie wing",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34914": {
+    "name": "Blue dragon bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34916": {
+    "name": "Boar bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34918": {
+    "name": "Catablepon ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34920": {
+    "name": "Cave horror bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34922": {
+    "name": "Chicken wing",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34924": {
+    "name": "Colonel radick's bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34926": {
+    "name": "Cow bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34928": {
+    "name": "Crawling hand bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34930": {
+    "name": "Crocodile bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34932": {
+    "name": "Cyclops bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34934": {
+    "name": "Druid ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34936": {
+    "name": "Fox bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34938": {
+    "name": "Frogeel spine",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34940": {
+    "name": "Gnome child bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34942": {
+    "name": "Goat ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34944": {
+    "name": "Hill giant bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34946": {
+    "name": "Infernal mage bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34948": {
+    "name": "Lizardman bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34950": {
+    "name": "Lynx bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34952": {
+    "name": "Minotaur bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34954": {
+    "name": "Ork skull",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34956": {
+    "name": "Sorebones bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34958": {
+    "name": "Tortoise bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34960": {
+    "name": "Turoth leg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34962": {
+    "name": "Ugthanki ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34964": {
+    "name": "Wallasalki bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34966": {
+    "name": "Angry giant rat bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34968": {
+    "name": "Ankou bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34970": {
+    "name": "Armoured zombie bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34972": {
+    "name": "Aviansie wing",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34974": {
+    "name": "Blue dragon bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34976": {
+    "name": "Boar bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34978": {
+    "name": "Catablepon ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34980": {
+    "name": "Cave horror bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34982": {
+    "name": "Chicken wing",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34984": {
+    "name": "Colonel radick's bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34986": {
+    "name": "Cow bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34988": {
+    "name": "Crawling hand bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34990": {
+    "name": "Crocodile bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34992": {
+    "name": "Cyclops bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34994": {
+    "name": "Druid ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34996": {
+    "name": "Fox bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "34998": {
+    "name": "Frogeel spine",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35000": {
+    "name": "Gnome child bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35002": {
+    "name": "Goat ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35004": {
+    "name": "Hill giant bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35006": {
+    "name": "Infernal mage bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35008": {
+    "name": "Lizardman bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35010": {
+    "name": "Lynx bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35012": {
+    "name": "Minotaur bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35014": {
+    "name": "Ork skull",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35016": {
+    "name": "Sorebones bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35018": {
+    "name": "Tortoise bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35020": {
+    "name": "Turoth leg",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35022": {
+    "name": "Ugthanki ribs",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35024": {
+    "name": "Wallasalki bone",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35026": {
+    "name": "Guthixian root",
+    "highalch": 6,
     "alchable": true,
     "mapping": null
   }

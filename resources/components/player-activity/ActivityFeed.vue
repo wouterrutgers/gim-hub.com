@@ -14,6 +14,7 @@
   const groupStore = useGroupStore();
   const settingsStore = useSettingsStore();
   const scroller = ref();
+  const earlierActivityMarker = ref();
   const comparisonScroller = ref();
   const excludedMembers = ref(new Set());
   const showTimeline = ref(false);
@@ -103,11 +104,28 @@
     return date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
   }
 
-  function onScroll() {
-    if (scroller.value.scrollHeight - scroller.value.scrollTop - scroller.value.clientHeight <= 200) {
-      void activityStore.loadOlder();
-    }
-  }
+  watch(
+    earlierActivityMarker,
+    function observeEarlierActivity(marker, _previousMarker, onCleanup) {
+      if (!marker) {
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        function loadWhenNearEnd([entry]) {
+          if (entry.isIntersecting && earlierActivityMarker.value === marker) {
+            void activityStore.loadOlder();
+          }
+        },
+        { root: scroller.value, rootMargin: "0px 0px 200px" },
+      );
+      observer.observe(marker);
+      onCleanup(function stopObserving() {
+        observer.disconnect();
+      });
+    },
+    { flush: "post" },
+  );
 
   watch(filteredEntries, async function preserveReadingPosition(_entries, previous) {
     const timeline = scroller.value;
@@ -285,28 +303,29 @@
       :role="props.collapsible ? undefined : 'region'"
       :aria-label="props.collapsible ? undefined : 'Group activity timeline'"
       :tabindex="props.collapsible ? undefined : 0"
-      @scroll="onScroll"
     >
       <p v-if="!activityStore.loaded || !groupStore.loaded" class="activity-empty">Loading activity…</p>
-      <p v-else-if="filteredEntries.length === 0" class="activity-empty">
-        {{
-          activityStore.entries.length === 0
-            ? "No activity yet."
-            : activityStore.olderCursor
-              ? "No matches in loaded history. Load earlier activity to search further."
-              : "No activity matches these filters."
-        }}
+      <p v-else-if="filteredEntries.length === 0 && !activityStore.olderCursor" class="activity-empty">
+        {{ activityStore.entries.length === 0 ? "No activity yet." : "No activity matches these filters." }}
       </p>
       <ActivityTimeline :entries="filteredEntries" :members="members" :timestamp="timestamp" />
+      <p v-if="activityStore.loadingOlder" class="activity-empty" role="status">Loading earlier activity…</p>
       <button
-        v-if="activityStore.olderCursor"
+        v-if="activityStore.olderError"
         type="button"
         class="activity-older men-button small"
-        :disabled="activityStore.loadingOlder"
         @click="activityStore.loadOlder"
       >
-        {{ activityStore.loadingOlder ? "Loading…" : "Load earlier activity" }}
+        Retry loading earlier activity
       </button>
+      <div
+        v-else-if="
+          activityStore.olderCursor && groupStore.loaded && (!props.collapsible || settingsStore.showActivitySidebar)
+        "
+        :key="activityStore.olderCursor"
+        ref="earlierActivityMarker"
+        aria-hidden="true"
+      />
     </div>
   </section>
 </template>

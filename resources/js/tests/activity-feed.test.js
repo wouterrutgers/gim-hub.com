@@ -7,6 +7,7 @@ import ActivityFeed from "../../components/player-activity/ActivityFeed.vue";
 import { useApiStore } from "../../stores/api";
 import { useActivityStore } from "../../stores/activity";
 import { useImageStore } from "../../stores/images";
+import { useSettingsStore } from "../../stores/settings";
 import { activityWeek } from "../../game/activity";
 
 function playerHistory(entries) {
@@ -143,7 +144,19 @@ describe("activity feed", function activityFeed() {
 
   it("loads and shows the next page near the bottom without duplicating pending requests", async function scrollHistory() {
     vi.useFakeTimers();
+    let notifyIntersection;
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class IntersectionObserver {
+        constructor(notify) {
+          notifyIntersection = notify;
+        }
+        observe() {}
+        disconnect() {}
+      },
+    );
     const pinia = createTestPinia();
+    useSettingsStore(pinia).setShowActivitySidebar(true);
     vi.spyOn(useImageStore(pinia), "getImageUrl").mockImplementation(function imagePath(path) {
       return path;
     });
@@ -192,14 +205,12 @@ describe("activity feed", function activityFeed() {
     await vi.advanceTimersByTimeAsync(0);
     expect(container.querySelectorAll(".activity-card")).toHaveLength(50);
     const scroll = container.querySelector(".activity-feed-scroll");
-    Object.defineProperties(scroll, { clientHeight: { value: 200 }, scrollHeight: { value: 1000 } });
-    scroll.scrollTop = 200;
-    scroll.dispatchEvent(new Event("scroll"));
+    notifyIntersection([{ isIntersecting: false }]);
     expect(client.fetchActivity).toHaveBeenCalledTimes(1);
 
     scroll.scrollTop = 780;
-    scroll.dispatchEvent(new Event("scroll"));
-    scroll.dispatchEvent(new Event("scroll"));
+    notifyIntersection([{ isIntersecting: true }]);
+    notifyIntersection([{ isIntersecting: true }]);
     expect(client.fetchActivity).toHaveBeenCalledTimes(2);
     expect(client.fetchActivity).toHaveBeenLastCalledWith({ cursor: "earlier" });
     resolveEarlier({ entries: [earlier], older_cursor: null });
@@ -207,7 +218,7 @@ describe("activity feed", function activityFeed() {
 
     expect(container.querySelector('[data-entry-id="51"]')).not.toBeNull();
     expect(scroll.scrollTop).toBe(780);
-    scroll.dispatchEvent(new Event("scroll"));
+    notifyIntersection([{ isIntersecting: true }]);
     expect(client.fetchActivity).toHaveBeenCalledTimes(2);
   });
 

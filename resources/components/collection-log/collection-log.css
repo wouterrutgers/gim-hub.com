@@ -218,16 +218,10 @@
 .collection-log-page-items {
   padding: 20px;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
-  justify-content: center;
-  gap: 1rem;
-}
-
-@media (width <= 1070px) {
-  .collection-log-page-items {
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  }
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1rem min(1rem, 2%);
 }
 
 .collection-log-page-completion-quantity {

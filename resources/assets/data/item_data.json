@@ -31720,7 +31720,7 @@
   "7822": {
     "name": "Unicorn bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7823": {
@@ -31738,7 +31738,7 @@
   "7825": {
     "name": "Giant rat bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7826": {
@@ -31756,7 +31756,7 @@
   "7828": {
     "name": "Giant bat wing in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7829": {
@@ -31774,7 +31774,7 @@
   "7831": {
     "name": "Wolf bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7832": {
@@ -31792,7 +31792,7 @@
   "7834": {
     "name": "Bat wing in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7835": {
@@ -31810,7 +31810,7 @@
   "7837": {
     "name": "Rat bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7838": {
@@ -31828,7 +31828,7 @@
   "7840": {
     "name": "Baby dragon bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7841": {
@@ -31846,7 +31846,7 @@
   "7843": {
     "name": "Ogre ribs in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7844": {
@@ -31864,7 +31864,7 @@
   "7846": {
     "name": "Jogre bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7847": {
@@ -31882,7 +31882,7 @@
   "7849": {
     "name": "Zogre bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7850": {
@@ -31900,7 +31900,7 @@
   "7852": {
     "name": "Mogre bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7853": {
@@ -31918,7 +31918,7 @@
   "7855": {
     "name": "Monkey paw in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7856": {
@@ -31936,7 +31936,7 @@
   "7858": {
     "name": "Dagannoth ribs in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7859": {
@@ -31954,7 +31954,7 @@
   "7861": {
     "name": "Snake spine in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7862": {
@@ -31972,7 +31972,7 @@
   "7864": {
     "name": "Zombie bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7865": {
@@ -31990,7 +31990,7 @@
   "7867": {
     "name": "Werewolf bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7868": {
@@ -32008,7 +32008,7 @@
   "7870": {
     "name": "Moss giant bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7871": {
@@ -32026,7 +32026,7 @@
   "7873": {
     "name": "Fire giant bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7874": {
@@ -32044,7 +32044,7 @@
   "7876": {
     "name": "Ice giant ribs in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7877": {
@@ -32062,7 +32062,7 @@
   "7879": {
     "name": "Terrorbird wing in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7880": {
@@ -32080,7 +32080,7 @@
   "7882": {
     "name": "Ghoul bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7883": {
@@ -32098,7 +32098,7 @@
   "7885": {
     "name": "Troll bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7886": {
@@ -32116,7 +32116,7 @@
   "7888": {
     "name": "Seagull wing in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7889": {
@@ -32134,7 +32134,7 @@
   "7891": {
     "name": "Undead cow ribs in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7892": {
@@ -32152,7 +32152,7 @@
   "7894": {
     "name": "Experiment bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7895": {
@@ -32170,7 +32170,7 @@
   "7897": {
     "name": "Rabbit bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7898": {
@@ -32188,7 +32188,7 @@
   "7900": {
     "name": "Basilisk bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7901": {
@@ -32206,7 +32206,7 @@
   "7903": {
     "name": "Desert lizard bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7904": {
@@ -32224,7 +32224,7 @@
   "7906": {
     "name": "Cave goblin skull in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7907": {
@@ -32242,7 +32242,7 @@
   "7909": {
     "name": "Big frog leg in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7910": {
@@ -32260,7 +32260,7 @@
   "7912": {
     "name": "Vulture wing in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7913": {
@@ -32278,7 +32278,7 @@
   "7915": {
     "name": "Jackal bone in vinegar",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "7916": {
@@ -114865,8 +114865,8 @@
   },
   "35026": {
     "name": "Guthixian root",
-    "highalch": 6,
-    "alchable": true,
+    "highalch": 0,
+    "alchable": false,
     "mapping": null
   }
 }

@@ -45,15 +45,19 @@ class ActivityUpdates
             }
 
             foreach (['skill', 'boss', 'quest_name', 'source'] as $field) {
-                if (in_array($field, $fields)) {
-                    $rules["{$attribute}.{$field}"] = ['required', 'string', ['max', 200]];
+                if (! in_array($field, $fields)) {
+                    continue;
                 }
+
+                $rules["{$attribute}.{$field}"] = ['required', 'string', ['max', 200]];
             }
 
             foreach (['item_id', 'quest_id', 'quantity', 'count', 'total_count'] as $field) {
-                if (in_array($field, $fields)) {
-                    $rules["{$attribute}.{$field}"] = ['required', 'integer', ['min', $field === 'quest_id' ? 0 : 1], ['max', 2147483647]];
+                if (! in_array($field, $fields)) {
+                    continue;
                 }
+
+                $rules["{$attribute}.{$field}"] = ['required', 'integer', ['min', $field === 'quest_id' ? 0 : 1], ['max', 2147483647]];
             }
 
             if (($update['type'] ?? '') === 'xp') {

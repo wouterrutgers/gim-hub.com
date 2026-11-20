@@ -17,11 +17,13 @@ class MemberUpdateValidation
                 }
 
                 foreach ($value as $itemValue) {
-                    if (! is_int($itemValue) || $itemValue < $minimum || $itemValue > $maximum) {
-                        $fail("Snapshot values must be integers between {$minimum} and {$maximum}.");
-
-                        return;
+                    if (! (! is_int($itemValue) || $itemValue < $minimum || $itemValue > $maximum)) {
+                        continue;
                     }
+
+                    $fail("Snapshot values must be integers between {$minimum} and {$maximum}.");
+
+                    return;
                 }
             };
         };
@@ -32,9 +34,11 @@ class MemberUpdateValidation
             'stats' => [
                 'bail', 'nullable', 'array', 'list', ['size', 8], $integerList(),
                 function (string $attribute, array $value, Closure $fail): void {
-                    if ($value[5] !== 100) {
-                        $fail('Run energy maximum must be 100.');
+                    if ($value[5] === 100) {
+                        return;
                     }
+
+                    $fail('Run energy maximum must be 100.');
                 },
             ],
             'coordinates' => ['bail', 'nullable', 'array', 'list', ['size', 4], $integerList()],
@@ -117,9 +121,11 @@ class MemberUpdateValidation
                 $rules["{$attribute}.id"] = [
                     'bail', 'required', 'integer', ['min', 1],
                     function (string $attribute, mixed $value, Closure $fail) use ($identifiers): void {
-                        if ($identifiers[filter_var($value, FILTER_VALIDATE_INT)] > 1) {
-                            $fail('STASH unit IDs must be distinct.');
+                        if ($identifiers[filter_var($value, FILTER_VALIDATE_INT)] <= 1) {
+                            return;
                         }
+
+                        $fail('STASH unit IDs must be distinct.');
                     },
                 ];
                 $rules["{$attribute}.name"] = ['required', 'string', ['max', 200]];

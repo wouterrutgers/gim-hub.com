@@ -37,9 +37,11 @@ class MemberUpdates
         $keys = array_keys($properties);
 
         foreach (Member::PARTIAL_PROPERTY_KEYS as $key => $partialKey) {
-            if (isset($data[$partialKey]) && ! isset($properties[$key])) {
-                $keys[] = $key;
+            if (! isset($data[$partialKey]) || isset($properties[$key])) {
+                continue;
             }
+
+            $keys[] = $key;
         }
 
         if ($keys === []) {
@@ -63,9 +65,11 @@ class MemberUpdates
         }
 
         foreach (Member::PARTIAL_PROPERTY_KEYS as $key => $partialKey) {
-            if (isset($data[$partialKey]) && ! isset($properties[$key])) {
-                $properties[$key] = static::applyPartial($current[$key]->value ?? [], $data[$partialKey]);
+            if (! isset($data[$partialKey]) || isset($properties[$key])) {
+                continue;
             }
+
+            $properties[$key] = static::applyPartial($current[$key]->value ?? [], $data[$partialKey]);
         }
 
         $rows = [];

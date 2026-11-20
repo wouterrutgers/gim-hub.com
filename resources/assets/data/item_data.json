@@ -114242,19 +114242,19 @@
   "34825": {
     "name": "Perfect cabbage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "34827": {
     "name": "Perfect potato",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "34829": {
     "name": "Perfect rosemary",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "34831": {
@@ -114266,7 +114266,7 @@
   "34833": {
     "name": "Prayer to Brassica",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "34835": {

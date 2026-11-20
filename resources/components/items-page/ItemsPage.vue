@@ -555,9 +555,7 @@
       </div>
 
       <div class="items-results-heading">
-        <h2>
-          Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
-        </h2>
+        <h2>Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span></h2>
         <div class="items-view-toggle" role="group" aria-label="Item display">
           <button
             type="button"

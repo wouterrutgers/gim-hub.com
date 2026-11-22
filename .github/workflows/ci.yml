@@ -27,7 +27,7 @@ jobs:
       - name: Setup pnpm and Node.js
         uses: pnpm/setup@v3
         with:
-          runtime: node@24
+          runtime: node@26
           cache: true
           install: false
 
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:8.4
+        image: mysql:9.7
         env:
           MYSQL_DATABASE: gim_hub_test
           MYSQL_ROOT_PASSWORD: root

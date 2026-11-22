@@ -37,7 +37,7 @@ services:
         condition: service_healthy
 
   mysql:
-    image: mysql:8.4
+    image: mysql:9.7
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: gim

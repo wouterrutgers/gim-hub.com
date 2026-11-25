@@ -7244,6 +7244,23 @@
         ]
       },
       {
+        "name": "Prison of Ræun",
+        "items": [
+          {
+            "id": 35033,
+            "name": "Sunken treasure"
+          },
+          {
+            "id": 35027,
+            "name": "Fremennik graceful ornament kit"
+          },
+          {
+            "id": 35029,
+            "name": "Fremennik sail fabric"
+          }
+        ]
+      },
+      {
         "name": "Random Events",
         "items": [
           {
@@ -7484,6 +7501,10 @@
           {
             "id": 33074,
             "name": "Facility bottle (empty)"
+          },
+          {
+            "id": 35031,
+            "name": "Ghostly sail fabric"
           }
         ]
       },

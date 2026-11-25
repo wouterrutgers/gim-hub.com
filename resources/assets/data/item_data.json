@@ -114868,5 +114868,287 @@
     "highalch": 0,
     "alchable": false,
     "mapping": null
+  },
+  "35027": {
+    "name": "Fremennik graceful ornament kit",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35029": {
+    "name": "Fremennik sail fabric",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35031": {
+    "name": "Ghostly sail fabric",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35033": {
+    "name": "Sunken treasure",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        35035
+      ],
+      [
+        3,
+        35036
+      ],
+      [
+        4,
+        35037
+      ],
+      [
+        5,
+        35038
+      ]
+    ]
+  },
+  "35039": {
+    "name": "Graceful hood",
+    "highalch": 21,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 280
+      }
+    ]
+  },
+  "35041": {
+    "name": "Graceful hood",
+    "highalch": 21,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 280
+      }
+    ]
+  },
+  "35042": {
+    "name": "Graceful cape",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 320
+      }
+    ]
+  },
+  "35044": {
+    "name": "Graceful cape",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 320
+      }
+    ]
+  },
+  "35045": {
+    "name": "Graceful top",
+    "highalch": 33,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 440
+      }
+    ]
+  },
+  "35047": {
+    "name": "Graceful top",
+    "highalch": 33,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 440
+      }
+    ]
+  },
+  "35048": {
+    "name": "Graceful legs",
+    "highalch": 36,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 480
+      }
+    ]
+  },
+  "35050": {
+    "name": "Graceful legs",
+    "highalch": 36,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 480
+      }
+    ]
+  },
+  "35051": {
+    "name": "Graceful gloves",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 240
+      }
+    ]
+  },
+  "35053": {
+    "name": "Graceful gloves",
+    "highalch": 18,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 240
+      }
+    ]
+  },
+  "35054": {
+    "name": "Graceful boots",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 320
+      }
+    ]
+  },
+  "35056": {
+    "name": "Graceful boots",
+    "highalch": 24,
+    "alchable": true,
+    "mapping": [
+      {
+        "id": 12640,
+        "quantity": 320
+      }
+    ]
+  },
+  "35057": {
+    "name": "Torva platebody",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "35059": {
+    "name": "Amethyst arrow",
+    "highalch": 294,
+    "alchable": true,
+    "mapping": null,
+    "stacks": [
+      [
+        2,
+        4771
+      ],
+      [
+        3,
+        4772
+      ],
+      [
+        4,
+        4769
+      ],
+      [
+        5,
+        4770
+      ]
+    ]
+  },
+  "35060": {
+    "name": "Captain's log",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35061": {
+    "name": "Captain's log",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35062": {
+    "name": "Captain's log (e)",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35063": {
+    "name": "Arctic pine stake",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "35065": {
+    "name": "Infused arctic pine stake",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "35067": {
+    "name": "Binding stake",
+    "highalch": 60,
+    "alchable": true,
+    "mapping": null
+  },
+  "35069": {
+    "name": "Soul essence",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35071": {
+    "name": "Salt-crusted lamp",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35072": {
+    "name": "The blind seer",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35073": {
+    "name": "Waterlogged book",
+    "highalch": 0,
+    "alchable": true,
+    "mapping": null
+  },
+  "35074": {
+    "name": "Soggy ownership note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35075": {
+    "name": "Dusty ownership note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
+  },
+  "35076": {
+    "name": "Scratched note",
+    "highalch": 0,
+    "alchable": false,
+    "mapping": null
   }
 }

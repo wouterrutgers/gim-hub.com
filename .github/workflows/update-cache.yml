@@ -12,21 +12,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  check:
+  find-cache:
     runs-on: ubuntu-latest
     outputs:
       cache-id: ${{ steps.latest.outputs.cache-id }}
-      update-cache: ${{ steps.latest.outputs.update-cache }}
 
     steps:
-      - uses: actions/checkout@v7
-
-      - id: latest
+      - name: Check latest OpenRS2 cache
+        id: latest
         shell: bash
         run: |
-          processed_cache_id=$(cat cache/last-processed-id.txt)
           cache_id=$(curl --fail --silent --show-error https://archive.openrs2.org/caches.json | jq -r '
-            [ .[] | select(.game == "oldschool" and .environment == "live" and .language == "en" and (.sources | contains(["Jagex"]))) ] |
+            map(select(.game == "oldschool" and .environment == "live" and .language == "en" and (.sources | contains(["Jagex"])))) |
             max_by(.id) |
             select(.size != null and .indexes != null and .groups != null and .keys != null and
               .valid_indexes == .indexes and .valid_groups == .groups and .valid_keys == .keys) |
@@ -35,33 +32,43 @@ jobs:
 
           if [[ -z "$cache_id" ]]; then
             echo "The latest OpenRS2 cache is not complete yet."
-            cache_id=$processed_cache_id
-          fi
-
-          if [[ "$cache_id" == "$processed_cache_id" ]] && (( 10#$(date -u +%H) % 4 != 0 )); then
-            echo "OpenRS2 cache $cache_id has already been processed."
             exit 0
           fi
 
           echo "cache-id=$cache_id" >> "$GITHUB_OUTPUT"
 
-          if [[ "$cache_id" != "$processed_cache_id" ]]; then
-            echo "update-cache=true" >> "$GITHUB_OUTPUT"
-          fi
-
   dump:
-    needs: check
-    if: needs.check.outputs.cache-id != ''
+    needs: find-cache
+    if: needs.find-cache.outputs.cache-id != ''
     runs-on: ubuntu-latest
-    env:
-      CACHE_ID: ${{ needs.check.outputs.cache-id }}
 
     steps:
-      - uses: actions/checkout@v7
+      - name: Check out GIM Hub
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.PAT }}
 
-      - uses: actions/checkout@v7
+      - name: Cache OpenRS2 files
+        id: openrs2
+        uses: actions/cache@v6
+        with:
+          path: cache/cache
+          key: openrs2-${{ needs.find-cache.outputs.cache-id }}
+
+      - name: Download OpenRS2 cache
+        if: steps.openrs2.outputs.cache-hit != 'true'
+        working-directory: cache/cache
+        env:
+          CACHE_ID: ${{ needs.find-cache.outputs.cache-id }}
+        run: |
+          cache_url="https://archive.openrs2.org/caches/runescape/$CACHE_ID"
+          curl --fail --silent --show-error --location --output xteas.json "$cache_url/keys.json"
+          curl --fail --silent --show-error --location --output disk.zip "$cache_url/disk.zip"
+          unzip -q disk.zip
+          rm disk.zip
+
+      - name: Check out RuneLite
+        uses: actions/checkout@v7
         with:
           repository: runelite/runelite
           path: cache/runelite
@@ -70,10 +77,14 @@ jobs:
         with:
           runtime: node@26
           cache: true
+          require-lockfile: true
           cache-dependency-path: |
             pnpm-lock.yaml
             cache/pnpm-lock.yaml
-          install: false
+
+      - name: Install dump dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: cache
 
       - uses: actions/setup-java@v6
         with:
@@ -87,41 +98,17 @@ jobs:
             cache/**/libs.versions.toml
             cache/update.js
 
-      - if: needs.check.outputs.update-cache == 'true'
-        run: pnpm install --frozen-lockfile
-        working-directory: ./cache
+      - name: Dump game data
+        run: pnpm run update
+        working-directory: cache
 
-      - run: pnpm install --frozen-lockfile
+      - name: Update wiki quest data
+        run: node resources/js/quests/scraper.js
 
-      - uses: actions/cache/restore@v6
-        id: cache
-        with:
-          path: cache/cache
-          key: openrs2-${{ env.CACHE_ID }}
-
-      - if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          curl --fail --silent --show-error --location -o cache/cache/xteas.json "https://archive.openrs2.org/caches/runescape/$CACHE_ID/keys.json"
-          curl --fail --silent --show-error --location -o cache/cache/disk.zip "https://archive.openrs2.org/caches/runescape/$CACHE_ID/disk.zip"
-          unzip cache/cache/disk.zip -d cache/cache
-          rm cache/cache/disk.zip
-
-      - if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: cache/cache
-          key: ${{ steps.cache.outputs.cache-primary-key }}
-
-      - run: pnpm run ${{ needs.check.outputs.update-cache == 'true' && 'update' || 'update:wiki' }}
-        working-directory: ./cache
-
-      - run: node resources/js/quests/scraper.js
-
-      - run: node resources/js/check-collection-log-mappings.js --github-issue
+      - name: Check collection log mappings
+        run: node resources/js/check-collection-log-mappings.js --github-issue
         env:
           GITHUB_TOKEN: ${{ github.token }}
-
-      - run: echo "$CACHE_ID" > cache/last-processed-id.txt
 
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:

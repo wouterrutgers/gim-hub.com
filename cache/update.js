@@ -1,6 +1,7 @@
 const childProcess = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
+const images = require("./images");
 const fetchWiki = require("./wiki");
 const { buildMapLabels } = require("./map-labels");
 const { buildWantedItems } = require("./wanted-items");
@@ -513,18 +514,11 @@ async function dumpBossIcons() {
 
 (async () => {
   try {
-    const wikiOnly = process.argv.includes("--wiki-only");
     await dumpItemData();
     const { allIncludedItemIds, wantedData } = await buildItemDataJson();
     await dumpQuestMapping();
     await dumpBossIcons();
 
-    if (wikiOnly) {
-      await publishItemData(wantedData);
-      return;
-    }
-
-    const images = require("./images");
     await dumpItemImages(allIncludedItemIds);
     const xteasLocation = await convertXteasToRuneliteFormat();
     const mapDump = dumpMapData(xteasLocation);

@@ -115289,7 +115289,8 @@
     "name": "Torva platebody",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "35059": {
     "name": "Amethyst arrow",

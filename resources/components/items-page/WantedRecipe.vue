@@ -12,6 +12,9 @@
   const announcement = ref("");
   const selected = computed(() => props.plan.methods[props.plan.methodIndex]);
   const missingCount = computed(() => props.plan.ingredients.filter(({ quantity }) => quantity > 0n).length);
+  const coveredStatus = computed(() =>
+    props.plan.ingredients.some(({ fromSurplus }) => fromSurplus) ? "Materials covered" : "Materials ready",
+  );
   const item = computed(() => props.itemName(props.plan.itemId));
   const sourceUrl = computed(function recipeSource() {
     const method = selected.value;
@@ -46,13 +49,45 @@
         label: outputDiffers
           ? `${describeItem(method.outputId ?? props.plan.itemId, method.quantity)} from ${label}`
           : label,
-        ids: inputs.map(({ itemId }) => itemId).join(", "),
+        ingredients,
+        methodLabel: method.label,
+        shortMethod: method.label?.split(", ", 1)[0],
+        ids: [
+          ...(outputDiffers && method.outputId ? [method.outputId] : []),
+          ...inputs.map(({ itemId }) => itemId),
+        ].join(", "),
+        page: method.page,
       };
     });
 
-    return options.map(({ label, ids }) =>
-      options.filter((other) => other.label === label).length > 1 ? `Item IDs ${ids}: ${label}` : label,
-    );
+    const labels = options.map(function distinguishMethod(option) {
+      const matches = options.filter((other) => other !== option && other.label === option.label);
+
+      if (!matches.length || !option.methodLabel) {
+        return option.label;
+      }
+
+      const method = matches.some((other) => other.shortMethod === option.shortMethod)
+        ? option.methodLabel
+        : option.shortMethod;
+
+      return `${method} | ${option.ingredients}`;
+    });
+
+    return labels.map(function distinguishSource(label, index) {
+      if (labels.indexOf(label) === labels.lastIndexOf(label)) {
+        return label;
+      }
+
+      const { page, ids } = options[index];
+      const pageDiffers =
+        page &&
+        !options.some(
+          (other, otherIndex) => index !== otherIndex && labels[otherIndex] === label && other.page === page,
+        );
+
+      return `${pageDiffers ? page : `Item IDs ${ids}`} | ${label}`;
+    });
   });
 
   async function chooseMethod(event) {
@@ -62,7 +97,7 @@
     const count = missingCount.value;
     announcement.value = count
       ? `${item.value}: ${count} ${count === 1 ? "material" : "materials"} still needed.`
-      : `${item.value}: materials ready.`;
+      : `${item.value}: ${coveredStatus.value.toLowerCase()}.`;
   }
 
   function describeItem(itemId, quantity) {
@@ -99,7 +134,7 @@
       </span>
       <span class="visually-hidden" role="status">{{ announcement }}</span>
     </div>
-    <p v-if="plan.path && !missingCount" class="wanted-recipe-ready">Materials ready</p>
+    <p v-if="plan.path && !missingCount" class="wanted-recipe-ready">{{ coveredStatus }}</p>
     <ul class="wanted-material-list" role="list">
       <li v-for="ingredient in plan.ingredients" :key="ingredient.itemId">
         <details
@@ -113,6 +148,7 @@
               :icon="itemIcon(ingredient.itemId)"
               :quantity="ingredient.quantity"
               :required="ingredient.required"
+              :from-surplus="ingredient.fromSurplus"
             />
           </summary>
           <WantedRecipe
@@ -132,6 +168,7 @@
               :icon="itemIcon(ingredient.itemId)"
               :quantity="ingredient.quantity"
               :required="ingredient.required"
+              :from-surplus="ingredient.fromSurplus"
             />
           </div>
           <p v-if="ingredient.blocked" class="wanted-material-blocked">

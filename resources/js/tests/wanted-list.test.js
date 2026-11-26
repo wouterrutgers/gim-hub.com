@@ -13,7 +13,8 @@ import { useGroupStore } from "../../stores/group";
 const items = new Map(
   [
     11889, 20714, 20716, 29801, 29804, 20366, 29799, 33534, 19553, 19541, 19501, 19493, 19496, 6571, 6573, 19529, 2357,
-    1759, 564, 565, 566, 30843, 53, 52, 314, 10088, 20997, 577, 581, 1767, 4622,
+    1759, 564, 565, 566, 30843, 53, 52, 314, 10088, 20997, 577, 581, 1767, 4622, 13237, 13239, 31088, 31091, 31094,
+    31111, 31115, 5358, 5364, 5370, 6585, 6581, 4699, 554, 557, 1393, 1395,
   ].map(function catalogueItem(itemId) {
     return [itemId, itemData[itemId]];
   }),
@@ -198,6 +199,67 @@ it("stops expanding when a recipe would lead back to its target", async function
   expect([...materials.querySelectorAll("summary")].some((summary) => summary.textContent.includes("Black robe"))).toBe(
     false,
   );
+});
+
+it("shares demon tears made in one batch across both tread upgrades", async function treadUpgrades() {
+  const container = await mount({
+    goals: [{ item_id: 31094, target_quantity: 1 }],
+    readGroupData() {
+      return [{ id: 1, name: "Alice", bank: [31088, 1, 13237, 1, 13239, 1, 31115, 1] }];
+    },
+  });
+
+  const materials = await expandMaterial(container, "Materials still needed");
+  const upgrade = await expandMaterial(materials, "1 × Avernic treads (pr)");
+  const tears = await expandMaterial(upgrade, "4,000 × Demon tear");
+
+  expect(tears.textContent).toContain("1 batch of 10,000");
+  expect(tears.textContent).toContain("Materials ready");
+  expect(
+    [...materials.querySelectorAll(".wanted-material-row")].filter((row) => row.textContent.includes("Eye of Ayak")),
+  ).toHaveLength(1);
+  expect(materials.textContent).toContain("4,000 from another batch");
+});
+
+it("plans the watering step for a sapling from an unwatered seedling", async function oakSapling() {
+  const container = await mount({
+    goals: [{ item_id: 5370, target_quantity: 1 }],
+    readGroupData() {
+      return [{ id: 1, name: "Alice", bank: [5358, 1] }];
+    },
+  });
+
+  const materials = await expandMaterial(container, "Materials still needed");
+  const watering = await expandMaterial(materials, "1 × Oak seedling (w)");
+
+  expect(watering.textContent).toContain("Materials ready");
+  expect(watering.querySelector(":scope > .wanted-recipe .wanted-material-name").textContent).toBe("Oak seedling");
+  expect(watering.textContent).toContain("1 / 1 available");
+});
+
+it("uses lava runes for both enchantment elements and requires fire runes for a staff conversion", async function combinationRunes() {
+  const container = await mount({
+    goals: [
+      { item_id: 6585, target_quantity: 1 },
+      { item_id: 1393, target_quantity: 1 },
+    ],
+    readGroupData() {
+      return [{ id: 1, name: "Alice", bank: [6581, 1, 564, 1, 4699, 20, 1395, 1] }];
+    },
+  });
+
+  const fury = container.querySelector('[data-item-id="6585"]');
+  const enchantment = await expandMaterial(fury, "Materials still needed");
+  const method = enchantment.querySelector("select");
+  method.value = [...method.options].find((option) => option.textContent.includes("Cosmic rune")).value;
+  method.dispatchEvent(new Event("change"));
+  await nextTick();
+
+  expect(enchantment.querySelector("summary").textContent).toBe("Materials ready");
+
+  const staff = container.querySelector('[data-item-id="1393"]');
+  const conversion = await expandMaterial(staff, "Materials still needed");
+  expect(conversion.textContent).toContain("100 × Fire rune");
 });
 
 it("keeps saved goals editable when the initial sync failed before Wanted opened", async function failedInitialSync() {

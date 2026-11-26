@@ -47,6 +47,7 @@ export function wantedMaterialPlan(groupItems, recipes, itemId, quantity, choice
   const targetIds = new Set(stockItemIds(itemId));
   // Existing copies of the target already count towards the goal.
   const available = new Map([...targetIds].map((id) => [id, 0n]));
+  const surplus = new Map();
 
   function spendStock(id, required) {
     const owned = available.get(id) ?? BigInt(stockQuantity(groupItems, id));
@@ -54,6 +55,38 @@ export function wantedMaterialPlan(groupItems, recipes, itemId, quantity, choice
     available.set(id, owned - used);
 
     return required - used;
+  }
+
+  function dependsOn(plan, target, visited = new Set()) {
+    if (plan === target) {
+      return true;
+    }
+
+    if (visited.has(plan)) {
+      return false;
+    }
+
+    visited.add(plan);
+
+    return [...plan.dependencies].some((dependency) => dependsOn(dependency, target, visited));
+  }
+
+  function spendSurplus(plan, ingredient) {
+    for (const batch of surplus.get(ingredient.itemId) ?? []) {
+      if (!ingredient.quantity) {
+        break;
+      }
+
+      if (!batch.remaining || dependsOn(batch.plan, plan)) {
+        continue;
+      }
+
+      const used = batch.remaining < ingredient.quantity ? batch.remaining : ingredient.quantity;
+      batch.remaining -= used;
+      ingredient.quantity -= used;
+      ingredient.fromSurplus += used;
+      plan.dependencies.add(batch.plan);
+    }
   }
 
   function createPlan(methods, outputId, required, path, ancestors) {
@@ -70,12 +103,56 @@ export function wantedMaterialPlan(groupItems, recipes, itemId, quantity, choice
       batchSize,
       batches,
       ancestors,
+      dependencies: new Set(),
       ingredients: ingredients.map(function materialRequirement(ingredient) {
         const required = BigInt(ingredient.quantity) * batches;
 
-        return { ...ingredient, path: `${path}/${ingredient.itemId}`, required, quantity: required };
+        return { ...ingredient, path: `${path}/${ingredient.itemId}`, required, quantity: required, fromSurplus: 0n };
       }),
     };
+  }
+
+  function planIngredient(plan, ingredient) {
+    spendSurplus(plan, ingredient);
+
+    const methods = recipes[ingredient.itemId];
+
+    if (!ingredient.quantity || !methods) {
+      return;
+    }
+
+    const ancestors = new Set([...plan.ancestors, ingredient.itemId]);
+    const childMethods = plan.ancestors.has(ingredient.itemId)
+      ? []
+      : methods.filter(({ ingredients }) => ingredients.every(({ itemId }) => !ancestors.has(itemId)));
+
+    if (!childMethods.length) {
+      ingredient.blocked = true;
+
+      return;
+    }
+
+    ingredient.expandable = true;
+
+    if (!expanded.has(ingredient.path)) {
+      return;
+    }
+
+    const child = createPlan(childMethods, ingredient.itemId, ingredient.quantity, ingredient.path, ancestors);
+    ingredient.plan = child;
+    plan.dependencies.add(child);
+
+    const remaining = child.batches * child.batchSize - ingredient.quantity;
+
+    if (remaining) {
+      if (!surplus.has(ingredient.itemId)) {
+        surplus.set(ingredient.itemId, []);
+      }
+
+      surplus.get(ingredient.itemId).push({ plan: child, remaining });
+    }
+
+    return child;
   }
 
   const methods = [...targetIds].flatMap(function goalMethods(outputId) {
@@ -89,6 +166,7 @@ export function wantedMaterialPlan(groupItems, recipes, itemId, quantity, choice
   }
 
   const root = createPlan(methods, itemId, BigInt(quantity), "", targetIds);
+  const collapsedIngredients = [];
 
   for (let plans = [root]; plans.length;) {
     // Reserve exact materials across the whole level before considering substitutes.
@@ -101,53 +179,51 @@ export function wantedMaterialPlan(groupItems, recipes, itemId, quantity, choice
     const nextPlans = [];
 
     for (const plan of plans) {
-      const substitutes = new Set(plan.ingredients.flatMap(({ alternatives }) => alternatives ?? []));
+      const missingRunes = plan.ingredients.filter(({ quantity, alternatives }) => quantity && alternatives?.length);
+      const substitutes = [...new Set(missingRunes.flatMap(({ alternatives }) => alternatives))].map(
+        function groupRuneShortages(itemId) {
+          return { itemId, runes: missingRunes.filter(({ alternatives }) => alternatives.includes(itemId)) };
+        },
+      );
 
-      for (const substitute of substitutes) {
-        const runeIngredients = plan.ingredients.filter(({ alternatives }) => alternatives?.includes(substitute));
-        const required = runeIngredients.reduce(
+      substitutes.sort((first, second) => second.runes.length - first.runes.length);
+
+      for (const { itemId, runes } of substitutes) {
+        const required = runes.reduce(
           (maximum, ingredient) => (ingredient.quantity > maximum ? ingredient.quantity : maximum),
           0n,
         );
-        const used = required - spendStock(substitute, required);
+        const used = required - spendStock(itemId, required);
 
-        for (const ingredient of runeIngredients) {
+        for (const ingredient of runes) {
           ingredient.quantity = ingredient.quantity > used ? ingredient.quantity - used : 0n;
         }
       }
 
       for (const ingredient of plan.ingredients) {
-        const methods = recipes[ingredient.itemId];
-
-        if (!ingredient.quantity || !methods) {
+        if (!ingredient.quantity) {
           continue;
         }
 
-        const ancestors = new Set([...plan.ancestors, ingredient.itemId]);
-        const childMethods = plan.ancestors.has(ingredient.itemId)
-          ? []
-          : methods.filter(({ ingredients }) => ingredients.every(({ itemId }) => !ancestors.has(itemId)));
+        if (!expanded.has(ingredient.path)) {
+          collapsedIngredients.push({ plan, ingredient });
 
-        if (childMethods.length) {
-          ingredient.expandable = true;
+          continue;
+        }
 
-          if (expanded.has(ingredient.path)) {
-            ingredient.plan = createPlan(
-              childMethods,
-              ingredient.itemId,
-              ingredient.quantity,
-              ingredient.path,
-              ancestors,
-            );
-            nextPlans.push(ingredient.plan);
-          }
-        } else {
-          ingredient.blocked = true;
+        const child = planIngredient(plan, ingredient);
+
+        if (child) {
+          nextPlans.push(child);
         }
       }
     }
 
     plans = nextPlans;
+  }
+
+  for (const { plan, ingredient } of collapsedIngredients) {
+    planIngredient(plan, ingredient);
   }
 
   return root;

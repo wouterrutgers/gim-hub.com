@@ -2,6 +2,12 @@ const { setTimeout } = require("node:timers/promises");
 const fetchWiki = require("./wiki");
 
 const BUCKET_PAGE_SIZE = 500;
+const ELEMENTAL_COMBINATION_RUNES = {
+  554: [4694, 4697, 4699], // Fire: steam, smoke, lava
+  555: [4694, 4695, 4698], // Water: steam, mist, mud
+  556: [4695, 4696, 4697], // Air: mist, dust, smoke
+  557: [4696, 4698, 4699], // Earth: dust, mud, lava
+};
 
 function buildEquivalents(items, itemVariations, recipes) {
   const equivalents = {};
@@ -127,21 +133,25 @@ async function loadItemResolver(items) {
   return function resolveItem({ name, image, txt }) {
     const [link, linkLabel] = normalize(name).split("|");
     const [title, anchor] = link.split("#");
-    const exact = !anchor && !linkLabel ? names.get(title) : undefined;
-    if (exact?.size === 1) {
-      return exact.values().next().value;
-    }
     const nameIds = names.get(linkLabel || normalize(txt) || (anchor ? "" : title));
     const pageIds = (anchor && wikiSections.get(link)) || wikiPages.get(title);
     const imageIds = wikiImages.get(`file:${normalize(image)}`);
-    let candidates = pageIds ?? imageIds ?? nameIds ?? new Set();
+    const pageImageIds = pageIds && imageIds && pageIds.intersection(imageIds);
+    const exact = !anchor && !linkLabel ? names.get(title) : undefined;
 
-    if (pageIds && imageIds) {
-      const intersection = pageIds.intersection(imageIds);
-      if (intersection.size) {
-        candidates = intersection;
+    if (exact?.size === 1) {
+      const [exactId] = exact;
+      // Variant recipes can use the base name with an image of the parenthesized variant.
+      if (pageIds?.has(exactId) && pageImageIds?.size === 1) {
+        const [variantId] = pageImageIds;
+        if (normalize(items[variantId]?.name).startsWith(`${title} (`)) {
+          return variantId;
+        }
       }
+      return exactId;
     }
+
+    let candidates = (pageImageIds?.size ? pageImageIds : pageIds) ?? imageIds ?? nameIds ?? new Set();
 
     if (candidates.size > 1 && nameIds) {
       const intersection = candidates.intersection(nameIds);
@@ -209,8 +219,12 @@ async function buildRecipes(items, cacheItems) {
     const usesSpellRunes = production.skills?.some(({ name }) => normalize(name) === "magic");
     const ingredients = Object.values(
       materials.reduce(function totalIngredients(totals, { itemId, quantity }) {
+        const cacheAlternatives = cacheItems[itemId].alternativeRunes ?? [];
+        const elementalAlternatives = ELEMENTAL_COMBINATION_RUNES[itemId] ?? [];
         const alternatives = usesSpellRunes
-          ? cacheItems[itemId].alternativeRunes?.filter((alternativeId) => items[alternativeId])
+          ? [...new Set([...cacheAlternatives, ...elementalAlternatives])].filter(
+              (alternativeId) => items[alternativeId],
+            )
           : undefined;
         const ingredient = (totals[itemId] ??= {
           itemId,

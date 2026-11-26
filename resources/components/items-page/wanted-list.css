@@ -345,6 +345,7 @@ summary.wanted-material-row:hover {
 .wanted-method select {
   font: inherit;
   font-size: max(1rem, 1em);
+  text-overflow: ellipsis;
 }
 
 @media (width <= 480px) {

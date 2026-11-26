@@ -1,5 +1,6 @@
 const { setTimeout } = require("node:timers/promises");
 const fetchWiki = require("./wiki");
+const { loadSeasonalItemPages } = require("./seasonal-items");
 
 const BUCKET_PAGE_SIZE = 500;
 const ELEMENTAL_COMBINATION_RUNES = {
@@ -9,8 +10,40 @@ const ELEMENTAL_COMBINATION_RUNES = {
   557: [4696, 4698, 4699], // Earth: dust, mud, lava
 };
 
-function buildEquivalents(items, itemVariations, recipes) {
+function buildItemStateVariants(items, cacheItems, itemVariations) {
   const equivalents = {};
+  const idsByGameVal = new Map();
+  const families = new Map();
+
+  for (const itemId of Object.keys(items)) {
+    const gameVal = cacheItems[itemId].gameVal;
+    if (gameVal) {
+      idsByGameVal.set(gameVal, Number(itemId));
+    }
+  }
+
+  for (const family of Object.values(itemVariations)) {
+    for (const itemId of family) {
+      families.set(itemId, family);
+    }
+  }
+
+  for (const [gameVal, itemId] of idsByGameVal) {
+    // Active and new crystal equipment differ only in the number of charges.
+    const baseName =
+      gameVal.match(/^(.+)_(?:worn|dummy)$/)?.[1] ?? gameVal.match(/^(crystal_(?:bow|halberd|shield))_2500$/)?.[1];
+    const baseId = idsByGameVal.get(baseName);
+
+    if (items[baseId]?.name === items[itemId].name && families.get(itemId)?.includes(baseId)) {
+      (equivalents[baseId] ??= []).push(itemId);
+    }
+  }
+
+  return equivalents;
+}
+
+function buildEquivalents(items, itemVariations, recipes, itemStates) {
+  const equivalents = structuredClone(itemStates);
   for (const [baseId, ...variantIds] of Object.values(itemVariations)) {
     const base = items[baseId];
     if (!base) {
@@ -103,7 +136,7 @@ function indexItem(index, key, itemId) {
   index.get(key).add(itemId);
 }
 
-async function loadItemResolver(items) {
+async function loadItemResolver(items, canonicalItemIds) {
   const names = new Map();
   const wikiPages = new Map();
   const wikiSections = new Map();
@@ -130,7 +163,18 @@ async function loadItemResolver(items) {
     }
   }
 
-  return function resolveItem({ name, image, txt }) {
+  const seasonal = {};
+  for (const [title, mode] of await loadSeasonalItemPages()) {
+    const itemIds = (title.includes("#") ? wikiSections : wikiPages).get(normalize(title));
+
+    for (const id of itemIds ?? []) {
+      if (items[id]) {
+        seasonal[id] = mode;
+      }
+    }
+  }
+
+  function resolveItem({ name, image, txt }) {
     const [link, linkLabel] = normalize(name).split("|");
     const [title, anchor] = link.split("#");
     const nameIds = names.get(linkLabel || normalize(txt) || (anchor ? "" : title));
@@ -160,9 +204,13 @@ async function loadItemResolver(items) {
       }
     }
 
-    const available = [...candidates].filter((id) => items[id]);
+    const available = [
+      ...new Set([...candidates].filter((id) => items[id]).map((id) => canonicalItemIds.get(id) ?? id)),
+    ];
     return available.length === 1 ? available[0] : available.sort((first, second) => first - second);
-  };
+  }
+
+  return { resolveItem, seasonal };
 }
 
 function parseQuantity(quantity) {
@@ -175,8 +223,11 @@ function parseQuantity(quantity) {
   return Number.isSafeInteger(number) && number > 0 ? number : undefined;
 }
 
-async function buildRecipes(items, cacheItems) {
-  const resolveItem = await loadItemResolver(items);
+async function buildRecipes(items, cacheItems, itemStates) {
+  const canonicalItemIds = new Map(
+    Object.entries(itemStates).flatMap(([baseId, variants]) => variants.map((id) => [id, Number(baseId)])),
+  );
+  const { resolveItem, seasonal } = await loadItemResolver(items, canonicalItemIds);
   const recipes = {};
   const signatures = new Set();
   const unresolved = new Set();
@@ -190,7 +241,7 @@ async function buildRecipes(items, cacheItems) {
     }
 
     const quantity = parseQuantity(part.quantity);
-    return quantity ? { itemId, quantity } : undefined;
+    return quantity ? { itemId: canonicalItemIds.get(itemId) ?? itemId, quantity } : undefined;
   }
 
   for await (const row of readBucket("recipe", "'page_name','production_json'", "'production_json','asc'")) {
@@ -221,15 +272,17 @@ async function buildRecipes(items, cacheItems) {
       materials.reduce(function totalIngredients(totals, { itemId, quantity }) {
         const cacheAlternatives = cacheItems[itemId].alternativeRunes ?? [];
         const elementalAlternatives = ELEMENTAL_COMBINATION_RUNES[itemId] ?? [];
-        const alternatives = usesSpellRunes
-          ? [...new Set([...cacheAlternatives, ...elementalAlternatives])].filter(
-              (alternativeId) => items[alternativeId],
-            )
-          : undefined;
+        const runeAlternatives = usesSpellRunes ? [...cacheAlternatives, ...elementalAlternatives] : [];
+        const inventoryAlternatives = (itemStates[itemId] ?? []).filter(
+          (variantId) => !cacheItems[variantId].gameVal.endsWith("_dummy"),
+        );
+        const alternatives = [...new Set([...inventoryAlternatives, ...runeAlternatives])].filter(
+          (alternativeId) => items[alternativeId],
+        );
         const ingredient = (totals[itemId] ??= {
           itemId,
           quantity: 0,
-          ...(alternatives?.length ? { alternatives } : {}),
+          ...(alternatives.length ? { alternatives } : {}),
         });
         ingredient.quantity += quantity;
         return totals;
@@ -239,6 +292,9 @@ async function buildRecipes(items, cacheItems) {
     const description = [production.output.subtxt, production.tools, production.facilities, ...skills]
       .filter((text) => typeof text === "string" && text.trim())
       .map((text) => text.replace(/\[\[(?:[^|\]]+\|)?([^\]]+)\]\]/g, "$1").trim());
+    if (production.facilities === "Ilfeen") {
+      description.push("minimum price");
+    }
     const label = [...new Set(description)].join(", ");
     const page = normalize(row.page_name) === normalize(items[output.itemId].name) ? undefined : row.page_name;
     const method = { quantity: output.quantity, ingredients, ...(label ? { label } : {}), ...(page ? { page } : {}) };
@@ -270,7 +326,7 @@ async function buildRecipes(items, cacheItems) {
   console.info(
     `Imported ${signatures.size} recipes for ${Object.keys(recipes).length} items. Skipped ${invalid} unusable records.`,
   );
-  return recipes;
+  return { recipes, seasonal };
 }
 
 async function buildWantedItems(catalogue, cacheItems, itemVariations) {
@@ -285,9 +341,10 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
     }
   }
 
-  const recipes = await buildRecipes(items, cacheItems);
-  const equivalents = buildEquivalents(items, itemVariations, recipes);
-  return { wantedItems: { equivalents, unavailable }, recipes };
+  const itemStates = buildItemStateVariants(items, cacheItems, itemVariations);
+  const { recipes, seasonal } = await buildRecipes(items, cacheItems, itemStates);
+  const equivalents = buildEquivalents(items, itemVariations, recipes, itemStates);
+  return { wantedItems: { equivalents, unavailable, seasonal }, recipes };
 }
 
 module.exports = { buildWantedItems };

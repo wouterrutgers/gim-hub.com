@@ -11,6 +11,7 @@
     wantedItemId,
     wantedItemProgress,
     wantedOwnedQuantity,
+    wantedSeasonalLabel,
   } from "../../game/wanted-items";
   import CachedImage from "../cached-image/CachedImage.vue";
   import WantedMaterials from "./WantedMaterials.vue";
@@ -31,7 +32,6 @@
   const saving = ref(false);
   const confirmingRemoval = ref(false);
   const saveError = ref("");
-  const status = ref("");
   const search = ref("");
   const selectedItemId = ref();
   const quantity = ref(1);
@@ -241,7 +241,6 @@
 
   async function openEditor(itemId) {
     editorSource = itemId;
-    status.value = "";
     search.value = "";
     editing.value = true;
 
@@ -317,7 +316,6 @@
     saving.value = true;
     writeVersion += 1;
     saveError.value = "";
-    status.value = remove ? "Removing goal…" : "Saving goal…";
 
     try {
       const savedGoal = remove
@@ -334,7 +332,6 @@
       }
 
       replaceGoal(savedGoal?.item_id ?? itemId, savedGoal?.target_quantity ?? null);
-      status.value = remove ? "Goal removed." : expectedQuantity === null ? "Goal added." : "Goal updated.";
 
       await closeEditor(remove ? undefined : savedGoal.item_id);
     } catch (error) {
@@ -342,7 +339,6 @@
         return;
       }
 
-      status.value = "";
       confirmingRemoval.value = false;
 
       if (error instanceof WantedItemConflict) {
@@ -404,7 +400,6 @@
 
       if (!saving.value) {
         editing.value = false;
-        status.value = "";
       }
 
       async function refreshGoals() {
@@ -504,7 +499,6 @@
       </button>
     </header>
 
-    <p class="wanted-status" role="status">{{ status }}</p>
     <div v-if="loadError" class="wanted-heading">
       <p role="alert">
         {{ goalsLoaded ? "Could not refresh goals. Showing the last saved list." : "Could not load wanted items." }}
@@ -544,6 +538,9 @@
                   >
                     #{{ itemId }}
                   </small>
+                  <small v-if="wantedSeasonalLabel(itemId)" class="wanted-search-note">
+                    {{ wantedSeasonalLabel(itemId) }}
+                  </small>
                   <small v-if="targetsByItem.has(itemId)" class="wanted-search-note">Already wanted</small>
                 </span>
               </button>
@@ -553,7 +550,12 @@
         <template v-else>
           <div class="wanted-editor-item">
             <CachedImage :src="itemIcon(selectedItemId)" alt="" width="32" height="32" />
-            <h3 id="wanted-editor-item">{{ itemName(selectedItemId) }}</h3>
+            <h3 id="wanted-editor-item">
+              {{ itemName(selectedItemId) }}
+              <small v-if="wantedSeasonalLabel(selectedItemId)" class="wanted-search-note">
+                {{ wantedSeasonalLabel(selectedItemId) }}
+              </small>
+            </h3>
           </div>
           <div class="wanted-editor-quantity">
             <label for="wanted-quantity">Total quantity wanted</label>
@@ -623,14 +625,8 @@
       </p>
       <p v-if="!goals.length && !editing" class="wanted-note">Add an item and set how many your group wants to own.</p>
       <template v-if="goals.length">
-        <p class="wanted-note">
-          {{
-            countsAvailable
-              ? "Based on synced items from group members and shared storage."
-              : groupStore.syncError
-                ? "Synced item counts are temporarily unavailable."
-                : "Loading synced item counts…"
-          }}
+        <p v-if="!countsAvailable" class="wanted-note">
+          {{ groupStore.syncError ? "Synced item counts are temporarily unavailable." : "Loading synced item counts…" }}
         </p>
         <p v-if="loadingRecipes && hasMissingGoals" class="wanted-note" role="status">Loading recipes…</p>
         <div v-else-if="recipeLoadError && hasMissingGoals" class="wanted-heading">
@@ -645,6 +641,9 @@
                 <CachedImage :src="itemIcon(goal.item_id)" alt="" width="32" height="32" />
                 <div class="wanted-goal-item">
                   <strong>{{ goal.name }}</strong>
+                  <small v-if="wantedSeasonalLabel(goal.item_id)" class="wanted-search-note">
+                    {{ wantedSeasonalLabel(goal.item_id) }}
+                  </small>
                   <div class="wanted-note">
                     <template v-if="goal.owned !== undefined">{{ goal.owned.toLocaleString() }} owned / </template
                     >{{ goal.target_quantity.toLocaleString() }} wanted

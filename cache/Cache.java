@@ -23,11 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class Cache {
@@ -60,7 +58,7 @@ public class Cache {
     if (cmd.hasOption("items")) {
       ItemManager items = new ItemManager(store);
       items.load();
-      Set<Integer> legacyItems = loadLegacyItems(store);
+      Map<Integer, String> gameValNames = loadGameValNames(store);
       Map<Integer, List<Integer>> alternativeRunes = loadAlternativeRunes(store);
       Map<Integer, Map<String, Object>> data = new TreeMap<>();
       for (ItemDefinition item : items.getItems()) {
@@ -73,8 +71,12 @@ public class Cache {
         if (item.params != null && Integer.valueOf(1).equals(item.params.get(LAST_MAN_STANDING_PARAM))) {
           values.put("lastManStanding", true);
         }
-        if (legacyItems.contains(item.id)) {
-          values.put("legacy", true);
+        String gameValName = gameValNames.get(item.id);
+        if (gameValName != null) {
+          values.put("gameVal", gameValName);
+          if (gameValName.endsWith("_legacy")) {
+            values.put("legacy", true);
+          }
         }
         if (alternativeRunes.containsKey(item.id)) {
           values.put("alternativeRunes", alternativeRunes.get(item.id));
@@ -126,17 +128,15 @@ public class Cache {
     return store;
   }
 
-  private static Set<Integer> loadLegacyItems(Store store) throws IOException {
+  private static Map<Integer, String> loadGameValNames(Store store) throws IOException {
     GameValLoader loader = new GameValLoader();
     Archive archive = store.getIndex(IndexType.GAMEVALS).getArchive(GameValLoader.ITEMS);
-    Set<Integer> legacyItems = new HashSet<>();
+    Map<Integer, String> names = new HashMap<>();
     for (FSFile file : archive.getFiles(store.getStorage().loadArchive(archive)).getFiles()) {
       String name = loader.load(GameValLoader.ITEMS, file.getFileId(), file.getContents()).getName();
-      if (name.endsWith("_legacy")) {
-        legacyItems.add(file.getFileId());
-      }
+      names.put(file.getFileId(), name);
     }
-    return legacyItems;
+    return names;
   }
 
   private static Map<Integer, List<Integer>> loadAlternativeRunes(Store store) throws IOException {

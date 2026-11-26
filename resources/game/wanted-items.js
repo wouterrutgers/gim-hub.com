@@ -1,5 +1,5 @@
 import { itemQuantityBreakdown } from "./member";
-import { equivalents, unavailable } from "./wanted-items.json";
+import { equivalents, seasonal, unavailable } from "./wanted-items.json";
 
 const variants = new Map(
   Object.entries(equivalents).flatMap(function mapVariants([itemId, itemVariants]) {
@@ -10,6 +10,11 @@ const variants = new Map(
 );
 const excludedMembers = new Set();
 const unavailableItems = new Set(unavailable);
+const seasonalLabels = { deadman: "Deadman only", leagues: "Leagues item" };
+
+export function wantedSeasonalLabel(itemId) {
+  return seasonalLabels[seasonal[itemId]];
+}
 
 export function isWantedCatalogueItem(itemId, item) {
   return !item.lastManStanding && !unavailableItems.has(itemId);

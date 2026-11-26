@@ -3,6 +3,7 @@
 use App\Http\Controllers\GroupActivityController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupMemberController;
+use App\Http\Controllers\GroupWantedItemController;
 use App\Http\Controllers\MemberPreferencesController;
 use App\Http\Controllers\UnauthedController;
 use App\Http\Middleware\AuthenticateGroup;
@@ -26,6 +27,9 @@ Route::middleware(AuthenticateGroup::class)->prefix('group/{group}')->group(func
     Route::get('/activity/player/{member}', [GroupActivityController::class, 'player'])->whereNumber('member');
     Route::put('/update-member-color', [GroupMemberController::class, 'updateMemberColor']);
     Route::get('/get-group-data', [GroupMemberController::class, 'getGroupData']);
+    Route::get('/wanted-items', [GroupWantedItemController::class, 'index']);
+    Route::put('/wanted-items', [GroupWantedItemController::class, 'update']);
+    Route::delete('/wanted-items/{item}', [GroupWantedItemController::class, 'destroy'])->whereNumber('item');
     Route::get('/get-skill-data', [GroupMemberController::class, 'getSkillData']);
     Route::get('/collection-log', [GroupMemberController::class, 'getCollectionLog']);
     Route::get('/am-i-logged-in', [GroupMemberController::class, 'amILoggedIn']);

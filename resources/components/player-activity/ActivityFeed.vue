@@ -1,5 +1,6 @@
 <script setup>
   import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
+  import { isRecentActivitySession } from "../../game/activity";
   import { useApiStore } from "../../stores/api";
   import { useActivityStore } from "../../stores/activity";
   import { useGroupStore } from "../../stores/group";
@@ -81,6 +82,18 @@
   const filteredEntries = computed(function filterEntries() {
     return activityStore.entries.filter(matches);
   });
+  const timelineRows = computed(function orderTimelineRows() {
+    const recent = [];
+    const history = [];
+
+    for (const entry of filteredEntries.value) {
+      const recentSession = isRecentActivitySession(entry, timestamp.value);
+      const rows = recentSession ? recent : history;
+      rows.push({ entry, recentSession });
+    }
+
+    return [...recent, ...history];
+  });
 
   function periodLabel(period) {
     const date = new Date(period.started_at);
@@ -127,7 +140,7 @@
     { flush: "post" },
   );
 
-  watch(filteredEntries, async function preserveReadingPosition(_entries, previous) {
+  watch(timelineRows, async function preserveReadingPosition(rows, previous) {
     const timeline = scroller.value;
 
     if (!timeline || previous.length === 0) {
@@ -142,11 +155,22 @@
     }
 
     const { top, bottom } = timeline.getBoundingClientRect();
-    const anchor = [...timeline.querySelectorAll("[data-entry-id]")].find(function visible(element) {
-      const bounds = element.getBoundingClientRect();
+    const previousSections = new Map(previous.map(({ entry, recentSession }) => [entry.id, recentSession]));
+    const currentSections = new Map(rows.map(({ entry, recentSession }) => [entry.id, recentSession]));
+    let firstVisible;
+    const anchor =
+      [...timeline.querySelectorAll("[data-entry-id]")].find(function staysInSection(element) {
+        const bounds = element.getBoundingClientRect();
 
-      return bounds.bottom >= top && bounds.top <= bottom;
-    });
+        if (bounds.bottom < top || bounds.top > bottom) {
+          return false;
+        }
+
+        firstVisible ??= element;
+        const identifier = Number(element.dataset.entryId);
+
+        return currentSections.get(identifier) === previousSections.get(identifier);
+      }) ?? firstVisible;
 
     if (!anchor) {
       return;
@@ -308,7 +332,7 @@
       <p v-else-if="filteredEntries.length === 0 && !activityStore.olderCursor" class="activity-empty">
         {{ activityStore.entries.length === 0 ? "No activity yet." : "No activity matches these filters." }}
       </p>
-      <ActivityTimeline :entries="filteredEntries" :members="members" :timestamp="timestamp" />
+      <ActivityTimeline :rows="timelineRows" :members="members" :timestamp="timestamp" />
       <p v-if="activityStore.loadingOlder" class="activity-empty" role="status">Loading earlier activity…</p>
       <button
         v-if="activityStore.olderError"

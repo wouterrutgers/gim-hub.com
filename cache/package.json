@@ -6,8 +6,7 @@
   "author": "",
   "main": "index.js",
   "scripts": {
-    "update": "node update.js && node item-tags/build-item-tags.js",
-    "update:wiki": "node update.js --wiki-only && node item-tags/build-item-tags.js"
+    "update": "node update.js && node item-tags/build-item-tags.js"
   },
   "dependencies": {
     "async": "^3.2.6",

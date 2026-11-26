@@ -2,9 +2,11 @@ package net.runelite.cache;
 
 import com.google.gson.Gson;
 import net.runelite.cache.definitions.ItemDefinition;
+import net.runelite.cache.definitions.loaders.GameValLoader;
 import net.runelite.cache.definitions.loaders.ModelLoader;
 import net.runelite.cache.definitions.providers.ModelProvider;
 import net.runelite.cache.fs.Archive;
+import net.runelite.cache.fs.FSFile;
 import net.runelite.cache.fs.Index;
 import net.runelite.cache.fs.Store;
 import net.runelite.cache.item.ItemSpriteFactory;
@@ -20,12 +22,18 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class Cache {
+  private static final int LAST_MAN_STANDING_PARAM = 403;
+  private static final int MULTIRUNES_TABLE = 91;
+
   public static void main(String[] args) throws IOException {
     Options options = new Options();
 
@@ -52,6 +60,8 @@ public class Cache {
     if (cmd.hasOption("items")) {
       ItemManager items = new ItemManager(store);
       items.load();
+      Set<Integer> legacyItems = loadLegacyItems(store);
+      Map<Integer, List<Integer>> alternativeRunes = loadAlternativeRunes(store);
       Map<Integer, Map<String, Object>> data = new TreeMap<>();
       for (ItemDefinition item : items.getItems()) {
         Map<String, Object> values = new LinkedHashMap<>();
@@ -60,6 +70,15 @@ public class Cache {
         values.put("cost", item.cost);
         values.put("countCo", item.countCo);
         values.put("countObj", item.countObj);
+        if (item.params != null && Integer.valueOf(1).equals(item.params.get(LAST_MAN_STANDING_PARAM))) {
+          values.put("lastManStanding", true);
+        }
+        if (legacyItems.contains(item.id)) {
+          values.put("legacy", true);
+        }
+        if (alternativeRunes.containsKey(item.id)) {
+          values.put("alternativeRunes", alternativeRunes.get(item.id));
+        }
         data.put(item.id, values);
       }
       try (Writer writer = Files.newBufferedWriter(new File(cmd.getOptionValue("items")).toPath(), StandardCharsets.UTF_8)) {
@@ -105,6 +124,39 @@ public class Cache {
     Store store = new Store(new File(cache));
     store.load();
     return store;
+  }
+
+  private static Set<Integer> loadLegacyItems(Store store) throws IOException {
+    GameValLoader loader = new GameValLoader();
+    Archive archive = store.getIndex(IndexType.GAMEVALS).getArchive(GameValLoader.ITEMS);
+    Set<Integer> legacyItems = new HashSet<>();
+    for (FSFile file : archive.getFiles(store.getStorage().loadArchive(archive)).getFiles()) {
+      String name = loader.load(GameValLoader.ITEMS, file.getFileId(), file.getContents()).getName();
+      if (name.endsWith("_legacy")) {
+        legacyItems.add(file.getFileId());
+      }
+    }
+    return legacyItems;
+  }
+
+  private static Map<Integer, List<Integer>> loadAlternativeRunes(Store store) throws IOException {
+    DBRowManager rows = new DBRowManager(store);
+    rows.load();
+    Map<Integer, List<Integer>> alternatives = new HashMap<>();
+    for (var row : rows.getRows()) {
+      if (row.getTableId() != MULTIRUNES_TABLE) {
+        continue;
+      }
+      Object[][] columns = row.getColumnValues();
+      int baseRune = (int) columns[0][0];
+      List<Integer> runes = new ArrayList<>();
+      // Each tuple holds a combination rune and the other rune it supplies.
+      for (int index = 0; index < columns[1].length; index += 2) {
+        runes.add((int) columns[1][index]);
+      }
+      alternatives.put(baseRune, runes);
+    }
+    return alternatives;
   }
 
   private static void dumpItemModelImages(Store store, File outputDir, List<Integer> itemIds) throws IOException {

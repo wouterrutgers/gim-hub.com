@@ -10,7 +10,7 @@ class MemberUpdates
     {
         static::properties($member, $data);
 
-        if (! empty($data['shared_bank'])) {
+        if (isset($data['shared_bank'])) {
             $sharedMember = Member::firstOrCreate([
                 'group_id' => $member->group_id,
                 'name' => Member::SHARED_MEMBER,

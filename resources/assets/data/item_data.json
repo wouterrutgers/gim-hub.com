@@ -60781,73 +60781,85 @@
     "name": "Shark",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20393": {
     "name": "Prayer potion(4)",
     "highalch": 240,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20394": {
     "name": "Prayer potion(3)",
     "highalch": 180,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20395": {
     "name": "Prayer potion(2)",
     "highalch": 120,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20396": {
     "name": "Prayer potion(1)",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20397": {
     "name": "Spear",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20401": {
     "name": "Yew shortbow",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20402": {
     "name": "Rune scimitar",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20403": {
     "name": "Maple shortbow",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20405": {
     "name": "Abyssal whip",
     "highalch": 450,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20406": {
     "name": "Dragon scimitar",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20407": {
     "name": "Dragon dagger",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20408": {
     "name": "Dark bow",
@@ -60858,91 +60870,106 @@
         "id": 11235,
         "quantity": 1
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "20415": {
     "name": "Adamant platebody",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20416": {
     "name": "Adamant platelegs",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20417": {
     "name": "Blue d'hide body",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20418": {
     "name": "Blue d'hide chaps",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20421": {
     "name": "Rune platebody",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20422": {
     "name": "Rune platelegs",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20423": {
     "name": "Black d'hide body",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20424": {
     "name": "Black d'hide chaps",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20425": {
     "name": "Mystic robe top",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20426": {
     "name": "Mystic robe bottom",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20428": {
     "name": "Dragon chainbody",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20429": {
     "name": "Dragon platelegs",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20430": {
     "name": "Ancient magicks tablet",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20431": {
     "name": "Ancient staff",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20433": {
     "name": "Evil chicken feet",
@@ -61200,31 +61227,36 @@
     "name": "Catalytic rune pack",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20524": {
     "name": "Elemental rune pack",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20525": {
     "name": "Adamant arrow pack",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20526": {
     "name": "Bloody key",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20527": {
     "name": "Survival token",
     "highalch": 0,
     "alchable": false,
     "mapping": null,
+    "lastManStanding": true,
     "stacks": [
       [
         2,
@@ -61320,151 +61352,176 @@
     "name": "Monkfish",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20548": {
     "name": "Super energy(4)",
     "highalch": 96,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20549": {
     "name": "Super energy(3)",
     "highalch": 72,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20550": {
     "name": "Super energy(2)",
     "highalch": 48,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20551": {
     "name": "Super energy(1)",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20552": {
     "name": "Rune battleaxe",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20553": {
     "name": "Beginner wand",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20554": {
     "name": "Toktz-xil-ak",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20555": {
     "name": "Rune 2h sword",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20556": {
     "name": "Apprentice wand",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20557": {
     "name": "Granite maul",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20558": {
     "name": "Magic shortbow",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20559": {
     "name": "Dragon 2h sword",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20560": {
     "name": "Master wand",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20561": {
     "name": "Adamant full helm",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20562": {
     "name": "Mystic hat",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20563": {
     "name": "Proselyte sallet",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20564": {
     "name": "Proselyte hauberk",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20565": {
     "name": "Proselyte cuisse",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20566": {
     "name": "Red d'hide body",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20567": {
     "name": "Red d'hide chaps",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20568": {
     "name": "Splitbark helm",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20571": {
     "name": "Warrior helm",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20572": {
     "name": "Archer helm",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20573": {
     "name": "Farseer helm",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20574": {
     "name": "Infinity top",
@@ -61475,7 +61532,8 @@
         "id": 6916,
         "quantity": 1
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "20575": {
     "name": "Infinity bottoms",
@@ -61486,79 +61544,92 @@
         "id": 6924,
         "quantity": 1
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "20576": {
     "name": "3rd Age robe top",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20577": {
     "name": "3rd Age robe",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20578": {
     "name": "Climbing boots",
     "highalch": 150,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20579": {
     "name": "Mystic boots",
     "highalch": 150,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20580": {
     "name": "Snakeskin boots",
     "highalch": 150,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20581": {
     "name": "Mithril gloves",
     "highalch": 210,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20582": {
     "name": "Adamant gloves",
     "highalch": 330,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20583": {
     "name": "Rune gloves",
     "highalch": 450,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20584": {
     "name": "Amulet of accuracy",
     "highalch": 210,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20585": {
     "name": "Amulet of power",
     "highalch": 330,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20586": {
     "name": "Amulet of glory",
     "highalch": 450,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20587": {
     "name": "Rope",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20590": {
     "name": "Stale baguette",
@@ -61570,7 +61641,8 @@
     "name": "Armadyl godsword",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20594": {
     "name": "Bank filler",
@@ -61588,13 +61660,15 @@
     "name": "Ahrim's robetop",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20599": {
     "name": "Ahrim's robeskirt",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20600": {
     "name": "Rune arrow",
@@ -61654,13 +61728,15 @@
     "name": "Rune arrow pack",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20608": {
     "name": "Bloodier key",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20609": {
     "name": "Fairy enchantment",
@@ -62341,13 +62417,15 @@
     "name": "Dragon claws",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20785": {
     "name": "Dragon warhammer",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "20786": {
     "name": "Ring of wealth (i5)",
@@ -64095,19 +64173,22 @@
     "name": "Elder maul",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "21206": {
     "name": "Dragon shortsword",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "21207": {
     "name": "Dragon thrownaxe",
     "highalch": 1,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "21208": {
     "name": "Invitation list",
@@ -72215,163 +72296,190 @@
     "name": "Cooked karambwan",
     "highalch": 150,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23543": {
     "name": "Super combat potion(4)",
     "highalch": 96,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23545": {
     "name": "Super combat potion(3)",
     "highalch": 72,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23547": {
     "name": "Super combat potion(2)",
     "highalch": 48,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23549": {
     "name": "Super combat potion(1)",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23551": {
     "name": "Ranging potion(4)",
     "highalch": 96,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23553": {
     "name": "Ranging potion(3)",
     "highalch": 72,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23555": {
     "name": "Ranging potion(2)",
     "highalch": 48,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23557": {
     "name": "Ranging potion(1)",
     "highalch": 86,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23559": {
     "name": "Sanfew serum(4)",
     "highalch": 96,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23561": {
     "name": "Sanfew serum(3)",
     "highalch": 72,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23563": {
     "name": "Sanfew serum(2)",
     "highalch": 48,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23565": {
     "name": "Sanfew serum(1)",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23567": {
     "name": "Super restore(4)",
     "highalch": 96,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23569": {
     "name": "Super restore(3)",
     "highalch": 72,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23571": {
     "name": "Super restore(2)",
     "highalch": 48,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23573": {
     "name": "Super restore(1)",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23575": {
     "name": "Saradomin brew(4)",
     "highalch": 96,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23577": {
     "name": "Saradomin brew(3)",
     "highalch": 72,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23579": {
     "name": "Saradomin brew(2)",
     "highalch": 48,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23581": {
     "name": "Saradomin brew(1)",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23583": {
     "name": "Stamina potion(4)",
     "highalch": 240,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23585": {
     "name": "Stamina potion(3)",
     "highalch": 180,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23587": {
     "name": "Stamina potion(2)",
     "highalch": 120,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23589": {
     "name": "Stamina potion(1)",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23591": {
     "name": "Helm of Neitiznot",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23593": {
     "name": "Barrows gloves",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23595": {
     "name": "Berserker ring (i)",
@@ -72382,91 +72490,106 @@
         "id": 6737,
         "quantity": 1
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "23597": {
     "name": "Dragon defender",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23599": {
     "name": "Spirit shield",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23601": {
     "name": "Rune crossbow",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23603": {
     "name": "Imbued Guthix cape",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23605": {
     "name": "Imbued Zamorak cape",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23607": {
     "name": "Imbued Saradomin cape",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23609": {
     "name": "Ava's accumulator",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23611": {
     "name": "Armadyl crossbow",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23613": {
     "name": "Staff of the Dead",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23615": {
     "name": "Vesta's longsword",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23617": {
     "name": "Zuriel's staff",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23619": {
     "name": "Morrigan's javelin",
     "highalch": 1,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23620": {
     "name": "Statius's warhammer",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23622": {
     "name": "Infernal cape",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23624": {
     "name": "Seers ring (i)",
@@ -72477,109 +72600,127 @@
         "id": 6731,
         "quantity": 1
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "23626": {
     "name": "Kodai wand",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23628": {
     "name": "Ghrazi rapier",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23630": {
     "name": "Heavy ballista",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23632": {
     "name": "Karil's leathertop",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23633": {
     "name": "Dharok's platelegs",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23634": {
     "name": "Torag's platelegs",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23635": {
     "name": "Verac's plateskirt",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23636": {
     "name": "Verac's helm",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23637": {
     "name": "Torag's helm",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23638": {
     "name": "Guthan's helm",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23639": {
     "name": "Dharok's helm",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23640": {
     "name": "Amulet of fury",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23642": {
     "name": "Blessed spirit shield",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23644": {
     "name": "Eternal boots",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23646": {
     "name": "Bandos tassets",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23648": {
     "name": "Dragon javelin",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23649": {
     "name": "Diamond bolts (e)",
     "highalch": 0,
     "alchable": true,
     "mapping": null,
+    "lastManStanding": true,
     "stacks": [
       [
         2,
@@ -72603,25 +72744,29 @@
     "name": "Rune pouch",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23652": {
     "name": "Mage's book",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23653": {
     "name": "Ahrim's staff",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23654": {
     "name": "Occult necklace",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "23655": {
     "name": "Crystal seedling",
@@ -76280,7 +76425,8 @@
     "name": "Mithril seeds",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "24535": {
     "name": "Magic egg ball",
@@ -79978,25 +80124,29 @@
     "name": "Dharok's platebody",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "25516": {
     "name": "Dharok's greataxe",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "25517": {
     "name": "Volatile Nightmare staff",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "25518": {
     "name": "Ancestral hat",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "25519": {
     "name": "JalRek-Jad",
@@ -86495,181 +86645,211 @@
     "name": "Dragon knife",
     "highalch": 3,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27158": {
     "name": "Mystic robe top (dark)",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27159": {
     "name": "Mystic robe bottom (dark)",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27160": {
     "name": "Mystic robe top (light)",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27161": {
     "name": "Mystic robe bottom (light)",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27162": {
     "name": "Wizard boots",
     "highalch": 3,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27163": {
     "name": "Guthix halo",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27164": {
     "name": "Zamorak halo",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27165": {
     "name": "Saradomin halo",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27166": {
     "name": "Ghostly hood",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27167": {
     "name": "Ghostly robe",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27168": {
     "name": "Ghostly robe",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27169": {
     "name": "Berserker helm",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27170": {
     "name": "Infinity boots",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27171": {
     "name": "Tormented bracelet",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27172": {
     "name": "Necklace of anguish",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27173": {
     "name": "Amulet of torture",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27174": {
     "name": "Elder chaos top",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27175": {
     "name": "Elder chaos robe",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27176": {
     "name": "Elder chaos hood",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27177": {
     "name": "Fremennik kilt",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27178": {
     "name": "Spiked manacles",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27179": {
     "name": "Rangers' tunic",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27180": {
     "name": "Guthix chaps",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27181": {
     "name": "Zamorak chaps",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27182": {
     "name": "Saradomin chaps",
     "highalch": 6,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27183": {
     "name": "3rd Age mage hat",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27184": {
     "name": "Ancient godsword",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27185": {
     "name": "Rune defender",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27186": {
     "name": "Zaryte crossbow",
     "highalch": 24,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27187": {
     "name": "Bow of Faerdhinen (c)",
@@ -86680,37 +86860,43 @@
         "id": 25862,
         "quantity": 1
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "27188": {
     "name": "Light ballista",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27189": {
     "name": "Verac's flail",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27190": {
     "name": "Verac's brassard",
     "highalch": 30,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27191": {
     "name": "Unholy book",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27192": {
     "name": "Opal dragon bolts (e)",
     "highalch": 0,
     "alchable": true,
     "mapping": null,
+    "lastManStanding": true,
     "stacks": [
       [
         2,
@@ -86734,55 +86920,64 @@
     "name": "Ancestral robe top",
     "highalch": 33,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27194": {
     "name": "Ancestral robe bottom",
     "highalch": 33,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27195": {
     "name": "Inquisitor's great helm",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27196": {
     "name": "Inquisitor's hauberk",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27197": {
     "name": "Inquisitor's plateskirt",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27198": {
     "name": "Inquisitor's mace",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27199": {
     "name": "3rd Age range top",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27200": {
     "name": "3rd Age range legs",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27201": {
     "name": "3rd Age range coif",
     "highalch": 12,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27202": {
     "name": "Menaphite remedy(4)",
@@ -87260,7 +87455,8 @@
     "name": "Tome of Fire",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27359": {
     "name": "Masori assembler (broken)",
@@ -89373,13 +89569,15 @@
     "name": "Voidwaker",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27870": {
     "name": "Lightbearer",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "27871": {
     "name": "Giant bronze dagger",
@@ -96026,79 +96224,92 @@
     "name": "Eclipse Moon chestplate",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29841": {
     "name": "Eclipse Moon tassets",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29842": {
     "name": "Eclipse Moon helm",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29843": {
     "name": "Blue Moon chestplate",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29844": {
     "name": "Blue Moon tassets",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29845": {
     "name": "Blue Moon helm",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29846": {
     "name": "Blood Moon chestplate",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29847": {
     "name": "Blood Moon tassets",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29848": {
     "name": "Blood Moon helm",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29849": {
     "name": "Blue Moon spear",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29850": {
     "name": "Dual macuahuitl",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29851": {
     "name": "Eclipse atlatl",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "29852": {
     "name": "Atlatl dart",
     "highalch": 60,
     "alchable": true,
     "mapping": null,
+    "lastManStanding": true,
     "stacks": [
       [
         2,
@@ -108852,7 +109063,8 @@
         "id": 23956,
         "quantity": 3
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "33168": {
     "name": "Crystal legs",
@@ -108863,7 +109075,8 @@
         "id": 23956,
         "quantity": 2
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "33170": {
     "name": "Crystal helm",
@@ -108874,103 +109087,120 @@
         "id": 23956,
         "quantity": 1
       }
-    ]
+    ],
+    "lastManStanding": true
   },
   "33172": {
     "name": "Avernic treads (max)",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33174": {
     "name": "Osmumten's fang",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33176": {
     "name": "Elidinis' ward (f)",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33178": {
     "name": "Noxious halberd",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33180": {
     "name": "Magus ring",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33182": {
     "name": "Ultor ring",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33184": {
     "name": "Purging staff",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33186": {
     "name": "Dragonfire shield",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33188": {
     "name": "Twisted buckler",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33190": {
     "name": "Masori body (f)",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33192": {
     "name": "Masori chaps (f)",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33194": {
     "name": "Torva platelegs",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33196": {
     "name": "Virtus robe top",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33198": {
     "name": "Virtus robe bottom",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33200": {
     "name": "Burning claws",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33202": {
     "name": "Aranea boots",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33204": {
     "name": "Bronze cannon",
@@ -109788,13 +110018,15 @@
     "name": "Dragon crossbow",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33462": {
     "name": "Oathplate helm",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33464": {
     "name": "Void melee helm (l) (broken)",
@@ -110567,7 +110799,8 @@
     "name": "Vial",
     "highalch": 1,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "33701": {
     "name": "Squire's journal",
@@ -113525,49 +113758,57 @@
     "name": "Karil's leatherskirt",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34611": {
     "name": "Bandos chestplate",
     "highalch": 18,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34613": {
     "name": "Fighter torso",
     "highalch": 0,
     "alchable": false,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34615": {
     "name": "Black d'hide shield",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34617": {
     "name": "Torva full helm",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34619": {
     "name": "Abyssal tentacle",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34621": {
     "name": "Dragon boots",
     "highalch": 60,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34623": {
     "name": "Anglerfish",
     "highalch": 1,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34625": {
     "name": "Imbued ancient max cape",
@@ -113627,7 +113868,8 @@
     "name": "Supply crate",
     "highalch": 0,
     "alchable": true,
-    "mapping": null
+    "mapping": null,
+    "lastManStanding": true
   },
   "34644": {
     "name": "Pete's vouchers",

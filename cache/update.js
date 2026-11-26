@@ -1,8 +1,10 @@
 const childProcess = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
+const images = require("./images");
 const fetchWiki = require("./wiki");
 const { buildMapLabels } = require("./map-labels");
+const { buildWantedItems } = require("./wanted-items");
 
 const osrsCacheDirectory = path.resolve("./cache/cache");
 
@@ -33,6 +35,8 @@ const SITE_PATHS = (() => {
   return {
     FILES: {
       itemData: path.resolve(assets, "data/item_data.json"),
+      wantedItems: path.resolve(resources, "game/wanted-items.json"),
+      wantedRecipes: path.resolve(assets, "data/wanted_recipes.json"),
       mapMetadata: path.resolve(assets, "data/map.json"),
       mapIconAtlas: path.resolve(assets, "map-misc/map_icons.webp"),
       questMapping: path.resolve(resources, "js/quests/mapping.json"),
@@ -228,6 +232,7 @@ async function buildItemDataJson() {
         highalch: Math.floor(item.cost * 0.6),
         alchable: true,
         mapping: item.mapping,
+        ...(item.lastManStanding ? { lastManStanding: true } : {}),
       };
 
       const stackedList = [];
@@ -279,7 +284,18 @@ async function buildItemDataJson() {
   console.log(`${itemsMadeNonAlchable} items were updated to be unalchable`);
   fs.writeFileSync("./item_data.json", JSON.stringify(includedItems, null, 2));
 
-  return allIncludedItemIds;
+  const itemVariations = JSON.parse(
+    fs.readFileSync(path.join(RUNELITE_PATHS.DIRS.client, "src/main/resources/item_variations.json"), "utf8"),
+  );
+  const wantedData = await buildWantedItems(includedItems, items, itemVariations);
+
+  return { allIncludedItemIds, wantedData };
+}
+
+async function publishItemData({ wantedItems, recipes }) {
+  await retry(() => fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData));
+  fs.writeFileSync(SITE_PATHS.FILES.wantedItems, JSON.stringify(wantedItems, null, 2) + "\n");
+  fs.writeFileSync(SITE_PATHS.FILES.wantedRecipes, JSON.stringify(recipes) + "\n");
 }
 
 async function dumpItemImages(allIncludedItemIds) {
@@ -362,8 +378,6 @@ async function moveResults() {
     }
     return { files, destination };
   });
-
-  await retry(() => fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData));
 
   for (const { files, destination } of replacements) {
     await retry(() => fs.rmSync(destination, { recursive: true, force: true }));
@@ -500,18 +514,11 @@ async function dumpBossIcons() {
 
 (async () => {
   try {
-    const wikiOnly = process.argv.includes("--wiki-only");
     await dumpItemData();
-    const allIncludedItemIds = await buildItemDataJson();
+    const { allIncludedItemIds, wantedData } = await buildItemDataJson();
     await dumpQuestMapping();
     await dumpBossIcons();
 
-    if (wikiOnly) {
-      fs.copyFileSync("./item_data.json", SITE_PATHS.FILES.itemData);
-      return;
-    }
-
-    const images = require("./images");
     await dumpItemImages(allIncludedItemIds);
     const xteasLocation = await convertXteasToRuneliteFormat();
     const mapDump = dumpMapData(xteasLocation);
@@ -535,6 +542,7 @@ async function dumpBossIcons() {
 
     await buildMapJsonAndIconAtlas();
     await moveResults();
+    await publishItemData(wantedData);
   } finally {
     execGitCleanInRunelite();
   }

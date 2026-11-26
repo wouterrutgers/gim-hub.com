@@ -13,4 +13,9 @@ class Group extends Model
     {
         return $this->hasMany(Member::class);
     }
+
+    public function wantedItems(): HasMany
+    {
+        return $this->hasMany(GroupWantedItem::class);
+    }
 }

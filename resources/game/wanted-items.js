@@ -17,7 +17,7 @@ export function wantedSeasonalLabel(itemId) {
 }
 
 export function isWantedCatalogueItem(itemId, item) {
-  return !item.lastManStanding && !unavailableItems.has(itemId);
+  return !item.lastManStanding && !unavailableItems.has(itemId) && !Object.hasOwn(seasonal, itemId);
 }
 
 export function wantedItemId(itemId) {

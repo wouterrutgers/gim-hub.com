@@ -35,6 +35,7 @@ class GroupWantedItemController extends Controller
 
         if (! isset($catalogue[$goal['item_id']])
             || ($catalogue[$goal['item_id']]['lastManStanding'] ?? false)
+            || isset($wantedItemData['seasonal'][$goal['item_id']])
             || in_array($goal['item_id'], $wantedItemData['unavailable'])) {
             throw ValidationException::withMessages(['item_id' => 'Choose an item from the catalogue.']);
         }

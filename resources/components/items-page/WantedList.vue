@@ -538,9 +538,6 @@
                   >
                     #{{ itemId }}
                   </small>
-                  <small v-if="wantedSeasonalLabel(itemId)" class="wanted-search-note">
-                    {{ wantedSeasonalLabel(itemId) }}
-                  </small>
                   <small v-if="targetsByItem.has(itemId)" class="wanted-search-note">Already wanted</small>
                 </span>
               </button>

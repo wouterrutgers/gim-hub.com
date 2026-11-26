@@ -86,12 +86,8 @@ export function activityPresentation(entry, gameData) {
   };
 }
 
-export function activityIsLive(entry, timestamp) {
+export function isRecentActivitySession(entry, timestamp) {
   const minutes = entry.type === "boss" ? 30 : 15;
 
-  return (
-    !entry.is_weekly &&
-    ["xp", "boss", "diary", "collection"].includes(entry.type) &&
-    timestamp - entry.occurred_at < minutes * 60_000
-  );
+  return !entry.is_weekly && ["xp", "boss"].includes(entry.type) && timestamp - entry.occurred_at < minutes * 60_000;
 }

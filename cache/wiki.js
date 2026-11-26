@@ -6,7 +6,7 @@ async function fetchWiki(url) {
   });
 
   if (!response.ok) {
-    throw new Error(`Unable to fetch ${url}: HTTP ${response.status}`);
+    throw Object.assign(new Error(`Unable to fetch ${url}: HTTP ${response.status}`), { status: response.status });
   }
 
   const body = await response.text();
@@ -15,7 +15,7 @@ async function fetchWiki(url) {
     const data = JSON.parse(body);
 
     if (data.error) {
-      throw new Error(`Wiki API error: ${data.error.info}`);
+      throw new Error(`Wiki API error: ${data.error.info ?? data.error}`);
     }
   }
 

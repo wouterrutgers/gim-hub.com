@@ -11,6 +11,7 @@ import {
   updateMemberColor,
 } from "./requests/group-members";
 import { fetchSkillData } from "./requests/skill-data";
+import { fetchWantedItems, removeWantedItem, saveWantedItem } from "./requests/wanted-items";
 
 export default class LiveClient {
   baseURL = __API_URL__;
@@ -33,6 +34,18 @@ export default class LiveClient {
 
   fetchGroupData(fromTime) {
     return fetchGroupData({ baseURL: this.baseURL, credentials: this.credentials, fromTime });
+  }
+
+  fetchWantedItems() {
+    return fetchWantedItems({ baseURL: this.baseURL, credentials: this.credentials });
+  }
+
+  saveWantedItem(goal) {
+    return saveWantedItem({ baseURL: this.baseURL, credentials: this.credentials, goal });
+  }
+
+  removeWantedItem(itemId, expectedQuantity) {
+    return removeWantedItem({ baseURL: this.baseURL, credentials: this.credentials, itemId, expectedQuantity });
   }
 
   fetchSkillData(range) {

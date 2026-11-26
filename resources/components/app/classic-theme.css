@@ -96,7 +96,7 @@
     .items-summary small,
     .items-filter-label,
     .items-filter-caption,
-    .items-results-heading h2 > span,
+    .items-result-count,
     .item-selection-hint,
     .settings-description,
     .history-page-settings-notice,
@@ -108,7 +108,6 @@
     .activity-feed-period,
     .activity-date,
     .activity-time,
-    .activity-live,
     .activity-unlock,
     .activity-card-details,
     .activity-detail-range,
@@ -179,7 +178,11 @@
   text-decoration: underline;
 }
 
-:root.classic-mode :is(.items-summary, .items-page-member-filter-clipbox) {
+:root.classic-mode .items-summary {
+  --items-summary-caption-offset: 0;
+}
+
+:root.classic-mode .items-page-member-filter-clipbox {
   box-sizing: border-box;
   padding: 10px 12px;
   border: 1px solid var(--border);
@@ -388,8 +391,7 @@
     --classic-border-button: none;
   }
 
-  :root.classic-mode
-    :is(.rsborder, .rsborder-tiny, .men-button, .select-container, .items-summary, .items-page-member-filter-clipbox),
+  :root.classic-mode :is(.rsborder, .rsborder-tiny, .men-button, .select-container, .items-page-member-filter-clipbox),
   :root.classic-mode #app-navigation,
   :root.classic-mode #app-navigation-nav .app-link,
   :root.classic-mode #group-switcher-toggle,

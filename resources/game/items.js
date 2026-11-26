@@ -8,6 +8,7 @@ const itemDataSchema = z
       name: z.string(),
       highalch: z.uint32(),
       alchable: z.boolean(),
+      lastManStanding: z.literal(true).optional(),
       stacks: z
         .array(z.tuple([z.uint32(), z.uint32()]))
         .min(1)

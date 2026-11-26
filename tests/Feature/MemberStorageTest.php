@@ -141,17 +141,19 @@ it('merges portable deltas while giving full snapshots precedence', function ():
     expect($member->getProperty('tackle_box')->value)->toBe([313, 0, 314, 23, 307, 1]);
 });
 
-it('writes shared bank contents separately and preserves them for empty snapshots', function (): void {
+it('preserves omitted shared bank contents and clears them for an empty snapshot', function (): void {
     $member = storageMember();
 
     $this->withHeader('Authorization', 'storage-token')->postJson('/api/group/storage-group/update-group-member', [
         'name' => $member->name, 'bank' => [995, 100], 'shared_bank' => [4151, 2],
     ])->assertSuccessful();
+    $shared = Member::where('group_id', '=', $member->group_id)->where('name', '=', Member::SHARED_MEMBER)->sole();
+    $this->postJson('/api/group/storage-group/update-group-member', ['name' => $member->name])->assertSuccessful();
+    expect($shared->getProperty('bank')->value)->toBe([4151, 2]);
+
     $this->postJson('/api/group/storage-group/update-group-member', [
         'name' => $member->name, 'shared_bank' => [],
     ])->assertSuccessful();
-
-    $shared = Member::where('group_id', '=', $member->group_id)->where('name', '=', Member::SHARED_MEMBER)->sole();
     expect($member->load('properties')->getProperty('bank')->value)->toBe([995, 100]);
-    expect($shared->getProperty('bank')->value)->toBe([4151, 2]);
+    expect($shared->load('properties')->getProperty('bank')->value)->toBe([]);
 });

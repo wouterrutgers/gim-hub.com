@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { h, nextTick } from "vue";
+import { createMemoryHistory, createRouter } from "vue-router";
 import { describe, expect, it, vi } from "vite-plus/test";
 import { createTestApplication, createTestPinia } from "./vue-test-helpers";
 import PlayerInventory from "../../components/player-panel/PlayerInventory.vue";
@@ -65,11 +66,12 @@ describe("storage UI", function storageInterface() {
     document.body.append(container);
     const app = createTestApplication(component);
     app.use(pinia);
-    app.component("RouterLink", {
-      render() {
-        return h("a", this.$slots.default());
-      },
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [{ path: "/group/items", component: ItemsPage }],
     });
+    await router.push("/group/items");
+    app.use(router);
     app.mount(container);
     await vi.advanceTimersByTimeAsync(0);
     await nextTick();
@@ -186,6 +188,8 @@ describe("storage UI", function storageInterface() {
     expect(container.querySelector(".stash-units")).toBeNull();
     expect(container.querySelectorAll(".bank-item").length).toBe(2);
 
+    container.querySelector("#items-page-filters-button").click();
+    await nextTick();
     const storageFilter = container.querySelectorAll("select")[1];
     storageFilter.value = "STASH units";
     storageFilter.dispatchEvent(new Event("change", { bubbles: true }));

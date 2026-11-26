@@ -18,6 +18,7 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
   const state = shallowRef(createGroupState());
   const collectionLogsLoaded = ref(false);
   const loaded = ref(false);
+  const syncError = ref(false);
 
   const items = computed(function getItems() {
     return state.value.items;
@@ -74,6 +75,7 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
       state.value = createGroupState();
       collectionLogsLoaded.value = false;
       loaded.value = false;
+      syncError.value = false;
 
       if (!client) {
         return;
@@ -100,8 +102,13 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
           const { updates, colorUpdates, newestTimestamp } = mapGroupResponse(response, gameDataStore.gameData.quests);
           state.value = updateGroupState(state.value, updates, { colorUpdates });
           loaded.value = true;
+          syncError.value = false;
           validUpTo = newestTimestamp;
         } catch (reason) {
+          if (!cancelled) {
+            syncError.value = true;
+          }
+
           console.error("Failed to get group data", reason);
         }
 
@@ -138,6 +145,7 @@ export const useGroupStore = defineStore("group", function createGroupStore() {
     experienceDrops,
     collectionLogsLoaded,
     loaded,
+    syncError,
     updateMemberColors,
     updateMemberOrder,
     refreshCollectionLogs,

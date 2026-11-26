@@ -18,6 +18,11 @@ export default class DemoClient {
   demoData;
   gameData;
   gameDataPromise;
+  wantedItems = new Map([
+    [11889, { item_id: 11889, target_quantity: 5 }],
+    [20714, { item_id: 20714, target_quantity: 1 }],
+    [29801, { item_id: 29801, target_quantity: 5 }],
+  ]);
 
   constructor() {
     populateSkillDataFromRoster(this.state);
@@ -122,6 +127,30 @@ export default class DemoClient {
 
     this.state.sharedBank = sharedBank;
 
+    for (const [itemID, quantity] of [
+      [11889, 3],
+      [20714, 0],
+      [20716, 1],
+      [29801, 1],
+      [29804, 0],
+      [19553, 1],
+      [29799, 0],
+      [33534, 2],
+      [6571, 1],
+    ]) {
+      for (const bank of this.state.banks.values()) {
+        bank.delete(itemID);
+      }
+
+      if (quantity > 0) {
+        sharedBank.set(itemID, { itemID, quantity });
+
+        continue;
+      }
+
+      sharedBank.delete(itemID);
+    }
+
     for (const member of this.state.roster) {
       if (member.id === 3) {
         continue;
@@ -151,6 +180,21 @@ export default class DemoClient {
     advanceActivity(this.state, members);
 
     return members;
+  }
+
+  async fetchWantedItems() {
+    return structuredClone([...this.wantedItems.values()]);
+  }
+
+  async saveWantedItem({ item_id, target_quantity }) {
+    const goal = { item_id, target_quantity };
+    this.wantedItems.set(item_id, goal);
+
+    return goal;
+  }
+
+  async removeWantedItem(itemId) {
+    this.wantedItems.delete(itemId);
   }
 
   async fetchSkillData(range) {

@@ -1,5 +1,6 @@
 <script setup>
   import { computed, nextTick, ref, watch } from "vue";
+  import { useRoute, useRouter } from "vue-router";
   import * as Member from "../../game/member";
   import { useGameDataStore } from "../../stores/game-data";
   import { useGroupStore } from "../../stores/group";
@@ -16,6 +17,7 @@
   import ItemBank from "./ItemBank.vue";
   import ItemPanel from "./ItemPanel.vue";
   import ItemsPageTutorialWindow from "./ItemsPageTutorialWindow.vue";
+  import WantedList from "./WantedList.vue";
   import "./items-page.css";
 
   const ItemSortCategories = [
@@ -32,6 +34,8 @@
   const gameDataStore = useGameDataStore();
   const groupStore = useGroupStore();
   const settingsStore = useSettingsStore();
+  const route = useRoute();
+  const router = useRouter();
 
   const [searchFilterUserString, setSearchFilterUserString] = useRememberedState({
     key: "search-filter",
@@ -51,6 +55,9 @@
   });
   const gearscapeExportStatus = ref("idle");
   const filtersExpanded = ref(false);
+  const wantedView = computed(function getWantedView() {
+    return route.query.view === "wanted";
+  });
   const selectedItemDetails = ref();
   const [selectedItemIdentifier, setSelectedItemIdentifier] = useRememberedState({
     key: "bank-selected-item",
@@ -163,7 +170,6 @@
 
   const activeFilterCount = computed(function countActiveFilters() {
     return [
-      Boolean(searchExpression.value),
       memberFilter.value.size > 0,
       sortCategory.value !== DEFAULT_SORT_CATEGORY,
       containerFilter.value !== DEFAULT_CONTAINER_FILTER,
@@ -356,6 +362,19 @@
     settingsStore.setPinnedItemIds([...newPinnedItems]);
   }
 
+  function openWanted() {
+    if (wantedView.value) {
+      return;
+    }
+
+    void router.push({ query: { ...route.query, view: "wanted" } });
+  }
+
+  function openBank() {
+    const { view: _view, ...query } = route.query;
+    void router.push({ query });
+  }
+
   function toggleMember(name) {
     const newMemberFilter = new Set(memberFilter.value);
 
@@ -424,8 +443,47 @@
     @close="closeTutorialModal"
   />
 
-  <LoadingScreen v-if="!groupStore.loaded" />
-  <div v-else-if="groupStore.items.size <= 0" id="items-page-no-items" class="rsborder rsbackground">
+  <header class="items-page-header">
+    <div class="items-view-toggle" role="group" aria-label="Items view">
+      <button
+        type="button"
+        class="men-button"
+        :class="{ active: !wantedView }"
+        :aria-pressed="!wantedView"
+        @click="openBank"
+      >
+        Group bank
+      </button>
+      <button
+        type="button"
+        class="men-button"
+        :class="{ active: wantedView }"
+        :aria-pressed="wantedView"
+        @click="openWanted"
+      >
+        Wanted
+      </button>
+    </div>
+    <div
+      v-if="!wantedView && groupStore.loaded && groupStore.items.size"
+      class="items-summary"
+      role="group"
+      aria-label="Item totals for current filters"
+    >
+      <div>
+        <span>GE</span>
+        <strong>{{ itemAggregates.totalGEPrice.toLocaleString() }} <small>gp</small></strong>
+      </div>
+      <div>
+        <span>High alch</span>
+        <strong>{{ itemAggregates.totalHighAlch.toLocaleString() }} <small>gp</small></strong>
+      </div>
+    </div>
+  </header>
+  <WantedList v-show="wantedView" :active="wantedView" />
+
+  <LoadingScreen v-if="!wantedView && !groupStore.loaded" />
+  <div v-else-if="!wantedView && groupStore.items.size <= 0" id="items-page-no-items" class="rsborder rsbackground">
     <h3>Your group has no recorded items!</h3>
     <p>
       Either no members have logged in with the plugin, or there is an issue. Please double check that the names in the
@@ -434,59 +492,55 @@
     </p>
   </div>
 
-  <template v-else>
+  <template v-else-if="!wantedView">
     <div class="items-toolbar">
-      <div class="items-summary" aria-label="Item totals for current filters">
-        <div>
-          <span>Grand Exchange value</span>
-          <strong>{{ itemAggregates.totalGEPrice.toLocaleString() }} <small>gp</small></strong>
-        </div>
-        <div>
-          <span>High alch value</span>
-          <strong>{{ itemAggregates.totalHighAlch.toLocaleString() }} <small>gp</small></strong>
-        </div>
-      </div>
-
       <div id="items-page-head">
-        <SearchElement
-          id="items-page-search"
-          placeholder="Search your group's items…"
-          :value="searchFilterUserString ?? ''"
-          :default-value="searchFilterUserString"
-          @change="setSearchFilterUserString"
-        />
-        <button
-          id="items-page-filters-button"
-          class="men-button"
-          type="button"
-          :aria-expanded="filtersExpanded"
-          aria-controls="items-page-filters"
-          @click="filtersExpanded = !filtersExpanded"
-        >
-          Filters{{ activeFilterCount ? ` (${activeFilterCount})` : "" }}
-          <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
-        </button>
-      </div>
-
-      <div id="items-page-filters" class="items-page-utility" :class="{ 'filters-expanded': filtersExpanded }">
-        <div class="items-filter-actions">
+        <div class="items-search-controls">
+          <SearchElement
+            id="items-page-search"
+            placeholder="Search your group's items…"
+            :value="searchFilterUserString ?? ''"
+            :default-value="searchFilterUserString"
+            @change="setSearchFilterUserString"
+          />
           <button
-            v-if="hasActiveFilters"
-            id="items-page-reset-filters-button"
+            id="items-page-filters-button"
             class="men-button"
-            data-tooltip="Reset all filters to default"
-            aria-label="Reset all filters to default"
-            @click="resetFilters"
+            type="button"
+            :aria-expanded="filtersExpanded"
+            aria-controls="items-page-filters"
+            @click="filtersExpanded = !filtersExpanded"
           >
-            <CachedImage alt="" src="/ui/1731-0.png" />
-            Reset
-          </button>
-          <button id="items-page-tutorial-button" class="men-button" @click="openTutorialModal()">
-            <CachedImage alt="" src="/ui/1094-0.png" />
-            Search help
+            Filters{{ activeFilterCount ? ` (${activeFilterCount})` : "" }}
+            <span class="chevron" :class="{ 'chevron-up': filtersExpanded }" aria-hidden="true" />
           </button>
         </div>
+        <div class="items-result-controls">
+          <span class="items-result-count">{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span>
+          <div class="items-view-toggle" role="group" aria-label="Item display">
+            <button
+              type="button"
+              class="men-button men-button-small"
+              :class="{ active: !settingsStore.showItemOwners }"
+              :aria-pressed="!settingsStore.showItemOwners"
+              @click="settingsStore.setShowItemOwners(false)"
+            >
+              Compact
+            </button>
+            <button
+              type="button"
+              class="men-button men-button-small"
+              :class="{ active: settingsStore.showItemOwners }"
+              :aria-pressed="settingsStore.showItemOwners"
+              @click="settingsStore.setShowItemOwners(true)"
+            >
+              Detailed
+            </button>
+          </div>
+        </div>
+      </div>
 
+      <div id="items-page-filters" class="items-page-utility" :hidden="!filtersExpanded">
         <div class="items-filter-fields">
           <label class="items-filter-label">
             Sort by
@@ -541,39 +595,31 @@
           </div>
         </div>
 
-        <div v-if="settingsStore.enableGearscapeExport" class="items-results-actions">
+        <div class="items-filter-actions">
           <button
+            v-if="hasActiveFilters"
+            id="items-page-reset-filters-button"
+            class="men-button"
+            data-tooltip="Reset all filters to default"
+            aria-label="Reset all filters to default"
+            @click="resetFilters"
+          >
+            <CachedImage alt="" src="/ui/1731-0.png" />
+            Reset
+          </button>
+          <button id="items-page-tutorial-button" class="men-button" @click="openTutorialModal()">
+            <CachedImage alt="" src="/ui/1094-0.png" />
+            Search help
+          </button>
+          <button
+            v-if="settingsStore.enableGearscapeExport"
             id="items-page-gearscape-export-button"
-            class="men-button men-button-small"
+            class="men-button"
             data-tooltip="Copy only the currently filtered items to the clipboard for importing into Gearscape"
             aria-label="Copy current items to clipboard for Gearscape"
             @click="copyItemsForGearscape"
           >
             {{ gearscapeExportLabel }}
-          </button>
-        </div>
-      </div>
-
-      <div class="items-results-heading">
-        <h2>Group bank <span>{{ itemAggregates.filteredItems.length.toLocaleString() }} items</span></h2>
-        <div class="items-view-toggle" role="group" aria-label="Item display">
-          <button
-            type="button"
-            class="men-button men-button-small"
-            :class="{ active: !settingsStore.showItemOwners }"
-            :aria-pressed="!settingsStore.showItemOwners"
-            @click="settingsStore.setShowItemOwners(false)"
-          >
-            Compact
-          </button>
-          <button
-            type="button"
-            class="men-button men-button-small"
-            :class="{ active: settingsStore.showItemOwners }"
-            :aria-pressed="settingsStore.showItemOwners"
-            @click="settingsStore.setShowItemOwners(true)"
-          >
-            Detailed
           </button>
         </div>
       </div>

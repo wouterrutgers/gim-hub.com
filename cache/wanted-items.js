@@ -141,19 +141,26 @@ async function loadItemResolver(items, canonicalItemIds) {
   const wikiPages = new Map();
   const wikiSections = new Map();
   const wikiImages = new Map();
+  const removedItemIds = new Set();
+  const currentItemIds = new Set();
   for (const [id, item] of Object.entries(items)) {
     indexItem(names, normalize(item.name), Number(id));
   }
 
   for await (const row of readBucket(
     "infobox_item",
-    "'page_name','page_name_sub','item_id','image'",
+    "'page_name','page_name_sub','item_id','image','removal_date'",
     "'page_name_sub','asc'",
   )) {
     const title = normalize(row.page_name);
     for (const value of row.item_id ?? []) {
       const id = Number(value);
       if (Number.isSafeInteger(id) && id > 0) {
+        if (row.removal_date) {
+          removedItemIds.add(id);
+        } else {
+          currentItemIds.add(id);
+        }
         indexItem(wikiPages, title, id);
         indexItem(wikiSections, normalize(row.page_name_sub), id);
         for (const image of row.image ?? []) {
@@ -210,7 +217,7 @@ async function loadItemResolver(items, canonicalItemIds) {
     return available.length === 1 ? available[0] : available.sort((first, second) => first - second);
   }
 
-  return { resolveItem, seasonal };
+  return { resolveItem, seasonal, removedItemIds: removedItemIds.difference(currentItemIds) };
 }
 
 function parseQuantity(quantity) {
@@ -227,7 +234,7 @@ async function buildRecipes(items, cacheItems, itemStates) {
   const canonicalItemIds = new Map(
     Object.entries(itemStates).flatMap(([baseId, variants]) => variants.map((id) => [id, Number(baseId)])),
   );
-  const { resolveItem, seasonal } = await loadItemResolver(items, canonicalItemIds);
+  const { resolveItem, seasonal, removedItemIds } = await loadItemResolver(items, canonicalItemIds);
   const recipes = {};
   const signatures = new Set();
   const unresolved = new Set();
@@ -326,7 +333,7 @@ async function buildRecipes(items, cacheItems, itemStates) {
   console.info(
     `Imported ${signatures.size} recipes for ${Object.keys(recipes).length} items. Skipped ${invalid} unusable records.`,
   );
-  return { recipes, seasonal };
+  return { recipes, seasonal, removedItemIds };
 }
 
 async function buildWantedItems(catalogue, cacheItems, itemVariations) {
@@ -334,7 +341,8 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   const items = {};
   const unavailable = [];
   for (const [itemId, item] of Object.entries(catalogue)) {
-    if (cacheItems[itemId].legacy) {
+    const { gameVal, legacy } = cacheItems[itemId];
+    if (legacy || /^(?:(?:cert_)?beta_|placeholder_)/.test(gameVal ?? "")) {
       unavailable.push(Number(itemId));
     } else if (!item.lastManStanding) {
       items[itemId] = item;
@@ -342,7 +350,9 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   }
 
   const itemStates = buildItemStateVariants(items, cacheItems, itemVariations);
-  const { recipes, seasonal } = await buildRecipes(items, cacheItems, itemStates);
+  const { recipes, seasonal, removedItemIds } = await buildRecipes(items, cacheItems, itemStates);
+  unavailable.push(...[...removedItemIds].filter((itemId) => items[itemId]));
+  unavailable.sort((first, second) => first - second);
   const equivalents = buildEquivalents(items, itemVariations, recipes, itemStates);
   return { wantedItems: { equivalents, unavailable, seasonal }, recipes };
 }

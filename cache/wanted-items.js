@@ -1,6 +1,7 @@
 const { setTimeout } = require("node:timers/promises");
 const fetchWiki = require("./wiki");
 const { loadSeasonalItemPages } = require("./seasonal-items");
+const { loadUnavailableItemIds } = require("./unavailable-items");
 
 const BUCKET_PAGE_SIZE = 500;
 const ELEMENTAL_COMBINATION_RUNES = {
@@ -339,22 +340,38 @@ async function buildRecipes(items, cacheItems, itemStates) {
 async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   console.info("\nStep: Build wanted-items.json");
   const items = {};
-  const unavailable = [];
+  const unavailable = new Set();
   for (const [itemId, item] of Object.entries(catalogue)) {
     const { gameVal, legacy } = cacheItems[itemId];
     if (legacy || /^(?:(?:cert_)?beta_|placeholder_)/.test(gameVal ?? "")) {
-      unavailable.push(Number(itemId));
+      unavailable.add(Number(itemId));
     } else if (!item.lastManStanding) {
       items[itemId] = item;
     }
   }
 
   const itemStates = buildItemStateVariants(items, cacheItems, itemVariations);
-  const { recipes, seasonal, removedItemIds } = await buildRecipes(items, cacheItems, itemStates);
-  unavailable.push(...[...removedItemIds].filter((itemId) => items[itemId]));
-  unavailable.sort((first, second) => first - second);
+  const [wikiUnavailable, { recipes, seasonal, removedItemIds }] = await Promise.all([
+    loadUnavailableItemIds(items),
+    buildRecipes(items, cacheItems, itemStates),
+  ]);
+  for (const itemId of wikiUnavailable.union(removedItemIds)) {
+    if (!items[itemId]) {
+      continue;
+    }
+
+    unavailable.add(itemId);
+
+    for (const variantId of itemStates[itemId] ?? []) {
+      if (cacheItems[variantId].gameVal.endsWith("_dummy")) {
+        unavailable.add(variantId);
+      }
+    }
+  }
+
   const equivalents = buildEquivalents(items, itemVariations, recipes, itemStates);
-  return { wantedItems: { equivalents, unavailable, seasonal }, recipes };
+  const sortedUnavailable = [...unavailable].sort((first, second) => first - second);
+  return { wantedItems: { equivalents, unavailable: sortedUnavailable, seasonal }, recipes };
 }
 
 module.exports = { buildWantedItems };

@@ -256,6 +256,12 @@
   justify-content: center;
 }
 
+.collection-log-page-item-highlighted {
+  border-radius: 4px;
+  background: var(--surface-raised);
+  outline: 2px solid var(--orange);
+}
+
 /*
  * object-fit, object-position, width, and height all work together to center
  * the image and make it as large as possible. This is used since the image

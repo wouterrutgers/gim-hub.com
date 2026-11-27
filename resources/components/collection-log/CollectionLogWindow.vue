@@ -4,6 +4,7 @@
   import { useGameDataStore } from "../../stores/game-data";
   import { useGroupStore } from "../../stores/group";
   import * as CollectionLog from "../../game/collection-log";
+  import { itemWikiUrl } from "../../game/items";
   import CachedImage from "../cached-image/CachedImage.vue";
   import PlayerIcon from "../player-icon/PlayerIcon.vue";
   import { serializeTooltip } from "../tooltip/tooltip-data";
@@ -14,6 +15,7 @@
 
   const props = defineProps({
     player: { type: String, required: true },
+    initialItemId: { type: Number, default: undefined },
   });
   const emit = defineEmits(["close"]);
 
@@ -21,8 +23,12 @@
   const gameDataStore = useGameDataStore();
   const groupStore = useGroupStore();
 
-  const currentTabName = ref("Bosses");
-  const pageIndex = ref(0);
+  const initialPage =
+    props.initialItemId === undefined
+      ? undefined
+      : gameDataStore.gameData.collectionLogInfo.itemPages.get(props.initialItemId);
+  const currentTabName = ref(initialPage?.tab ?? "Bosses");
+  const pageIndex = ref(initialPage?.index ?? 0);
   const hiscores = ref();
   const hiscoresError = ref();
 
@@ -304,7 +310,9 @@
                     : undefined
                 "
                 class="collection-log-page-item"
-                :href="`https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=${item.id}`"
+                :class="{ 'collection-log-page-item-highlighted': item.id === props.initialItemId }"
+                :data-initial-focus="item.id === props.initialItemId || undefined"
+                :href="itemWikiUrl(item.id)"
                 target="_blank"
                 rel="noopener noreferrer"
               >

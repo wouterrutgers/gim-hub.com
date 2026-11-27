@@ -104,7 +104,9 @@
       opener = document.activeElement;
       toggleBackgroundInert(true);
       await nextTick();
-      dialog.value.querySelector(focusableSelector).focus();
+      const initialFocus =
+        dialog.value.querySelector("[data-initial-focus]") ?? dialog.value.querySelector(focusableSelector);
+      initialFocus.focus();
     },
     { immediate: true },
   );

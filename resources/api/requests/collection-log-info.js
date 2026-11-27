@@ -1,8 +1,7 @@
 import * as z from "zod/v4";
-import { canonicalizeCollectionLogItemId } from "../../game/collection-log";
+import { canonicalizeCollectionLogItemId, tabNames } from "../../game/collection-log";
 import { fetchVersionedData } from "../fetch-versioned-data";
 
-const tabsById = ["Bosses", "Raids", "Clues", "Minigames", "Other"];
 const collectionLogInfoSchema = z
   .array(
     z.object({
@@ -10,7 +9,7 @@ const collectionLogInfoSchema = z
         .number()
         .int()
         .min(0)
-        .max(tabsById.length - 1),
+        .max(tabNames.length - 1),
       pages: z.array(
         z.object({
           name: z.string(),
@@ -28,24 +27,28 @@ export async function fetchCollectionLogInfo() {
 }
 
 function mapCollectionLogInfo(data) {
-  const seenItemIds = new Set();
+  const itemPages = new Map();
   const tabs = new Map();
 
   for (const { tabId, pages } of data) {
-    const mappedPages = pages.map(function mapPage({ name, items }) {
+    const tab = tabNames[tabId];
+    const mappedPages = pages.map(function mapPage({ name, items }, index) {
+      const page = { tab, index };
       const itemIds = items.map(function mapItem({ id }) {
-        return canonicalizeCollectionLogItemId(id);
-      });
+        const itemId = canonicalizeCollectionLogItemId(id);
 
-      itemIds.forEach(function rememberItem(itemId) {
-        seenItemIds.add(itemId);
+        if (!itemPages.has(itemId)) {
+          itemPages.set(itemId, page);
+        }
+
+        return itemId;
       });
 
       return { name, items: itemIds };
     });
 
-    tabs.set(tabsById[tabId], mappedPages);
+    tabs.set(tab, mappedPages);
   }
 
-  return { uniqueSlots: seenItemIds.size, tabs };
+  return { uniqueSlots: itemPages.size, tabs, itemPages };
 }

@@ -14,6 +14,7 @@
   import { createPlayerActivityHistory } from "../../stores/player-activity";
   import { useGameDataStore } from "../../stores/game-data";
   import { activityComparisonRows, playerPeriodIsLoaded, playerPeriodStatus } from "../../game/activity-comparison";
+  import { itemWikiUrl } from "../../game/items";
   import CachedImage from "../cached-image/CachedImage.vue";
 
   const props = defineProps({
@@ -21,6 +22,7 @@
     filterEntry: { type: Function, required: true },
     periodLabel: { type: Function, required: true },
   });
+  const emit = defineEmits(["open-collection-log"]);
   const gameDataStore = useGameDataStore();
   const active = ref(true);
   const sources = shallowRef(new Map());
@@ -248,14 +250,16 @@
           </tr>
           <tr v-for="row in rows" :key="row.key" :class="{ 'activity-comparison-total': row.key === 'xp:total' }">
             <th scope="row">
-              <CachedImage
-                v-if="row.icon"
-                class="activity-detail-icon"
-                :src="row.icon"
-                alt=""
-                width="16"
-                height="16"
-              />{{ row.label }}
+              <CachedImage v-if="row.icon" class="activity-detail-icon" :src="row.icon" alt="" width="16" height="16" />
+              <a
+                v-if="row.itemId !== undefined && row.collectionItemId === undefined"
+                :href="itemWikiUrl(row.itemId)"
+                target="_blank"
+                rel="noopener noreferrer"
+                :aria-label="`${row.label}, open on the OSRS Wiki`"
+                >{{ row.label }}</a
+              >
+              <template v-else>{{ row.label }}</template>
             </th>
             <td
               v-for="player in props.players"
@@ -268,9 +272,19 @@
                   : undefined
               "
             >
-              {{
+              <button
+                v-if="row.collectionItemId !== undefined && row.values.has(player.identifier)"
+                class="activity-item-action"
+                type="button"
+                aria-haspopup="dialog"
+                :aria-label="`${row.values.get(player.identifier)}, open ${row.label} in ${player.name}'s collection log`"
+                @click="emit('open-collection-log', player.name, row.collectionItemId)"
+              >
+                {{ row.values.get(player.identifier) }}
+              </button>
+              <template v-else>{{
                 row.values.get(player.identifier) ?? playerPeriodStatus(sources.get(player.identifier).history, period)
-              }}
+              }}</template>
             </td>
           </tr>
         </template>

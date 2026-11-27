@@ -87,6 +87,8 @@ export function activityComparisonRows(entries, gameData) {
       category: "Drops",
       label: `${gameData.items?.get(data.item_id)?.name ?? `Item ${data.item_id}`} (${data.source})`,
       icon: presentation.icon,
+      itemId: presentation.itemId,
+      collectionItemId: presentation.collectionItemId,
       value: `${data.quantity.toLocaleString()}${data.new_collection_item ? " (new collection item)" : ""}`,
     });
   }

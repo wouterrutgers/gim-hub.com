@@ -1,5 +1,6 @@
 import { skillIcons } from "./skill";
 import { getBossIcon } from "./boss-icons";
+import { canonicalizeCollectionLogItemId } from "./collection-log";
 
 export function activityWeek(timestamp) {
   const date = new Date(timestamp);
@@ -73,8 +74,11 @@ export function activityPresentation(entry, gameData) {
   }
 
   const item = gameData.items?.get(data.item_id);
+  const collectionItemId = canonicalizeCollectionLogItemId(data.item_id);
 
   return {
+    itemId: data.item_id,
+    collectionItemId: gameData.collectionLogInfo?.itemPages.has(collectionItemId) ? collectionItemId : undefined,
     icon: `/item-icons/${data.item_id}.webp`,
     text: `${data.new_collection_item && data.source === "Collection log" ? "Unlocked" : "Received"} ${data.quantity > 1 ? `${data.quantity.toLocaleString()} × ` : ""}${item?.name ?? `Item ${data.item_id}`}`,
     details: [

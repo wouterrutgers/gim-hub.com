@@ -71,6 +71,10 @@ export async function fetchItemTags() {
   return itemTagsSchema.parseAsync(data);
 }
 
+export function itemWikiUrl(itemId) {
+  return `https://oldschool.runescape.wiki/w/Special:Lookup?type=item&id=${itemId}`;
+}
+
 export function quantityColor(quantity) {
   if (quantity >= 10_000_000) {
     return "#00ff00";

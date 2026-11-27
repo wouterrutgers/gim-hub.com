@@ -247,6 +247,13 @@
   font-weight: 600;
 }
 
+.activity-item-action {
+  display: inline-block;
+  min-block-size: 24px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .activity-unlock {
   display: block;
   color: var(--muted);

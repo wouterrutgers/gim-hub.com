@@ -5,6 +5,9 @@
   import { useActivityStore } from "../../stores/activity";
   import { useGroupStore } from "../../stores/group";
   import { useSettingsStore } from "../../stores/settings";
+  import CollectionLogWindow from "../collection-log/CollectionLogWindow.vue";
+  import Modal from "../modal/Modal.vue";
+  import { useModal } from "../modal/use-modal";
   import ActivityTimeline from "./ActivityTimeline.vue";
   import ActivityComparison from "./ActivityComparison.vue";
   import "./activity-feed.css";
@@ -14,6 +17,7 @@
   const activityStore = useActivityStore();
   const groupStore = useGroupStore();
   const settingsStore = useSettingsStore();
+  const { open, componentProps, openModal, closeModal } = useModal();
   const scroller = ref();
   const earlierActivityMarker = ref();
   const comparisonScroller = ref();
@@ -30,6 +34,10 @@
   onBeforeUnmount(function stopClock() {
     window.clearInterval(timer);
   });
+
+  function openCollectionLog(player, initialItemId) {
+    openModal({ player, initialItemId });
+  }
 
   const members = computed(function getMembers() {
     return new Map(
@@ -221,6 +229,7 @@
     :class="{ 'activity-comparison-feed': comparing }"
     aria-label="Group activity"
   >
+    <Modal :open="open" :component="CollectionLogWindow" :component-props="componentProps" @close="closeModal" />
     <header class="activity-feed-header">
       <div>
         <component :is="props.collapsible ? 'h2' : 'h1'">Group activity</component>
@@ -318,6 +327,7 @@
         :players="comparisonPlayers"
         :filter-entry="matches"
         :period-label="periodLabel"
+        @open-collection-log="openCollectionLog"
       />
     </KeepAlive>
     <div
@@ -332,7 +342,12 @@
       <p v-else-if="filteredEntries.length === 0 && !activityStore.olderCursor" class="activity-empty">
         {{ activityStore.entries.length === 0 ? "No activity yet." : "No activity matches these filters." }}
       </p>
-      <ActivityTimeline :rows="timelineRows" :members="members" :timestamp="timestamp" />
+      <ActivityTimeline
+        :rows="timelineRows"
+        :members="members"
+        :timestamp="timestamp"
+        @open-collection-log="openCollectionLog"
+      />
       <p v-if="activityStore.loadingOlder" class="activity-empty" role="status">Loading earlier activity…</p>
       <button
         v-if="activityStore.olderError"

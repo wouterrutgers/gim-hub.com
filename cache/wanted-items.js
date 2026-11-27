@@ -43,19 +43,45 @@ function buildItemStateVariants(items, cacheItems, itemVariations) {
   return equivalents;
 }
 
-function buildEquivalents(items, itemVariations, recipes, itemStates) {
+function buildEquivalents({ items, cacheItems, itemVariations, recipes, itemStates, excludedItems, cosmeticBases }) {
   const equivalents = structuredClone(itemStates);
-  for (const [baseId, ...variantIds] of Object.values(itemVariations)) {
-    const base = items[baseId];
-    if (!base) {
-      continue;
+  const families = Object.values(itemVariations);
+  const canonicalIds = new Map(
+    Object.entries(equivalents).flatMap(([baseId, variants]) => variants.map((id) => [id, Number(baseId)])),
+  );
+
+  function addEquivalent(baseId, itemId) {
+    const canonicalId = canonicalIds.get(baseId) ?? baseId;
+    const variantId = canonicalIds.get(itemId) ?? itemId;
+    if (canonicalId === variantId) {
+      return;
     }
 
+    const variants = [variantId, ...(equivalents[variantId] ?? [])];
+    (equivalents[canonicalId] ??= []).push(...variants);
+    for (const id of variants) {
+      canonicalIds.set(id, canonicalId);
+    }
+    delete equivalents[variantId];
+  }
+
+  for (const [baseId, ...variantIds] of families) {
+    const base = items[baseId];
     const family = new Set([baseId, ...variantIds]);
+    const recolourBaseId = [...family].find(
+      (id) =>
+        items[id] &&
+        !excludedItems.has(id) &&
+        /^(?:crystal_(?:helmet|chestplate|platelegs)|serpentine_helm)$/.test(cacheItems[id].gameVal),
+    );
     for (const variantId of variantIds) {
       const variant = items[variantId];
+      if (!base || !variant) {
+        continue;
+      }
+
       const equivalentNames = [`${base.name} (or)`, `${base.name} (s)`, `${base.name} (empty)`];
-      if (variant && equivalentNames.includes(variant.name) && (mapsTo(variant, baseId) || mapsTo(base, variantId))) {
+      if (equivalentNames.includes(variant.name) && (mapsTo(variant, baseId) || mapsTo(base, variantId))) {
         const recipeBases = new Set(
           (recipes[variantId] ?? []).flatMap(({ ingredients }) =>
             ingredients
@@ -66,26 +92,146 @@ function buildEquivalents(items, itemVariations, recipes, itemStates) {
         if (recipeBases.size > 1) {
           continue;
         }
-        const canonicalId = recipeBases.values().next().value ?? baseId;
-        (equivalents[canonicalId] ??= []).push(variantId);
+        addEquivalent(recipeBases.values().next().value ?? baseId, variantId);
       }
+    }
+
+    for (const itemId of family) {
+      const item = items[itemId];
+      if (!item || excludedItems.has(itemId)) {
+        continue;
+      }
+
+      if (recolourBaseId && cacheItems[itemId].gameVal?.startsWith(`${cacheItems[recolourBaseId].gameVal}_`)) {
+        addEquivalent(recolourBaseId, itemId);
+        continue;
+      }
+
+      if (item.mapping?.length !== 1) {
+        continue;
+      }
+
+      const [{ id: unchargedId, quantity }] = item.mapping;
+      if (quantity !== 1 || !family.has(unchargedId) || excludedItems.has(unchargedId)) {
+        continue;
+      }
+
+      const unchargedName = items[unchargedId]?.name;
+      const inactiveName = `${item.name.replace(/ \(c\)$/, "")} (inactive)`;
+      if (![inactiveName, `${item.name} (uncharged)`, `${item.name} (empty)`].includes(unchargedName)) {
+        continue;
+      }
+
+      addEquivalent(unchargedId, itemId);
     }
   }
 
-  for (const [itemId, item] of Object.entries(items)) {
+  for (const [id, item] of Object.entries(items)) {
+    const itemId = Number(id);
     const etched = item.mapping?.find(
       ({ id, quantity }) => quantity === 1 && items[id]?.name === `Etched ${item.name.toLowerCase()}`,
     );
     if (etched) {
-      (equivalents[itemId] ??= []).push(etched.id);
+      addEquivalent(itemId, etched.id);
+    }
+
+    const cosmeticBaseNames = cosmeticBases.get(normalize(item.name));
+    if (excludedItems.has(itemId) || canonicalIds.has(itemId) || (!cosmeticBaseNames && !item.mapping?.length)) {
+      continue;
+    }
+
+    const recipeBases = new Set(
+      (recipes[itemId] ?? []).flatMap(function cosmeticRecipeBases({ ingredients }) {
+        const usesCosmeticKit = ingredients.some(({ itemId }) => isCosmeticKit(items[itemId]));
+
+        return ingredients
+          .filter(
+            ({ itemId: baseId, quantity }) =>
+              quantity === 1 &&
+              baseId !== itemId &&
+              items[baseId] &&
+              !excludedItems.has(baseId) &&
+              !isCosmeticKit(items[baseId]) &&
+              (cosmeticBaseNames?.has(normalize(items[baseId].name)) || (usesCosmeticKit && mapsTo(item, baseId))),
+          )
+          .map(({ itemId }) => itemId);
+      }),
+    );
+    if (recipeBases.size !== 1) {
+      continue;
+    }
+
+    const baseId = recipeBases.values().next().value;
+    addEquivalent(baseId, itemId);
+
+    const itemState = /\s*\((?:uncharged|empty|l)\)\s*/g;
+    const name = item.name.replace(itemState, " ").trim();
+    const family = families.find((ids) => ids.includes(itemId));
+    for (const variantId of family ?? []) {
+      const variant = items[variantId];
+      if (
+        variant &&
+        !excludedItems.has(variantId) &&
+        !canonicalIds.has(variantId) &&
+        variant.name !== item.name &&
+        variant.name.replace(itemState, " ").trim() === name &&
+        (cosmeticBaseNames?.has(normalize(items[baseId].name)) || mapsTo(variant, baseId))
+      ) {
+        addEquivalent(baseId, variantId);
+      }
     }
   }
 
   return equivalents;
 }
 
+function isCosmeticKit(item) {
+  return /\b(?:ornament|colou?r) kit$/i.test(item?.name ?? "");
+}
+
 function mapsTo(item, itemId) {
   return item.mapping?.some(({ id, quantity }) => id === itemId && quantity === 1);
+}
+
+async function loadCosmeticBases() {
+  const url = new URL("https://oldschool.runescape.wiki/api.php");
+  url.search = new URLSearchParams({ action: "parse", page: "Ornament kit", prop: "wikitext", format: "json" });
+  const { parse } = JSON.parse(await fetchWiki(url.toString()));
+  const cosmeticBases = new Map();
+
+  for (const [table] of parse.wikitext["*"].matchAll(/^\{\|[\s\S]*?^\|\}/gm)) {
+    if (!/^!.*\bUsed on\s*$/m.test(table) || !/^!.*\bCreates\s*$/m.test(table)) {
+      continue;
+    }
+
+    for (const row of table.split(/^\|-.*$/m).slice(1)) {
+      const [usedOn, creates] = row
+        .split("\n")
+        .map((line) => [...line.matchAll(/\{\{plink[pt]?\|([^|{}\n]+)/gi)])
+        .filter((links) => links.length)
+        .slice(-2);
+      if (usedOn?.length !== 1 || creates?.length !== 1) {
+        continue;
+      }
+
+      const base = normalize(usedOn[0][1]);
+      const variant = normalize(creates[0][1]);
+      if (base === variant) {
+        continue;
+      }
+
+      if (!cosmeticBases.has(variant)) {
+        cosmeticBases.set(variant, new Set());
+      }
+      cosmeticBases.get(variant).add(base);
+    }
+  }
+
+  if (!cosmeticBases.size) {
+    throw new Error('No cosmetic item pairs found on the Wiki page "Ornament kit".');
+  }
+
+  return cosmeticBases;
 }
 
 async function* readBucket(bucket, fields, orderBy) {
@@ -351,9 +497,10 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   }
 
   const itemStates = buildItemStateVariants(items, cacheItems, itemVariations);
-  const [wikiUnavailable, { recipes, seasonal, removedItemIds }] = await Promise.all([
+  const [wikiUnavailable, { recipes, seasonal, removedItemIds }, cosmeticBases] = await Promise.all([
     loadUnavailableItemIds(items),
     buildRecipes(items, cacheItems, itemStates),
+    loadCosmeticBases(),
   ]);
   for (const itemId of wikiUnavailable.union(removedItemIds)) {
     if (!items[itemId]) {
@@ -369,7 +516,16 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
     }
   }
 
-  const equivalents = buildEquivalents(items, itemVariations, recipes, itemStates);
+  const excludedItems = unavailable.union(new Set(Object.keys(seasonal).map(Number)));
+  const equivalents = buildEquivalents({
+    items,
+    cacheItems,
+    itemVariations,
+    recipes,
+    itemStates,
+    excludedItems,
+    cosmeticBases,
+  });
   const sortedUnavailable = [...unavailable].sort((first, second) => first - second);
   return { wantedItems: { equivalents, unavailable: sortedUnavailable, seasonal }, recipes };
 }

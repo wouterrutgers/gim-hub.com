@@ -14,7 +14,7 @@ const items = new Map(
   [
     11889, 20714, 20716, 29801, 29804, 20366, 29799, 33534, 19553, 19541, 19501, 19493, 19496, 6571, 6573, 19529, 2357,
     1759, 564, 565, 566, 30843, 53, 52, 314, 10088, 20997, 577, 581, 1767, 4622, 13237, 13239, 31088, 31091, 31094,
-    31111, 31115, 5358, 5364, 5370, 6585, 6581, 4699, 554, 557, 1393, 1395,
+    31111, 31115, 5358, 5364, 5370, 6585, 6581, 4699, 554, 557, 1393, 1395, 26378, 26384, 28256, 22486, 22109,
   ].map(function catalogueItem(itemId) {
     return [itemId, itemData[itemId]];
   }),
@@ -111,6 +111,82 @@ it("adds an unowned item from the catalogue and updates its goal when shared sto
 
   expect(container.querySelector(".wanted-section").textContent).toContain("Completed");
   expect(container.querySelector(".wanted-goals").textContent).toContain("1 owned / 1 wanted");
+});
+
+it("finds one existing goal and counts all owned Bowfa colours and charge states", async function bowfaVariants() {
+  const container = await mount({
+    goals: [{ item_id: 25886, target_quantity: 5 }],
+    async fetchGameData() {
+      return {
+        items: new Map([25862, 25865, 25884, 25886, 25890].map((itemId) => [itemId, itemData[itemId]])),
+        quests: new Map(),
+      };
+    },
+    readGroupData() {
+      return [
+        { id: 1, name: "Alice", bank: [25884, 3, 25859, 1] },
+        { id: 2, name: "Bob", bank: [25865, 1] },
+        { id: 3, name: "@SHARED", bank: [25890, 1] },
+      ];
+    },
+  });
+
+  container.querySelector(".wanted-heading button").click();
+  await nextTick();
+  const search = container.querySelector("#wanted-search");
+  search.value = "bow of faerdhinen";
+  search.dispatchEvent(new Event("input"));
+  await nextTick();
+
+  const matches = container.querySelectorAll(".wanted-search-results button");
+  expect(matches).toHaveLength(1);
+  matches[0].click();
+  await nextTick();
+
+  expect(container.querySelector("#wanted-quantity").value).toBe("5");
+  expect(container.querySelector("#wanted-quantity-preview").textContent.trim()).toBe(
+    "5 already owned, 0 still needed.",
+  );
+  expect(container.querySelector(".wanted-section h3").textContent).toBe("Completed");
+});
+
+it("counts cosmetic Torva platebodies towards the goal and excludes damaged platebodies", async function torvaVariants() {
+  const container = await mount({
+    goals: [{ item_id: 26384, target_quantity: 5 }],
+    readGroupData() {
+      return [
+        { id: 1, name: "Alice", bank: [26384, 3, 26378, 1] },
+        { id: 2, name: "Bob", bank: [28256, 2] },
+      ];
+    },
+  });
+
+  expect(container.querySelector(".wanted-goal").textContent).toContain("5 owned / 5 wanted");
+  expect(container.querySelector(".wanted-section h3").textContent).toBe("Completed");
+});
+
+it("counts uncharged ornamented scythes towards a Scythe of Vitur goal", async function ornamentedScythes() {
+  const container = await mount({
+    goals: [{ item_id: 22486, target_quantity: 3 }],
+    readGroupData() {
+      return [{ id: 1, name: "Alice", bank: [25736, 1, 25738, 1, 25741, 1, 25742, 1] }];
+    },
+  });
+
+  expect(container.querySelector(".wanted-goal").textContent).toContain("3 owned / 3 wanted");
+  expect(container.querySelector(".wanted-section h3").textContent).toBe("Completed");
+});
+
+it("counts regular and protected Masori assemblers towards an Ava's assembler goal", async function masoriAssemblers() {
+  const container = await mount({
+    goals: [{ item_id: 22109, target_quantity: 2 }],
+    readGroupData() {
+      return [{ id: 1, name: "Alice", bank: [27374, 1, 27376, 1, 27372, 1] }];
+    },
+  });
+
+  expect(container.querySelector(".wanted-goal").textContent).toContain("2 owned / 2 wanted");
+  expect(container.querySelector(".wanted-section h3").textContent).toBe("Completed");
 });
 
 it("expands Rancour intermediates and uses shared substitutes only once", async function rancourInputs() {

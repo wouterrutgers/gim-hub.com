@@ -501,6 +501,7 @@
             placeholder="Search your group's items…"
             :value="searchFilterUserString ?? ''"
             :default-value="searchFilterUserString"
+            clearable
             @change="setSearchFilterUserString"
           />
           <button

@@ -1,3 +1,29 @@
+.search-element {
+  position: relative;
+}
+
 .search-element-input {
   width: 100%;
+}
+
+.search-element-input:has(+ .search-element-clear) {
+  padding-inline-end: 46px;
+}
+
+.search-element-clear {
+  position: absolute;
+  inset-block: 2px;
+  inset-inline-end: 2px;
+  min-inline-size: 38px;
+  border-radius: 2px;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  text-align: center;
+}
+
+.search-element-clear:hover,
+.search-element-clear:focus-visible {
+  background: var(--selected);
+  color: var(--text);
 }

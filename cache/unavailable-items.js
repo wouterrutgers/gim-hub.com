@@ -46,7 +46,7 @@ async function loadUnavailableItemIds(items) {
     }
   }
 
-  return { unavailable: unavailable.difference(ownable), ownable };
+  return unavailable.difference(ownable);
 }
 
 async function loadRestrictedItemPages() {

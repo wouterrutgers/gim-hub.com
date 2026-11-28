@@ -4,6 +4,7 @@ const { loadSeasonalItemPages } = require("./seasonal-items");
 const { loadRestrictedItemPages, loadUnavailableItemIds } = require("./unavailable-items");
 
 const BUCKET_PAGE_SIZE = 500;
+const MANUALLY_EXCLUDED_ITEMS = new Map([[617, "fake_coins"]]);
 const INTERFACE_GAMEVAL = /(?:^|_)skillguide_|^poh_.*_league_?\d|^league_\d+_(?:poh_|pool_)/;
 const ELEMENTAL_COMBINATION_RUNES = {
   554: [4694, 4697, 4699], // Fire: steam, smoke, lava
@@ -507,6 +508,7 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   for (const [itemId, item] of Object.entries(catalogue)) {
     const { gameVal = "", legacy, trackingPlaceholder, unbankable } = cacheItems[itemId];
     if (
+      MANUALLY_EXCLUDED_ITEMS.get(Number(itemId)) === gameVal ||
       legacy ||
       trackingPlaceholder ||
       /^(?:(?:cert_)?beta_|placeholder_|nosave_)/.test(gameVal) ||
@@ -519,7 +521,7 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   }
 
   const itemStates = buildItemStateVariants(items, cacheItems, itemVariations);
-  const [{ unavailable: wikiUnavailable, ownable }, wikiItems, cosmeticBases] = await Promise.all([
+  const [wikiUnavailable, wikiItems, cosmeticBases] = await Promise.all([
     loadUnavailableItemIds(items),
     buildRecipes(items, cacheItems, itemStates),
     loadCosmeticBases(),
@@ -538,7 +540,7 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
     }
   }
 
-  for (const itemId of wikiUnavailable.union(removedItemIds).union(restrictedItemIds.difference(ownable))) {
+  for (const itemId of wikiUnavailable.union(removedItemIds).union(restrictedItemIds)) {
     if (!items[itemId]) {
       continue;
     }

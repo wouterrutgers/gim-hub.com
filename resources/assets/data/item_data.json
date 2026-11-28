@@ -114430,7 +114430,7 @@
   "34808": {
     "name": "Communication cabbage",
     "highalch": 0,
-    "alchable": true,
+    "alchable": false,
     "mapping": null
   },
   "34810": {

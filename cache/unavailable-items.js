@@ -1,23 +1,19 @@
-const fetchWiki = require("./wiki");
+const { categoryMemberTitles, queryWiki } = require("./wiki");
 
 const WIKI_PAGES = ["Interface items", "Unobtainable items"];
+const RESTRICTED_CATEGORIES = ["Beta items", "Jagex moderator items"];
 const OWNABLE_SECTIONS = new Set(["Discontinued after 2013", "Have since been released", "Formerly noted items"]);
 const ITEM_TABLE = /^\{\|[^\n]*\n!(?:[^\n|]*\|)?[ \t]*ID(?: number)?[ \t]*\n([\s\S]*?)^\|\}/gm;
 const ITEM_ROW = /^\|-[^\n]*\n\|[ \t]*(\d+)[ \t]*\n\|[^\n]*\n\|([^\n]*)/gm;
 
 async function loadUnavailableItemIds(items) {
-  const url = new URL("https://oldschool.runescape.wiki/api.php");
-  url.search = new URLSearchParams({
-    action: "query",
-    format: "json",
-    formatversion: "2",
+  const { query } = await queryWiki({
     prop: "revisions",
     rvprop: "content",
     rvslots: "main",
     titles: WIKI_PAGES.join("|"),
   });
 
-  const { query } = JSON.parse(await fetchWiki(url.toString()));
   const unavailable = new Set();
   const ownable = new Set();
 
@@ -50,7 +46,15 @@ async function loadUnavailableItemIds(items) {
     }
   }
 
-  return unavailable.difference(ownable);
+  return { unavailable: unavailable.difference(ownable), ownable };
 }
 
-module.exports = { loadUnavailableItemIds };
+async function loadRestrictedItemPages() {
+  const categories = await Promise.all(
+    RESTRICTED_CATEGORIES.map((category) => Array.fromAsync(categoryMemberTitles(category))),
+  );
+
+  return new Set(categories.flat());
+}
+
+module.exports = { loadUnavailableItemIds, loadRestrictedItemPages };

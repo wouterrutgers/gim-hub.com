@@ -29,6 +29,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Cache {
+  private static final int CONSTRUCTION_LEVEL_PARAM = 23;
+  private static final int UNBANKABLE_PARAM = 59;
+  private static final int CABBAGE_MODEL = 8195;
   private static final int LAST_MAN_STANDING_PARAM = 403;
   private static final int MULTIRUNES_TABLE = 91;
 
@@ -68,6 +71,18 @@ public class Cache {
         values.put("cost", item.cost);
         values.put("countCo", item.countCo);
         values.put("countObj", item.countObj);
+        if (item.params != null && item.params.containsKey(CONSTRUCTION_LEVEL_PARAM)) {
+          values.put("hasConstructionLevel", true);
+        }
+        if (item.params != null && Integer.valueOf(1).equals(item.params.get(UNBANKABLE_PARAM))) {
+          values.put("unbankable", true);
+          if (item.inventoryModel == CABBAGE_MODEL && !item.isTradeable()) {
+            values.put("trackingPlaceholder", true);
+          }
+        }
+        if (item.isTradeable()) {
+          values.put("tradeable", true);
+        }
         if (item.params != null && Integer.valueOf(1).equals(item.params.get(LAST_MAN_STANDING_PARAM))) {
           values.put("lastManStanding", true);
         }

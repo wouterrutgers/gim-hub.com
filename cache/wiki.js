@@ -22,4 +22,33 @@ async function fetchWiki(url) {
   return body;
 }
 
+async function queryWiki(parameters) {
+  const url = new URL("https://oldschool.runescape.wiki/api.php");
+  url.search = new URLSearchParams({ action: "query", format: "json", formatversion: "2", ...parameters });
+
+  return JSON.parse(await fetchWiki(url.toString()));
+}
+
+async function* categoryMemberTitles(category) {
+  let continuation;
+
+  do {
+    const response = await queryWiki({
+      list: "categorymembers",
+      cmtitle: `Category:${category}`,
+      cmnamespace: "0",
+      cmlimit: "500",
+      ...continuation,
+    });
+
+    for (const { title } of response.query.categorymembers) {
+      yield title;
+    }
+
+    continuation = response.continue;
+  } while (continuation);
+}
+
 module.exports = fetchWiki;
+module.exports.queryWiki = queryWiki;
+module.exports.categoryMemberTitles = categoryMemberTitles;

@@ -1,19 +1,13 @@
 const { parseStringPromise } = require("xml2js");
-const fetchWiki = require("./wiki");
+const { categoryMemberTitles, queryWiki } = require("./wiki");
 
 const leagueItemGroups = new Set(["gameplay items", "echo equipment", "echo orbs"]);
+const rewardGroups = new Set(["rewards", "scroll boxes"]);
 
-async function queryWiki(parameters) {
-  const url = new URL("https://oldschool.runescape.wiki/api.php");
-  url.search = new URLSearchParams({ action: "query", format: "json", formatversion: "2", ...parameters });
-
-  return JSON.parse(await fetchWiki(url.toString()));
-}
-
-async function leagueNavboxes() {
-  const navboxes = new Set();
-  const leagueInfobox =
-    /\{\{Infobox Temporary Game Mode\b(?:(?!^[ \t]*\}\})[\s\S])*?^[ \t]*\|[ \t]*type[ \t]*=[ \t]*Leagues[ \t]*$/im;
+async function temporaryModeNavboxes() {
+  const navboxes = new Map();
+  const modeInfobox =
+    /\{\{Infobox Temporary Game Mode\b(?:(?!^[ \t]*\}\})[\s\S])*?^[ \t]*\|[ \t]*type[ \t]*=[ \t]*(Leagues|Community event|Temporary)[ \t]*$/im;
   let continuation;
 
   do {
@@ -30,7 +24,8 @@ async function leagueNavboxes() {
 
     for (const page of response.query.pages) {
       const content = page.revisions?.[0]?.slots.main.content ?? "";
-      if (!leagueInfobox.test(content)) {
+      const mode = content.match(modeInfobox)?.[1].toLowerCase();
+      if (!mode) {
         continue;
       }
 
@@ -40,9 +35,9 @@ async function leagueNavboxes() {
         .find((name) => expectedNames.has(name));
 
       if (navbox) {
-        navboxes.add(`Template:${navbox}`);
+        navboxes.set(navbox, mode);
       } else {
-        console.warn(`No league navigation template found for ${page.title}.`);
+        console.warn(`No temporary mode navigation template found for ${page.title}.`);
       }
     }
 
@@ -56,7 +51,7 @@ function wikiText(node) {
   return typeof node === "string" ? node : (node?._ ?? "");
 }
 
-function* leagueItemTitles(node, inItemGroup = false) {
+function* navboxItemTitles(node, groups, inItemGroup = false) {
   if (inItemGroup) {
     for (const [, title] of wikiText(node).matchAll(/\[\[([^|\]]+)(?:\|[^\]]*)?\]\]/g)) {
       yield title.trim();
@@ -92,44 +87,43 @@ function* leagueItemTitles(node, inItemGroup = false) {
         .trim()
         .toLowerCase();
 
-      if (title === "rewards" || title === "scroll boxes") {
+      if (groups === leagueItemGroups && rewardGroups.has(title)) {
         continue;
       }
 
-      yield* leagueItemTitles(value, inItemGroup || leagueItemGroups.has(title));
+      yield* navboxItemTitles(value, groups, inItemGroup || groups.has(title));
     }
   }
 }
 
 async function loadSeasonalItemPages() {
   const modes = new Map();
-  let continuation;
+  const eventPages = new Set();
 
-  do {
-    const response = await queryWiki({
-      list: "categorymembers",
-      cmtitle: "Category:Deadman seasonal items",
-      cmnamespace: "0",
-      cmlimit: "500",
-      ...continuation,
-    });
+  for await (const title of categoryMemberTitles("Deadman seasonal items")) {
+    modes.set(title, "deadman");
+  }
 
-    for (const { title } of response.query.categorymembers) {
-      modes.set(title, "deadman");
+  for (const [navbox, mode] of await temporaryModeNavboxes()) {
+    const { parse } = await queryWiki({ action: "parse", page: `Template:${navbox}`, prop: "parsetree" });
+    const { root } = await parseStringPromise(parse.parsetree);
+    if (mode === "leagues") {
+      for (const title of navboxItemTitles(root, leagueItemGroups)) {
+        modes.set(title, "leagues");
+      }
+
+      continue;
     }
 
-    continuation = response.continue;
-  } while (continuation);
-
-  for (const page of await leagueNavboxes()) {
-    const { parse } = await queryWiki({ action: "parse", page, prop: "parsetree" });
-    const { root } = await parseStringPromise(parse.parsetree);
-    for (const title of leagueItemTitles(root)) {
-      modes.set(title, "leagues");
+    const rewards = new Set(navboxItemTitles(root, rewardGroups));
+    for await (const title of categoryMemberTitles(navbox)) {
+      if (!rewards.has(title)) {
+        eventPages.add(title);
+      }
     }
   }
 
-  return modes;
+  return { modes, eventPages };
 }
 
 module.exports = { loadSeasonalItemPages };

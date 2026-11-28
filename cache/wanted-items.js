@@ -1,9 +1,10 @@
 const { setTimeout } = require("node:timers/promises");
 const fetchWiki = require("./wiki");
 const { loadSeasonalItemPages } = require("./seasonal-items");
-const { loadUnavailableItemIds } = require("./unavailable-items");
+const { loadRestrictedItemPages, loadUnavailableItemIds } = require("./unavailable-items");
 
 const BUCKET_PAGE_SIZE = 500;
+const INTERFACE_GAMEVAL = /(?:^|_)skillguide_|^poh_.*_league_?\d|^league_\d+_(?:poh_|pool_)/;
 const ELEMENTAL_COMBINATION_RUNES = {
   554: [4694, 4697, 4699], // Fire: steam, smoke, lava
   555: [4694, 4695, 4698], // Water: steam, mist, mud
@@ -290,13 +291,19 @@ async function loadItemResolver(items, canonicalItemIds) {
   const wikiImages = new Map();
   const removedItemIds = new Set();
   const currentItemIds = new Set();
+  const restrictedItemIds = new Set();
+  const publicItemIds = new Set();
+  const [{ modes, eventPages }, restrictedPages] = await Promise.all([
+    loadSeasonalItemPages(),
+    loadRestrictedItemPages(),
+  ]);
   for (const [id, item] of Object.entries(items)) {
     indexItem(names, normalize(item.name), Number(id));
   }
 
   for await (const row of readBucket(
     "infobox_item",
-    "'page_name','page_name_sub','item_id','image','removal_date'",
+    "'page_name','page_name_sub','item_id','item_name','image','removal_date'",
     "'page_name_sub','asc'",
   )) {
     const title = normalize(row.page_name);
@@ -307,6 +314,10 @@ async function loadItemResolver(items, canonicalItemIds) {
           removedItemIds.add(id);
         } else {
           currentItemIds.add(id);
+          if (items[id] && normalize(items[id].name) === normalize(row.item_name)) {
+            const restricted = restrictedPages.has(row.page_name) || eventPages.has(row.page_name);
+            (restricted ? restrictedItemIds : publicItemIds).add(id);
+          }
         }
         indexItem(wikiPages, title, id);
         indexItem(wikiSections, normalize(row.page_name_sub), id);
@@ -318,7 +329,7 @@ async function loadItemResolver(items, canonicalItemIds) {
   }
 
   const seasonal = {};
-  for (const [title, mode] of await loadSeasonalItemPages()) {
+  for (const [title, mode] of modes) {
     const itemIds = (title.includes("#") ? wikiSections : wikiPages).get(normalize(title));
 
     for (const id of itemIds ?? []) {
@@ -364,7 +375,13 @@ async function loadItemResolver(items, canonicalItemIds) {
     return available.length === 1 ? available[0] : available.sort((first, second) => first - second);
   }
 
-  return { resolveItem, seasonal, removedItemIds: removedItemIds.difference(currentItemIds) };
+  return {
+    resolveItem,
+    seasonal,
+    publicItemIds,
+    removedItemIds: removedItemIds.difference(currentItemIds),
+    restrictedItemIds: restrictedItemIds.difference(publicItemIds),
+  };
 }
 
 function parseQuantity(quantity) {
@@ -381,7 +398,7 @@ async function buildRecipes(items, cacheItems, itemStates) {
   const canonicalItemIds = new Map(
     Object.entries(itemStates).flatMap(([baseId, variants]) => variants.map((id) => [id, Number(baseId)])),
   );
-  const { resolveItem, seasonal, removedItemIds } = await loadItemResolver(items, canonicalItemIds);
+  const { resolveItem, ...availability } = await loadItemResolver(items, canonicalItemIds);
   const recipes = {};
   const signatures = new Set();
   const unresolved = new Set();
@@ -480,7 +497,7 @@ async function buildRecipes(items, cacheItems, itemStates) {
   console.info(
     `Imported ${signatures.size} recipes for ${Object.keys(recipes).length} items. Skipped ${invalid} unusable records.`,
   );
-  return { recipes, seasonal, removedItemIds };
+  return { recipes, ...availability };
 }
 
 async function buildWantedItems(catalogue, cacheItems, itemVariations) {
@@ -488,8 +505,13 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   const items = {};
   const unavailable = new Set();
   for (const [itemId, item] of Object.entries(catalogue)) {
-    const { gameVal, legacy } = cacheItems[itemId];
-    if (legacy || /^(?:(?:cert_)?beta_|placeholder_)/.test(gameVal ?? "")) {
+    const { gameVal = "", legacy, trackingPlaceholder, unbankable } = cacheItems[itemId];
+    if (
+      legacy ||
+      trackingPlaceholder ||
+      /^(?:(?:cert_)?beta_|placeholder_|nosave_)/.test(gameVal) ||
+      (unbankable && gameVal.startsWith("magictraining_"))
+    ) {
       unavailable.add(Number(itemId));
     } else if (!item.lastManStanding) {
       items[itemId] = item;
@@ -497,12 +519,26 @@ async function buildWantedItems(catalogue, cacheItems, itemVariations) {
   }
 
   const itemStates = buildItemStateVariants(items, cacheItems, itemVariations);
-  const [wikiUnavailable, { recipes, seasonal, removedItemIds }, cosmeticBases] = await Promise.all([
+  const [{ unavailable: wikiUnavailable, ownable }, wikiItems, cosmeticBases] = await Promise.all([
     loadUnavailableItemIds(items),
     buildRecipes(items, cacheItems, itemStates),
     loadCosmeticBases(),
   ]);
-  for (const itemId of wikiUnavailable.union(removedItemIds)) {
+  const { recipes, seasonal, publicItemIds, removedItemIds, restrictedItemIds } = wikiItems;
+  for (const id of Object.keys(items)) {
+    const itemId = Number(id);
+    const { gameVal = "", hasConstructionLevel, tradeable } = cacheItems[itemId];
+
+    if (
+      !tradeable &&
+      !publicItemIds.has(itemId) &&
+      (INTERFACE_GAMEVAL.test(gameVal) || (hasConstructionLevel && /(?:^|_)poh_/.test(gameVal)))
+    ) {
+      wikiUnavailable.add(itemId);
+    }
+  }
+
+  for (const itemId of wikiUnavailable.union(removedItemIds).union(restrictedItemIds.difference(ownable))) {
     if (!items[itemId]) {
       continue;
     }
